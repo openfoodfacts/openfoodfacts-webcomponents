@@ -17,8 +17,9 @@
     "analyze": "cem analyze --litelement --globs \"src/**/*.ts\"",
     "analyze:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
     "serve": "wds --watch",
-    "serve:prod": "MODE=prod npm run serve",
+    "dev": "concurrently \"npm run build:watch\" \"npm run serve\"",
     "test": "npm run test:dev && npm run test:prod",
+    "serve:prod": "MODE=prod npm run serve",
     "test:dev": "wtr",
     "test:watch": "wtr --watch",
     "test:prod": "MODE=prod wtr",
@@ -35,7 +36,8 @@
   "license": "BSD-3-Clause",
   "dependencies": {
     "@lit/localize": "^0.12.2",
-    "lit": "^3.2.0"
+    "lit": "^3.2.0",
+    "lit-html": "^3.2.1"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.6.3",
@@ -51,6 +53,7 @@
     "@web/test-runner": "^0.15.0",
     "@web/test-runner-playwright": "^0.9.0",
     "@webcomponents/webcomponentsjs": "^2.8.0",
+    "concurrently": "^9.1.2",
     "eslint": "^8.15.0",
     "lit-analyzer": "^1.2.1",
     "prettier": "^2.6.2",
