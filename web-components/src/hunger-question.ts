@@ -1,6 +1,6 @@
-import { LitElement, html, css } from "lit";
-import { customElement, property } from "lit/decorators.js";
-import { Product } from "./types";
+import { LitElement, html, css } from "lit"
+import { customElement, property } from "lit/decorators.js"
+import { Product } from "./types"
 
 /**
  * An example element.
@@ -18,18 +18,18 @@ export class HungerQuestion extends LitElement {
       padding: 16px;
       max-width: 800px;
     }
-  `;
+  `
 
   /**
    * The product to display.
    */
   @property({ type: Object, reflect: true })
-  product?: Product;
+  product?: Product
 
   @property({
     type: String,
   })
-  question = "Question";
+  question = "Question"
 
   override render() {
     return html`
@@ -46,12 +46,12 @@ export class HungerQuestion extends LitElement {
           <button>Skip</button>
         </div>
       </div>
-    `;
+    `
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "hunger-question": HungerQuestion;
+    "hunger-question": HungerQuestion
   }
 }

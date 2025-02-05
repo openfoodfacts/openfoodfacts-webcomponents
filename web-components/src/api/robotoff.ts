@@ -3,6 +3,7 @@ import { ROBOTOFF_API_URL, IS_DEVELOPMENT_MODE } from "../constants"
 import COUNTRIES from "../utils/countries.json"
 import { reformatValueTag, removeEmptyKeys } from "../utils"
 import { getLocale } from "../localization"
+import { QuestionFilter } from "../types"
 
 export interface QuestionInterface {
   barcode: string
@@ -29,7 +30,7 @@ function countryId2countryCode(id: string | null) {
 }
 
 const robotoff = {
-  annotate(insightId: string, annotation) {
+  annotate(insightId: string, annotation: string) {
     if (IS_DEVELOPMENT_MODE) {
       console.log(
         `Annotated, ${ROBOTOFF_API_URL}/insights/annotate`,
@@ -38,6 +39,7 @@ const robotoff = {
         ),
         { withCredentials: true }
       )
+      return
     } else {
       return axios.post(
         `${ROBOTOFF_API_URL}/insights/annotate`,
@@ -61,7 +63,7 @@ const robotoff = {
       })
   },
 
-  questions(filterState, count = 10, page = 1) {
+  questions(filterState: QuestionFilter, count = 10, page = 1) {
     const {
       insightType,
       brandFilter,
@@ -96,15 +98,15 @@ const robotoff = {
     })
   },
 
-  insightDetail(insight_id) {
+  insightDetail(insight_id: string) {
     return axios.get(`${ROBOTOFF_API_URL}/insights/detail/${insight_id}`)
   },
 
-  loadLogo(logoId) {
+  loadLogo(logoId: string) {
     return axios.get(`${ROBOTOFF_API_URL}/images/logos/${logoId}`)
   },
 
-  updateLogo(logoId, value, type) {
+  updateLogo(logoId: string, value: any, type: string) {
     return axios.put(
       `${ROBOTOFF_API_URL}/images/logos/${logoId}`,
       removeEmptyKeys({
@@ -115,7 +117,13 @@ const robotoff = {
     )
   },
 
-  searchLogos(barcode, value, type, count = 25, random = false) {
+  searchLogos(
+    barcode: string,
+    value: any,
+    type: string,
+    count = 25,
+    random = false
+  ) {
     const formattedValue = /^[a-z][a-z]:/.test(value)
       ? { taxonomy_value: value }
       : { value }
@@ -131,7 +139,7 @@ const robotoff = {
     })
   },
 
-  getLogoAnnotations(logoId, index, count = 25) {
+  getLogoAnnotations(logoId: string, index: number, count = 25) {
     const url =
       logoId.length > 0
         ? `${ROBOTOFF_API_URL}/ann/search/${logoId}`
@@ -144,7 +152,7 @@ const robotoff = {
     })
   },
 
-  annotateLogos(annotations) {
+  annotateLogos(annotations: string) {
     return axios.post(
       `${ROBOTOFF_API_URL}/images/logos/annotate`,
       removeEmptyKeys({
@@ -184,16 +192,19 @@ const robotoff = {
     })
   },
 
-  getUserStatistics(username) {
+  getUserStatistics(username: string) {
     return axios.get(`${ROBOTOFF_API_URL}/users/statistics/${username}`)
   },
 
-  getCroppedImageUrl(imageUrl, boundingBox) {
+  getCroppedImageUrl(
+    imageUrl: string,
+    boundingBox: [number, number, number, number]
+  ) {
     const [y_min, x_min, y_max, x_max] = boundingBox
     return `${ROBOTOFF_API_URL}/images/crop?image_url=${imageUrl}&y_min=${y_min}&x_min=${x_min}&y_max=${y_max}&x_max=${x_max}`
   },
 
-  getLogosImages(logoIds) {
+  getLogosImages(logoIds: string[]) {
     return axios.get(
       `${ROBOTOFF_API_URL}/images/logos?logo_ids=${logoIds.join(",")}`
     )
@@ -201,8 +212,8 @@ const robotoff = {
 
   getUnansweredValues(params: {
     type: "label" | "brand" | "category"
-    countryCode
-    campaign
+    countryCode: string
+    campaign: string
     page?: number
     count?: number
   }) {
