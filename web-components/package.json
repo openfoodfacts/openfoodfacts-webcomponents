@@ -2,7 +2,7 @@
   "name": "@lit/lit-starter-ts",
   "private": true,
   "version": "1.0.0",
-  "description": "A simple web component",
+  "description": "Reusable Web Components for Open Food Facts",
   "main": "off-webcomponents.ts",
   "module": "off-webcomponents.ts",
   "type": "module",
