@@ -130,3 +130,5 @@ dist
 .pnp.*
 .idea
 build/
+.env
+web-components/src/localization/generated/*

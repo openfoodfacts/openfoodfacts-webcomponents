@@ -30,7 +30,7 @@ export const reformatValueTag = (value: string) => {
   return output
 }
 
-export const removeEmptyKeys = (obj: object) => {
+export const removeEmptyKeys = (obj: Record<string, any>) => {
   Object.keys(obj).forEach(
     (key) => (obj[key] == null || obj[key] === "") && delete obj[key]
   )
