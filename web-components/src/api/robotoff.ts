@@ -1,5 +1,5 @@
 import { ROBOTOFF_API_URL, IS_DEVELOPMENT_MODE } from "../constants"
-import { addParamsToUrl, removeEmptyKeys } from "../utils"
+import { addParamsToUrl } from "../utils"
 import { getLocale } from "../localization"
 import {
   QuestionRequestParams,
