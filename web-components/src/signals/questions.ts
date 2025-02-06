@@ -10,3 +10,7 @@ export const fetchQuestionsByProductCode = async (code: string) => {
   const response = await robotoff.questionsByProductCode(code)
   questions.set(response.questions)
 }
+
+export const nextQuestion = () => {
+  currentQuestionIndex.set(currentQuestionIndex.get() + 1)
+}

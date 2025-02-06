@@ -25,3 +25,5 @@ export type QuestionsResponse = {
   status: string
   questions: Question[]
 }
+
+export type QuestionAnnotationAnswer = "2" | "1" | "0" | "-1" // https://openfoodfacts.github.io/robotoff/references/api/#tag/Insights/paths/~1insights~1annotate/post
