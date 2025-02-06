@@ -1,33 +1,7 @@
-import axios from "axios"
 import { ROBOTOFF_API_URL, IS_DEVELOPMENT_MODE } from "../constants"
-import COUNTRIES from "../utils/countries.json"
-import { reformatValueTag, removeEmptyKeys } from "../utils"
+import { addParamsToUrl, removeEmptyKeys } from "../utils"
 import { getLocale } from "../localization"
-import { QuestionFilter } from "../types"
-
-export interface QuestionInterface {
-  barcode: string
-  insight_id: string
-  insight_type: string
-  question: string
-  source_image_url?: string
-  type: string
-  value: string
-  value_tag: string
-}
-
-type GetQuestionsResponse = { count: number; questions: QuestionInterface[] }
-
-function countryId2countryCode(id: string | null) {
-  if (id === null) {
-    return null
-  }
-  const code = COUNTRIES.find((c) => c.id === id)?.countryCode
-  if (code) {
-    return code.toLowerCase()
-  }
-  return code
-}
+import { QuestionRequestParams, QuestionsResponse } from "../types/robotoff"
 
 const robotoff = {
   annotate(insightId: string, annotation: string) {
@@ -36,88 +10,98 @@ const robotoff = {
         `Annotated, ${ROBOTOFF_API_URL}/insights/annotate`,
         new URLSearchParams(
           `insight_id=${insightId}&annotation=${annotation}&update=1`
-        ),
-        { withCredentials: true }
+        )
       )
       return
     } else {
-      return axios.post(
-        `${ROBOTOFF_API_URL}/insights/annotate`,
-        new URLSearchParams(
+      return fetch(`${ROBOTOFF_API_URL}/insights/annotate`, {
+        method: "POST",
+        body: new URLSearchParams(
           `insight_id=${insightId}&annotation=${annotation}&update=1`
         ),
-        { withCredentials: true }
-      )
-    }
-  },
-
-  questionsByProductCode(code: string) {
-    return axios
-      .get<GetQuestionsResponse>(`${ROBOTOFF_API_URL}/questions/${code}`)
-      .then((result) => {
-        const questions = result.data.questions
-        result.data.questions = questions.filter(
-          (question) => question.source_image_url
-        )
-        return result
+        credentials: "include",
       })
+    }
   },
 
-  questions(filterState: QuestionFilter, count = 10, page = 1) {
-    const {
-      insightType,
-      brandFilter,
-      valueTag,
-      countryFilter,
-      sortByPopularity,
-      campaign,
-      predictor,
-    } = filterState
-
-    const searchParams = {
-      insight_types: insightType,
-      value_tag: valueTag,
-      brands: reformatValueTag(brandFilter),
-      countries: countryId2countryCode(
-        countryFilter !== "en:world" ? countryFilter : null
-      ),
-      campaign,
-      predictor,
-      order_by: sortByPopularity ? "popularity" : "random",
+  async questionsByProductCode(
+    code: string,
+    questionRequestParams: QuestionRequestParams = {}
+  ) {
+    if (!questionRequestParams.lang) {
+      questionRequestParams.lang = getLocale()
     }
+    const url = addParamsToUrl(
+      `${ROBOTOFF_API_URL}/questions/${code}`,
+      questionRequestParams
+    )
+    const response = await fetch(url)
+    const result: QuestionsResponse = await response.json()
+    return result
+  },
+  //
+  // async questions(filterState: QuestionRequestParams, count = 10, page = 1) {
+  //   const {
+  //     insightType,
+  //     brandFilter,
+  //     valueTag,
+  //     countryFilter,
+  //     sortByPopularity,
+  //     campaign,
+  //     predictor,
+  //   } = filterState
+  //
+  //   // const searchParams = {
+  //   //   insight_types: insightType,
+  //   //   value_tag: valueTag,
+  //   //   brands: reformatValueTag(brandFilter),
+  //   //   countries: countryId2countryCode(
+  //   //     countryFilter !== "en:world" ? countryFilter : null
+  //   //   ),
+  //   //   campaign,
+  //   //   predictor,
+  //   //   order_by: sortByPopularity ? "popularity" : "random",
+  //   // }
+  //
+  //   const lang = getLocale()
+  //
+  //   const response = await fetch(
+  //     `${ROBOTOFF_API_URL}/questions/?${new URLSearchParams(
+  //       removeEmptyKeys({
+  //         ...searchParams,
+  //         lang,
+  //         count,
+  //         page,
+  //       })
+  //     )}`
+  //   )
+  //   return response.json()
+  // },
 
-    const lang = getLocale()
+  async insightDetail(insight_id: string) {
+    const response = await fetch(
+      `${ROBOTOFF_API_URL}/insights/detail/${insight_id}`
+    )
+    return response.json()
+  },
 
-    return axios.get<GetQuestionsResponse>(`${ROBOTOFF_API_URL}/questions/`, {
-      params: removeEmptyKeys({
-        ...searchParams,
-        lang,
-        count,
-        page,
-      }),
+  async loadLogo(logoId: string) {
+    const response = await fetch(`${ROBOTOFF_API_URL}/images/logos/${logoId}`)
+    return response.json()
+  },
+
+  async updateLogo(logoId: string, value: any, type: string) {
+    return fetch(`${ROBOTOFF_API_URL}/images/logos/${logoId}`, {
+      method: "PUT",
+      body: JSON.stringify(removeEmptyKeys({ value, type })),
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
   },
 
-  insightDetail(insight_id: string) {
-    return axios.get(`${ROBOTOFF_API_URL}/insights/detail/${insight_id}`)
-  },
-
-  loadLogo(logoId: string) {
-    return axios.get(`${ROBOTOFF_API_URL}/images/logos/${logoId}`)
-  },
-
-  updateLogo(logoId: string, value: any, type: string) {
-    return axios.put(
-      `${ROBOTOFF_API_URL}/images/logos/${logoId}`,
-      removeEmptyKeys({
-        value,
-        type,
-      }),
-      { withCredentials: true }
-    )
-  },
-
-  searchLogos(
+  async searchLogos(
     barcode: string,
     value: any,
     type: string,
@@ -128,41 +112,43 @@ const robotoff = {
       ? { taxonomy_value: value }
       : { value }
 
-    return axios.get(`${ROBOTOFF_API_URL}/images/logos/search/`, {
-      params: removeEmptyKeys({
-        barcode,
-        type,
-        count,
-        random,
-        ...formattedValue,
-      }),
-    })
+    const response = await fetch(
+      `${ROBOTOFF_API_URL}/images/logos/search/?${new URLSearchParams(
+        removeEmptyKeys({
+          barcode,
+          type,
+          count,
+          random,
+          ...formattedValue,
+        })
+      )}`
+    )
+    return response.json()
   },
 
-  getLogoAnnotations(logoId: string, index: number, count = 25) {
+  async getLogoAnnotations(logoId: string, index: number, count = 25) {
     const url =
       logoId.length > 0
         ? `${ROBOTOFF_API_URL}/ann/search/${logoId}`
         : `${ROBOTOFF_API_URL}/ann/search`
-    return axios.get(url, {
-      params: removeEmptyKeys({
-        index,
-        count,
-      }),
+    const response = await fetch(
+      `${url}?${new URLSearchParams(removeEmptyKeys({ index, count }))}`
+    )
+    return response.json()
+  },
+
+  async annotateLogos(annotations: string) {
+    return fetch(`${ROBOTOFF_API_URL}/images/logos/annotate`, {
+      method: "POST",
+      body: JSON.stringify(removeEmptyKeys({ annotations })),
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
   },
 
-  annotateLogos(annotations: string) {
-    return axios.post(
-      `${ROBOTOFF_API_URL}/images/logos/annotate`,
-      removeEmptyKeys({
-        annotations,
-      }),
-      { withCredentials: true }
-    )
-  },
-
-  getInsights(
+  async getInsights(
     barcode = "",
     insightType = "",
     valueTag = "",
@@ -177,23 +163,29 @@ const robotoff = {
       annotated = "0"
       annotation = ""
     }
-    return axios.get(`${ROBOTOFF_API_URL}/insights`, {
-      params: removeEmptyKeys({
-        barcode,
-        insight_types: insightType,
-        value_tag: valueTag,
-        annotation,
-        page,
-        annotated,
-        count,
-        campaigns,
-        countries: country,
-      }),
-    })
+    const response = await fetch(
+      `${ROBOTOFF_API_URL}/insights?${new URLSearchParams(
+        removeEmptyKeys({
+          barcode,
+          insight_types: insightType,
+          value_tag: valueTag,
+          annotation,
+          page,
+          annotated,
+          count,
+          campaigns,
+          countries: country,
+        })
+      )}`
+    )
+    return response.json()
   },
 
-  getUserStatistics(username: string) {
-    return axios.get(`${ROBOTOFF_API_URL}/users/statistics/${username}`)
+  async getUserStatistics(username: string) {
+    const response = await fetch(
+      `${ROBOTOFF_API_URL}/users/statistics/${username}`
+    )
+    return response.json()
   },
 
   getCroppedImageUrl(
@@ -204,13 +196,14 @@ const robotoff = {
     return `${ROBOTOFF_API_URL}/images/crop?image_url=${imageUrl}&y_min=${y_min}&x_min=${x_min}&y_max=${y_max}&x_max=${x_max}`
   },
 
-  getLogosImages(logoIds: string[]) {
-    return axios.get(
+  async getLogosImages(logoIds: string[]) {
+    const response = await fetch(
       `${ROBOTOFF_API_URL}/images/logos?logo_ids=${logoIds.join(",")}`
     )
+    return response.json()
   },
 
-  getUnansweredValues(params: {
+  async getUnansweredValues(params: {
     type: "label" | "brand" | "category"
     countryCode: string
     campaign: string
@@ -219,17 +212,16 @@ const robotoff = {
   }) {
     const { page = 1, countryCode, ...other } = params
 
-    return axios.get(
-      `${ROBOTOFF_API_URL}/questions/unanswered/?${Object.entries(
+    const response = await fetch(
+      `${ROBOTOFF_API_URL}/questions/unanswered/?${new URLSearchParams(
         removeEmptyKeys({
           ...other,
           countries: countryCode,
           page: page >= 1 ? page : 1,
         })
-      )
-        .map(([key, value]) => `${key}=${value}`)
-        .join("&")}`
+      )}`
     )
+    return response.json()
   },
 }
 

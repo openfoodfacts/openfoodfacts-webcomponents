@@ -38,6 +38,7 @@
   "dependencies": {
     "@lit-labs/signals": "^0.1.1",
     "@lit/localize": "^0.12.2",
+    "@lit/task": "^1.0.2",
     "axios": "^1.7.9",
     "lit": "^3.2.0",
     "lit-html": "^3.2.1"
