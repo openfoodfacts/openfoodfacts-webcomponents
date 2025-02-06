@@ -50,3 +50,14 @@ export const capitaliseName = (string: string | undefined) => {
   const name = string.slice(3)
   return name.charAt(0).toUpperCase() + name.slice(1)
 }
+
+export const paramsToUrl = (params: Record<string, any>) => {
+  return new URLSearchParams(params).toString()
+}
+
+export const addParamsToUrl = (url: string, params: Record<string, any>) => {
+  if (url.includes("?")) {
+    return `${url}&${paramsToUrl(params)}`
+  }
+  return `${url}?${paramsToUrl(params)}`
+}

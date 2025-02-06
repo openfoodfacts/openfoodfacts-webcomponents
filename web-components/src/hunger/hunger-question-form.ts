@@ -1,6 +1,6 @@
-import { LitElement, html, css } from "lit"
+import { LitElement, html, css, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { Product } from "./types"
+import { Question } from "../types/robotoff"
 
 /**
  * An example element.
@@ -9,8 +9,8 @@ import { Product } from "./types"
  * @slot - This element has a slot
  * @csspart button - The button
  */
-@customElement("hunger-question")
-export class HungerQuestion extends LitElement {
+@customElement("hunger-question-form")
+export class HungerQuestionForm extends LitElement {
   static override styles = css`
     :host {
       display: block;
@@ -21,26 +21,27 @@ export class HungerQuestion extends LitElement {
   `
 
   /**
-   * The product to display.
+   * The question to display.
    */
   @property({ type: Object, reflect: true })
-  product?: Product
-
-  @property({
-    type: String,
-  })
-  question = "Question"
+  question?: Question
 
   override render() {
+    if (!this.question) {
+      return html`<div>No question</div>`
+    }
     return html`
       <div>
-        <h2>${this.question}</h2>
-        <img
-          .src=${this.product?.imgUrl}
-          alt=${this.product?.name}
-          style="width: 200px;"
-        />
+        <h2>${this.question.question}</h2>
+        ${this.question.source_image_url
+          ? html`<img
+              .src=${this.question?.source_image_url}
+              alt="Product image"
+              style="width: 200px;"
+            />`
+          : nothing}
         <div>
+          <p>${this.question.value}</p>
           <button>Yes</button>
           <button>No</button>
           <button>Skip</button>
@@ -52,6 +53,6 @@ export class HungerQuestion extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "hunger-question": HungerQuestion
+    "hunger-question-form": HungerQuestionForm
   }
 }
