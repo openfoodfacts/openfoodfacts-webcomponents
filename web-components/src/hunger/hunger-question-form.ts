@@ -1,9 +1,9 @@
 import { LitElement, html, css, nothing } from "lit"
-import { customElement, property } from "lit/decorators.js"
-import { Question } from "../types/robotoff"
+import { customElement, property, state } from "lit/decorators.js"
+import { Question, QuestionAnnotationAnswer } from "../types/robotoff"
 import robotoff from "../api/robotoff"
 import { nextQuestion } from "../signals/questions"
-import {localized, msg} from "@lit/localize";
+import { localized, msg } from "@lit/localize"
 
 /**
  * An example element.
@@ -34,23 +34,33 @@ export class HungerQuestionForm extends LitElement {
   showMessage: boolean = false
 
   @state()
-  private first?: boolean = true
+  private _first: boolean = true
 
-  private _annotateProduct = async (value: string) => {
+  @state()
+  private _showLastQuestionMessage: boolean = false
+
+  private _annotateProduct = async (value: QuestionAnnotationAnswer) => {
     robotoff.annotate(this.question!.insight_id, value)
-    nextQuestion()
+    if (!nextQuestion()) {
+      this._showLastQuestionMessage = true
+    }
   }
 
   private renderMessage() {
-    if (!this.showMessage) {
+    if (this._showLastQuestionMessage) {
+      return html`<div>${msg("Thank you for your assistance!")}</div>`
+    } else if (!this.showMessage) {
       return nothing
-    } else if (this.first) {
-      this.first = false
-      return html`<div>${msg("Open foods facts need your help for this product")}<div>`
+    } else if (this._first) {
+      this._first = false
+      return html`<div>
+        ${msg("Open Food Facts needs your help with this product.")}
+      </div>`
     }
 
-    return html`<div>${msg("Thanks for your help, can you ")}</div>`
-
+    return html`<div>
+      ${msg("Thanks for your help! Can you assist with another question?")}
+    </div>`
   }
 
   override render() {
@@ -71,14 +81,9 @@ export class HungerQuestionForm extends LitElement {
           : nothing}
         <div>
           <p>${this.question.value}</p>
-          <button @click="${this._annotateProduct" data-value="1">Yes</button>
-          <button @click="${this._annotateProduct}" data-value="0">No</button>
-          <button
-            @click="${this._annotateProduct}"
-            data-value="-1"
-          >
-            Skip
-          </button>
+          <button @click="${() => this._annotateProduct("1")}">Yes</button>
+          <button @click="${() => this._annotateProduct("0")}">No</button>
+          <button @click="${() => this._annotateProduct("-1")}">Skip</button>
         </div>
       </div>
     `
