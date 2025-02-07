@@ -5,19 +5,27 @@ export const questions = new State<any[]>([])
 
 export const currentQuestionIndex = new State(0)
 export const numberOfQuestions = new Computed(() => questions.get().length)
-export const finishQuestions = new State(false)
+export const isQuestionsFinished = new State(false)
 
 export const fetchQuestionsByProductCode = async (code: string) => {
   const response = await robotoff.questionsByProductCode(code)
   questions.set(response.questions)
 }
 
-export const nextQuestion = () => {
+export const checkIfQuestionsFinished = () => {
   const current = currentQuestionIndex.get()
-  if (current === numberOfQuestions.get() - 1) {
-    finishQuestions.set(true)
+
+  if (current === numberOfQuestions.get()) {
+    isQuestionsFinished.set(true)
+    return true
+  }
+  return false
+}
+
+export const nextQuestion = () => {
+  currentQuestionIndex.set(currentQuestionIndex.get() + 1)
+  if (checkIfQuestionsFinished()) {
     return false
   }
-  currentQuestionIndex.set(currentQuestionIndex.get() + 1)
   return true
 }
