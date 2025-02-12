@@ -8,11 +8,13 @@ import {
   questions,
   hasQuestions,
   numberOfQuestions,
+  hasAnswered,
+  answerQuestion,
 } from "../../signals/questions"
 import { Task } from "@lit/task"
 import { localized, msg } from "@lit/localize"
 import { EventType } from "../../constants"
-import { QuestionStateEvent, QuestionStateEventDetail } from "../../types"
+import { QuestionStateEventDetail } from "../../types"
 
 /**
  * An example element.
@@ -39,6 +41,13 @@ export class HungerQuestion extends LitElement {
       font-style: italic;
     }
   `
+  /**
+   * Options for the component
+   * @type {Object}
+   * @property {boolean} showMessage - Whether to show the message
+   * @property {boolean} showLoading - Whether to show the loading indicator
+   * @property {boolean} showError - Whether to show the error message
+   */
   @property({ type: Object, reflect: true })
   options: {
     showMessage?: boolean
@@ -46,14 +55,19 @@ export class HungerQuestion extends LitElement {
     showError?: boolean
   } = {}
 
-  @property({ attribute: "product-id" })
+  /**
+   * The product id to fetch questions for
+   * @type {string}
+   */
+  @property({ type: String, attribute: "product-id" })
   productId: string = ""
 
+  /**
+   * The insight types to filter questions separate by comma
+   * @type {string}
+   */
   @property({ type: String, attribute: "insight-types" })
   insightTypes: string = ""
-
-  @state()
-  private _first: boolean = true
 
   private _questionsTask = new Task(this, {
     task: async ([productId, insightTypes], {}) => {
@@ -95,8 +109,7 @@ export class HungerQuestion extends LitElement {
       return getMessageWrapper(msg("Thank you for your assistance!"))
     } else if (!this.options?.showMessage) {
       return nothing
-    } else if (this._first) {
-      this._first = false
+    } else if (!hasAnswered.get()) {
       return getMessageWrapper(
         msg("Open Food Facts needs your help with this product.")
       )

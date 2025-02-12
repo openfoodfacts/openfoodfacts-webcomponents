@@ -1,16 +1,13 @@
 import { LitElement, html, css, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { Question, QuestionAnnotationAnswer } from "../../types/robotoff"
-import robotoff from "../../api/robotoff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { EventType } from "../../constants"
 import { classMap } from "lit/directives/class-map.js"
+import { answerQuestion } from "../../signals/questions"
 /**
- * An example element.
- *
- * @fires count-changed - Indicates when the count changes
- * @slot - This element has a slot
- * @csspart button - The button
+ * HungerQuestionForm component
+ * It displays a form to answer a question about a product.
  */
 @customElement("hunger-question-form")
 export class HungerQuestionForm extends LitElement {
@@ -64,9 +61,16 @@ export class HungerQuestionForm extends LitElement {
   @property({ type: Object, reflect: true })
   question?: Question
 
+  /**
+   * The image size is zoomed or not.
+   */
   @state()
   private _zoomed: boolean = false
 
+  /**
+   * Emit an event submit when the user clicks on a button.
+   * It stops the propagation of the event to avoid the click event on the parent.
+   */
   private emitEventClick = (event: Event, value: string) => {
     event.stopPropagation()
     const click = new CustomEvent(EventType.SUBMIT, {
@@ -81,7 +85,7 @@ export class HungerQuestionForm extends LitElement {
     event: Event,
     value: QuestionAnnotationAnswer
   ) => {
-    robotoff.annotate(this.question!.insight_id, value)
+    answerQuestion(this.question?.insight_id!, value)
     this.emitEventClick(event, value)
   }
 
