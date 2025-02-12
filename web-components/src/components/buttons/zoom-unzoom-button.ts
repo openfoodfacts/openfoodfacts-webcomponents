@@ -17,8 +17,8 @@ export class ZoomUnzoomButton extends LitElement {
       background-color: white;
       border: none;
       border-radius: 50%;
-      width: 30px;
-      height: 30px;
+      width: 26px;
+      height: 26px;
       cursor: pointer;
     }
     button:hover {
