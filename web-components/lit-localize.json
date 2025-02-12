@@ -5,7 +5,8 @@
   "tsConfig": "./tsconfig.json",
   "output": {
     "mode": "runtime",
-    "outputDir": "./src/localization/generated/locales",
+    "language": "js",
+    "outputDir": "./dist/localization/locales",
     "localeCodesModule": "./src/localization/generated/locale-codes.ts"
   },
   "interchange": {

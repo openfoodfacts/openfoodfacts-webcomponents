@@ -13,7 +13,7 @@ export const getBrowserLocale = () => {
 export const { getLocale, setLocale } = configureLocalization({
   sourceLocale,
   targetLocales,
-  loadLocale: (locale: string) => import(`./generated/locales/${locale}.js`),
+  loadLocale: (locale: string) => import(`./localization/locales/${locale}.js`),
 })
 ;(async () => {
   try {
