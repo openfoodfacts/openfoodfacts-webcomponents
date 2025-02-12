@@ -20,8 +20,7 @@ const robotoff = {
       return fetch(`${ROBOTOFF_API_URL}/insights/annotate`, {
         method: "POST",
         body,
-        // Is is necessary to include credentials?
-        // credentials: "include",
+        credentials: "include",
       })
     }
   },

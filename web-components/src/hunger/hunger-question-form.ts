@@ -1,8 +1,10 @@
 import { LitElement, html, css, nothing } from "lit"
-import { customElement, property } from "lit/decorators.js"
+import { customElement, property, state } from "lit/decorators.js"
 import { Question, QuestionAnnotationAnswer } from "../types/robotoff"
 import robotoff from "../api/robotoff"
 import { localized } from "@lit/localize"
+import { ButtonType, getButtonClasses } from "../styles/buttons"
+import { EventType } from "../constants"
 
 /**
  * An example element.
@@ -14,14 +16,27 @@ import { localized } from "@lit/localize"
 @localized()
 @customElement("hunger-question-form")
 export class HungerQuestionForm extends LitElement {
-  static override styles = css`
-    :host {
-      display: block;
-      border: solid 1px gray;
-      padding: 16px;
-      max-width: 800px;
-    }
-  `
+  static override styles = [
+    ...getButtonClasses([
+      ButtonType.Cappucino,
+      ButtonType.White,
+      ButtonType.LINK,
+    ]),
+    css`
+      :host {
+        display: block;
+        max-width: 800px;
+      }
+
+      .question-img {
+        width: 100px;
+      }
+
+      .question-img .enlarged {
+        width: 100%;
+      }
+    `,
+  ]
 
   /**
    * The question to display.
@@ -29,9 +44,12 @@ export class HungerQuestionForm extends LitElement {
   @property({ type: Object, reflect: true })
   question?: Question
 
+  @state()
+  private _enlargedImage: boolean = false
+
   private emitEventClick = (event: Event, value: string) => {
     event.stopPropagation()
-    const click = new CustomEvent("click", {
+    const click = new CustomEvent(EventType.SUBMIT, {
       detail: { value },
       bubbles: true,
       composed: true,
@@ -47,6 +65,26 @@ export class HungerQuestionForm extends LitElement {
     this.emitEventClick(event, value)
   }
 
+  private _toggleImageSize() {
+    this._enlargedImage = !this._enlargedImage
+  }
+
+  private _renderImage() {
+    if (!this.question?.source_image_url) {
+      return nothing
+    }
+
+    return html`<div>
+      <img
+        .src=${this.question?.source_image_url}
+        alt="Product image"
+        class="question-img"
+      />
+
+      <button class="link-button" @click=${() => this.()}>
+    </div>`
+  }
+
   override render() {
     if (!this.question) {
       return html`<div>No question</div>`
@@ -54,27 +92,26 @@ export class HungerQuestionForm extends LitElement {
 
     return html`
       <div>
-        <h2>${this.question.question}</h2>
-        ${this.question.source_image_url
-          ? html`<img
-              .src=${this.question?.source_image_url}
-              alt="Product image"
-              style="width: 200px;"
-            />`
-          : nothing}
+        <p>
+          ${this.question.question} <strong> ${this.question.value} </strong>
+        </p>
+        ${this._renderImage()}
         <div>
-          <p>${this.question.value}</p>
+          <p></p>
           <button
+            class="button cappucino-button"
             @click="${(event: Event) => this._annotateProduct(event, "1")}"
           >
             Yes
           </button>
           <button
+            class="button cappucino-button"
             @click="${(event: Event) => this._annotateProduct(event, "0")}"
           >
             No
           </button>
           <button
+            class="button white-button"
             @click="${(event: Event) => this._annotateProduct(event, "-1")}"
           >
             Skip
