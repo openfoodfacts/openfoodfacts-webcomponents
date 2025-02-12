@@ -1,6 +1,9 @@
 import { LitElement, html, css } from "lit"
 import { customElement } from "lit/decorators.js"
-
+/**
+ * Component that displays a unzoom icon.
+ * @element unzoom-icon
+ **/
 @customElement("unzoom-icon")
 export class UnzoomIcon extends LitElement {
   static override styles = css`

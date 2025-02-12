@@ -16,11 +16,9 @@ import { EventType, IS_DEVELOPMENT_MODE } from "../../constants"
 import { QuestionStateEventDetail } from "../../types"
 
 /**
- * An example element.
- *
- * @fires count-changed - Indicates when the count changes
- * @slot - This element has a slot
- * @csspart button - The button
+ * Robotoff question component
+ * @element robotoff-question
+ * @fires {EventType.QUESTION_STATE} - When the state of the question changes
  */
 @customElement("robotoff-question")
 @localized()
@@ -101,22 +99,17 @@ export class RobotoffQuestion extends LitElement {
   }
 
   private renderMessage() {
-    const getMessageWrapper = (message: string) =>
-      html`<div class="message">${message}</div>`
+    const getMessageWrapper = (message: string) => html`<div class="message">${message}</div>`
 
     if (isQuestionsFinished.get()) {
       return getMessageWrapper(msg("Thank you for your assistance!"))
     } else if (!this.options?.showMessage) {
       return nothing
     } else if (!hasAnswered.get()) {
-      return getMessageWrapper(
-        msg("Open Food Facts needs your help with this product.")
-      )
+      return getMessageWrapper(msg("Open Food Facts needs your help with this product."))
     }
 
-    return html`<div>
-      ${msg(`Thanks for your help! Can you assist with another question?`)}
-    </div>`
+    return html`<div>${msg(`Thanks for your help! Can you assist with another question?`)}</div>`
   }
 
   override render() {

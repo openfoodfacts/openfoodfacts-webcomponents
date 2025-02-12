@@ -8,15 +8,13 @@ import { answerQuestion } from "../../signals/questions"
 /**
  * RobotoffQuestionForm component
  * It displays a form to answer a question about a product.
+ * @element robotoff-question-form
+ * @fires {EventType.SUBMIT} - When the form is submitted
  */
 @customElement("robotoff-question-form")
 export class RobotoffQuestionForm extends LitElement {
   static override styles = [
-    ...getButtonClasses([
-      ButtonType.Cappucino,
-      ButtonType.White,
-      ButtonType.LINK,
-    ]),
+    ...getButtonClasses([ButtonType.Cappucino, ButtonType.White, ButtonType.LINK]),
     css`
       :host {
         display: block;
@@ -81,10 +79,7 @@ export class RobotoffQuestionForm extends LitElement {
 
     this.dispatchEvent(click)
   }
-  private _annotateProduct = async (
-    event: Event,
-    value: QuestionAnnotationAnswer
-  ) => {
+  private _annotateProduct = async (event: Event, value: QuestionAnnotationAnswer) => {
     answerQuestion(this.question?.insight_id!, value)
     this.emitEventClick(event, value)
   }
@@ -126,9 +121,7 @@ export class RobotoffQuestionForm extends LitElement {
 
     return html`
       <div class="question-form">
-        <p>
-          ${this.question.question} <strong> ${this.question.value} </strong>
-        </p>
+        <p>${this.question.question} <strong> ${this.question.value} </strong></p>
         <div>${this._renderImage()}</div>
         <div>
           <p></p>
