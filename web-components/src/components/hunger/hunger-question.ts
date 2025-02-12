@@ -12,7 +12,7 @@ import {
 } from "../../signals/questions"
 import { Task } from "@lit/task"
 import { localized, msg } from "@lit/localize"
-import { EventType } from "../../constants"
+import { EventType, IS_DEVELOPMENT_MODE } from "../../constants"
 import { QuestionStateEventDetail } from "../../types"
 
 /**
@@ -135,7 +135,6 @@ export class HungerQuestion extends LitElement {
         }
         return html`
           <div class="question-wrapper">
-            ${this.renderMessage()}
             ${isQuestionsFinished.get()
               ? nothing
               : html`<hunger-question-form
