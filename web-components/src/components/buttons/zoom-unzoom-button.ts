@@ -2,9 +2,10 @@ import { localized, msg } from "@lit/localize"
 import { LitElement, html, css } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { SAFE_LIGHT_GREY } from "../../utils/colors"
+import "../icons/zoom"
+import "../icons/unzoom"
 
 /**
- * A button to zoom or unzoom a page
  * @element zoom-unzoom-button
  * @fires click - Fired when the button is clicked
  */

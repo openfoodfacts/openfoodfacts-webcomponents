@@ -5,6 +5,7 @@ import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { EventType } from "../../constants"
 import { classMap } from "lit/directives/class-map.js"
 import { answerQuestion } from "../../signals/questions"
+import "../buttons/zoom-unzoom-button"
 /**
  * RobotoffQuestionForm component
  * It displays a form to answer a question about a product.
