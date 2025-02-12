@@ -1,6 +1,10 @@
 import { LitElement, html, css } from "lit-element"
 import { customElement } from "lit/decorators.js"
 
+/**
+ * Component that displays a zoom icon.
+ * @element zoom-icon
+ **/
 @customElement("zoom-icon")
 export class ZoomIcon extends LitElement {
   static override styles = css`

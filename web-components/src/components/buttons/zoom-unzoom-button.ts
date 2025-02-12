@@ -3,6 +3,11 @@ import { LitElement, html, css } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { SAFE_LIGHT_GREY } from "../../utils/colors"
 
+/**
+ * A button to zoom or unzoom a page
+ * @element zoom-unzoom-button
+ * @fires click - Fired when the button is clicked
+ */
 @customElement("zoom-unzoom-button")
 @localized()
 export class ZoomUnzoomButton extends LitElement {
@@ -32,9 +37,7 @@ export class ZoomUnzoomButton extends LitElement {
   override render() {
     return html`
       <button title=${this.zoomed ? msg("Unzoom") : msg("Zoom")}>
-        ${this.zoomed
-          ? html`<unzoom-icon></unzoom-icon>`
-          : html`<zoom-icon></zoom-icon>`}
+        ${this.zoomed ? html`<unzoom-icon></unzoom-icon>` : html`<zoom-icon></zoom-icon>`}
       </button>
     `
   }
