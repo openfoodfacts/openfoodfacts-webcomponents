@@ -37,15 +37,31 @@
 </html>
 
 <script>
+  // avoid too many requests
+  const debounce = (callback) => {
+    let timeout
+    return (...args) => {
+      clearTimeout(timeout)
+      timeout = setTimeout(() => {
+        callback(...args)
+      }, 500)
+    }
+  }
   const hungerQuestion = document.getElementById("hunger-question")
   const productId = document.getElementById("product-id")
   const insightTypes = document.getElementById("insight-types")
 
+  const productDebounce = debounce((value) => {
+    hungerQuestion.setAttribute("product-id", value)
+  })
   productId.addEventListener("input", (event) => {
-    hungerQuestion.setAttribute("product-id", event.target.value)
+    productDebounce(event.target.value)
   })
 
+  const insightDebounce = debounce((value) => {
+    hungerQuestion.setAttribute("insight-types", value)
+  })
   insightTypes.addEventListener("input", (event) => {
-    hungerQuestion.setAttribute("insight-types", event.target.value)
+    insightDebounce(event.target.value)
   })
 </script>

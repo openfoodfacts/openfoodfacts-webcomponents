@@ -1,8 +1,5 @@
-import { css, type CSSResult, unsafeCSS } from "lit-element"
-import { CAPPUCINO, CHOCOLATE } from "../utils/colors"
-
-const SAFE_CHOCOLATE = unsafeCSS(CHOCOLATE)
-const SAFE_CAPPUCINO = unsafeCSS(CAPPUCINO)
+import { css, type CSSResult } from "lit-element"
+import { SAFE_CAPPUCINO, SAFE_CHOCOLATE } from "../utils/colors"
 
 export enum ButtonType {
   Chocolate = "chocolate",
@@ -21,6 +18,9 @@ export const getDefaultButtonClasses = (): CSSResult => {
       border-width: 1px;
       border-style: solid;
       cursor: pointer;
+    }
+    .button.rounded {
+      border-radius: 50%;
     }
   `
 }

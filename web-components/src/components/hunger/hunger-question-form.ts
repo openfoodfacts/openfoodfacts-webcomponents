@@ -1,12 +1,10 @@
 import { LitElement, html, css, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
-import { Question, QuestionAnnotationAnswer } from "../types/robotoff"
-import robotoff from "../api/robotoff"
-import { localized, msg } from "@lit/localize"
-import { ButtonType, getButtonClasses } from "../styles/buttons"
-import { EventType } from "../constants"
+import { Question, QuestionAnnotationAnswer } from "../../types/robotoff"
+import robotoff from "../../api/robotoff"
+import { ButtonType, getButtonClasses } from "../../styles/buttons"
+import { EventType } from "../../constants"
 import { classMap } from "lit/directives/class-map.js"
-
 /**
  * An example element.
  *
@@ -14,7 +12,6 @@ import { classMap } from "lit/directives/class-map.js"
  * @slot - This element has a slot
  * @csspart button - The button
  */
-@localized()
 @customElement("hunger-question-form")
 export class HungerQuestionForm extends LitElement {
   static override styles = [
@@ -30,6 +27,8 @@ export class HungerQuestionForm extends LitElement {
       }
 
       .question-img-wrapper {
+        position: relative;
+        justify-content: center;
         width: 100px;
       }
 
@@ -43,6 +42,9 @@ export class HungerQuestionForm extends LitElement {
       }
 
       .img-button-wrapper {
+        position: absolute;
+        bottom: 0.5rem;
+        right: 0.5rem;
         display: flex;
         justify-content: center;
       }
@@ -56,7 +58,7 @@ export class HungerQuestionForm extends LitElement {
   question?: Question
 
   @state()
-  private _enlargedImage: boolean = false
+  private _zoomed: boolean = false
 
   private emitEventClick = (event: Event, value: string) => {
     event.stopPropagation()
@@ -77,7 +79,7 @@ export class HungerQuestionForm extends LitElement {
   }
 
   private _toggleImageSize() {
-    this._enlargedImage = !this._enlargedImage
+    this._zoomed = !this._zoomed
   }
 
   private _renderImage() {
@@ -89,7 +91,7 @@ export class HungerQuestionForm extends LitElement {
       <div
         class=${classMap({
           "question-img-wrapper": true,
-          enlarged: this._enlargedImage,
+          enlarged: this._zoomed,
         })}
       >
         <div>
@@ -97,9 +99,10 @@ export class HungerQuestionForm extends LitElement {
         </div>
 
         <div class="img-button-wrapper">
-          <button class="link-button" @click=${this._toggleImageSize}>
-            ${this._enlargedImage ? msg("Reduce") : msg("Enlarge")}
-          </button>
+          <zoom-unzoom-button
+            .zoomed=${this._zoomed}
+            @click=${this._toggleImageSize}
+          ></zoom-unzoom-button>
         </div>
       </div>
     </div> `
