@@ -33,8 +33,8 @@ export class ZoomUnzoomButton extends LitElement {
     return html`
       <button title=${this.zoomed ? msg("Unzoom") : msg("Zoom")}>
         ${this.zoomed
-          ? html`<reduce-icon></reduce-icon>`
-          : html`<enlarge-icon></enlarge-icon>`}
+          ? html`<unzoom-icon></unzoom-icon>`
+          : html`<zoom-icon></zoom-icon>`}
       </button>
     `
   }
