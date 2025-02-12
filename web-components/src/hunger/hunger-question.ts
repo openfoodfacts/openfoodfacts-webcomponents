@@ -6,9 +6,10 @@ import {
   nextQuestion,
   isQuestionsFinished,
   questions,
+  hasQuestions,
 } from "../signals/questions"
 import { Task } from "@lit/task"
-import { msg } from "@lit/localize"
+import { localized, msg } from "@lit/localize"
 
 /**
  * An example element.
@@ -18,6 +19,7 @@ import { msg } from "@lit/localize"
  * @csspart button - The button
  */
 @customElement("hunger-question")
+@localized()
 export class HungerQuestion extends LitElement {
   static override styles = css`
     :host {
@@ -28,21 +30,31 @@ export class HungerQuestion extends LitElement {
       font-style: italic;
     }
   `
+  @property({ type: Object, reflect: true })
+  options: {
+    showMessage?: boolean
+    showLoading?: boolean
+    showError?: boolean
+  } = {}
 
-  @property({ attribute: "product-id" }) productId: string = ""
+  @property({ attribute: "product-id" })
+  productId: string = ""
+
+  @property({ type: String, attribute: "insight-types" })
+  insightTypes: string = ""
 
   @state()
   private _first: boolean = true
-
-  @property({ type: Boolean, attribute: "show-message" })
-  showMessage: boolean = false
 
   private _questionsTask = new Task(this, {
     task: async ([productId], {}) => {
       if (!productId) {
         return []
       }
-      await fetchQuestionsByProductCode(productId)
+      const params = this.insightTypes
+        ? { insight_types: this.insightTypes }
+        : {}
+      await fetchQuestionsByProductCode(productId, params)
       return questions.get()
     },
     args: () => [this.productId],
@@ -59,7 +71,7 @@ export class HungerQuestion extends LitElement {
 
     if (isQuestionsFinished.get()) {
       return getMessageWrapper(msg("Thank you for your assistance!"))
-    } else if (!this.showMessage) {
+    } else if (!this.options?.showMessage) {
       return nothing
     } else if (this._first) {
       this._first = false
@@ -75,10 +87,18 @@ export class HungerQuestion extends LitElement {
 
   override render() {
     return this._questionsTask.render({
-      pending: () => html`<div>Loading...</div>`,
+      pending: () => {
+        if (!this.options?.showLoading) {
+          return nothing
+        }
+        return html`<div>Loading...</div>`
+      },
       complete: (questionsList) => {
         const index = currentQuestionIndex.get() ?? 0
         const question = questionsList[index]
+        if (!hasQuestions.get()) {
+          return html``
+        }
         return html`
           <div>
             ${this.renderMessage()}
@@ -91,7 +111,12 @@ export class HungerQuestion extends LitElement {
           </div>
         `
       },
-      error: (error) => html`<div>Error: ${error}</div>`,
+      error: (error) => {
+        if (!this.options.showError) {
+          return nothing
+        }
+        return html`<div>Error: ${error}</div>`
+      },
     })
   }
 }

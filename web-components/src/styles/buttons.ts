@@ -76,8 +76,10 @@ export const BUTTON_CLASS_BY_TYPE: Record<ButtonType, CSSResult> = {
   `,
   [ButtonType.LINK]: css`
     .link-button {
+      text-decoration: none;
       background-color: transparent;
       border-color: transparent;
+      cursor: pointer;
       color: black;
     }
 

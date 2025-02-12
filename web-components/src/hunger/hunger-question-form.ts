@@ -2,9 +2,10 @@ import { LitElement, html, css, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { Question, QuestionAnnotationAnswer } from "../types/robotoff"
 import robotoff from "../api/robotoff"
-import { localized } from "@lit/localize"
+import { localized, msg } from "@lit/localize"
 import { ButtonType, getButtonClasses } from "../styles/buttons"
 import { EventType } from "../constants"
+import { classMap } from "lit/directives/class-map.js"
 
 /**
  * An example element.
@@ -28,12 +29,22 @@ export class HungerQuestionForm extends LitElement {
         max-width: 800px;
       }
 
-      .question-img {
+      .question-img-wrapper {
         width: 100px;
       }
 
-      .question-img .enlarged {
+      .question-img-wrapper.enlarged {
         width: 100%;
+        max-width: 400px;
+      }
+
+      .question-img-wrapper img {
+        width: 100%;
+      }
+
+      .img-button-wrapper {
+        display: flex;
+        justify-content: center;
       }
     `,
   ]
@@ -75,14 +86,23 @@ export class HungerQuestionForm extends LitElement {
     }
 
     return html`<div>
-      <img
-        .src=${this.question?.source_image_url}
-        alt="Product image"
-        class="question-img"
-      />
+      <div
+        class=${classMap({
+          "question-img-wrapper": true,
+          enlarged: this._enlargedImage,
+        })}
+      >
+        <div>
+          <img .src=${this.question?.source_image_url} alt="Product image" />
+        </div>
 
-      <button class="link-button" @click=${() => this.()}>
-    </div>`
+        <div class="img-button-wrapper">
+          <button class="link-button" @click=${this._toggleImageSize}>
+            ${this._enlargedImage ? msg("Reduce") : msg("Enlarge")}
+          </button>
+        </div>
+      </div>
+    </div> `
   }
 
   override render() {

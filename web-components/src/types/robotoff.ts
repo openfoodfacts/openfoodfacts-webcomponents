@@ -1,5 +1,5 @@
 export type QuestionRequestParams = Partial<{
-  insight_type: string
+  insight_types: string
   brand_filter: string
   value_tag: string
   country_filter: string

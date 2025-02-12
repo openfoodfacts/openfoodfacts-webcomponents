@@ -16,8 +16,36 @@
   </head>
   <body style="background: #f2f2f2">
     <h1>List of all available components</h1>
+    <h2>Hunger Question</h2>
     <div>
-      <hunger-question product-id="6111242380219" show-message="true" />
+      <div>
+        <label for="product-id">Product Id :</label>
+        <input type="text" id="product-id" placeholder="Id of a product" />
+      </div>
+      <div>
+        <label for="insight-types">Insight Types :</label>
+        <input type="text" id="insight-types" placeholder="Insight types" />
+      </div>
+      <hunger-question
+        product-id=""
+        insight-types=""
+        options='{"showMessage": false, "showLoading": true, "showError": true}'
+        id="hunger-question"
+      />
     </div>
   </body>
 </html>
+
+<script>
+  const hungerQuestion = document.getElementById("hunger-question")
+  const productId = document.getElementById("product-id")
+  const insightTypes = document.getElementById("insight-types")
+
+  productId.addEventListener("input", (event) => {
+    hungerQuestion.setAttribute("product-id", event.target.value)
+  })
+
+  insightTypes.addEventListener("input", (event) => {
+    hungerQuestion.setAttribute("insight-types", event.target.value)
+  })
+</script>
