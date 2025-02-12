@@ -12,7 +12,7 @@ import {
 } from "../../signals/questions"
 import { Task } from "@lit/task"
 import { localized, msg } from "@lit/localize"
-import { EventType, IS_DEVELOPMENT_MODE } from "../../constants"
+import { EventType } from "../../constants"
 import { QuestionStateEventDetail } from "../../types"
 
 /**
