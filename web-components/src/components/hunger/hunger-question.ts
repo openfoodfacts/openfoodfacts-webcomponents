@@ -125,7 +125,7 @@ export class HungerQuestion extends LitElement {
         if (!this.options?.showLoading) {
           return nothing
         }
-        return html`<div>Loading...</div>`
+        return html`<div>${msg("Loading...")}</div>`
       },
       complete: (questionsList) => {
         const index = currentQuestionIndex.get() ?? 0

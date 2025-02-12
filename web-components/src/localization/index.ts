@@ -15,7 +15,6 @@ export const { getLocale, setLocale } = configureLocalization({
   targetLocales,
   loadLocale: (locale: string) => import(`./generated/locales/${locale}.js`),
 })
-
 ;(async () => {
   try {
     // Defer first render until our initial locale is ready, to avoid a flash of
