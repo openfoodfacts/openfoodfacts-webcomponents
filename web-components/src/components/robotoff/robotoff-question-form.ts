@@ -9,7 +9,7 @@ import { answerQuestion } from "../../signals/questions"
  * HungerQuestionForm component
  * It displays a form to answer a question about a product.
  */
-@customElement("hunger-question-form")
+@customElement("robotoff-question-form")
 export class HungerQuestionForm extends LitElement {
   static override styles = [
     ...getButtonClasses([
@@ -158,6 +158,6 @@ export class HungerQuestionForm extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "hunger-question-form": HungerQuestionForm
+    "robotoff-question-form": HungerQuestionForm
   }
 }
