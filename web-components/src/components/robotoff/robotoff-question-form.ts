@@ -6,11 +6,11 @@ import { EventType } from "../../constants"
 import { classMap } from "lit/directives/class-map.js"
 import { answerQuestion } from "../../signals/questions"
 /**
- * HungerQuestionForm component
+ * RobotoffQuestionForm component
  * It displays a form to answer a question about a product.
  */
 @customElement("robotoff-question-form")
-export class HungerQuestionForm extends LitElement {
+export class RobotoffQuestionForm extends LitElement {
   static override styles = [
     ...getButtonClasses([
       ButtonType.Cappucino,
@@ -158,6 +158,6 @@ export class HungerQuestionForm extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "robotoff-question-form": HungerQuestionForm
+    "robotoff-question-form": RobotoffQuestionForm
   }
 }

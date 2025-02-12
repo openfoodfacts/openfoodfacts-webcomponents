@@ -24,7 +24,7 @@ import { QuestionStateEventDetail } from "../../types"
  */
 @customElement("robotoff-question")
 @localized()
-export class HungerQuestion extends LitElement {
+export class RobotoffQuestion extends LitElement {
   static override styles = css`
     :host {
       display: block;
@@ -156,6 +156,6 @@ export class HungerQuestion extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "robotoff-question": HungerQuestion
+    "robotoff-question": RobotoffQuestion
   }
 }
