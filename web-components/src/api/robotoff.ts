@@ -9,17 +9,20 @@ import {
 
 const robotoff = {
   annotate(insightId: string, annotation: QuestionAnnotationAnswer) {
-    const body = JSON.stringify({
+    const formBody = new URLSearchParams({
       insight_id: insightId,
-      annotation,
-    })
+      annotation: annotation,
+    }).toString()
     if (IS_DEVELOPMENT_MODE) {
-      console.log(`Annotated, ${ROBOTOFF_API_URL}/insights/annotate`, body)
+      console.log(`Annotated, ${ROBOTOFF_API_URL}/insights/annotate`, formBody)
       return
     } else {
       return fetch(`${ROBOTOFF_API_URL}/insights/annotate`, {
         method: "POST",
-        body,
+        body: formBody,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
         credentials: "include",
       })
     }
