@@ -7,9 +7,12 @@ import {
   isQuestionsFinished,
   questions,
   hasQuestions,
+  numberOfQuestions,
 } from "../../signals/questions"
 import { Task } from "@lit/task"
 import { localized, msg } from "@lit/localize"
+import { EventType } from "../../constants"
+import { QuestionStateEvent, QuestionStateEventDetail } from "../../types"
 
 /**
  * An example element.
@@ -24,6 +27,12 @@ export class HungerQuestion extends LitElement {
   static override styles = css`
     :host {
       display: block;
+    }
+    .question-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
     }
 
     .message {
@@ -53,14 +62,29 @@ export class HungerQuestion extends LitElement {
       }
       const params = insightTypes ? { insight_types: insightTypes } : {}
       await fetchQuestionsByProductCode(productId, params)
+      this._emitQuestionStateEvent()
       return questions.get()
     },
     args: () => [this.productId, this.insightTypes],
   })
 
+  private _emitQuestionStateEvent = () => {
+    const detail: QuestionStateEventDetail = {
+      index: currentQuestionIndex.get(),
+      numberOfQuestions: numberOfQuestions.get(),
+    }
+    this.dispatchEvent(
+      new CustomEvent(EventType.QUESTION_STATE, {
+        detail,
+        bubbles: true,
+        composed: true,
+      })
+    )
+  }
   private onQuestionAnswered = () => {
     nextQuestion()
     this.requestUpdate()
+    this._emitQuestionStateEvent()
   }
 
   private renderMessage() {
@@ -98,7 +122,7 @@ export class HungerQuestion extends LitElement {
           return html``
         }
         return html`
-          <div>
+          <div class="question-wrapper">
             ${this.renderMessage()}
             ${isQuestionsFinished.get()
               ? nothing

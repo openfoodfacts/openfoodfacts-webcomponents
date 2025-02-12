@@ -4,3 +4,10 @@ export type Product = {
   description: string
   imgUrl: string
 }
+
+export type QuestionStateEventDetail = {
+  index: number
+  numberOfQuestions: number
+}
+
+export type QuestionStateEvent = CustomEvent<QuestionStateEventDetail>
