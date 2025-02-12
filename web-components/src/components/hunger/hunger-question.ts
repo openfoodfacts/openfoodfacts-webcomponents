@@ -7,7 +7,7 @@ import {
   isQuestionsFinished,
   questions,
   hasQuestions,
-} from "../signals/questions"
+} from "../../signals/questions"
 import { Task } from "@lit/task"
 import { localized, msg } from "@lit/localize"
 
@@ -47,17 +47,15 @@ export class HungerQuestion extends LitElement {
   private _first: boolean = true
 
   private _questionsTask = new Task(this, {
-    task: async ([productId], {}) => {
+    task: async ([productId, insightTypes], {}) => {
       if (!productId) {
         return []
       }
-      const params = this.insightTypes
-        ? { insight_types: this.insightTypes }
-        : {}
+      const params = insightTypes ? { insight_types: insightTypes } : {}
       await fetchQuestionsByProductCode(productId, params)
       return questions.get()
     },
-    args: () => [this.productId],
+    args: () => [this.productId, this.insightTypes],
   })
 
   private onQuestionAnswered = () => {
