@@ -22,7 +22,7 @@ import { QuestionStateEventDetail } from "../../types"
  * @slot - This element has a slot
  * @csspart button - The button
  */
-@customElement("hunger-question")
+@customElement("robotoff-question")
 @localized()
 export class HungerQuestion extends LitElement {
   static override styles = css`
@@ -137,10 +137,10 @@ export class HungerQuestion extends LitElement {
           <div class="question-wrapper">
             ${isQuestionsFinished.get()
               ? nothing
-              : html`<hunger-question-form
+              : html`<robotoff-question-form
                   .question=${question}
                   @submit=${this.onQuestionAnswered}
-                ></hunger-question-form>`}
+                ></robotoff-question-form>`}
           </div>
         `
       },
@@ -156,6 +156,6 @@ export class HungerQuestion extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "hunger-question": HungerQuestion
+    "robotoff-question": HungerQuestion
   }
 }

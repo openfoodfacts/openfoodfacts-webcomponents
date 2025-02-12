@@ -16,7 +16,7 @@
   </head>
   <body style="background: #f2f2f2">
     <h1>List of all available components</h1>
-    <h2>Hunger Question</h2>
+    <h2>Robotoff Question</h2>
     <div style="">
       <div>
         <label for="product-id">Product Id :</label>
@@ -27,11 +27,11 @@
         <input type="text" id="insight-types" placeholder="Insight types" />
       </div>
       <div style="display: flex; margin-top: 1rem">
-        <hunger-question
+        <robotoff-question
           product-id=""
           insight-types=""
           options='{"showMessage": true, "showLoading": true, "showError": true}'
-          id="hunger-question"
+          id="robotoff-question"
         />
       </div>
     </div>
@@ -49,25 +49,25 @@
       }, 500)
     }
   }
-  const hungerQuestion = document.getElementById("hunger-question")
+  const robotoffQuestion = document.getElementById("robotoff-question")
   const productId = document.getElementById("product-id")
   const insightTypes = document.getElementById("insight-types")
 
   const productDebounce = debounce((value) => {
-    hungerQuestion.setAttribute("product-id", value)
+    robotoffQuestion.setAttribute("product-id", value)
   })
   productId.addEventListener("input", (event) => {
     productDebounce(event.target.value)
   })
 
   const insightDebounce = debounce((value) => {
-    hungerQuestion.setAttribute("insight-types", value)
+    robotoffQuestion.setAttribute("insight-types", value)
   })
   insightTypes.addEventListener("input", (event) => {
     insightDebounce(event.target.value)
   })
 
-  hungerQuestion.addEventListener("question-state", (event) => {
+  robotoffQuestion.addEventListener("question-state", (event) => {
     console.log("question-state", event.detail)
   })
 </script>
