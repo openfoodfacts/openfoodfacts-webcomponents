@@ -1,8 +1,8 @@
 import { LitElement, html, css } from "lit"
 import { customElement } from "lit/decorators.js"
 
-@customElement("reduce-icon")
-export class ReduceIcon extends LitElement {
+@customElement("unzoom-icon")
+export class UnzoomIcon extends LitElement {
   static override styles = css`
     :host {
       display: inline-block;
@@ -52,6 +52,6 @@ export class ReduceIcon extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "reduce-icon": ReduceIcon
+    "unzoom-icon": UnzoomIcon
   }
 }
