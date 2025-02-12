@@ -4,7 +4,6 @@ import {
   currentQuestionIndex,
   fetchQuestionsByProductCode,
   nextQuestion,
-  numberOfQuestions,
   isQuestionsFinished,
   questions,
 } from "../signals/questions"
@@ -23,6 +22,10 @@ export class HungerQuestion extends LitElement {
   static override styles = css`
     :host {
       display: block;
+    }
+
+    .message {
+      font-style: italic;
     }
   `
 
@@ -51,19 +54,22 @@ export class HungerQuestion extends LitElement {
   }
 
   private renderMessage() {
+    const getMessageWrapper = (message: string) =>
+      html`<div class="message">${message}</div>`
+
     if (isQuestionsFinished.get()) {
-      return html`<div>${msg("Thank you for your assistance!")}</div>`
+      return getMessageWrapper(msg("Thank you for your assistance!"))
     } else if (!this.showMessage) {
       return nothing
     } else if (this._first) {
       this._first = false
-      return html`<div>
-        ${msg("Open Food Facts needs your help with this product.")}
-      </div>`
+      return getMessageWrapper(
+        msg("Open Food Facts needs your help with this product.")
+      )
     }
 
     return html`<div>
-      ${msg("Thanks for your help! Can you assist with another question?")}
+      ${msg(`Thanks for your help! Can you assist with another question?`)}
     </div>`
   }
 
@@ -78,12 +84,10 @@ export class HungerQuestion extends LitElement {
             ${this.renderMessage()}
             ${isQuestionsFinished.get()
               ? nothing
-              : html`<h2>Question ${index + 1} / ${numberOfQuestions.get()}</h2>
-
-                  <hunger-question-form
-                    .question=${question}
-                    @click=${this.onQuestionAnswered}
-                  ></hunger-question-form>`}
+              : html`<hunger-question-form
+                  .question=${question}
+                  @submit=${this.onQuestionAnswered}
+                ></hunger-question-form>`}
           </div>
         `
       },
