@@ -26,6 +26,13 @@ export class HungerQuestionForm extends LitElement {
         max-width: 800px;
       }
 
+      .question-form {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
       .question-img-wrapper {
         position: relative;
         justify-content: center;
@@ -114,11 +121,11 @@ export class HungerQuestionForm extends LitElement {
     }
 
     return html`
-      <div>
+      <div class="question-form">
         <p>
           ${this.question.question} <strong> ${this.question.value} </strong>
         </p>
-        ${this._renderImage()}
+        <div>${this._renderImage()}</div>
         <div>
           <p></p>
           <button
