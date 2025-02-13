@@ -1,0 +1,1112 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/constants.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "ENV",
+          "default": "__ENV__"
+        },
+        {
+          "kind": "variable",
+          "name": "ROBOTOFF_API_URL",
+          "type": {
+            "text": "string"
+          },
+          "default": "\"https://robotoff.openfoodfacts.org/api/v1\""
+        },
+        {
+          "kind": "variable",
+          "name": "PAGE_SIZE",
+          "type": {
+            "text": "number"
+          },
+          "default": "25"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ENV",
+          "declaration": {
+            "name": "ENV",
+            "module": "src/constants.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ROBOTOFF_API_URL",
+          "declaration": {
+            "name": "ROBOTOFF_API_URL",
+            "module": "src/constants.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "PAGE_SIZE",
+          "declaration": {
+            "name": "PAGE_SIZE",
+            "module": "src/constants.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/off-webcomponents.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "setLocale",
+          "declaration": {
+            "name": "setLocale",
+            "module": "\"./localization\""
+          }
+        },
+        {
+          "kind": "js",
+          "name": "getLocale",
+          "declaration": {
+            "name": "getLocale",
+            "module": "\"./localization\""
+          }
+        },
+        {
+          "kind": "js",
+          "name": "RobotoffQuestion",
+          "declaration": {
+            "name": "RobotoffQuestion",
+            "module": "\"./components/robotoff/robotoff-question\""
+          }
+        },
+        {
+          "kind": "js",
+          "name": "RobotoffQuestionForm",
+          "declaration": {
+            "name": "RobotoffQuestionForm",
+            "module": "\"./components/robotoff/robotoff-question-form\""
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/api/robotoff.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "robotoff",
+          "type": {
+            "text": "object"
+          },
+          "default": "{\n  annotate(insightId: string, annotation: QuestionAnnotationAnswer) {\n    const formBody = new URLSearchParams({\n      insight_id: insightId,\n      annotation: annotation,\n    }).toString()\n    if (ENV.dryRun) {\n      console.log(`Annotated, ${ROBOTOFF_API_URL}/insights/annotate`, formBody)\n      return\n    } else {\n      return fetch(`${ROBOTOFF_API_URL}/insights/annotate`, {\n        method: \"POST\",\n        body: formBody,\n        headers: {\n          \"Content-Type\": \"application/x-www-form-urlencoded\",\n        },\n        credentials: \"include\",\n      })\n    }\n  },\n\n  async questionsByProductCode(code: string, questionRequestParams: QuestionRequestParams = {}) {\n    if (!questionRequestParams.lang) {\n      questionRequestParams.lang = getLocale()\n    }\n    const url = addParamsToUrl(`${ROBOTOFF_API_URL}/questions/${code}`, questionRequestParams)\n    const response = await fetch(url)\n    const result: QuestionsResponse = await response.json()\n    return result\n  },\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "robotoff",
+            "module": "src/api/robotoff.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/localization/index.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "getBrowserLocale",
+          "description": "Get the browser locale, it will keep only the language part"
+        },
+        {
+          "kind": "variable",
+          "name": "{ getLocale, setLocale }",
+          "description": "Configure the localization, it will load the locale files and set the source and target locales"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "getBrowserLocale",
+          "declaration": {
+            "name": "getBrowserLocale",
+            "module": "src/localization/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "{ getLocale, setLocale }",
+          "declaration": {
+            "name": "{ getLocale, setLocale }",
+            "module": "src/localization/index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/localization/translations.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "getPluralTranslation",
+          "parameters": [
+            {
+              "name": "value",
+              "type": {
+                "text": "number | undefined | null"
+              }
+            },
+            {
+              "name": "singleTranslation",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "pluralTranslation",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "description": "Utility functions to take the appropriate translation based on the value\nIf value is <= 1 or null or undefined, it will return the singleTranslation, otherwise the pluralTranslation",
+          "return": {
+            "type": {
+              "text": ""
+            }
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "getPluralTranslation",
+          "declaration": {
+            "name": "getPluralTranslation",
+            "module": "src/localization/translations.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/signals/questions.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "questions",
+          "default": "new State<any[]>([])"
+        },
+        {
+          "kind": "variable",
+          "name": "currentQuestionIndex",
+          "default": "new State(0)",
+          "description": "Current question index"
+        },
+        {
+          "kind": "variable",
+          "name": "hasAnswered",
+          "default": "new State(false)",
+          "description": "Has the user answered to one question"
+        },
+        {
+          "kind": "variable",
+          "name": "hasQuestions",
+          "default": "new Computed(() => questions.get().length > 0)",
+          "description": "Does the current product has questions"
+        },
+        {
+          "kind": "variable",
+          "name": "numberOfQuestions",
+          "default": "new Computed(() => questions.get().length ?? 0)",
+          "description": "Number of questions available"
+        },
+        {
+          "kind": "variable",
+          "name": "isQuestionsFinished",
+          "default": "new State(false)",
+          "description": "Indicates if all questions have been answered"
+        },
+        {
+          "kind": "function",
+          "name": "fetchQuestionsByProductCode",
+          "parameters": [
+            {
+              "name": "code",
+              "type": {
+                "text": "string"
+              },
+              "description": "The product code."
+            },
+            {
+              "name": "params",
+              "default": "{}",
+              "type": {
+                "text": "QuestionRequestParams"
+              },
+              "description": "Additional parameters for the question request."
+            }
+          ],
+          "description": "Fetches questions for a given product code."
+        },
+        {
+          "kind": "function",
+          "name": "checkIfQuestionsFinished",
+          "description": "Checks if all questions have been answered.",
+          "return": {
+            "type": {
+              "text": ""
+            }
+          }
+        },
+        {
+          "kind": "function",
+          "name": "answerQuestion",
+          "parameters": [
+            {
+              "name": "insightId",
+              "type": {
+                "text": "string"
+              },
+              "description": "The ID of the insight."
+            },
+            {
+              "name": "value",
+              "type": {
+                "text": "QuestionAnnotationAnswer"
+              },
+              "description": "The answer to the question."
+            }
+          ],
+          "description": "Answers a question."
+        },
+        {
+          "kind": "function",
+          "name": "nextQuestion",
+          "description": "Moves to the next question.",
+          "return": {
+            "type": {
+              "text": ""
+            }
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "questions",
+          "declaration": {
+            "name": "questions",
+            "module": "src/signals/questions.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "currentQuestionIndex",
+          "declaration": {
+            "name": "currentQuestionIndex",
+            "module": "src/signals/questions.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "hasAnswered",
+          "declaration": {
+            "name": "hasAnswered",
+            "module": "src/signals/questions.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "hasQuestions",
+          "declaration": {
+            "name": "hasQuestions",
+            "module": "src/signals/questions.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "numberOfQuestions",
+          "declaration": {
+            "name": "numberOfQuestions",
+            "module": "src/signals/questions.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "isQuestionsFinished",
+          "declaration": {
+            "name": "isQuestionsFinished",
+            "module": "src/signals/questions.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "fetchQuestionsByProductCode",
+          "declaration": {
+            "name": "fetchQuestionsByProductCode",
+            "module": "src/signals/questions.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "checkIfQuestionsFinished",
+          "declaration": {
+            "name": "checkIfQuestionsFinished",
+            "module": "src/signals/questions.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "answerQuestion",
+          "declaration": {
+            "name": "answerQuestion",
+            "module": "src/signals/questions.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "nextQuestion",
+          "declaration": {
+            "name": "nextQuestion",
+            "module": "src/signals/questions.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/test/off-webcomponents_test.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/index.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/robotoff.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/styles/buttons.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "getDefaultButtonClasses",
+          "return": {
+            "type": {
+              "text": "CSSResult"
+            }
+          }
+        },
+        {
+          "kind": "variable",
+          "name": "BUTTON_CLASS_BY_TYPE",
+          "type": {
+            "text": "Record<ButtonType, CSSResult>"
+          },
+          "default": "{\n  [ButtonType.Chocolate]: css`\n    .chocolate-button {\n      background-color: ${SAFE_CHOCOLATE};\n      border-color: ${SAFE_CHOCOLATE};\n      color: white;\n    }\n\n    .chocolate-button:hover {\n      background-color: white;\n      color: ${SAFE_CHOCOLATE};\n    }\n  `,\n  [ButtonType.Cappucino]: css`\n    .cappucino-button {\n      background-color: ${SAFE_CAPPUCINO};\n      border-color: ${SAFE_CAPPUCINO};\n      color: black;\n    }\n\n    .cappucino-button:hover {\n      background-color: white;\n    }\n  `,\n  [ButtonType.ChocolateOutline]: css`\n    .chocolate-button-outline {\n      background-color: transparent;\n      border-color: ${SAFE_CHOCOLATE};\n      color: ${SAFE_CHOCOLATE};\n    }\n\n    .chocolate-button-outline:hover {\n      background-color: ${SAFE_CHOCOLATE};\n      color: white;\n    }\n  `,\n  [ButtonType.White]: css`\n    .white-button {\n      background-color: white;\n      border-color: white;\n      color: black;\n    }\n\n    .white-button:hover {\n      border-color: black;\n      background-color: black;\n      color: white;\n    }\n  `,\n  [ButtonType.LINK]: css`\n    .link-button {\n      text-decoration: none;\n      background-color: transparent;\n      border-color: transparent;\n      cursor: pointer;\n      color: black;\n    }\n\n    .link-button:hover {\n      text-decoration: underline;\n    }\n  `,\n}"
+        },
+        {
+          "kind": "function",
+          "name": "getButtonClasses",
+          "return": {
+            "type": {
+              "text": "CSSResult[]"
+            }
+          },
+          "parameters": [
+            {
+              "name": "types",
+              "type": {
+                "text": "ButtonType[]"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "getDefaultButtonClasses",
+          "declaration": {
+            "name": "getDefaultButtonClasses",
+            "module": "src/styles/buttons.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BUTTON_CLASS_BY_TYPE",
+          "declaration": {
+            "name": "BUTTON_CLASS_BY_TYPE",
+            "module": "src/styles/buttons.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "getButtonClasses",
+          "declaration": {
+            "name": "getButtonClasses",
+            "module": "src/styles/buttons.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/colors.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "CHOCOLATE",
+          "type": {
+            "text": "string"
+          },
+          "default": "\"#341100\""
+        },
+        {
+          "kind": "variable",
+          "name": "CAPPUCINO",
+          "type": {
+            "text": "string"
+          },
+          "default": "\"#ede0db\""
+        },
+        {
+          "kind": "variable",
+          "name": "LIGHT_GREY",
+          "type": {
+            "text": "string"
+          },
+          "default": "\"#f0f0f0\""
+        },
+        {
+          "kind": "variable",
+          "name": "SAFE_CAPPUCINO"
+        },
+        {
+          "kind": "variable",
+          "name": "SAFE_CHOCOLATE"
+        },
+        {
+          "kind": "variable",
+          "name": "SAFE_LIGHT_GREY"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CHOCOLATE",
+          "declaration": {
+            "name": "CHOCOLATE",
+            "module": "src/utils/colors.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "CAPPUCINO",
+          "declaration": {
+            "name": "CAPPUCINO",
+            "module": "src/utils/colors.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "LIGHT_GREY",
+          "declaration": {
+            "name": "LIGHT_GREY",
+            "module": "src/utils/colors.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SAFE_CAPPUCINO",
+          "declaration": {
+            "name": "SAFE_CAPPUCINO",
+            "module": "src/utils/colors.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SAFE_CHOCOLATE",
+          "declaration": {
+            "name": "SAFE_CHOCOLATE",
+            "module": "src/utils/colors.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SAFE_LIGHT_GREY",
+          "declaration": {
+            "name": "SAFE_LIGHT_GREY",
+            "module": "src/utils/colors.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/index.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "reformatValueTag",
+          "parameters": [
+            {
+              "name": "value",
+              "type": {
+                "text": "string"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "removeEmptyKeys",
+          "parameters": [
+            {
+              "name": "obj",
+              "type": {
+                "text": "Record<string, any>"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "sleep",
+          "parameters": [
+            {
+              "name": "ms",
+              "type": {
+                "text": "number"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "capitaliseName",
+          "parameters": [
+            {
+              "name": "string",
+              "type": {
+                "text": "string | undefined"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "paramsToUrl",
+          "parameters": [
+            {
+              "name": "params",
+              "type": {
+                "text": "Record<string, any>"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "addParamsToUrl",
+          "parameters": [
+            {
+              "name": "url",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "params",
+              "type": {
+                "text": "Record<string, any>"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "reformatValueTag",
+          "declaration": {
+            "name": "reformatValueTag",
+            "module": "src/utils/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "removeEmptyKeys",
+          "declaration": {
+            "name": "removeEmptyKeys",
+            "module": "src/utils/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "sleep",
+          "declaration": {
+            "name": "sleep",
+            "module": "src/utils/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "capitaliseName",
+          "declaration": {
+            "name": "capitaliseName",
+            "module": "src/utils/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "paramsToUrl",
+          "declaration": {
+            "name": "paramsToUrl",
+            "module": "src/utils/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "addParamsToUrl",
+          "declaration": {
+            "name": "addParamsToUrl",
+            "module": "src/utils/index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/localization/generated/locale-codes.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "sourceLocale",
+          "default": "`en`",
+          "description": "The locale code that templates in this source code are written in."
+        },
+        {
+          "kind": "variable",
+          "name": "targetLocales",
+          "type": {
+            "text": "[\n  `fr`,\n]"
+          },
+          "default": "[\n  `fr`,\n]",
+          "description": "The other locale codes that this application is localized into. Sorted\nlexicographically."
+        },
+        {
+          "kind": "variable",
+          "name": "allLocales",
+          "type": {
+            "text": "[\n  `en`,\n  `fr`,\n]"
+          },
+          "default": "[\n  `en`,\n  `fr`,\n]",
+          "description": "All valid project locale codes. Sorted lexicographically."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "sourceLocale",
+          "declaration": {
+            "name": "sourceLocale",
+            "module": "src/localization/generated/locale-codes.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "targetLocales",
+          "declaration": {
+            "name": "targetLocales",
+            "module": "src/localization/generated/locale-codes.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "allLocales",
+          "declaration": {
+            "name": "allLocales",
+            "module": "src/localization/generated/locale-codes.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/robotoff/robotoff-question-form.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "RobotoffQuestionForm component\nIt displays a form to answer a question about a product.",
+          "name": "RobotoffQuestionForm",
+          "members": [
+            {
+              "kind": "field",
+              "name": "question",
+              "type": {
+                "text": "Question | undefined"
+              },
+              "description": "The question to display.",
+              "attribute": "question",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "_zoomed",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "The image size is zoomed or not."
+            },
+            {
+              "kind": "field",
+              "name": "emitEventClick",
+              "privacy": "private",
+              "description": "Emit an event submit when the user clicks on a button.\nIt stops the propagation of the event to avoid the click event on the parent."
+            },
+            {
+              "kind": "field",
+              "name": "_annotateProduct",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_toggleImageSize",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_renderImage",
+              "privacy": "private"
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "EventType.SUBMIT"
+              },
+              "description": "When the form is submitted",
+              "name": ""
+            }
+          ],
+          "attributes": [
+            {
+              "name": "question",
+              "type": {
+                "text": "Question | undefined"
+              },
+              "description": "The question to display.",
+              "fieldName": "question"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "robotoff-question-form",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RobotoffQuestionForm",
+          "declaration": {
+            "name": "RobotoffQuestionForm",
+            "module": "src/components/robotoff/robotoff-question-form.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "robotoff-question-form",
+          "declaration": {
+            "name": "RobotoffQuestionForm",
+            "module": "src/components/robotoff/robotoff-question-form.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/robotoff/robotoff-question.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Robotoff question component",
+          "name": "RobotoffQuestion",
+          "members": [
+            {
+              "kind": "field",
+              "name": "options",
+              "type": {
+                "text": "Object"
+              },
+              "default": "{}",
+              "description": "Options for the component",
+              "attribute": "options",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "productId",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "description": "The product id to fetch questions for",
+              "attribute": "product-id"
+            },
+            {
+              "kind": "field",
+              "name": "insightTypes",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "description": "The insight types to filter questions separate by comma",
+              "attribute": "insight-types"
+            },
+            {
+              "kind": "field",
+              "name": "_questionsTask",
+              "privacy": "private",
+              "default": "new Task(this, {\n    task: async ([productId, insightTypes], {}) => {\n      if (!productId) {\n        return []\n      }\n      const params = insightTypes ? { insight_types: insightTypes } : {}\n      await fetchQuestionsByProductCode(productId, params)\n      this._emitQuestionStateEvent()\n      return questions.get()\n    },\n    args: () => [this.productId, this.insightTypes],\n  })"
+            },
+            {
+              "kind": "field",
+              "name": "_emitQuestionStateEvent",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "onQuestionAnswered",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "renderMessage",
+              "privacy": "private"
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "EventType.QUESTION_STATE"
+              },
+              "description": "When the state of the question changes",
+              "name": ""
+            }
+          ],
+          "attributes": [
+            {
+              "name": "options",
+              "type": {
+                "text": "Object"
+              },
+              "default": "{}",
+              "description": "Options for the component",
+              "fieldName": "options"
+            },
+            {
+              "name": "product-id",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "description": "The product id to fetch questions for",
+              "fieldName": "productId"
+            },
+            {
+              "name": "insight-types",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "description": "The insight types to filter questions separate by comma",
+              "fieldName": "insightTypes"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "robotoff-question",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RobotoffQuestion",
+          "declaration": {
+            "name": "RobotoffQuestion",
+            "module": "src/components/robotoff/robotoff-question.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "robotoff-question",
+          "declaration": {
+            "name": "RobotoffQuestion",
+            "module": "src/components/robotoff/robotoff-question.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/icons/unzoom.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Component that displays a unzoom icon.",
+          "name": "UnzoomIcon",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "unzoom-icon",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UnzoomIcon",
+          "declaration": {
+            "name": "UnzoomIcon",
+            "module": "src/components/icons/unzoom.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "unzoom-icon",
+          "declaration": {
+            "name": "UnzoomIcon",
+            "module": "src/components/icons/unzoom.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/icons/zoom.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Component that displays a zoom icon.",
+          "name": "ZoomIcon",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit-element"
+          },
+          "tagName": "zoom-icon",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ZoomIcon",
+          "declaration": {
+            "name": "ZoomIcon",
+            "module": "src/components/icons/zoom.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "zoom-icon",
+          "declaration": {
+            "name": "ZoomIcon",
+            "module": "src/components/icons/zoom.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/buttons/zoom-unzoom-button.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ZoomUnzoomButton",
+          "members": [
+            {
+              "kind": "field",
+              "name": "zoomed",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "zoomed"
+            }
+          ],
+          "events": [
+            {
+              "description": "Fired when the button is clicked",
+              "name": "click"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "zoomed",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "zoomed"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "zoom-unzoom-button",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ZoomUnzoomButton",
+          "declaration": {
+            "name": "ZoomUnzoomButton",
+            "module": "src/components/buttons/zoom-unzoom-button.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "zoom-unzoom-button",
+          "declaration": {
+            "name": "ZoomUnzoomButton",
+            "module": "src/components/buttons/zoom-unzoom-button.ts"
+          }
+        }
+      ]
+    }
+  ]
+}
