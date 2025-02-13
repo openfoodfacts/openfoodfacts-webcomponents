@@ -32,7 +32,7 @@ export const updateLitLocalizeJsonFile = async () => {
   const litLocalizeJson = fs.readFileSync("./lit-localize.json", "utf8")
   const litLocalizeJsonParsed = JSON.parse(litLocalizeJson)
   litLocalizeJsonParsed.targetLocales = languageCodes
-  //overwrite lit-localize.json file
+  // overwrite lit-localize.json file
   fs.writeFileSync("./lit-localize.json", JSON.stringify(litLocalizeJsonParsed, null, 2))
 }
 
