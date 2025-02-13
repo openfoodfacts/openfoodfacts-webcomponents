@@ -1,4 +1,4 @@
-import { ROBOTOFF_API_URL, IS_DEVELOPMENT_MODE } from "../constants"
+import { ROBOTOFF_API_URL, ENV } from "../constants"
 import { addParamsToUrl } from "../utils"
 import { getLocale } from "../localization"
 import {
@@ -13,7 +13,7 @@ const robotoff = {
       insight_id: insightId,
       annotation: annotation,
     }).toString()
-    if (IS_DEVELOPMENT_MODE) {
+    if (ENV.dryRun) {
       console.log(`Annotated, ${ROBOTOFF_API_URL}/insights/annotate`, formBody)
       return
     } else {
@@ -28,17 +28,11 @@ const robotoff = {
     }
   },
 
-  async questionsByProductCode(
-    code: string,
-    questionRequestParams: QuestionRequestParams = {}
-  ) {
+  async questionsByProductCode(code: string, questionRequestParams: QuestionRequestParams = {}) {
     if (!questionRequestParams.lang) {
       questionRequestParams.lang = getLocale()
     }
-    const url = addParamsToUrl(
-      `${ROBOTOFF_API_URL}/questions/${code}`,
-      questionRequestParams
-    )
+    const url = addParamsToUrl(`${ROBOTOFF_API_URL}/questions/${code}`, questionRequestParams)
     const response = await fetch(url)
     const result: QuestionsResponse = await response.json()
     return result
