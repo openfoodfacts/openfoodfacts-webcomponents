@@ -16,7 +16,7 @@
     "translations:build": "lit-localize build",
     "translations:extract": "lit-localize extract",
     "format": "prettier \"**/*.{cjs,html,js,json,md,ts}\" --ignore-path ./.eslintignore --write",
-    "analyze": "cem analyze --litelement --globs \"src/**/*.ts\" --outdir ../docs",
+    "analyze": "cem analyze --litelement --globs \"src/**/*.ts\"",
     "analyze:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
     "serve": "wds --watch",
     "dev": "concurrently \"npm run build:watch\" \"npm run serve\"",
