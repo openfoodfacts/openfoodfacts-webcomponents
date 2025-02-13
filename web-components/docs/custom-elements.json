@@ -452,6 +452,12 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/test/off-webcomponents_test.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/types/index.ts",
       "declarations": [],
       "exports": []
@@ -459,12 +465,6 @@
     {
       "kind": "javascript-module",
       "path": "src/types/robotoff.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/test/off-webcomponents_test.ts",
       "declarations": [],
       "exports": []
     },
