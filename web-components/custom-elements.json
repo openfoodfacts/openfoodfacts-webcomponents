@@ -386,24 +386,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/test/off-webcomponents_test.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/index.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/types/robotoff.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/styles/buttons.ts",
       "declarations": [
         {
@@ -467,6 +449,24 @@
           }
         }
       ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/index.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/robotoff.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/test/off-webcomponents_test.ts",
+      "declarations": [],
+      "exports": []
     },
     {
       "kind": "javascript-module",
@@ -696,56 +696,134 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/localization/generated/locale-codes.ts",
+      "path": "src/components/buttons/zoom-unzoom-button.ts",
       "declarations": [
         {
-          "kind": "variable",
-          "name": "sourceLocale",
-          "default": "`en`",
-          "description": "The locale code that templates in this source code are written in."
-        },
-        {
-          "kind": "variable",
-          "name": "targetLocales",
-          "type": {
-            "text": "[\n  `fr`,\n]"
+          "kind": "class",
+          "description": "",
+          "name": "ZoomUnzoomButton",
+          "members": [
+            {
+              "kind": "field",
+              "name": "zoomed",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "zoomed"
+            }
+          ],
+          "events": [
+            {
+              "description": "Fired when the button is clicked",
+              "name": "click"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "zoomed",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "zoomed"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
           },
-          "default": "[\n  `fr`,\n]",
-          "description": "The other locale codes that this application is localized into. Sorted\nlexicographically."
-        },
-        {
-          "kind": "variable",
-          "name": "allLocales",
-          "type": {
-            "text": "[\n  `en`,\n  `fr`,\n]"
-          },
-          "default": "[\n  `en`,\n  `fr`,\n]",
-          "description": "All valid project locale codes. Sorted lexicographically."
+          "tagName": "zoom-unzoom-button",
+          "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "sourceLocale",
+          "name": "ZoomUnzoomButton",
           "declaration": {
-            "name": "sourceLocale",
-            "module": "src/localization/generated/locale-codes.ts"
+            "name": "ZoomUnzoomButton",
+            "module": "src/components/buttons/zoom-unzoom-button.ts"
           }
         },
         {
-          "kind": "js",
-          "name": "targetLocales",
+          "kind": "custom-element-definition",
+          "name": "zoom-unzoom-button",
           "declaration": {
-            "name": "targetLocales",
-            "module": "src/localization/generated/locale-codes.ts"
+            "name": "ZoomUnzoomButton",
+            "module": "src/components/buttons/zoom-unzoom-button.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/icons/unzoom.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Component that displays a unzoom icon.",
+          "name": "UnzoomIcon",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "unzoom-icon",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UnzoomIcon",
+          "declaration": {
+            "name": "UnzoomIcon",
+            "module": "src/components/icons/unzoom.ts"
           }
         },
         {
-          "kind": "js",
-          "name": "allLocales",
+          "kind": "custom-element-definition",
+          "name": "unzoom-icon",
           "declaration": {
-            "name": "allLocales",
-            "module": "src/localization/generated/locale-codes.ts"
+            "name": "UnzoomIcon",
+            "module": "src/components/icons/unzoom.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/icons/zoom.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Component that displays a zoom icon.",
+          "name": "ZoomIcon",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit-element"
+          },
+          "tagName": "zoom-icon",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ZoomIcon",
+          "declaration": {
+            "name": "ZoomIcon",
+            "module": "src/components/icons/zoom.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "zoom-icon",
+          "declaration": {
+            "name": "ZoomIcon",
+            "module": "src/components/icons/zoom.ts"
           }
         }
       ]
@@ -976,134 +1054,56 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/icons/unzoom.ts",
+      "path": "src/localization/generated/locale-codes.ts",
       "declarations": [
         {
-          "kind": "class",
-          "description": "Component that displays a unzoom icon.",
-          "name": "UnzoomIcon",
-          "members": [],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
+          "kind": "variable",
+          "name": "sourceLocale",
+          "default": "`en`",
+          "description": "The locale code that templates in this source code are written in."
+        },
+        {
+          "kind": "variable",
+          "name": "targetLocales",
+          "type": {
+            "text": "[\n  `fr`,\n]"
           },
-          "tagName": "unzoom-icon",
-          "customElement": true
+          "default": "[\n  `fr`,\n]",
+          "description": "The other locale codes that this application is localized into. Sorted\nlexicographically."
+        },
+        {
+          "kind": "variable",
+          "name": "allLocales",
+          "type": {
+            "text": "[\n  `en`,\n  `fr`,\n]"
+          },
+          "default": "[\n  `en`,\n  `fr`,\n]",
+          "description": "All valid project locale codes. Sorted lexicographically."
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "UnzoomIcon",
+          "name": "sourceLocale",
           "declaration": {
-            "name": "UnzoomIcon",
-            "module": "src/components/icons/unzoom.ts"
+            "name": "sourceLocale",
+            "module": "src/localization/generated/locale-codes.ts"
           }
         },
-        {
-          "kind": "custom-element-definition",
-          "name": "unzoom-icon",
-          "declaration": {
-            "name": "UnzoomIcon",
-            "module": "src/components/icons/unzoom.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/icons/zoom.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Component that displays a zoom icon.",
-          "name": "ZoomIcon",
-          "members": [],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit-element"
-          },
-          "tagName": "zoom-icon",
-          "customElement": true
-        }
-      ],
-      "exports": [
         {
           "kind": "js",
-          "name": "ZoomIcon",
+          "name": "targetLocales",
           "declaration": {
-            "name": "ZoomIcon",
-            "module": "src/components/icons/zoom.ts"
+            "name": "targetLocales",
+            "module": "src/localization/generated/locale-codes.ts"
           }
         },
-        {
-          "kind": "custom-element-definition",
-          "name": "zoom-icon",
-          "declaration": {
-            "name": "ZoomIcon",
-            "module": "src/components/icons/zoom.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/buttons/zoom-unzoom-button.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ZoomUnzoomButton",
-          "members": [
-            {
-              "kind": "field",
-              "name": "zoomed",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "attribute": "zoomed"
-            }
-          ],
-          "events": [
-            {
-              "description": "Fired when the button is clicked",
-              "name": "click"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "zoomed",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "fieldName": "zoomed"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "zoom-unzoom-button",
-          "customElement": true
-        }
-      ],
-      "exports": [
         {
           "kind": "js",
-          "name": "ZoomUnzoomButton",
+          "name": "allLocales",
           "declaration": {
-            "name": "ZoomUnzoomButton",
-            "module": "src/components/buttons/zoom-unzoom-button.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "zoom-unzoom-button",
-          "declaration": {
-            "name": "ZoomUnzoomButton",
-            "module": "src/components/buttons/zoom-unzoom-button.ts"
+            "name": "allLocales",
+            "module": "src/localization/generated/locale-codes.ts"
           }
         }
       ]
