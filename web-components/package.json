@@ -12,9 +12,9 @@
     "clean": "rimraf dist && rimraf my-element.{d.ts,d.ts.map,js,js.map} test/my-element.{d.ts,d.ts.map,js,js.map} test/my-element_test.{d.ts,d.ts.map,js,js.map}",
     "lint": "npm run lint:lit-analyzer && npm run lint:eslint",
     "lint:eslint": "eslint 'src/**/*.ts'",
-    "lint:lit-analyzer": "lit-analyzer",
+    "translations:update-language-codes": "NODE_PATH=. node scripts/update-language-codes.js",
     "translations:build": "lit-localize build",
-    "translations:extract": "lit-localize extract",
+    "translations:extract": "npm run translations:update-language-codes && lit-localize extract",
     "format": "prettier \"**/*.{cjs,html,js,json,md,ts}\" --ignore-path ./.eslintignore --write",
     "analyze": "cem analyze --litelement --globs \"src/**/*.ts\" --outdir docs",
     "analyze:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
@@ -69,6 +69,7 @@
     "rollup-plugin-serve": "^3.0.0",
     "rollup-plugin-sourcemaps": "^0.6.3",
     "rollup-plugin-summary": "^2.0.1",
+    "ts-node": "^10.9.2",
     "typescript": "~5.5.0"
   },
   "customElements": "custom-elements.json"
