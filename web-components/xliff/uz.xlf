@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+<file target-language="uz" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+<body>
+<trans-unit id="s01d2865e3e1d5501">
+  <source>Thank you for your assistance!</source>
+</trans-unit>
+<trans-unit id="s4e94adf723979402">
+  <source>Open Food Facts needs your help with this product.</source>
+</trans-unit>
+<trans-unit id="s25e94495991e95ba">
+  <source>Thanks for your help! Can you assist with another question?</source>
+</trans-unit>
+<trans-unit id="s49730f3d5751a433">
+  <source>Loading...</source>
+</trans-unit>
+<trans-unit id="s95d23d03f9147581">
+  <source>Unzoom</source>
+</trans-unit>
+<trans-unit id="s166bd56d19670a72">
+  <source>Zoom</source>
+</trans-unit>
+</body>
+</file>
+</xliff>
