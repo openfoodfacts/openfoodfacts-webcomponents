@@ -1,4 +1,4 @@
-import { ROBOTOFF_API_URL, ENV } from "../constants"
+import { ENV } from "../constants"
 import { addParamsToUrl } from "../utils"
 import { getLocale } from "../localization"
 import {
@@ -6,6 +6,11 @@ import {
   QuestionsResponse,
   QuestionAnnotationAnswer,
 } from "../types/robotoff"
+import { robotoffApiUrl } from "../signals/robotoff"
+
+const getApiUrl = (path: string) => {
+  return `${robotoffApiUrl.get()}}${path}`
+}
 
 const robotoff = {
   annotate(insightId: string, annotation: QuestionAnnotationAnswer) {
@@ -13,11 +18,12 @@ const robotoff = {
       insight_id: insightId,
       annotation: annotation,
     }).toString()
+    const apiUrl = getApiUrl(`/insights/annotate`)
     if (ENV.dryRun) {
-      console.log(`Annotated, ${ROBOTOFF_API_URL}/insights/annotate`, formBody)
+      console.log(`Annotated ${apiUrl}`, formBody)
       return
     } else {
-      return fetch(`${ROBOTOFF_API_URL}/insights/annotate`, {
+      return fetch(apiUrl, {
         method: "POST",
         body: formBody,
         headers: {
@@ -32,7 +38,8 @@ const robotoff = {
     if (!questionRequestParams.lang) {
       questionRequestParams.lang = getLocale()
     }
-    const url = addParamsToUrl(`${ROBOTOFF_API_URL}/questions/${code}`, questionRequestParams)
+    const apiUrl = getApiUrl(`/questions/${code}`)
+    const url = addParamsToUrl(apiUrl, questionRequestParams)
     const response = await fetch(url)
     const result: QuestionsResponse = await response.json()
     return result

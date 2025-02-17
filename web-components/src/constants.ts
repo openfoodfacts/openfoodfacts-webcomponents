@@ -6,7 +6,7 @@ declare const __ENV__: {
 
 export const ENV = __ENV__
 
-export const ROBOTOFF_API_URL = "https://robotoff.openfoodfacts.org/api/v1"
+export const DEFAULT_ROBOTOFF_API_URL = 
 export const PAGE_SIZE = 25
 
 export enum EventType {
