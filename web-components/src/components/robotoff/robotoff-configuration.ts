@@ -1,27 +1,26 @@
+import { robotoffApiUrl, robotoffDryRun } from "../../signals/robotoff"
+import { DEFAULT_ROBOTOFF_CONFIGURATION } from "../../constants"
 import { LitElement } from "lit"
-import { customElement, property } from "lit/decorators"
-import { robotoffApiUrl } from "../../signals/robotoff"
-import { ENV } from "../../constants"
+import { customElement, property } from "lit/decorators.js"
 
-/**
- * Robotoff configuration
- * @element robotoff-configuration
- */
-@customElement("Robotoff-configuration")
+@customElement("robotoff-configuration")
 export class RobotoffConfiguration extends LitElement {
   @property({ type: String, attribute: "robotoff-api-url" })
-  robotoffApiUrl: string = "https://robotoff.openfoodfacts.org/api/v1"
+  robotoffApiUrl: string = DEFAULT_ROBOTOFF_CONFIGURATION.apiUrl
 
   @property({ type: Boolean, attribute: "dry-run" })
-  dryRun: boolean = ENV.dryRun
+  dryRun: boolean = DEFAULT_ROBOTOFF_CONFIGURATION.dryRun
 
   override attributeChangedCallback(name: string, oldval: string, newval: string) {
     super.attributeChangedCallback(name, oldval, newval)
     if (name === "robotoff-api-url") {
       robotoffApiUrl.set(newval)
+    } else if (name === "dry-run") {
+      robotoffDryRun.set(newval === "true")
     }
   }
 }
+
 declare global {
   interface HTMLElementTagNameMap {
     "robotoff-configuration": RobotoffConfiguration
