@@ -1,5 +1,5 @@
 import { addParamsToUrl } from "../utils"
-import { getLocale } from "../localization"
+import { getLocaleAfterInit } from "../localization"
 import {
   QuestionRequestParams,
   QuestionsResponse,
@@ -35,7 +35,7 @@ const robotoff = {
 
   async questionsByProductCode(code: string, questionRequestParams: QuestionRequestParams = {}) {
     if (!questionRequestParams.lang) {
-      questionRequestParams.lang = getLocale()
+      questionRequestParams.lang = await getLocaleAfterInit()
     }
     const apiUrl = getApiUrl(`/questions/${code}`)
     const url = addParamsToUrl(apiUrl, questionRequestParams)

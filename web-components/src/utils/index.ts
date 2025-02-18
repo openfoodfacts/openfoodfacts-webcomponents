@@ -31,9 +31,7 @@ export const reformatValueTag = (value: string) => {
 }
 
 export const removeEmptyKeys = (obj: Record<string, any>) => {
-  Object.keys(obj).forEach(
-    (key) => (obj[key] == null || obj[key] === "") && delete obj[key]
-  )
+  Object.keys(obj).forEach((key) => (obj[key] == null || obj[key] === "") && delete obj[key])
   return obj
 }
 
@@ -61,3 +59,6 @@ export const addParamsToUrl = (url: string, params: Record<string, any>) => {
   }
   return `${url}?${paramsToUrl(params)}`
 }
+
+// Function to delay the execution of a function
+export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
