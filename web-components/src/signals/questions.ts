@@ -12,6 +12,7 @@ export const questionIdsByProductCode = new State<Record<string, string[]>>({})
 // Current question index by product code
 export const currentQuestionIndexByProductCode = new State<Record<string, number>>({})
 
+// Is questions finished by product code
 export const isQuestionsFinishedByProductCode = new State<Record<string, boolean>>({})
 
 // Get questions by product code
