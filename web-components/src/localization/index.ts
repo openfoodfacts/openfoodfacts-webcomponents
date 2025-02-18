@@ -21,7 +21,7 @@ export const { getLocale, setLocale } = configureLocalization({
 export let isLocaleSet = false
 
 /**
- * Get the locale and delay if it is not set yet
+ * Get the locale if it's set or delay 100ms to get it
  */
 export const getLocaleAfterInit = async (): Promise<string> => {
   // Delay to wait for the locale to be set
