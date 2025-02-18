@@ -20,6 +20,11 @@ const CONFIGURATION_PROPERTIES: Record<
   },
 }
 
+/**
+ * Robotoff configuration element.
+ * It is used to configure the robotoff parameters.
+ * @element robotoff-configuration
+ */
 @customElement("robotoff-configuration")
 export class RobotoffConfiguration extends LitElement {
   @property({ type: String, attribute: "api-url" })
