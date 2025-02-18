@@ -8,16 +8,11 @@
       "declarations": [
         {
           "kind": "variable",
-          "name": "ENV",
-          "default": "__ENV__"
-        },
-        {
-          "kind": "variable",
-          "name": "ROBOTOFF_API_URL",
+          "name": "DEFAULT_ROBOTOFF_CONFIGURATION",
           "type": {
-            "text": "string"
+            "text": "object"
           },
-          "default": "\"https://robotoff.openfoodfacts.org/api/v1\""
+          "default": "{\n  apiUrl: \"https://robotoff.openfoodfacts.org/api/v1\",\n  dryRun: false,\n}"
         },
         {
           "kind": "variable",
@@ -31,17 +26,9 @@
       "exports": [
         {
           "kind": "js",
-          "name": "ENV",
+          "name": "DEFAULT_ROBOTOFF_CONFIGURATION",
           "declaration": {
-            "name": "ENV",
-            "module": "src/constants.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ROBOTOFF_API_URL",
-          "declaration": {
-            "name": "ROBOTOFF_API_URL",
+            "name": "DEFAULT_ROBOTOFF_CONFIGURATION",
             "module": "src/constants.ts"
           }
         },
@@ -78,6 +65,14 @@
         },
         {
           "kind": "js",
+          "name": "RobotoffConfiguration",
+          "declaration": {
+            "name": "RobotoffConfiguration",
+            "module": "\"./components/robotoff/robotoff-configuration\""
+          }
+        },
+        {
+          "kind": "js",
           "name": "RobotoffQuestion",
           "declaration": {
             "name": "RobotoffQuestion",
@@ -104,7 +99,7 @@
           "type": {
             "text": "object"
           },
-          "default": "{\n  annotate(insightId: string, annotation: QuestionAnnotationAnswer) {\n    const formBody = new URLSearchParams({\n      insight_id: insightId,\n      annotation: annotation,\n    }).toString()\n    if (ENV.dryRun) {\n      console.log(`Annotated, ${ROBOTOFF_API_URL}/insights/annotate`, formBody)\n      return\n    } else {\n      return fetch(`${ROBOTOFF_API_URL}/insights/annotate`, {\n        method: \"POST\",\n        body: formBody,\n        headers: {\n          \"Content-Type\": \"application/x-www-form-urlencoded\",\n        },\n        credentials: \"include\",\n      })\n    }\n  },\n\n  async questionsByProductCode(code: string, questionRequestParams: QuestionRequestParams = {}) {\n    if (!questionRequestParams.lang) {\n      questionRequestParams.lang = getLocale()\n    }\n    const url = addParamsToUrl(`${ROBOTOFF_API_URL}/questions/${code}`, questionRequestParams)\n    const response = await fetch(url)\n    const result: QuestionsResponse = await response.json()\n    return result\n  },\n}"
+          "default": "{\n  annotate(insightId: string, annotation: QuestionAnnotationAnswer) {\n    const formBody = new URLSearchParams({\n      insight_id: insightId,\n      annotation: annotation,\n    }).toString()\n    const apiUrl = getApiUrl(`/insights/annotate`)\n    if (robotoffDryRun.get()) {\n      console.log(`Annotated ${apiUrl}`, formBody)\n      return\n    } else {\n      return fetch(apiUrl, {\n        method: \"POST\",\n        body: formBody,\n        headers: {\n          \"Content-Type\": \"application/x-www-form-urlencoded\",\n        },\n        credentials: \"include\",\n      })\n    }\n  },\n\n  async questionsByProductCode(code: string, questionRequestParams: QuestionRequestParams = {}) {\n    if (!questionRequestParams.lang) {\n      questionRequestParams.lang = getLocale()\n    }\n    const apiUrl = getApiUrl(`/questions/${code}`)\n    const url = addParamsToUrl(apiUrl, questionRequestParams)\n    const response = await fetch(url)\n    const result: QuestionsResponse = await response.json()\n    return result\n  },\n}"
         }
       ],
       "exports": [
@@ -204,37 +199,85 @@
       "declarations": [
         {
           "kind": "variable",
+          "name": "questionsById",
+          "default": "new SignalMap<Question>({})"
+        },
+        {
+          "kind": "variable",
+          "name": "questionIdsByProductCode",
+          "default": "new SignalMap<string[]>({})"
+        },
+        {
+          "kind": "variable",
+          "name": "currentQuestionIndexByProductCode",
+          "default": "new SignalMap<number>({})"
+        },
+        {
+          "kind": "variable",
+          "name": "isQuestionsFinishedByProductCode",
+          "default": "new SignalMap<boolean>({})"
+        },
+        {
+          "kind": "function",
           "name": "questions",
-          "default": "new State<any[]>([])"
+          "parameters": [
+            {
+              "name": "productCode",
+              "type": {
+                "text": "string"
+              }
+            }
+          ]
         },
         {
-          "kind": "variable",
+          "kind": "function",
           "name": "currentQuestionIndex",
-          "default": "new State(0)",
-          "description": "Current question index"
+          "parameters": [
+            {
+              "name": "productCode",
+              "type": {
+                "text": "string"
+              }
+            }
+          ]
         },
         {
-          "kind": "variable",
-          "name": "hasAnswered",
-          "default": "new State(false)",
-          "description": "Has the user answered to one question"
-        },
-        {
-          "kind": "variable",
+          "kind": "function",
           "name": "hasQuestions",
-          "default": "new Computed(() => questions.get().length > 0)",
+          "parameters": [
+            {
+              "name": "productCode",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
           "description": "Does the current product has questions"
         },
         {
-          "kind": "variable",
+          "kind": "function",
           "name": "numberOfQuestions",
-          "default": "new Computed(() => questions.get().length ?? 0)",
+          "parameters": [
+            {
+              "name": "productCode",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
           "description": "Number of questions available"
         },
         {
-          "kind": "variable",
+          "kind": "function",
           "name": "isQuestionsFinished",
-          "default": "new State(false)",
+          "parameters": [
+            {
+              "name": "productCode",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
           "description": "Indicates if all questions have been answered"
         },
         {
@@ -261,7 +304,15 @@
         },
         {
           "kind": "function",
-          "name": "checkIfQuestionsFinished",
+          "name": "checkIfQuestionsFinishedByProductCode",
+          "parameters": [
+            {
+              "name": "productCode",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
           "description": "Checks if all questions have been answered.",
           "return": {
             "type": {
@@ -292,7 +343,15 @@
         },
         {
           "kind": "function",
-          "name": "nextQuestion",
+          "name": "nextQuestionByProductCode",
+          "parameters": [
+            {
+              "name": "productCode",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
           "description": "Moves to the next question.",
           "return": {
             "type": {
@@ -302,6 +361,38 @@
         }
       ],
       "exports": [
+        {
+          "kind": "js",
+          "name": "questionsById",
+          "declaration": {
+            "name": "questionsById",
+            "module": "src/signals/questions.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "questionIdsByProductCode",
+          "declaration": {
+            "name": "questionIdsByProductCode",
+            "module": "src/signals/questions.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "currentQuestionIndexByProductCode",
+          "declaration": {
+            "name": "currentQuestionIndexByProductCode",
+            "module": "src/signals/questions.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "isQuestionsFinishedByProductCode",
+          "declaration": {
+            "name": "isQuestionsFinishedByProductCode",
+            "module": "src/signals/questions.ts"
+          }
+        },
         {
           "kind": "js",
           "name": "questions",
@@ -315,14 +406,6 @@
           "name": "currentQuestionIndex",
           "declaration": {
             "name": "currentQuestionIndex",
-            "module": "src/signals/questions.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "hasAnswered",
-          "declaration": {
-            "name": "hasAnswered",
             "module": "src/signals/questions.ts"
           }
         },
@@ -360,9 +443,9 @@
         },
         {
           "kind": "js",
-          "name": "checkIfQuestionsFinished",
+          "name": "checkIfQuestionsFinishedByProductCode",
           "declaration": {
-            "name": "checkIfQuestionsFinished",
+            "name": "checkIfQuestionsFinishedByProductCode",
             "module": "src/signals/questions.ts"
           }
         },
@@ -376,10 +459,44 @@
         },
         {
           "kind": "js",
-          "name": "nextQuestion",
+          "name": "nextQuestionByProductCode",
           "declaration": {
-            "name": "nextQuestion",
+            "name": "nextQuestionByProductCode",
             "module": "src/signals/questions.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/signals/robotoff.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "robotoffApiUrl",
+          "default": "new State(DEFAULT_ROBOTOFF_CONFIGURATION.apiUrl)"
+        },
+        {
+          "kind": "variable",
+          "name": "robotoffDryRun",
+          "default": "new State(DEFAULT_ROBOTOFF_CONFIGURATION.dryRun)"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "robotoffApiUrl",
+          "declaration": {
+            "name": "robotoffApiUrl",
+            "module": "src/signals/robotoff.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "robotoffDryRun",
+          "declaration": {
+            "name": "robotoffDryRun",
+            "module": "src/signals/robotoff.ts"
           }
         }
       ]
@@ -696,6 +813,68 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/utils/signals.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SignalMap",
+          "members": [
+            {
+              "kind": "method",
+              "name": "getItem",
+              "return": {
+                "type": {
+                  "text": "T"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "setItem",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "T"
+                  }
+                }
+              ]
+            }
+          ],
+          "superclass": {
+            "name": "State",
+            "package": "@lit-labs/signals"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SignalMap",
+          "declaration": {
+            "name": "SignalMap",
+            "module": "src/utils/signals.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/buttons/zoom-unzoom-button.ts",
       "declarations": [
         {
@@ -752,6 +931,321 @@
           "declaration": {
             "name": "ZoomUnzoomButton",
             "module": "src/components/buttons/zoom-unzoom-button.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/robotoff/robotoff-configuration.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Robotoff configuration element.\nIt is used to configure the robotoff parameters.",
+          "name": "RobotoffConfiguration",
+          "members": [
+            {
+              "kind": "field",
+              "name": "apiUrl",
+              "type": {
+                "text": "string"
+              },
+              "attribute": "api-url"
+            },
+            {
+              "kind": "field",
+              "name": "dryRun",
+              "type": {
+                "text": "boolean"
+              },
+              "attribute": "dry-run"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "api-url",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "apiUrl"
+            },
+            {
+              "name": "dry-run",
+              "type": {
+                "text": "boolean"
+              },
+              "fieldName": "dryRun"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "robotoff-configuration",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RobotoffConfiguration",
+          "declaration": {
+            "name": "RobotoffConfiguration",
+            "module": "src/components/robotoff/robotoff-configuration.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "robotoff-configuration",
+          "declaration": {
+            "name": "RobotoffConfiguration",
+            "module": "src/components/robotoff/robotoff-configuration.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/robotoff/robotoff-question-form.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "RobotoffQuestionForm component\nIt displays a form to answer a question about a product.",
+          "name": "RobotoffQuestionForm",
+          "members": [
+            {
+              "kind": "field",
+              "name": "question",
+              "type": {
+                "text": "Question | undefined"
+              },
+              "description": "The question to display.",
+              "attribute": "question",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "_zoomed",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "The image size is zoomed or not."
+            },
+            {
+              "kind": "field",
+              "name": "emitEventClick",
+              "privacy": "private",
+              "description": "Emit an event submit when the user clicks on a button.\nIt stops the propagation of the event to avoid the click event on the parent."
+            },
+            {
+              "kind": "field",
+              "name": "_annotateProduct",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_toggleImageSize",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_renderImage",
+              "privacy": "private"
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "EventType.SUBMIT"
+              },
+              "description": "When the form is submitted",
+              "name": ""
+            }
+          ],
+          "attributes": [
+            {
+              "name": "question",
+              "type": {
+                "text": "Question | undefined"
+              },
+              "description": "The question to display.",
+              "fieldName": "question"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@lit-labs/signals"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "robotoff-question-form",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RobotoffQuestionForm",
+          "declaration": {
+            "name": "RobotoffQuestionForm",
+            "module": "src/components/robotoff/robotoff-question-form.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "robotoff-question-form",
+          "declaration": {
+            "name": "RobotoffQuestionForm",
+            "module": "src/components/robotoff/robotoff-question-form.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/robotoff/robotoff-question.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Robotoff question component",
+          "name": "RobotoffQuestion",
+          "members": [
+            {
+              "kind": "field",
+              "name": "options",
+              "type": {
+                "text": "Object"
+              },
+              "default": "{}",
+              "description": "Options for the component",
+              "attribute": "options",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "productId",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "description": "The product id to fetch questions for",
+              "attribute": "product-id"
+            },
+            {
+              "kind": "field",
+              "name": "insightTypes",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "description": "The insight types to filter questions separate by comma",
+              "attribute": "insight-types"
+            },
+            {
+              "kind": "field",
+              "name": "hasAnswered",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "Whether the user has answered the question"
+            },
+            {
+              "kind": "field",
+              "name": "_questionsTask",
+              "privacy": "private",
+              "default": "new Task(this, {\n    task: async ([productId, insightTypes], {}) => {\n      this.hasAnswered = false\n      if (!productId) {\n        return []\n      }\n      const params = insightTypes ? { insight_types: insightTypes } : {}\n\n      await fetchQuestionsByProductCode(productId, params)\n      this._emitQuestionStateEvent()\n      return questions(productId).get()\n    },\n    args: () => [this.productId, this.insightTypes],\n  })"
+            },
+            {
+              "kind": "field",
+              "name": "_emitQuestionStateEvent",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "onQuestionAnswered",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "renderMessage",
+              "privacy": "private"
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "EventType.QUESTION_STATE"
+              },
+              "description": "When the state of the question changes",
+              "name": ""
+            }
+          ],
+          "attributes": [
+            {
+              "name": "options",
+              "type": {
+                "text": "Object"
+              },
+              "default": "{}",
+              "description": "Options for the component",
+              "fieldName": "options"
+            },
+            {
+              "name": "product-id",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "description": "The product id to fetch questions for",
+              "fieldName": "productId"
+            },
+            {
+              "name": "insight-types",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "description": "The insight types to filter questions separate by comma",
+              "fieldName": "insightTypes"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@lit-labs/signals"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "robotoff-question",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RobotoffQuestion",
+          "declaration": {
+            "name": "RobotoffQuestion",
+            "module": "src/components/robotoff/robotoff-question.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "robotoff-question",
+          "declaration": {
+            "name": "RobotoffQuestion",
+            "module": "src/components/robotoff/robotoff-question.ts"
           }
         }
       ]
@@ -830,230 +1324,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/robotoff/robotoff-question-form.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "RobotoffQuestionForm component\nIt displays a form to answer a question about a product.",
-          "name": "RobotoffQuestionForm",
-          "members": [
-            {
-              "kind": "field",
-              "name": "question",
-              "type": {
-                "text": "Question | undefined"
-              },
-              "description": "The question to display.",
-              "attribute": "question",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "_zoomed",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false",
-              "description": "The image size is zoomed or not."
-            },
-            {
-              "kind": "field",
-              "name": "emitEventClick",
-              "privacy": "private",
-              "description": "Emit an event submit when the user clicks on a button.\nIt stops the propagation of the event to avoid the click event on the parent."
-            },
-            {
-              "kind": "field",
-              "name": "_annotateProduct",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "_toggleImageSize",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "_renderImage",
-              "privacy": "private"
-            }
-          ],
-          "events": [
-            {
-              "type": {
-                "text": "EventType.SUBMIT"
-              },
-              "description": "When the form is submitted",
-              "name": ""
-            }
-          ],
-          "attributes": [
-            {
-              "name": "question",
-              "type": {
-                "text": "Question | undefined"
-              },
-              "description": "The question to display.",
-              "fieldName": "question"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "robotoff-question-form",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "RobotoffQuestionForm",
-          "declaration": {
-            "name": "RobotoffQuestionForm",
-            "module": "src/components/robotoff/robotoff-question-form.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "robotoff-question-form",
-          "declaration": {
-            "name": "RobotoffQuestionForm",
-            "module": "src/components/robotoff/robotoff-question-form.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/robotoff/robotoff-question.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Robotoff question component",
-          "name": "RobotoffQuestion",
-          "members": [
-            {
-              "kind": "field",
-              "name": "options",
-              "type": {
-                "text": "Object"
-              },
-              "default": "{}",
-              "description": "Options for the component",
-              "attribute": "options",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "productId",
-              "type": {
-                "text": "string"
-              },
-              "default": "\"\"",
-              "description": "The product id to fetch questions for",
-              "attribute": "product-id"
-            },
-            {
-              "kind": "field",
-              "name": "insightTypes",
-              "type": {
-                "text": "string"
-              },
-              "default": "\"\"",
-              "description": "The insight types to filter questions separate by comma",
-              "attribute": "insight-types"
-            },
-            {
-              "kind": "field",
-              "name": "_questionsTask",
-              "privacy": "private",
-              "default": "new Task(this, {\n    task: async ([productId, insightTypes], {}) => {\n      if (!productId) {\n        return []\n      }\n      const params = insightTypes ? { insight_types: insightTypes } : {}\n      await fetchQuestionsByProductCode(productId, params)\n      this._emitQuestionStateEvent()\n      return questions.get()\n    },\n    args: () => [this.productId, this.insightTypes],\n  })"
-            },
-            {
-              "kind": "field",
-              "name": "_emitQuestionStateEvent",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "onQuestionAnswered",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "renderMessage",
-              "privacy": "private"
-            }
-          ],
-          "events": [
-            {
-              "type": {
-                "text": "EventType.QUESTION_STATE"
-              },
-              "description": "When the state of the question changes",
-              "name": ""
-            }
-          ],
-          "attributes": [
-            {
-              "name": "options",
-              "type": {
-                "text": "Object"
-              },
-              "default": "{}",
-              "description": "Options for the component",
-              "fieldName": "options"
-            },
-            {
-              "name": "product-id",
-              "type": {
-                "text": "string"
-              },
-              "default": "\"\"",
-              "description": "The product id to fetch questions for",
-              "fieldName": "productId"
-            },
-            {
-              "name": "insight-types",
-              "type": {
-                "text": "string"
-              },
-              "default": "\"\"",
-              "description": "The insight types to filter questions separate by comma",
-              "fieldName": "insightTypes"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "robotoff-question",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "RobotoffQuestion",
-          "declaration": {
-            "name": "RobotoffQuestion",
-            "module": "src/components/robotoff/robotoff-question.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "robotoff-question",
-          "declaration": {
-            "name": "RobotoffQuestion",
-            "module": "src/components/robotoff/robotoff-question.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/localization/generated/locale-codes.ts",
       "declarations": [
         {
@@ -1066,18 +1336,18 @@
           "kind": "variable",
           "name": "targetLocales",
           "type": {
-            "text": "[\n  `fr`,\n]"
+            "text": "[\n  `af`,\n  `am`,\n  `ar`,\n  `ay`,\n  `az`,\n  `be`,\n  `bg`,\n  `bi`,\n  `bn`,\n  `bs`,\n  `ca`,\n  `ch`,\n  `cs`,\n  `cy`,\n  `da`,\n  `de`,\n  `dv`,\n  `dz`,\n  `el`,\n  `es`,\n  `et`,\n  `eu`,\n  `fa`,\n  `fi`,\n  `fj`,\n  `fr`,\n  `ga`,\n  `gd`,\n  `gl`,\n  `gn`,\n  `gv`,\n  `he`,\n  `hi`,\n  `ho`,\n  `hr`,\n  `ht`,\n  `hu`,\n  `hy`,\n  `id`,\n  `is`,\n  `it`,\n  `ja`,\n  `ka`,\n  `kk`,\n  `kl`,\n  `km`,\n  `ko`,\n  `ku`,\n  `ky`,\n  `la`,\n  `lb`,\n  `lo`,\n  `lt`,\n  `lv`,\n  `mg`,\n  `mh`,\n  `mi`,\n  `mk`,\n  `mn`,\n  `ms`,\n  `mt`,\n  `my`,\n  `na`,\n  `nb`,\n  `nd`,\n  `ne`,\n  `nl`,\n  `nr`,\n  `ny`,\n  `pap`,\n  `pl`,\n  `prs`,\n  `ps`,\n  `pt`,\n  `qu`,\n  `rn`,\n  `ro`,\n  `ru`,\n  `rw`,\n  `sg`,\n  `si`,\n  `sk`,\n  `sl`,\n  `sm`,\n  `sn`,\n  `so`,\n  `sq`,\n  `sr`,\n  `ss`,\n  `st`,\n  `sv`,\n  `sw`,\n  `ta`,\n  `tg`,\n  `th`,\n  `ti`,\n  `tk`,\n  `tl`,\n  `tn`,\n  `to`,\n  `tr`,\n  `ts`,\n  `uk`,\n  `ur`,\n  `uz`,\n  `ve`,\n  `vi`,\n  `xh`,\n  `zh`,\n  `zu`,\n]"
           },
-          "default": "[\n  `fr`,\n]",
+          "default": "[\n  `af`,\n  `am`,\n  `ar`,\n  `ay`,\n  `az`,\n  `be`,\n  `bg`,\n  `bi`,\n  `bn`,\n  `bs`,\n  `ca`,\n  `ch`,\n  `cs`,\n  `cy`,\n  `da`,\n  `de`,\n  `dv`,\n  `dz`,\n  `el`,\n  `es`,\n  `et`,\n  `eu`,\n  `fa`,\n  `fi`,\n  `fj`,\n  `fr`,\n  `ga`,\n  `gd`,\n  `gl`,\n  `gn`,\n  `gv`,\n  `he`,\n  `hi`,\n  `ho`,\n  `hr`,\n  `ht`,\n  `hu`,\n  `hy`,\n  `id`,\n  `is`,\n  `it`,\n  `ja`,\n  `ka`,\n  `kk`,\n  `kl`,\n  `km`,\n  `ko`,\n  `ku`,\n  `ky`,\n  `la`,\n  `lb`,\n  `lo`,\n  `lt`,\n  `lv`,\n  `mg`,\n  `mh`,\n  `mi`,\n  `mk`,\n  `mn`,\n  `ms`,\n  `mt`,\n  `my`,\n  `na`,\n  `nb`,\n  `nd`,\n  `ne`,\n  `nl`,\n  `nr`,\n  `ny`,\n  `pap`,\n  `pl`,\n  `prs`,\n  `ps`,\n  `pt`,\n  `qu`,\n  `rn`,\n  `ro`,\n  `ru`,\n  `rw`,\n  `sg`,\n  `si`,\n  `sk`,\n  `sl`,\n  `sm`,\n  `sn`,\n  `so`,\n  `sq`,\n  `sr`,\n  `ss`,\n  `st`,\n  `sv`,\n  `sw`,\n  `ta`,\n  `tg`,\n  `th`,\n  `ti`,\n  `tk`,\n  `tl`,\n  `tn`,\n  `to`,\n  `tr`,\n  `ts`,\n  `uk`,\n  `ur`,\n  `uz`,\n  `ve`,\n  `vi`,\n  `xh`,\n  `zh`,\n  `zu`,\n]",
           "description": "The other locale codes that this application is localized into. Sorted\nlexicographically."
         },
         {
           "kind": "variable",
           "name": "allLocales",
           "type": {
-            "text": "[\n  `en`,\n  `fr`,\n]"
+            "text": "[\n  `af`,\n  `am`,\n  `ar`,\n  `ay`,\n  `az`,\n  `be`,\n  `bg`,\n  `bi`,\n  `bn`,\n  `bs`,\n  `ca`,\n  `ch`,\n  `cs`,\n  `cy`,\n  `da`,\n  `de`,\n  `dv`,\n  `dz`,\n  `el`,\n  `en`,\n  `es`,\n  `et`,\n  `eu`,\n  `fa`,\n  `fi`,\n  `fj`,\n  `fr`,\n  `ga`,\n  `gd`,\n  `gl`,\n  `gn`,\n  `gv`,\n  `he`,\n  `hi`,\n  `ho`,\n  `hr`,\n  `ht`,\n  `hu`,\n  `hy`,\n  `id`,\n  `is`,\n  `it`,\n  `ja`,\n  `ka`,\n  `kk`,\n  `kl`,\n  `km`,\n  `ko`,\n  `ku`,\n  `ky`,\n  `la`,\n  `lb`,\n  `lo`,\n  `lt`,\n  `lv`,\n  `mg`,\n  `mh`,\n  `mi`,\n  `mk`,\n  `mn`,\n  `ms`,\n  `mt`,\n  `my`,\n  `na`,\n  `nb`,\n  `nd`,\n  `ne`,\n  `nl`,\n  `nr`,\n  `ny`,\n  `pap`,\n  `pl`,\n  `prs`,\n  `ps`,\n  `pt`,\n  `qu`,\n  `rn`,\n  `ro`,\n  `ru`,\n  `rw`,\n  `sg`,\n  `si`,\n  `sk`,\n  `sl`,\n  `sm`,\n  `sn`,\n  `so`,\n  `sq`,\n  `sr`,\n  `ss`,\n  `st`,\n  `sv`,\n  `sw`,\n  `ta`,\n  `tg`,\n  `th`,\n  `ti`,\n  `tk`,\n  `tl`,\n  `tn`,\n  `to`,\n  `tr`,\n  `ts`,\n  `uk`,\n  `ur`,\n  `uz`,\n  `ve`,\n  `vi`,\n  `xh`,\n  `zh`,\n  `zu`,\n]"
           },
-          "default": "[\n  `en`,\n  `fr`,\n]",
+          "default": "[\n  `af`,\n  `am`,\n  `ar`,\n  `ay`,\n  `az`,\n  `be`,\n  `bg`,\n  `bi`,\n  `bn`,\n  `bs`,\n  `ca`,\n  `ch`,\n  `cs`,\n  `cy`,\n  `da`,\n  `de`,\n  `dv`,\n  `dz`,\n  `el`,\n  `en`,\n  `es`,\n  `et`,\n  `eu`,\n  `fa`,\n  `fi`,\n  `fj`,\n  `fr`,\n  `ga`,\n  `gd`,\n  `gl`,\n  `gn`,\n  `gv`,\n  `he`,\n  `hi`,\n  `ho`,\n  `hr`,\n  `ht`,\n  `hu`,\n  `hy`,\n  `id`,\n  `is`,\n  `it`,\n  `ja`,\n  `ka`,\n  `kk`,\n  `kl`,\n  `km`,\n  `ko`,\n  `ku`,\n  `ky`,\n  `la`,\n  `lb`,\n  `lo`,\n  `lt`,\n  `lv`,\n  `mg`,\n  `mh`,\n  `mi`,\n  `mk`,\n  `mn`,\n  `ms`,\n  `mt`,\n  `my`,\n  `na`,\n  `nb`,\n  `nd`,\n  `ne`,\n  `nl`,\n  `nr`,\n  `ny`,\n  `pap`,\n  `pl`,\n  `prs`,\n  `ps`,\n  `pt`,\n  `qu`,\n  `rn`,\n  `ro`,\n  `ru`,\n  `rw`,\n  `sg`,\n  `si`,\n  `sk`,\n  `sl`,\n  `sm`,\n  `sn`,\n  `so`,\n  `sq`,\n  `sr`,\n  `ss`,\n  `st`,\n  `sv`,\n  `sw`,\n  `ta`,\n  `tg`,\n  `th`,\n  `ti`,\n  `tk`,\n  `tl`,\n  `tn`,\n  `to`,\n  `tr`,\n  `ts`,\n  `uk`,\n  `ur`,\n  `uz`,\n  `ve`,\n  `vi`,\n  `xh`,\n  `zh`,\n  `zu`,\n]",
           "description": "All valid project locale codes. Sorted lexicographically."
         }
       ],
