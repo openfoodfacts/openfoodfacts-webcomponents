@@ -6,6 +6,7 @@ import { EventType } from "../../constants"
 import { classMap } from "lit/directives/class-map.js"
 import { answerQuestion } from "../../signals/questions"
 import "../buttons/zoom-unzoom-button"
+import { SignalWatcher } from "@lit-labs/signals"
 /**
  * RobotoffQuestionForm component
  * It displays a form to answer a question about a product.
@@ -13,7 +14,7 @@ import "../buttons/zoom-unzoom-button"
  * @fires {EventType.SUBMIT} - When the form is submitted
  */
 @customElement("robotoff-question-form")
-export class RobotoffQuestionForm extends LitElement {
+export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
   static override styles = [
     ...getButtonClasses([ButtonType.Cappucino, ButtonType.White, ButtonType.LINK]),
     css`
