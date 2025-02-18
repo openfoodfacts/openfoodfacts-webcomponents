@@ -1,4 +1,3 @@
-import { ENV } from "../constants"
 import { addParamsToUrl } from "../utils"
 import { getLocale } from "../localization"
 import {
@@ -6,7 +5,7 @@ import {
   QuestionsResponse,
   QuestionAnnotationAnswer,
 } from "../types/robotoff"
-import { robotoffApiUrl } from "../signals/robotoff"
+import { robotoffApiUrl, robotoffDryRun } from "../signals/robotoff"
 
 const getApiUrl = (path: string) => {
   return `${robotoffApiUrl.get()}}${path}`
@@ -19,7 +18,7 @@ const robotoff = {
       annotation: annotation,
     }).toString()
     const apiUrl = getApiUrl(`/insights/annotate`)
-    if (ENV.dryRun) {
+    if (robotoffDryRun.get()) {
       console.log(`Annotated ${apiUrl}`, formBody)
       return
     } else {
