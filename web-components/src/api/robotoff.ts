@@ -8,7 +8,7 @@ import {
 import { robotoffApiUrl, robotoffDryRun } from "../signals/robotoff"
 
 const getApiUrl = (path: string) => {
-  return `${robotoffApiUrl.get()}}${path}`
+  return `${robotoffApiUrl.get()}${path}`
 }
 
 const robotoff = {
