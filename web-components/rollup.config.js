@@ -48,7 +48,6 @@ export default {
       preventAssignment: true,
       __ENV__: JSON.stringify({
         isDevelopment: !production,
-        dryRun: process.env.DRY_RUN === "true",
       }),
     }),
 
