@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Set signal object state attribute
 
 import { Signal, State } from "@lit-labs/signals"
@@ -17,4 +18,9 @@ export class SignalMap<T> extends State<SignalMapType<T> {
   setItem(key: string, value: T) {
     super.set({ ...super.get(), [key]: value })
   }
+=======
+// Do not use Object assign because it does not work with signals watchers
+export const setSignalObjectStateAttribute = (signal: any, attribute: string, value: any) => {
+  signal.set({ ...signal.get(), [attribute]: value })
+>>>>>>> e647021 (feat: update store to handle multiple components)
 }
