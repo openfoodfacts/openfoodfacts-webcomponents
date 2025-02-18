@@ -66,6 +66,10 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
   @property({ type: String, attribute: "insight-types" })
   insightTypes: string = ""
 
+  /**
+   * Whether the user has answered the question
+   * @type {boolean}
+   */
   @state()
   private hasAnswered = false
 
