@@ -1,22 +1,39 @@
 import { Computed, State } from "@lit-labs/signals"
 import robotoff from "../api/robotoff"
-import {
-  QuestionAnnotationAnswer,
-  QuestionRequestParams,
-} from "../types/robotoff"
+import { Question, QuestionAnnotationAnswer, QuestionRequestParams } from "../types/robotoff"
+import { setSignalObjectStateAttribute } from "../utils/signals"
 
-export const questions = new State<any[]>([])
+// Store questions by id
+export const questionsById = new State<Record<string, Question>>({})
 
-/** Current question index */
-export const currentQuestionIndex = new State(0)
-/** Has the user answered to one question */
-export const hasAnswered = new State(false)
+// Store question ids by product code
+export const questionIdsByProductCode = new State<Record<string, string[]>>({})
+
+// Current question index by product code
+export const currentQuestionIndexByProductCode = new State<Record<string, number>>({})
+
+export const isQuestionsFinishedByProductCode = new State<Record<string, boolean>>({})
+
+// Get questions by product code
+export const questions = (productCode: string) =>
+  new Computed(() => {
+    return questionIdsByProductCode.get()[productCode].map((id) => questionsById.get()[id])
+  })
+
+// Get current question index by product code
+export const currentQuestionIndex = (productCode: string) =>
+  new Computed(() => {
+    return currentQuestionIndexByProductCode.get()[productCode] ?? 0
+  })
 /** Does the current product has questions */
-export const hasQuestions = new Computed(() => questions.get().length > 0)
+export const hasQuestions = (productCode: string) =>
+  new Computed(() => questionIdsByProductCode.get()[productCode]?.length > 0)
 /** Number of questions available */
-export const numberOfQuestions = new Computed(() => questions.get().length ?? 0)
+export const numberOfQuestions = (productCode: string) =>
+  new Computed(() => questionIdsByProductCode.get()[productCode].length ?? 0)
 /** Indicates if all questions have been answered */
-export const isQuestionsFinished = new State(false)
+export const isQuestionsFinished = (productCode: string) =>
+  new Computed(() => isQuestionsFinishedByProductCode.get()[productCode] ?? false)
 
 /**
  * Fetches questions for a given product code.
@@ -27,22 +44,35 @@ export const fetchQuestionsByProductCode = async (
   code: string,
   params: QuestionRequestParams = {}
 ) => {
-  hasAnswered.set(false)
-  isQuestionsFinished.set(false)
-  currentQuestionIndex.set(0)
+  setSignalObjectStateAttribute(isQuestionsFinishedByProductCode, code, false)
+  setSignalObjectStateAttribute(currentQuestionIndexByProductCode, code, 0)
   const response = await robotoff.questionsByProductCode(code, params)
-  questions.set(response.questions)
+  setSignalObjectStateAttribute(
+    questionIdsByProductCode,
+    code,
+    response.questions.map((question) => question.insight_id)
+  )
+
+  // Update the questionsById signal
+  const newQuestionsById = {
+    ...questionsById.get(),
+  }
+  response.questions.forEach((question: Question) => {
+    newQuestionsById[question.insight_id] = question
+  })
+  questionsById.set(newQuestionsById)
 }
 
 /**
  * Checks if all questions have been answered.
  * @returns True if all questions have been answered, otherwise false.
  */
-export const checkIfQuestionsFinished = () => {
-  const current = currentQuestionIndex.get()
+export const checkIfQuestionsFinishedByProductCode = (productCode: string) => {
+  const current = currentQuestionIndex(productCode).get()
+  const count = numberOfQuestions(productCode).get()
 
-  if (current === numberOfQuestions.get()) {
-    isQuestionsFinished.set(true)
+  if (current === count) {
+    setSignalObjectStateAttribute(isQuestionsFinishedByProductCode, productCode, true)
     return true
   }
   return false
@@ -53,11 +83,7 @@ export const checkIfQuestionsFinished = () => {
  * @param insightId - The ID of the insight.
  * @param value - The answer to the question.
  */
-export const answerQuestion = (
-  insightId: string,
-  value: QuestionAnnotationAnswer
-) => {
-  hasAnswered.set(true)
+export const answerQuestion = (insightId: string, value: QuestionAnnotationAnswer) => {
   robotoff.annotate(insightId, value)
 }
 
@@ -65,9 +91,10 @@ export const answerQuestion = (
  * Moves to the next question.
  * @returns False if all questions have been answered, otherwise true.
  */
-export const nextQuestion = () => {
-  currentQuestionIndex.set(currentQuestionIndex.get() + 1)
-  if (checkIfQuestionsFinished()) {
+export const nextQuestionByProductCode = (productCode: string) => {
+  const current = currentQuestionIndex(productCode).get()
+  setSignalObjectStateAttribute(currentQuestionIndexByProductCode, productCode, current + 1)
+  if (checkIfQuestionsFinishedByProductCode(productCode)) {
     return false
   }
   return true
