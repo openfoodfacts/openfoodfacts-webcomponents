@@ -19,6 +19,9 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitOverride": true,
+    "outDir": "dist",
+    "declaration": true,
+    "declarationDir": "dist/types",
     "plugins": [
       {
         "name": "ts-lit-plugin",
