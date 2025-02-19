@@ -1,14 +1,19 @@
 {
-  "name": "@lit/lit-starter-ts",
+  "name": "off-webcomponents",
+  "author": "Open Food Facts",
+  "license": "LGPL-2.1-only",
   "private": true,
   "version": "1.0.0",
   "description": "Reusable Web Components for Open Food Facts",
-  "main": "off-webcomponents.ts",
-  "module": "off-webcomponents.ts",
+  "main": "dist/off-webcomponents.js",
   "type": "module",
+  "exports": {
+    "import": "./dist/off-webcomponents.js",
+    "require": "./dist/off-webcomponents.cjs"
+  },
   "scripts": {
-    "build": "rollup -c",
-    "build:watch": "npm run translations:build && rollup -c -w",
+    "build": "MODE=prod rollup -c",
+    "build:watch": "npm run translations:build && MODE=dev rollup -c -w",
     "clean": "rimraf dist && rimraf my-element.{d.ts,d.ts.map,js,js.map} test/my-element.{d.ts,d.ts.map,js,js.map} test/my-element_test.{d.ts,d.ts.map,js,js.map}",
     "lint": "npm run lint:lit-analyzer && npm run lint:eslint",
     "lint:eslint": "eslint 'src/**/*.ts'",
@@ -16,6 +21,8 @@
     "translations:build": "lit-localize build",
     "translations:extract": "npm run translations:update-language-codes && lit-localize extract",
     "format": "prettier \"**/*.{cjs,html,js,json,md,ts}\" --ignore-path ./.eslintignore --write",
+    "generate-commonjs": "rollup dist/off-webcomponents.bundled.js --file off-webcomponents.bundled.cjs --format cjs",
+    "prepare-package": "npm run build && npm run generate-commonjs",
     "analyze": "cem analyze --litelement --globs \"src/**/*.ts\" --outdir docs",
     "analyze:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
     "serve": "wds --watch",
@@ -34,8 +41,6 @@
     "typescript",
     "lit"
   ],
-  "author": "Open Food Facts",
-  "license": "BSD-3-Clause",
   "dependencies": {
     "@lit-labs/signals": "^0.1.1",
     "@lit/localize": "^0.12.2",
