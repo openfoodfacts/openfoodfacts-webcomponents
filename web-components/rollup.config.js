@@ -52,13 +52,6 @@ export default {
   plugins: [
     typescript({
       tsconfig: "tsconfig.json",
-      // Désactiver l'émission de fichiers par TypeScript
-      // car Rollup gère la sortie
-      compilerOptions: {
-        outDir: null,
-        declaration: false,
-        declarationDir: null,
-      },
     }),
     replace({ preventAssignment: false, "Reflect.decorate": "undefined" }),
     resolve(),
