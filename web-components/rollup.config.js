@@ -71,13 +71,15 @@ export default {
       }),
     }),
 
-    !production &&
-      serve({
-        contentBase: "dist",
-        port: 3000,
-        historyApiFallback: true,
-      }),
-    !production && livereload("dist"),
+    // Currently we don't need to serve the app during development because we use web dev server
+    // !production &&
+    //   serve({
+    //     contentBase: "dist",
+    //     port: 3000,
+    //     historyApiFallback: true,
+    //   }),
+    // !production && livereload("dist"),
+
     /**
      * This minification setup serves the static site generation.
      * For bundling and minification, check the README.md file.
