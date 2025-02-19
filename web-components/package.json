@@ -1,9 +1,9 @@
 {
-  "name": "openfoodfacts-webcomponents-test",
+  "name": "openfoodfacts-webcomponents",
   "author": "Open Food Facts",
   "license": "LGPL-2.1-only",
   "private": false,
-  "version": "1.0.3",
+  "version": "1.0.0",
   "description": "Reusable Web Components for Open Food Facts",
   "type": "module",
   "repository": {
