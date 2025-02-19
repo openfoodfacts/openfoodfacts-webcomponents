@@ -1,9 +1,9 @@
 {
-  "name": "openfoodfacts-webcomponents",
+  "name": "openfoodfacts-webcomponents-test",
   "author": "Open Food Facts",
   "license": "LGPL-2.1-only",
   "private": false,
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Reusable Web Components for Open Food Facts",
   "type": "module",
   "repository": {
@@ -16,6 +16,7 @@
       "require": "./dist/off-webcomponents.bundled.cjs"
     }
   },
+  "types": "dist/types/off-webcomponents.d.ts",
   "files": [
     "dist"
   ],
@@ -29,7 +30,8 @@
     "translations:build": "lit-localize build",
     "translations:extract": "npm run translations:update-language-codes && lit-localize extract",
     "format": "prettier \"**/*.{cjs,html,js,json,md,ts}\" --ignore-path ./.eslintignore --write",
-    "prepare-package": "rm -r ./dist && npm run build",
+    "prepare:package": "rm -r ./dist && npm run build",
+    "publish:package": "npm run prepare:package && npm publish",
     "analyze": "cem analyze --litelement --globs \"src/**/*.ts\" --outdir docs",
     "analyze:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
     "serve": "wds --watch",
