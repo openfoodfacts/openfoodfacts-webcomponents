@@ -16,12 +16,12 @@ import livereload from "rollup-plugin-livereload"
 // Load environment variables from .env file
 dotenv.config()
 
-const production = process.env.IS_DEVELOPMENT_MODE !== "true"
+const production = process.env.MODE !== "dev"
 console.log("IS PRODUCTION", production)
 export default {
   input: "src/off-webcomponents.ts",
   output: {
-    file: "dist/off-webcomponents.bundled.js",
+    file: production ? "dist/off-webcomponents.bundled.js" : "dist/off-webcomponents.js",
     format: "esm",
     sourcemap: true,
   },
