@@ -12,7 +12,7 @@
     "require": "./dist/off-webcomponents.cjs"
   },
   "scripts": {
-    "build": "MODE=prod rollup -c",
+    "build": "MODE=prod npm run translations:build && MODE=prod rollup -c",
     "build:watch": "npm run translations:build && MODE=dev rollup -c -w",
     "clean": "rimraf dist && rimraf my-element.{d.ts,d.ts.map,js,js.map} test/my-element.{d.ts,d.ts.map,js,js.map} test/my-element_test.{d.ts,d.ts.map,js,js.map}",
     "lint": "npm run lint:lit-analyzer && npm run lint:eslint",
@@ -21,8 +21,8 @@
     "translations:build": "lit-localize build",
     "translations:extract": "npm run translations:update-language-codes && lit-localize extract",
     "format": "prettier \"**/*.{cjs,html,js,json,md,ts}\" --ignore-path ./.eslintignore --write",
-    "generate-commonjs": "rollup dist/off-webcomponents.bundled.js --file off-webcomponents.bundled.cjs --format cjs",
-    "prepare-package": "npm run build && npm run generate-commonjs",
+    "generate-commonjs": "rollup dist/off-webcomponents.bundled.js --file dist/off-webcomponents.bundled.cjs --format cjs",
+    "prepare-package": "rm -r ./dist && npm run build && npm run generate-commonjs",
     "analyze": "cem analyze --litelement --globs \"src/**/*.ts\" --outdir docs",
     "analyze:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
     "serve": "wds --watch",
