@@ -18,13 +18,32 @@ dotenv.config()
 
 const production = process.env.MODE !== "dev"
 console.log("IS PRODUCTION", production)
-export default {
-  input: "src/off-webcomponents.ts",
-  output: {
-    file: production ? "dist/off-webcomponents.bundled.js" : "dist/off-webcomponents.js",
+
+let output = []
+if (production) {
+  output.push(
+    {
+      file: "dist/off-webcomponents.bundled.js",
+      format: "esm",
+      sourcemap: true,
+    },
+    {
+      file: "dist/off-webcomponents.bundled.cjs",
+      format: "cjs",
+      sourcemap: true,
+    }
+  )
+} else {
+  output.push({
+    file: "dist/off-webcomponents.js",
     format: "esm",
     sourcemap: true,
-  },
+  })
+}
+
+export default {
+  input: "src/off-webcomponents.ts",
+  output,
   onwarn(warning) {
     if (warning.code !== "THIS_IS_UNDEFINED") {
       console.error(`(!) ${warning.message}`)
