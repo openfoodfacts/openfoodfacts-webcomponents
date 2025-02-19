@@ -5,12 +5,20 @@
   "private": false,
   "version": "1.0.0",
   "description": "Reusable Web Components for Open Food Facts",
-  "main": "dist/off-webcomponents.js",
   "type": "module",
-  "exports": {
-    "import": "./dist/off-webcomponents.js",
-    "require": "./dist/off-webcomponents.cjs"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/openfoodfacts/openfoodfacts-webcomponents"
   },
+  "exports": {
+    ".": {
+      "import": "./dist/off-webcomponents.bundled.js",
+      "require": "./dist/off-webcomponents.bundled.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "MODE=prod npm run translations:build && MODE=prod rollup -c",
     "build:watch": "npm run translations:build && MODE=dev rollup -c -w",
