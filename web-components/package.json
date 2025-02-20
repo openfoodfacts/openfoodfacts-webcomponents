@@ -1,7 +1,7 @@
 {
   "name": "openfoodfacts-webcomponents",
   "author": "Open Food Facts",
-  "license": "LGPL-2.1-only",
+  "license": "LGPL-2.1-or-later",
   "private": false,
   "version": "1.0.0",
   "description": "Reusable Web Components for Open Food Facts",
