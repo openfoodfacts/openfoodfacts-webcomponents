@@ -3,6 +3,10 @@ import { DEFAULT_ROBOTOFF_CONFIGURATION } from "../../constants"
 import { LitElement } from "lit"
 import { customElement, property } from "lit/decorators.js"
 
+/**
+ * The configuration properties of the robotoff configuration element.
+ * It is used to map the configuration properties to the robotoff signals.
+ */
 const CONFIGURATION_PROPERTIES: Record<
   string,
   {
@@ -27,9 +31,17 @@ const CONFIGURATION_PROPERTIES: Record<
  */
 @customElement("robotoff-configuration")
 export class RobotoffConfiguration extends LitElement {
+  /**
+   * The robotoff API URL.
+   * @attr api-url
+   */
   @property({ type: String, attribute: "api-url" })
   apiUrl: string = DEFAULT_ROBOTOFF_CONFIGURATION.apiUrl
 
+  /**
+   * Whether to run robotoff in dry run mode. Il allows to run robotoff without actually sending the data to the API.
+   * @attr dry-run
+   */
   @property({ type: Boolean, attribute: "dry-run" })
   dryRun: boolean = DEFAULT_ROBOTOFF_CONFIGURATION.dryRun
 
