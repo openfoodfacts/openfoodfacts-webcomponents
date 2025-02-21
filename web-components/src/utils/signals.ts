@@ -4,8 +4,7 @@ import { Signal, State } from "@lit-labs/signals"
 
 export type SignalMapType<T> = Record<string, T>
 
-
-export class SignalMap<T> extends State<SignalMapType<T> {
+export class SignalMap<T> extends State<SignalMapType<T>> {
   constructor(initialValue: SignalMapType<T>, options: Signal.Options<SignalMapType<T>> = {}) {
     super(initialValue, options)
   }
