@@ -23,8 +23,8 @@
     </div>
     <div style="">
       <div>
-        <label for="product-id">Product Id :</label>
-        <input type="text" id="product-id" placeholder="Id of a product" />
+        <label for="product-code">Product Id :</label>
+        <input type="text" id="product-code" placeholder="Id of a product" />
       </div>
       <div>
         <label for="insight-types">Insight Types :</label>
@@ -32,11 +32,14 @@
       </div>
       <div style="display: flex; margin-top: 1rem">
         <robotoff-question
-          product-id="1"
+          product-code="1"
           insight-types=""
           options='{"showMessage": true, "showLoading": true, "showError": true}'
           id="robotoff-question"
         />
+      </div>
+      <div style="display: flex; margin-top: 1rem">
+        <robotoff-nutrients product-code="1"> </robotoff-nutrients>
       </div>
     </div>
   </body>
@@ -54,13 +57,13 @@
     }
   }
   const robotoffQuestion = document.getElementById("robotoff-question")
-  const productId = document.getElementById("product-id")
+  const productCode = document.getElementById("product-code")
   const insightTypes = document.getElementById("insight-types")
 
   const productDebounce = debounce((value) => {
-    robotoffQuestion.setAttribute("product-id", value)
+    robotoffQuestion.setAttribute("product-code", value)
   })
-  productId.addEventListener("input", (event) => {
+  productCode.addEventListener("input", (event) => {
     productDebounce(event.target.value)
   })
 

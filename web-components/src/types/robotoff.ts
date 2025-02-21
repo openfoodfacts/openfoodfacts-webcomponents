@@ -27,3 +27,72 @@ export type QuestionsResponse = {
 }
 
 export type QuestionAnnotationAnswer = "2" | "1" | "0" | "-1" // https://openfoodfacts.github.io/robotoff/references/api/#tag/Insights/paths/~1insights~1annotate/post
+
+export type InsightsRequestParams = Partial<{
+  insight_types: string
+  barcode: string
+  annotated: boolean
+  annotation: number
+  value_tag: string
+  brands: string
+  countries: string
+  server_type: string
+  predictor: string
+  order_by: string
+  count: number
+  page: number
+  campaigns: string
+}>
+
+export type InsightDatum = {
+  end: number
+  text: string
+  unit: string
+  score: number
+  start: number
+  valid: boolean
+  value: string
+  entity: string
+  char_end: number
+  char_start: number
+}
+
+export type InsightData = {
+  entities: {
+    postprocessed: InsightDatum[]
+  }
+  nutrients: InsightDatum[]
+}
+
+export type Insight = {
+  id: string
+  barcode: string
+  type: string
+  data: InsightData
+  timestamp: string | null
+  completed_at: string | null
+  annotation: string | null
+  annotated_result: string | null
+  n_votes: number
+  username: string | null
+  countries: string[]
+  brands: string[]
+  process_after: string | null
+  value_tag: string | null
+  value: string | null
+  source_image: string | null
+  automatic_processing: boolean
+  server_type: string
+  unique_scans_n: number
+  reserved_barcode: boolean
+  predictor: string
+  predictor_version: string
+  campaign: string[]
+  confidence: number | null
+  bounding_box: string | null
+}
+export type InsightsResponse = {
+  count: number
+  status: string
+  insights: Insight[]
+}

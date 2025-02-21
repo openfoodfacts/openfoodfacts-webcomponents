@@ -4,6 +4,8 @@ import {
   QuestionRequestParams,
   QuestionsResponse,
   QuestionAnnotationAnswer,
+  InsightsRequestParams,
+  InsightsResponse,
 } from "../types/robotoff"
 import { robotoffApiUrl, robotoffDryRun } from "../signals/robotoff"
 
@@ -41,6 +43,13 @@ const robotoff = {
     const url = addParamsToUrl(apiUrl, questionRequestParams)
     const response = await fetch(url)
     const result: QuestionsResponse = await response.json()
+    return result
+  },
+
+  async insights(requestParams: InsightsRequestParams = {}) {
+    const url = addParamsToUrl(`${ROBOTOFF_API_URL}/insights`, requestParams)
+    const response = await fetch(url)
+    const result: InsightsResponse = await response.json()
     return result
   },
 }
