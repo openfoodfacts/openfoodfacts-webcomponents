@@ -24,9 +24,12 @@ export let isLocaleSet = false
  * Get the locale if it's set or delay 100ms to get it
  */
 export const getLocaleAfterInit = async (): Promise<string> => {
-  // Delay to wait for the locale to be set
-  if (!isLocaleSet) {
+  let index = 0
+
+  // Delay to wait for the locale to be set - 1s max
+  while (!isLocaleSet && index < 10) {
     await delay(100)
+    index++
   }
   return getLocale()
 }
