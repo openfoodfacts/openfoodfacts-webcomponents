@@ -39,7 +39,7 @@
         />
       </div>
       <div style="display: flex; margin-top: 1rem">
-        <robotoff-nutrients product-code="1"> </robotoff-nutrients>
+        <robotoff-nutrients id="robotoff-nutrients" product-code="1"> </robotoff-nutrients>
       </div>
     </div>
   </body>
@@ -57,11 +57,13 @@
     }
   }
   const robotoffQuestion = document.getElementById("robotoff-question")
+  const robotoffNutrients = document.getElementById("robotoff-nutrients")
   const productCode = document.getElementById("product-code")
   const insightTypes = document.getElementById("insight-types")
 
   const productDebounce = debounce((value) => {
     robotoffQuestion.setAttribute("product-code", value)
+    robotoffNutrients.setAttribute("product-code", value)
   })
   productCode.addEventListener("input", (event) => {
     productDebounce(event.target.value)

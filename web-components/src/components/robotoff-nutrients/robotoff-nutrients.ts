@@ -1,7 +1,9 @@
 import { Task } from "@lit/task"
 import { html, LitElement } from "lit"
-import { customElement, property } from "lit/decorators"
-import { fetchIncompleteNutrientsInsightsByProductCode, insights } from "../../signals/insights"
+import { customElement, property } from "lit/decorators.js"
+import { fetchIncompleteNutrientsInsightsByProductCode, insight } from "../../signals/nutrients"
+import "./robotoff-nutrients-table"
+import { fetchNutrientsTaxonomies } from "../../signals/taxonomies"
 
 @customElement("robotoff-nutrients")
 export class RobotoffNutrients extends LitElement {
@@ -14,8 +16,11 @@ export class RobotoffNutrients extends LitElement {
         return []
       }
 
-      await fetchIncompleteNutrientsInsightsByProductCode(productCode)
-      return insights(productCode).get()
+      await Promise.all([
+        fetchIncompleteNutrientsInsightsByProductCode(productCode),
+        fetchNutrientsTaxonomies(),
+      ])
+      return insight(productCode).get()
     },
     args: () => [this.productCode],
   })
@@ -23,7 +28,14 @@ export class RobotoffNutrients extends LitElement {
   override render() {
     return this._insightsTask.render({
       pending: () => html`<off-wb-loader></off-wb-loader>`,
-      complete: (insights) => html`<p>${insights.length}</p>`,
+      complete: (insight) => {
+        if (!insight) {
+          return html`<p>No insights</p>`
+        }
+        return html`<div>
+          <robotoff-nutrients-table .insight="${insight}"></robotoff-nutrients-table>
+        </div> `
+      },
       error: (error) => html`<p>Error: ${error}</p>`,
     })
   }

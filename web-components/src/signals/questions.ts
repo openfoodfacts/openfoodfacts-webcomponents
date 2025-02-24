@@ -81,7 +81,7 @@ export const checkIfQuestionsFinishedByProductCode = (productCode: string) => {
  * @param value - The answer to the question.
  */
 export const answerQuestion = (insightId: string, value: QuestionAnnotationAnswer) => {
-  robotoff.annotate(insightId, value)
+  robotoff.annotateQuestion(insightId, value)
 }
 
 /**

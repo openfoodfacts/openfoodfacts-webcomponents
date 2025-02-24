@@ -8,3 +8,9 @@ export enum EventType {
   SUBMIT = "submit",
   QUESTION_STATE = "question-state",
 }
+
+export enum LoadingState {
+  NOT_LOADED = "not-loaded",
+  LOADING = "loading",
+  LOADED = "loaded",
+}

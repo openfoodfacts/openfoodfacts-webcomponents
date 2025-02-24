@@ -28,6 +28,12 @@ export type QuestionsResponse = {
 
 export type QuestionAnnotationAnswer = "2" | "1" | "0" | "-1" // https://openfoodfacts.github.io/robotoff/references/api/#tag/Insights/paths/~1insights~1annotate/post
 
+export type InsightAnnotationAnswer = {
+  insightId: string
+  data: Record<string, { value: string; unit: string | null }>
+  type: "100g" | "serving"
+}
+
 export type InsightsRequestParams = Partial<{
   insight_types: string
   barcode: string
@@ -61,7 +67,7 @@ export type InsightData = {
   entities: {
     postprocessed: InsightDatum[]
   }
-  nutrients: InsightDatum[]
+  nutrients: Record<string, InsightDatum>
 }
 
 export type Insight = {
@@ -96,3 +102,9 @@ export type InsightsResponse = {
   status: string
   insights: Insight[]
 }
+
+export type NutrientAnotationFormData = {
+  value: string
+  unit: string | null
+}
+export type NutrientAnotationForm = Record<string, { value: string; unit: string | null }>
