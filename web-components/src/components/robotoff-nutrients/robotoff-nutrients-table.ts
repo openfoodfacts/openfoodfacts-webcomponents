@@ -27,8 +27,8 @@ export type FormatedNutrients = {
   keys: string[]
   servingSize?: InsightDatum
 }
-const INPUT_VALUE_MAX_SIZE = 3
-const INPUT_UNIT_MAX_SIZE = 3
+const INPUT_VALUE_MAX_SIZE = 4
+const INPUT_UNIT_MAX_SIZE = 4
 const INPUTS_GAP = 0.5
 const SERVING_MAX_SIZE = INPUT_VALUE_MAX_SIZE + INPUT_UNIT_MAX_SIZE + INPUTS_GAP
 
@@ -67,13 +67,16 @@ export class RobotoffNutrientsTable extends LitElement {
       .serving-size-wrapper input {
         max-width: ${SERVING_MAX_SIZE}rem;
         text-align: center;
+        box-sizing: border-box;
       }
 
       table .input-number {
         max-width: ${INPUT_VALUE_MAX_SIZE}rem;
+        box-sizing: border-box;
       }
 
       table .select {
+        box-sizing: border-box;
         height: 100%;
         font-size: 0.7rem;
         width: ${INPUT_UNIT_MAX_SIZE}rem !important;
@@ -210,6 +213,8 @@ export class RobotoffNutrientsTable extends LitElement {
           value="${nutrient.value}"
           title="${msg("value")}"
           class="input-number"
+          step="0.1"
+          min="0.1"
         />
       </span>
       <span title=${msg("unit")}> ${this.renderUnit(key, column, nutrient)} </span>
