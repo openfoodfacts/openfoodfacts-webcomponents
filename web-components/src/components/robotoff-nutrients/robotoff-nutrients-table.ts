@@ -4,7 +4,7 @@ import {
   Insight,
   InsightDatum,
   NutrientAnotationForm,
-  NutrientAnotationFormData,
+  InsightAnnotationType,
 } from "../../types/robotoff"
 import { localized, msg } from "@lit/localize"
 import { getTaxonomyNameByIdAndLang } from "../../signals/taxonomies"
@@ -14,9 +14,9 @@ import {
   NUTRIENT_SERVING_SIZE_KEY,
   NUTRIENT_SUFFIX,
   NUTRIENT_UNIT_NAME_PREFIX,
-  NutrientColumn,
 } from "../../utils/nutrients"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
+import { EventType } from "../../constants"
 
 export type FormatedNutrients = {
   "100g": Record<string, InsightDatum>
@@ -43,13 +43,13 @@ export class RobotoffNutrientsTable extends LitElement {
 
     Object.entries(this.insight!.data.nutrients).forEach(([key, value]) => {
       let nutrientKey
-      if (key.endsWith(NUTRIENT_SUFFIX[NutrientColumn.CENTGRAMS])) {
-        nutrientKey = key.replace(NUTRIENT_SUFFIX[NutrientColumn.CENTGRAMS], "")
-        nutrients[NutrientColumn.CENTGRAMS][nutrientKey] = value
+      if (key.endsWith(NUTRIENT_SUFFIX[InsightAnnotationType.CENTGRAMS])) {
+        nutrientKey = key.replace(NUTRIENT_SUFFIX[InsightAnnotationType.CENTGRAMS], "")
+        nutrients[InsightAnnotationType.CENTGRAMS][nutrientKey] = value
         keysSet.add(nutrientKey)
-      } else if (key.endsWith(NUTRIENT_SUFFIX[NutrientColumn.SERVING])) {
-        nutrientKey = key.replace(NUTRIENT_SUFFIX[NutrientColumn.SERVING], "")
-        nutrients[NutrientColumn.SERVING][nutrientKey] = value
+      } else if (key.endsWith(NUTRIENT_SUFFIX[InsightAnnotationType.SERVING])) {
+        nutrientKey = key.replace(NUTRIENT_SUFFIX[InsightAnnotationType.SERVING], "")
+        nutrients[InsightAnnotationType.SERVING][nutrientKey] = value
       } else if (key === NUTRIENT_SERVING_SIZE_KEY) {
         nutrients.servingSize = value
         return
@@ -64,7 +64,12 @@ export class RobotoffNutrientsTable extends LitElement {
     return nutrients
   }
 
-  renderColumns(nutrients: FormatedNutrients) {
+  /**
+   * Render the inputs for the given nutrient key and column
+   * @param nutrients - The nutrients to render
+   * @returns
+   */
+  renderRows(nutrients: FormatedNutrients) {
     return nutrients.keys.map((key) => {
       const label = getTaxonomyNameByIdAndLang(key, getLocale())
       return html`
@@ -73,15 +78,15 @@ export class RobotoffNutrientsTable extends LitElement {
           <td>
             ${this.renderInputs(
               key,
-              NutrientColumn.CENTGRAMS,
-              nutrients[NutrientColumn.CENTGRAMS][key]
+              InsightAnnotationType.CENTGRAMS,
+              nutrients[InsightAnnotationType.CENTGRAMS][key]
             )}
           </td>
           <td>
             ${this.renderInputs(
               key,
-              NutrientColumn.SERVING,
-              nutrients[NutrientColumn.SERVING][key]
+              InsightAnnotationType.SERVING,
+              nutrients[InsightAnnotationType.SERVING][key]
             )}
           </td>
         </tr>
@@ -89,8 +94,8 @@ export class RobotoffNutrientsTable extends LitElement {
     })
   }
 
-  getInputValueName = (key: string, column: NutrientColumn) => `${key}_${column}`
-  getInputUnitName = (key: string, column: NutrientColumn) =>
+  getInputValueName = (key: string, column: InsightAnnotationType) => `${key}_${column}`
+  getInputUnitName = (key: string, column: InsightAnnotationType) =>
     `${NUTRIENT_UNIT_NAME_PREFIX}${this.getInputValueName(key, column)}`
 
   /**
@@ -101,7 +106,7 @@ export class RobotoffNutrientsTable extends LitElement {
    * @param nutrient The nutrient to render.
    * @returns The rendered inputs.
    */
-  renderUnit(key: string, column: NutrientColumn, nutrient: Pick<InsightDatum, "unit">) {
+  renderUnit(key: string, column: InsightAnnotationType, nutrient: Pick<InsightDatum, "unit">) {
     const possibleUnits = getPossibleUnits(key, nutrient.unit)
     const inputName = this.getInputUnitName(key, column)
     if (possibleUnits.length > 1) {
@@ -131,7 +136,7 @@ export class RobotoffNutrientsTable extends LitElement {
    */
   renderInputs(
     key: string,
-    column: NutrientColumn,
+    column: InsightAnnotationType,
     nutrient: Pick<InsightDatum, "value" | "unit">
   ) {
     const inputName = this.getInputValueName(key, column)
@@ -148,10 +153,20 @@ export class RobotoffNutrientsTable extends LitElement {
     `
   }
 
+  emitSubmitEvent(nutrientAnotationForm: NutrientAnotationForm) {
+    this.dispatchEvent(
+      new CustomEvent(EventType.SUBMIT, {
+        bubbles: true,
+        composed: true,
+        detail: nutrientAnotationForm,
+      })
+    )
+  }
+
   onSubmit(event: SubmitEvent) {
     event.preventDefault()
     event.stopPropagation()
-    const column = event.submitter?.getAttribute("data-key") as NutrientColumn
+    const column = event.submitter?.getAttribute("data-key") as InsightAnnotationType
     if (!column) {
       console.error("No column found in submitter")
       return
@@ -179,13 +194,15 @@ export class RobotoffNutrientsTable extends LitElement {
       }
       nutrientAnotationForm[name][isUnit ? "unit" : "value"] = value as string
     }
-
-    console.log(nutrientAnotationForm)
+    this.emitSubmitEvent(nutrientAnotationForm)
   }
 
   override render() {
     const nutrients = this.getFormatedNutrients()
-    const inputServingSizeName = this.getInputValueName("serving_size", NutrientColumn.SERVING)
+    const inputServingSizeName = this.getInputValueName(
+      "serving_size",
+      InsightAnnotationType.SERVING
+    )
     return html`
       <form @submit=${this.onSubmit}>
         <table>
@@ -205,14 +222,14 @@ export class RobotoffNutrientsTable extends LitElement {
             </tr>
           </thead>
           <tbody>
-            ${this.renderColumns(nutrients)}
+            ${this.renderRows(nutrients)}
             <tr>
               <td></td>
               <td>
                 <button
                   type="submit"
                   class="button chocolate-button"
-                  data-key=${NutrientColumn.CENTGRAMS}
+                  data-key=${InsightAnnotationType.CENTGRAMS}
                 >
                   Valider
                 </button>
@@ -221,7 +238,7 @@ export class RobotoffNutrientsTable extends LitElement {
                 <button
                   type="submit"
                   class="button chocolate-button"
-                  data-key=${NutrientColumn.SERVING}
+                  data-key=${InsightAnnotationType.SERVING}
                 >
                   Valider
                 </button>

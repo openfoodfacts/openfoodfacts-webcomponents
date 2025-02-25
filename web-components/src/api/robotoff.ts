@@ -6,7 +6,7 @@ import {
   QuestionAnnotationAnswer,
   InsightsRequestParams,
   InsightsResponse,
-  NutrientAnotationForm,
+  InsightAnnotationAnswer,
 } from "../types/robotoff"
 import { robotoffApiUrl, robotoffDryRun } from "../signals/robotoff"
 
@@ -40,11 +40,11 @@ const robotoff = {
     }).toString()
     return annotate(formBody)
   },
-  annotateNutrients(insightId: string, data: NutrientAnotationForm, type: "100g" | "serving") {
+  annotateNutrients(annotation: InsightAnnotationAnswer) {
     const formBody = new URLSearchParams({
-      insight_id: insightId,
-      data: JSON.stringify(data),
-      type,
+      insight_id: annotation.insightId,
+      data: JSON.stringify(annotation.data),
+      type: annotation.type,
     }).toString()
     return annotate(formBody)
   },
@@ -67,37 +67,6 @@ const robotoff = {
     const result: InsightsResponse = await response.json()
     return result
   },
-
-  // async postRobotoff(config: PostRobotoffParams) {
-  //   const { insightId, data, type } = config
-
-  //   const filteredValues = {}
-
-  //   Object.keys(data).forEach((key) => {
-  //     if (key.includes(type) && data[key].value) {
-  //       const nutriId = type.replace(`_${type}`, "") // remove the _100g _serving suffix
-  //       const forcedUnit = FORCED_UNITS[nutriId]
-  //       filteredValues[key] = {
-  //         value: data[key].value,
-  //         unit: forcedUnit ?? data[key].unit,
-  //       }
-  //     }
-  //   })
-
-  //   axios.post(
-  //     `${ROBOTOFF_API_URL}/insights/annotate`,
-  //     new URLSearchParams(
-  //       `insight_id=${insightId}&annotation=2&data=${JSON.stringify({
-  //         nutrients: filteredValues,
-  //       })}`
-  //     ),
-  //     {
-  //       withCredentials: true,
-
-  //       headers: { "content-type": "application/x-www-form-urlencoded" },
-  //     }
-  //   )
-  // },
 }
 
 export default robotoff

@@ -1,6 +1,6 @@
 import { Computed } from "@lit-labs/signals"
 import robotoff from "../api/robotoff"
-import { Insight } from "../types/robotoff"
+import { Insight, InsightAnnotationAnswer, NutrientAnotationForm } from "../types/robotoff"
 import { SignalMap } from "../utils/signals"
 
 export const insightById = new SignalMap<Insight>({})
@@ -35,4 +35,8 @@ export const fetchIncompleteNutrientsInsightsByProductCode = (productCode: strin
 
       insightIdByProductCode.setItem(productCode, insight.id)
     })
+}
+
+export const annotateNutrients = async (data: InsightAnnotationAnswer) => {
+  return await robotoff.annotateNutrients(data)
 }

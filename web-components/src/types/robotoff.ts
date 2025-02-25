@@ -27,11 +27,15 @@ export type QuestionsResponse = {
 }
 
 export type QuestionAnnotationAnswer = "2" | "1" | "0" | "-1" // https://openfoodfacts.github.io/robotoff/references/api/#tag/Insights/paths/~1insights~1annotate/post
+export enum InsightAnnotationType {
+  CENTGRAMS = "100g",
+  SERVING = "serving",
+}
 
 export type InsightAnnotationAnswer = {
   insightId: string
   data: Record<string, { value: string; unit: string | null }>
-  type: "100g" | "serving"
+  type: InsightAnnotationType
 }
 
 export type InsightsRequestParams = Partial<{

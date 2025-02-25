@@ -25,6 +25,10 @@ export class RobotoffNutrients extends LitElement {
     args: () => [this.productCode],
   })
 
+  onSubmit = (event: CustomEvent) => {
+    console.log("detail", event.detail)
+  }
+
   override render() {
     return this._insightsTask.render({
       pending: () => html`<off-wb-loader></off-wb-loader>`,
@@ -33,7 +37,10 @@ export class RobotoffNutrients extends LitElement {
           return html`<p>No insights</p>`
         }
         return html`<div>
-          <robotoff-nutrients-table .insight="${insight}"></robotoff-nutrients-table>
+          <robotoff-nutrients-table
+            .insight="${insight}"
+            @submit="${this.onSubmit}"
+          ></robotoff-nutrients-table>
         </div> `
       },
       error: (error) => html`<p>Error: ${error}</p>`,

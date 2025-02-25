@@ -1,3 +1,5 @@
+import { InsightAnnotationType } from "../types/robotoff"
+
 export enum Unit {
   NULL = "",
   MICROGRAMS = "µg",
@@ -9,16 +11,12 @@ export enum Unit {
 
 export const EDITABLE_UNITS = [Unit.MICROGRAMS, Unit.MILIGRAMS, Unit.GRAMS]
 
-export enum NutrientColumn {
-  CENTGRAMS = "100g",
-  SERVING = "serving",
-}
 export type NutrientSuffix = "_100g" | "_serving"
 
 export const NUTRIENT_SERVING_SIZE_KEY = "serving_size"
-export const NUTRIENT_SUFFIX: Record<NutrientColumn, NutrientSuffix> = {
-  [NutrientColumn.CENTGRAMS]: "_100g",
-  [NutrientColumn.SERVING]: "_serving",
+export const NUTRIENT_SUFFIX: Record<InsightAnnotationType, NutrientSuffix> = {
+  [InsightAnnotationType.CENTGRAMS]: "_100g",
+  [InsightAnnotationType.SERVING]: "_serving",
 }
 
 export enum ForcedNutrientKey {
