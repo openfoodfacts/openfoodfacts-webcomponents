@@ -213,8 +213,8 @@ export class RobotoffNutrientsTable extends LitElement {
           value="${nutrient.value}"
           title="${msg("value")}"
           class="input-number"
-          step="0.1"
-          min="0.1"
+          step="0.01"
+          min="0.01"
         />
       </span>
       <span title=${msg("unit")}> ${this.renderUnit(key, column, nutrient)} </span>
