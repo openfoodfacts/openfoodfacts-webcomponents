@@ -15,6 +15,7 @@ import { EventType } from "../../constants"
 import { QuestionStateEventDetail } from "../../types"
 import { SignalWatcher } from "@lit-labs/signals"
 import "../shared/loader"
+import "./robotoff-question-form"
 
 /**
  * Robotoff question component
@@ -155,7 +156,7 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
         if (!this.options.showError) {
           return nothing
         }
-        return html`<div>Error: ${error}</div>`
+        return html`<div>lol3Error: ${error}</div>`
       },
     })
   }
