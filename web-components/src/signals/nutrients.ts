@@ -1,6 +1,6 @@
 import { Computed } from "@lit-labs/signals"
 import robotoff from "../api/robotoff"
-import { Insight, InsightAnnotationAnswer, NutrientAnotationForm } from "../types/robotoff"
+import { Insight, InsightAnnotationAnswer, InsightAnnotatationData } from "../types/robotoff"
 import { SignalMap } from "../utils/signals"
 
 export const insightById = new SignalMap<Insight>({})

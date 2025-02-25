@@ -42,6 +42,7 @@ const robotoff = {
   },
   annotateNutrients(annotation: InsightAnnotationAnswer) {
     const formBody = new URLSearchParams({
+      annotation: "2",
       insight_id: annotation.insightId,
       data: JSON.stringify(annotation.data),
       type: annotation.type,

@@ -12,6 +12,7 @@ const CONFIGURATION_PROPERTIES: Record<
   {
     signal: any
     propertyName: string
+    converter?: (value: string) => any
   }
 > = {
   "api-url": {
@@ -21,6 +22,7 @@ const CONFIGURATION_PROPERTIES: Record<
   "dry-run": {
     signal: robotoffDryRun,
     propertyName: "dryRun",
+    converter: (value: string) => value === "true",
   },
 }
 
@@ -48,7 +50,12 @@ export class RobotoffConfiguration extends LitElement {
   override attributeChangedCallback(name: string, oldval: string, newval: string) {
     super.attributeChangedCallback(name, oldval, newval)
     if (name in CONFIGURATION_PROPERTIES) {
-      const value = this[CONFIGURATION_PROPERTIES[name].propertyName as keyof this]
+      let value
+      if (CONFIGURATION_PROPERTIES[name].converter) {
+        value = CONFIGURATION_PROPERTIES[name].converter!(newval)
+      } else {
+        value = this[CONFIGURATION_PROPERTIES[name].propertyName as keyof this]
+      }
       CONFIGURATION_PROPERTIES[name].signal.set(value as any)
     }
   }

@@ -1,10 +1,11 @@
-import { LitElement, html, css, nothing } from "lit"
+import { LitElement, html, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import {
   Insight,
   InsightDatum,
-  NutrientAnotationForm,
+  InsightAnnotatationData,
   InsightAnnotationType,
+  InsightAnnotationAnswer,
 } from "../../types/robotoff"
 import { localized, msg } from "@lit/localize"
 import { getTaxonomyNameByIdAndLang } from "../../signals/taxonomies"
@@ -153,12 +154,12 @@ export class RobotoffNutrientsTable extends LitElement {
     `
   }
 
-  emitSubmitEvent(nutrientAnotationForm: NutrientAnotationForm) {
+  emitSubmitEvent(insightAnnotationAnswer: InsightAnnotationAnswer) {
     this.dispatchEvent(
       new CustomEvent(EventType.SUBMIT, {
         bubbles: true,
         composed: true,
-        detail: nutrientAnotationForm,
+        detail: insightAnnotationAnswer,
       })
     )
   }
@@ -174,27 +175,38 @@ export class RobotoffNutrientsTable extends LitElement {
 
     const formData = new FormData(event.target as HTMLFormElement)
 
-    const nutrientAnotationForm: NutrientAnotationForm = {}
+    const nutrientAnotationForm: InsightAnnotatationData = {}
 
     for (const [key, value] of formData.entries()) {
       if (!key.endsWith(column)) {
         continue
       }
-      let name = key.replace(NUTRIENT_SUFFIX[column], "")
+      let name = key
       let isUnit = false
       if (name.startsWith(NUTRIENT_UNIT_NAME_PREFIX)) {
         isUnit = true
         name = name.replace(NUTRIENT_UNIT_NAME_PREFIX, "")
       }
+
+      if (name.startsWith("serving_size") {
+        name = name.replace(NUTRIENT_SUFFIX[column], "")
+      }
+
       if (!nutrientAnotationForm[name]) {
         nutrientAnotationForm[name] = {
           value: "",
           unit: null,
         }
       }
+
       nutrientAnotationForm[name][isUnit ? "unit" : "value"] = value as string
     }
-    this.emitSubmitEvent(nutrientAnotationForm)
+
+    this.emitSubmitEvent({
+      type: column,
+      data: nutrientAnotationForm,
+      insightId: this.insight!.id,
+    })
   }
 
   override render() {

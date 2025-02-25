@@ -1,9 +1,14 @@
 import { Task } from "@lit/task"
 import { html, LitElement } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { fetchIncompleteNutrientsInsightsByProductCode, insight } from "../../signals/nutrients"
+import {
+  annotateNutrients,
+  fetchIncompleteNutrientsInsightsByProductCode,
+  insight,
+} from "../../signals/nutrients"
 import "./robotoff-nutrients-table"
 import { fetchNutrientsTaxonomies } from "../../signals/taxonomies"
+import { InsightAnnotationAnswer } from "../../types/robotoff"
 
 @customElement("robotoff-nutrients")
 export class RobotoffNutrients extends LitElement {
@@ -25,8 +30,8 @@ export class RobotoffNutrients extends LitElement {
     args: () => [this.productCode],
   })
 
-  onSubmit = (event: CustomEvent) => {
-    console.log("detail", event.detail)
+  onSubmit = (event: CustomEvent<InsightAnnotationAnswer>) => {
+    annotateNutrients(event.detail)
   }
 
   override render() {

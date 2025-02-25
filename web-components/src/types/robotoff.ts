@@ -31,10 +31,11 @@ export enum InsightAnnotationType {
   CENTGRAMS = "100g",
   SERVING = "serving",
 }
+export type InsightAnnotatationData = Record<string, { value: string; unit: string | null }>
 
 export type InsightAnnotationAnswer = {
   insightId: string
-  data: Record<string, { value: string; unit: string | null }>
+  data: InsightAnnotatationData
   type: InsightAnnotationType
 }
 
@@ -111,4 +112,3 @@ export type NutrientAnotationFormData = {
   value: string
   unit: string | null
 }
-export type NutrientAnotationForm = Record<string, { value: string; unit: string | null }>
