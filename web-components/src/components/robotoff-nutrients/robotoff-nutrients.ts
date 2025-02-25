@@ -9,9 +9,12 @@ import {
 import "./robotoff-nutrients-table"
 import { fetchNutrientsTaxonomies } from "../../signals/taxonomies"
 import { InsightAnnotationAnswer } from "../../types/robotoff"
+import { BASE } from "../../styles/base"
 
 @customElement("robotoff-nutrients")
 export class RobotoffNutrients extends LitElement {
+  static override styles = [BASE]
+
   @property({ type: String, attribute: "product-code" })
   productCode: string = ""
 

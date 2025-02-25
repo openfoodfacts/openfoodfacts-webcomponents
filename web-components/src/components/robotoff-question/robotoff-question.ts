@@ -16,6 +16,7 @@ import { QuestionStateEventDetail } from "../../types"
 import { SignalWatcher } from "@lit-labs/signals"
 import "../shared/loader"
 import "./robotoff-question-form"
+import { BASE } from "../../styles/base"
 
 /**
  * Robotoff question component
@@ -25,21 +26,24 @@ import "./robotoff-question-form"
 @customElement("robotoff-question")
 @localized()
 export class RobotoffQuestion extends SignalWatcher(LitElement) {
-  static override styles = css`
-    :host {
-      display: block;
-    }
-    .question-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
+  static override styles = [
+    BASE,
+    css`
+      :host {
+        display: block;
+      }
+      .question-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
 
-    .message {
-      font-style: italic;
-    }
-  `
+      .message {
+        font-style: italic;
+      }
+    `,
+  ]
   /**
    * Options for the component
    * @type {Object}

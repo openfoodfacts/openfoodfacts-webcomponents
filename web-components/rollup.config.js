@@ -10,8 +10,7 @@ import resolve from "@rollup/plugin-node-resolve"
 import replace from "@rollup/plugin-replace"
 import dotenv from "dotenv"
 import typescript from "@rollup/plugin-typescript"
-import serve from "rollup-plugin-serve"
-import livereload from "rollup-plugin-livereload"
+import copy from "rollup-plugin-copy"
 
 // Load environment variables from .env file
 dotenv.config()
@@ -88,5 +87,10 @@ export default {
         },
       }),
     summary(),
+    copy({
+      targets: [
+        { src: "src/assets", dest: "dist" }, // This will copy src/assets to dist/assets
+      ],
+    }),
   ],
 }

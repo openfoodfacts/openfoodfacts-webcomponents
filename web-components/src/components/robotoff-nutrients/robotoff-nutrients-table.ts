@@ -1,4 +1,4 @@
-import { LitElement, html, nothing } from "lit"
+import { LitElement, css, html, nothing, unsafeCSS } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import {
   Insight,
@@ -18,6 +18,8 @@ import {
 } from "../../utils/nutrients"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { EventType } from "../../constants"
+import { INPUT, SELECT } from "../../styles/form"
+import { FLEX } from "../../styles/utils"
 
 export type FormatedNutrients = {
   "100g": Record<string, InsightDatum>
@@ -25,11 +27,64 @@ export type FormatedNutrients = {
   keys: string[]
   servingSize?: InsightDatum
 }
+const INPUT_VALUE_MAX_SIZE = 3
+const INPUT_UNIT_MAX_SIZE = 3
+const INPUTS_GAP = 0.5
+const SERVING_MAX_SIZE = INPUT_VALUE_MAX_SIZE + INPUT_UNIT_MAX_SIZE + INPUTS_GAP
 
 @customElement("robotoff-nutrients-table")
 @localized()
 export class RobotoffNutrientsTable extends LitElement {
-  static override styles = [...getButtonClasses([ButtonType.Chocolate])]
+  static override styles = [
+    ...getButtonClasses([ButtonType.Chocolate]),
+    SELECT,
+    INPUT,
+    FLEX,
+    css`
+      table th {
+        font-weight: normal;
+        font-size: 0.8rem;
+      }
+      table th[scope="col"] {
+        vertical-align: top;
+        font-weight: bold;
+      }
+
+      table th:first-child {
+        max-width: 6rem;
+      }
+      table td,
+      table th[scope="row"] {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+      .inputs-wrapper {
+        gap: ${INPUTS_GAP}rem;
+      }
+      .serving-size-wrapper {
+        gap: 0.3rem;
+      }
+      .serving-size-wrapper input {
+        max-width: ${SERVING_MAX_SIZE}rem;
+        text-align: center;
+      }
+
+      table .input-number {
+        max-width: ${INPUT_VALUE_MAX_SIZE}rem;
+      }
+
+      table .select {
+        height: 100%;
+        font-size: 0.7rem;
+        width: ${INPUT_UNIT_MAX_SIZE}rem !important;
+      }
+
+      table .submit-row td {
+        padding-top: 0.5rem;
+      }
+    `,
+  ]
+
   @property({ type: Object })
   insight?: Insight
 
@@ -77,18 +132,22 @@ export class RobotoffNutrientsTable extends LitElement {
         <tr>
           <th scope="row">${label}</th>
           <td>
-            ${this.renderInputs(
-              key,
-              InsightAnnotationType.CENTGRAMS,
-              nutrients[InsightAnnotationType.CENTGRAMS][key]
-            )}
+            <div class="flex inputs-wrapper">
+              ${this.renderInputs(
+                key,
+                InsightAnnotationType.CENTGRAMS,
+                nutrients[InsightAnnotationType.CENTGRAMS][key]
+              )}
+            </div>
           </td>
           <td>
-            ${this.renderInputs(
-              key,
-              InsightAnnotationType.SERVING,
-              nutrients[InsightAnnotationType.SERVING][key]
-            )}
+            <div class="flex inputs-wrapper">
+              ${this.renderInputs(
+                key,
+                InsightAnnotationType.SERVING,
+                nutrients[InsightAnnotationType.SERVING][key]
+              )}
+            </div>
           </td>
         </tr>
       `
@@ -112,7 +171,7 @@ export class RobotoffNutrientsTable extends LitElement {
     const inputName = this.getInputUnitName(key, column)
     if (possibleUnits.length > 1) {
       return html`
-        <select name=${inputName}>
+        <select name=${inputName} class="select">
           ${possibleUnits.map(
             (unit) =>
               html`<option value="${unit}" ?selected=${unit === nutrient.unit}>${unit}</option>`
@@ -120,10 +179,12 @@ export class RobotoffNutrientsTable extends LitElement {
         </select>
       `
     } else {
-      return (
-        html`<input type="hidden" name="${inputName}" value="${possibleUnits[0]}" />
-          ${possibleUnits[0]}` ?? nothing
-      )
+      return possibleUnits[0]
+        ? html`<input type="hidden" name="${inputName}" value="${possibleUnits[0]}" />
+            <select name=${inputName} class="select" disabled>
+              <option value="${possibleUnits[0]!}" selected>${possibleUnits[0]}</option>
+            </select>`
+        : nothing
     }
   }
 
@@ -148,6 +209,7 @@ export class RobotoffNutrientsTable extends LitElement {
           name="${inputName}"
           value="${nutrient.value}"
           title="${msg("value")}"
+          class="input-number"
         />
       </span>
       <span title=${msg("unit")}> ${this.renderUnit(key, column, nutrient)} </span>
@@ -188,7 +250,7 @@ export class RobotoffNutrientsTable extends LitElement {
         name = name.replace(NUTRIENT_UNIT_NAME_PREFIX, "")
       }
 
-      if (name.startsWith("serving_size") {
+      if (name.startsWith("serving_size")) {
         name = name.replace(NUTRIENT_SUFFIX[column], "")
       }
 
@@ -222,9 +284,10 @@ export class RobotoffNutrientsTable extends LitElement {
             <tr>
               <th scope="col">${msg("Nutrients")}</th>
               <th scope="col">100g</th>
-              <th scope="col">
-                <span>${msg("Serving size")}</span>
+              <th scope="col" class="flex flex-col align-center serving-size-wrapper">
+                <span>${msg("Serving size:")}</span>
                 <input
+                  class="input"
                   name=${inputServingSizeName}
                   type="text"
                   value=${nutrients.servingSize?.value}
@@ -235,18 +298,22 @@ export class RobotoffNutrientsTable extends LitElement {
           </thead>
           <tbody>
             ${this.renderRows(nutrients)}
-            <tr>
+            <tr class="submit-row">
               <td></td>
               <td>
-                <button
-                  type="submit"
-                  class="button chocolate-button"
-                  data-key=${InsightAnnotationType.CENTGRAMS}
-                >
-                  Valider
-                </button>
+                <div class="flex justify-center">
+                  <button
+                    type="submit"
+                    class="button chocolate-button"
+                    data-key=${InsightAnnotationType.CENTGRAMS}
+                  >
+                    Valider
+                  </button>
+                </div>
               </td>
               <td>
+              <div class="flex justify-center">
+
                 <button
                   type="submit"
                   class="button chocolate-button"
