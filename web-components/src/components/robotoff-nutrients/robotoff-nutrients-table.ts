@@ -1,4 +1,4 @@
-import { LitElement, css, html, nothing, unsafeCSS } from "lit"
+import { LitElement, css, html, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import {
   Insight,

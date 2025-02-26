@@ -2,6 +2,7 @@ import { robotoffConfiguration } from "../../signals/robotoff"
 import { DEFAULT_ROBOTOFF_CONFIGURATION } from "../../constants"
 import { LitElement } from "lit"
 import { customElement, property } from "lit/decorators.js"
+import { RobotoffConfigurationOptions } from "../../types/robotoff"
 
 /**
  * The configuration properties of the robotoff configuration element.
@@ -10,7 +11,7 @@ import { customElement, property } from "lit/decorators.js"
 const CONFIGURATION_PROPERTIES: Record<
   string,
   {
-    propertyName: keyof RobotoffConfiguration
+    propertyName: keyof RobotoffConfigurationOptions
     converter?: (value: string) => any
   }
 > = {

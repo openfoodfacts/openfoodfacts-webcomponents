@@ -1,4 +1,4 @@
-export type RobotoffConfiguration = {
+export type RobotoffConfigurationOptions = {
   apiUrl: string
   dryRun: boolean
   imgUrl: string
