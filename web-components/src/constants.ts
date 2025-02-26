@@ -1,6 +1,7 @@
 export const DEFAULT_ROBOTOFF_CONFIGURATION = {
   apiUrl: "https://robotoff.openfoodfacts.org/api/v1",
   dryRun: false,
+  imgUrl: "https://images.openfoodfacts.org/images/products",
 }
 export const PAGE_SIZE = 25
 

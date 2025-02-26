@@ -10,9 +10,9 @@
           "kind": "variable",
           "name": "DEFAULT_ROBOTOFF_CONFIGURATION",
           "type": {
-            "text": "object"
+            "text": ""
           },
-          "default": "{\n  apiUrl: \"https://robotoff.openfoodfacts.org/api/v1\",\n  dryRun: false,\n}"
+          "default": "{\n  apiUrl: \"https://robotoff.openfoodfacts.org/api/v1\",\n  dryRun: false,\n  imgUrl: \"https://images.openfoodfacts.org/images/products\",\n}"
         },
         {
           "kind": "variable",
@@ -76,15 +76,15 @@
           "name": "RobotoffQuestion",
           "declaration": {
             "name": "RobotoffQuestion",
-            "module": "\"./components/robotoff/robotoff-question\""
+            "module": "\"./components/robotoff-question/robotoff-question\""
           }
         },
         {
           "kind": "js",
-          "name": "RobotoffQuestionForm",
+          "name": "RobotoffNutrients",
           "declaration": {
-            "name": "RobotoffQuestionForm",
-            "module": "\"./components/robotoff/robotoff-question-form\""
+            "name": "RobotoffNutrients",
+            "module": "\"./components/robotoff-nutrients/robotoff-nutrients\""
           }
         }
       ]
@@ -99,7 +99,7 @@
           "type": {
             "text": "object"
           },
-          "default": "{\n  annotate(insightId: string, annotation: QuestionAnnotationAnswer) {\n    const formBody = new URLSearchParams({\n      insight_id: insightId,\n      annotation: annotation,\n    }).toString()\n    const apiUrl = getApiUrl(`/insights/annotate`)\n    if (robotoffDryRun.get()) {\n      console.log(`Annotated ${apiUrl}`, formBody)\n      return\n    } else {\n      return fetch(apiUrl, {\n        method: \"POST\",\n        body: formBody,\n        headers: {\n          \"Content-Type\": \"application/x-www-form-urlencoded\",\n        },\n        credentials: \"include\",\n      })\n    }\n  },\n\n  async questionsByProductCode(code: string, questionRequestParams: QuestionRequestParams = {}) {\n    if (!questionRequestParams.lang) {\n      questionRequestParams.lang = getLocale()\n    }\n    const apiUrl = getApiUrl(`/questions/${code}`)\n    const url = addParamsToUrl(apiUrl, questionRequestParams)\n    const response = await fetch(url)\n    const result: QuestionsResponse = await response.json()\n    return result\n  },\n}"
+          "default": "{\n  annotate,\n  annotateQuestion(insightId: string, annotation: QuestionAnnotationAnswer) {\n    const formBody = new URLSearchParams({\n      insight_id: insightId,\n      annotation: annotation,\n    }).toString()\n    return annotate(formBody)\n  },\n  annotateNutrients(annotation: InsightAnnotationAnswer) {\n    const formBody = new URLSearchParams({\n      annotation: \"2\",\n      insight_id: annotation.insightId,\n      data: JSON.stringify(annotation.data),\n      type: annotation.type,\n    }).toString()\n    return annotate(formBody)\n  },\n\n  async questionsByProductCode(code: string, questionRequestParams: QuestionRequestParams = {}) {\n    if (!questionRequestParams.lang) {\n      questionRequestParams.lang = await getLocaleAfterInit()\n    }\n    const apiUrl = getApiUrl(`/questions/${code}`)\n    const url = addParamsToUrl(apiUrl, questionRequestParams)\n    const response = await fetch(url)\n    const result: QuestionsResponse = await response.json()\n    return result\n  },\n\n  async insights(requestParams: InsightsRequestParams = {}) {\n    const apiUrl = getApiUrl(\"/insights\")\n    const url = addParamsToUrl(apiUrl, requestParams)\n    const response = await fetch(url)\n    const result: InsightsResponse = await response.json()\n    return result\n  },\n}"
         }
       ],
       "exports": [
@@ -109,6 +109,20 @@
           "declaration": {
             "name": "robotoff",
             "module": "src/api/robotoff.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/api/taxonomies.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "module": "src/api/taxonomies.ts"
           }
         }
       ]
@@ -126,6 +140,24 @@
           "kind": "variable",
           "name": "{ getLocale, setLocale }",
           "description": "Configure the localization, it will load the locale files and set the source and target locales"
+        },
+        {
+          "kind": "variable",
+          "name": "isLocaleSet",
+          "type": {
+            "text": "boolean"
+          },
+          "default": "false"
+        },
+        {
+          "kind": "function",
+          "name": "getLocaleAfterInit",
+          "return": {
+            "type": {
+              "text": "Promise<string>"
+            }
+          },
+          "description": "Get the locale if it's set or delay 100ms to get it"
         }
       ],
       "exports": [
@@ -142,6 +174,22 @@
           "name": "{ getLocale, setLocale }",
           "declaration": {
             "name": "{ getLocale, setLocale }",
+            "module": "src/localization/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "isLocaleSet",
+          "declaration": {
+            "name": "isLocaleSet",
+            "module": "src/localization/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "getLocaleAfterInit",
+          "declaration": {
+            "name": "getLocaleAfterInit",
             "module": "src/localization/index.ts"
           }
         }
@@ -189,6 +237,100 @@
           "declaration": {
             "name": "getPluralTranslation",
             "module": "src/localization/translations.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/signals/nutrients.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "insightById",
+          "default": "new SignalMap<Insight>({})"
+        },
+        {
+          "kind": "variable",
+          "name": "insightIdByProductCode",
+          "default": "new SignalMap<string | null>({})"
+        },
+        {
+          "kind": "function",
+          "name": "insight",
+          "parameters": [
+            {
+              "name": "productCode",
+              "type": {
+                "text": "string"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "fetchIncompleteNutrientsInsightsByProductCode",
+          "parameters": [
+            {
+              "name": "productCode",
+              "type": {
+                "text": "string"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "annotateNutrients",
+          "parameters": [
+            {
+              "name": "data",
+              "type": {
+                "text": "InsightAnnotationAnswer"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "insightById",
+          "declaration": {
+            "name": "insightById",
+            "module": "src/signals/nutrients.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "insightIdByProductCode",
+          "declaration": {
+            "name": "insightIdByProductCode",
+            "module": "src/signals/nutrients.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "insight",
+          "declaration": {
+            "name": "insight",
+            "module": "src/signals/nutrients.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "fetchIncompleteNutrientsInsightsByProductCode",
+          "declaration": {
+            "name": "fetchIncompleteNutrientsInsightsByProductCode",
+            "module": "src/signals/nutrients.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "annotateNutrients",
+          "declaration": {
+            "name": "annotateNutrients",
+            "module": "src/signals/nutrients.ts"
           }
         }
       ]
@@ -473,30 +615,113 @@
       "declarations": [
         {
           "kind": "variable",
-          "name": "robotoffApiUrl",
-          "default": "new State(DEFAULT_ROBOTOFF_CONFIGURATION.apiUrl)"
-        },
-        {
-          "kind": "variable",
-          "name": "robotoffDryRun",
-          "default": "new State(DEFAULT_ROBOTOFF_CONFIGURATION.dryRun)"
+          "name": "robotoffConfiguration",
+          "default": "new SignalObject<RobotoffConfiguration>({\n  ...DEFAULT_ROBOTOFF_CONFIGURATION,\n})"
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "robotoffApiUrl",
+          "name": "robotoffConfiguration",
           "declaration": {
-            "name": "robotoffApiUrl",
+            "name": "robotoffConfiguration",
             "module": "src/signals/robotoff.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/signals/taxonomies.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "getTaxonomyNameByIdAndLang",
+          "parameters": [
+            {
+              "name": "id",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "lang",
+              "type": {
+                "text": "string"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "fetchNutrientsTaxonomies"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "getTaxonomyNameByIdAndLang",
+          "declaration": {
+            "name": "getTaxonomyNameByIdAndLang",
+            "module": "src/signals/taxonomies.ts"
           }
         },
         {
           "kind": "js",
-          "name": "robotoffDryRun",
+          "name": "fetchNutrientsTaxonomies",
           "declaration": {
-            "name": "robotoffDryRun",
-            "module": "src/signals/robotoff.ts"
+            "name": "fetchNutrientsTaxonomies",
+            "module": "src/signals/taxonomies.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/test/off-webcomponents_test.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/styles/accessibility.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "VISUALLY_HIDDEN",
+          "default": "css`\n  .visually-hidden {\n    position: absolute;\n    position: absolute !important;\n    width: 1px !important;\n    height: 1px !important;\n    padding: 0 !important;\n    margin: -1px !important;\n    overflow: hidden !important;\n    clip: rect(0, 0, 0, 0) !important;\n    white-space: nowrap !important;\n    border: 0 !important;\n  }\n`",
+          "description": "Class to hide elements visually but keep them accessible for screen readers\nhttps://a11y-guidelines.orange.com/en/articles/accessible-hiding/"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "VISUALLY_HIDDEN",
+          "declaration": {
+            "name": "VISUALLY_HIDDEN",
+            "module": "src/styles/accessibility.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/styles/base.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "BASE",
+          "default": "css`\n  :host {\n    font-family: var(--font-family, \"Public Sans\", Helvetica, Roboto, Arial, sans-serif);\n  }\n`",
+          "description": "Base styles for all components\n- Font family : It is necessary to import the font in the index.html file"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "BASE",
+          "declaration": {
+            "name": "BASE",
+            "module": "src/styles/base.ts"
           }
         }
       ]
@@ -569,9 +794,58 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/test/off-webcomponents_test.ts",
-      "declarations": [],
-      "exports": []
+      "path": "src/styles/form.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "SELECT",
+          "default": "css`\n  .select {\n    width: 100%;\n    appearance: none;\n    -webkit-appearance: none !important;\n    -moz-appearance: none !important;\n    background-color: #fafafa;\n    background-image: url(\"dist/assets/carret-bottom.svg\");\n    background-position: 100% center;\n    background-repeat: no-repeat;\n    border-style: solid;\n    border-width: 1px;\n    border-color: #ccc;\n    color: rgba(0, 0, 0, 0.75);\n    line-height: normal;\n    padding: 0.25rem 0.5rem;\n    border-radius: 0;\n  }\n`"
+        },
+        {
+          "kind": "variable",
+          "name": "INPUT",
+          "default": "css`\n  .input,\n  .input-number {\n    width: 100%;\n    background-color: #fafafa;\n    border-style: solid;\n    border-width: 1px;\n    border-color: #ccc;\n    color: rgba(0, 0, 0, 0.75);\n    line-height: normal;\n    padding: 0.25rem 0.5rem;\n    border-radius: 0;\n    appearance: none;\n    -webkit-appearance: none !important;\n  }\n\n  .input {\n    -moz-appearance: none !important;\n  }\n\n  .input-number::-webkit-outer-spin-button,\n  .input-number::-webkit-inner-spin-button {\n    /* display: none; <- Crashes Chrome on hover */\n    -webkit-appearance: none;\n    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */\n  }\n\n  .input-number {\n    padding: 0.25rem 0.5rem;\n    -moz-appearance: textfield !important;\n  }\n`"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SELECT",
+          "declaration": {
+            "name": "SELECT",
+            "module": "src/styles/form.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "INPUT",
+          "declaration": {
+            "name": "INPUT",
+            "module": "src/styles/form.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/styles/utils.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "FLEX",
+          "default": "css`\n  .flex {\n    display: flex;\n  }\n  .flex-col {\n    flex-direction: column;\n  }\n  .justify-center {\n    justify-content: center;\n  }\n  .justify-between {\n    justify-content: space-between;\n  }\n  .justify-end {\n    justify-content: flex-end;\n  }\n  .align-center {\n    align-items: center;\n  }\n  .gap-0_5 {\n    gap: 0.5rem;\n  }\n  .gap-1 {\n    gap: 1rem;\n  }\n`"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FLEX",
+          "declaration": {
+            "name": "FLEX",
+            "module": "src/styles/utils.ts"
+          }
+        }
+      ]
     },
     {
       "kind": "javascript-module",
@@ -582,6 +856,12 @@
     {
       "kind": "javascript-module",
       "path": "src/types/robotoff.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types/taxonomies.ts",
       "declarations": [],
       "exports": []
     },
@@ -758,6 +1038,18 @@
               }
             }
           ]
+        },
+        {
+          "kind": "function",
+          "name": "delay",
+          "parameters": [
+            {
+              "name": "ms",
+              "type": {
+                "text": "number"
+              }
+            }
+          ]
         }
       ],
       "exports": [
@@ -808,6 +1100,129 @@
             "name": "addParamsToUrl",
             "module": "src/utils/index.ts"
           }
+        },
+        {
+          "kind": "js",
+          "name": "delay",
+          "declaration": {
+            "name": "delay",
+            "module": "src/utils/index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/nutrients.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "EDITABLE_UNITS",
+          "type": {
+            "text": "array"
+          },
+          "default": "[Unit.MICROGRAMS, Unit.MILIGRAMS, Unit.GRAMS]"
+        },
+        {
+          "kind": "variable",
+          "name": "NUTRIENT_SERVING_SIZE_KEY",
+          "type": {
+            "text": "string"
+          },
+          "default": "\"serving_size\""
+        },
+        {
+          "kind": "variable",
+          "name": "NUTRIENT_SUFFIX",
+          "type": {
+            "text": "Record<InsightAnnotationType, NutrientSuffix>"
+          },
+          "default": "{\n  [InsightAnnotationType.CENTGRAMS]: \"_100g\",\n  [InsightAnnotationType.SERVING]: \"_serving\",\n}"
+        },
+        {
+          "kind": "variable",
+          "name": "FORCED_UNITS_BY_NUTRIENTS_KEYS",
+          "type": {
+            "text": "object"
+          },
+          "default": "{\n  [ForcedNutrientKey.ENERGY_KJ]: Unit.KILOJOULES,\n  [ForcedNutrientKey.ENERGY_KCAL]: Unit.KILOCALORIES,\n  [ForcedNutrientKey.ENERGY_FROM_FAT]: Unit.KILOJOULES,\n}"
+        },
+        {
+          "kind": "function",
+          "name": "getPossibleUnits",
+          "parameters": [
+            {
+              "name": "key",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "unit",
+              "optional": true,
+              "type": {
+                "text": "string | null"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "variable",
+          "name": "NUTRIENT_UNIT_NAME_PREFIX",
+          "type": {
+            "text": "string"
+          },
+          "default": "\"unit__\""
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "EDITABLE_UNITS",
+          "declaration": {
+            "name": "EDITABLE_UNITS",
+            "module": "src/utils/nutrients.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "NUTRIENT_SERVING_SIZE_KEY",
+          "declaration": {
+            "name": "NUTRIENT_SERVING_SIZE_KEY",
+            "module": "src/utils/nutrients.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "NUTRIENT_SUFFIX",
+          "declaration": {
+            "name": "NUTRIENT_SUFFIX",
+            "module": "src/utils/nutrients.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "FORCED_UNITS_BY_NUTRIENTS_KEYS",
+          "declaration": {
+            "name": "FORCED_UNITS_BY_NUTRIENTS_KEYS",
+            "module": "src/utils/nutrients.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "getPossibleUnits",
+          "declaration": {
+            "name": "getPossibleUnits",
+            "module": "src/utils/nutrients.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "NUTRIENT_UNIT_NAME_PREFIX",
+          "declaration": {
+            "name": "NUTRIENT_UNIT_NAME_PREFIX",
+            "module": "src/utils/nutrients.ts"
+          }
         }
       ]
     },
@@ -818,14 +1233,14 @@
         {
           "kind": "class",
           "description": "",
-          "name": "SignalMap",
+          "name": "SignalObject",
           "members": [
             {
               "kind": "method",
               "name": "getItem",
               "return": {
                 "type": {
-                  "text": "T"
+                  "text": "T[keyof T]"
                 }
               },
               "parameters": [
@@ -850,7 +1265,7 @@
                 {
                   "name": "value",
                   "type": {
-                    "text": "T"
+                    "text": "T[keyof T]"
                   }
                 }
               ]
@@ -860,9 +1275,71 @@
             "name": "State",
             "package": "@lit-labs/signals"
           }
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SignalMap",
+          "superclass": {
+            "name": "SignalObject",
+            "module": "src/utils/signals.ts"
+          },
+          "members": [
+            {
+              "kind": "method",
+              "name": "getItem",
+              "return": {
+                "type": {
+                  "text": "T[keyof T]"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "SignalObject",
+                "module": "src/utils/signals.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "setItem",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "T[keyof T]"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "SignalObject",
+                "module": "src/utils/signals.ts"
+              }
+            }
+          ]
         }
       ],
       "exports": [
+        {
+          "kind": "js",
+          "name": "SignalObject",
+          "declaration": {
+            "name": "SignalObject",
+            "module": "src/utils/signals.ts"
+          }
+        },
         {
           "kind": "js",
           "name": "SignalMap",
@@ -937,6 +1414,78 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/icons/unzoom.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Component that displays a unzoom icon.",
+          "name": "UnzoomIcon",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "unzoom-icon",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UnzoomIcon",
+          "declaration": {
+            "name": "UnzoomIcon",
+            "module": "src/components/icons/unzoom.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "unzoom-icon",
+          "declaration": {
+            "name": "UnzoomIcon",
+            "module": "src/components/icons/unzoom.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/icons/zoom.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Component that displays a zoom icon.",
+          "name": "ZoomIcon",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit-element"
+          },
+          "tagName": "zoom-icon",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ZoomIcon",
+          "declaration": {
+            "name": "ZoomIcon",
+            "module": "src/components/icons/zoom.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "zoom-icon",
+          "declaration": {
+            "name": "ZoomIcon",
+            "module": "src/components/icons/zoom.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/robotoff/robotoff-configuration.ts",
       "declarations": [
         {
@@ -950,6 +1499,7 @@
               "type": {
                 "text": "string"
               },
+              "description": "The robotoff API URL.",
               "attribute": "api-url"
             },
             {
@@ -958,7 +1508,17 @@
               "type": {
                 "text": "boolean"
               },
+              "description": "Whether to run robotoff in dry run mode. Il allows to run robotoff without actually sending the data to the API.",
               "attribute": "dry-run"
+            },
+            {
+              "kind": "field",
+              "name": "imgUrl",
+              "type": {
+                "text": "string"
+              },
+              "description": "The URL of the images server.",
+              "attribute": "img-url"
             }
           ],
           "attributes": [
@@ -967,14 +1527,27 @@
               "type": {
                 "text": "string"
               },
-              "fieldName": "apiUrl"
+              "description": "The robotoff API URL.",
+              "fieldName": "apiUrl",
+              "attribute": "api-url"
             },
             {
               "name": "dry-run",
               "type": {
                 "text": "boolean"
               },
-              "fieldName": "dryRun"
+              "description": "Whether to run robotoff in dry run mode. Il allows to run robotoff without actually sending the data to the API.",
+              "fieldName": "dryRun",
+              "attribute": "dry-run"
+            },
+            {
+              "name": "img-url",
+              "type": {
+                "text": "string"
+              },
+              "description": "The URL of the images server.",
+              "fieldName": "imgUrl",
+              "attribute": "img-url"
             }
           ],
           "superclass": {
@@ -1006,7 +1579,7 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/robotoff/robotoff-question-form.ts",
+      "path": "src/components/robotoff-question/robotoff-question-form.ts",
       "declarations": [
         {
           "kind": "class",
@@ -1094,7 +1667,7 @@
           "name": "RobotoffQuestionForm",
           "declaration": {
             "name": "RobotoffQuestionForm",
-            "module": "src/components/robotoff/robotoff-question-form.ts"
+            "module": "src/components/robotoff-question/robotoff-question-form.ts"
           }
         },
         {
@@ -1102,14 +1675,14 @@
           "name": "robotoff-question-form",
           "declaration": {
             "name": "RobotoffQuestionForm",
-            "module": "src/components/robotoff/robotoff-question-form.ts"
+            "module": "src/components/robotoff-question/robotoff-question-form.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/robotoff/robotoff-question.ts",
+      "path": "src/components/robotoff-question/robotoff-question.ts",
       "declarations": [
         {
           "kind": "class",
@@ -1129,13 +1702,13 @@
             },
             {
               "kind": "field",
-              "name": "productId",
+              "name": "productCode",
               "type": {
                 "text": "string"
               },
               "default": "\"\"",
-              "description": "The product id to fetch questions for",
-              "attribute": "product-id"
+              "description": "The product code to fetch questions for",
+              "attribute": "product-code"
             },
             {
               "kind": "field",
@@ -1161,7 +1734,7 @@
               "kind": "field",
               "name": "_questionsTask",
               "privacy": "private",
-              "default": "new Task(this, {\n    task: async ([productId, insightTypes], {}) => {\n      this.hasAnswered = false\n      if (!productId) {\n        return []\n      }\n      const params = insightTypes ? { insight_types: insightTypes } : {}\n\n      await fetchQuestionsByProductCode(productId, params)\n      this._emitQuestionStateEvent()\n      return questions(productId).get()\n    },\n    args: () => [this.productId, this.insightTypes],\n  })"
+              "default": "new Task(this, {\n    task: async ([productCode, insightTypes], {}) => {\n      this.hasAnswered = false\n      if (!productCode) {\n        return []\n      }\n      const params = insightTypes ? { insight_types: insightTypes } : {}\n\n      await fetchQuestionsByProductCode(productCode, params)\n      this._emitQuestionStateEvent()\n      return questions(productCode).get()\n    },\n    args: () => [this.productCode, this.insightTypes],\n  })"
             },
             {
               "kind": "field",
@@ -1199,13 +1772,13 @@
               "fieldName": "options"
             },
             {
-              "name": "product-id",
+              "name": "product-code",
               "type": {
                 "text": "string"
               },
               "default": "\"\"",
-              "description": "The product id to fetch questions for",
-              "fieldName": "productId"
+              "description": "The product code to fetch questions for",
+              "fieldName": "productCode"
             },
             {
               "name": "insight-types",
@@ -1237,7 +1810,7 @@
           "name": "RobotoffQuestion",
           "declaration": {
             "name": "RobotoffQuestion",
-            "module": "src/components/robotoff/robotoff-question.ts"
+            "module": "src/components/robotoff-question/robotoff-question.ts"
           }
         },
         {
@@ -1245,79 +1818,374 @@
           "name": "robotoff-question",
           "declaration": {
             "name": "RobotoffQuestion",
-            "module": "src/components/robotoff/robotoff-question.ts"
+            "module": "src/components/robotoff-question/robotoff-question.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/icons/unzoom.ts",
+      "path": "src/components/robotoff-nutrients/robotoff-nutrients-table.ts",
       "declarations": [
         {
           "kind": "class",
-          "description": "Component that displays a unzoom icon.",
-          "name": "UnzoomIcon",
+          "description": "",
+          "name": "RobotoffNutrientsTable",
+          "members": [
+            {
+              "kind": "field",
+              "name": "insight",
+              "type": {
+                "text": "Insight | undefined"
+              },
+              "attribute": "insight"
+            },
+            {
+              "kind": "field",
+              "name": "showImage",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "show-image"
+            },
+            {
+              "kind": "method",
+              "name": "getFormatedNutrients",
+              "return": {
+                "type": {
+                  "text": "FormatedNutrients"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "hideImage"
+            },
+            {
+              "kind": "method",
+              "name": "displayImage"
+            },
+            {
+              "kind": "method",
+              "name": "renderImage"
+            },
+            {
+              "kind": "method",
+              "name": "renderRows",
+              "parameters": [
+                {
+                  "name": "nutrients",
+                  "type": {
+                    "text": "FormatedNutrients"
+                  },
+                  "description": "The nutrients to render"
+                }
+              ],
+              "description": "Render the inputs for the given nutrient key and column",
+              "return": {
+                "type": {
+                  "text": ""
+                }
+              }
+            },
+            {
+              "kind": "field",
+              "name": "getInputValueName"
+            },
+            {
+              "kind": "field",
+              "name": "getInputUnitName"
+            },
+            {
+              "kind": "method",
+              "name": "renderUnit",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  },
+                  "description": "The key of the nutrient."
+                },
+                {
+                  "name": "column",
+                  "type": {
+                    "text": "InsightAnnotationType"
+                  },
+                  "description": "The column of the nutrient."
+                },
+                {
+                  "name": "nutrient",
+                  "type": {
+                    "text": "Pick<InsightDatum, \"unit\">"
+                  },
+                  "description": "The nutrient to render."
+                },
+                {
+                  "name": "tabIndex",
+                  "type": {
+                    "text": "1 | 2"
+                  }
+                }
+              ],
+              "description": "Render the inputs for the given key and column.\nWe use a method instead a component to have input in form data when submitting.",
+              "return": {
+                "type": {
+                  "text": ""
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderInputs",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  },
+                  "description": "The key of the nutrient."
+                },
+                {
+                  "name": "column",
+                  "type": {
+                    "text": "InsightAnnotationType"
+                  },
+                  "description": "The column of the nutrient."
+                },
+                {
+                  "name": "nutrient",
+                  "type": {
+                    "text": "Pick<InsightDatum, \"value\" | \"unit\">"
+                  },
+                  "description": "The nutrient to render."
+                },
+                {
+                  "name": "tabIndex",
+                  "type": {
+                    "text": "1 | 2"
+                  }
+                }
+              ],
+              "description": "Render the inputs for the given key and column.\nWe use a method instead a component to have input in form data when submitting.",
+              "return": {
+                "type": {
+                  "text": ""
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "emitSubmitEvent",
+              "parameters": [
+                {
+                  "name": "insightAnnotationAnswer",
+                  "type": {
+                    "text": "InsightAnnotationAnswer"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onSubmit",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "SubmitEvent"
+                  }
+                }
+              ]
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "CustomEvent"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "insight",
+              "type": {
+                "text": "Insight | undefined"
+              },
+              "fieldName": "insight"
+            },
+            {
+              "name": "show-image",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "showImage"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "robotoff-nutrients-table",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RobotoffNutrientsTable",
+          "declaration": {
+            "name": "RobotoffNutrientsTable",
+            "module": "src/components/robotoff-nutrients/robotoff-nutrients-table.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "robotoff-nutrients-table",
+          "declaration": {
+            "name": "RobotoffNutrientsTable",
+            "module": "src/components/robotoff-nutrients/robotoff-nutrients-table.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/robotoff-nutrients/robotoff-nutrients.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "RobotoffNutrients",
+          "members": [
+            {
+              "kind": "field",
+              "name": "productCode",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "attribute": "product-code"
+            },
+            {
+              "kind": "field",
+              "name": "showMessages",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "show-messages"
+            },
+            {
+              "kind": "field",
+              "name": "isSubmited",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "showSuccessMessage",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_insightsTask",
+              "privacy": "private",
+              "default": "new Task(this, {\n    task: async ([productCode], {}) => {\n      if (!productCode) {\n        return []\n      }\n\n      await Promise.all([\n        fetchIncompleteNutrientsInsightsByProductCode(productCode),\n        fetchNutrientsTaxonomies(),\n      ])\n      return insight(productCode).get()\n    },\n    args: () => [this.productCode],\n  })"
+            },
+            {
+              "kind": "field",
+              "name": "onSubmit"
+            },
+            {
+              "kind": "method",
+              "name": "renderMessages"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "product-code",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "fieldName": "productCode"
+            },
+            {
+              "name": "show-messages",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "showMessages"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "robotoff-nutrients",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RobotoffNutrients",
+          "declaration": {
+            "name": "RobotoffNutrients",
+            "module": "src/components/robotoff-nutrients/robotoff-nutrients.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "robotoff-nutrients",
+          "declaration": {
+            "name": "RobotoffNutrients",
+            "module": "src/components/robotoff-nutrients/robotoff-nutrients.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/shared/loader.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "OffWcLoader",
           "members": [],
           "superclass": {
             "name": "LitElement",
             "package": "lit"
           },
-          "tagName": "unzoom-icon",
+          "tagName": "off-wc-loader",
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "UnzoomIcon",
+          "name": "OffWcLoader",
           "declaration": {
-            "name": "UnzoomIcon",
-            "module": "src/components/icons/unzoom.ts"
+            "name": "OffWcLoader",
+            "module": "src/components/shared/loader.ts"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "unzoom-icon",
+          "name": "off-wc-loader",
           "declaration": {
-            "name": "UnzoomIcon",
-            "module": "src/components/icons/unzoom.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/icons/zoom.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Component that displays a zoom icon.",
-          "name": "ZoomIcon",
-          "members": [],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit-element"
-          },
-          "tagName": "zoom-icon",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ZoomIcon",
-          "declaration": {
-            "name": "ZoomIcon",
-            "module": "src/components/icons/zoom.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "zoom-icon",
-          "declaration": {
-            "name": "ZoomIcon",
-            "module": "src/components/icons/zoom.ts"
+            "name": "OffWcLoader",
+            "module": "src/components/shared/loader.ts"
           }
         }
       ]

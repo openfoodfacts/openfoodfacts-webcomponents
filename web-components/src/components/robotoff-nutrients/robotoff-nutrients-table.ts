@@ -20,6 +20,7 @@ import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { EventType } from "../../constants"
 import { INPUT, SELECT } from "../../styles/form"
 import { FLEX } from "../../styles/utils"
+import { robotoffConfiguration } from "../../signals/robotoff"
 
 export type FormatedNutrients = {
   "100g": Record<string, InsightDatum>
@@ -36,7 +37,7 @@ const SERVING_MAX_SIZE = INPUT_VALUE_MAX_SIZE + INPUT_UNIT_MAX_SIZE + INPUTS_GAP
 @localized()
 export class RobotoffNutrientsTable extends LitElement {
   static override styles = [
-    ...getButtonClasses([ButtonType.Chocolate]),
+    ...getButtonClasses([ButtonType.Chocolate, ButtonType.LINK]),
     SELECT,
     INPUT,
     FLEX,
@@ -65,13 +66,13 @@ export class RobotoffNutrientsTable extends LitElement {
         gap: 0.3rem;
       }
       .serving-size-wrapper input {
-        max-width: ${SERVING_MAX_SIZE}rem;
+        width: ${SERVING_MAX_SIZE}rem;
         text-align: center;
         box-sizing: border-box;
       }
 
       table .input-number {
-        max-width: ${INPUT_VALUE_MAX_SIZE}rem;
+        width: ${INPUT_VALUE_MAX_SIZE}rem;
         box-sizing: border-box;
       }
 
@@ -85,11 +86,31 @@ export class RobotoffNutrientsTable extends LitElement {
       table .submit-row td {
         padding-top: 0.5rem;
       }
+
+      .link-button {
+        margin-bottom: 1rem;
+      }
+
+      .image-wrapper {
+        max-width: 100%;
+        overflow: hidden;
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: center;
+      }
+
+      .image-wrapper img {
+        max-width: 100%;
+        height: 30rem;
+      }
     `,
   ]
 
   @property({ type: Object })
   insight?: Insight
+
+  @property({ type: Boolean, attribute: "show-image" })
+  showImage = false
 
   getFormatedNutrients(): FormatedNutrients {
     const nutrients: FormatedNutrients = {
@@ -123,6 +144,35 @@ export class RobotoffNutrientsTable extends LitElement {
     return nutrients
   }
 
+  hideImage() {
+    this.showImage = false
+  }
+  displayImage() {
+    this.showImage = true
+  }
+
+  renderImage() {
+    if (!this.insight?.source_image) {
+      return nothing
+    }
+    const imgUrl = `${robotoffConfiguration.getItem("imgUrl")}${this.insight.source_image}`
+    return html`
+      <div>
+        <div class="flex justify-center">
+          ${this.showImage
+            ? html`<button class="link-button" @click=${this.hideImage}>
+                ${msg("Hide image")}
+              </button>`
+            : html`<button class="link-button" @click=${this.displayImage}>
+                ${msg("Voir image")}
+              </button>`}
+        </div>
+
+        <div class="image-wrapper">${this.showImage ? html`<img src="${imgUrl}" />` : nothing}</div>
+      </div>
+    `
+  }
+
   /**
    * Render the inputs for the given nutrient key and column
    * @param nutrients - The nutrients to render
@@ -139,7 +189,8 @@ export class RobotoffNutrientsTable extends LitElement {
               ${this.renderInputs(
                 key,
                 InsightAnnotationType.CENTGRAMS,
-                nutrients[InsightAnnotationType.CENTGRAMS][key]
+                nutrients[InsightAnnotationType.CENTGRAMS][key],
+                1
               )}
             </div>
           </td>
@@ -148,7 +199,8 @@ export class RobotoffNutrientsTable extends LitElement {
               ${this.renderInputs(
                 key,
                 InsightAnnotationType.SERVING,
-                nutrients[InsightAnnotationType.SERVING][key]
+                nutrients[InsightAnnotationType.SERVING][key],
+                2
               )}
             </div>
           </td>
@@ -169,12 +221,17 @@ export class RobotoffNutrientsTable extends LitElement {
    * @param nutrient The nutrient to render.
    * @returns The rendered inputs.
    */
-  renderUnit(key: string, column: InsightAnnotationType, nutrient: Pick<InsightDatum, "unit">) {
+  renderUnit(
+    key: string,
+    column: InsightAnnotationType,
+    nutrient: Pick<InsightDatum, "unit">,
+    tabIndex: 1 | 2
+  ) {
     const possibleUnits = getPossibleUnits(key, nutrient.unit)
     const inputName = this.getInputUnitName(key, column)
     if (possibleUnits.length > 1) {
       return html`
-        <select name=${inputName} class="select">
+        <select name=${inputName} class="select" tabindex=${tabIndex}>
           ${possibleUnits.map(
             (unit) =>
               html`<option value="${unit}" ?selected=${unit === nutrient.unit}>${unit}</option>`
@@ -202,7 +259,8 @@ export class RobotoffNutrientsTable extends LitElement {
   renderInputs(
     key: string,
     column: InsightAnnotationType,
-    nutrient: Pick<InsightDatum, "value" | "unit">
+    nutrient: Pick<InsightDatum, "value" | "unit">,
+    tabIndex: 1 | 2
   ) {
     const inputName = this.getInputValueName(key, column)
     return html`
@@ -215,9 +273,10 @@ export class RobotoffNutrientsTable extends LitElement {
           class="input-number"
           step="0.01"
           min="0.01"
+          tabindex=${tabIndex}
         />
       </span>
-      <span title=${msg("unit")}> ${this.renderUnit(key, column, nutrient)} </span>
+      <span title=${msg("unit")}> ${this.renderUnit(key, column, nutrient, tabIndex)} </span>
     `
   }
 
@@ -284,6 +343,7 @@ export class RobotoffNutrientsTable extends LitElement {
     )
     return html`
       <form @submit=${this.onSubmit}>
+        ${this.renderImage()}
         <table>
           <thead>
             <tr>
@@ -297,6 +357,7 @@ export class RobotoffNutrientsTable extends LitElement {
                   type="text"
                   value=${nutrients.servingSize?.value}
                   required="true"
+                  tabindex="2"
                 />
               </th>
             </tr>
@@ -311,6 +372,7 @@ export class RobotoffNutrientsTable extends LitElement {
                     type="submit"
                     class="button chocolate-button"
                     data-key=${InsightAnnotationType.CENTGRAMS}
+                    tabindex="1"
                   >
                     Valider
                   </button>
@@ -323,6 +385,7 @@ export class RobotoffNutrientsTable extends LitElement {
                   type="submit"
                   class="button chocolate-button"
                   data-key=${InsightAnnotationType.SERVING}
+                  tabindex="2"
                 >
                   Valider
                 </button>

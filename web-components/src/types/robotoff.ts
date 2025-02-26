@@ -1,3 +1,9 @@
+export type RobotoffConfiguration = {
+  apiUrl: string
+  dryRun: boolean
+  imgUrl: string
+}
+
 export type QuestionRequestParams = Partial<{
   insight_types: string
   brand_filter: string

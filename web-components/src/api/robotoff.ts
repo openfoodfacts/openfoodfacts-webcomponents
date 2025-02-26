@@ -8,15 +8,15 @@ import {
   InsightsResponse,
   InsightAnnotationAnswer,
 } from "../types/robotoff"
-import { robotoffApiUrl, robotoffDryRun } from "../signals/robotoff"
+import { robotoffConfiguration } from "../signals/robotoff"
 
 const getApiUrl = (path: string) => {
-  return `${robotoffApiUrl.get()}${path}`
+  return `${robotoffConfiguration.getItem("apiUrl")}${path}`
 }
 
 const annotate = (formBody: string) => {
   const apiUrl = getApiUrl(`/insights/annotate`)
-  if (robotoffDryRun.get()) {
+  if (robotoffConfiguration.getItem("dryRun")) {
     console.log("Annotated :", apiUrl, formBody)
     return
   } else {
