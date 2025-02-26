@@ -10,7 +10,7 @@
           "kind": "variable",
           "name": "DEFAULT_ROBOTOFF_CONFIGURATION",
           "type": {
-            "text": ""
+            "text": "object"
           },
           "default": "{\n  apiUrl: \"https://robotoff.openfoodfacts.org/api/v1\",\n  dryRun: false,\n  imgUrl: \"https://images.openfoodfacts.org/images/products\",\n}"
         },
@@ -616,7 +616,7 @@
         {
           "kind": "variable",
           "name": "robotoffConfiguration",
-          "default": "new SignalObject<RobotoffConfiguration>({\n  ...DEFAULT_ROBOTOFF_CONFIGURATION,\n})"
+          "default": "new SignalObject<RobotoffConfigurationOptions>({\n  ...DEFAULT_ROBOTOFF_CONFIGURATION,\n})"
         }
       ],
       "exports": [
@@ -675,12 +675,6 @@
           }
         }
       ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/test/off-webcomponents_test.ts",
-      "declarations": [],
-      "exports": []
     },
     {
       "kind": "javascript-module",
@@ -846,6 +840,12 @@
           }
         }
       ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/test/off-webcomponents_test.ts",
+      "declarations": [],
+      "exports": []
     },
     {
       "kind": "javascript-module",
@@ -1414,78 +1414,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/icons/unzoom.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Component that displays a unzoom icon.",
-          "name": "UnzoomIcon",
-          "members": [],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "unzoom-icon",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UnzoomIcon",
-          "declaration": {
-            "name": "UnzoomIcon",
-            "module": "src/components/icons/unzoom.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "unzoom-icon",
-          "declaration": {
-            "name": "UnzoomIcon",
-            "module": "src/components/icons/unzoom.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/icons/zoom.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Component that displays a zoom icon.",
-          "name": "ZoomIcon",
-          "members": [],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit-element"
-          },
-          "tagName": "zoom-icon",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ZoomIcon",
-          "declaration": {
-            "name": "ZoomIcon",
-            "module": "src/components/icons/zoom.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "zoom-icon",
-          "declaration": {
-            "name": "ZoomIcon",
-            "module": "src/components/icons/zoom.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/robotoff/robotoff-configuration.ts",
       "declarations": [
         {
@@ -1573,6 +1501,473 @@
           "declaration": {
             "name": "RobotoffConfiguration",
             "module": "src/components/robotoff/robotoff-configuration.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/icons/rotate-left.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "RotateLeftIcon",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "rotate-left-icon",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "rotate-left-icon",
+          "declaration": {
+            "name": "RotateLeftIcon",
+            "module": "src/components/icons/rotate-left.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/icons/rotate-right.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "RotateRightIcon",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "rotate-right-icon",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RotateRightIcon",
+          "declaration": {
+            "name": "RotateRightIcon",
+            "module": "src/components/icons/rotate-right.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "rotate-right-icon",
+          "declaration": {
+            "name": "RotateRightIcon",
+            "module": "src/components/icons/rotate-right.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/icons/unzoom.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Component that displays a unzoom icon.",
+          "name": "UnzoomIcon",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "unzoom-icon",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UnzoomIcon",
+          "declaration": {
+            "name": "UnzoomIcon",
+            "module": "src/components/icons/unzoom.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "unzoom-icon",
+          "declaration": {
+            "name": "UnzoomIcon",
+            "module": "src/components/icons/unzoom.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/icons/zoom.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Component that displays a zoom icon.",
+          "name": "ZoomIcon",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit-element"
+          },
+          "tagName": "zoom-icon",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ZoomIcon",
+          "declaration": {
+            "name": "ZoomIcon",
+            "module": "src/components/icons/zoom.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "zoom-icon",
+          "declaration": {
+            "name": "ZoomIcon",
+            "module": "src/components/icons/zoom.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/robotoff-nutrients/robotoff-nutrients-table.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "RobotoffNutrientsTable",
+          "members": [
+            {
+              "kind": "field",
+              "name": "insight",
+              "type": {
+                "text": "Insight | undefined"
+              },
+              "attribute": "insight"
+            },
+            {
+              "kind": "field",
+              "name": "showImage",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "attribute": "show-image"
+            },
+            {
+              "kind": "method",
+              "name": "getFormatedNutrients",
+              "return": {
+                "type": {
+                  "text": "FormatedNutrients"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "hideImage"
+            },
+            {
+              "kind": "method",
+              "name": "displayImage"
+            },
+            {
+              "kind": "method",
+              "name": "renderImage"
+            },
+            {
+              "kind": "method",
+              "name": "renderRows",
+              "parameters": [
+                {
+                  "name": "nutrients",
+                  "type": {
+                    "text": "FormatedNutrients"
+                  },
+                  "description": "The nutrients to render"
+                }
+              ],
+              "description": "Render the inputs for the given nutrient key and column",
+              "return": {
+                "type": {
+                  "text": ""
+                }
+              }
+            },
+            {
+              "kind": "field",
+              "name": "getInputValueName"
+            },
+            {
+              "kind": "field",
+              "name": "getInputUnitName"
+            },
+            {
+              "kind": "method",
+              "name": "renderUnit",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  },
+                  "description": "The key of the nutrient."
+                },
+                {
+                  "name": "column",
+                  "type": {
+                    "text": "InsightAnnotationType"
+                  },
+                  "description": "The column of the nutrient."
+                },
+                {
+                  "name": "nutrient",
+                  "type": {
+                    "text": "Pick<InsightDatum, \"unit\">"
+                  },
+                  "description": "The nutrient to render."
+                },
+                {
+                  "name": "tabIndex",
+                  "type": {
+                    "text": "1 | 2"
+                  }
+                }
+              ],
+              "description": "Render the inputs for the given key and column.\nWe use a method instead a component to have input in form data when submitting.",
+              "return": {
+                "type": {
+                  "text": ""
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderInputs",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  },
+                  "description": "The key of the nutrient."
+                },
+                {
+                  "name": "column",
+                  "type": {
+                    "text": "InsightAnnotationType"
+                  },
+                  "description": "The column of the nutrient."
+                },
+                {
+                  "name": "nutrient",
+                  "type": {
+                    "text": "Pick<InsightDatum, \"value\" | \"unit\">"
+                  },
+                  "description": "The nutrient to render."
+                },
+                {
+                  "name": "tabIndex",
+                  "type": {
+                    "text": "1 | 2"
+                  }
+                }
+              ],
+              "description": "Render the inputs for the given key and column.\nWe use a method instead a component to have input in form data when submitting.",
+              "return": {
+                "type": {
+                  "text": ""
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "emitSubmitEvent",
+              "parameters": [
+                {
+                  "name": "insightAnnotationAnswer",
+                  "type": {
+                    "text": "InsightAnnotationAnswer"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onSubmit",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "SubmitEvent"
+                  }
+                }
+              ]
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "CustomEvent"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "insight",
+              "type": {
+                "text": "Insight | undefined"
+              },
+              "fieldName": "insight"
+            },
+            {
+              "name": "show-image",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "fieldName": "showImage"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "robotoff-nutrients-table",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RobotoffNutrientsTable",
+          "declaration": {
+            "name": "RobotoffNutrientsTable",
+            "module": "src/components/robotoff-nutrients/robotoff-nutrients-table.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "robotoff-nutrients-table",
+          "declaration": {
+            "name": "RobotoffNutrientsTable",
+            "module": "src/components/robotoff-nutrients/robotoff-nutrients-table.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/robotoff-nutrients/robotoff-nutrients.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "RobotoffNutrients",
+          "members": [
+            {
+              "kind": "field",
+              "name": "productCode",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "attribute": "product-code"
+            },
+            {
+              "kind": "field",
+              "name": "showMessages",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "show-messages"
+            },
+            {
+              "kind": "field",
+              "name": "isSubmited",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "showSuccessMessage",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_insightsTask",
+              "privacy": "private",
+              "default": "new Task(this, {\n    task: async ([productCode], {}) => {\n      if (!productCode) {\n        return []\n      }\n\n      await Promise.all([\n        fetchIncompleteNutrientsInsightsByProductCode(productCode),\n        fetchNutrientsTaxonomies(),\n      ])\n      return insight(productCode).get()\n    },\n    args: () => [this.productCode],\n  })"
+            },
+            {
+              "kind": "field",
+              "name": "onSubmit"
+            },
+            {
+              "kind": "method",
+              "name": "renderMessages"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "product-code",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "fieldName": "productCode"
+            },
+            {
+              "name": "show-messages",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "showMessages"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "robotoff-nutrients",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RobotoffNutrients",
+          "declaration": {
+            "name": "RobotoffNutrients",
+            "module": "src/components/robotoff-nutrients/robotoff-nutrients.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "robotoff-nutrients",
+          "declaration": {
+            "name": "RobotoffNutrients",
+            "module": "src/components/robotoff-nutrients/robotoff-nutrients.ts"
           }
         }
       ]
@@ -1825,337 +2220,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/robotoff-nutrients/robotoff-nutrients-table.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "RobotoffNutrientsTable",
-          "members": [
-            {
-              "kind": "field",
-              "name": "insight",
-              "type": {
-                "text": "Insight | undefined"
-              },
-              "attribute": "insight"
-            },
-            {
-              "kind": "field",
-              "name": "showImage",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "attribute": "show-image"
-            },
-            {
-              "kind": "method",
-              "name": "getFormatedNutrients",
-              "return": {
-                "type": {
-                  "text": "FormatedNutrients"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "hideImage"
-            },
-            {
-              "kind": "method",
-              "name": "displayImage"
-            },
-            {
-              "kind": "method",
-              "name": "renderImage"
-            },
-            {
-              "kind": "method",
-              "name": "renderRows",
-              "parameters": [
-                {
-                  "name": "nutrients",
-                  "type": {
-                    "text": "FormatedNutrients"
-                  },
-                  "description": "The nutrients to render"
-                }
-              ],
-              "description": "Render the inputs for the given nutrient key and column",
-              "return": {
-                "type": {
-                  "text": ""
-                }
-              }
-            },
-            {
-              "kind": "field",
-              "name": "getInputValueName"
-            },
-            {
-              "kind": "field",
-              "name": "getInputUnitName"
-            },
-            {
-              "kind": "method",
-              "name": "renderUnit",
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  },
-                  "description": "The key of the nutrient."
-                },
-                {
-                  "name": "column",
-                  "type": {
-                    "text": "InsightAnnotationType"
-                  },
-                  "description": "The column of the nutrient."
-                },
-                {
-                  "name": "nutrient",
-                  "type": {
-                    "text": "Pick<InsightDatum, \"unit\">"
-                  },
-                  "description": "The nutrient to render."
-                },
-                {
-                  "name": "tabIndex",
-                  "type": {
-                    "text": "1 | 2"
-                  }
-                }
-              ],
-              "description": "Render the inputs for the given key and column.\nWe use a method instead a component to have input in form data when submitting.",
-              "return": {
-                "type": {
-                  "text": ""
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "renderInputs",
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  },
-                  "description": "The key of the nutrient."
-                },
-                {
-                  "name": "column",
-                  "type": {
-                    "text": "InsightAnnotationType"
-                  },
-                  "description": "The column of the nutrient."
-                },
-                {
-                  "name": "nutrient",
-                  "type": {
-                    "text": "Pick<InsightDatum, \"value\" | \"unit\">"
-                  },
-                  "description": "The nutrient to render."
-                },
-                {
-                  "name": "tabIndex",
-                  "type": {
-                    "text": "1 | 2"
-                  }
-                }
-              ],
-              "description": "Render the inputs for the given key and column.\nWe use a method instead a component to have input in form data when submitting.",
-              "return": {
-                "type": {
-                  "text": ""
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "emitSubmitEvent",
-              "parameters": [
-                {
-                  "name": "insightAnnotationAnswer",
-                  "type": {
-                    "text": "InsightAnnotationAnswer"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onSubmit",
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "SubmitEvent"
-                  }
-                }
-              ]
-            }
-          ],
-          "events": [
-            {
-              "type": {
-                "text": "CustomEvent"
-              }
-            }
-          ],
-          "attributes": [
-            {
-              "name": "insight",
-              "type": {
-                "text": "Insight | undefined"
-              },
-              "fieldName": "insight"
-            },
-            {
-              "name": "show-image",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "fieldName": "showImage"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "robotoff-nutrients-table",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "RobotoffNutrientsTable",
-          "declaration": {
-            "name": "RobotoffNutrientsTable",
-            "module": "src/components/robotoff-nutrients/robotoff-nutrients-table.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "robotoff-nutrients-table",
-          "declaration": {
-            "name": "RobotoffNutrientsTable",
-            "module": "src/components/robotoff-nutrients/robotoff-nutrients-table.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/robotoff-nutrients/robotoff-nutrients.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "RobotoffNutrients",
-          "members": [
-            {
-              "kind": "field",
-              "name": "productCode",
-              "type": {
-                "text": "string"
-              },
-              "default": "\"\"",
-              "attribute": "product-code"
-            },
-            {
-              "kind": "field",
-              "name": "showMessages",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "attribute": "show-messages"
-            },
-            {
-              "kind": "field",
-              "name": "isSubmited",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "showSuccessMessage",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_insightsTask",
-              "privacy": "private",
-              "default": "new Task(this, {\n    task: async ([productCode], {}) => {\n      if (!productCode) {\n        return []\n      }\n\n      await Promise.all([\n        fetchIncompleteNutrientsInsightsByProductCode(productCode),\n        fetchNutrientsTaxonomies(),\n      ])\n      return insight(productCode).get()\n    },\n    args: () => [this.productCode],\n  })"
-            },
-            {
-              "kind": "field",
-              "name": "onSubmit"
-            },
-            {
-              "kind": "method",
-              "name": "renderMessages"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "product-code",
-              "type": {
-                "text": "string"
-              },
-              "default": "\"\"",
-              "fieldName": "productCode"
-            },
-            {
-              "name": "show-messages",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "fieldName": "showMessages"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "robotoff-nutrients",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "RobotoffNutrients",
-          "declaration": {
-            "name": "RobotoffNutrients",
-            "module": "src/components/robotoff-nutrients/robotoff-nutrients.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "robotoff-nutrients",
-          "declaration": {
-            "name": "RobotoffNutrients",
-            "module": "src/components/robotoff-nutrients/robotoff-nutrients.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/shared/loader.ts",
       "declarations": [
         {
@@ -2186,6 +2250,185 @@
           "declaration": {
             "name": "OffWcLoader",
             "module": "src/components/shared/loader.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/shared/zoomable-image.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ZoomableImage",
+          "members": [
+            {
+              "kind": "field",
+              "name": "element",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "panzoom",
+              "type": {
+                "text": "any"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "src",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "attribute": "src"
+            },
+            {
+              "kind": "field",
+              "name": "currentZoom",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "attribute": "current-zoom"
+            },
+            {
+              "kind": "field",
+              "name": "stepSize",
+              "type": {
+                "text": "number"
+              },
+              "default": "0.1",
+              "attribute": "step-size"
+            },
+            {
+              "kind": "field",
+              "name": "minZoom",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "attribute": "min-zoom"
+            },
+            {
+              "kind": "field",
+              "name": "maxZoom",
+              "type": {
+                "text": "number"
+              },
+              "default": "5",
+              "attribute": "max-zoom"
+            },
+            {
+              "kind": "field",
+              "name": "rotation",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "{\n    width?: string\n    height?: string\n  }"
+              },
+              "default": "{\n    width: \"100%\",\n    height: \"30vh\",\n  }",
+              "attribute": "size"
+            },
+            {
+              "kind": "method",
+              "name": "initPanzoom"
+            },
+            {
+              "kind": "method",
+              "name": "rotateImage",
+              "parameters": [
+                {
+                  "name": "rotation",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            }
+          ],
+          "attributes": [
+            {
+              "name": "src",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "fieldName": "src"
+            },
+            {
+              "name": "current-zoom",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "fieldName": "currentZoom"
+            },
+            {
+              "name": "step-size",
+              "type": {
+                "text": "number"
+              },
+              "default": "0.1",
+              "fieldName": "stepSize"
+            },
+            {
+              "name": "min-zoom",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "fieldName": "minZoom"
+            },
+            {
+              "name": "max-zoom",
+              "type": {
+                "text": "number"
+              },
+              "default": "5",
+              "fieldName": "maxZoom"
+            },
+            {
+              "name": "size",
+              "type": {
+                "text": "{\n    width?: string\n    height?: string\n  }"
+              },
+              "default": "{\n    width: \"100%\",\n    height: \"30vh\",\n  }",
+              "fieldName": "size"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "zoomable-image",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ZoomableImage",
+          "declaration": {
+            "name": "ZoomableImage",
+            "module": "src/components/shared/zoomable-image.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "zoomable-image",
+          "declaration": {
+            "name": "ZoomableImage",
+            "module": "src/components/shared/zoomable-image.ts"
           }
         }
       ]

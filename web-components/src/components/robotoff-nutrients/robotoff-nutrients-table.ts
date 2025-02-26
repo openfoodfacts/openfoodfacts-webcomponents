@@ -88,7 +88,7 @@ export class RobotoffNutrientsTable extends LitElement {
         padding-top: 0.5rem;
       }
 
-      .link-button {
+      .link-button.is-closed {
         margin-bottom: 1rem;
       }
 
@@ -158,7 +158,7 @@ export class RobotoffNutrientsTable extends LitElement {
             ? html`<button class="link-button" @click=${this.hideImage}>
                 ${msg("Hide image")}
               </button>`
-            : html`<button class="link-button" @click=${this.displayImage}>
+            : html`<button class="link-button is-closed" @click=${this.displayImage}>
                 ${msg("Voir image")}
               </button>`}
         </div>

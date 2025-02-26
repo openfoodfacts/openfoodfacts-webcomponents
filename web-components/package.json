@@ -21,7 +21,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "MODE=prod npm run translations:build && MODE=prod rollup -c",
+    "build": "npm run translations:extract && MODE=prod npm run translations:build && MODE=prod rollup -c",
     "build:watch": "npm run translations:build && MODE=dev rollup -c -w",
     "clean": "rimraf dist && rimraf my-element.{d.ts,d.ts.map,js,js.map} test/my-element.{d.ts,d.ts.map,js,js.map} test/my-element_test.{d.ts,d.ts.map,js,js.map}",
     "lint": "npm run lint:lit-analyzer && npm run lint:eslint",
