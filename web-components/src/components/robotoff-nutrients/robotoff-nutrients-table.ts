@@ -21,6 +21,7 @@ import { EventType } from "../../constants"
 import { INPUT, SELECT } from "../../styles/form"
 import { FLEX } from "../../styles/utils"
 import { robotoffConfiguration } from "../../signals/robotoff"
+import "../shared/zoomable-image"
 
 export type FormatedNutrients = {
   "100g": Record<string, InsightDatum>
@@ -92,16 +93,10 @@ export class RobotoffNutrientsTable extends LitElement {
       }
 
       .image-wrapper {
-        max-width: 100%;
-        overflow: hidden;
-        margin-bottom: 1rem;
         display: flex;
         justify-content: center;
-      }
-
-      .image-wrapper img {
-        max-width: 100%;
-        height: 30rem;
+        align-items: center;
+        margin-bottom: 1rem;
       }
     `,
   ]
@@ -110,7 +105,7 @@ export class RobotoffNutrientsTable extends LitElement {
   insight?: Insight
 
   @property({ type: Boolean, attribute: "show-image" })
-  showImage = false
+  showImage = true
 
   getFormatedNutrients(): FormatedNutrients {
     const nutrients: FormatedNutrients = {
@@ -168,7 +163,11 @@ export class RobotoffNutrientsTable extends LitElement {
               </button>`}
         </div>
 
-        <div class="image-wrapper">${this.showImage ? html`<img src="${imgUrl}" />` : nothing}</div>
+        ${this.showImage
+          ? html`<div class="image-wrapper">
+              <zoomable-image src=${imgUrl} .size="${{ height: "400px" }}" />
+            </div>`
+          : nothing}
       </div>
     `
   }
