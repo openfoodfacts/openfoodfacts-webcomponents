@@ -2,7 +2,6 @@ import { NutrientTaxonomy } from "../types/taxonomies"
 import { SignalMap } from "../utils/signals"
 import { LoadingState } from "../constants"
 import taxonomies from "../api/taxonomies"
-import { State } from "@lit-labs/signals"
 
 const isLoading = new SignalMap<LoadingState>({
   nutrients: LoadingState.NOT_LOADED,

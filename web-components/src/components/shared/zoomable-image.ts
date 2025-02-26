@@ -4,7 +4,7 @@ import Panzoom from "@panzoom/panzoom"
 import { styleMap } from "lit/directives/style-map.js"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { FLEX } from "../../styles/utils"
-import "../icons/rotate-left.ts"
+import "../icons/rotate-left"
 import "../icons/rotate-right"
 import { localized, msg } from "@lit/localize"
 

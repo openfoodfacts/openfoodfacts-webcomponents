@@ -90,6 +90,7 @@ export default {
     copy({
       targets: [
         { src: "src/assets", dest: "dist" }, // This will copy src/assets to dist/assets
+        !production && { src: "index.html", dest: "dist" }, // This will copy src/index.html to dist/index.html in development mode
       ],
     }),
   ],
