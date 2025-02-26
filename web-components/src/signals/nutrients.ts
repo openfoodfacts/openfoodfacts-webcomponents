@@ -19,7 +19,8 @@ export const fetchIncompleteNutrientsInsightsByProductCode = (productCode: strin
     .insights({
       barcode: productCode,
       insight_types: "nutrient_extraction",
-      campaigns: "incomplete-nutrition",
+      // not needed
+      // campaigns: "incomplete-nutrition",
     })
     .then((response) => {
       if (response.insights?.length === 0) {
