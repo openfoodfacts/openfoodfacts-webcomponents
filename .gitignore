@@ -133,3 +133,4 @@ build/
 dist/
 .env
 web-components/src/localization/generated/*
+.vscode
