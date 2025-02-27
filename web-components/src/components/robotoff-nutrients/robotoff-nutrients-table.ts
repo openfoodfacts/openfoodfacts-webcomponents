@@ -238,17 +238,17 @@ export class RobotoffNutrientsTable extends LitElement {
   renderUnit(
     key: string,
     column: InsightAnnotationType,
-    nutrient: Pick<InsightDatum, "unit">,
+    nutrient: Pick<InsightDatum, "unit"> | undefined,
     tabIndex: 1 | 2
   ) {
-    const possibleUnits = getPossibleUnits(key, nutrient.unit)
+    const possibleUnits = getPossibleUnits(key, nutrient?.unit)
     const inputName = this.getInputUnitName(key, column)
     if (possibleUnits.length > 1) {
       return html`
         <select name=${inputName} class="select" tabindex=${tabIndex}>
           ${possibleUnits.map(
             (unit) =>
-              html`<option value="${unit}" ?selected=${unit === nutrient.unit}>${unit}</option>`
+              html`<option value="${unit}" ?selected=${unit === nutrient?.unit}>${unit}</option>`
           )}
         </select>
       `
@@ -273,7 +273,7 @@ export class RobotoffNutrientsTable extends LitElement {
   renderInputs(
     key: string,
     column: InsightAnnotationType,
-    nutrient: Pick<InsightDatum, "value" | "unit">,
+    nutrient: Pick<InsightDatum, "value" | "unit"> | undefined,
     tabIndex: 1 | 2
   ) {
     const inputName = this.getInputValueName(key, column)
@@ -282,11 +282,11 @@ export class RobotoffNutrientsTable extends LitElement {
         <input
           type="number"
           name="${inputName}"
-          value="${nutrient.value}"
+          value="${nutrient?.value}"
           title="${msg("value")}"
           class="input-number"
           step="0.01"
-          min="0.01"
+          min="0"
           tabindex=${tabIndex}
         />
       </span>

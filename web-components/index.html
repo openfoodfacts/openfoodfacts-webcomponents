@@ -20,7 +20,7 @@
     <h2>Robotoff Question</h2>
 
     <div>
-      <robotoff-configuration dry-run="true" />
+      <robotoff-configuration api-url="https://robotoff.openfoodfacts.net/api/v1" />
     </div>
     <div>
       <div>
@@ -33,14 +33,18 @@
       </div>
       <div style="display: flex; margin-top: 1rem">
         <robotoff-question
-          product-code="5900951311505"
+          product-code="0628233671356"
           insight-types=""
           options='{"showMessage": true, "showLoading": true, "showError": true}'
           id="robotoff-question"
         />
       </div>
       <div style="display: flex; margin-top: 1rem">
-        <robotoff-nutrients id="robotoff-nutrients" product-code="1" show-messages="true">
+        <robotoff-nutrients
+          id="robotoff-nutrients"
+          product-code="0628233671356"
+          show-messages="true"
+        >
         </robotoff-nutrients>
       </div>
     </div>
