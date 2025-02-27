@@ -10,9 +10,21 @@ import {
 } from "../types/robotoff"
 import { robotoffConfiguration } from "../signals/robotoff"
 
+/**
+ * Get the API URL for a given path with the current configuration
+ * @param path
+ * @returns {string}
+ */
+
 const getApiUrl = (path: string) => {
   return `${robotoffConfiguration.getItem("apiUrl")}${path}`
 }
+
+/**
+ * Annotate an insight
+ * @param formBody
+ * @returns {Promise<Response>}
+ */
 
 const annotate = (formBody: string) => {
   const apiUrl = getApiUrl(`/insights/annotate`)
@@ -30,7 +42,9 @@ const annotate = (formBody: string) => {
     })
   }
 }
-
+/**
+ * Robotoff API
+ */
 const robotoff = {
   annotate,
   annotateQuestion(insightId: string, annotation: QuestionAnnotationAnswer) {

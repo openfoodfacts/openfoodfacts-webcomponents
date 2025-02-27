@@ -2,6 +2,9 @@ import { css, LitElement } from "lit"
 import { html } from "lit-html"
 import { customElement } from "lit/decorators.js"
 
+/**
+ * Rotate right icon
+ */
 @customElement("rotate-right-icon")
 export class RotateRightIcon extends LitElement {
   static override styles = css`

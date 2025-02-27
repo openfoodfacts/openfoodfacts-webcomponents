@@ -31,6 +31,13 @@ export const FORCED_UNITS_BY_NUTRIENTS_KEYS = {
   [ForcedNutrientKey.ENERGY_FROM_FAT]: Unit.KILOJOULES,
 }
 
+/**
+ * get the possible units for a nutrient key
+ * @param key - the nutrient key
+ * @param unit - the unit to check if it is forced or not.
+ * For example, if the unit is "kj", it will return ["kj"].
+ * @returns
+ */
 export const getPossibleUnits = (key: string, unit?: string | null) => {
   if (unit && unit in FORCED_UNITS_BY_NUTRIENTS_KEYS) {
     const forcedUnit = [FORCED_UNITS_BY_NUTRIENTS_KEYS[key as ForcedNutrientKey]]

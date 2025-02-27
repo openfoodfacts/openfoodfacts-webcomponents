@@ -79,6 +79,11 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
   @state()
   private hasAnswered = false
 
+  /**
+   * Task to fetch questions for the given product code
+   * @type {Task}
+   * @private
+   */
   private _questionsTask = new Task(this, {
     task: async ([productCode, insightTypes], {}) => {
       this.hasAnswered = false
@@ -94,6 +99,10 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
     args: () => [this.productCode, this.insightTypes],
   })
 
+  /**
+   * Emit a custom event when the question state changes to know current state outside the component
+   * @returns {void}
+   */
   private _emitQuestionStateEvent = () => {
     const detail: QuestionStateEventDetail = {
       index: currentQuestionIndex(this.productCode).get(),
@@ -114,6 +123,11 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
     this._emitQuestionStateEvent()
   }
 
+  /**
+   * Render the message to display to the user
+   * @returns {TemplateResult}
+   * @private
+   **/
   private renderMessage() {
     const getMessageWrapper = (message: string) => html`<div class="message">${message}</div>`
 

@@ -3,11 +3,24 @@ import { SignalMap } from "../utils/signals"
 import { LoadingState } from "../constants"
 import taxonomies from "../api/taxonomies"
 
+/**
+ * Store the loading state of the taxonomies to avoid multiple requests.
+ */
 const isLoading = new SignalMap<LoadingState>({
   nutrients: LoadingState.NOT_LOADED,
 })
+
+/**
+ * Store the taxonomies by id.
+ *
+ */
 const nutrientTaxonomyById = new SignalMap<NutrientTaxonomy>({})
 
+/**
+ * Get the name of a taxonomy by its id and lang.
+ * If the lang is not available, it returns the english name.
+ * If the id is not available, it returns an empty string.
+ */
 export const getTaxonomyNameByIdAndLang = (id: string, lang: string) => {
   const taxonomy = nutrientTaxonomyById.getItem(id)
   if (!taxonomy) {
@@ -19,6 +32,10 @@ export const getTaxonomyNameByIdAndLang = (id: string, lang: string) => {
   return taxonomy.name["en"]
 }
 
+/**
+ * Fetch the nutrients taxonomies and store them in the signal.
+k
+ */
 export const fetchNutrientsTaxonomies = async () => {
   if (isLoading.getItem("nutrients") != LoadingState.NOT_LOADED) {
     return

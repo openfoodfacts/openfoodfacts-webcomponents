@@ -8,6 +8,12 @@ import "../icons/rotate-left"
 import "../icons/rotate-right"
 import { localized, msg } from "@lit/localize"
 
+/**
+ * A simple zoomable image component.
+ * It allows to display an image that can be zoomed, and rotated.
+ * It uses the panzoom library.
+ * @element zoomable-image
+ **/
 @customElement("zoomable-image")
 @localized()
 export class ZoomableImage extends LitElement {

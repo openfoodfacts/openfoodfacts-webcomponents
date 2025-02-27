@@ -34,6 +34,11 @@ const INPUT_UNIT_MAX_SIZE = 4
 const INPUTS_GAP = 0.5
 const SERVING_MAX_SIZE = INPUT_VALUE_MAX_SIZE + INPUT_UNIT_MAX_SIZE + INPUTS_GAP
 
+/**
+ * Display a table of nutrients for a given product
+ * @element robotoff-nutrients-table
+ * @fires submit - when the user submit the form
+ */
 @customElement("robotoff-nutrients-table")
 @localized()
 export class RobotoffNutrientsTable extends LitElement {
@@ -101,12 +106,22 @@ export class RobotoffNutrientsTable extends LitElement {
     `,
   ]
 
+  /**
+   * The insight to edit
+   */
   @property({ type: Object })
   insight?: Insight
 
+  /**
+   * Do we show the image of the product by default
+   */
   @property({ type: Boolean, attribute: "show-image" })
   showImage = true
 
+  /**
+   * Get the nutrients in a formated way to manipulate it easily in the template
+   * @returns {FormatedNutrients}
+   */
   getFormatedNutrients(): FormatedNutrients {
     const nutrients: FormatedNutrients = {
       servingSize: undefined,
@@ -279,6 +294,11 @@ export class RobotoffNutrientsTable extends LitElement {
     `
   }
 
+  /**
+   * Emit a custom submit event to submit the form data well formatted.
+   *
+   * @param insightAnnotationAnswer
+   */
   emitSubmitEvent(insightAnnotationAnswer: InsightAnnotationAnswer) {
     this.dispatchEvent(
       new CustomEvent(EventType.SUBMIT, {
@@ -289,6 +309,12 @@ export class RobotoffNutrientsTable extends LitElement {
     )
   }
 
+  /**
+   * Handle the form submission.
+   * It will emit a custom submit event to submit the form data well formatted.
+   * It only sent the data for the column that was submitted.
+   * @param event
+   */
   onSubmit(event: SubmitEvent) {
     event.preventDefault()
     event.stopPropagation()
@@ -303,6 +329,7 @@ export class RobotoffNutrientsTable extends LitElement {
     const nutrientAnotationForm: InsightAnnotatationData = {}
 
     for (const [key, value] of formData.entries()) {
+      // We only want the data for the column that was submitted
       if (!key.endsWith(column)) {
         continue
       }
@@ -312,7 +339,8 @@ export class RobotoffNutrientsTable extends LitElement {
         isUnit = true
         name = name.replace(NUTRIENT_UNIT_NAME_PREFIX, "")
       }
-
+      // Remove the suffix for serving_size
+      // We add suffix to match the column condition
       if (name.startsWith("serving_size")) {
         name = name.replace(NUTRIENT_SUFFIX[column], "")
       }
