@@ -1,5 +1,5 @@
 import { LitElement, css, html, nothing } from "lit"
-import { customElement, property } from "lit/decorators.js"
+import { customElement, property, state } from "lit/decorators.js"
 import {
   Insight,
   InsightDatum,
@@ -83,7 +83,7 @@ export class RobotoffNutrientsTable extends LitElement {
         box-sizing: border-box;
       }
 
-      table .input-number {
+      table .input-nutritional-value {
         width: ${INPUT_VALUE_MAX_SIZE}rem;
         box-sizing: border-box;
       }
@@ -98,6 +98,14 @@ export class RobotoffNutrientsTable extends LitElement {
       table .submit-row td {
         padding-top: 0.5rem;
       }
+      .input-error-message {
+        display: block;
+        box-sizing: border-box;
+        margin-top: 0.2rem;
+        width: ${SERVING_MAX_SIZE}rem;
+        font-size: 0.7rem;
+        color: var(--error-color, red);
+      }
     `,
   ]
 
@@ -106,6 +114,13 @@ export class RobotoffNutrientsTable extends LitElement {
    */
   @property({ type: Object })
   insight?: Insight
+
+  /**
+   * Error message by key
+   *
+   */
+  @state()
+  private errors: Record<string, string> = {}
 
   /**
    * Get the nutrients in a formated way to manipulate it easily in the template
@@ -157,7 +172,7 @@ export class RobotoffNutrientsTable extends LitElement {
         <tr>
           <th scope="row">${label}</th>
           <td>
-            <div class="flex inputs-wrapper">
+            <div>
               ${this.renderInputs(
                 key,
                 InsightAnnotationType.CENTGRAMS,
@@ -167,7 +182,7 @@ export class RobotoffNutrientsTable extends LitElement {
             </div>
           </td>
           <td>
-            <div class="flex inputs-wrapper">
+            <div>
               ${this.renderInputs(
                 key,
                 InsightAnnotationType.SERVING,
@@ -184,6 +199,9 @@ export class RobotoffNutrientsTable extends LitElement {
   getInputValueName = (key: string, column: InsightAnnotationType) => `${key}_${column}`
   getInputUnitName = (key: string, column: InsightAnnotationType) =>
     `${NUTRIENT_UNIT_NAME_PREFIX}${this.getInputValueName(key, column)}`
+
+  getServingSizeInputName = () =>
+    this.getInputValueName(NUTRIENT_SERVING_SIZE_KEY, InsightAnnotationType.SERVING)
 
   /**
    * Render the unit input for the given key and column.
@@ -235,20 +253,22 @@ export class RobotoffNutrientsTable extends LitElement {
     tabIndex: 1 | 2
   ) {
     const inputName = this.getInputValueName(key, column)
+
     return html`
-      <span>
+      <span class="flex inputs-wrapper">
         <input
-          type="number"
+          type="text"
           name="${inputName}"
           value="${nutrient?.value}"
           title="${msg("value")}"
-          class="input-number"
-          step="0.01"
-          min="0"
+          class="input input-nutritional-value"
           tabindex=${tabIndex}
         />
+        <span title=${msg("unit")}> ${this.renderUnit(key, column, nutrient, tabIndex)} </span>
       </span>
-      <span title=${msg("unit")}> ${this.renderUnit(key, column, nutrient, tabIndex)} </span>
+      ${this.errors[inputName]
+        ? html`<span class="input-error-message" role="alert">${this.errors[inputName]}</span>`
+        : nothing}
     `
   }
 
@@ -267,6 +287,72 @@ export class RobotoffNutrientsTable extends LitElement {
     )
   }
 
+  isUnitInput(key: string) {
+    return key.startsWith(NUTRIENT_UNIT_NAME_PREFIX)
+  }
+
+  /**
+   * Validate the input value.
+
+   */
+  validateInputValue(value: string | null): {
+    error?: string
+    value?: string
+  } {
+    const valueCleaned = value?.replace(" ", "").replace(",", ".") ?? ""
+
+    if (valueCleaned === "") {
+      return {
+        value: valueCleaned,
+      }
+    }
+    // Check if the value is a number and a multiple of 0.01. Replace < by nothing to allow to enter a value like <1
+    const numberValue = Number(valueCleaned.replace(/^</gm, ""))
+    if (isNaN(numberValue)) {
+      return {
+        error: msg("Error: Invalid value."),
+      }
+    }
+    // Check number have maximum of 2 decimal
+    if (valueCleaned.split(".")[1]?.length > 2) {
+      return {
+        error: msg("Error: Value must have only 2 decimal"),
+      }
+    }
+
+    return {
+      value: valueCleaned,
+    }
+  }
+
+  /**
+   * Validate the form data.
+   * It will return the form data well formatted.
+   */
+  validateFormData(data: InsightAnnotatationData): InsightAnnotatationData {
+    this.errors = {}
+    for (const [key, item] of Object.entries(data)) {
+      // Skip serving size inputs
+      if (key === NUTRIENT_SERVING_SIZE_KEY) {
+        continue
+      }
+
+      const { error, value } = this.validateInputValue(item.value)
+
+      if (error) {
+        this.errors[key] = error
+      } else {
+        item.value = value!
+      }
+    }
+
+    // raise error if there is any error
+    if (Object.keys(this.errors).length > 0) {
+      throw new Error("Form data is invalid")
+    }
+    return data
+  }
+
   /**
    * Handle the form submission.
    * It will emit a custom submit event to submit the form data well formatted.
@@ -282,24 +368,24 @@ export class RobotoffNutrientsTable extends LitElement {
       return
     }
 
+    let nutrientAnotationForm: InsightAnnotatationData = {}
     const formData = new FormData(event.target as HTMLFormElement)
+    const formValues = formData.entries()
+    const servingSizeInputName = this.getServingSizeInputName()
 
-    const nutrientAnotationForm: InsightAnnotatationData = {}
-
-    for (const [key, value] of formData.entries()) {
+    for (const [key, value] of formValues) {
       // We only want the data for the column that was submitted
       if (!key.endsWith(column)) {
         continue
       }
       let name = key
-      let isUnit = false
-      if (name.startsWith(NUTRIENT_UNIT_NAME_PREFIX)) {
-        isUnit = true
+      let isUnit = this.isUnitInput(name)
+      if (isUnit) {
         name = name.replace(NUTRIENT_UNIT_NAME_PREFIX, "")
       }
       // Remove the suffix for serving_size
       // We add suffix to match the column condition
-      if (name.startsWith("serving_size")) {
+      if (key === servingSizeInputName) {
         name = name.replace(NUTRIENT_SUFFIX[column], "")
       }
 
@@ -312,6 +398,8 @@ export class RobotoffNutrientsTable extends LitElement {
 
       nutrientAnotationForm[name][isUnit ? "unit" : "value"] = value as string
     }
+
+    nutrientAnotationForm = this.validateFormData(nutrientAnotationForm)
 
     this.emitSubmitEvent({
       type: column,
