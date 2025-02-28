@@ -99,17 +99,6 @@ export class RobotoffNutrientsTable extends LitElement {
       table .submit-row td {
         padding-top: 0.5rem;
       }
-
-      .link-button.is-closed {
-        margin-bottom: 1rem;
-      }
-
-      .image-wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 1rem;
-      }
     `,
   ]
 
@@ -118,12 +107,6 @@ export class RobotoffNutrientsTable extends LitElement {
    */
   @property({ type: Object })
   insight?: Insight
-
-  /**
-   * Do we show the image of the product by default
-   */
-  @property({ type: Boolean, attribute: "show-image" })
-  showImage = true
 
   /**
    * Get the nutrients in a formated way to manipulate it easily in the template
@@ -158,39 +141,6 @@ export class RobotoffNutrientsTable extends LitElement {
 
     nutrients.keys = Array.from(keysSet)
     return nutrients
-  }
-
-  hideImage() {
-    this.showImage = false
-  }
-  displayImage() {
-    this.showImage = true
-  }
-
-  renderImage() {
-    if (!this.insight?.source_image) {
-      return nothing
-    }
-    const imgUrl = `${robotoffConfiguration.getItem("imgUrl")}${this.insight.source_image}`
-    return html`
-      <div>
-        <div class="flex justify-center">
-          ${this.showImage
-            ? html`<button class="link-button" @click=${this.hideImage}>
-                ${msg("Hide image")}
-              </button>`
-            : html`<button class="link-button is-closed" @click=${this.displayImage}>
-                ${msg("Voir image")}
-              </button>`}
-        </div>
-
-        ${this.showImage
-          ? html`<div class="image-wrapper">
-              <zoomable-image src=${imgUrl} .size="${{ height: "400px" }}" />
-            </div>`
-          : nothing}
-      </div>
-    `
   }
 
   /**
@@ -376,7 +326,6 @@ export class RobotoffNutrientsTable extends LitElement {
     )
     return html`
       <form @submit=${this.onSubmit}>
-        ${this.renderImage()}
         <table>
           <thead>
             <tr>

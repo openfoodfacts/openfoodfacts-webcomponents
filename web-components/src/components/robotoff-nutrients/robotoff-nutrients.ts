@@ -4,9 +4,11 @@ import { customElement, property, state } from "lit/decorators.js"
 import { annotateNutrients, fetchInsightsByProductCode, insight } from "../../signals/nutrients"
 import "./robotoff-nutrients-table"
 import { fetchNutrientsTaxonomies } from "../../signals/taxonomies"
-import { InsightAnnotationAnswer } from "../../types/robotoff"
+import { Insight, InsightAnnotationAnswer } from "../../types/robotoff"
 import { BASE } from "../../styles/base"
 import { msg } from "@lit/localize"
+import { robotoffConfiguration } from "../../signals/robotoff"
+import { FLEX } from "../../styles/utils"
 
 /**
  * Robotoff Nutrients component
@@ -16,6 +18,7 @@ import { msg } from "@lit/localize"
 export class RobotoffNutrients extends LitElement {
   static override styles = [
     BASE,
+    FLEX,
     css`
       :host {
         max-width: 500px;
@@ -25,6 +28,17 @@ export class RobotoffNutrients extends LitElement {
         margin-right: auto;
         max-width: 400px;
         text-align: center;
+      }
+
+      .image-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .link-button.is-closed {
+        margin-bottom: 1rem;
       }
     `,
   ]
@@ -56,6 +70,12 @@ export class RobotoffNutrients extends LitElement {
    */
   @state()
   showSuccessMessage: boolean = false
+
+  /**
+   * Do we show the image of the product by default
+   */
+  @property({ type: Boolean, attribute: "show-image" })
+  showImage = true
 
   /**
    * Task to get the insights for the given product code
@@ -105,6 +125,39 @@ export class RobotoffNutrients extends LitElement {
     return nothing
   }
 
+  hideImage() {
+    this.showImage = false
+  }
+  displayImage() {
+    this.showImage = true
+  }
+
+  renderImage(insight: Insight) {
+    if (!insight?.source_image) {
+      return nothing
+    }
+    const imgUrl = `${robotoffConfiguration.getItem("imgUrl")}${insight.source_image}`
+    return html`
+      <div>
+        <div class="flex justify-center">
+          ${this.showImage
+            ? html`<button class="link-button" @click=${this.hideImage}>
+                ${msg("Hide image")}
+              </button>`
+            : html`<button class="link-button is-closed" @click=${this.displayImage}>
+                ${msg("Voir image")}
+              </button>`}
+        </div>
+
+        ${this.showImage
+          ? html`<div class="image-wrapper">
+              <zoomable-image src=${imgUrl} .size="${{ height: "400px" }}" />
+            </div>`
+          : nothing}
+      </div>
+    `
+  }
+
   override render() {
     return this._insightsTask.render({
       pending: () => html`<off-wb-loader></off-wb-loader>`,
@@ -114,6 +167,7 @@ export class RobotoffNutrients extends LitElement {
         }
         return html`<div>
           <p class="messages-wrapper"><i>${this.renderMessages()}</i></p>
+          ${this.renderImage(insight as Insight)}
           <robotoff-nutrients-table
             .insight="${insight}"
             @submit="${this.onSubmit}"
