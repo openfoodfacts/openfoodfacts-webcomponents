@@ -21,7 +21,15 @@ from `web-components` folder run `npm install`.
 
 If you use nvm, you can use the `.nvmrc` file to set the right node version.
 
-To run the project locally, use the following command to build:
+To use .nvmrc file, run the following command in root of project :
+
+```bash
+nvm use
+nvm install
+
+```
+
+To run the project locally, use the following command to build from `web-components` folder:
 `npm install`
 and then
 `npm run dev`
