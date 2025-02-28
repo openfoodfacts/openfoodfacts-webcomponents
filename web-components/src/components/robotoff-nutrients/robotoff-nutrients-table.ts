@@ -452,8 +452,7 @@ export class RobotoffNutrientsTable extends LitElement {
   renderSubmitRow() {
     return html`
       <tr class="submit-row">
-        <td></td>
-        <td>
+        <td colspan="2">
           <div class="flex justify-center">
             <button type="submit" class="button chocolate-button">Valider</button>
           </div>
