@@ -121,6 +121,7 @@ export class RobotoffNutrientsTable extends LitElement {
     const keysSet = new Set<string>()
 
     Object.entries(this.insight!.data.nutrients)
+      // Sort by start position to keep the same order as the image
       .sort((entryA, entryB) => entryA[1].start - entryB[1].start)
       .forEach(([key, value]) => {
         let nutrientKey
