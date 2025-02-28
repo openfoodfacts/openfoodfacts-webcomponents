@@ -8,7 +8,6 @@ import { Insight, InsightAnnotationAnswer } from "../../types/robotoff"
 import { BASE } from "../../styles/base"
 import { msg } from "@lit/localize"
 import { robotoffConfiguration } from "../../signals/robotoff"
-import { FLEX } from "../../styles/utils"
 
 /**
  * Robotoff Nutrients component
@@ -18,7 +17,6 @@ import { FLEX } from "../../styles/utils"
 export class RobotoffNutrients extends LitElement {
   static override styles = [
     BASE,
-    FLEX,
     css`
       :host {
         max-width: 500px;
@@ -34,10 +32,6 @@ export class RobotoffNutrients extends LitElement {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-bottom: 1rem;
-      }
-
-      .link-button.is-closed {
         margin-bottom: 1rem;
       }
     `,

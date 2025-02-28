@@ -345,7 +345,10 @@ export class RobotoffNutrientsTable extends LitElement {
    * Validate the form data.
    * It will return the form data well formatted.
    */
-  validateFormData(data: InsightAnnotatationData): InsightAnnotatationData {
+  validateFormData(data: InsightAnnotatationData): {
+    isValid: boolean
+    validatedData: InsightAnnotatationData
+  } {
     this.errors = {}
     for (const [key, item] of Object.entries(data)) {
       // Skip serving size inputs
@@ -364,9 +367,9 @@ export class RobotoffNutrientsTable extends LitElement {
 
     // raise error if there is any error
     if (Object.keys(this.errors).length > 0) {
-      throw new Error("Form data is invalid")
+      return { isValid: false, validatedData: data }
     }
-    return data
+    return { isValid: true, validatedData: data }
   }
 
   /**
@@ -401,11 +404,14 @@ export class RobotoffNutrientsTable extends LitElement {
       nutrientAnotationForm[name][isUnit ? "unit" : "value"] = value as string
     }
 
-    nutrientAnotationForm = this.validateFormData(nutrientAnotationForm)
+    const { isValid, validatedData } = this.validateFormData(nutrientAnotationForm)
+    if (!isValid) {
+      return
+    }
 
     this.emitSubmitEvent({
       type: column,
-      data: nutrientAnotationForm,
+      data: validatedData!,
       insightId: this.insight!.id,
     })
   }
@@ -518,10 +524,13 @@ export class RobotoffNutrientsTable extends LitElement {
 
   override render() {
     return html`
-      <form @submit=${this.onSubmit}>
+      <div>
         <div>${this.renderInsightAnnotationTypeSelection()}</div>
-        <div>${this.renderTable()}</div>
-      </form>
+
+        <form @submit=${this.onSubmit}>
+          <div>${this.renderTable()}</div>
+        </form>
+      </div>
     `
   }
 }
