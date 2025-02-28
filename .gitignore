@@ -134,3 +134,4 @@ dist/
 .env
 web-components/src/localization/generated/*
 .vscode
+docs/dist/

@@ -99,7 +99,8 @@
           "type": {
             "text": "object"
           },
-          "default": "{\n  annotate,\n  annotateQuestion(insightId: string, annotation: QuestionAnnotationAnswer) {\n    const formBody = new URLSearchParams({\n      insight_id: insightId,\n      annotation: annotation,\n    }).toString()\n    return annotate(formBody)\n  },\n  annotateNutrients(annotation: InsightAnnotationAnswer) {\n    const formBody = new URLSearchParams({\n      annotation: \"2\",\n      insight_id: annotation.insightId,\n      data: JSON.stringify(annotation.data),\n      type: annotation.type,\n    }).toString()\n    return annotate(formBody)\n  },\n\n  async questionsByProductCode(code: string, questionRequestParams: QuestionRequestParams = {}) {\n    if (!questionRequestParams.lang) {\n      questionRequestParams.lang = await getLocaleAfterInit()\n    }\n    const apiUrl = getApiUrl(`/questions/${code}`)\n    const url = addParamsToUrl(apiUrl, questionRequestParams)\n    const response = await fetch(url)\n    const result: QuestionsResponse = await response.json()\n    return result\n  },\n\n  async insights(requestParams: InsightsRequestParams = {}) {\n    const apiUrl = getApiUrl(\"/insights\")\n    const url = addParamsToUrl(apiUrl, requestParams)\n    const response = await fetch(url)\n    const result: InsightsResponse = await response.json()\n    return result\n  },\n}"
+          "default": "{\n  annotate,\n  annotateQuestion(insightId: string, annotation: QuestionAnnotationAnswer) {\n    const formBody = new URLSearchParams({\n      insight_id: insightId,\n      annotation: annotation,\n    }).toString()\n    return annotate(formBody)\n  },\n  annotateNutrients(annotation: InsightAnnotationAnswer) {\n    const formBody = new URLSearchParams({\n      annotation: \"2\",\n      insight_id: annotation.insightId,\n      data: JSON.stringify({\n        nutrients: annotation.data,\n      }),\n      type: annotation.type,\n    }).toString()\n    return annotate(formBody)\n  },\n\n  async questionsByProductCode(code: string, questionRequestParams: QuestionRequestParams = {}) {\n    if (!questionRequestParams.lang) {\n      questionRequestParams.lang = await getLocaleAfterInit()\n    }\n    const apiUrl = getApiUrl(`/questions/${code}`)\n    const url = addParamsToUrl(apiUrl, questionRequestParams)\n    const response = await fetch(url)\n    const result: QuestionsResponse = await response.json()\n    return result\n  },\n\n  async insights(requestParams: InsightsRequestParams = {}) {\n    const apiUrl = getApiUrl(\"/insights\")\n    const url = addParamsToUrl(apiUrl, requestParams)\n    const response = await fetch(url)\n    const result: InsightsResponse = await response.json()\n    return result\n  },\n}",
+          "description": "Robotoff API"
         }
       ],
       "exports": [
@@ -248,12 +249,14 @@
         {
           "kind": "variable",
           "name": "insightById",
-          "default": "new SignalMap<Insight>({})"
+          "default": "new SignalMap<Insight>({})",
+          "description": "Nutrients insights by insight id"
         },
         {
           "kind": "variable",
           "name": "insightIdByProductCode",
-          "default": "new SignalMap<string | null>({})"
+          "default": "new SignalMap<string | null>({})",
+          "description": "Nutrients insights id by product code"
         },
         {
           "kind": "function",
@@ -265,11 +268,17 @@
                 "text": "string"
               }
             }
-          ]
+          ],
+          "description": "Get the insight for a given product code",
+          "return": {
+            "type": {
+              "text": "Computed<Insight | undefined>"
+            }
+          }
         },
         {
           "kind": "function",
-          "name": "fetchIncompleteNutrientsInsightsByProductCode",
+          "name": "fetchInsightsByProductCode",
           "parameters": [
             {
               "name": "productCode",
@@ -277,7 +286,8 @@
                 "text": "string"
               }
             }
-          ]
+          ],
+          "description": "Fetch the incomplete nutrients insights for a given product code"
         },
         {
           "kind": "function",
@@ -289,7 +299,8 @@
                 "text": "InsightAnnotationAnswer"
               }
             }
-          ]
+          ],
+          "description": "Annotate an insight"
         }
       ],
       "exports": [
@@ -319,9 +330,9 @@
         },
         {
           "kind": "js",
-          "name": "fetchIncompleteNutrientsInsightsByProductCode",
+          "name": "fetchInsightsByProductCode",
           "declaration": {
-            "name": "fetchIncompleteNutrientsInsightsByProductCode",
+            "name": "fetchInsightsByProductCode",
             "module": "src/signals/nutrients.ts"
           }
         },
@@ -616,7 +627,8 @@
         {
           "kind": "variable",
           "name": "robotoffConfiguration",
-          "default": "new SignalObject<RobotoffConfigurationOptions>({\n  ...DEFAULT_ROBOTOFF_CONFIGURATION,\n})"
+          "default": "new SignalObject<RobotoffConfigurationOptions>({\n  ...DEFAULT_ROBOTOFF_CONFIGURATION,\n})",
+          "description": "Configuration for the robotoff web components"
         }
       ],
       "exports": [
@@ -650,11 +662,13 @@
                 "text": "string"
               }
             }
-          ]
+          ],
+          "description": "Get the name of a taxonomy by its id and lang.\nIf the lang is not available, it returns the english name.\nIf the id is not available, it returns an empty string."
         },
         {
           "kind": "function",
-          "name": "fetchNutrientsTaxonomies"
+          "name": "fetchNutrientsTaxonomies",
+          "description": "Fetch the nutrients taxonomies and store them in the signal.\nk"
         }
       ],
       "exports": [
@@ -793,7 +807,7 @@
         {
           "kind": "variable",
           "name": "SELECT",
-          "default": "css`\n  .select {\n    width: 100%;\n    appearance: none;\n    -webkit-appearance: none !important;\n    -moz-appearance: none !important;\n    background-color: #fafafa;\n    background-image: url(\"dist/assets/carret-bottom.svg\");\n    background-position: 100% center;\n    background-repeat: no-repeat;\n    border-style: solid;\n    border-width: 1px;\n    border-color: #ccc;\n    color: rgba(0, 0, 0, 0.75);\n    line-height: normal;\n    padding: 0.25rem 0.5rem;\n    border-radius: 0;\n  }\n`"
+          "default": "css`\n  .select {\n    width: 100%;\n    appearance: none;\n    -webkit-appearance: none !important;\n    -moz-appearance: none !important;\n    background-color: #fafafa;\n    background-image: url(\"assets/carret-bottom.svg\");\n    background-position: 100% center;\n    background-repeat: no-repeat;\n    border-style: solid;\n    border-width: 1px;\n    border-color: #ccc;\n    color: rgba(0, 0, 0, 0.75);\n    line-height: normal;\n    padding: 0.25rem 0.5rem;\n    border-radius: 0;\n  }\n`"
         },
         {
           "kind": "variable",
@@ -1155,16 +1169,24 @@
               "name": "key",
               "type": {
                 "text": "string"
-              }
+              },
+              "description": "the nutrient key"
             },
             {
               "name": "unit",
               "optional": true,
               "type": {
                 "text": "string | null"
-              }
+              },
+              "description": "the unit to check if it is forced or not.\nFor example, if the unit is \"kj\", it will return [\"kj\"]."
             }
-          ]
+          ],
+          "description": "get the possible units for a nutrient key",
+          "return": {
+            "type": {
+              "text": ""
+            }
+          }
         },
         {
           "kind": "variable",
@@ -1414,104 +1436,11 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/robotoff/robotoff-configuration.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Robotoff configuration element.\nIt is used to configure the robotoff parameters.",
-          "name": "RobotoffConfiguration",
-          "members": [
-            {
-              "kind": "field",
-              "name": "apiUrl",
-              "type": {
-                "text": "string"
-              },
-              "description": "The robotoff API URL.",
-              "attribute": "api-url"
-            },
-            {
-              "kind": "field",
-              "name": "dryRun",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Whether to run robotoff in dry run mode. Il allows to run robotoff without actually sending the data to the API.",
-              "attribute": "dry-run"
-            },
-            {
-              "kind": "field",
-              "name": "imgUrl",
-              "type": {
-                "text": "string"
-              },
-              "description": "The URL of the images server.",
-              "attribute": "img-url"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "api-url",
-              "type": {
-                "text": "string"
-              },
-              "description": "The robotoff API URL.",
-              "fieldName": "apiUrl",
-              "attribute": "api-url"
-            },
-            {
-              "name": "dry-run",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Whether to run robotoff in dry run mode. Il allows to run robotoff without actually sending the data to the API.",
-              "fieldName": "dryRun",
-              "attribute": "dry-run"
-            },
-            {
-              "name": "img-url",
-              "type": {
-                "text": "string"
-              },
-              "description": "The URL of the images server.",
-              "fieldName": "imgUrl",
-              "attribute": "img-url"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "robotoff-configuration",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "RobotoffConfiguration",
-          "declaration": {
-            "name": "RobotoffConfiguration",
-            "module": "src/components/robotoff/robotoff-configuration.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "robotoff-configuration",
-          "declaration": {
-            "name": "RobotoffConfiguration",
-            "module": "src/components/robotoff/robotoff-configuration.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/icons/rotate-left.ts",
       "declarations": [
         {
           "kind": "class",
-          "description": "",
+          "description": "Rotate left icon",
           "name": "RotateLeftIcon",
           "members": [],
           "superclass": {
@@ -1539,7 +1468,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "",
+          "description": "Rotate right icon",
           "name": "RotateRightIcon",
           "members": [],
           "superclass": {
@@ -1643,11 +1572,104 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/robotoff/robotoff-configuration.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Robotoff configuration element.\nIt is used to configure the robotoff parameters.",
+          "name": "RobotoffConfiguration",
+          "members": [
+            {
+              "kind": "field",
+              "name": "apiUrl",
+              "type": {
+                "text": "string"
+              },
+              "description": "The robotoff API URL.",
+              "attribute": "api-url"
+            },
+            {
+              "kind": "field",
+              "name": "dryRun",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether to run robotoff in dry run mode. Il allows to run robotoff without actually sending the data to the API.",
+              "attribute": "dry-run"
+            },
+            {
+              "kind": "field",
+              "name": "imgUrl",
+              "type": {
+                "text": "string"
+              },
+              "description": "The URL of the images server.",
+              "attribute": "img-url"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "api-url",
+              "type": {
+                "text": "string"
+              },
+              "description": "The robotoff API URL.",
+              "fieldName": "apiUrl",
+              "attribute": "api-url"
+            },
+            {
+              "name": "dry-run",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether to run robotoff in dry run mode. Il allows to run robotoff without actually sending the data to the API.",
+              "fieldName": "dryRun",
+              "attribute": "dry-run"
+            },
+            {
+              "name": "img-url",
+              "type": {
+                "text": "string"
+              },
+              "description": "The URL of the images server.",
+              "fieldName": "imgUrl",
+              "attribute": "img-url"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "robotoff-configuration",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RobotoffConfiguration",
+          "declaration": {
+            "name": "RobotoffConfiguration",
+            "module": "src/components/robotoff/robotoff-configuration.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "robotoff-configuration",
+          "declaration": {
+            "name": "RobotoffConfiguration",
+            "module": "src/components/robotoff/robotoff-configuration.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/robotoff-nutrients/robotoff-nutrients-table.ts",
       "declarations": [
         {
           "kind": "class",
-          "description": "",
+          "description": "Display a table of nutrients for a given product",
           "name": "RobotoffNutrientsTable",
           "members": [
             {
@@ -1656,16 +1678,8 @@
               "type": {
                 "text": "Insight | undefined"
               },
+              "description": "The insight to edit",
               "attribute": "insight"
-            },
-            {
-              "kind": "field",
-              "name": "showImage",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "attribute": "show-image"
             },
             {
               "kind": "method",
@@ -1674,19 +1688,8 @@
                 "type": {
                   "text": "FormatedNutrients"
                 }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "hideImage"
-            },
-            {
-              "kind": "method",
-              "name": "displayImage"
-            },
-            {
-              "kind": "method",
-              "name": "renderImage"
+              },
+              "description": "Get the nutrients in a formated way to manipulate it easily in the template"
             },
             {
               "kind": "method",
@@ -1736,7 +1739,7 @@
                 {
                   "name": "nutrient",
                   "type": {
-                    "text": "Pick<InsightDatum, \"unit\">"
+                    "text": "Pick<InsightDatum, \"unit\"> | undefined"
                   },
                   "description": "The nutrient to render."
                 },
@@ -1747,7 +1750,7 @@
                   }
                 }
               ],
-              "description": "Render the inputs for the given key and column.\nWe use a method instead a component to have input in form data when submitting.",
+              "description": "Render the unit input for the given key and column.\nWe use a method instead a component to have input in form data when submitting.",
               "return": {
                 "type": {
                   "text": ""
@@ -1775,7 +1778,7 @@
                 {
                   "name": "nutrient",
                   "type": {
-                    "text": "Pick<InsightDatum, \"value\" | \"unit\">"
+                    "text": "Pick<InsightDatum, \"value\" | \"unit\"> | undefined"
                   },
                   "description": "The nutrient to render."
                 },
@@ -1786,7 +1789,7 @@
                   }
                 }
               ],
-              "description": "Render the inputs for the given key and column.\nWe use a method instead a component to have input in form data when submitting.",
+              "description": "Render the nutrient value inputs for the given key and column.\nWe use a method instead a component to have input in form data when submitting.",
               "return": {
                 "type": {
                   "text": ""
@@ -1803,7 +1806,8 @@
                     "text": "InsightAnnotationAnswer"
                   }
                 }
-              ]
+              ],
+              "description": "Emit a custom submit event to submit the form data well formatted."
             },
             {
               "kind": "method",
@@ -1815,7 +1819,8 @@
                     "text": "SubmitEvent"
                   }
                 }
-              ]
+              ],
+              "description": "Handle the form submission.\nIt will emit a custom submit event to submit the form data well formatted.\nIt only sent the data for the column that was submitted."
             }
           ],
           "events": [
@@ -1823,6 +1828,10 @@
               "type": {
                 "text": "CustomEvent"
               }
+            },
+            {
+              "description": "when the user submit the form",
+              "name": "submit"
             }
           ],
           "attributes": [
@@ -1831,15 +1840,8 @@
               "type": {
                 "text": "Insight | undefined"
               },
+              "description": "The insight to edit",
               "fieldName": "insight"
-            },
-            {
-              "name": "show-image",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "fieldName": "showImage"
             }
           ],
           "superclass": {
@@ -1875,7 +1877,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "",
+          "description": "Robotoff Nutrients component",
           "name": "RobotoffNutrients",
           "members": [
             {
@@ -1885,6 +1887,7 @@
                 "text": "string"
               },
               "default": "\"\"",
+              "description": "The product code to get the insights for",
               "attribute": "product-code"
             },
             {
@@ -1894,6 +1897,7 @@
                 "text": "boolean"
               },
               "default": "false",
+              "description": "Show messages",
               "attribute": "show-messages"
             },
             {
@@ -1902,7 +1906,8 @@
               "type": {
                 "text": "boolean"
               },
-              "default": "false"
+              "default": "false",
+              "description": "Is the form submited"
             },
             {
               "kind": "field",
@@ -1910,21 +1915,68 @@
               "type": {
                 "text": "boolean"
               },
-              "default": "false"
+              "default": "false",
+              "description": "Show success message"
+            },
+            {
+              "kind": "field",
+              "name": "showImage",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Do we show the image of the product by default",
+              "attribute": "show-image"
             },
             {
               "kind": "field",
               "name": "_insightsTask",
               "privacy": "private",
-              "default": "new Task(this, {\n    task: async ([productCode], {}) => {\n      if (!productCode) {\n        return []\n      }\n\n      await Promise.all([\n        fetchIncompleteNutrientsInsightsByProductCode(productCode),\n        fetchNutrientsTaxonomies(),\n      ])\n      return insight(productCode).get()\n    },\n    args: () => [this.productCode],\n  })"
+              "default": "new Task(this, {\n    task: async ([productCode], {}) => {\n      if (!productCode) {\n        return []\n      }\n\n      await Promise.all([fetchInsightsByProductCode(productCode), fetchNutrientsTaxonomies()])\n      return insight(productCode).get()\n    },\n    args: () => [this.productCode],\n  })",
+              "description": "Task to get the insights for the given product code\nit will fetch the incomplete nutrients insights and the nutrients taxonomies",
+              "type": {
+                "text": "Task"
+              }
             },
             {
               "kind": "field",
-              "name": "onSubmit"
+              "name": "onSubmit",
+              "description": "Annotate the nutrients insights",
+              "parameters": [
+                {
+                  "name": "event"
+                }
+              ]
             },
             {
               "kind": "method",
-              "name": "renderMessages"
+              "name": "renderMessages",
+              "description": "Render messages",
+              "return": {
+                "type": {
+                  "text": "TemplateResult | typeof nothing"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "hideImage"
+            },
+            {
+              "kind": "method",
+              "name": "displayImage"
+            },
+            {
+              "kind": "method",
+              "name": "renderImage",
+              "parameters": [
+                {
+                  "name": "insight",
+                  "type": {
+                    "text": "Insight"
+                  }
+                }
+              ]
             }
           ],
           "attributes": [
@@ -1934,6 +1986,7 @@
                 "text": "string"
               },
               "default": "\"\"",
+              "description": "The product code to get the insights for",
               "fieldName": "productCode"
             },
             {
@@ -1942,7 +1995,17 @@
                 "text": "boolean"
               },
               "default": "false",
+              "description": "Show messages",
               "fieldName": "showMessages"
+            },
+            {
+              "name": "show-image",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Do we show the image of the product by default",
+              "fieldName": "showImage"
             }
           ],
           "superclass": {
@@ -2129,12 +2192,22 @@
               "kind": "field",
               "name": "_questionsTask",
               "privacy": "private",
-              "default": "new Task(this, {\n    task: async ([productCode, insightTypes], {}) => {\n      this.hasAnswered = false\n      if (!productCode) {\n        return []\n      }\n      const params = insightTypes ? { insight_types: insightTypes } : {}\n\n      await fetchQuestionsByProductCode(productCode, params)\n      this._emitQuestionStateEvent()\n      return questions(productCode).get()\n    },\n    args: () => [this.productCode, this.insightTypes],\n  })"
+              "default": "new Task(this, {\n    task: async ([productCode, insightTypes], {}) => {\n      this.hasAnswered = false\n      if (!productCode) {\n        return []\n      }\n      const params = insightTypes ? { insight_types: insightTypes } : {}\n\n      await fetchQuestionsByProductCode(productCode, params)\n      this._emitQuestionStateEvent()\n      return questions(productCode).get()\n    },\n    args: () => [this.productCode, this.insightTypes],\n  })",
+              "description": "Task to fetch questions for the given product code",
+              "type": {
+                "text": "Task"
+              }
             },
             {
               "kind": "field",
               "name": "_emitQuestionStateEvent",
-              "privacy": "private"
+              "privacy": "private",
+              "description": "Emit a custom event when the question state changes to know current state outside the component",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              }
             },
             {
               "kind": "field",
@@ -2144,7 +2217,13 @@
             {
               "kind": "method",
               "name": "renderMessage",
-              "privacy": "private"
+              "privacy": "private",
+              "description": "Render the message to display to the user",
+              "return": {
+                "type": {
+                  "text": "TemplateResult"
+                }
+              }
             }
           ],
           "events": [
@@ -2224,7 +2303,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "",
+          "description": "A simple loader component. It allows to display a same loader in different components.",
           "name": "OffWcLoader",
           "members": [],
           "superclass": {
@@ -2260,7 +2339,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "",
+          "description": "A simple zoomable image component.\nIt allows to display an image that can be zoomed, and rotated.\nIt uses the panzoom library.",
           "name": "ZoomableImage",
           "members": [
             {

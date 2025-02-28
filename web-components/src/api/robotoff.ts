@@ -58,7 +58,9 @@ const robotoff = {
     const formBody = new URLSearchParams({
       annotation: "2",
       insight_id: annotation.insightId,
-      data: JSON.stringify(annotation.data),
+      data: JSON.stringify({
+        nutrients: annotation.data,
+      }),
       type: annotation.type,
     }).toString()
     return annotate(formBody)
