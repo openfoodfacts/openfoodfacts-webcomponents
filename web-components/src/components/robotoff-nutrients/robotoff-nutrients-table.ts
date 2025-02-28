@@ -8,9 +8,10 @@ import {
   InsightAnnotationAnswer,
 } from "../../types/robotoff"
 import { localized, msg } from "@lit/localize"
-import { getTaxonomyNameByIdAndLang } from "../../signals/taxonomies"
+import { getTaxonomyNameByIdAndLang, getTaxonomyUnitById } from "../../signals/taxonomies"
 import { getLocale } from "../../localization"
 import {
+  ANNOTATION_TYPE_LABELS,
   getPossibleUnits,
   NUTRIENT_SERVING_SIZE_KEY,
   NUTRIENT_SUFFIX,
@@ -39,6 +40,8 @@ const INPUT_VALUE_MAX_SIZE = 4
 const INPUT_UNIT_MAX_SIZE = 4
 const INPUTS_GAP = 0.5
 const SERVING_MAX_SIZE = INPUT_VALUE_MAX_SIZE + INPUT_UNIT_MAX_SIZE + INPUTS_GAP
+
+const SERVING_SIZE_SELECT_NAME = "serving_size_select"
 
 /**
  * Display a table of nutrients for a given product
@@ -98,6 +101,10 @@ export class RobotoffNutrientsTable extends LitElement {
       table .submit-row td {
         padding-top: 0.5rem;
       }
+
+      .submit-row button {
+        width: 100%;
+      }
       .input-error-message {
         display: block;
         box-sizing: border-box;
@@ -105,6 +112,23 @@ export class RobotoffNutrientsTable extends LitElement {
         width: ${SERVING_MAX_SIZE}rem;
         font-size: 0.7rem;
         color: var(--error-color, red);
+      }
+
+      .fieldset-annotation-type {
+        display: flex;
+        justify-content: center;
+        border: none;
+        padding: 0;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .fieldset-annotation-type legend {
+        font-size: 0.8rem;
+        font-weight: bold;
+      }
+      .fieldset-annotation-type label {
+        font-size: 0.8rem;
       }
     `,
   ]
@@ -114,6 +138,12 @@ export class RobotoffNutrientsTable extends LitElement {
    */
   @property({ type: Object })
   insight?: Insight
+
+  /**
+   * Insight type
+   */
+  @state()
+  insightAnnotationType: InsightAnnotationType = InsightAnnotationType.CENTGRAMS
 
   /**
    * Error message by key
@@ -175,19 +205,8 @@ export class RobotoffNutrientsTable extends LitElement {
             <div>
               ${this.renderInputs(
                 key,
-                InsightAnnotationType.CENTGRAMS,
-                nutrients[InsightAnnotationType.CENTGRAMS][key],
-                1
-              )}
-            </div>
-          </td>
-          <td>
-            <div>
-              ${this.renderInputs(
-                key,
-                InsightAnnotationType.SERVING,
-                nutrients[InsightAnnotationType.SERVING][key],
-                2
+                this.insightAnnotationType,
+                nutrients[this.insightAnnotationType][key]
               )}
             </div>
           </td>
@@ -214,17 +233,17 @@ export class RobotoffNutrientsTable extends LitElement {
   renderUnit(
     key: string,
     column: InsightAnnotationType,
-    nutrient: Pick<InsightDatum, "unit"> | undefined,
-    tabIndex: 1 | 2
+    nutrient: Pick<InsightDatum, "unit"> | undefined
   ) {
     const possibleUnits = getPossibleUnits(key, nutrient?.unit)
     const inputName = this.getInputUnitName(key, column)
+    const currentUnit = nutrient?.unit ?? getTaxonomyUnitById(key)
     if (possibleUnits.length > 1) {
       return html`
-        <select name=${inputName} class="select" tabindex=${tabIndex}>
+        <select name=${inputName} class="select">
           ${possibleUnits.map(
             (unit) =>
-              html`<option value="${unit}" ?selected=${unit === nutrient?.unit}>${unit}</option>`
+              html`<option value="${unit}" ?selected=${unit === currentUnit}>${unit}</option>`
           )}
         </select>
       `
@@ -249,8 +268,7 @@ export class RobotoffNutrientsTable extends LitElement {
   renderInputs(
     key: string,
     column: InsightAnnotationType,
-    nutrient: Pick<InsightDatum, "value" | "unit"> | undefined,
-    tabIndex: 1 | 2
+    nutrient: Pick<InsightDatum, "value" | "unit"> | undefined
   ) {
     const inputName = this.getInputValueName(key, column)
 
@@ -262,9 +280,8 @@ export class RobotoffNutrientsTable extends LitElement {
           value="${nutrient?.value}"
           title="${msg("value")}"
           class="input input-nutritional-value"
-          tabindex=${tabIndex}
         />
-        <span title=${msg("unit")}> ${this.renderUnit(key, column, nutrient, tabIndex)} </span>
+        <span title=${msg("unit")}> ${this.renderUnit(key, column, nutrient)} </span>
       </span>
       ${this.errors[inputName]
         ? html`<span class="input-error-message" role="alert">${this.errors[inputName]}</span>`
@@ -293,7 +310,6 @@ export class RobotoffNutrientsTable extends LitElement {
 
   /**
    * Validate the input value.
-
    */
   validateInputValue(value: string | null): {
     error?: string
@@ -354,30 +370,16 @@ export class RobotoffNutrientsTable extends LitElement {
   }
 
   /**
-   * Handle the form submission.
-   * It will emit a custom submit event to submit the form data well formatted.
-   * It only sent the data for the column that was submitted.
-   * @param event
+   * Submit the form data.
+   * It will send the data to the server.
    */
-  onSubmit(event: SubmitEvent) {
-    event.preventDefault()
-    event.stopPropagation()
-    const column = event.submitter?.getAttribute("data-key") as InsightAnnotationType
-    if (!column) {
-      console.error("No column found in submitter")
-      return
-    }
-
+  submitFormData(formData: FormData, column: InsightAnnotationType) {
     let nutrientAnotationForm: InsightAnnotatationData = {}
-    const formData = new FormData(event.target as HTMLFormElement)
     const formValues = formData.entries()
+
     const servingSizeInputName = this.getServingSizeInputName()
 
     for (const [key, value] of formValues) {
-      // We only want the data for the column that was submitted
-      if (!key.endsWith(column)) {
-        continue
-      }
       let name = key
       let isUnit = this.isUnitInput(name)
       if (isUnit) {
@@ -408,63 +410,117 @@ export class RobotoffNutrientsTable extends LitElement {
     })
   }
 
-  override render() {
+  /**
+   * Handle the change event of the annotation type selection.
+   * It will update the annotation type.
+   */
+  onInsightAnnotationTypeChange(event: Event) {
+    const input = event.target as HTMLInputElement
+    const value = input.value as InsightAnnotationType
+    this.insightAnnotationType = value
+  }
+
+  /**
+   * Render the submit row.
+   * It will render a submit button.
+   */
+  renderSubmitRow() {
+    return html`
+      <tr class="submit-row">
+        <td></td>
+        <td>
+          <div class="flex justify-center">
+            <button type="submit" class="button chocolate-button">Valider</button>
+          </div>
+        </td>
+      </tr>
+    `
+  }
+
+  /**
+   * Render the annotation type selection.
+   * It will render a radio button for each annotation type.
+   */
+  renderInsightAnnotationTypeSelection() {
+    return html`
+      <div class="flex justify-center">
+        <fieldset class="fieldset-annotation-type">
+          <legend>${msg("Select the serving size :")}</legend>
+          <div>
+            ${Object.values(InsightAnnotationType).map(
+              (type) => html`
+                <label>
+                  <span>${ANNOTATION_TYPE_LABELS[type]()}</span>
+                  <input
+                    type="radio"
+                    name="${SERVING_SIZE_SELECT_NAME}"
+                    value=${type}
+                    ?checked=${this.insightAnnotationType === type}
+                    @change=${this.onInsightAnnotationTypeChange}
+                  />
+                </label>
+              `
+            )}
+          </div>
+        </fieldset>
+      </div>
+    `
+  }
+
+  /**
+   * Handle the form submission.
+   * It will emit a custom submit event to submit the form data well formatted.
+   * It only sent the data for the column that was submitted.
+   * @param event
+   */
+  onSubmit(event: SubmitEvent) {
+    event.preventDefault()
+    event.stopPropagation()
+    const formData = new FormData(event.target as HTMLFormElement)
+    this.submitFormData(formData, this.insightAnnotationType)
+  }
+
+  /**
+   * Render the table with the nutrients data.
+   */
+  renderTable() {
     const nutrients = this.getFormatedNutrients()
     const inputServingSizeName = this.getInputValueName(
       "serving_size",
       InsightAnnotationType.SERVING
     )
     return html`
-      <form @submit=${this.onSubmit}>
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">${msg("Nutrients")}</th>
-              <th scope="col">100g</th>
-              <th scope="col" class="flex flex-col align-center serving-size-wrapper">
-                <span>${msg("Serving size:")}</span>
-                <input
-                  class="input"
-                  name=${inputServingSizeName}
-                  type="text"
-                  value=${nutrients.servingSize?.value}
-                  required="true"
-                  tabindex="2"
-                />
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            ${this.renderRows(nutrients)}
-            <tr class="submit-row">
-              <td></td>
-              <td>
-                <div class="flex justify-center">
-                  <button
-                    type="submit"
-                    class="button chocolate-button"
-                    data-key=${InsightAnnotationType.CENTGRAMS}
-                    tabindex="1"
-                  >
-                    Valider
-                  </button>
-                </div>
-              </td>
-              <td>
-              <div class="flex justify-center">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">${msg("Nutrients")}</th>
+            ${this.insightAnnotationType === InsightAnnotationType.CENTGRAMS
+              ? html` <th scope="col">100g</th> `
+              : html`
+                  <th scope="col" class="flex flex-col align-center serving-size-wrapper">
+                    <span>${msg("Serving size:")}</span>
+                    <input
+                      class="input"
+                      name=${inputServingSizeName}
+                      type="text"
+                      value=${nutrients.servingSize?.value}
+                    />
+                  </th>
+                `}
+          </tr>
+        </thead>
+        <tbody>
+          ${this.renderRows(nutrients)} ${this.renderSubmitRow()}
+        </tbody>
+      </table>
+    `
+  }
 
-                <button
-                  type="submit"
-                  class="button chocolate-button"
-                  data-key=${InsightAnnotationType.SERVING}
-                  tabindex="2"
-                >
-                  Valider
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+  override render() {
+    return html`
+      <form @submit=${this.onSubmit}>
+        <div>${this.renderInsightAnnotationTypeSelection()}</div>
+        <div>${this.renderTable()}</div>
       </form>
     `
   }

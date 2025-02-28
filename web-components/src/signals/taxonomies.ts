@@ -32,6 +32,14 @@ export const getTaxonomyNameByIdAndLang = (id: string, lang: string) => {
   return taxonomy.name["en"]
 }
 
+export const getTaxonomyUnitById = (id: string): string | undefined => {
+  const taxonomy = nutrientTaxonomyById.getItem(id)
+  if (!taxonomy) {
+    return
+  }
+  return taxonomy.unit.en
+}
+
 /**
  * Fetch the nutrients taxonomies and store them in the signal.
 k

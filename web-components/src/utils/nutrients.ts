@@ -1,4 +1,7 @@
+import { msg } from "@lit/localize"
 import { InsightAnnotationType } from "../types/robotoff"
+import { isNullOrUndefined } from "."
+import { getTaxonomyUnitById } from "../signals/taxonomies"
 
 export enum Unit {
   NULL = "",
@@ -9,7 +12,7 @@ export enum Unit {
   KILOCALORIES = "kcal",
 }
 
-export const EDITABLE_UNITS = [Unit.MICROGRAMS, Unit.MILIGRAMS, Unit.GRAMS]
+export const EDITABLE_UNITS = [Unit.GRAMS, Unit.MILIGRAMS, Unit.MICROGRAMS]
 
 export type NutrientSuffix = "_100g" | "_serving"
 
@@ -17,6 +20,11 @@ export const NUTRIENT_SERVING_SIZE_KEY = "serving_size"
 export const NUTRIENT_SUFFIX: Record<InsightAnnotationType, NutrientSuffix> = {
   [InsightAnnotationType.CENTGRAMS]: "_100g",
   [InsightAnnotationType.SERVING]: "_serving",
+}
+
+export const ANNOTATION_TYPE_LABELS: Record<InsightAnnotationType, () => string> = {
+  [InsightAnnotationType.CENTGRAMS]: () => msg("100g"),
+  [InsightAnnotationType.SERVING]: () => msg("Specified serving"),
 }
 
 export enum ForcedNutrientKey {
@@ -39,11 +47,14 @@ export const FORCED_UNITS_BY_NUTRIENTS_KEYS = {
  * @returns
  */
 export const getPossibleUnits = (key: string, unit?: string | null) => {
-  if (unit && unit in FORCED_UNITS_BY_NUTRIENTS_KEYS) {
+  if (key in FORCED_UNITS_BY_NUTRIENTS_KEYS) {
     const forcedUnit = [FORCED_UNITS_BY_NUTRIENTS_KEYS[key as ForcedNutrientKey]]
     return forcedUnit
   }
-  if (unit === null || EDITABLE_UNITS.includes(unit as Unit)) {
+  if (isNullOrUndefined(unit)) {
+    unit = getTaxonomyUnitById(key)
+  }
+  if (!unit || EDITABLE_UNITS.includes(unit as Unit)) {
     return EDITABLE_UNITS
   }
   return [unit]
