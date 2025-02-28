@@ -174,7 +174,7 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
         if (!this.options.showError) {
           return nothing
         }
-        return html`<div>lol3Error: ${error}</div>`
+        return html`<div>Error: ${error}</div>`
       },
     })
   }

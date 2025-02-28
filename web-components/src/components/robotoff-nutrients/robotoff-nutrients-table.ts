@@ -23,12 +23,19 @@ import { FLEX } from "../../styles/utils"
 import { robotoffConfiguration } from "../../signals/robotoff"
 import "../shared/zoomable-image"
 
+// A handy data structure for nutrients information
 export type FormatedNutrients = {
+  // nutrients per 100g
   "100g": Record<string, InsightDatum>
+  // nutrients per serving
   serving: Record<string, InsightDatum>
+  // all nutrients present per 100g or serving
   keys: string[]
   servingSize?: InsightDatum
 }
+/**
+ * Variable store all size of the input to calculate the width of serving size input
+ */
 const INPUT_VALUE_MAX_SIZE = 4
 const INPUT_UNIT_MAX_SIZE = 4
 const INPUTS_GAP = 0.5
@@ -136,7 +143,6 @@ export class RobotoffNutrientsTable extends LitElement {
       if (key.endsWith(NUTRIENT_SUFFIX[InsightAnnotationType.CENTGRAMS])) {
         nutrientKey = key.replace(NUTRIENT_SUFFIX[InsightAnnotationType.CENTGRAMS], "")
         nutrients[InsightAnnotationType.CENTGRAMS][nutrientKey] = value
-        keysSet.add(nutrientKey)
       } else if (key.endsWith(NUTRIENT_SUFFIX[InsightAnnotationType.SERVING])) {
         nutrientKey = key.replace(NUTRIENT_SUFFIX[InsightAnnotationType.SERVING], "")
         nutrients[InsightAnnotationType.SERVING][nutrientKey] = value
@@ -228,7 +234,7 @@ export class RobotoffNutrientsTable extends LitElement {
     `${NUTRIENT_UNIT_NAME_PREFIX}${this.getInputValueName(key, column)}`
 
   /**
-   * Render the inputs for the given key and column.
+   * Render the unit input for the given key and column.
    * We use a method instead a component to have input in form data when submitting.
    * @param key The key of the nutrient.
    * @param column The column of the nutrient.
@@ -263,7 +269,7 @@ export class RobotoffNutrientsTable extends LitElement {
   }
 
   /**
-   * Render the inputs for the given key and column.
+   * Render the nutrient value inputs for the given key and column.
    * We use a method instead a component to have input in form data when submitting.
    * @param key The key of the nutrient.
    * @param column The column of the nutrient.
