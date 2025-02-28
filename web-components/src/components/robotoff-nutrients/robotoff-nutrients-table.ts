@@ -8,7 +8,12 @@ import {
   InsightAnnotationAnswer,
 } from "../../types/robotoff"
 import { localized, msg } from "@lit/localize"
-import { getTaxonomyNameByIdAndLang, getTaxonomyUnitById } from "../../signals/taxonomies"
+import {
+  getTaxonomyNameByIdAndLang,
+  getTaxonomyUnitById,
+  getTaxonomyNameByLang,
+  nutrientTaxonomies,
+} from "../../signals/taxonomies"
 import { getLocale } from "../../localization"
 import {
   ANNOTATION_TYPE_LABELS,
@@ -52,12 +57,13 @@ const SERVING_SIZE_SELECT_NAME = "serving_size_select"
 @localized()
 export class RobotoffNutrientsTable extends LitElement {
   static override styles = [
-    ...getButtonClasses([ButtonType.Chocolate, ButtonType.LINK]),
+    ...getButtonClasses([ButtonType.Chocolate]),
     SELECT,
     INPUT,
     FLEX,
     css`
-      table th {
+      table th,
+      table td {
         font-weight: normal;
         font-size: 0.8rem;
       }
@@ -92,9 +98,12 @@ export class RobotoffNutrientsTable extends LitElement {
       }
 
       table .select {
+        font-size: 0.7rem;
+      }
+
+      table .unit-select {
         box-sizing: border-box;
         height: 100%;
-        font-size: 0.7rem;
         width: ${INPUT_UNIT_MAX_SIZE}rem !important;
       }
 
@@ -130,6 +139,9 @@ export class RobotoffNutrientsTable extends LitElement {
       .fieldset-annotation-type label {
         font-size: 0.8rem;
       }
+      .add-nutrient-row select {
+        width: 10rem;
+      }
     `,
   ]
 
@@ -151,6 +163,12 @@ export class RobotoffNutrientsTable extends LitElement {
    */
   @state()
   private errors: Record<string, string> = {}
+
+  /**
+   * Nutrient keys that were added to the table
+   */
+  @state()
+  private _addedNutrientKey: string[] = []
 
   /**
    * Get the nutrients in a formated way to manipulate it easily in the template
@@ -186,7 +204,7 @@ export class RobotoffNutrientsTable extends LitElement {
         keysSet.add(nutrientKey)
       })
 
-    nutrients.keys = Array.from(keysSet)
+    nutrients.keys = [...Array.from(keysSet), ...this._addedNutrientKey]
     return nutrients
   }
 
@@ -238,9 +256,10 @@ export class RobotoffNutrientsTable extends LitElement {
     const possibleUnits = getPossibleUnits(key, nutrient?.unit)
     const inputName = this.getInputUnitName(key, column)
     const currentUnit = nutrient?.unit ?? getTaxonomyUnitById(key)
+    const selectsClasses = "select unit-select"
     if (possibleUnits.length > 1) {
       return html`
-        <select name=${inputName} class="select">
+        <select name=${inputName} class=${selectsClasses}>
           ${possibleUnits.map(
             (unit) =>
               html`<option value="${unit}" ?selected=${unit === currentUnit}>${unit}</option>`
@@ -250,7 +269,7 @@ export class RobotoffNutrientsTable extends LitElement {
     } else {
       return possibleUnits[0]
         ? html`<input type="hidden" name="${inputName}" value="${possibleUnits[0]}" />
-            <select name=${inputName} class="select" disabled>
+            <select name=${inputName} class=${selectsClasses} disabled>
               <option value="${possibleUnits[0]!}" selected>${possibleUnits[0]}</option>
             </select>`
         : nothing
@@ -473,6 +492,18 @@ export class RobotoffNutrientsTable extends LitElement {
     `
   }
 
+  onAddNutrient(event: Event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const selectElement = event.target as HTMLSelectElement
+    const nutrientId = selectElement.value
+    this._addedNutrientKey.push(nutrientId)
+    selectElement.value = ""
+    // Force the component to update to render the new rows
+    this.requestUpdate()
+  }
+
   /**
    * Handle the form submission.
    * It will emit a custom submit event to submit the form data well formatted.
@@ -487,14 +518,44 @@ export class RobotoffNutrientsTable extends LitElement {
   }
 
   /**
+   * Render the row to add a new nutrient.
+   * @param alreadyAddedNutrients
+   */
+  renderAddNutrientRow(alreadyAddedNutrients: string[]) {
+    const lang = getLocale()
+    const filteredNutrientTaxonomies = nutrientTaxonomies
+      .get()
+      .filter((nutrientTaxonomy) => !alreadyAddedNutrients.includes(nutrientTaxonomy.id))
+    if (filteredNutrientTaxonomies.length === 0) {
+      return nothing
+    }
+
+    return html`
+      <tr class="add-nutrient-row">
+        <td>
+          <select class="select" @change=${this.onAddNutrient}>
+            <option>${msg("Add a nutrient")}</option>
+            ${filteredNutrientTaxonomies.map(
+              (taxonomy) =>
+                html`
+                  <option value=${taxonomy.id}>${getTaxonomyNameByLang(taxonomy, lang)}</option>
+                `
+            )}
+          </select>
+        </td>
+      </tr>
+    `
+  }
+
+  /**
    * Render the table with the nutrients data.
    */
   renderTable() {
-    const nutrients = this.getFormatedNutrients()
     const inputServingSizeName = this.getInputValueName(
       "serving_size",
       InsightAnnotationType.SERVING
     )
+    const nutrients = this.getFormatedNutrients()
     return html`
       <table>
         <thead>
@@ -516,7 +577,8 @@ export class RobotoffNutrientsTable extends LitElement {
           </tr>
         </thead>
         <tbody>
-          ${this.renderRows(nutrients)} ${this.renderSubmitRow()}
+          ${this.renderRows(nutrients)} ${this.renderAddNutrientRow(nutrients.keys)}
+          ${this.renderSubmitRow()}
         </tbody>
       </table>
     `

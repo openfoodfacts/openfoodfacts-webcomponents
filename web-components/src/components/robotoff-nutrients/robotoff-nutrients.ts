@@ -8,6 +8,8 @@ import { Insight, InsightAnnotationAnswer } from "../../types/robotoff"
 import { BASE } from "../../styles/base"
 import { msg } from "@lit/localize"
 import { robotoffConfiguration } from "../../signals/robotoff"
+import { ButtonType, getButtonClasses } from "../../styles/buttons"
+import { FLEX } from "../../styles/utils"
 
 /**
  * Robotoff Nutrients component
@@ -17,6 +19,9 @@ import { robotoffConfiguration } from "../../signals/robotoff"
 export class RobotoffNutrients extends LitElement {
   static override styles = [
     BASE,
+    FLEX,
+    ...getButtonClasses([ButtonType.LINK]),
+
     css`
       :host {
         max-width: 500px;

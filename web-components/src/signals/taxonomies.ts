@@ -2,6 +2,7 @@ import { NutrientTaxonomy } from "../types/taxonomies"
 import { SignalMap } from "../utils/signals"
 import { LoadingState } from "../constants"
 import taxonomies from "../api/taxonomies"
+import { Computed } from "@lit-labs/signals"
 
 /**
  * Store the loading state of the taxonomies to avoid multiple requests.
@@ -14,15 +15,21 @@ const isLoading = new SignalMap<LoadingState>({
  * Store the taxonomies by id.
  *
  */
-const nutrientTaxonomyById = new SignalMap<NutrientTaxonomy>({})
+export const nutrientTaxonomyById = new SignalMap<NutrientTaxonomy>({})
 
 /**
- * Get the name of a taxonomy by its id and lang.
- * If the lang is not available, it returns the english name.
- * If the id is not available, it returns an empty string.
+ * Nutrient taxonomy ids.
  */
-export const getTaxonomyNameByIdAndLang = (id: string, lang: string) => {
-  const taxonomy = nutrientTaxonomyById.getItem(id)
+export const nutrientTaxonomies = new Computed(() => {
+  const nutrientTaxonomyObj = nutrientTaxonomyById.get()
+  return Object.values(nutrientTaxonomyObj)
+})
+
+/**
+ * Load the taxonomies if they are not already loaded.
+ * @returns
+ */
+export const getTaxonomyNameByLang = (taxonomy: NutrientTaxonomy, lang: string) => {
   if (!taxonomy) {
     return ""
   }
@@ -32,6 +39,20 @@ export const getTaxonomyNameByIdAndLang = (id: string, lang: string) => {
   return taxonomy.name["en"]
 }
 
+/**
+ * Get the name of a taxonomy by its id and lang.
+ * If the lang is not available, it returns the english name.
+ * If the id is not available, it returns an empty string.
+ */
+export const getTaxonomyNameByIdAndLang = (id: string, lang: string) => {
+  const taxonomy = nutrientTaxonomyById.getItem(id)
+  return getTaxonomyNameByLang(taxonomy, lang)
+}
+
+/**
+ * Get the unit of a taxonomy by its id.
+ * If the id is not available, it returns undefined.
+ */
 export const getTaxonomyUnitById = (id: string): string | undefined => {
   const taxonomy = nutrientTaxonomyById.getItem(id)
   if (!taxonomy) {
@@ -52,7 +73,8 @@ export const fetchNutrientsTaxonomies = async () => {
   const response = await taxonomies.nutrientsTaxonomies()
 
   Object.entries(response).forEach(([key, value]) => {
-    nutrientTaxonomyById.setItem(key.replace("zz:", ""), value)
+    const id = key.replace("zz:", "")
+    nutrientTaxonomyById.setItem(id, { ...value, id })
   })
   isLoading.setItem("nutrients", LoadingState.LOADED)
 }
