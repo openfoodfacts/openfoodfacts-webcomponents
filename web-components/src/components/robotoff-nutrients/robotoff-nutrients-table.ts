@@ -26,7 +26,6 @@ import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { EventType } from "../../constants"
 import { INPUT, SELECT } from "../../styles/form"
 import { FLEX } from "../../styles/utils"
-import "../shared/zoomable-image"
 
 // A handy data structure for nutrients information
 export type FormatedNutrients = {

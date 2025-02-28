@@ -3,6 +3,8 @@ import { css, html, LitElement, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { annotateNutrients, fetchInsightsByProductCode, insight } from "../../signals/nutrients"
 import "./robotoff-nutrients-table"
+import "../shared/zoomable-image"
+
 import { fetchNutrientsTaxonomies } from "../../signals/taxonomies"
 import { Insight, InsightAnnotationAnswer } from "../../types/robotoff"
 import { BASE } from "../../styles/base"
@@ -150,7 +152,7 @@ export class RobotoffNutrients extends LitElement {
 
         ${this.showImage
           ? html`<div class="image-wrapper">
-              <zoomable-image src=${imgUrl} .size="${{ height: "400px" }}" />
+              <zoomable-image src=${imgUrl} .size="${{ height: "350px" }}" />
             </div>`
           : nothing}
       </div>
