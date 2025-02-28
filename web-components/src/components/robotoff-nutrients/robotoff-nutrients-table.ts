@@ -120,23 +120,25 @@ export class RobotoffNutrientsTable extends LitElement {
     }
     const keysSet = new Set<string>()
 
-    Object.entries(this.insight!.data.nutrients).forEach(([key, value]) => {
-      let nutrientKey
-      if (key.endsWith(NUTRIENT_SUFFIX[InsightAnnotationType.CENTGRAMS])) {
-        nutrientKey = key.replace(NUTRIENT_SUFFIX[InsightAnnotationType.CENTGRAMS], "")
-        nutrients[InsightAnnotationType.CENTGRAMS][nutrientKey] = value
-      } else if (key.endsWith(NUTRIENT_SUFFIX[InsightAnnotationType.SERVING])) {
-        nutrientKey = key.replace(NUTRIENT_SUFFIX[InsightAnnotationType.SERVING], "")
-        nutrients[InsightAnnotationType.SERVING][nutrientKey] = value
-      } else if (key === NUTRIENT_SERVING_SIZE_KEY) {
-        nutrients.servingSize = value
-        return
-      } else {
-        console.log("Unknown nutrient key", key, value)
-        return
-      }
-      keysSet.add(nutrientKey)
-    })
+    Object.entries(this.insight!.data.nutrients)
+      .sort((entryA, entryB) => entryA[1].start - entryB[1].start)
+      .forEach(([key, value]) => {
+        let nutrientKey
+        if (key.endsWith(NUTRIENT_SUFFIX[InsightAnnotationType.CENTGRAMS])) {
+          nutrientKey = key.replace(NUTRIENT_SUFFIX[InsightAnnotationType.CENTGRAMS], "")
+          nutrients[InsightAnnotationType.CENTGRAMS][nutrientKey] = value
+        } else if (key.endsWith(NUTRIENT_SUFFIX[InsightAnnotationType.SERVING])) {
+          nutrientKey = key.replace(NUTRIENT_SUFFIX[InsightAnnotationType.SERVING], "")
+          nutrients[InsightAnnotationType.SERVING][nutrientKey] = value
+        } else if (key === NUTRIENT_SERVING_SIZE_KEY) {
+          nutrients.servingSize = value
+          return
+        } else {
+          console.log("Unknown nutrient key", key, value)
+          return
+        }
+        keysSet.add(nutrientKey)
+      })
 
     nutrients.keys = Array.from(keysSet)
     return nutrients
