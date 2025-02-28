@@ -18,7 +18,7 @@ const isLoading = new SignalMap<LoadingState>({
 export const nutrientTaxonomyById = new SignalMap<NutrientTaxonomy>({})
 
 /**
- * Nutrient taxonomy ids.
+ * Nutrient taxonomies
  */
 export const nutrientTaxonomies = new Computed(() => {
   const nutrientTaxonomyObj = nutrientTaxonomyById.get()
