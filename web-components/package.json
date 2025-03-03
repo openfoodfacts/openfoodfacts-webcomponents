@@ -38,6 +38,7 @@
     "dev": "concurrently \"npm run build:watch\" \"npm run serve\"",
     "test": "npm run test:dev && npm run test:prod",
     "serve:prod": "MODE=prod npm run serve",
+    "serve:doc": "npm run analyze && npm run build && cp -r dist docs && wds --watch --config web-doc-server.config.js",
     "test:dev": "wtr",
     "test:watch": "wtr --watch",
     "test:prod": "MODE=prod wtr",
@@ -54,6 +55,7 @@
     "@lit-labs/signals": "^0.1.1",
     "@lit/localize": "^0.12.2",
     "@lit/task": "^1.0.2",
+    "@panzoom/panzoom": "^4.6.0",
     "lit": "^3.2.1",
     "lit-html": "^3.2.1"
   },
@@ -79,6 +81,7 @@
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
     "rollup": "^4.34.8",
+    "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-livereload": "^2.0.5",
     "rollup-plugin-serve": "^3.0.0",
     "rollup-plugin-sourcemaps": "^0.6.3",

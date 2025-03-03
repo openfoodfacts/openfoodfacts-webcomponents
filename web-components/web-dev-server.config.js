@@ -12,6 +12,8 @@ if (!["dev", "prod"].includes(mode)) {
 }
 
 export default {
+  rootDir: "dist",
+  hostname: "127.0.0.1",
   nodeResolve: {
     exportConditions: mode === "dev" ? ["development"] : [],
     browser: true,

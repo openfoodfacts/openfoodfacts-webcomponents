@@ -14,6 +14,9 @@ import { localized, msg } from "@lit/localize"
 import { EventType } from "../../constants"
 import { QuestionStateEventDetail } from "../../types"
 import { SignalWatcher } from "@lit-labs/signals"
+import "../shared/loader"
+import "./robotoff-question-form"
+import { BASE } from "../../styles/base"
 
 /**
  * Robotoff question component
@@ -23,21 +26,24 @@ import { SignalWatcher } from "@lit-labs/signals"
 @customElement("robotoff-question")
 @localized()
 export class RobotoffQuestion extends SignalWatcher(LitElement) {
-  static override styles = css`
-    :host {
-      display: block;
-    }
-    .question-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
+  static override styles = [
+    BASE,
+    css`
+      :host {
+        display: block;
+      }
+      .question-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
 
-    .message {
-      font-style: italic;
-    }
-  `
+      .message {
+        font-style: italic;
+      }
+    `,
+  ]
   /**
    * Options for the component
    * @type {Object}
@@ -53,11 +59,11 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
   } = {}
 
   /**
-   * The product id to fetch questions for
+   * The product code to fetch questions for
    * @type {string}
    */
-  @property({ type: String, attribute: "product-id" })
-  productId: string = ""
+  @property({ type: String, attribute: "product-code" })
+  productCode: string = ""
 
   /**
    * The insight types to filter questions separate by comma
@@ -73,25 +79,34 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
   @state()
   private hasAnswered = false
 
+  /**
+   * Task to fetch questions for the given product code
+   * @type {Task}
+   * @private
+   */
   private _questionsTask = new Task(this, {
-    task: async ([productId, insightTypes], {}) => {
+    task: async ([productCode, insightTypes], {}) => {
       this.hasAnswered = false
-      if (!productId) {
+      if (!productCode) {
         return []
       }
       const params = insightTypes ? { insight_types: insightTypes } : {}
 
-      await fetchQuestionsByProductCode(productId, params)
+      await fetchQuestionsByProductCode(productCode, params)
       this._emitQuestionStateEvent()
-      return questions(productId).get()
+      return questions(productCode).get()
     },
-    args: () => [this.productId, this.insightTypes],
+    args: () => [this.productCode, this.insightTypes],
   })
 
+  /**
+   * Emit a custom event when the question state changes to know current state outside the component
+   * @returns {void}
+   */
   private _emitQuestionStateEvent = () => {
     const detail: QuestionStateEventDetail = {
-      index: currentQuestionIndex(this.productId).get(),
-      numberOfQuestions: numberOfQuestions(this.productId).get(),
+      index: currentQuestionIndex(this.productCode).get(),
+      numberOfQuestions: numberOfQuestions(this.productCode).get(),
     }
     this.dispatchEvent(
       new CustomEvent(EventType.QUESTION_STATE, {
@@ -103,15 +118,20 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
   }
   private onQuestionAnswered = () => {
     this.hasAnswered = true
-    nextQuestionByProductCode(this.productId)
+    nextQuestionByProductCode(this.productCode)
     this.requestUpdate()
     this._emitQuestionStateEvent()
   }
 
+  /**
+   * Render the message to display to the user
+   * @returns {TemplateResult}
+   * @private
+   **/
   private renderMessage() {
     const getMessageWrapper = (message: string) => html`<div class="message">${message}</div>`
 
-    if (isQuestionsFinished(this.productId).get()) {
+    if (isQuestionsFinished(this.productCode).get()) {
       return getMessageWrapper(msg("Thank you for your assistance!"))
     } else if (!this.options?.showMessage) {
       return nothing
@@ -128,17 +148,17 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
         if (!this.options?.showLoading) {
           return nothing
         }
-        return html`<div>${msg("Loading...")}</div>`
+        return html`<off-wb-loader></off-wb-loader>`
       },
       complete: (questionsList) => {
-        const index = currentQuestionIndex(this.productId).get() ?? 0
+        const index = currentQuestionIndex(this.productCode).get() ?? 0
         const question = questionsList[index]
-        if (!hasQuestions(this.productId).get()) {
+        if (!hasQuestions(this.productCode).get()) {
           return html``
         }
         return html`
           <div class="question-wrapper">
-            ${isQuestionsFinished(this.productId).get()
+            ${isQuestionsFinished(this.productCode).get()
               ? nothing
               : html`
                   ${this.renderMessage()}

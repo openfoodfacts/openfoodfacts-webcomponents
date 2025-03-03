@@ -4,27 +4,29 @@
   <head>
     <meta charset="utf-8" />
     <title>Demo</title>
-    <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-    <script src="node_modules/lit/polyfill-support.js"></script>
-    <script type="module" src="dist/off-webcomponents.js"></script>
+    <script type="module" src="off-webcomponents.js"></script>
     <style>
       p {
         border: solid 1px blue;
         padding: 8px;
       }
     </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body style="background: #f2f2f2">
     <h1>List of all available components</h1>
     <h2>Robotoff Question</h2>
 
     <div>
-      <robotoff-configuration dry-run="true" />
+      <robotoff-configuration
+        api-url="https://robotoff.openfoodfacts.net/api/v1"
+        img-url="https://images.openfoodfacts.net/images/products"
+      />
     </div>
-    <div style="">
+    <div>
       <div>
-        <label for="product-id">Product Id :</label>
-        <input type="text" id="product-id" placeholder="Id of a product" />
+        <label for="product-code">Product Id :</label>
+        <input type="text" id="product-code" placeholder="Id of a product" />
       </div>
       <div>
         <label for="insight-types">Insight Types :</label>
@@ -32,11 +34,19 @@
       </div>
       <div style="display: flex; margin-top: 1rem">
         <robotoff-question
-          product-id="1"
+          product-code="0628233671356"
           insight-types=""
           options='{"showMessage": true, "showLoading": true, "showError": true}'
           id="robotoff-question"
         />
+      </div>
+      <div style="display: flex; margin-top: 1rem">
+        <robotoff-nutrients
+          id="robotoff-nutrients"
+          product-code="0628233671356"
+          show-messages="true"
+        >
+        </robotoff-nutrients>
       </div>
     </div>
   </body>
@@ -54,13 +64,15 @@
     }
   }
   const robotoffQuestion = document.getElementById("robotoff-question")
-  const productId = document.getElementById("product-id")
+  const robotoffNutrients = document.getElementById("robotoff-nutrients")
+  const productCode = document.getElementById("product-code")
   const insightTypes = document.getElementById("insight-types")
 
   const productDebounce = debounce((value) => {
-    robotoffQuestion.setAttribute("product-id", value)
+    robotoffQuestion.setAttribute("product-code", value)
+    robotoffNutrients.setAttribute("product-code", value)
   })
-  productId.addEventListener("input", (event) => {
+  productCode.addEventListener("input", (event) => {
     productDebounce(event.target.value)
   })
 

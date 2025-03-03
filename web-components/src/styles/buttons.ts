@@ -22,6 +22,11 @@ export const getDefaultButtonClasses = (): CSSResult => {
     .button.rounded {
       border-radius: 50%;
     }
+
+    .button:focus {
+      outline: 1px solid black;
+      outline-offset: 4px;
+    }
   `
 }
 

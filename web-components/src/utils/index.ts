@@ -62,3 +62,5 @@ export const addParamsToUrl = (url: string, params: Record<string, any>) => {
 
 // Function to delay the execution of a function
 export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
+
+export const isNullOrUndefined = (value: any) => value === null || value === undefined

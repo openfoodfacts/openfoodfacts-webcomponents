@@ -10,8 +10,7 @@ import resolve from "@rollup/plugin-node-resolve"
 import replace from "@rollup/plugin-replace"
 import dotenv from "dotenv"
 import typescript from "@rollup/plugin-typescript"
-import serve from "rollup-plugin-serve"
-import livereload from "rollup-plugin-livereload"
+import copy from "rollup-plugin-copy"
 
 // Load environment variables from .env file
 dotenv.config()
@@ -40,6 +39,11 @@ if (production) {
     sourcemap: true,
   })
 }
+
+const elementsToCopy = [
+  { src: "src/assets", dest: "dist" }, // This will copy src/assets to dist/assets
+  !production && { src: "index.html", dest: "dist" }, // This will copy src/index.html to dist/index.html in development mode
+].filter(Boolean)
 
 export default {
   input: "src/off-webcomponents.ts",
@@ -88,5 +92,8 @@ export default {
         },
       }),
     summary(),
+    copy({
+      targets: elementsToCopy,
+    }),
   ],
 }

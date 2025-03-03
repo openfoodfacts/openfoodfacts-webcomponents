@@ -1,7 +1,8 @@
-import { robotoffApiUrl, robotoffDryRun } from "../../signals/robotoff"
+import { robotoffConfiguration } from "../../signals/robotoff"
 import { DEFAULT_ROBOTOFF_CONFIGURATION } from "../../constants"
 import { LitElement } from "lit"
 import { customElement, property } from "lit/decorators.js"
+import { RobotoffConfigurationOptions } from "../../types/robotoff"
 
 /**
  * The configuration properties of the robotoff configuration element.
@@ -10,17 +11,19 @@ import { customElement, property } from "lit/decorators.js"
 const CONFIGURATION_PROPERTIES: Record<
   string,
   {
-    signal: any
-    propertyName: string
+    propertyName: keyof RobotoffConfigurationOptions
+    converter?: (value: string) => any
   }
 > = {
   "api-url": {
-    signal: robotoffApiUrl,
     propertyName: "apiUrl",
   },
   "dry-run": {
-    signal: robotoffDryRun,
     propertyName: "dryRun",
+    converter: (value: string) => value === "true",
+  },
+  "img-url": {
+    propertyName: "imgUrl",
   },
 }
 
@@ -45,11 +48,24 @@ export class RobotoffConfiguration extends LitElement {
   @property({ type: Boolean, attribute: "dry-run" })
   dryRun: boolean = DEFAULT_ROBOTOFF_CONFIGURATION.dryRun
 
+  /**
+   * The URL of the images server.
+   * @attr img-url
+   */
+  @property({ type: String, attribute: "img-url" })
+  imgUrl: string = DEFAULT_ROBOTOFF_CONFIGURATION.imgUrl
+
   override attributeChangedCallback(name: string, oldval: string, newval: string) {
     super.attributeChangedCallback(name, oldval, newval)
     if (name in CONFIGURATION_PROPERTIES) {
-      const value = this[CONFIGURATION_PROPERTIES[name].propertyName as keyof this]
-      CONFIGURATION_PROPERTIES[name].signal.set(value as any)
+      let value
+      const propertyName = CONFIGURATION_PROPERTIES[name].propertyName
+      if (CONFIGURATION_PROPERTIES[name].converter) {
+        value = CONFIGURATION_PROPERTIES[name].converter!(newval)
+      } else {
+        value = this[propertyName]
+      }
+      robotoffConfiguration.setItem(propertyName, value)
     }
   }
 }

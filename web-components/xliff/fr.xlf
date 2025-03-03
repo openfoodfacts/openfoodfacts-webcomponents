@@ -26,6 +26,37 @@
   <source>Loading...</source>
   <target state="translated">Chargement...</target>
 </trans-unit>
+<trans-unit id="sc5575e3107f87874">
+  <source>Rotate image to the left</source>
+</trans-unit>
+<trans-unit id="se773f50d2a16d481">
+  <source>Rotate image to the right</source>
+</trans-unit>
+<trans-unit id="sb4ff51a46f0cd54c">
+  <source>Hide image</source>
+</trans-unit>
+<trans-unit id="sf854ab8601cebb10">
+  <source>Voir image</source>
+</trans-unit>
+<trans-unit id="s7ce4fd9430e80cea">
+  <source>value</source>
+</trans-unit>
+<trans-unit id="s6498dfe4855bb3a7">
+  <source>unit</source>
+</trans-unit>
+<trans-unit id="s13d6dffec1a1ec2b">
+  <source>Nutrients</source>
+</trans-unit>
+<trans-unit id="se08df1c0fa856132">
+  <source>Serving size:</source>
+</trans-unit>
+<trans-unit id="h276ecd60f2ffe8fd">
+  <source>Openfoodfacts lives thanks to its community.<x id="0" equiv-text="&lt;br&gt;"/>
+          Can you help us validate nutritional information?</source>
+</trans-unit>
+<trans-unit id="s78f63546f502a6f0">
+  <source>Thank you for your help!</source>
+</trans-unit>
 </body>
 </file>
 </xliff>
