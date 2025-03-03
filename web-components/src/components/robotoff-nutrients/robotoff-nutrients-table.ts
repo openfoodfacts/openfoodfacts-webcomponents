@@ -93,6 +93,7 @@ export class RobotoffNutrientsTable extends LitElement {
         width: ${SERVING_MAX_SIZE}rem;
         text-align: center;
         box-sizing: border-box;
+        margin-bottom: 0.5rem;
       }
 
       table .input-nutritional-value {
@@ -379,7 +380,7 @@ export class RobotoffNutrientsTable extends LitElement {
   } {
     const valueCleaned = value?.replace(" ", "").replace(",", ".") ?? ""
 
-    if (valueCleaned === "") {
+    if (["", "-"].includes(valueCleaned)) {
       return {
         value: valueCleaned,
       }
