@@ -72,6 +72,9 @@ export class RobotoffNutrientsTable extends LitElement {
       table th:first-child {
         max-width: 6rem;
       }
+      table thead th {
+        padding-bottom: 0.25rem;
+      }
       table td,
       table th[scope="row"] {
         padding-left: 0.5rem;
@@ -85,7 +88,6 @@ export class RobotoffNutrientsTable extends LitElement {
       }
       .serving-size-wrapper {
         font-weight: bold;
-        margin-bottom: 1rem;
       }
       .serving-size-wrapper input {
         width: ${SERVING_MAX_SIZE}rem;
