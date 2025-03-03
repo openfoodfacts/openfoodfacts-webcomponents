@@ -22,11 +22,6 @@ export const NUTRIENT_SUFFIX: Record<InsightAnnotationType, NutrientSuffix> = {
   [InsightAnnotationType.SERVING]: "_serving",
 }
 
-export const ANNOTATION_TYPE_LABELS: Record<InsightAnnotationType, () => string> = {
-  [InsightAnnotationType.CENTGRAMS]: () => msg("100g"),
-  [InsightAnnotationType.SERVING]: () => msg("Specified serving"),
-}
-
 export enum ForcedNutrientKey {
   ENERGY_KJ = "energy-kj",
   ENERGY_KCAL = "energy-kcal",

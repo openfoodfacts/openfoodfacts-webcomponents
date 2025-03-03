@@ -16,7 +16,6 @@ import {
 } from "../../signals/taxonomies"
 import { getLocale } from "../../localization"
 import {
-  ANNOTATION_TYPE_LABELS,
   getPossibleUnits,
   NUTRIENT_SERVING_SIZE_KEY,
   NUTRIENT_SUFFIX,
@@ -61,8 +60,7 @@ export class RobotoffNutrientsTable extends LitElement {
     INPUT,
     FLEX,
     css`
-      table th,
-      table td {
+      :host {
         font-weight: normal;
         font-size: 0.8rem;
       }
@@ -84,6 +82,10 @@ export class RobotoffNutrientsTable extends LitElement {
       }
       .serving-size-wrapper {
         gap: 0.3rem;
+      }
+      .serving-size-wrapper {
+        font-weight: bold;
+        margin-bottom: 1rem;
       }
       .serving-size-wrapper input {
         width: ${SERVING_MAX_SIZE}rem;
@@ -132,10 +134,10 @@ export class RobotoffNutrientsTable extends LitElement {
       }
 
       .fieldset-annotation-type legend {
-        font-size: 0.8rem;
         font-weight: bold;
       }
-      .fieldset-annotation-type label {
+      label,
+      legend {
         font-size: 0.8rem;
       }
       .add-nutrient-row select {
@@ -168,6 +170,29 @@ export class RobotoffNutrientsTable extends LitElement {
    */
   @state()
   private _addedNutrientKey: string[] = []
+
+  /**
+   * Serving size value
+   */
+  @state()
+  private _servingSizeValue: string = ""
+
+  updateServingSizeValueFromInsight = () => {
+    this._servingSizeValue = this.insight!.data.nutrients.serving_size?.value || ""
+  }
+
+  override connectedCallback() {
+    super.connectedCallback()
+    this.updateServingSizeValueFromInsight()
+  }
+
+  override attributeChangedCallback(name: string, oldval: string, newval: string) {
+    super.attributeChangedCallback(name, oldval, newval)
+    if (name === "insight") {
+      debugger
+      this.updateServingSizeValueFromInsight()
+    }
+  }
 
   /**
    * Get the nutrients in a formated way to manipulate it easily in the template
@@ -207,6 +232,14 @@ export class RobotoffNutrientsTable extends LitElement {
     return nutrients
   }
 
+  getInputValueName = (key: string, column: InsightAnnotationType) => `${key}_${column}`
+  getInputUnitName = (key: string, column: InsightAnnotationType) =>
+    `${NUTRIENT_UNIT_NAME_PREFIX}${this.getInputValueName(key, column)}`
+
+  getServingSizeInputName = () =>
+    this.getInputValueName(NUTRIENT_SERVING_SIZE_KEY, InsightAnnotationType.SERVING)
+  getServingSizeValue = () => {}
+
   /**
    * Render the inputs for the given nutrient key and column
    * @param nutrients - The nutrients to render
@@ -231,13 +264,6 @@ export class RobotoffNutrientsTable extends LitElement {
       `
     })
   }
-
-  getInputValueName = (key: string, column: InsightAnnotationType) => `${key}_${column}`
-  getInputUnitName = (key: string, column: InsightAnnotationType) =>
-    `${NUTRIENT_UNIT_NAME_PREFIX}${this.getInputValueName(key, column)}`
-
-  getServingSizeInputName = () =>
-    this.getInputValueName(NUTRIENT_SERVING_SIZE_KEY, InsightAnnotationType.SERVING)
 
   /**
    * Render the unit input for the given key and column.
@@ -460,6 +486,28 @@ export class RobotoffNutrientsTable extends LitElement {
     `
   }
 
+  onChangeServingSize(event: Event) {
+    const input = event.target as HTMLInputElement
+    const value = input.value
+    this._servingSizeValue = value
+  }
+
+  renderServingSizeInput(nutrients: FormatedNutrients) {
+    const inputServingSizeName = this.getServingSizeInputName()
+    return html`<div class="">
+      <label class="serving-size-wrapper flex align-center flex-col">
+        <span>${msg("Serving size")}</span>
+        <input
+          class="input"
+          name=${inputServingSizeName}
+          type="text"
+          value=${nutrients.servingSize?.value}
+          @change=${this.onChangeServingSize}
+        />
+      </label>
+    </div> `
+  }
+
   /**
    * Render the annotation type selection.
    * It will render a radio button for each annotation type.
@@ -468,22 +516,28 @@ export class RobotoffNutrientsTable extends LitElement {
     return html`
       <div class="flex justify-center">
         <fieldset class="fieldset-annotation-type">
-          <legend>${msg("Select the serving size :")}</legend>
+          <legend>${msg("Nutrition facts are displayed on the packaging:")}</legend>
           <div>
-            ${Object.values(InsightAnnotationType).map(
-              (type) => html`
-                <label>
-                  <span>${ANNOTATION_TYPE_LABELS[type]()}</span>
-                  <input
-                    type="radio"
-                    name="${SERVING_SIZE_SELECT_NAME}"
-                    value=${type}
-                    ?checked=${this.insightAnnotationType === type}
-                    @change=${this.onInsightAnnotationTypeChange}
-                  />
-                </label>
-              `
-            )}
+            <label>
+              <span>${msg("per 100g")}</span>
+              <input
+                type="radio"
+                name="${SERVING_SIZE_SELECT_NAME}"
+                value=${InsightAnnotationType.CENTGRAMS}
+                ?checked=${this.insightAnnotationType === InsightAnnotationType.CENTGRAMS}
+                @change=${this.onInsightAnnotationTypeChange}
+              />
+            </label>
+            <label>
+              <span>${msg(`per specified serving "${this._servingSizeValue}"`)}</span>
+              <input
+                type="radio"
+                name="${SERVING_SIZE_SELECT_NAME}"
+                value=${InsightAnnotationType.SERVING}
+                ?checked=${this.insightAnnotationType === InsightAnnotationType.SERVING}
+                @change=${this.onInsightAnnotationTypeChange}
+              />
+            </label>
           </div>
         </fieldset>
       </div>
@@ -548,12 +602,7 @@ export class RobotoffNutrientsTable extends LitElement {
   /**
    * Render the table with the nutrients data.
    */
-  renderTable() {
-    const inputServingSizeName = this.getInputValueName(
-      "serving_size",
-      InsightAnnotationType.SERVING
-    )
-    const nutrients = this.getFormatedNutrients()
+  renderTable(nutrients: FormatedNutrients) {
     return html`
       <table>
         <thead>
@@ -563,13 +612,7 @@ export class RobotoffNutrientsTable extends LitElement {
               ? html` <th scope="col">100g</th> `
               : html`
                   <th scope="col" class="flex flex-col align-center serving-size-wrapper">
-                    <span>${msg("Serving size:")}</span>
-                    <input
-                      class="input"
-                      name=${inputServingSizeName}
-                      type="text"
-                      value=${nutrients.servingSize?.value}
-                    />
+                    <span>${msg(`Specified serving "${this._servingSizeValue}"`)}</span>
                   </th>
                 `}
           </tr>
@@ -583,12 +626,14 @@ export class RobotoffNutrientsTable extends LitElement {
   }
 
   override render() {
+    const nutrients = this.getFormatedNutrients()
     return html`
       <div>
+        <div>${this.renderServingSizeInput(nutrients)}</div>
         <div>${this.renderInsightAnnotationTypeSelection()}</div>
 
         <form @submit=${this.onSubmit}>
-          <div>${this.renderTable()}</div>
+          <div class="flex justify-center">${this.renderTable(nutrients)}</div>
         </form>
       </div>
     `
