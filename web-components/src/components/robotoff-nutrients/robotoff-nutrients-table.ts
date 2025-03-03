@@ -174,25 +174,41 @@ export class RobotoffNutrientsTable extends LitElement {
   private _addedNutrientKey: string[] = []
 
   /**
-   * Serving size value
+   * Serving size value to display
    */
   @state()
   private _servingSizeValue: string = ""
 
-  updateServingSizeValueFromInsight = () => {
+  /**
+   * Update properties when the insight is updated
+   *
+   */
+  onUpdateInsight = () => {
+    // Update the serving size value to dislay
     this._servingSizeValue = this.insight!.data.nutrients.serving_size?.value || ""
+    // Update the insight type by checking the nutrient keys
+    this.insightAnnotationType = Object.keys(this.insight!.data.nutrients).filter((key) =>
+      key.endsWith(NUTRIENT_SUFFIX[InsightAnnotationType.SERVING])
+    ).length
+      ? InsightAnnotationType.SERVING
+      : InsightAnnotationType.CENTGRAMS
   }
 
+  /**
+   * Update the insight type on connected callback
+   */
   override connectedCallback() {
     super.connectedCallback()
-    this.updateServingSizeValueFromInsight()
+    this.onUpdateInsight()
   }
 
+  /**
+   * Update the insight type on attribute changed callback
+   */
   override attributeChangedCallback(name: string, oldval: string, newval: string) {
     super.attributeChangedCallback(name, oldval, newval)
     if (name === "insight") {
-      debugger
-      this.updateServingSizeValueFromInsight()
+      this.onUpdateInsight()
     }
   }
 
