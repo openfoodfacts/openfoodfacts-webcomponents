@@ -116,7 +116,7 @@ export class RobotoffNutrients extends LitElement {
 
     if (!this.isSubmited) {
       return msg(
-        html`Openfoodfacts lives thanks to its community.<br />
+        html`Open food facts lives thanks to its community.<br />
           Can you help us validate nutritional information?`
       )
     }
