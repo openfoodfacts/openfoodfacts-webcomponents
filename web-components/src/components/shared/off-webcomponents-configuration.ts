@@ -8,7 +8,7 @@ import { setLocale } from "../../localization"
 
 /**
  * The configuration properties of the webcomponent configuration element.
- * It is used to map the configuration properties to the robotoff signals.
+ * It is used to configure the app parameters.
  */
 const CONFIGURATION_PROPERTIES: Record<
   string,
@@ -25,12 +25,14 @@ const CONFIGURATION_PROPERTIES: Record<
       return { ...DEFAULT_ROBOTOFF_CONFIGURATION, ...configuration }
     },
     fn: (value: RobotoffConfigurationOptions) => {
+      // Set the robotoff configuration
       robotoffConfiguration.set(value)
     },
   },
   "language-code": {
     propertyName: "languageCode",
     fn: (value: string) => {
+      // Set the language code
       setLocale(value)
     },
   },
@@ -74,6 +76,7 @@ export class OffWebcomponentsConfiguration extends LitElement {
       } else {
         value = this[propertyName]
       }
+      // Run the callback function that apply configuration
       config.fn(value)
     }
   }
@@ -81,6 +84,6 @@ export class OffWebcomponentsConfiguration extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "off-webcomponents-configuration": OffWebcomponentsConfiguration
+    "off-webcomponent-configuration": OffWebcomponentsConfiguration
   }
 }
