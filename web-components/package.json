@@ -1,5 +1,5 @@
 {
-  "name": "openfoodfacts-webcomponents",
+  "name": "@openfoodfacts/openfoodfacts-webcomponents",
   "author": "Open Food Facts",
   "license": "LGPL-2.1-or-later",
   "private": false,
@@ -31,7 +31,7 @@
     "translations:extract": "npm run translations:update-language-codes && lit-localize extract",
     "format": "prettier \"**/*.{cjs,html,js,json,md,ts}\" --ignore-path ./.eslintignore --write",
     "prepare:package": "rm -r ./dist && npm run build",
-    "publish:package": "npm run prepare:package && npm publish",
+    "publish:package": "npm run prepare:package && npm publish --access=public",
     "analyze": "cem analyze --litelement --globs \"src/**/*.ts\" --outdir docs",
     "analyze:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
     "serve": "wds --watch",
