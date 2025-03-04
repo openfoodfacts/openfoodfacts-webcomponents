@@ -21,6 +21,14 @@
             "text": "number"
           },
           "default": "25"
+        },
+        {
+          "kind": "variable",
+          "name": "DEFAULT_LANGUAGE_CODE",
+          "type": {
+            "text": "string"
+          },
+          "default": "\"en\""
         }
       ],
       "exports": [
@@ -37,6 +45,14 @@
           "name": "PAGE_SIZE",
           "declaration": {
             "name": "PAGE_SIZE",
+            "module": "src/constants.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "DEFAULT_LANGUAGE_CODE",
+          "declaration": {
+            "name": "DEFAULT_LANGUAGE_CODE",
             "module": "src/constants.ts"
           }
         }
@@ -65,10 +81,10 @@
         },
         {
           "kind": "js",
-          "name": "RobotoffConfiguration",
+          "name": "OffWebcomponentConfiguration",
           "declaration": {
-            "name": "RobotoffConfiguration",
-            "module": "\"./components/robotoff/robotoff-configuration\""
+            "name": "OffWebcomponentsConfiguration",
+            "module": "\"./components/shared/off-webcomponents-configuration\""
           }
         },
         {
@@ -647,6 +663,42 @@
       "path": "src/signals/taxonomies.ts",
       "declarations": [
         {
+          "kind": "variable",
+          "name": "nutrientTaxonomyById",
+          "default": "new SignalMap<NutrientTaxonomy>({})",
+          "description": "Store the taxonomies by id."
+        },
+        {
+          "kind": "variable",
+          "name": "nutrientTaxonomies",
+          "default": "new Computed(() => {\n  const nutrientTaxonomyObj = nutrientTaxonomyById.get()\n  return Object.values(nutrientTaxonomyObj)\n})",
+          "description": "Nutrient taxonomies"
+        },
+        {
+          "kind": "function",
+          "name": "getTaxonomyNameByLang",
+          "parameters": [
+            {
+              "name": "taxonomy",
+              "type": {
+                "text": "NutrientTaxonomy"
+              }
+            },
+            {
+              "name": "lang",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "description": "Load the taxonomies if they are not already loaded.",
+          "return": {
+            "type": {
+              "text": ""
+            }
+          }
+        },
+        {
           "kind": "function",
           "name": "getTaxonomyNameByIdAndLang",
           "parameters": [
@@ -667,6 +719,24 @@
         },
         {
           "kind": "function",
+          "name": "getTaxonomyUnitById",
+          "return": {
+            "type": {
+              "text": "string | undefined"
+            }
+          },
+          "parameters": [
+            {
+              "name": "id",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "description": "Get the unit of a taxonomy by its id.\nIf the id is not available, it returns undefined."
+        },
+        {
+          "kind": "function",
           "name": "fetchNutrientsTaxonomies",
           "description": "Fetch the nutrients taxonomies and store them in the signal.\nk"
         }
@@ -674,9 +744,41 @@
       "exports": [
         {
           "kind": "js",
+          "name": "nutrientTaxonomyById",
+          "declaration": {
+            "name": "nutrientTaxonomyById",
+            "module": "src/signals/taxonomies.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "nutrientTaxonomies",
+          "declaration": {
+            "name": "nutrientTaxonomies",
+            "module": "src/signals/taxonomies.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "getTaxonomyNameByLang",
+          "declaration": {
+            "name": "getTaxonomyNameByLang",
+            "module": "src/signals/taxonomies.ts"
+          }
+        },
+        {
+          "kind": "js",
           "name": "getTaxonomyNameByIdAndLang",
           "declaration": {
             "name": "getTaxonomyNameByIdAndLang",
+            "module": "src/signals/taxonomies.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "getTaxonomyUnitById",
+          "declaration": {
+            "name": "getTaxonomyUnitById",
             "module": "src/signals/taxonomies.ts"
           }
         },
@@ -1064,6 +1166,18 @@
               }
             }
           ]
+        },
+        {
+          "kind": "function",
+          "name": "isNullOrUndefined",
+          "parameters": [
+            {
+              "name": "value",
+              "type": {
+                "text": "any"
+              }
+            }
+          ]
         }
       ],
       "exports": [
@@ -1122,6 +1236,14 @@
             "name": "delay",
             "module": "src/utils/index.ts"
           }
+        },
+        {
+          "kind": "js",
+          "name": "isNullOrUndefined",
+          "declaration": {
+            "name": "isNullOrUndefined",
+            "module": "src/utils/index.ts"
+          }
         }
       ]
     },
@@ -1135,7 +1257,7 @@
           "type": {
             "text": "array"
           },
-          "default": "[Unit.MICROGRAMS, Unit.MILIGRAMS, Unit.GRAMS]"
+          "default": "[Unit.GRAMS, Unit.MILIGRAMS, Unit.MICROGRAMS]"
         },
         {
           "kind": "variable",
@@ -1572,471 +1694,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/robotoff/robotoff-configuration.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Robotoff configuration element.\nIt is used to configure the robotoff parameters.",
-          "name": "RobotoffConfiguration",
-          "members": [
-            {
-              "kind": "field",
-              "name": "apiUrl",
-              "type": {
-                "text": "string"
-              },
-              "description": "The robotoff API URL.",
-              "attribute": "api-url"
-            },
-            {
-              "kind": "field",
-              "name": "dryRun",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Whether to run robotoff in dry run mode. Il allows to run robotoff without actually sending the data to the API.",
-              "attribute": "dry-run"
-            },
-            {
-              "kind": "field",
-              "name": "imgUrl",
-              "type": {
-                "text": "string"
-              },
-              "description": "The URL of the images server.",
-              "attribute": "img-url"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "api-url",
-              "type": {
-                "text": "string"
-              },
-              "description": "The robotoff API URL.",
-              "fieldName": "apiUrl",
-              "attribute": "api-url"
-            },
-            {
-              "name": "dry-run",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Whether to run robotoff in dry run mode. Il allows to run robotoff without actually sending the data to the API.",
-              "fieldName": "dryRun",
-              "attribute": "dry-run"
-            },
-            {
-              "name": "img-url",
-              "type": {
-                "text": "string"
-              },
-              "description": "The URL of the images server.",
-              "fieldName": "imgUrl",
-              "attribute": "img-url"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "robotoff-configuration",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "RobotoffConfiguration",
-          "declaration": {
-            "name": "RobotoffConfiguration",
-            "module": "src/components/robotoff/robotoff-configuration.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "robotoff-configuration",
-          "declaration": {
-            "name": "RobotoffConfiguration",
-            "module": "src/components/robotoff/robotoff-configuration.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/robotoff-nutrients/robotoff-nutrients-table.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Display a table of nutrients for a given product",
-          "name": "RobotoffNutrientsTable",
-          "members": [
-            {
-              "kind": "field",
-              "name": "insight",
-              "type": {
-                "text": "Insight | undefined"
-              },
-              "description": "The insight to edit",
-              "attribute": "insight"
-            },
-            {
-              "kind": "method",
-              "name": "getFormatedNutrients",
-              "return": {
-                "type": {
-                  "text": "FormatedNutrients"
-                }
-              },
-              "description": "Get the nutrients in a formated way to manipulate it easily in the template"
-            },
-            {
-              "kind": "method",
-              "name": "renderRows",
-              "parameters": [
-                {
-                  "name": "nutrients",
-                  "type": {
-                    "text": "FormatedNutrients"
-                  },
-                  "description": "The nutrients to render"
-                }
-              ],
-              "description": "Render the inputs for the given nutrient key and column",
-              "return": {
-                "type": {
-                  "text": ""
-                }
-              }
-            },
-            {
-              "kind": "field",
-              "name": "getInputValueName"
-            },
-            {
-              "kind": "field",
-              "name": "getInputUnitName"
-            },
-            {
-              "kind": "method",
-              "name": "renderUnit",
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  },
-                  "description": "The key of the nutrient."
-                },
-                {
-                  "name": "column",
-                  "type": {
-                    "text": "InsightAnnotationType"
-                  },
-                  "description": "The column of the nutrient."
-                },
-                {
-                  "name": "nutrient",
-                  "type": {
-                    "text": "Pick<InsightDatum, \"unit\"> | undefined"
-                  },
-                  "description": "The nutrient to render."
-                },
-                {
-                  "name": "tabIndex",
-                  "type": {
-                    "text": "1 | 2"
-                  }
-                }
-              ],
-              "description": "Render the unit input for the given key and column.\nWe use a method instead a component to have input in form data when submitting.",
-              "return": {
-                "type": {
-                  "text": ""
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "renderInputs",
-              "parameters": [
-                {
-                  "name": "key",
-                  "type": {
-                    "text": "string"
-                  },
-                  "description": "The key of the nutrient."
-                },
-                {
-                  "name": "column",
-                  "type": {
-                    "text": "InsightAnnotationType"
-                  },
-                  "description": "The column of the nutrient."
-                },
-                {
-                  "name": "nutrient",
-                  "type": {
-                    "text": "Pick<InsightDatum, \"value\" | \"unit\"> | undefined"
-                  },
-                  "description": "The nutrient to render."
-                },
-                {
-                  "name": "tabIndex",
-                  "type": {
-                    "text": "1 | 2"
-                  }
-                }
-              ],
-              "description": "Render the nutrient value inputs for the given key and column.\nWe use a method instead a component to have input in form data when submitting.",
-              "return": {
-                "type": {
-                  "text": ""
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "emitSubmitEvent",
-              "parameters": [
-                {
-                  "name": "insightAnnotationAnswer",
-                  "type": {
-                    "text": "InsightAnnotationAnswer"
-                  }
-                }
-              ],
-              "description": "Emit a custom submit event to submit the form data well formatted."
-            },
-            {
-              "kind": "method",
-              "name": "onSubmit",
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "SubmitEvent"
-                  }
-                }
-              ],
-              "description": "Handle the form submission.\nIt will emit a custom submit event to submit the form data well formatted.\nIt only sent the data for the column that was submitted."
-            }
-          ],
-          "events": [
-            {
-              "type": {
-                "text": "CustomEvent"
-              }
-            },
-            {
-              "description": "when the user submit the form",
-              "name": "submit"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "insight",
-              "type": {
-                "text": "Insight | undefined"
-              },
-              "description": "The insight to edit",
-              "fieldName": "insight"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "robotoff-nutrients-table",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "RobotoffNutrientsTable",
-          "declaration": {
-            "name": "RobotoffNutrientsTable",
-            "module": "src/components/robotoff-nutrients/robotoff-nutrients-table.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "robotoff-nutrients-table",
-          "declaration": {
-            "name": "RobotoffNutrientsTable",
-            "module": "src/components/robotoff-nutrients/robotoff-nutrients-table.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/robotoff-nutrients/robotoff-nutrients.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Robotoff Nutrients component",
-          "name": "RobotoffNutrients",
-          "members": [
-            {
-              "kind": "field",
-              "name": "productCode",
-              "type": {
-                "text": "string"
-              },
-              "default": "\"\"",
-              "description": "The product code to get the insights for",
-              "attribute": "product-code"
-            },
-            {
-              "kind": "field",
-              "name": "showMessages",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Show messages",
-              "attribute": "show-messages"
-            },
-            {
-              "kind": "field",
-              "name": "isSubmited",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Is the form submited"
-            },
-            {
-              "kind": "field",
-              "name": "showSuccessMessage",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Show success message"
-            },
-            {
-              "kind": "field",
-              "name": "showImage",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Do we show the image of the product by default",
-              "attribute": "show-image"
-            },
-            {
-              "kind": "field",
-              "name": "_insightsTask",
-              "privacy": "private",
-              "default": "new Task(this, {\n    task: async ([productCode], {}) => {\n      if (!productCode) {\n        return []\n      }\n\n      await Promise.all([fetchInsightsByProductCode(productCode), fetchNutrientsTaxonomies()])\n      return insight(productCode).get()\n    },\n    args: () => [this.productCode],\n  })",
-              "description": "Task to get the insights for the given product code\nit will fetch the incomplete nutrients insights and the nutrients taxonomies",
-              "type": {
-                "text": "Task"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "onSubmit",
-              "description": "Annotate the nutrients insights",
-              "parameters": [
-                {
-                  "name": "event"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "renderMessages",
-              "description": "Render messages",
-              "return": {
-                "type": {
-                  "text": "TemplateResult | typeof nothing"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "hideImage"
-            },
-            {
-              "kind": "method",
-              "name": "displayImage"
-            },
-            {
-              "kind": "method",
-              "name": "renderImage",
-              "parameters": [
-                {
-                  "name": "insight",
-                  "type": {
-                    "text": "Insight"
-                  }
-                }
-              ]
-            }
-          ],
-          "attributes": [
-            {
-              "name": "product-code",
-              "type": {
-                "text": "string"
-              },
-              "default": "\"\"",
-              "description": "The product code to get the insights for",
-              "fieldName": "productCode"
-            },
-            {
-              "name": "show-messages",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Show messages",
-              "fieldName": "showMessages"
-            },
-            {
-              "name": "show-image",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Do we show the image of the product by default",
-              "fieldName": "showImage"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "robotoff-nutrients",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "RobotoffNutrients",
-          "declaration": {
-            "name": "RobotoffNutrients",
-            "module": "src/components/robotoff-nutrients/robotoff-nutrients.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "robotoff-nutrients",
-          "declaration": {
-            "name": "RobotoffNutrients",
-            "module": "src/components/robotoff-nutrients/robotoff-nutrients.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/robotoff-question/robotoff-question-form.ts",
       "declarations": [
         {
@@ -2299,6 +1956,625 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/robotoff-nutrients/robotoff-nutrients-table.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Display a table of nutrients for a given product",
+          "name": "RobotoffNutrientsTable",
+          "members": [
+            {
+              "kind": "field",
+              "name": "insight",
+              "type": {
+                "text": "Insight | undefined"
+              },
+              "description": "The insight to edit",
+              "attribute": "insight"
+            },
+            {
+              "kind": "field",
+              "name": "insightAnnotationType",
+              "type": {
+                "text": "InsightAnnotationType"
+              },
+              "description": "Insight type"
+            },
+            {
+              "kind": "field",
+              "name": "errors",
+              "type": {
+                "text": "Record<string, string>"
+              },
+              "privacy": "private",
+              "default": "{}",
+              "description": "Error message by key"
+            },
+            {
+              "kind": "field",
+              "name": "_addedNutrientKey",
+              "type": {
+                "text": "string[]"
+              },
+              "privacy": "private",
+              "default": "[]",
+              "description": "Nutrient keys that were added to the table"
+            },
+            {
+              "kind": "field",
+              "name": "_servingSizeValue",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "\"\"",
+              "description": "Serving size value to display"
+            },
+            {
+              "kind": "field",
+              "name": "onUpdateInsight",
+              "description": "Update properties when the insight is updated"
+            },
+            {
+              "kind": "method",
+              "name": "getFormatedNutrients",
+              "return": {
+                "type": {
+                  "text": "FormatedNutrients"
+                }
+              },
+              "description": "Get the nutrients in a formated way to manipulate it easily in the template"
+            },
+            {
+              "kind": "field",
+              "name": "getInputValueName"
+            },
+            {
+              "kind": "field",
+              "name": "getInputUnitName"
+            },
+            {
+              "kind": "field",
+              "name": "getServingSizeInputName"
+            },
+            {
+              "kind": "field",
+              "name": "getServingSizeValue"
+            },
+            {
+              "kind": "method",
+              "name": "renderRows",
+              "parameters": [
+                {
+                  "name": "nutrients",
+                  "type": {
+                    "text": "FormatedNutrients"
+                  },
+                  "description": "The nutrients to render"
+                }
+              ],
+              "description": "Render the inputs for the given nutrient key and column",
+              "return": {
+                "type": {
+                  "text": ""
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderUnit",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  },
+                  "description": "The key of the nutrient."
+                },
+                {
+                  "name": "column",
+                  "type": {
+                    "text": "InsightAnnotationType"
+                  },
+                  "description": "The column of the nutrient."
+                },
+                {
+                  "name": "nutrient",
+                  "type": {
+                    "text": "Pick<InsightDatum, \"unit\"> | undefined"
+                  },
+                  "description": "The nutrient to render."
+                }
+              ],
+              "description": "Render the unit input for the given key and column.\nWe use a method instead a component to have input in form data when submitting.",
+              "return": {
+                "type": {
+                  "text": ""
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderInputs",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  },
+                  "description": "The key of the nutrient."
+                },
+                {
+                  "name": "column",
+                  "type": {
+                    "text": "InsightAnnotationType"
+                  },
+                  "description": "The column of the nutrient."
+                },
+                {
+                  "name": "nutrient",
+                  "type": {
+                    "text": "Pick<InsightDatum, \"value\" | \"unit\"> | undefined"
+                  },
+                  "description": "The nutrient to render."
+                }
+              ],
+              "description": "Render the nutrient value inputs for the given key and column.\nWe use a method instead a component to have input in form data when submitting.",
+              "return": {
+                "type": {
+                  "text": ""
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "emitSubmitEvent",
+              "parameters": [
+                {
+                  "name": "insightAnnotationAnswer",
+                  "type": {
+                    "text": "InsightAnnotationAnswer"
+                  }
+                }
+              ],
+              "description": "Emit a custom submit event to submit the form data well formatted."
+            },
+            {
+              "kind": "method",
+              "name": "isUnitInput",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "validateInputValue",
+              "return": {
+                "type": {
+                  "text": "{\n    error?: string\n    value?: string\n  }"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "string | null"
+                  }
+                }
+              ],
+              "description": "Validate the input value."
+            },
+            {
+              "kind": "method",
+              "name": "validateFormData",
+              "return": {
+                "type": {
+                  "text": "{\n    isValid: boolean\n    validatedData: InsightAnnotatationData\n  }"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "data",
+                  "type": {
+                    "text": "InsightAnnotatationData"
+                  }
+                }
+              ],
+              "description": "Validate the form data.\nIt will return the form data well formatted."
+            },
+            {
+              "kind": "method",
+              "name": "submitFormData",
+              "parameters": [
+                {
+                  "name": "formData",
+                  "type": {
+                    "text": "FormData"
+                  }
+                },
+                {
+                  "name": "column",
+                  "type": {
+                    "text": "InsightAnnotationType"
+                  }
+                }
+              ],
+              "description": "Submit the form data.\nIt will send the data to the server."
+            },
+            {
+              "kind": "method",
+              "name": "onInsightAnnotationTypeChange",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ],
+              "description": "Handle the change event of the annotation type selection.\nIt will update the annotation type."
+            },
+            {
+              "kind": "method",
+              "name": "renderSubmitRow",
+              "description": "Render the submit row.\nIt will render a submit button."
+            },
+            {
+              "kind": "method",
+              "name": "onChangeServingSize",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderServingSizeInput",
+              "parameters": [
+                {
+                  "name": "nutrients",
+                  "type": {
+                    "text": "FormatedNutrients"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderInsightAnnotationTypeSelection",
+              "description": "Render the annotation type selection.\nIt will render a radio button for each annotation type."
+            },
+            {
+              "kind": "method",
+              "name": "onAddNutrient",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onSubmit",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "SubmitEvent"
+                  }
+                }
+              ],
+              "description": "Handle the form submission.\nIt will emit a custom submit event to submit the form data well formatted.\nIt only sent the data for the column that was submitted."
+            },
+            {
+              "kind": "method",
+              "name": "renderAddNutrientRow",
+              "parameters": [
+                {
+                  "name": "alreadyAddedNutrients",
+                  "type": {
+                    "text": "string[]"
+                  }
+                }
+              ],
+              "description": "Render the row to add a new nutrient."
+            },
+            {
+              "kind": "method",
+              "name": "renderTable",
+              "parameters": [
+                {
+                  "name": "nutrients",
+                  "type": {
+                    "text": "FormatedNutrients"
+                  }
+                }
+              ],
+              "description": "Render the table with the nutrients data."
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "CustomEvent"
+              }
+            },
+            {
+              "description": "when the user submit the form",
+              "name": "submit"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "insight",
+              "type": {
+                "text": "Insight | undefined"
+              },
+              "description": "The insight to edit",
+              "fieldName": "insight"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "robotoff-nutrients-table",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RobotoffNutrientsTable",
+          "declaration": {
+            "name": "RobotoffNutrientsTable",
+            "module": "src/components/robotoff-nutrients/robotoff-nutrients-table.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "robotoff-nutrients-table",
+          "declaration": {
+            "name": "RobotoffNutrientsTable",
+            "module": "src/components/robotoff-nutrients/robotoff-nutrients-table.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/robotoff-nutrients/robotoff-nutrients.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Robotoff Nutrients component",
+          "name": "RobotoffNutrients",
+          "members": [
+            {
+              "kind": "field",
+              "name": "productCode",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "description": "The product code to get the insights for",
+              "attribute": "product-code"
+            },
+            {
+              "kind": "field",
+              "name": "showMessages",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Show messages",
+              "attribute": "show-messages"
+            },
+            {
+              "kind": "field",
+              "name": "isSubmited",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Is the form submited"
+            },
+            {
+              "kind": "field",
+              "name": "showSuccessMessage",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Show success message"
+            },
+            {
+              "kind": "field",
+              "name": "showImage",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Do we show the image of the product by default",
+              "attribute": "show-image"
+            },
+            {
+              "kind": "field",
+              "name": "_insightsTask",
+              "privacy": "private",
+              "default": "new Task(this, {\n    task: async ([productCode], {}) => {\n      if (!productCode) {\n        return []\n      }\n\n      await Promise.all([fetchInsightsByProductCode(productCode), fetchNutrientsTaxonomies()])\n      return insight(productCode).get()\n    },\n    args: () => [this.productCode],\n  })",
+              "description": "Task to get the insights for the given product code\nit will fetch the incomplete nutrients insights and the nutrients taxonomies",
+              "type": {
+                "text": "Task"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "onSubmit",
+              "description": "Annotate the nutrients insights",
+              "parameters": [
+                {
+                  "name": "event"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderMessages",
+              "description": "Render messages",
+              "return": {
+                "type": {
+                  "text": "TemplateResult | typeof nothing"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "hideImage"
+            },
+            {
+              "kind": "method",
+              "name": "displayImage"
+            },
+            {
+              "kind": "method",
+              "name": "renderImage",
+              "parameters": [
+                {
+                  "name": "insight",
+                  "type": {
+                    "text": "Insight"
+                  }
+                }
+              ]
+            }
+          ],
+          "attributes": [
+            {
+              "name": "product-code",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "description": "The product code to get the insights for",
+              "fieldName": "productCode"
+            },
+            {
+              "name": "show-messages",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Show messages",
+              "fieldName": "showMessages"
+            },
+            {
+              "name": "show-image",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Do we show the image of the product by default",
+              "fieldName": "showImage"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "robotoff-nutrients",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RobotoffNutrients",
+          "declaration": {
+            "name": "RobotoffNutrients",
+            "module": "src/components/robotoff-nutrients/robotoff-nutrients.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "robotoff-nutrients",
+          "declaration": {
+            "name": "RobotoffNutrients",
+            "module": "src/components/robotoff-nutrients/robotoff-nutrients.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/localization/generated/locale-codes.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "sourceLocale",
+          "default": "`en`",
+          "description": "The locale code that templates in this source code are written in."
+        },
+        {
+          "kind": "variable",
+          "name": "targetLocales",
+          "type": {
+            "text": "[\n  `af`,\n  `am`,\n  `ar`,\n  `ay`,\n  `az`,\n  `be`,\n  `bg`,\n  `bi`,\n  `bn`,\n  `bs`,\n  `ca`,\n  `ch`,\n  `cs`,\n  `cy`,\n  `da`,\n  `de`,\n  `dv`,\n  `dz`,\n  `el`,\n  `es`,\n  `et`,\n  `eu`,\n  `fa`,\n  `fi`,\n  `fj`,\n  `fr`,\n  `ga`,\n  `gd`,\n  `gl`,\n  `gn`,\n  `gv`,\n  `he`,\n  `hi`,\n  `ho`,\n  `hr`,\n  `ht`,\n  `hu`,\n  `hy`,\n  `id`,\n  `is`,\n  `it`,\n  `ja`,\n  `ka`,\n  `kk`,\n  `kl`,\n  `km`,\n  `ko`,\n  `ku`,\n  `ky`,\n  `la`,\n  `lb`,\n  `lo`,\n  `lt`,\n  `lv`,\n  `mg`,\n  `mh`,\n  `mi`,\n  `mk`,\n  `mn`,\n  `ms`,\n  `mt`,\n  `my`,\n  `na`,\n  `nb`,\n  `nd`,\n  `ne`,\n  `nl`,\n  `nr`,\n  `ny`,\n  `pap`,\n  `pl`,\n  `prs`,\n  `ps`,\n  `pt`,\n  `qu`,\n  `rn`,\n  `ro`,\n  `ru`,\n  `rw`,\n  `sg`,\n  `si`,\n  `sk`,\n  `sl`,\n  `sm`,\n  `sn`,\n  `so`,\n  `sq`,\n  `sr`,\n  `ss`,\n  `st`,\n  `sv`,\n  `sw`,\n  `ta`,\n  `tg`,\n  `th`,\n  `ti`,\n  `tk`,\n  `tl`,\n  `tn`,\n  `to`,\n  `tr`,\n  `ts`,\n  `uk`,\n  `ur`,\n  `uz`,\n  `ve`,\n  `vi`,\n  `xh`,\n  `zh`,\n  `zu`,\n]"
+          },
+          "default": "[\n  `af`,\n  `am`,\n  `ar`,\n  `ay`,\n  `az`,\n  `be`,\n  `bg`,\n  `bi`,\n  `bn`,\n  `bs`,\n  `ca`,\n  `ch`,\n  `cs`,\n  `cy`,\n  `da`,\n  `de`,\n  `dv`,\n  `dz`,\n  `el`,\n  `es`,\n  `et`,\n  `eu`,\n  `fa`,\n  `fi`,\n  `fj`,\n  `fr`,\n  `ga`,\n  `gd`,\n  `gl`,\n  `gn`,\n  `gv`,\n  `he`,\n  `hi`,\n  `ho`,\n  `hr`,\n  `ht`,\n  `hu`,\n  `hy`,\n  `id`,\n  `is`,\n  `it`,\n  `ja`,\n  `ka`,\n  `kk`,\n  `kl`,\n  `km`,\n  `ko`,\n  `ku`,\n  `ky`,\n  `la`,\n  `lb`,\n  `lo`,\n  `lt`,\n  `lv`,\n  `mg`,\n  `mh`,\n  `mi`,\n  `mk`,\n  `mn`,\n  `ms`,\n  `mt`,\n  `my`,\n  `na`,\n  `nb`,\n  `nd`,\n  `ne`,\n  `nl`,\n  `nr`,\n  `ny`,\n  `pap`,\n  `pl`,\n  `prs`,\n  `ps`,\n  `pt`,\n  `qu`,\n  `rn`,\n  `ro`,\n  `ru`,\n  `rw`,\n  `sg`,\n  `si`,\n  `sk`,\n  `sl`,\n  `sm`,\n  `sn`,\n  `so`,\n  `sq`,\n  `sr`,\n  `ss`,\n  `st`,\n  `sv`,\n  `sw`,\n  `ta`,\n  `tg`,\n  `th`,\n  `ti`,\n  `tk`,\n  `tl`,\n  `tn`,\n  `to`,\n  `tr`,\n  `ts`,\n  `uk`,\n  `ur`,\n  `uz`,\n  `ve`,\n  `vi`,\n  `xh`,\n  `zh`,\n  `zu`,\n]",
+          "description": "The other locale codes that this application is localized into. Sorted\nlexicographically."
+        },
+        {
+          "kind": "variable",
+          "name": "allLocales",
+          "type": {
+            "text": "[\n  `af`,\n  `am`,\n  `ar`,\n  `ay`,\n  `az`,\n  `be`,\n  `bg`,\n  `bi`,\n  `bn`,\n  `bs`,\n  `ca`,\n  `ch`,\n  `cs`,\n  `cy`,\n  `da`,\n  `de`,\n  `dv`,\n  `dz`,\n  `el`,\n  `en`,\n  `es`,\n  `et`,\n  `eu`,\n  `fa`,\n  `fi`,\n  `fj`,\n  `fr`,\n  `ga`,\n  `gd`,\n  `gl`,\n  `gn`,\n  `gv`,\n  `he`,\n  `hi`,\n  `ho`,\n  `hr`,\n  `ht`,\n  `hu`,\n  `hy`,\n  `id`,\n  `is`,\n  `it`,\n  `ja`,\n  `ka`,\n  `kk`,\n  `kl`,\n  `km`,\n  `ko`,\n  `ku`,\n  `ky`,\n  `la`,\n  `lb`,\n  `lo`,\n  `lt`,\n  `lv`,\n  `mg`,\n  `mh`,\n  `mi`,\n  `mk`,\n  `mn`,\n  `ms`,\n  `mt`,\n  `my`,\n  `na`,\n  `nb`,\n  `nd`,\n  `ne`,\n  `nl`,\n  `nr`,\n  `ny`,\n  `pap`,\n  `pl`,\n  `prs`,\n  `ps`,\n  `pt`,\n  `qu`,\n  `rn`,\n  `ro`,\n  `ru`,\n  `rw`,\n  `sg`,\n  `si`,\n  `sk`,\n  `sl`,\n  `sm`,\n  `sn`,\n  `so`,\n  `sq`,\n  `sr`,\n  `ss`,\n  `st`,\n  `sv`,\n  `sw`,\n  `ta`,\n  `tg`,\n  `th`,\n  `ti`,\n  `tk`,\n  `tl`,\n  `tn`,\n  `to`,\n  `tr`,\n  `ts`,\n  `uk`,\n  `ur`,\n  `uz`,\n  `ve`,\n  `vi`,\n  `xh`,\n  `zh`,\n  `zu`,\n]"
+          },
+          "default": "[\n  `af`,\n  `am`,\n  `ar`,\n  `ay`,\n  `az`,\n  `be`,\n  `bg`,\n  `bi`,\n  `bn`,\n  `bs`,\n  `ca`,\n  `ch`,\n  `cs`,\n  `cy`,\n  `da`,\n  `de`,\n  `dv`,\n  `dz`,\n  `el`,\n  `en`,\n  `es`,\n  `et`,\n  `eu`,\n  `fa`,\n  `fi`,\n  `fj`,\n  `fr`,\n  `ga`,\n  `gd`,\n  `gl`,\n  `gn`,\n  `gv`,\n  `he`,\n  `hi`,\n  `ho`,\n  `hr`,\n  `ht`,\n  `hu`,\n  `hy`,\n  `id`,\n  `is`,\n  `it`,\n  `ja`,\n  `ka`,\n  `kk`,\n  `kl`,\n  `km`,\n  `ko`,\n  `ku`,\n  `ky`,\n  `la`,\n  `lb`,\n  `lo`,\n  `lt`,\n  `lv`,\n  `mg`,\n  `mh`,\n  `mi`,\n  `mk`,\n  `mn`,\n  `ms`,\n  `mt`,\n  `my`,\n  `na`,\n  `nb`,\n  `nd`,\n  `ne`,\n  `nl`,\n  `nr`,\n  `ny`,\n  `pap`,\n  `pl`,\n  `prs`,\n  `ps`,\n  `pt`,\n  `qu`,\n  `rn`,\n  `ro`,\n  `ru`,\n  `rw`,\n  `sg`,\n  `si`,\n  `sk`,\n  `sl`,\n  `sm`,\n  `sn`,\n  `so`,\n  `sq`,\n  `sr`,\n  `ss`,\n  `st`,\n  `sv`,\n  `sw`,\n  `ta`,\n  `tg`,\n  `th`,\n  `ti`,\n  `tk`,\n  `tl`,\n  `tn`,\n  `to`,\n  `tr`,\n  `ts`,\n  `uk`,\n  `ur`,\n  `uz`,\n  `ve`,\n  `vi`,\n  `xh`,\n  `zh`,\n  `zu`,\n]",
+          "description": "All valid project locale codes. Sorted lexicographically."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "sourceLocale",
+          "declaration": {
+            "name": "sourceLocale",
+            "module": "src/localization/generated/locale-codes.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "targetLocales",
+          "declaration": {
+            "name": "targetLocales",
+            "module": "src/localization/generated/locale-codes.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "allLocales",
+          "declaration": {
+            "name": "allLocales",
+            "module": "src/localization/generated/locale-codes.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/shared/loader.ts",
       "declarations": [
         {
@@ -2329,6 +2605,97 @@
           "declaration": {
             "name": "OffWcLoader",
             "module": "src/components/shared/loader.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/shared/off-webcomponents-configuration.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Robotoff configuration element.\nIt is used to configure the robotoff parameters.",
+          "name": "OffWebcomponentsConfiguration",
+          "members": [
+            {
+              "kind": "field",
+              "name": "robotoffConfiguration",
+              "type": {
+                "text": "RobotoffConfigurationOptions"
+              },
+              "default": "{\n    apiUrl: DEFAULT_ROBOTOFF_CONFIGURATION.apiUrl,\n    dryRun: DEFAULT_ROBOTOFF_CONFIGURATION.dryRun,\n    imgUrl: DEFAULT_ROBOTOFF_CONFIGURATION.imgUrl,\n  }",
+              "description": "The robotoff configuration object.",
+              "attribute": "robotoff-configuration"
+            },
+            {
+              "kind": "field",
+              "name": "languageCode",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "DEFAULT_LANGUAGE_CODE",
+              "description": "The language code we need to use for the app.",
+              "attribute": "language-code"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "robotoff-api-url",
+              "type": {
+                "text": "RobotoffConfigurationOptions"
+              },
+              "default": "{\n    apiUrl: DEFAULT_ROBOTOFF_CONFIGURATION.apiUrl,\n    dryRun: DEFAULT_ROBOTOFF_CONFIGURATION.dryRun,\n    imgUrl: DEFAULT_ROBOTOFF_CONFIGURATION.imgUrl,\n  }",
+              "description": "The robotoff configuration object.",
+              "fieldName": "robotoffConfiguration"
+            },
+            {
+              "name": "language-code",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "DEFAULT_LANGUAGE_CODE",
+              "description": "The language code we need to use for the app.",
+              "resolveInitializer": {
+                "module": "/src/constants"
+              },
+              "fieldName": "languageCode",
+              "attribute": "language-code"
+            },
+            {
+              "name": "robotoff-configuration",
+              "type": {
+                "text": "RobotoffConfigurationOptions"
+              },
+              "default": "{\n    apiUrl: DEFAULT_ROBOTOFF_CONFIGURATION.apiUrl,\n    dryRun: DEFAULT_ROBOTOFF_CONFIGURATION.dryRun,\n    imgUrl: DEFAULT_ROBOTOFF_CONFIGURATION.imgUrl,\n  }",
+              "description": "The robotoff configuration object.",
+              "attribute": "robotoff-api-url",
+              "fieldName": "robotoffConfiguration"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "off-w-configuration",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "OffWebcomponentsConfiguration",
+          "declaration": {
+            "name": "OffWebcomponentsConfiguration",
+            "module": "src/components/shared/off-webcomponents-configuration.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "off-webcomponents-configuration",
+          "declaration": {
+            "name": "OffWebcomponentsConfiguration",
+            "module": "src/components/shared/off-webcomponents-configuration.ts"
           }
         }
       ]
@@ -2508,62 +2875,6 @@
           "declaration": {
             "name": "ZoomableImage",
             "module": "src/components/shared/zoomable-image.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/localization/generated/locale-codes.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "sourceLocale",
-          "default": "`en`",
-          "description": "The locale code that templates in this source code are written in."
-        },
-        {
-          "kind": "variable",
-          "name": "targetLocales",
-          "type": {
-            "text": "[\n  `af`,\n  `am`,\n  `ar`,\n  `ay`,\n  `az`,\n  `be`,\n  `bg`,\n  `bi`,\n  `bn`,\n  `bs`,\n  `ca`,\n  `ch`,\n  `cs`,\n  `cy`,\n  `da`,\n  `de`,\n  `dv`,\n  `dz`,\n  `el`,\n  `es`,\n  `et`,\n  `eu`,\n  `fa`,\n  `fi`,\n  `fj`,\n  `fr`,\n  `ga`,\n  `gd`,\n  `gl`,\n  `gn`,\n  `gv`,\n  `he`,\n  `hi`,\n  `ho`,\n  `hr`,\n  `ht`,\n  `hu`,\n  `hy`,\n  `id`,\n  `is`,\n  `it`,\n  `ja`,\n  `ka`,\n  `kk`,\n  `kl`,\n  `km`,\n  `ko`,\n  `ku`,\n  `ky`,\n  `la`,\n  `lb`,\n  `lo`,\n  `lt`,\n  `lv`,\n  `mg`,\n  `mh`,\n  `mi`,\n  `mk`,\n  `mn`,\n  `ms`,\n  `mt`,\n  `my`,\n  `na`,\n  `nb`,\n  `nd`,\n  `ne`,\n  `nl`,\n  `nr`,\n  `ny`,\n  `pap`,\n  `pl`,\n  `prs`,\n  `ps`,\n  `pt`,\n  `qu`,\n  `rn`,\n  `ro`,\n  `ru`,\n  `rw`,\n  `sg`,\n  `si`,\n  `sk`,\n  `sl`,\n  `sm`,\n  `sn`,\n  `so`,\n  `sq`,\n  `sr`,\n  `ss`,\n  `st`,\n  `sv`,\n  `sw`,\n  `ta`,\n  `tg`,\n  `th`,\n  `ti`,\n  `tk`,\n  `tl`,\n  `tn`,\n  `to`,\n  `tr`,\n  `ts`,\n  `uk`,\n  `ur`,\n  `uz`,\n  `ve`,\n  `vi`,\n  `xh`,\n  `zh`,\n  `zu`,\n]"
-          },
-          "default": "[\n  `af`,\n  `am`,\n  `ar`,\n  `ay`,\n  `az`,\n  `be`,\n  `bg`,\n  `bi`,\n  `bn`,\n  `bs`,\n  `ca`,\n  `ch`,\n  `cs`,\n  `cy`,\n  `da`,\n  `de`,\n  `dv`,\n  `dz`,\n  `el`,\n  `es`,\n  `et`,\n  `eu`,\n  `fa`,\n  `fi`,\n  `fj`,\n  `fr`,\n  `ga`,\n  `gd`,\n  `gl`,\n  `gn`,\n  `gv`,\n  `he`,\n  `hi`,\n  `ho`,\n  `hr`,\n  `ht`,\n  `hu`,\n  `hy`,\n  `id`,\n  `is`,\n  `it`,\n  `ja`,\n  `ka`,\n  `kk`,\n  `kl`,\n  `km`,\n  `ko`,\n  `ku`,\n  `ky`,\n  `la`,\n  `lb`,\n  `lo`,\n  `lt`,\n  `lv`,\n  `mg`,\n  `mh`,\n  `mi`,\n  `mk`,\n  `mn`,\n  `ms`,\n  `mt`,\n  `my`,\n  `na`,\n  `nb`,\n  `nd`,\n  `ne`,\n  `nl`,\n  `nr`,\n  `ny`,\n  `pap`,\n  `pl`,\n  `prs`,\n  `ps`,\n  `pt`,\n  `qu`,\n  `rn`,\n  `ro`,\n  `ru`,\n  `rw`,\n  `sg`,\n  `si`,\n  `sk`,\n  `sl`,\n  `sm`,\n  `sn`,\n  `so`,\n  `sq`,\n  `sr`,\n  `ss`,\n  `st`,\n  `sv`,\n  `sw`,\n  `ta`,\n  `tg`,\n  `th`,\n  `ti`,\n  `tk`,\n  `tl`,\n  `tn`,\n  `to`,\n  `tr`,\n  `ts`,\n  `uk`,\n  `ur`,\n  `uz`,\n  `ve`,\n  `vi`,\n  `xh`,\n  `zh`,\n  `zu`,\n]",
-          "description": "The other locale codes that this application is localized into. Sorted\nlexicographically."
-        },
-        {
-          "kind": "variable",
-          "name": "allLocales",
-          "type": {
-            "text": "[\n  `af`,\n  `am`,\n  `ar`,\n  `ay`,\n  `az`,\n  `be`,\n  `bg`,\n  `bi`,\n  `bn`,\n  `bs`,\n  `ca`,\n  `ch`,\n  `cs`,\n  `cy`,\n  `da`,\n  `de`,\n  `dv`,\n  `dz`,\n  `el`,\n  `en`,\n  `es`,\n  `et`,\n  `eu`,\n  `fa`,\n  `fi`,\n  `fj`,\n  `fr`,\n  `ga`,\n  `gd`,\n  `gl`,\n  `gn`,\n  `gv`,\n  `he`,\n  `hi`,\n  `ho`,\n  `hr`,\n  `ht`,\n  `hu`,\n  `hy`,\n  `id`,\n  `is`,\n  `it`,\n  `ja`,\n  `ka`,\n  `kk`,\n  `kl`,\n  `km`,\n  `ko`,\n  `ku`,\n  `ky`,\n  `la`,\n  `lb`,\n  `lo`,\n  `lt`,\n  `lv`,\n  `mg`,\n  `mh`,\n  `mi`,\n  `mk`,\n  `mn`,\n  `ms`,\n  `mt`,\n  `my`,\n  `na`,\n  `nb`,\n  `nd`,\n  `ne`,\n  `nl`,\n  `nr`,\n  `ny`,\n  `pap`,\n  `pl`,\n  `prs`,\n  `ps`,\n  `pt`,\n  `qu`,\n  `rn`,\n  `ro`,\n  `ru`,\n  `rw`,\n  `sg`,\n  `si`,\n  `sk`,\n  `sl`,\n  `sm`,\n  `sn`,\n  `so`,\n  `sq`,\n  `sr`,\n  `ss`,\n  `st`,\n  `sv`,\n  `sw`,\n  `ta`,\n  `tg`,\n  `th`,\n  `ti`,\n  `tk`,\n  `tl`,\n  `tn`,\n  `to`,\n  `tr`,\n  `ts`,\n  `uk`,\n  `ur`,\n  `uz`,\n  `ve`,\n  `vi`,\n  `xh`,\n  `zh`,\n  `zu`,\n]"
-          },
-          "default": "[\n  `af`,\n  `am`,\n  `ar`,\n  `ay`,\n  `az`,\n  `be`,\n  `bg`,\n  `bi`,\n  `bn`,\n  `bs`,\n  `ca`,\n  `ch`,\n  `cs`,\n  `cy`,\n  `da`,\n  `de`,\n  `dv`,\n  `dz`,\n  `el`,\n  `en`,\n  `es`,\n  `et`,\n  `eu`,\n  `fa`,\n  `fi`,\n  `fj`,\n  `fr`,\n  `ga`,\n  `gd`,\n  `gl`,\n  `gn`,\n  `gv`,\n  `he`,\n  `hi`,\n  `ho`,\n  `hr`,\n  `ht`,\n  `hu`,\n  `hy`,\n  `id`,\n  `is`,\n  `it`,\n  `ja`,\n  `ka`,\n  `kk`,\n  `kl`,\n  `km`,\n  `ko`,\n  `ku`,\n  `ky`,\n  `la`,\n  `lb`,\n  `lo`,\n  `lt`,\n  `lv`,\n  `mg`,\n  `mh`,\n  `mi`,\n  `mk`,\n  `mn`,\n  `ms`,\n  `mt`,\n  `my`,\n  `na`,\n  `nb`,\n  `nd`,\n  `ne`,\n  `nl`,\n  `nr`,\n  `ny`,\n  `pap`,\n  `pl`,\n  `prs`,\n  `ps`,\n  `pt`,\n  `qu`,\n  `rn`,\n  `ro`,\n  `ru`,\n  `rw`,\n  `sg`,\n  `si`,\n  `sk`,\n  `sl`,\n  `sm`,\n  `sn`,\n  `so`,\n  `sq`,\n  `sr`,\n  `ss`,\n  `st`,\n  `sv`,\n  `sw`,\n  `ta`,\n  `tg`,\n  `th`,\n  `ti`,\n  `tk`,\n  `tl`,\n  `tn`,\n  `to`,\n  `tr`,\n  `ts`,\n  `uk`,\n  `ur`,\n  `uz`,\n  `ve`,\n  `vi`,\n  `xh`,\n  `zh`,\n  `zu`,\n]",
-          "description": "All valid project locale codes. Sorted lexicographically."
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "sourceLocale",
-          "declaration": {
-            "name": "sourceLocale",
-            "module": "src/localization/generated/locale-codes.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "targetLocales",
-          "declaration": {
-            "name": "targetLocales",
-            "module": "src/localization/generated/locale-codes.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "allLocales",
-          "declaration": {
-            "name": "allLocales",
-            "module": "src/localization/generated/locale-codes.ts"
           }
         }
       ]

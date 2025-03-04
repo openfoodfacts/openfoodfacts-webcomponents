@@ -15,3 +15,5 @@ export enum LoadingState {
   LOADING = "loading",
   LOADED = "loaded",
 }
+
+export const DEFAULT_LANGUAGE_CODE = "en"

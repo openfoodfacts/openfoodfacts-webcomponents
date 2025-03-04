@@ -33,16 +33,3 @@ export const getLocaleAfterInit = async (): Promise<string> => {
   }
   return getLocale()
 }
-;(async () => {
-  try {
-    // Defer first render until our initial locale is ready, to avoid a flash of
-    // the wrong locale.
-    // It sets the locale to the browser locale
-    await setLocale(getBrowserLocale())
-    isLocaleSet = true
-  } catch (e) {
-    // Either the URL locale code was invalid, or there was a problem loading
-    // the locale module.
-    console.error(`Error loading locale: ${(e as Error).message}`)
-  }
-})()
