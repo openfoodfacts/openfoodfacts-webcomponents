@@ -1,4 +1,3 @@
-import { msg } from "@lit/localize"
 import { InsightAnnotationType } from "../types/robotoff"
 import { isNullOrUndefined } from "."
 import { getTaxonomyUnitById } from "../signals/taxonomies"

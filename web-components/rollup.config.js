@@ -25,12 +25,13 @@ if (production) {
       file: "dist/off-webcomponents.bundled.js",
       format: "esm",
       sourcemap: true,
-    },
-    {
-      file: "dist/off-webcomponents.bundled.cjs",
-      format: "cjs",
-      sourcemap: true,
     }
+    // Remove because language is not supported in commonjs
+    // {
+    //   file: "dist/off-webcomponents.bundled.cjs",
+    //   format: "cjs",
+    //   sourcemap: true,
+    // }
   )
 } else {
   output.push({
