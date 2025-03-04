@@ -3,7 +3,13 @@
 A set of web components for Open Food Facts to help build edition interfaces
 
 - Currently, we have Search webcomponents (coded in Lit) in https://github.com/openfoodfacts/openfoodfacts-search
-- Candidates for using such webcomponents are: https://github.com/openfoodfacts/openfoodfacts-server, https://github.com/openfoodfacts/openfoodfacts-explorer, https://github.com/openfoodfacts/hunger-games and potentially open-prices
+- Under development are components for nutrition editing, and Robotoff questions
+- Projects/features that could benefit from having webcomponents: nutripatrol (display & input), folksonomy_api (display & input), knowledge panels (display), ingredients (display & input), photo upload, open prices (display & input), photo gallery/editing
+- API calls could be delegated to [openfoodfacts-nodejs](https://github.com/openfoodfacts/openfoodfacts-nodejs)
+- Candidates for using such webcomponents are: [openfoodfacts-server](https://github.com/openfoodfacts/openfoodfacts-server), [openfoodfacts-explorer](https://github.com/openfoodfacts/openfoodfacts-explorer) , [hunger-games](https://github.com/openfoodfacts/hunger-games) and potentially open-prices
+
+### NPM Package
+The components are now published on NPM
 
 ## Getting Started
 
