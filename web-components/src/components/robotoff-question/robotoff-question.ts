@@ -53,6 +53,7 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
     showMessage?: boolean
     showLoading?: boolean
     showError?: boolean
+    showImage?: boolean
   } = {}
 
   /**
@@ -153,13 +154,16 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
         if (!hasQuestions(this.productCode).get()) {
           return html``
         }
+        // Hide image only if explicitly set to false
+        const isImageShowned = this.options.showImage !== false
         return html`
           <div class="question-wrapper">
+            ${this.renderMessage()}
             ${isQuestionsFinished(this.productCode).get()
               ? nothing
               : html`
-                  ${this.renderMessage()}
                   <robotoff-question-form
+                    .showImage=${isImageShowned}
                     .question=${question}
                     @submit=${this.onQuestionAnswered}
                   ></robotoff-question-form>

@@ -25,3 +25,10 @@
 ## Fixed
 
 - Fix the property `robotoff-configuration` in `off-web-components-configuration` to be correctly set has a property of the web component.
+
+## [1.2.0] - 2025-03-05
+
+## Changed
+
+- Remove max-width from `robotoff-question` to allow it to be used in a flex container.
+- Add `showImage` in `options` property of `robotoff-question` to allow to hide or show the image.
