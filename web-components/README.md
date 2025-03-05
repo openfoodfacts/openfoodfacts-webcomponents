@@ -13,6 +13,10 @@ You will see the list of available components and how to use them.
 
 `npm install @openfoodfacts/openfoodfacts-webcomponents`
 
+### With CDN
+
+Link : [https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.bundled.js](https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.bundled.js)
+
 ### Import it in your project
 
 You can use the components via ES6 modules or via script tag. To be sure webcomponents are handled correctly, you have to inport the polyfill.
@@ -32,10 +36,10 @@ import * as offWebComponents from "@openfoodfacts/openfoodfacts-webcomponents/di
 #### Via script tag
 
 ```html
-<script src="path-to/webcomponents-loader.js"></script>
+<script src="<path-to-webcomponentsjs>/webcomponents-loader.js"></script>
 <script
   type="module"
-  src="https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.bundled.js"
+  src="<path-to-openfoodfacts-webcomponents>/dist/off-webcomponents.bundled.js"
 ></script>
 `
 ```
