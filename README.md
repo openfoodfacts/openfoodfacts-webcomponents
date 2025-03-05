@@ -48,3 +48,5 @@ To have it, you need to follow these steps:
 4. Go to any product page and upload an image that you want to annotate. The image should not already exist on this product.
 5. Go to http://wc.openfoodfacts.net:8000 to get cookie for api. It will redirect you to the local index.html page.
 6. Use the `barcode` of the product to annotate it.
+
+### To use it like a library check the [webcomponents/README.md](webcomponents/README.md) file
