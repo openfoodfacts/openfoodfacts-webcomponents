@@ -30,7 +30,7 @@
     "translations:build": "lit-localize build && rollup -c language.rollup.config.js",
     "translations:extract": "npm run translations:update-language-codes && lit-localize extract",
     "format": "prettier \"**/*.{cjs,html,js,json,md,ts}\" --ignore-path ./.eslintignore --write",
-    "doc:package": "cp README.md dist/README.md && cp ../LICENSE dist/LICENSE && cp ../CHANGELOG.md dist/CHANGELOG.md",
+    "doc:package": "cp README.md dist/README.md && cp ../LICENSE dist/LICENSE",
     "prepare:package": "rm -rf ./dist && npm run build",
     "publish:package": "npm run prepare:package && npm run doc:package && npm publish --access=public",
     "analyze": "cem analyze --litelement --globs \"src/**/*.ts\" --outdir docs",
