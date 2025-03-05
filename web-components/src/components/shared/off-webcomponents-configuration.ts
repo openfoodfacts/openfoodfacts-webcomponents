@@ -26,7 +26,6 @@ const CONFIGURATION_PROPERTIES: Record<
     },
     fn: (value: RobotoffConfigurationOptions) => {
       // Set the robotoff configuration
-      debugger
       robotoffConfiguration.set(value)
     },
   },

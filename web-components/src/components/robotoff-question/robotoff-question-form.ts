@@ -20,17 +20,15 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
     css`
       :host {
         display: block;
-        max-width: 800px;
       }
 
       .question-form {
         display: flex;
         align-items: center;
         flex-direction: column;
-        gap: 1rem;
       }
-
       .question-img-wrapper {
+        margin-top: 1rem;
         position: relative;
         justify-content: center;
         width: 100px;
@@ -62,6 +60,12 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
   question?: Question
 
   /**
+   * Show the image or not.
+   */
+  @property({ type: Boolean })
+  showImage?: boolean = true
+
+  /**
    * The image size is zoomed or not.
    */
   @state()
@@ -91,7 +95,7 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
   }
 
   private _renderImage() {
-    if (!this.question?.source_image_url) {
+    if (!this.showImage || !this.question?.source_image_url) {
       return nothing
     }
 
