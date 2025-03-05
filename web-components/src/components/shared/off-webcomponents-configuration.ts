@@ -26,6 +26,7 @@ const CONFIGURATION_PROPERTIES: Record<
     },
     fn: (value: RobotoffConfigurationOptions) => {
       // Set the robotoff configuration
+      debugger
       robotoffConfiguration.set(value)
     },
   },
@@ -49,6 +50,7 @@ export class OffWebcomponentsConfiguration extends LitElement {
    * The robotoff configuration object.
    * @type {RobotoffConfigurationOptions}
    */
+  @property({ type: Object, attribute: "robotoff-configuration" })
   robotoffConfiguration: RobotoffConfigurationOptions = {
     ...DEFAULT_ROBOTOFF_CONFIGURATION,
   }

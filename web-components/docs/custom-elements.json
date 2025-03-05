@@ -1496,136 +1496,62 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/icons/rotate-left.ts",
+      "path": "src/components/buttons/zoom-unzoom-button.ts",
       "declarations": [
         {
           "kind": "class",
-          "description": "Rotate left icon",
-          "name": "RotateLeftIcon",
-          "members": [],
+          "description": "",
+          "name": "ZoomUnzoomButton",
+          "members": [
+            {
+              "kind": "field",
+              "name": "zoomed",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "zoomed"
+            }
+          ],
+          "events": [
+            {
+              "description": "Fired when the button is clicked",
+              "name": "click"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "zoomed",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "zoomed"
+            }
+          ],
           "superclass": {
             "name": "LitElement",
             "package": "lit"
           },
-          "tagName": "rotate-left-icon",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "rotate-left-icon",
-          "declaration": {
-            "name": "RotateLeftIcon",
-            "module": "src/components/icons/rotate-left.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/icons/rotate-right.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Rotate right icon",
-          "name": "RotateRightIcon",
-          "members": [],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "rotate-right-icon",
+          "tagName": "zoom-unzoom-button",
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "RotateRightIcon",
+          "name": "ZoomUnzoomButton",
           "declaration": {
-            "name": "RotateRightIcon",
-            "module": "src/components/icons/rotate-right.ts"
+            "name": "ZoomUnzoomButton",
+            "module": "src/components/buttons/zoom-unzoom-button.ts"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "rotate-right-icon",
+          "name": "zoom-unzoom-button",
           "declaration": {
-            "name": "RotateRightIcon",
-            "module": "src/components/icons/rotate-right.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/icons/unzoom.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Component that displays a unzoom icon.",
-          "name": "UnzoomIcon",
-          "members": [],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "unzoom-icon",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UnzoomIcon",
-          "declaration": {
-            "name": "UnzoomIcon",
-            "module": "src/components/icons/unzoom.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "unzoom-icon",
-          "declaration": {
-            "name": "UnzoomIcon",
-            "module": "src/components/icons/unzoom.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/icons/zoom.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Component that displays a zoom icon.",
-          "name": "ZoomIcon",
-          "members": [],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit-element"
-          },
-          "tagName": "zoom-icon",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ZoomIcon",
-          "declaration": {
-            "name": "ZoomIcon",
-            "module": "src/components/icons/zoom.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "zoom-icon",
-          "declaration": {
-            "name": "ZoomIcon",
-            "module": "src/components/icons/zoom.ts"
+            "name": "ZoomUnzoomButton",
+            "module": "src/components/buttons/zoom-unzoom-button.ts"
           }
         }
       ]
@@ -2465,6 +2391,142 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/icons/rotate-left.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Rotate left icon",
+          "name": "RotateLeftIcon",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "rotate-left-icon",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "rotate-left-icon",
+          "declaration": {
+            "name": "RotateLeftIcon",
+            "module": "src/components/icons/rotate-left.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/icons/rotate-right.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Rotate right icon",
+          "name": "RotateRightIcon",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "rotate-right-icon",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RotateRightIcon",
+          "declaration": {
+            "name": "RotateRightIcon",
+            "module": "src/components/icons/rotate-right.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "rotate-right-icon",
+          "declaration": {
+            "name": "RotateRightIcon",
+            "module": "src/components/icons/rotate-right.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/icons/unzoom.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Component that displays a unzoom icon.",
+          "name": "UnzoomIcon",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "unzoom-icon",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UnzoomIcon",
+          "declaration": {
+            "name": "UnzoomIcon",
+            "module": "src/components/icons/unzoom.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "unzoom-icon",
+          "declaration": {
+            "name": "UnzoomIcon",
+            "module": "src/components/icons/unzoom.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/icons/zoom.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Component that displays a zoom icon.",
+          "name": "ZoomIcon",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit-element"
+          },
+          "tagName": "zoom-icon",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ZoomIcon",
+          "declaration": {
+            "name": "ZoomIcon",
+            "module": "src/components/icons/zoom.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "zoom-icon",
+          "declaration": {
+            "name": "ZoomIcon",
+            "module": "src/components/icons/zoom.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/shared/loader.ts",
       "declarations": [
         {
@@ -2515,7 +2577,8 @@
                 "text": "RobotoffConfigurationOptions"
               },
               "default": "{\n    ...DEFAULT_ROBOTOFF_CONFIGURATION,\n  }",
-              "description": "The robotoff configuration object."
+              "description": "The robotoff configuration object.",
+              "attribute": "robotoff-configuration"
             },
             {
               "kind": "field",
@@ -2541,6 +2604,15 @@
               },
               "fieldName": "languageCode",
               "attribute": "language-code"
+            },
+            {
+              "name": "robotoff-configuration",
+              "type": {
+                "text": "RobotoffConfigurationOptions"
+              },
+              "default": "{\n    ...DEFAULT_ROBOTOFF_CONFIGURATION,\n  }",
+              "description": "The robotoff configuration object.",
+              "fieldName": "robotoffConfiguration"
             }
           ],
           "superclass": {
@@ -2801,68 +2873,6 @@
           "declaration": {
             "name": "allLocales",
             "module": "src/localization/generated/locale-codes.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/buttons/zoom-unzoom-button.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ZoomUnzoomButton",
-          "members": [
-            {
-              "kind": "field",
-              "name": "zoomed",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "attribute": "zoomed"
-            }
-          ],
-          "events": [
-            {
-              "description": "Fired when the button is clicked",
-              "name": "click"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "zoomed",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "fieldName": "zoomed"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "zoom-unzoom-button",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ZoomUnzoomButton",
-          "declaration": {
-            "name": "ZoomUnzoomButton",
-            "module": "src/components/buttons/zoom-unzoom-button.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "zoom-unzoom-button",
-          "declaration": {
-            "name": "ZoomUnzoomButton",
-            "module": "src/components/buttons/zoom-unzoom-button.ts"
           }
         }
       ]
