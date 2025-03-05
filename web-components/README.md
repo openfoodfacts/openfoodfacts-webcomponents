@@ -41,7 +41,6 @@ import * as offWebComponents from "@openfoodfacts/openfoodfacts-webcomponents/di
   type="module"
   src="<path-to-openfoodfacts-webcomponents>/dist/off-webcomponents.bundled.js"
 ></script>
-`
 ```
 
 ### Usage
