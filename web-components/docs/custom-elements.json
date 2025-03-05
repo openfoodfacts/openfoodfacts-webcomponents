@@ -2203,6 +2203,268 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/robotoff-question/robotoff-question-form.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "RobotoffQuestionForm component\nIt displays a form to answer a question about a product.",
+          "name": "RobotoffQuestionForm",
+          "members": [
+            {
+              "kind": "field",
+              "name": "question",
+              "type": {
+                "text": "Question | undefined"
+              },
+              "description": "The question to display.",
+              "attribute": "question",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "_zoomed",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "The image size is zoomed or not."
+            },
+            {
+              "kind": "field",
+              "name": "emitEventClick",
+              "privacy": "private",
+              "description": "Emit an event submit when the user clicks on a button.\nIt stops the propagation of the event to avoid the click event on the parent."
+            },
+            {
+              "kind": "field",
+              "name": "_annotateProduct",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_toggleImageSize",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_renderImage",
+              "privacy": "private"
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "EventType.SUBMIT"
+              },
+              "description": "When the form is submitted",
+              "name": ""
+            }
+          ],
+          "attributes": [
+            {
+              "name": "question",
+              "type": {
+                "text": "Question | undefined"
+              },
+              "description": "The question to display.",
+              "fieldName": "question"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@lit-labs/signals"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "robotoff-question-form",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RobotoffQuestionForm",
+          "declaration": {
+            "name": "RobotoffQuestionForm",
+            "module": "src/components/robotoff-question/robotoff-question-form.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "robotoff-question-form",
+          "declaration": {
+            "name": "RobotoffQuestionForm",
+            "module": "src/components/robotoff-question/robotoff-question-form.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/robotoff-question/robotoff-question.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Robotoff question component",
+          "name": "RobotoffQuestion",
+          "members": [
+            {
+              "kind": "field",
+              "name": "options",
+              "type": {
+                "text": "Object"
+              },
+              "default": "{}",
+              "description": "Options for the component",
+              "attribute": "options",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "productCode",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "description": "The product code to fetch questions for",
+              "attribute": "product-code"
+            },
+            {
+              "kind": "field",
+              "name": "insightTypes",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "description": "The insight types to filter questions separate by comma",
+              "attribute": "insight-types"
+            },
+            {
+              "kind": "field",
+              "name": "hasAnswered",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "Whether the user has answered the question"
+            },
+            {
+              "kind": "field",
+              "name": "_questionsTask",
+              "privacy": "private",
+              "default": "new Task(this, {\n    task: async ([productCode, insightTypes], {}) => {\n      this.hasAnswered = false\n      if (!productCode) {\n        return []\n      }\n      const params = insightTypes ? { insight_types: insightTypes } : {}\n\n      await fetchQuestionsByProductCode(productCode, params)\n      this._emitQuestionStateEvent()\n      return questions(productCode).get()\n    },\n    args: () => [this.productCode, this.insightTypes],\n  })",
+              "description": "Task to fetch questions for the given product code",
+              "type": {
+                "text": "Task"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_emitQuestionStateEvent",
+              "privacy": "private",
+              "description": "Emit a custom event when the question state changes to know current state outside the component",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              }
+            },
+            {
+              "kind": "field",
+              "name": "onQuestionAnswered",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "renderMessage",
+              "privacy": "private",
+              "description": "Render the message to display to the user",
+              "return": {
+                "type": {
+                  "text": "TemplateResult"
+                }
+              }
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "EventType.QUESTION_STATE"
+              },
+              "description": "When the state of the question changes",
+              "name": ""
+            }
+          ],
+          "attributes": [
+            {
+              "name": "options",
+              "type": {
+                "text": "Object"
+              },
+              "default": "{}",
+              "description": "Options for the component",
+              "fieldName": "options"
+            },
+            {
+              "name": "product-code",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "description": "The product code to fetch questions for",
+              "fieldName": "productCode"
+            },
+            {
+              "name": "insight-types",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "description": "The insight types to filter questions separate by comma",
+              "fieldName": "insightTypes"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@lit-labs/signals"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "robotoff-question",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RobotoffQuestion",
+          "declaration": {
+            "name": "RobotoffQuestion",
+            "module": "src/components/robotoff-question/robotoff-question.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "robotoff-question",
+          "declaration": {
+            "name": "RobotoffQuestion",
+            "module": "src/components/robotoff-question/robotoff-question.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/shared/loader.ts",
       "declarations": [
         {
@@ -2489,6 +2751,62 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/localization/generated/locale-codes.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "sourceLocale",
+          "default": "`en`",
+          "description": "The locale code that templates in this source code are written in."
+        },
+        {
+          "kind": "variable",
+          "name": "targetLocales",
+          "type": {
+            "text": "[\n  `af`,\n  `am`,\n  `ar`,\n  `ay`,\n  `az`,\n  `be`,\n  `bg`,\n  `bi`,\n  `bn`,\n  `bs`,\n  `ca`,\n  `ch`,\n  `cs`,\n  `cy`,\n  `da`,\n  `de`,\n  `dv`,\n  `dz`,\n  `el`,\n  `es`,\n  `et`,\n  `eu`,\n  `fa`,\n  `fi`,\n  `fj`,\n  `fr`,\n  `ga`,\n  `gd`,\n  `gl`,\n  `gn`,\n  `gv`,\n  `he`,\n  `hi`,\n  `ho`,\n  `hr`,\n  `ht`,\n  `hu`,\n  `hy`,\n  `id`,\n  `is`,\n  `it`,\n  `ja`,\n  `ka`,\n  `kk`,\n  `kl`,\n  `km`,\n  `ko`,\n  `ku`,\n  `ky`,\n  `la`,\n  `lb`,\n  `lo`,\n  `lt`,\n  `lv`,\n  `mg`,\n  `mh`,\n  `mi`,\n  `mk`,\n  `mn`,\n  `ms`,\n  `mt`,\n  `my`,\n  `na`,\n  `nb`,\n  `nd`,\n  `ne`,\n  `nl`,\n  `nr`,\n  `ny`,\n  `pap`,\n  `pl`,\n  `prs`,\n  `ps`,\n  `pt`,\n  `qu`,\n  `rn`,\n  `ro`,\n  `ru`,\n  `rw`,\n  `sg`,\n  `si`,\n  `sk`,\n  `sl`,\n  `sm`,\n  `sn`,\n  `so`,\n  `sq`,\n  `sr`,\n  `ss`,\n  `st`,\n  `sv`,\n  `sw`,\n  `ta`,\n  `tg`,\n  `th`,\n  `ti`,\n  `tk`,\n  `tl`,\n  `tn`,\n  `to`,\n  `tr`,\n  `ts`,\n  `uk`,\n  `ur`,\n  `uz`,\n  `ve`,\n  `vi`,\n  `xh`,\n  `zh`,\n  `zu`,\n]"
+          },
+          "default": "[\n  `af`,\n  `am`,\n  `ar`,\n  `ay`,\n  `az`,\n  `be`,\n  `bg`,\n  `bi`,\n  `bn`,\n  `bs`,\n  `ca`,\n  `ch`,\n  `cs`,\n  `cy`,\n  `da`,\n  `de`,\n  `dv`,\n  `dz`,\n  `el`,\n  `es`,\n  `et`,\n  `eu`,\n  `fa`,\n  `fi`,\n  `fj`,\n  `fr`,\n  `ga`,\n  `gd`,\n  `gl`,\n  `gn`,\n  `gv`,\n  `he`,\n  `hi`,\n  `ho`,\n  `hr`,\n  `ht`,\n  `hu`,\n  `hy`,\n  `id`,\n  `is`,\n  `it`,\n  `ja`,\n  `ka`,\n  `kk`,\n  `kl`,\n  `km`,\n  `ko`,\n  `ku`,\n  `ky`,\n  `la`,\n  `lb`,\n  `lo`,\n  `lt`,\n  `lv`,\n  `mg`,\n  `mh`,\n  `mi`,\n  `mk`,\n  `mn`,\n  `ms`,\n  `mt`,\n  `my`,\n  `na`,\n  `nb`,\n  `nd`,\n  `ne`,\n  `nl`,\n  `nr`,\n  `ny`,\n  `pap`,\n  `pl`,\n  `prs`,\n  `ps`,\n  `pt`,\n  `qu`,\n  `rn`,\n  `ro`,\n  `ru`,\n  `rw`,\n  `sg`,\n  `si`,\n  `sk`,\n  `sl`,\n  `sm`,\n  `sn`,\n  `so`,\n  `sq`,\n  `sr`,\n  `ss`,\n  `st`,\n  `sv`,\n  `sw`,\n  `ta`,\n  `tg`,\n  `th`,\n  `ti`,\n  `tk`,\n  `tl`,\n  `tn`,\n  `to`,\n  `tr`,\n  `ts`,\n  `uk`,\n  `ur`,\n  `uz`,\n  `ve`,\n  `vi`,\n  `xh`,\n  `zh`,\n  `zu`,\n]",
+          "description": "The other locale codes that this application is localized into. Sorted\nlexicographically."
+        },
+        {
+          "kind": "variable",
+          "name": "allLocales",
+          "type": {
+            "text": "[\n  `af`,\n  `am`,\n  `ar`,\n  `ay`,\n  `az`,\n  `be`,\n  `bg`,\n  `bi`,\n  `bn`,\n  `bs`,\n  `ca`,\n  `ch`,\n  `cs`,\n  `cy`,\n  `da`,\n  `de`,\n  `dv`,\n  `dz`,\n  `el`,\n  `en`,\n  `es`,\n  `et`,\n  `eu`,\n  `fa`,\n  `fi`,\n  `fj`,\n  `fr`,\n  `ga`,\n  `gd`,\n  `gl`,\n  `gn`,\n  `gv`,\n  `he`,\n  `hi`,\n  `ho`,\n  `hr`,\n  `ht`,\n  `hu`,\n  `hy`,\n  `id`,\n  `is`,\n  `it`,\n  `ja`,\n  `ka`,\n  `kk`,\n  `kl`,\n  `km`,\n  `ko`,\n  `ku`,\n  `ky`,\n  `la`,\n  `lb`,\n  `lo`,\n  `lt`,\n  `lv`,\n  `mg`,\n  `mh`,\n  `mi`,\n  `mk`,\n  `mn`,\n  `ms`,\n  `mt`,\n  `my`,\n  `na`,\n  `nb`,\n  `nd`,\n  `ne`,\n  `nl`,\n  `nr`,\n  `ny`,\n  `pap`,\n  `pl`,\n  `prs`,\n  `ps`,\n  `pt`,\n  `qu`,\n  `rn`,\n  `ro`,\n  `ru`,\n  `rw`,\n  `sg`,\n  `si`,\n  `sk`,\n  `sl`,\n  `sm`,\n  `sn`,\n  `so`,\n  `sq`,\n  `sr`,\n  `ss`,\n  `st`,\n  `sv`,\n  `sw`,\n  `ta`,\n  `tg`,\n  `th`,\n  `ti`,\n  `tk`,\n  `tl`,\n  `tn`,\n  `to`,\n  `tr`,\n  `ts`,\n  `uk`,\n  `ur`,\n  `uz`,\n  `ve`,\n  `vi`,\n  `xh`,\n  `zh`,\n  `zu`,\n]"
+          },
+          "default": "[\n  `af`,\n  `am`,\n  `ar`,\n  `ay`,\n  `az`,\n  `be`,\n  `bg`,\n  `bi`,\n  `bn`,\n  `bs`,\n  `ca`,\n  `ch`,\n  `cs`,\n  `cy`,\n  `da`,\n  `de`,\n  `dv`,\n  `dz`,\n  `el`,\n  `en`,\n  `es`,\n  `et`,\n  `eu`,\n  `fa`,\n  `fi`,\n  `fj`,\n  `fr`,\n  `ga`,\n  `gd`,\n  `gl`,\n  `gn`,\n  `gv`,\n  `he`,\n  `hi`,\n  `ho`,\n  `hr`,\n  `ht`,\n  `hu`,\n  `hy`,\n  `id`,\n  `is`,\n  `it`,\n  `ja`,\n  `ka`,\n  `kk`,\n  `kl`,\n  `km`,\n  `ko`,\n  `ku`,\n  `ky`,\n  `la`,\n  `lb`,\n  `lo`,\n  `lt`,\n  `lv`,\n  `mg`,\n  `mh`,\n  `mi`,\n  `mk`,\n  `mn`,\n  `ms`,\n  `mt`,\n  `my`,\n  `na`,\n  `nb`,\n  `nd`,\n  `ne`,\n  `nl`,\n  `nr`,\n  `ny`,\n  `pap`,\n  `pl`,\n  `prs`,\n  `ps`,\n  `pt`,\n  `qu`,\n  `rn`,\n  `ro`,\n  `ru`,\n  `rw`,\n  `sg`,\n  `si`,\n  `sk`,\n  `sl`,\n  `sm`,\n  `sn`,\n  `so`,\n  `sq`,\n  `sr`,\n  `ss`,\n  `st`,\n  `sv`,\n  `sw`,\n  `ta`,\n  `tg`,\n  `th`,\n  `ti`,\n  `tk`,\n  `tl`,\n  `tn`,\n  `to`,\n  `tr`,\n  `ts`,\n  `uk`,\n  `ur`,\n  `uz`,\n  `ve`,\n  `vi`,\n  `xh`,\n  `zh`,\n  `zu`,\n]",
+          "description": "All valid project locale codes. Sorted lexicographically."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "sourceLocale",
+          "declaration": {
+            "name": "sourceLocale",
+            "module": "src/localization/generated/locale-codes.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "targetLocales",
+          "declaration": {
+            "name": "targetLocales",
+            "module": "src/localization/generated/locale-codes.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "allLocales",
+          "declaration": {
+            "name": "allLocales",
+            "module": "src/localization/generated/locale-codes.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/buttons/zoom-unzoom-button.ts",
       "declarations": [
         {
@@ -2545,324 +2863,6 @@
           "declaration": {
             "name": "ZoomUnzoomButton",
             "module": "src/components/buttons/zoom-unzoom-button.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/robotoff-question/robotoff-question-form.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "RobotoffQuestionForm component\nIt displays a form to answer a question about a product.",
-          "name": "RobotoffQuestionForm",
-          "members": [
-            {
-              "kind": "field",
-              "name": "question",
-              "type": {
-                "text": "Question | undefined"
-              },
-              "description": "The question to display.",
-              "attribute": "question",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "_zoomed",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false",
-              "description": "The image size is zoomed or not."
-            },
-            {
-              "kind": "field",
-              "name": "emitEventClick",
-              "privacy": "private",
-              "description": "Emit an event submit when the user clicks on a button.\nIt stops the propagation of the event to avoid the click event on the parent."
-            },
-            {
-              "kind": "field",
-              "name": "_annotateProduct",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "_toggleImageSize",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "_renderImage",
-              "privacy": "private"
-            }
-          ],
-          "events": [
-            {
-              "type": {
-                "text": "EventType.SUBMIT"
-              },
-              "description": "When the form is submitted",
-              "name": ""
-            }
-          ],
-          "attributes": [
-            {
-              "name": "question",
-              "type": {
-                "text": "Question | undefined"
-              },
-              "description": "The question to display.",
-              "fieldName": "question"
-            }
-          ],
-          "mixins": [
-            {
-              "name": "SignalWatcher",
-              "package": "@lit-labs/signals"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "robotoff-question-form",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "RobotoffQuestionForm",
-          "declaration": {
-            "name": "RobotoffQuestionForm",
-            "module": "src/components/robotoff-question/robotoff-question-form.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "robotoff-question-form",
-          "declaration": {
-            "name": "RobotoffQuestionForm",
-            "module": "src/components/robotoff-question/robotoff-question-form.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/robotoff-question/robotoff-question.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Robotoff question component",
-          "name": "RobotoffQuestion",
-          "members": [
-            {
-              "kind": "field",
-              "name": "options",
-              "type": {
-                "text": "Object"
-              },
-              "default": "{}",
-              "description": "Options for the component",
-              "attribute": "options",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "productCode",
-              "type": {
-                "text": "string"
-              },
-              "default": "\"\"",
-              "description": "The product code to fetch questions for",
-              "attribute": "product-code"
-            },
-            {
-              "kind": "field",
-              "name": "insightTypes",
-              "type": {
-                "text": "string"
-              },
-              "default": "\"\"",
-              "description": "The insight types to filter questions separate by comma",
-              "attribute": "insight-types"
-            },
-            {
-              "kind": "field",
-              "name": "hasAnswered",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false",
-              "description": "Whether the user has answered the question"
-            },
-            {
-              "kind": "field",
-              "name": "_questionsTask",
-              "privacy": "private",
-              "default": "new Task(this, {\n    task: async ([productCode, insightTypes], {}) => {\n      this.hasAnswered = false\n      if (!productCode) {\n        return []\n      }\n      const params = insightTypes ? { insight_types: insightTypes } : {}\n\n      await fetchQuestionsByProductCode(productCode, params)\n      this._emitQuestionStateEvent()\n      return questions(productCode).get()\n    },\n    args: () => [this.productCode, this.insightTypes],\n  })",
-              "description": "Task to fetch questions for the given product code",
-              "type": {
-                "text": "Task"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_emitQuestionStateEvent",
-              "privacy": "private",
-              "description": "Emit a custom event when the question state changes to know current state outside the component",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              }
-            },
-            {
-              "kind": "field",
-              "name": "onQuestionAnswered",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "renderMessage",
-              "privacy": "private",
-              "description": "Render the message to display to the user",
-              "return": {
-                "type": {
-                  "text": "TemplateResult"
-                }
-              }
-            }
-          ],
-          "events": [
-            {
-              "type": {
-                "text": "EventType.QUESTION_STATE"
-              },
-              "description": "When the state of the question changes",
-              "name": ""
-            }
-          ],
-          "attributes": [
-            {
-              "name": "options",
-              "type": {
-                "text": "Object"
-              },
-              "default": "{}",
-              "description": "Options for the component",
-              "fieldName": "options"
-            },
-            {
-              "name": "product-code",
-              "type": {
-                "text": "string"
-              },
-              "default": "\"\"",
-              "description": "The product code to fetch questions for",
-              "fieldName": "productCode"
-            },
-            {
-              "name": "insight-types",
-              "type": {
-                "text": "string"
-              },
-              "default": "\"\"",
-              "description": "The insight types to filter questions separate by comma",
-              "fieldName": "insightTypes"
-            }
-          ],
-          "mixins": [
-            {
-              "name": "SignalWatcher",
-              "package": "@lit-labs/signals"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "robotoff-question",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "RobotoffQuestion",
-          "declaration": {
-            "name": "RobotoffQuestion",
-            "module": "src/components/robotoff-question/robotoff-question.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "robotoff-question",
-          "declaration": {
-            "name": "RobotoffQuestion",
-            "module": "src/components/robotoff-question/robotoff-question.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/localization/generated/locale-codes.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "sourceLocale",
-          "default": "`en`",
-          "description": "The locale code that templates in this source code are written in."
-        },
-        {
-          "kind": "variable",
-          "name": "targetLocales",
-          "type": {
-            "text": "[\n  `af`,\n  `am`,\n  `ar`,\n  `ay`,\n  `az`,\n  `be`,\n  `bg`,\n  `bi`,\n  `bn`,\n  `bs`,\n  `ca`,\n  `ch`,\n  `cs`,\n  `cy`,\n  `da`,\n  `de`,\n  `dv`,\n  `dz`,\n  `el`,\n  `es`,\n  `et`,\n  `eu`,\n  `fa`,\n  `fi`,\n  `fj`,\n  `fr`,\n  `ga`,\n  `gd`,\n  `gl`,\n  `gn`,\n  `gv`,\n  `he`,\n  `hi`,\n  `ho`,\n  `hr`,\n  `ht`,\n  `hu`,\n  `hy`,\n  `id`,\n  `is`,\n  `it`,\n  `ja`,\n  `ka`,\n  `kk`,\n  `kl`,\n  `km`,\n  `ko`,\n  `ku`,\n  `ky`,\n  `la`,\n  `lb`,\n  `lo`,\n  `lt`,\n  `lv`,\n  `mg`,\n  `mh`,\n  `mi`,\n  `mk`,\n  `mn`,\n  `ms`,\n  `mt`,\n  `my`,\n  `na`,\n  `nb`,\n  `nd`,\n  `ne`,\n  `nl`,\n  `nr`,\n  `ny`,\n  `pap`,\n  `pl`,\n  `prs`,\n  `ps`,\n  `pt`,\n  `qu`,\n  `rn`,\n  `ro`,\n  `ru`,\n  `rw`,\n  `sg`,\n  `si`,\n  `sk`,\n  `sl`,\n  `sm`,\n  `sn`,\n  `so`,\n  `sq`,\n  `sr`,\n  `ss`,\n  `st`,\n  `sv`,\n  `sw`,\n  `ta`,\n  `tg`,\n  `th`,\n  `ti`,\n  `tk`,\n  `tl`,\n  `tn`,\n  `to`,\n  `tr`,\n  `ts`,\n  `uk`,\n  `ur`,\n  `uz`,\n  `ve`,\n  `vi`,\n  `xh`,\n  `zh`,\n  `zu`,\n]"
-          },
-          "default": "[\n  `af`,\n  `am`,\n  `ar`,\n  `ay`,\n  `az`,\n  `be`,\n  `bg`,\n  `bi`,\n  `bn`,\n  `bs`,\n  `ca`,\n  `ch`,\n  `cs`,\n  `cy`,\n  `da`,\n  `de`,\n  `dv`,\n  `dz`,\n  `el`,\n  `es`,\n  `et`,\n  `eu`,\n  `fa`,\n  `fi`,\n  `fj`,\n  `fr`,\n  `ga`,\n  `gd`,\n  `gl`,\n  `gn`,\n  `gv`,\n  `he`,\n  `hi`,\n  `ho`,\n  `hr`,\n  `ht`,\n  `hu`,\n  `hy`,\n  `id`,\n  `is`,\n  `it`,\n  `ja`,\n  `ka`,\n  `kk`,\n  `kl`,\n  `km`,\n  `ko`,\n  `ku`,\n  `ky`,\n  `la`,\n  `lb`,\n  `lo`,\n  `lt`,\n  `lv`,\n  `mg`,\n  `mh`,\n  `mi`,\n  `mk`,\n  `mn`,\n  `ms`,\n  `mt`,\n  `my`,\n  `na`,\n  `nb`,\n  `nd`,\n  `ne`,\n  `nl`,\n  `nr`,\n  `ny`,\n  `pap`,\n  `pl`,\n  `prs`,\n  `ps`,\n  `pt`,\n  `qu`,\n  `rn`,\n  `ro`,\n  `ru`,\n  `rw`,\n  `sg`,\n  `si`,\n  `sk`,\n  `sl`,\n  `sm`,\n  `sn`,\n  `so`,\n  `sq`,\n  `sr`,\n  `ss`,\n  `st`,\n  `sv`,\n  `sw`,\n  `ta`,\n  `tg`,\n  `th`,\n  `ti`,\n  `tk`,\n  `tl`,\n  `tn`,\n  `to`,\n  `tr`,\n  `ts`,\n  `uk`,\n  `ur`,\n  `uz`,\n  `ve`,\n  `vi`,\n  `xh`,\n  `zh`,\n  `zu`,\n]",
-          "description": "The other locale codes that this application is localized into. Sorted\nlexicographically."
-        },
-        {
-          "kind": "variable",
-          "name": "allLocales",
-          "type": {
-            "text": "[\n  `af`,\n  `am`,\n  `ar`,\n  `ay`,\n  `az`,\n  `be`,\n  `bg`,\n  `bi`,\n  `bn`,\n  `bs`,\n  `ca`,\n  `ch`,\n  `cs`,\n  `cy`,\n  `da`,\n  `de`,\n  `dv`,\n  `dz`,\n  `el`,\n  `en`,\n  `es`,\n  `et`,\n  `eu`,\n  `fa`,\n  `fi`,\n  `fj`,\n  `fr`,\n  `ga`,\n  `gd`,\n  `gl`,\n  `gn`,\n  `gv`,\n  `he`,\n  `hi`,\n  `ho`,\n  `hr`,\n  `ht`,\n  `hu`,\n  `hy`,\n  `id`,\n  `is`,\n  `it`,\n  `ja`,\n  `ka`,\n  `kk`,\n  `kl`,\n  `km`,\n  `ko`,\n  `ku`,\n  `ky`,\n  `la`,\n  `lb`,\n  `lo`,\n  `lt`,\n  `lv`,\n  `mg`,\n  `mh`,\n  `mi`,\n  `mk`,\n  `mn`,\n  `ms`,\n  `mt`,\n  `my`,\n  `na`,\n  `nb`,\n  `nd`,\n  `ne`,\n  `nl`,\n  `nr`,\n  `ny`,\n  `pap`,\n  `pl`,\n  `prs`,\n  `ps`,\n  `pt`,\n  `qu`,\n  `rn`,\n  `ro`,\n  `ru`,\n  `rw`,\n  `sg`,\n  `si`,\n  `sk`,\n  `sl`,\n  `sm`,\n  `sn`,\n  `so`,\n  `sq`,\n  `sr`,\n  `ss`,\n  `st`,\n  `sv`,\n  `sw`,\n  `ta`,\n  `tg`,\n  `th`,\n  `ti`,\n  `tk`,\n  `tl`,\n  `tn`,\n  `to`,\n  `tr`,\n  `ts`,\n  `uk`,\n  `ur`,\n  `uz`,\n  `ve`,\n  `vi`,\n  `xh`,\n  `zh`,\n  `zu`,\n]"
-          },
-          "default": "[\n  `af`,\n  `am`,\n  `ar`,\n  `ay`,\n  `az`,\n  `be`,\n  `bg`,\n  `bi`,\n  `bn`,\n  `bs`,\n  `ca`,\n  `ch`,\n  `cs`,\n  `cy`,\n  `da`,\n  `de`,\n  `dv`,\n  `dz`,\n  `el`,\n  `en`,\n  `es`,\n  `et`,\n  `eu`,\n  `fa`,\n  `fi`,\n  `fj`,\n  `fr`,\n  `ga`,\n  `gd`,\n  `gl`,\n  `gn`,\n  `gv`,\n  `he`,\n  `hi`,\n  `ho`,\n  `hr`,\n  `ht`,\n  `hu`,\n  `hy`,\n  `id`,\n  `is`,\n  `it`,\n  `ja`,\n  `ka`,\n  `kk`,\n  `kl`,\n  `km`,\n  `ko`,\n  `ku`,\n  `ky`,\n  `la`,\n  `lb`,\n  `lo`,\n  `lt`,\n  `lv`,\n  `mg`,\n  `mh`,\n  `mi`,\n  `mk`,\n  `mn`,\n  `ms`,\n  `mt`,\n  `my`,\n  `na`,\n  `nb`,\n  `nd`,\n  `ne`,\n  `nl`,\n  `nr`,\n  `ny`,\n  `pap`,\n  `pl`,\n  `prs`,\n  `ps`,\n  `pt`,\n  `qu`,\n  `rn`,\n  `ro`,\n  `ru`,\n  `rw`,\n  `sg`,\n  `si`,\n  `sk`,\n  `sl`,\n  `sm`,\n  `sn`,\n  `so`,\n  `sq`,\n  `sr`,\n  `ss`,\n  `st`,\n  `sv`,\n  `sw`,\n  `ta`,\n  `tg`,\n  `th`,\n  `ti`,\n  `tk`,\n  `tl`,\n  `tn`,\n  `to`,\n  `tr`,\n  `ts`,\n  `uk`,\n  `ur`,\n  `uz`,\n  `ve`,\n  `vi`,\n  `xh`,\n  `zh`,\n  `zu`,\n]",
-          "description": "All valid project locale codes. Sorted lexicographically."
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "sourceLocale",
-          "declaration": {
-            "name": "sourceLocale",
-            "module": "src/localization/generated/locale-codes.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "targetLocales",
-          "declaration": {
-            "name": "targetLocales",
-            "module": "src/localization/generated/locale-codes.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "allLocales",
-          "declaration": {
-            "name": "allLocales",
-            "module": "src/localization/generated/locale-codes.ts"
           }
         }
       ]
