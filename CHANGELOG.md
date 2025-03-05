@@ -19,3 +19,9 @@
 
 - Change the `robotoff-configuration` to `off-web-components-configuration` to add all possible configuration for the web components, in this case `language-code`
 - Build language files with rollup for the web components to fix the issue wit html from lit.
+
+## [1.1.1] - 2025-03-05
+
+## Fixed
+
+- Fix the property `robotoff-configuration` in `off-web-components-configuration` to be correctly set has a property of the web component.
