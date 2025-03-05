@@ -96,16 +96,6 @@ export class RobotoffNutrients extends LitElement {
   })
 
   /**
-   * Annotate the nutrients insights
-   * @param event
-   */
-  onSubmit = async (event: CustomEvent<InsightAnnotationAnswer>) => {
-    await annotateNutrients(event.detail)
-    this.isSubmited = true
-    this.showSuccessMessage = true
-    setTimeout(() => (this.showSuccessMessage = false), 3000)
-  }
-  /**
    * Render messages
    * @returns {TemplateResult | typeof nothing}
    */
@@ -124,6 +114,17 @@ export class RobotoffNutrients extends LitElement {
       return msg("Thank you for your contribution!")
     }
     return nothing
+  }
+
+  /**
+   * Annotate the nutrients insights
+   * @returns {Promise<void>}
+   */
+  async onSubmit(event: CustomEvent<InsightAnnotationAnswer>) {
+    await annotateNutrients(event.detail)
+    this.isSubmited = true
+    this.showSuccessMessage = true
+    setTimeout(() => (this.showSuccessMessage = false), 3000)
   }
 
   hideImage() {

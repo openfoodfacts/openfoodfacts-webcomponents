@@ -47,9 +47,6 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
   /**
    * Options for the component
    * @type {Object}
-   * @property {boolean} showMessage - Whether to show the message
-   * @property {boolean} showLoading - Whether to show the loading indicator
-   * @property {boolean} showError - Whether to show the error message
    */
   @property({ type: Object, reflect: true })
   options: {

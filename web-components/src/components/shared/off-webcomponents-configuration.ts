@@ -47,15 +47,10 @@ const CONFIGURATION_PROPERTIES: Record<
 export class OffWebcomponentsConfiguration extends LitElement {
   /**
    * The robotoff configuration object.
-   * @attr robotoff-api-url
-   * @attr robotoff-dry-run
-   * @attr robotoff-img-url
+   * @type {RobotoffConfigurationOptions}
    */
-  @property({ type: Object, attribute: "robotoff-configuration" })
   robotoffConfiguration: RobotoffConfigurationOptions = {
-    apiUrl: DEFAULT_ROBOTOFF_CONFIGURATION.apiUrl,
-    dryRun: DEFAULT_ROBOTOFF_CONFIGURATION.dryRun,
-    imgUrl: DEFAULT_ROBOTOFF_CONFIGURATION.imgUrl,
+    ...DEFAULT_ROBOTOFF_CONFIGURATION,
   }
 
   /**
