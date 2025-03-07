@@ -31,7 +31,7 @@ export const hasQuestions = (productCode: string) =>
   new Computed(() => questionIdsByProductCode.getItem(productCode)?.length > 0)
 /** Number of questions available */
 export const numberOfQuestions = (productCode: string) =>
-  new Computed(() => questionIdsByProductCode.getItem(productCode).length ?? 0)
+  new Computed(() => questionIdsByProductCode.getItem(productCode)?.length ?? 0)
 /** Indicates if all questions have been answered */
 export const isQuestionsFinished = (productCode: string) =>
   new Computed(() => isQuestionsFinishedByProductCode.getItem(productCode) ?? false)

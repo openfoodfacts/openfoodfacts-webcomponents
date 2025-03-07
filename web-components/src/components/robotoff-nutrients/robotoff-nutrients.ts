@@ -12,7 +12,8 @@ import { msg } from "@lit/localize"
 import { robotoffConfiguration } from "../../signals/robotoff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { FLEX } from "../../styles/utils"
-import { EventType } from "../../constants"
+import { EventState, EventType } from "../../constants"
+import { BasicStateEventDetail } from "../../types"
 
 /**
  * Robotoff Nutrients component
@@ -80,12 +81,15 @@ export class RobotoffNutrients extends LitElement {
   showImage = true
 
   /**
-   * Emit the nutrient state event
-   * @param {Insight} insight
+   * Emit the state event
+   * @param {EventState} state
    */
-  emitNutrientState(insight?: Insight) {
+  emitNutrientEvent(state: EventState) {
+    const detail: BasicStateEventDetail = {
+      state,
+    }
     const event = new CustomEvent(EventType.NUTRIENT_STATE, {
-      detail: { hasInsightToAnnotate: Boolean(insight) },
+      detail,
       bubbles: true,
       composed: true,
     })
@@ -103,9 +107,12 @@ export class RobotoffNutrients extends LitElement {
         return []
       }
 
+      this.emitNutrientEvent(EventState.LOADING)
+
       await Promise.all([fetchInsightsByProductCode(productCode), fetchNutrientsTaxonomies()])
+
       const value = insight(productCode).get()
-      this.emitNutrientState(value)
+      this.emitNutrientEvent(value ? EventState.HAS_DATA : EventState.NO_DATA)
       return value
     },
     args: () => [this.productCode],
@@ -140,7 +147,7 @@ export class RobotoffNutrients extends LitElement {
     await annotateNutrients(event.detail)
     this.isSubmited = true
     this.showSuccessMessage = true
-    setTimeout(() => (this.showSuccessMessage = false), 3000)
+    this.emitNutrientEvent(EventState.ANNOTATED)
   }
 
   hideImage() {

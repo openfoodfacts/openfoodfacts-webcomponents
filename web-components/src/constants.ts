@@ -18,3 +18,10 @@ export enum LoadingState {
 }
 
 export const DEFAULT_LANGUAGE_CODE = "en"
+
+export enum EventState {
+  LOADING = "loading",
+  NO_DATA = "no-data",
+  HAS_DATA = "has-data",
+  ANNOTATED = "annotated",
+}
