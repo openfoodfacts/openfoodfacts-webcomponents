@@ -5,12 +5,6 @@
     <meta charset="utf-8" />
     <title>Demo</title>
     <script type="module" src="off-webcomponents.js"></script>
-    <style>
-      p {
-        border: solid 1px blue;
-        padding: 8px;
-      }
-    </style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body style="background: #f2f2f2">
@@ -21,7 +15,7 @@
       <off-webcomponents-configuration
         language-code="fr"
         robotoff-configuration='{
-          "dryRun": true,
+          "dryRun": false,
           "apiUrl": "https://robotoff.openfoodfacts.net/api/v1",
           "imgUrl": "https://images.openfoodfacts.net/images/products"
         }'
@@ -50,6 +44,7 @@
           product-code="0628233671356"
           show-messages="true"
         >
+          <p slot="no-insight" style="text-align: center"><i>No insight</i></p>
         </robotoff-nutrients>
       </div>
     </div>
@@ -89,5 +84,9 @@
 
   robotoffQuestion.addEventListener("question-state", (event) => {
     console.log("question-state", event.detail)
+  })
+
+  robotoffNutrients.addEventListener("nutrient-state", (event) => {
+    console.log("nutrient-state", event.detail)
   })
 </script>

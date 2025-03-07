@@ -12,6 +12,7 @@ import { msg } from "@lit/localize"
 import { robotoffConfiguration } from "../../signals/robotoff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { FLEX } from "../../styles/utils"
+import { EventType } from "../../constants"
 
 /**
  * Robotoff Nutrients component
@@ -79,6 +80,19 @@ export class RobotoffNutrients extends LitElement {
   showImage = true
 
   /**
+   * Emit the nutrient state event
+   * @param {Insight} insight
+   */
+  emitNutrientState(insight?: Insight) {
+    const event = new CustomEvent(EventType.NUTRIENT_STATE, {
+      detail: { hasInsightToAnnotate: Boolean(insight) },
+      bubbles: true,
+      composed: true,
+    })
+    this.dispatchEvent(event)
+  }
+
+  /**
    * Task to get the insights for the given product code
    * it will fetch the incomplete nutrients insights and the nutrients taxonomies
    * @type {Task}
@@ -90,7 +104,9 @@ export class RobotoffNutrients extends LitElement {
       }
 
       await Promise.all([fetchInsightsByProductCode(productCode), fetchNutrientsTaxonomies()])
-      return insight(productCode).get()
+      const value = insight(productCode).get()
+      this.emitNutrientState(value)
+      return value
     },
     args: () => [this.productCode],
   })
@@ -165,7 +181,7 @@ export class RobotoffNutrients extends LitElement {
       pending: () => html`<off-wb-loader></off-wb-loader>`,
       complete: (insight) => {
         if (!insight) {
-          return html`<p>No insights</p>`
+          return html`<slot name="no-insight"></slot>`
         }
         return html`<div>
           <p class="messages-wrapper"><i>${this.renderMessages()}</i></p>

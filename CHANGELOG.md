@@ -7,9 +7,9 @@
 - Configure rollup to build the web components.
 - Implementation of `robotoff-question` web component.
 - Implementation of `robotoff-configuration` that allow to configure the interraction with the Robotoff API with :
-  - `dry-run` : to simulate the API call without actually sending the data.
-  - `api-url` : to configure the API URL.
-  - `img-url` : to configure the image URL.
+  - `dryRun` : to simulate the API call without actually sending the data.
+  - `apiUrl` : to configure the API URL.
+  - `imgUrl` : to configure the image URL.
 - Implementation of `robotoff-nutrients` web component.
 - Add docs for the web components on `web-components/docs`
 
