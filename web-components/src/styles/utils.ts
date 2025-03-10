@@ -16,6 +16,9 @@ export const FLEX = css`
   .justify-end {
     justify-content: flex-end;
   }
+  .flex-wrap {
+    flex-wrap: wrap;
+  }
   .align-center {
     align-items: center;
   }
