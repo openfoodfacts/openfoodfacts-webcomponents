@@ -1,7 +1,6 @@
 # openfoodfacts-webcomponents
 
 A set of web components for Open Food Facts to help build edition interfaces
-
 - Currently, we have Search webcomponents (coded in Lit) in https://github.com/openfoodfacts/openfoodfacts-search
 - Candidates for using such webcomponents are: https://github.com/openfoodfacts/openfoodfacts-server, https://github.com/openfoodfacts/openfoodfacts-explorer, https://github.com/openfoodfacts/hunger-games and potentially open-prices
 
@@ -9,30 +8,53 @@ A set of web components for Open Food Facts to help build edition interfaces
 
 ### Prerequisites
 
-Ensure you have Node.js and npm installed on your machine.
+Ensure you have Node.js and npm installed on your machine:
+- Node.js: version 18.0.0 or higher
+- npm: version 9.0.0 or higher
 
 ### Installation
 
-from `web-components` folder run `npm install`.
+Clone the repository:
+```bash
+git clone https://github.com/openfoodfacts/openfoodfacts-webcomponents.git
+```
 
-### Usage
+Navigate to the web-components directory:
+```bash
+cd openfoodfacts-webcomponents/web-components
+```
 
-#### Local
+Install dependencies:
+```bash
+npm install
+```
 
-If you use nvm, you can use the `.nvmrc` file to set the right node version.
+## Usage
 
-To use .nvmrc file, run the following command in root of project :
+### Local Development
 
+If you use nvm, you can use the .nvmrc file to set the right node version:
 ```bash
 nvm use
 nvm install
-
 ```
 
-To run the project locally, use the following command to build from `web-components` folder:
-`npm install`
-and then
-`npm run dev`
+To run the project locally:
+
+Navigate to the web-components directory (if not already there):
+```bash
+cd web-components
+```
+
+Install dependencies (if not already done):
+```bash
+npm install
+```
+
+Start the development server:
+```bash
+npm run dev
+```
 
 Go to http://localhost:8000 to see the demo.
 
