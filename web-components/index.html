@@ -15,10 +15,14 @@
   </head>
   <body style="background: #f2f2f2">
     <h1>List of all available components</h1>
+    
+    <button id="language-switch">Switch to English</button>
+    
     <h2>Robotoff Question</h2>
 
     <div>
       <off-webcomponents-configuration
+        id="configuration"
         language-code="fr"
         robotoff-configuration='{
           "dryRun": true,
@@ -57,7 +61,6 @@
 </html>
 
 <script>
-  // avoid too many requests
   const debounce = (callback) => {
     let timeout
     return (...args) => {
@@ -71,6 +74,8 @@
   const robotoffNutrients = document.getElementById("robotoff-nutrients")
   const productCode = document.getElementById("product-code")
   const insightTypes = document.getElementById("insight-types")
+  const configuration = document.getElementById("configuration")
+  const languageSwitch = document.getElementById("language-switch")
 
   const productDebounce = debounce((value) => {
     robotoffQuestion.setAttribute("product-code", value)
@@ -89,5 +94,14 @@
 
   robotoffQuestion.addEventListener("question-state", (event) => {
     console.log("question-state", event.detail)
+  })
+  
+  let currentLanguage = "fr"
+  
+  languageSwitch.addEventListener("click", () => {
+    currentLanguage = currentLanguage === "fr" ? "en" : "fr"
+    configuration.setAttribute("language-code", currentLanguage)
+    languageSwitch.textContent = currentLanguage === "fr" ? 
+      "Switch to English" : "Passer au français"
   })
 </script>
