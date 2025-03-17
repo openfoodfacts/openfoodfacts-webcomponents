@@ -61,6 +61,7 @@
 </html>
 
 <script>
+   // avoid too many requests
   const debounce = (callback) => {
     let timeout
     return (...args) => {
@@ -70,6 +71,7 @@
       }, 500)
     }
   }
+  
   const robotoffQuestion = document.getElementById("robotoff-question")
   const robotoffNutrients = document.getElementById("robotoff-nutrients")
   const productCode = document.getElementById("product-code")
