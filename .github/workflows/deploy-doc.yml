@@ -19,6 +19,8 @@ jobs:
         with:
           node-version: "23.7.0"
 
+      - name: Move to webcomponents directory
+        run: cd webcomponents
       - name: Install dependencies
         run: npm install
 
