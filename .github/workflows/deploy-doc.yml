@@ -19,15 +19,16 @@ jobs:
         with:
           node-version: "23.7.0"
 
-      - name: Move to webcomponents directory
-        run: cd web-components
       - name: Install dependencies
+        working-directory: ./web-components
         run: npm install
 
       - name: Build project
+        working-directory: ./web-components
         run: npm run build:doc
 
       - name: Deploy to GitHub Pages
+        working-directory: ./web-components
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
