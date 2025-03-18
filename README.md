@@ -1,7 +1,6 @@
 # openfoodfacts-webcomponents
 
 A set of web components for Open Food Facts to help build edition interfaces
-
 - Currently, we have Search webcomponents (coded in Lit) in https://github.com/openfoodfacts/openfoodfacts-search
 - Under development are components for nutrition editing, and Robotoff questions
 - Projects/features that could benefit from having webcomponents: nutripatrol (display & input), folksonomy_api (display & input), knowledge panels (display), ingredients (display & input), photo upload, open prices (display & input), photo gallery/editing
@@ -15,30 +14,51 @@ The components are now published on NPM
 
 ### Prerequisites
 
-Ensure you have Node.js and npm installed on your machine.
+Ensure you have Node.js and npm installed on your machine. We recommend using the version specified in the .nvmrc file. You can use nvm directly to install it with : `nvm install` and `nvm use`. You can find more information [here](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating).
 
 ### Installation
 
-from `web-components` folder run `npm install`.
+Clone the repository:
+```bash
+git clone https://github.com/openfoodfacts/openfoodfacts-webcomponents.git
+```
 
-### Usage
+Navigate to the web-components directory:
+```bash
+cd openfoodfacts-webcomponents/web-components
+```
 
-#### Local
+Install dependencies:
+```bash
+npm install
+```
 
-If you use nvm, you can use the `.nvmrc` file to set the right node version.
+## Usage
 
-To use .nvmrc file, run the following command in root of project :
+### Local Development
 
+If you use nvm, you can use the .nvmrc file to set the right node version:
 ```bash
 nvm use
 nvm install
-
 ```
 
-To run the project locally, use the following command to build from `web-components` folder:
-`npm install`
-and then
-`npm run dev`
+To run the project locally:
+
+Navigate to the web-components directory (if not already there):
+```bash
+cd web-components
+```
+
+Install dependencies (if not already done):
+```bash
+npm install
+```
+
+Start the development server:
+```bash
+npm run dev
+```
 
 Go to http://localhost:8000 to see the demo.
 
