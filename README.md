@@ -22,7 +22,7 @@ Update the version in `package.json` following [semantic versioning](https://sem
 
 Run the following command to build and publish the package:`npm run publish:package`
 
-Add a tag to the commit: `git tag vX.Y.Z` (replace X.Y.Z with the package version number)
+Add a tag to the commit: `git tag X.Y.Z` (replace X.Y.Z with the package version number)
 Then push the tag to GitHub: `git push --tags`
 
 ## Getting Started
