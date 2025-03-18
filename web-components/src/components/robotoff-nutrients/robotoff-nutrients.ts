@@ -12,10 +12,15 @@ import { msg } from "@lit/localize"
 import { robotoffConfiguration } from "../../signals/robotoff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { FLEX } from "../../styles/utils"
+import { EventState, EventType } from "../../constants"
+import { BasicStateEventDetail } from "../../types"
 
 /**
  * Robotoff Nutrients component
  * @element robotoff-nutrients
+ * @part nutrients - The nutrients component
+ * @part messages-wrapper - The messages wrapper
+ * @part nutrients-content-wrapper - The nutrients content wrapper
  */
 @customElement("robotoff-nutrients")
 export class RobotoffNutrients extends LitElement {
@@ -25,14 +30,8 @@ export class RobotoffNutrients extends LitElement {
     ...getButtonClasses([ButtonType.LINK]),
 
     css`
-      :host {
-        max-width: 500px;
-      }
-      .messages-wrapper {
-        margin-left: auto;
-        margin-right: auto;
+      .messages-wrapper p {
         max-width: 400px;
-        text-align: center;
       }
 
       .image-wrapper {
@@ -40,6 +39,10 @@ export class RobotoffNutrients extends LitElement {
         justify-content: center;
         align-items: center;
         margin-bottom: 1rem;
+      }
+
+      .nutrients-content-wrapper {
+        gap: 2rem 5rem;
       }
     `,
   ]
@@ -79,6 +82,22 @@ export class RobotoffNutrients extends LitElement {
   showImage = true
 
   /**
+   * Emit the state event
+   * @param {EventState} state
+   */
+  emitNutrientEvent(state: EventState) {
+    const detail: BasicStateEventDetail = {
+      state,
+    }
+    const event = new CustomEvent(EventType.NUTRIENT_STATE, {
+      detail,
+      bubbles: true,
+      composed: true,
+    })
+    this.dispatchEvent(event)
+  }
+
+  /**
    * Task to get the insights for the given product code
    * it will fetch the incomplete nutrients insights and the nutrients taxonomies
    * @type {Task}
@@ -89,8 +108,13 @@ export class RobotoffNutrients extends LitElement {
         return []
       }
 
+      this.emitNutrientEvent(EventState.LOADING)
+
       await Promise.all([fetchInsightsByProductCode(productCode), fetchNutrientsTaxonomies()])
-      return insight(productCode).get()
+
+      const value = insight(productCode).get()
+      this.emitNutrientEvent(value ? EventState.HAS_DATA : EventState.NO_DATA)
+      return value
     },
     args: () => [this.productCode],
   })
@@ -124,7 +148,7 @@ export class RobotoffNutrients extends LitElement {
     await annotateNutrients(event.detail)
     this.isSubmited = true
     this.showSuccessMessage = true
-    setTimeout(() => (this.showSuccessMessage = false), 3000)
+    this.emitNutrientEvent(EventState.ANNOTATED)
   }
 
   hideImage() {
@@ -165,16 +189,24 @@ export class RobotoffNutrients extends LitElement {
       pending: () => html`<off-wb-loader></off-wb-loader>`,
       complete: (insight) => {
         if (!insight) {
-          return html`<p>No insights</p>`
+          return html`<slot name="no-insight"></slot>`
         }
-        return html`<div>
-          <p class="messages-wrapper"><i>${this.renderMessages()}</i></p>
-          ${this.renderImage(insight as Insight)}
-          <robotoff-nutrients-table
-            .insight="${insight}"
-            @submit="${this.onSubmit}"
-          ></robotoff-nutrients-table>
-        </div> `
+        return html`
+          <div part="nutrients">
+            <div part="messages-wrapper" class="messages-wrapper">
+              <p>
+                <i>${this.renderMessages()}</i>
+              </p>
+            </div>
+            <div part="nutrients-content-wrapper" class="nutrients-content-wrapper">
+              ${this.renderImage(insight as Insight)}
+              <robotoff-nutrients-table
+                .insight="${insight}"
+                @submit="${this.onSubmit}"
+              ></robotoff-nutrients-table>
+            </div>
+          </div>
+        `
       },
       error: (error) => html`<p>Error: ${error}</p>`,
     })
