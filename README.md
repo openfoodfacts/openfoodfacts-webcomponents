@@ -20,7 +20,7 @@ To publish a new version, you need to be a member of the Open Food Facts organiz
 
 Update the version in `package.json` following [semantic versioning](https://semver.org/).
 
-Run the following command to build and publish the package:`npm run package:publish`
+Run the following command to build and publish the package:`npm run publish:package`
 
 Add a tag to the commit: `git tag vX.Y.Z` (replace X.Y.Z with the package version number)
 Then push the tag to GitHub: `git push --tags`
