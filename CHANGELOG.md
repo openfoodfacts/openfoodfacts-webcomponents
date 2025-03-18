@@ -32,3 +32,10 @@
 
 - Remove max-width from `robotoff-question` to allow it to be used in a flex container.
 - Add `showImage` in `options` property of `robotoff-question` to allow to hide or show the image.
+
+## [1.2.1] - 2025-03-18
+
+## Changed
+
+- Update event to simplify this behavior to simplify the code and make it more easier to integrate in openfoodfacts-server.
+- Add `annotated: false` to insights api call to get only the nutrients without the annotations.
