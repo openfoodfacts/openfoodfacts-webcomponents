@@ -1,4 +1,4 @@
-# openfoodfacts-webcomponents
+# openfoodfacts-webcomponents [![npm](https://img.shields.io/npm/v/@openfoodfacts/openfoodfacts-webcomponents.svg)](https://www.npmjs.com/package/@openfoodfacts/openfoodfacts-webcomponents)
 
 A set of web components for Open Food Facts to help build edition interfaces
 
