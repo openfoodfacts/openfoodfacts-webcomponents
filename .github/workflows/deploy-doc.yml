@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - update-doc-for-github-pages
 
 permissions:
   contents: read
