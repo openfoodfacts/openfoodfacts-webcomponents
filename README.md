@@ -16,14 +16,15 @@ The components are now published on NPM here: https://www.npmjs.com/package/@ope
 
 ### Publishing
 
-To publish a new version, you need to be a member of the Open Food Facts organization on npm. Then you can run:
+To publish a new version, you need to be a member of the Open Food Facts organization on npm.
 
-Update the version in `package.json` following [semantic versioning](https://semver.org/).
+- Update the version in `package.json` following [semantic versioning](https://semver.org/).
 
-Run the following command to build and publish the package:`npm run publish:package`
+- Update the `CHANGELOG.md` file with the new version number and the changes made in this version.
 
-Add a tag to the commit: `git tag X.Y.Z` (replace X.Y.Z with the package version number)
-Then push the tag to GitHub: `git push --tags`
+- Run the following command to build and publish the package:`npm run publish:package`
+
+- Add a tag to the commit: `git tag X.Y.Z` (replace X.Y.Z with the package version number). Then push the tag to GitHub: `git push --tags`
 
 ## Getting Started
 
