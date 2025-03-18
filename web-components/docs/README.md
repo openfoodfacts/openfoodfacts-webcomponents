@@ -10,6 +10,6 @@ Install project like its described [here](../../README.md)
 
 ### Serve documentation locally
 
-```bash
-npm run serve:doc
-```
+To serve the documentation locally, run the following command: `npm run serve:doc`. It will build the components and serve the documentation on `http://localhost:8000`.
+
+Now you can then update the documentation.
