@@ -943,7 +943,7 @@
         {
           "kind": "variable",
           "name": "FLEX",
-          "default": "css`\n  .flex {\n    display: flex;\n  }\n  .flex-col {\n    flex-direction: column;\n  }\n  .justify-center {\n    justify-content: center;\n  }\n  .justify-between {\n    justify-content: space-between;\n  }\n  .justify-end {\n    justify-content: flex-end;\n  }\n  .align-center {\n    align-items: center;\n  }\n  .gap-0_5 {\n    gap: 0.5rem;\n  }\n  .gap-1 {\n    gap: 1rem;\n  }\n`"
+          "default": "css`\n  .flex {\n    display: flex;\n  }\n  .flex-col {\n    flex-direction: column;\n  }\n  .justify-center {\n    justify-content: center;\n  }\n  .justify-between {\n    justify-content: space-between;\n  }\n  .justify-end {\n    justify-content: flex-end;\n  }\n  .flex-wrap {\n    flex-wrap: wrap;\n  }\n  .align-center {\n    align-items: center;\n  }\n  .gap-0_5 {\n    gap: 0.5rem;\n  }\n  .gap-1 {\n    gap: 1rem;\n  }\n`"
         }
       ],
       "exports": [
@@ -1558,6 +1558,142 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/icons/rotate-left.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Rotate left icon",
+          "name": "RotateLeftIcon",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "rotate-left-icon",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "rotate-left-icon",
+          "declaration": {
+            "name": "RotateLeftIcon",
+            "module": "src/components/icons/rotate-left.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/icons/rotate-right.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Rotate right icon",
+          "name": "RotateRightIcon",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "rotate-right-icon",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RotateRightIcon",
+          "declaration": {
+            "name": "RotateRightIcon",
+            "module": "src/components/icons/rotate-right.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "rotate-right-icon",
+          "declaration": {
+            "name": "RotateRightIcon",
+            "module": "src/components/icons/rotate-right.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/icons/unzoom.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Component that displays a unzoom icon.",
+          "name": "UnzoomIcon",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "unzoom-icon",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UnzoomIcon",
+          "declaration": {
+            "name": "UnzoomIcon",
+            "module": "src/components/icons/unzoom.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "unzoom-icon",
+          "declaration": {
+            "name": "UnzoomIcon",
+            "module": "src/components/icons/unzoom.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/icons/zoom.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Component that displays a zoom icon.",
+          "name": "ZoomIcon",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit-element"
+          },
+          "tagName": "zoom-icon",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ZoomIcon",
+          "declaration": {
+            "name": "ZoomIcon",
+            "module": "src/components/icons/zoom.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "zoom-icon",
+          "declaration": {
+            "name": "ZoomIcon",
+            "module": "src/components/icons/zoom.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/robotoff-nutrients/robotoff-nutrients-table.ts",
       "declarations": [
         {
@@ -1963,6 +2099,20 @@
           "kind": "class",
           "description": "Robotoff Nutrients component",
           "name": "RobotoffNutrients",
+          "cssParts": [
+            {
+              "description": "The nutrients component",
+              "name": "nutrients"
+            },
+            {
+              "description": "The messages wrapper",
+              "name": "messages-wrapper"
+            },
+            {
+              "description": "The nutrients content wrapper",
+              "name": "nutrients-content-wrapper"
+            }
+          ],
           "members": [
             {
               "kind": "field",
@@ -2013,10 +2163,23 @@
               "attribute": "show-image"
             },
             {
+              "kind": "method",
+              "name": "emitNutrientEvent",
+              "parameters": [
+                {
+                  "name": "state",
+                  "type": {
+                    "text": "EventState"
+                  }
+                }
+              ],
+              "description": "Emit the state event"
+            },
+            {
               "kind": "field",
               "name": "_insightsTask",
               "privacy": "private",
-              "default": "new Task(this, {\n    task: async ([productCode], {}) => {\n      if (!productCode) {\n        return []\n      }\n\n      await Promise.all([fetchInsightsByProductCode(productCode), fetchNutrientsTaxonomies()])\n      return insight(productCode).get()\n    },\n    args: () => [this.productCode],\n  })",
+              "default": "new Task(this, {\n    task: async ([productCode], {}) => {\n      if (!productCode) {\n        return []\n      }\n\n      this.emitNutrientEvent(EventState.LOADING)\n\n      await Promise.all([fetchInsightsByProductCode(productCode), fetchNutrientsTaxonomies()])\n\n      const value = insight(productCode).get()\n      this.emitNutrientEvent(value ? EventState.HAS_DATA : EventState.NO_DATA)\n      return value\n    },\n    args: () => [this.productCode],\n  })",
               "description": "Task to get the insights for the given product code\nit will fetch the incomplete nutrients insights and the nutrients taxonomies",
               "type": {
                 "text": "Task"
@@ -2148,6 +2311,16 @@
             },
             {
               "kind": "field",
+              "name": "showImage",
+              "type": {
+                "text": "boolean | undefined"
+              },
+              "default": "true",
+              "description": "Show the image or not.",
+              "attribute": "showImage"
+            },
+            {
+              "kind": "field",
               "name": "_zoomed",
               "type": {
                 "text": "boolean"
@@ -2195,6 +2368,15 @@
               },
               "description": "The question to display.",
               "fieldName": "question"
+            },
+            {
+              "name": "showImage",
+              "type": {
+                "text": "boolean | undefined"
+              },
+              "default": "true",
+              "description": "Show the image or not.",
+              "fieldName": "showImage"
             }
           ],
           "mixins": [
@@ -2284,7 +2466,7 @@
               "kind": "field",
               "name": "_questionsTask",
               "privacy": "private",
-              "default": "new Task(this, {\n    task: async ([productCode, insightTypes], {}) => {\n      this.hasAnswered = false\n      if (!productCode) {\n        return []\n      }\n      const params = insightTypes ? { insight_types: insightTypes } : {}\n\n      await fetchQuestionsByProductCode(productCode, params)\n      this._emitQuestionStateEvent()\n      return questions(productCode).get()\n    },\n    args: () => [this.productCode, this.insightTypes],\n  })",
+              "default": "new Task(this, {\n    task: async ([productCode, insightTypes], {}) => {\n      this.hasAnswered = false\n      if (!productCode) {\n        return []\n      }\n      const params = insightTypes ? { insight_types: insightTypes } : {}\n\n      this._emitQuestionStateEvent(EventState.LOADING)\n      await fetchQuestionsByProductCode(productCode, params)\n      const value = questions(productCode).get()\n      this._emitQuestionStateEvent(value?.length > 0 ? EventState.HAS_DATA : EventState.NO_DATA)\n      return value\n    },\n    args: () => [this.productCode, this.insightTypes],\n  })",
               "description": "Task to fetch questions for the given product code",
               "type": {
                 "text": "Task"
@@ -2385,142 +2567,6 @@
           "declaration": {
             "name": "RobotoffQuestion",
             "module": "src/components/robotoff-question/robotoff-question.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/icons/rotate-left.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Rotate left icon",
-          "name": "RotateLeftIcon",
-          "members": [],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "rotate-left-icon",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "rotate-left-icon",
-          "declaration": {
-            "name": "RotateLeftIcon",
-            "module": "src/components/icons/rotate-left.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/icons/rotate-right.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Rotate right icon",
-          "name": "RotateRightIcon",
-          "members": [],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "rotate-right-icon",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "RotateRightIcon",
-          "declaration": {
-            "name": "RotateRightIcon",
-            "module": "src/components/icons/rotate-right.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "rotate-right-icon",
-          "declaration": {
-            "name": "RotateRightIcon",
-            "module": "src/components/icons/rotate-right.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/icons/unzoom.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Component that displays a unzoom icon.",
-          "name": "UnzoomIcon",
-          "members": [],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "unzoom-icon",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "UnzoomIcon",
-          "declaration": {
-            "name": "UnzoomIcon",
-            "module": "src/components/icons/unzoom.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "unzoom-icon",
-          "declaration": {
-            "name": "UnzoomIcon",
-            "module": "src/components/icons/unzoom.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/icons/zoom.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Component that displays a zoom icon.",
-          "name": "ZoomIcon",
-          "members": [],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit-element"
-          },
-          "tagName": "zoom-icon",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ZoomIcon",
-          "declaration": {
-            "name": "ZoomIcon",
-            "module": "src/components/icons/zoom.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "zoom-icon",
-          "declaration": {
-            "name": "ZoomIcon",
-            "module": "src/components/icons/zoom.ts"
           }
         }
       ]
