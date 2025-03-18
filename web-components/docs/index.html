@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <base href="/openfoodfacts-webcomponents/" />
     <script type="module" src="dist/off-webcomponents.bundled.js"></script>
     <script type="module" src="https://jspm.dev/api-viewer-element"></script>
   </head>
@@ -11,6 +10,12 @@
     <div style="margin-top: 2rem">
       <api-viewer src="custom-elements.json" only="off-webcomponents-configuration"></api-viewer>
     </div>
+
+    <!-- Configuration for the demo -->
+    <off-webcomponents-configuration
+      robotoff-configuration='{"dryRun": true}'
+    ></off-webcomponents-configuration>
+
     <div style="margin-top: 1rem">
       <api-viewer src="custom-elements.json" only="robotoff-question"></api-viewer>
     </div>

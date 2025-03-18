@@ -38,7 +38,7 @@
     "analyze:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
     "serve": "wds --watch",
     "dev": "concurrently \"npm run build:watch\" \"npm run serve\"",
-    "serve:doc": "npm run build:doc wds --watch --config web-doc-server.config.js",
+    "serve:doc": "npm run build:doc && wds --watch --config web-doc-server.config.js",
     "test": "npm run test:dev && npm run test:prod",
     "serve:prod": "MODE=prod npm run serve",
     "test:dev": "wtr",
