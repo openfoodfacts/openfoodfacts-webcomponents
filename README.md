@@ -8,9 +8,7 @@ A set of web components for Open Food Facts to help build edition interfaces
 
 ### Prerequisites
 
-Ensure you have Node.js and npm installed on your machine:
-- Node.js: version 18.0.0 or higher
-- npm: version 9.0.0 or higher
+Ensure you have Node.js and npm installed on your machine. We recommend using the version specified in the .nvmrc file. You can use nvm directly to install it with : `nvm install` and `nvm use`. You can find more information [here](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating).
 
 ### Installation
 
