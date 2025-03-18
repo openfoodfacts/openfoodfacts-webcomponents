@@ -99,3 +99,9 @@ To have it, you need to follow these steps:
 6. Use the `barcode` of the product to annotate it.
 
 ### To use it like a library check the [web-components/README.md](web-components/README.md) file
+
+## Documentation
+
+Link to documentation will be available soon.
+
+To work on document let see [this](web-components/docs/README.md)
