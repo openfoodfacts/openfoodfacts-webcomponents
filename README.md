@@ -104,4 +104,4 @@ To have it, you need to follow these steps:
 
 Link to documentation will be available soon.
 
-To work on document let see [this](web-components/docs/README.md)
+To work on documentation let see [this](web-components/docs/README.md)

@@ -6,15 +6,9 @@ This is a documentation for the Open Food Facts Web Components.
 
 ### Prerequisites
 
-Ensure you have Node.js and npm installed on your machine as it is specified [here](../../README.md)
+Install project like its described [here](../../README.md)
 
-### Installation
-
-from `web-components` folder run `npm install`.
-
-### Usage
-
-#### Run the docs
+### Serve documentation locally
 
 ```bash
 npm run serve:doc
