@@ -4,11 +4,17 @@ import "../shared/zoomable-image"
 import "./robotoff-crops"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import robotoff from "../../api/robotoff"
-import { ImagePredictionsResponse } from "../../types/robotoff"
+import {
+  ImagePrediction,
+  ImagePredictionsResponse,
+  QuestionAnnotationAnswer,
+} from "../../types/robotoff"
 import { Task } from "@lit/task"
 import { getRobotoffImageUrl } from "../../signals/robotoff"
+import { localized, msg } from "@lit/localize"
 
 @customElement("robotoff-crops")
+@localized()
 export class RobotoffCrops extends LitElement {
   static override styles = [...getButtonClasses([ButtonType.Chocolate, ButtonType.Cappucino])]
 
@@ -55,31 +61,33 @@ export class RobotoffCrops extends LitElement {
           return nothing
         }
 
-        const imagePredictions = predictions.image_predictions
-        const imgUrls = imagePredictions.map((prediction) =>
-          getRobotoffImageUrl(prediction.image.source_image)
-        )
+        const imagePrediction = predictions.image_predictions[0]
 
-        return html`
-          <div>
-            ${imgUrls.map(
-              (imgUrl) => html`
-                <zoomable-image src=${imgUrl} .size="${{ height: "350px" }}"></zoomable-image>
-              `
-            )}
-            <div class="button-container">
-              <button @click="${this.handleValidate}">Validate</button>
-              <button @click="${this.handleUpdate}">Update</button>
-            </div>
-          </div>
-        `
+        return this.renderImagePrediction(imagePrediction)
       },
       error: (error) => html`<p>Error: ${error}</p>`,
     })
   }
 
-  handleValidate() {
-    console.log("Validate button clicked")
+  private renderImagePrediction(prediction: ImagePrediction) {
+    const imgUrl = getRobotoffImageUrl(prediction.image.source_image)
+    return html`
+      <div>
+        <div>
+          <zoomable-image src=${imgUrl} .size="${{ height: "350px" }}"></zoomable-image>
+          <p>${msg("Is this image a crop?")}</p>
+          <div class="button-container">
+            <button @click="${() => this.answer("1")}">${msg("Yes")}</button>
+            <button @click="${() => this.answer("0")}">${msg("No")}</button>
+            <button @click="${() => this.answer("-1")}">${msg("Skip")}</button>
+          </div>
+        </div>
+      </div>
+    `
+  }
+
+  answer(value: QuestionAnnotationAnswer) {
+    console.log("Validate button clicked", value)
     // Add validation logic here
   }
 
