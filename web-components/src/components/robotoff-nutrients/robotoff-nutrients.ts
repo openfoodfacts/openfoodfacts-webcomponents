@@ -14,7 +14,7 @@ import "../shared/loader"
 import { fetchNutrientsTaxonomies } from "../../signals/taxonomies"
 import { NutrientsInsight, InsightAnnotationAnswer, AnnotationAnswer } from "../../types/robotoff"
 import { BASE } from "../../styles/base"
-import { robotoffConfiguration } from "../../signals/robotoff"
+import { getRobotoffImageUrl } from "../../signals/robotoff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { FLEX } from "../../styles/utils"
 import { EventState, EventType } from "../../constants"
@@ -168,7 +168,7 @@ export class RobotoffNutrients extends LoadingWithTimeoutMixin(LitElement) {
     if (!insight?.source_image) {
       return nothing
     }
-    const imgUrl = `${robotoffConfiguration.getItem("imgUrl")}${insight.source_image}`
+    const imgUrl = getRobotoffImageUrl(insight.source_image)
     return html`
       <div class="image-wrapper">
         <zoomable-image

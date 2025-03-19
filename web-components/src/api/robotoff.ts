@@ -10,6 +10,8 @@ import {
   IngredientsInsight,
   NutrientsAnnotationData,
   AnnotationFormData,
+  ImagePredictionsRequestParams,
+  ImagePredictionsResponse,
 } from "../types/robotoff"
 import { robotoffConfiguration } from "../signals/robotoff"
 
@@ -126,6 +128,16 @@ const robotoff = {
     const url = addParamsToUrl(apiUrl, requestParams)
     const response = await fetch(url)
     const result: InsightsResponse<T> = await response.json()
+    return result
+  },
+
+  async getImagePredictions(
+    requestParams: ImagePredictionsRequestParams
+  ): Promise<ImagePredictionsResponse> {
+    const apiUrl = getApiUrl("/image_predictions")
+    const url = addParamsToUrl(apiUrl, requestParams)
+    const response = await fetch(url)
+    const result: ImagePredictionsResponse = await response.json()
     return result
   },
 }
