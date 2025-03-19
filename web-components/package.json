@@ -23,6 +23,7 @@
   "scripts": {
     "build": "MODE=prod npm run translations:build && MODE=prod rollup -c",
     "build:watch": "npm run translations:build && MODE=dev rollup -c -w",
+    "build:doc": "rm -rf docs/dist && npm run analyze && npm run build && cp -r dist docs",
     "clean": "rimraf dist && rimraf my-element.{d.ts,d.ts.map,js,js.map} test/my-element.{d.ts,d.ts.map,js,js.map} test/my-element_test.{d.ts,d.ts.map,js,js.map}",
     "lint": "eslint --ext .ts src/",
     "lint:eslint": "eslint --ext .ts src/",
@@ -37,9 +38,9 @@
     "analyze:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
     "serve": "wds --watch",
     "dev": "concurrently \"npm run build:watch\" \"npm run serve\"",
+    "serve:doc": "npm run build:doc && wds --watch --config web-doc-server.config.js",
     "test": "npm run test:dev && npm run test:prod",
     "serve:prod": "MODE=prod npm run serve",
-    "serve:doc": "npm run analyze && npm run build && cp -r dist docs && wds --watch --config web-doc-server.config.js",
     "test:dev": "wtr",
     "test:watch": "wtr --watch",
     "test:prod": "MODE=prod wtr",

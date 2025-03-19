@@ -135,3 +135,4 @@ dist/
 web-components/src/localization/generated/*
 .vscode
 docs/dist/
+custom-elements.json
