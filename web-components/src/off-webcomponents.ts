@@ -14,3 +14,4 @@ export { DownloadAppQrCode } from "./components/download-app-qr-code/download-ap
 export { BarcodeScanner } from "./components/barcode-scanner/barcode-scanner"
 export { DeleteModal } from "./components/folksnomy/delete-modal"
 export { FolksonomyEditor } from "./components/folksnomy/folksonomy-editor"
+export { RobotoffCrops } from "./components/robotoff-crops/robotoff-crops"
