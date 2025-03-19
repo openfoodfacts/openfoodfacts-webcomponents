@@ -156,6 +156,20 @@ export type ImagePredictionsRequestParams = {
   min_confidence: number
 }
 
+export type IngredientPrediction = {
+  id: string
+  text: string
+  vegan?: string
+  vegetarian?: string
+  in_taxonomy: boolean
+  percent_max: number
+  percent_min: number
+  is_in_taxonomy: number
+  percent_estimate: number
+  ciqual_proxy_food_code?: string
+  ingredients?: IngredientPrediction[]
+}
+
 export type ImagePrediction = {
   id: number
   type: string
@@ -172,30 +186,7 @@ export type ImagePrediction = {
       score: number
       start: number
       raw_end: number
-      ingredients: {
-        id: string
-        text: string
-        vegan?: string
-        vegetarian?: string
-        in_taxonomy: boolean
-        percent_max: number
-        percent_min: number
-        is_in_taxonomy: number
-        percent_estimate: number
-        ciqual_proxy_food_code?: string
-        ingredients?: {
-          id: string
-          text: string
-          vegan?: string
-          vegetarian?: string
-          in_taxonomy: boolean
-          percent_max: number
-          percent_min: number
-          is_in_taxonomy: number
-          percent_estimate: number
-          ciqual_proxy_food_code?: string
-        }[]
-      }[]
+      ingredients: IngredientPrediction[]
       bounding_box: number[]
       ingredients_n: number
       known_ingredients_n: number
