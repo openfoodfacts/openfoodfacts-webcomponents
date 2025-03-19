@@ -102,6 +102,6 @@ To have it, you need to follow these steps:
 
 ## Documentation
 
-Link to documentation will be available soon.
+You can find the documentation [here](https://openfoodfacts.github.io/openfoodfacts-webcomponents)
 
 To work on documentation let see [this](web-components/docs/README.md)
