@@ -36,7 +36,7 @@ export class ZoomableImage extends LitElement {
       }
     `,
     FLEX,
-    getButtonClasses([ButtonType.LINK]),
+    getButtonClasses([ButtonType.LINK, ButtonType.Chocolate]),
   ]
 
   @query("cropper-canvas")
@@ -152,10 +152,11 @@ export class ZoomableImage extends LitElement {
   }
 
   async validateCrop() {
-    const result = await this.canvasElement.$toCanvas()
+    const element = this.hasSelection() ? this.selectionElement : this.canvasElement
+    const result = await element.$toCanvas()
     this.cropResult = result.toDataURL()
     this.dispatchEvent(
-      new CustomEvent("crop-validated", {
+      new CustomEvent("save", {
         detail: {
           crop: this.cropResult,
         },
@@ -163,10 +164,21 @@ export class ZoomableImage extends LitElement {
     )
   }
 
+  resetSelection() {
+    this.selectionElement.$clear()
+  }
+
   renderCropMode() {
     return html`
       <div class="flex justify-end">
-        <button class="link-button" @click=${this.validateCrop}>${msg("Validate crop")}</button>
+        <button class="button link-button" @click=${this.resetSelection}>
+          ${msg("Reset selection")}
+        </button>
+      </div>
+      <div class="flex justify-center">
+        <button class="button chocolate-button" @click=${() => this.validateCrop()}>
+          ${msg("Validate crop")}
+        </button>
       </div>
     `
   }
@@ -184,19 +196,10 @@ export class ZoomableImage extends LitElement {
     if (!this.cropMode) {
       return nothing
     }
-    return html`
-      <cropper-shade></cropper-shade>
-      <cropper-selection
-        initial-coverage="0.5"
-        dynamic
-        movable
-        resizable
-        zoomable
-        @change="${this.onCropperSelectionChange}"
-      >
-        <cropper-grid role="grid" covered></cropper-grid>
-        <cropper-crosshair centered></cropper-crosshair>
-        <cropper-handle action="move" theme-color="rgba(255, 255, 255, 0.35)"></cropper-handle>
+    return html` <cropper-shade hidden></cropper-shade>
+      <cropper-handle action="select" plain></cropper-handle>
+      <cropper-selection movable resizable hidden @change="${this.onCropperSelectionChange}">
+        <cropper-handle action="move" plain></cropper-handle>
         <cropper-handle action="n-resize"></cropper-handle>
         <cropper-handle action="e-resize"></cropper-handle>
         <cropper-handle action="s-resize"></cropper-handle>
@@ -205,8 +208,24 @@ export class ZoomableImage extends LitElement {
         <cropper-handle action="nw-resize"></cropper-handle>
         <cropper-handle action="se-resize"></cropper-handle>
         <cropper-handle action="sw-resize"></cropper-handle>
-      </cropper-selection>
-    `
+      </cropper-selection>`
+
+    // return html`
+    //   <cropper-shade></cropper-shade>
+    //   <cropper-selection movable resizable zoomable @change="${this.onCropperSelectionChange}">
+    //     <cropper-grid role="grid" covered></cropper-grid>
+    //     <cropper-crosshair centered></cropper-crosshair>
+    //     <cropper-handle action="move" theme-color="rgba(255, 255, 255, 0.35)"></cropper-handle>
+    //     <cropper-handle action="n-resize"></cropper-handle>
+    //     <cropper-handle action="e-resize"></cropper-handle>
+    //     <cropper-handle action="s-resize"></cropper-handle>
+    //     <cropper-handle action="w-resize"></cropper-handle>
+    //     <cropper-handle action="ne-resize"></cropper-handle>
+    //     <cropper-handle action="nw-resize"></cropper-handle>
+    //     <cropper-handle action="se-resize"></cropper-handle>
+    //     <cropper-handle action="sw-resize"></cropper-handle>
+    //   </cropper-selection>
+    // `
   }
 
   inSelection(selection: Selection, maxSelection: Selection) {
@@ -218,10 +237,16 @@ export class ZoomableImage extends LitElement {
     )
   }
 
+  hasSelection() {
+    const isSelectionHidden = this.selectionElement?.hidden ?? true
+    const hasNoSize = this.selectionElement?.width === 0 || this.selectionElement?.height === 0
+    return !isSelectionHidden && !hasNoSize
+  }
+
   onCropperImageTransform(event: CustomEvent) {
     const cropperCanvas = this.canvasElement
 
-    if (!cropperCanvas) {
+    if (!cropperCanvas || !this.hasSelection()) {
       return
     }
 
@@ -292,11 +317,11 @@ export class ZoomableImage extends LitElement {
             <cropper-image
               src=${this.src}
               alt="Picture"
-              rotatable
               scalable
               skewable
               translatable
               ?crossorigin="${crossorigin}"
+              @transform=${this.onCropperImageTransform}
             ></cropper-image>
             <cropper-handle action="move" plain></cropper-handle>
             ${this.renderCropperControls()}
