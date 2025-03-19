@@ -9,7 +9,7 @@ import { fetchNutrientsTaxonomies } from "../../signals/taxonomies"
 import { Insight, InsightAnnotationAnswer } from "../../types/robotoff"
 import { BASE } from "../../styles/base"
 import { msg } from "@lit/localize"
-import { robotoffConfiguration } from "../../signals/robotoff"
+import { getRobotoffImageUrl, robotoffConfiguration } from "../../signals/robotoff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { FLEX } from "../../styles/utils"
 import { EventState, EventType } from "../../constants"
@@ -162,7 +162,7 @@ export class RobotoffNutrients extends LitElement {
     if (!insight?.source_image) {
       return nothing
     }
-    const imgUrl = `${robotoffConfiguration.getItem("imgUrl")}${insight.source_image}`
+    const imgUrl = getRobotoffImageUrl(insight.source_image)
     return html`
       <div>
         <div class="flex justify-center">
