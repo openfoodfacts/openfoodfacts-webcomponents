@@ -7,6 +7,8 @@ import {
   InsightsRequestParams,
   InsightsResponse,
   InsightAnnotationAnswer,
+  ImagePredictionsRequestParams,
+  ImagePredictionsResponse,
 } from "../types/robotoff"
 import { robotoffConfiguration } from "../signals/robotoff"
 
@@ -66,7 +68,10 @@ const robotoff = {
     return annotate(formBody)
   },
 
-  async questionsByProductCode(code: string, questionRequestParams: QuestionRequestParams = {}) {
+  async questionsByProductCode(
+    code: string,
+    questionRequestParams: QuestionRequestParams = {}
+  ): Promise<QuestionsResponse> {
     if (!questionRequestParams.lang) {
       questionRequestParams.lang = await getLocaleAfterInit()
     }
@@ -77,11 +82,21 @@ const robotoff = {
     return result
   },
 
-  async insights(requestParams: InsightsRequestParams = {}) {
+  async insights(requestParams: InsightsRequestParams = {}): Promise<InsightsResponse> {
     const apiUrl = getApiUrl("/insights")
     const url = addParamsToUrl(apiUrl, requestParams)
     const response = await fetch(url)
     const result: InsightsResponse = await response.json()
+    return result
+  },
+
+  async getImagePredictions(
+    requestParams: ImagePredictionsRequestParams
+  ): Promise<ImagePredictionsResponse> {
+    const apiUrl = getApiUrl(`/image_predictions`)
+    const url = addParamsToUrl(apiUrl, requestParams)
+    const response = await fetch(url)
+    const result: ImagePredictionsResponse = await response.json()
     return result
   },
 }
