@@ -1,6 +1,5 @@
 import { css, html, LitElement, nothing } from "lit"
 import { customElement, property, query, state } from "lit/decorators.js"
-import Panzoom from "@panzoom/panzoom"
 import { styleMap } from "lit/directives/style-map.js"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { FLEX } from "../../styles/utils"
@@ -9,10 +8,14 @@ import "../icons/rotate-right"
 import { localized, msg } from "@lit/localize"
 import { mobileAndTabletCheck } from "../../utils/breakpoints"
 
+import CropperCanvas from "@cropper/element-canvas"
+import CropperImage from "@cropper/element-image"
+import CropperHandle from "@cropper/element-handle"
+
 /**
  * A simple zoomable image component.
  * It allows to display an image that can be zoomed, and rotated.
- * It uses the panzoom library.
+ * It uses the cropperjs library.
  * @element zoomable-image
  **/
 @customElement("zoomable-image")
@@ -23,30 +26,18 @@ export class ZoomableImage extends LitElement {
       :host {
         display: block;
       }
-      .panzoom-parent {
+      .cropper-parent {
         position: relative;
         position: relative;
         border: 1px solid black;
         background-color: white;
-      }
-      .panzoom {
-        position: relative;
-      }
-      .panzoom img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        cursor: zoom-in;
       }
     `,
     FLEX,
     getButtonClasses([ButtonType.LINK]),
   ]
 
-  /*
-   * Panzoom element
-   */
-  @query(".panzoom")
+  @query(".cropper-parent")
   element!: HTMLElement
 
   /*
@@ -59,7 +50,7 @@ export class ZoomableImage extends LitElement {
    * Panzoom instance
    */
   @state()
-  panzoom!: any
+  image!: HTMLImageElement
 
   /*
    * Image source url
@@ -105,78 +96,39 @@ export class ZoomableImage extends LitElement {
   get canZoom() {
     return !mobileAndTabletCheck()
   }
-
-  override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
-    super.attributeChangedCallback(name, _old, value)
-    if (["src", "size"].includes(name)) {
-      this.onImageChange()
-    }
-  }
-
   override connectedCallback(): void {
     super.connectedCallback()
+    this.initCropper()
   }
   override disconnectedCallback(): void {
     super.disconnectedCallback()
-    if (this.canZoom) {
-      this.element.parentElement!.removeEventListener("wheel", this.panzoom.zoomWithWheel)
-    }
-    this.panzoom.destroy()
   }
 
-  initPanzoom() {
-    const panzoom = Panzoom(this.element, {
-      maxScale: this.maxZoom,
-      minScale: this.minZoom,
-      canvas: true,
-      increment: this.stepSize,
-      contain: "inside",
-    })
+  initCropper() {
+    CropperCanvas.$define()
+    CropperImage.$define()
+    CropperHandle.$define()
+    // this.image = new Image()
 
-    if (this.canZoom) {
-      this.element.parentElement!.addEventListener("wheel", panzoom.zoomWithWheel)
-    }
-    this.panzoom = panzoom
-    this.onImageChange()
-  }
+    // this.image.src = this.src
+    // // this.image.alt = "Picture"
 
-  resetContain() {
-    setTimeout(() => {
-      this.panzoom.setOptions({
-        contain: undefined,
-      })
-    }, 100)
-  }
-
-  onImageChange() {
-    if (!this.panzoom) return
-    this.rotation = 0
-    this.panzoom.setOptions({
-      contain: "inside",
-    })
-    setTimeout(() => {
-      this.panzoom.reset({
-        animate: false,
-      })
-      this.resetContain()
-    }, 100)
+    // const cropper = new Cropper(this.image, {
+    //   container: this.element,
+    //   // zoomable: true,
+    //   // minZoom: this.minZoom,
+    //   // maxZoom: this.maxZoom,
+    //   // zoomOnWheel: true,
+    //   // zoomOnTouch: true,
+    //   // zoomOnDoubleClick: true,
+    //   // zoomRatio: this.stepSize,
+    //   // initialZoom: this.currentZoom,
+    // })
+    // this.cropper = cropper
   }
 
   rotateImage(rotation: number) {
     this.rotation += rotation
-  }
-
-  /**
-   * Fit and center the image in the container
-   */
-  fitAndCenterImage() {
-    if (!this.panzoom) return
-
-    setTimeout(() => {
-      this.panzoom.constrainXY(0, 0, 0, {
-        contain: "inside",
-      })
-    }, 100)
   }
 
   renderButtons() {
@@ -202,22 +154,36 @@ export class ZoomableImage extends LitElement {
   }
 
   override render() {
-    const imageStyle = {
-      transform: `rotate(${this.rotation}deg)`,
-    }
     return html`
       <div>
-        <div class="panzoom-parent" style=${styleMap(this.size)}>
-          <div class="panzoom">
-            <img
+        <div class="flex justify-end">
+          <button
+            class="link-button"
+            @click=${() => this.rotateImage(-90)}
+            title=${msg("Rotate image to the left")}
+          >
+            <rotate-left-icon></rotate-left-icon>
+          </button>
+          <button
+            class="link-button"
+            @click=${() => this.rotateImage(90)}
+            title=${msg("Rotate image to the right")}
+          >
+            <rotate-right-icon></rotate-right-icon>
+          </button>
+        </div>
+        <div class="cropper-parent">
+          <cropper-canvas background style=${styleMap(this.size)}>
+            <cropper-image
               src=${this.src}
-              @error=${() => {
-                this.src = this.fallbackSrc
-              }}
-              @load=${this.initPanzoom}
-              style=${styleMap(imageStyle)}
-            />
-          </div>
+              alt="Picture"
+              rotatable
+              scalable
+              skewable
+              translatable
+            ></cropper-image>
+            <cropper-handle action="move" plain></cropper-handle>
+          </cropper-canvas>
         </div>
         ${this.renderButtons()}
       </div>
