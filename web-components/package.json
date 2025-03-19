@@ -59,12 +59,12 @@
     "@lit-labs/signals": "^0.1.2",
     "@lit/localize": "^0.12.2",
     "@lit/task": "^1.0.2",
-    "@panzoom/panzoom": "^4.6.0",
     "@types/dompurify": "^3.0.5",
     "diff": "^7.0.0",
     "dompurify": "^3.2.5",
     "lit": "^3.3.0",
-    "lit-html": "^3.3.0"
+    "lit-html": "^3.3.0",
+    "cropperjs": "^2.0.0"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.10.4",
