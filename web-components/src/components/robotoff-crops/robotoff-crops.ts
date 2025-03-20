@@ -23,7 +23,6 @@ export class RobotoffCrops extends LitElement {
 
   @property({ type: Number })
   page: number = 1
-
   @property({ type: String })
   barcode?: string = undefined
 
@@ -37,7 +36,10 @@ export class RobotoffCrops extends LitElement {
   predictions: ImagePredictionsResponse | null = null
 
   private _predictionTask = new Task(this, {
-    task: async ([count, page, barcode, modelName, minConfidence], {}) => {
+    task: async (
+      [count, page, barcode, modelName, minConfidence]: [number, number, string, string, number],
+      {}
+    ) => {
       if (!barcode) {
         return
       }
@@ -65,7 +67,7 @@ export class RobotoffCrops extends LitElement {
 
         return this.renderImagePrediction(imagePrediction)
       },
-      error: (error) => html`<p>Error: ${error}</p>`,
+      error: (error: string) => html`<p>Error: ${error}</p>`,
     })
   }
 
