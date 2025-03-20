@@ -125,6 +125,10 @@ export class ZoomableImage extends LitElement {
   }
 
   rotateImage(rotation: number) {
+    this.resetSelection()
+    if (!this.imageElement.rotatable) {
+      this.imageElement.rotatable = true
+    }
     this.imageElement.$rotate(`${rotation}deg`)
   }
 
@@ -164,7 +168,7 @@ export class ZoomableImage extends LitElement {
   }
 
   resetSelection() {
-    this.selectionElement.$clear()
+    this.selectionElement?.$clear()
   }
 
   renderCropMode() {
@@ -206,23 +210,6 @@ export class ZoomableImage extends LitElement {
         <cropper-handle action="se-resize"></cropper-handle>
         <cropper-handle action="sw-resize"></cropper-handle>
       </cropper-selection>`
-
-    // return html`
-    //   <cropper-shade></cropper-shade>
-    //   <cropper-selection movable resizable zoomable @change="${this.onCropperSelectionChange}">
-    //     <cropper-grid role="grid" covered></cropper-grid>
-    //     <cropper-crosshair centered></cropper-crosshair>
-    //     <cropper-handle action="move" theme-color="rgba(255, 255, 255, 0.35)"></cropper-handle>
-    //     <cropper-handle action="n-resize"></cropper-handle>
-    //     <cropper-handle action="e-resize"></cropper-handle>
-    //     <cropper-handle action="s-resize"></cropper-handle>
-    //     <cropper-handle action="w-resize"></cropper-handle>
-    //     <cropper-handle action="ne-resize"></cropper-handle>
-    //     <cropper-handle action="nw-resize"></cropper-handle>
-    //     <cropper-handle action="se-resize"></cropper-handle>
-    //     <cropper-handle action="sw-resize"></cropper-handle>
-    //   </cropper-selection>
-    // `
   }
 
   inSelection(selection: Selection, maxSelection: Selection) {
@@ -321,7 +308,6 @@ export class ZoomableImage extends LitElement {
               ?crossorigin="${crossorigin}"
               @transform=${this.onCropperImageTransform}
             ></cropper-image>
-            <cropper-handle action="move" plain></cropper-handle>
             ${this.renderCropperControls()}
           </cropper-canvas>
         </div>
