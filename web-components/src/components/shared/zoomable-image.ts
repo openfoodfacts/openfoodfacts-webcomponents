@@ -125,8 +125,7 @@ export class ZoomableImage extends LitElement {
   }
 
   rotateImage(rotation: number) {
-    this.rotation += rotation
-    this.requestUpdate()
+    this.imageElement.$rotate(`${rotation}deg`)
   }
 
   renderButtons() {
@@ -171,9 +170,7 @@ export class ZoomableImage extends LitElement {
   renderCropMode() {
     return html`
       <div class="flex justify-end">
-        <button class="button link-button" @click=${this.resetSelection}>
-          ${msg("Reset selection")}
-        </button>
+        <button class="link-button" @click=${this.resetSelection}>${msg("Reset selection")}</button>
       </div>
       <div class="flex justify-center">
         <button class="button chocolate-button" @click=${() => this.validateCrop()}>
@@ -317,6 +314,7 @@ export class ZoomableImage extends LitElement {
             <cropper-image
               src=${this.src}
               alt="Picture"
+              rotable
               scalable
               skewable
               translatable
