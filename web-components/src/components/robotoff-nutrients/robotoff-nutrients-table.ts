@@ -178,7 +178,7 @@ export class RobotoffNutrientsTable extends LitElement {
    * Serving size value to display
    */
   @state()
-  private _servingSizeValue: string = ""
+  private _servingSizeValue = ""
 
   /**
    * Update properties when the insight is updated
@@ -334,13 +334,14 @@ export class RobotoffNutrientsTable extends LitElement {
     nutrient: Pick<InsightDatum, "value" | "unit"> | undefined
   ) {
     const inputName = this.getInputValueName(key, column)
+    const value = nutrient?.value ?? ""
 
     return html`
       <span class="flex inputs-wrapper">
         <input
           type="text"
           name="${inputName}"
-          value="${nutrient?.value}"
+          value="${value}"
           title="${msg("value")}"
           class="input input-nutritional-value"
         />
@@ -440,14 +441,14 @@ export class RobotoffNutrientsTable extends LitElement {
    * It will send the data to the server.
    */
   submitFormData(formData: FormData, column: InsightAnnotationType) {
-    let nutrientAnotationForm: InsightAnnotatationData = {}
+    const nutrientAnotationForm: InsightAnnotatationData = {}
     const formValues = formData.entries()
 
     const servingSizeInputName = this.getServingSizeInputName()
 
     for (const [key, value] of formValues) {
       let name = key
-      let isUnit = this.isUnitInput(name)
+      const isUnit = this.isUnitInput(name)
       if (isUnit) {
         name = name.replace(NUTRIENT_UNIT_NAME_PREFIX, "")
       }
@@ -513,6 +514,7 @@ export class RobotoffNutrientsTable extends LitElement {
 
   renderServingSizeInput(nutrients: FormatedNutrients) {
     const inputServingSizeName = this.getServingSizeInputName()
+    const servingSize = nutrients.servingSize?.value ?? ""
     return html`<div class="">
       <label class="serving-size-wrapper flex align-center flex-col">
         <span>${msg("Serving size")}</span>
@@ -520,7 +522,7 @@ export class RobotoffNutrientsTable extends LitElement {
           class="input"
           name=${inputServingSizeName}
           type="text"
-          value=${nutrients.servingSize?.value}
+          value=${servingSize}
           @change=${this.onChangeServingSize}
         />
       </label>
@@ -607,10 +609,9 @@ export class RobotoffNutrientsTable extends LitElement {
           <select class="select" @change=${this.onAddNutrient}>
             <option>${msg("Add a nutrient")}</option>
             ${filteredNutrientTaxonomies.map(
-              (taxonomy) =>
-                html`
-                  <option value=${taxonomy.id}>${getTaxonomyNameByLang(taxonomy, lang)}</option>
-                `
+              (taxonomy) => html`
+                <option value=${taxonomy.id}>${getTaxonomyNameByLang(taxonomy, lang)}</option>
+              `
             )}
           </select>
         </td>

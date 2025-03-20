@@ -28,7 +28,7 @@
         "strict": true
       }
     ],
-    "types": ["mocha"]
+    "types": []
   },
   "include": ["src/**/*.ts"],
   "exclude": []

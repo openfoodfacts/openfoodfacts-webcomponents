@@ -1,5 +1,5 @@
 import { configureLocalization } from "@lit/localize"
-import { sourceLocale, targetLocales } from "./generated/locale-codes"
+import { sourceLocale, targetLocales } from "./dist/locale-codes"
 import { delay } from "../utils"
 
 /**
@@ -18,7 +18,7 @@ export const { getLocale, setLocale } = configureLocalization({
 })
 
 // Wait for the locale to be set
-export let isLocaleSet = false
+export const isLocaleSet = false
 
 /**
  * Get the locale if it's set or delay 100ms to get it

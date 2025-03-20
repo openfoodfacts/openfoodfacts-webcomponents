@@ -61,14 +61,14 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
    * @type {string}
    */
   @property({ type: String, attribute: "product-code" })
-  productCode: string = ""
+  productCode = ""
 
   /**
    * The insight types to filter questions separate by comma
    * @type {string}
    */
   @property({ type: String, attribute: "insight-types" })
-  insightTypes: string = ""
+  insightTypes = ""
 
   /**
    * Whether the user has answered the question
@@ -145,7 +145,7 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
       return getMessageWrapper(msg("Open Food Facts needs your help with this product."))
     }
 
-    return html`<div>${msg(`Thanks for your help! Can you assist with another question?`)}</div>`
+    return html`<div>${msg("Thanks for your help! Can you assist with another question?")}</div>`
   }
 
   override render() {
@@ -154,7 +154,7 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
         if (!this.options?.showLoading) {
           return nothing
         }
-        return html`<off-wb-loader></off-wb-loader>`
+        return html`<off-wc-loader></off-wc-loader>`
       },
       complete: (questionsList) => {
         const index = currentQuestionIndex(this.productCode).get() ?? 0

@@ -19,11 +19,13 @@ export const insightIdByProductCode = new SignalMap<string | null>({})
  * @returns {Computed<Insight | undefined>}
  */
 export const insight = (productCode: string) => {
-  return new Computed<Insight | undefined>(() =>
-    insightIdByProductCode.getItem(productCode)
-      ? insightById.getItem(insightIdByProductCode.getItem(productCode) as string)
-      : undefined
-  )
+  return new Computed<Insight | undefined>(() => {
+    const insightId = insightIdByProductCode.getItem(productCode)
+    if (!insightId) {
+      return undefined
+    }
+    return insightById.getItem(insightId)
+  })
 }
 
 /**
