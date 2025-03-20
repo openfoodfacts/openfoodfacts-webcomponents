@@ -189,10 +189,9 @@ export class RobotoffNutrients extends LitElement {
     return this._insightsTask.render({
       pending: () => html`<off-wc-loader></off-wc-loader>`,
       complete: (insight) => {
-        if (!insight || insight == []) {
+        if (!insight) {
           return html`<slot name="no-insight"></slot>`
         }
-        debugger
         return html`
           <div part="nutrients">
             <div part="messages-wrapper" class="messages-wrapper">
