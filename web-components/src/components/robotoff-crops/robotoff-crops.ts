@@ -79,7 +79,7 @@ export class RobotoffCrops extends LitElement {
           <zoomable-image
             src=${imgUrl}
             .size="${{ width: "500px", height: "500px" }}"
-            .crop-mode=${true}
+            crop-mode=${true}
           ></zoomable-image>
           <p>${msg("Is this image a crop?")}</p>
           <div class="button-container">
