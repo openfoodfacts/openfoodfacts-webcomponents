@@ -106,7 +106,7 @@ export class RobotoffNutrients extends LitElement {
   private _insightsTask = new Task(this, {
     task: async ([productCode], {}) => {
       if (!productCode) {
-        return []
+        return undefined
       }
 
       this.emitNutrientEvent(EventState.LOADING)
@@ -189,9 +189,10 @@ export class RobotoffNutrients extends LitElement {
     return this._insightsTask.render({
       pending: () => html`<off-wc-loader></off-wc-loader>`,
       complete: (insight) => {
-        if (!insight) {
+        if (!insight || insight == []) {
           return html`<slot name="no-insight"></slot>`
         }
+        debugger
         return html`
           <div part="nutrients">
             <div part="messages-wrapper" class="messages-wrapper">
