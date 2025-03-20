@@ -1,7 +1,6 @@
 import { LitElement, html, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import "../shared/zoomable-image"
-import "./robotoff-crops"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import robotoff from "../../api/robotoff"
 import {
