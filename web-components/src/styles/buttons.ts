@@ -95,7 +95,7 @@ export const BUTTON_CLASS_BY_TYPE: Record<ButtonType, CSSResult> = {
 }
 
 export const getButtonClasses = (types: ButtonType[]): CSSResult[] => {
-  let buttonClasses = [getDefaultButtonClasses()]
+  const buttonClasses = [getDefaultButtonClasses()]
 
   types.forEach((type) => {
     buttonClasses.push(BUTTON_CLASS_BY_TYPE[type])

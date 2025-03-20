@@ -31,6 +31,6 @@ export class RotateRightIcon extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "rotateRight-icon": RotateRightIcon
+    "rotate-right-icon": RotateRightIcon
   }
 }

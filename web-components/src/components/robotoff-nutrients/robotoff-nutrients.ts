@@ -4,6 +4,7 @@ import { customElement, property, state } from "lit/decorators.js"
 import { annotateNutrients, fetchInsightsByProductCode, insight } from "../../signals/nutrients"
 import "./robotoff-nutrients-table"
 import "../shared/zoomable-image"
+import "../shared/loader"
 
 import { fetchNutrientsTaxonomies } from "../../signals/taxonomies"
 import { Insight, InsightAnnotationAnswer } from "../../types/robotoff"
@@ -52,28 +53,28 @@ export class RobotoffNutrients extends LitElement {
    * @type {string}
    */
   @property({ type: String, attribute: "product-code" })
-  productCode: string = ""
+  productCode = ""
 
   /**
    * Show messages
    * @type {boolean}
    */
   @property({ type: Boolean, attribute: "show-messages" })
-  showMessages: boolean = false
+  showMessages = false
 
   /**
    * Is the form submited
    * @type {boolean}
    */
   @state()
-  isSubmited: boolean = false
+  isSubmited = false
 
   /**
    * Show success message
    * @type {boolean}
    */
   @state()
-  showSuccessMessage: boolean = false
+  showSuccessMessage = false
 
   /**
    * Do we show the image of the product by default
@@ -177,7 +178,7 @@ export class RobotoffNutrients extends LitElement {
 
         ${this.showImage
           ? html`<div class="image-wrapper">
-              <zoomable-image src=${imgUrl} .size="${{ height: "350px" }}" />
+              <zoomable-image src=${imgUrl} .size="${{ height: "350px" }}"></zoomable-image>
             </div>`
           : nothing}
       </div>
@@ -186,7 +187,7 @@ export class RobotoffNutrients extends LitElement {
 
   override render() {
     return this._insightsTask.render({
-      pending: () => html`<off-wb-loader></off-wb-loader>`,
+      pending: () => html`<off-wc-loader></off-wc-loader>`,
       complete: (insight) => {
         if (!insight) {
           return html`<slot name="no-insight"></slot>`
@@ -201,7 +202,7 @@ export class RobotoffNutrients extends LitElement {
             <div part="nutrients-content-wrapper" class="nutrients-content-wrapper">
               ${this.renderImage(insight as Insight)}
               <robotoff-nutrients-table
-                .insight="${insight}"
+                .insight="${insight as Insight}"
                 @submit="${this.onSubmit}"
               ></robotoff-nutrients-table>
             </div>

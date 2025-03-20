@@ -45,21 +45,21 @@ export class ZoomableImage extends LitElement {
   panzoom!: any
 
   @property({ type: String, attribute: "src" })
-  src: string = ""
+  src = ""
 
   @property({ type: Number, attribute: "current-zoom" })
-  currentZoom: number = 1
+  currentZoom = 1
 
   @property({ type: Number, attribute: "step-size" })
-  stepSize: number = 0.1
+  stepSize = 0.1
 
   @property({ type: Number, attribute: "min-zoom" })
-  minZoom: number = 1
+  minZoom = 1
   @property({ type: Number, attribute: "max-zoom" })
-  maxZoom: number = 5
+  maxZoom = 5
 
   @state()
-  rotation: number = 0
+  rotation = 0
 
   @property({ type: Object })
   size: {
@@ -107,14 +107,14 @@ export class ZoomableImage extends LitElement {
             @click=${() => this.rotateImage(-90)}
             title=${msg("Rotate image to the left")}
           >
-            <rotate-left-icon />
+            <rotate-left-icon></rotate-left-icon>
           </button>
           <button
             class="link-button"
             @click=${() => this.rotateImage(90)}
             title=${msg("Rotate image to the right")}
           >
-            <rotate-right-icon />
+            <rotate-right-icon></rotate-right-icon>
           </button>
         </div>
         <div class="panzoom-parent">

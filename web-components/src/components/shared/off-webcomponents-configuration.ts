@@ -65,7 +65,7 @@ export class OffWebcomponentsConfiguration extends LitElement {
     super.attributeChangedCallback(name, oldval, newval)
     if (name in CONFIGURATION_PROPERTIES) {
       let value
-      let config = CONFIGURATION_PROPERTIES[name]
+      const config = CONFIGURATION_PROPERTIES[name]
       const propertyName = config.propertyName
       if (CONFIGURATION_PROPERTIES[name].converter) {
         value = CONFIGURATION_PROPERTIES[name].converter!(newval)

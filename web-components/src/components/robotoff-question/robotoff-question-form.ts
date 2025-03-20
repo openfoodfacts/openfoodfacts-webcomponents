@@ -69,7 +69,7 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
    * The image size is zoomed or not.
    */
   @state()
-  private _zoomed: boolean = false
+  private _zoomed = false
 
   /**
    * Emit an event submit when the user clicks on a button.

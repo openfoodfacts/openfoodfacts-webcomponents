@@ -27,7 +27,7 @@ const getApiUrl = (path: string) => {
  */
 
 const annotate = (formBody: string) => {
-  const apiUrl = getApiUrl(`/insights/annotate`)
+  const apiUrl = getApiUrl("/insights/annotate")
   if (robotoffConfiguration.getItem("dryRun")) {
     console.log("Annotated :", apiUrl, formBody)
     return
