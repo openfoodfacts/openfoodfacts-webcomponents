@@ -10,7 +10,7 @@ import { fetchNutrientsTaxonomies } from "../../signals/taxonomies"
 import { Insight, InsightAnnotationAnswer } from "../../types/robotoff"
 import { BASE } from "../../styles/base"
 import { msg } from "@lit/localize"
-import { getRobotoffImageUrl, robotoffConfiguration } from "../../signals/robotoff"
+import { getRobotoffImageUrl } from "../../signals/robotoff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { FLEX } from "../../styles/utils"
 import { EventState, EventType } from "../../constants"
@@ -188,7 +188,7 @@ export class RobotoffNutrients extends LitElement {
   override render() {
     return this._insightsTask.render({
       pending: () => html`<off-wc-loader></off-wc-loader>`,
-      complete: (insight) => {
+      complete: (insight?: Insight) => {
         if (!insight) {
           return html`<slot name="no-insight"></slot>`
         }
@@ -200,9 +200,9 @@ export class RobotoffNutrients extends LitElement {
               </p>
             </div>
             <div part="nutrients-content-wrapper" class="nutrients-content-wrapper">
-              ${this.renderImage(insight as Insight)}
+              ${this.renderImage(insight)}
               <robotoff-nutrients-table
-                .insight="${insight as Insight}"
+                .insight="${insight}"
                 @submit="${this.onSubmit}"
               ></robotoff-nutrients-table>
             </div>

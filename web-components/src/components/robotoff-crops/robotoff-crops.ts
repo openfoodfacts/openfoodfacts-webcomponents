@@ -1,4 +1,4 @@
-import { LitElement, html, css, nothing } from "lit"
+import { LitElement, html, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import "../shared/zoomable-image"
 import "./robotoff-crops"
@@ -12,6 +12,7 @@ import {
 import { Task } from "@lit/task"
 import { getRobotoffImageUrl } from "../../signals/robotoff"
 import { localized, msg } from "@lit/localize"
+import "../shared/loader"
 
 @customElement("robotoff-crops")
 @localized()
@@ -77,7 +78,7 @@ export class RobotoffCrops extends LitElement {
           <zoomable-image
             src=${imgUrl}
             .size="${{ width: "500px", height: "500px" }}"
-            crop-mode="${true}"
+            .crop-mode=${true}
           ></zoomable-image>
           <p>${msg("Is this image a crop?")}</p>
           <div class="button-container">

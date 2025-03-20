@@ -93,7 +93,7 @@ const robotoff = {
   async getImagePredictions(
     requestParams: ImagePredictionsRequestParams
   ): Promise<ImagePredictionsResponse> {
-    const apiUrl = getApiUrl(`/image_predictions`)
+    const apiUrl = getApiUrl("/image_predictions")
     const url = addParamsToUrl(apiUrl, requestParams)
     const response = await fetch(url)
     const result: ImagePredictionsResponse = await response.json()
