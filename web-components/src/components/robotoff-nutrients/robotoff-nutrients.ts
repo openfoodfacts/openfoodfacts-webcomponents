@@ -182,7 +182,7 @@ export class RobotoffNutrients extends LitElement {
   override render() {
     return this._insightsTask.render({
       pending: () => html`<off-wc-loader></off-wc-loader>`,
-      complete: (insight) => {
+      complete: (insight?: NutrientsInsight | null) => {
         if (!insight) {
           return html`<slot name="no-insight"></slot>`
         }
