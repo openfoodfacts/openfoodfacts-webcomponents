@@ -30,9 +30,16 @@ export class ZoomableImage extends LitElement {
         position: relative;
         border: 1px solid black;
       }
+
+      .button-container {
+        display: flex;
+        justify-content: end;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+      }
     `,
     FLEX,
-    getButtonClasses([ButtonType.LINK, ButtonType.Chocolate]),
+    getButtonClasses([ButtonType.White, ButtonType.Chocolate]),
   ]
 
   @query("cropper-canvas")
@@ -126,12 +133,12 @@ export class ZoomableImage extends LitElement {
 
   renderCropMode() {
     return html`
-      <div class="flex justify-end">
-        <button class="link-button" @click=${this.resetSelection}>${msg("Reset selection")}</button>
-      </div>
-      <div class="flex justify-center">
-        <button class="button chocolate-button" @click=${() => this.validateCrop()}>
-          ${msg("Validate crop")}
+      <div class="button-container">
+        <button class="button white-button small" @click=${this.resetSelection}>
+          ${msg("Reset selection")}
+        </button>
+        <button class="button chocolate-button small" @click=${() => this.validateCrop()}>
+          ${msg("Show crop")}
         </button>
       </div>
     `
@@ -140,7 +147,7 @@ export class ZoomableImage extends LitElement {
   renderCropResult() {
     return html`
       <div>
-        <h3>Crop Result</h3>
+        <div>Crop Result</h3>
         <img src=${this.cropResult} alt="Cropped Image" />
       </div>
     `
