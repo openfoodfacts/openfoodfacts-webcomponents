@@ -1,18 +1,59 @@
 version: 2
 updates:
+  # Keep npm dependencies up to date in web-components
   - package-ecosystem: "npm"
     directory: "/web-components"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
     groups:
-      minor-and-patch-dependencies:
+      # Group for UI/interface libraries
+      interface-libraries:
         patterns:
-          - "*"
+          - "@lit/*"
+          - "lit"
+          - "lit-*"
+          - "@open-wc/*"
+          - "web-*"
+          - "@shoelace*"
+          - "@material/*"
+          - "stencil*"
+          - "react*"
+          - "vue*"
+          - "angular*"
+          - "svelte*"
+        update-types:
+          - "minor"
+          - "patch"
+      
+      # Group for development tooling
+      dev-tooling:
+        patterns:
+          - "eslint*"
+          - "prettier*"
+          - "typescript"
+          - "webpack*"
+          - "babel*"
+          - "jest*"
+          - "rollup*"
+          - "vite*"
+          - "storybook*"
+          - "@storybook/*"
+          - "karma*"
+          - "mocha*"
+          - "chai*"
+          - "husky*"
+          - "lint-staged"
+          - "@types/*"
+        update-types:
+          - "minor"
+          - "patch"
     commit-message:
       prefix: "fix"
+      prefix-development: "chore"
       include: "scope"
 
+  # Keep GitHub Actions up to date
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
