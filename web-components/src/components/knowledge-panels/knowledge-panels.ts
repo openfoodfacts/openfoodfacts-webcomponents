@@ -4,6 +4,7 @@ import { fetchKnowledgePanels } from "../../api/knowledgepanel"
 import { Task } from "@lit/task"
 import { unsafeHTML } from "lit/directives/unsafe-html.js"
 import { ALERT } from "../../styles/alert"
+import "../../components/shared/loader" // Import the loader component
 import { ButtonType, getButtonClasses } from "../../styles/buttons" // Import button styles
 import { VISUALLY_HIDDEN_FOCUSABLE } from "../../styles/accessibility" // Import accessibility styles
 import { BASE } from "../../styles/base" // Import BASE for font styles
