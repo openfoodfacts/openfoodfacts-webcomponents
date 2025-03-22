@@ -11,7 +11,7 @@ import {
 } from "../../signals/questions"
 import { Task } from "@lit/task"
 import { localized, msg } from "@lit/localize"
-import { EventType } from "../../constants"
+import { EventState, EventType } from "../../constants"
 import { QuestionStateEventDetail } from "../../types"
 import { SignalWatcher } from "@lit-labs/signals"
 import "../shared/loader"
@@ -61,14 +61,14 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
    * @type {string}
    */
   @property({ type: String, attribute: "product-code" })
-  productCode: string = ""
+  productCode = ""
 
   /**
    * The insight types to filter questions separate by comma
    * @type {string}
    */
   @property({ type: String, attribute: "insight-types" })
-  insightTypes: string = ""
+  insightTypes = ""
 
   /**
    * Whether the user has answered the question
@@ -90,9 +90,11 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
       }
       const params = insightTypes ? { insight_types: insightTypes } : {}
 
+      this._emitQuestionStateEvent(EventState.LOADING)
       await fetchQuestionsByProductCode(productCode, params)
-      this._emitQuestionStateEvent()
-      return questions(productCode).get()
+      const value = questions(productCode).get()
+      this._emitQuestionStateEvent(value?.length > 0 ? EventState.HAS_DATA : EventState.NO_DATA)
+      return value
     },
     args: () => [this.productCode, this.insightTypes],
   })
@@ -101,11 +103,15 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
    * Emit a custom event when the question state changes to know current state outside the component
    * @returns {void}
    */
-  private _emitQuestionStateEvent = () => {
-    const detail: QuestionStateEventDetail = {
-      index: currentQuestionIndex(this.productCode).get(),
-      numberOfQuestions: numberOfQuestions(this.productCode).get(),
-    }
+  private _emitQuestionStateEvent = (state: EventState) => {
+    const detail: QuestionStateEventDetail =
+      state === EventState.LOADING
+        ? { state }
+        : {
+            state,
+            index: currentQuestionIndex(this.productCode).get(),
+            numberOfQuestions: numberOfQuestions(this.productCode).get(),
+          }
     this.dispatchEvent(
       new CustomEvent(EventType.QUESTION_STATE, {
         detail,
@@ -118,7 +124,9 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
     this.hasAnswered = true
     nextQuestionByProductCode(this.productCode)
     this.requestUpdate()
-    this._emitQuestionStateEvent()
+    this._emitQuestionStateEvent(
+      isQuestionsFinished(this.productCode).get() ? EventState.ANNOTATED : EventState.HAS_DATA
+    )
   }
 
   /**
@@ -137,7 +145,7 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
       return getMessageWrapper(msg("Open Food Facts needs your help with this product."))
     }
 
-    return html`<div>${msg(`Thanks for your help! Can you assist with another question?`)}</div>`
+    return html`<div>${msg("Thanks for your help! Can you assist with another question?")}</div>`
   }
 
   override render() {
@@ -146,13 +154,13 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
         if (!this.options?.showLoading) {
           return nothing
         }
-        return html`<off-wb-loader></off-wb-loader>`
+        return html`<off-wc-loader></off-wc-loader>`
       },
       complete: (questionsList) => {
         const index = currentQuestionIndex(this.productCode).get() ?? 0
         const question = questionsList[index]
         if (!hasQuestions(this.productCode).get()) {
-          return html``
+          return html`<slot></slot>`
         }
         // Hide image only if explicitly set to false
         const isImageShowned = this.options.showImage !== false

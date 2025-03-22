@@ -1,3 +1,4 @@
+import { EventState } from "../constants"
 import { RobotoffConfigurationOptions } from "./robotoff"
 
 export type OffWebcomponentConfigurationOptions = {
@@ -12,9 +13,13 @@ export type Product = {
   imgUrl: string
 }
 
-export type QuestionStateEventDetail = {
-  index: number
-  numberOfQuestions: number
+export type BasicStateEventDetail = {
+  state: EventState
 }
+
+export type QuestionStateEventDetail = {
+  index?: number
+  numberOfQuestions?: number
+} & BasicStateEventDetail
 
 export type QuestionStateEvent = CustomEvent<QuestionStateEventDetail>

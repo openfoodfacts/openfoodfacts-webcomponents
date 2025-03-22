@@ -116,8 +116,8 @@
   "tsConfig": "./tsconfig.json",
   "output": {
     "mode": "runtime",
-    "outputDir": "./src/localization/generated/locales",
-    "localeCodesModule": "./src/localization/generated/locale-codes.ts"
+    "outputDir": "./src/localization/dist/locales",
+    "localeCodesModule": "./src/localization/dist/locale-codes.ts"
   },
   "interchange": {
     "format": "xliff",

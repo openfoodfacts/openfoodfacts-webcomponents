@@ -19,11 +19,13 @@ export const insightIdByProductCode = new SignalMap<string | null>({})
  * @returns {Computed<Insight | undefined>}
  */
 export const insight = (productCode: string) => {
-  return new Computed(
-    () =>
-      insightIdByProductCode.getItem(productCode) &&
-      insightById.getItem(insightIdByProductCode.getItem(productCode) as string)
-  )
+  return new Computed<Insight | undefined>(() => {
+    const insightId = insightIdByProductCode.getItem(productCode)
+    if (!insightId) {
+      return undefined
+    }
+    return insightById.getItem(insightId)
+  })
 }
 
 /**
@@ -35,8 +37,8 @@ export const fetchInsightsByProductCode = (productCode: string) => {
     .insights({
       barcode: productCode,
       insight_types: "nutrient_extraction",
-      // not needed
-      // campaigns: "incomplete-nutrition",
+      // Add this to filter out already annotated insights
+      annotated: false,
     })
     .then((response) => {
       if (response.insights?.length === 0) {

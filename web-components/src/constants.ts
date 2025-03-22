@@ -8,6 +8,7 @@ export const PAGE_SIZE = 25
 export enum EventType {
   SUBMIT = "submit",
   QUESTION_STATE = "question-state",
+  NUTRIENT_STATE = "nutrient-state",
 }
 
 export enum LoadingState {
@@ -17,3 +18,10 @@ export enum LoadingState {
 }
 
 export const DEFAULT_LANGUAGE_CODE = "en"
+
+export enum EventState {
+  LOADING = "loading",
+  NO_DATA = "no-data",
+  HAS_DATA = "has-data",
+  ANNOTATED = "annotated",
+}
