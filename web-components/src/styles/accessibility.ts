@@ -19,8 +19,8 @@ export const VISUALLY_HIDDEN = css`
   }
 `
 export const VISUALLY_HIDDEN_FOCUSABLE = css`
-:focus-visible {
-        outline: 2px solid #5bc0de;
-        outline-offset: 2px;
+  :focus-visible {
+    outline: 2px solid #5bc0de;
+    outline-offset: 2px;
   }
 `

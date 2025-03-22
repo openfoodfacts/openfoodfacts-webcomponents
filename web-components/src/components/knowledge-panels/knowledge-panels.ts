@@ -6,6 +6,7 @@ import { unsafeHTML } from "lit/directives/unsafe-html.js"
 import { ALERT } from "../../styles/alert"
 import { ButtonType, getButtonClasses } from "../../styles/buttons" // Import button styles
 import { VISUALLY_HIDDEN_FOCUSABLE } from "../../styles/accessibility" // Import accessibility styles
+import { BASE } from "../../styles/base" // Import BASE for font styles
 import {
   KnowledgePanel,
   KnowledgePanelElement,
@@ -27,13 +28,13 @@ import {
 @customElement("knowledge-panels")
 export class KnowledgePanelComponent extends LitElement {
   static override styles = [
+    BASE,
     VISUALLY_HIDDEN_FOCUSABLE,
     ALERT,
     ...getButtonClasses([ButtonType.Chocolate, ButtonType.Cappucino]), // Add button styles
     css`
       :host {
         display: block;
-        font-family: var(--font-family, "Public Sans", Helvetica, Roboto, Arial, sans-serif);
         max-width: 100%;
         margin-bottom: 1rem;
       }
@@ -249,7 +250,7 @@ export class KnowledgePanelComponent extends LitElement {
       }
 
       /* Remove button styling - now using imported styles */
-      
+
       .action small {
         display: block;
         color: #999;
@@ -274,8 +275,6 @@ export class KnowledgePanelComponent extends LitElement {
           align-items: flex-start;
         }
       }
-
-     
     `,
   ]
 
@@ -434,7 +433,8 @@ export class KnowledgePanelComponent extends LitElement {
           <div class="action">
             <div>${unsafeHTML(actionElement.html || "")}</div>
             <button class="button chocolate-button" disabled>
-              ${(actionElement as any).action_text || (() => {
+              ${(actionElement as any).action_text ||
+              (() => {
                 console.warn("Missing action_text for action element:", actionElement)
                 return "Default Action"
               })()}
