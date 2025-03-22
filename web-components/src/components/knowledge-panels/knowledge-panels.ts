@@ -26,6 +26,7 @@ import {
  *
  * @property {string} url - The URL to fetch the knowledge panels from
  * @property {string} path - The path to the knowledge panels inside the JSON response (e.g., "product.knowledge_panels")
+ * @property {string} headingLevel - The heading level to use for panel titles (h2, h3, h4, h5, h6)
  */
 @customElement("knowledge-panels")
 export class KnowledgePanelComponent extends LitElement {
@@ -173,7 +174,7 @@ export class KnowledgePanelComponent extends LitElement {
         margin-bottom: 1.5rem;
       }
 
-      .panel-group h4 {
+      .panel-group-title {
         margin-top: 0;
         margin-bottom: 0.75rem;
         font-size: 1.1rem;
@@ -205,7 +206,7 @@ export class KnowledgePanelComponent extends LitElement {
         border-radius: 0 4px 4px 0;
       }
 
-      .sub-panel h4 {
+      .sub-panel-title {
         margin-top: 0;
         margin-bottom: 0.5rem;
         font-size: 1rem;
@@ -222,8 +223,6 @@ export class KnowledgePanelComponent extends LitElement {
         border-radius: 4px;
         border: 1px solid #eee;
       }
-
-      /* Remove button styling - now using imported styles */
 
       .action small {
         display: block;
@@ -252,6 +251,13 @@ export class KnowledgePanelComponent extends LitElement {
     `,
   ]
 
+  @property({ 
+    type: String,
+    reflect: true,
+    attribute: 'heading-level' // Explicitly match the attribute name
+  })
+  headingLevel = "h3" // Set a default value
+
   @property({ type: String })
   url = ""
 
@@ -260,6 +266,27 @@ export class KnowledgePanelComponent extends LitElement {
 
   @state()
   private knowledgePanels: KnowledgePanelsData | null = null
+
+  /**
+   * Add debug information to see what's happening with the component
+   */
+  override connectedCallback(): void {
+    super.connectedCallback();
+    // console.log("Knowledge Panels Component Connected");
+    // console.log("Heading Level Attribute:", this.getAttribute('heading-level'));
+    // console.log("Heading Level Property:", this.headingLevel);
+    // console.log("Validated Heading Level:", this.getValidHeadingLevel());
+  }
+
+  /**
+   * Also add debug for attribute changes
+   */
+  override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+    super.attributeChangedCallback(name, oldValue, newValue);
+    if (name === 'heading-level') {
+      console.log("Heading Level Attribute Changed:", oldValue, "->", newValue);
+    }
+  }
 
   /**
    * Task to fetch knowledge panels
@@ -275,6 +302,43 @@ export class KnowledgePanelComponent extends LitElement {
   })
 
   /**
+   * Validates and normalizes the heading level
+   * @returns Validated heading level string
+   */
+  private getValidHeadingLevel(): string {
+    const validLevels = ["h1", "h2", "h3", "h4", "h5", "h6"]
+    const level = this.headingLevel.toLowerCase()
+    return validLevels.includes(level) ? level : "h3" // Default to h3 if invalid
+  }
+
+  /**
+   * Calculates a subordinate heading level based on the main heading level
+   * @param offset - Number of levels to add (1 = one level deeper)
+   * @returns A valid heading level string (h1-h6)
+   */
+  private getSubHeadingLevel(offset: number = 1): string {
+    const currentLevel = parseInt(this.getValidHeadingLevel().substring(1))
+    const newLevel = Math.min(currentLevel + offset, 6) // Ensure we don't go beyond h6
+    return `h${newLevel}`
+  }
+
+  /**
+   * Renders a dynamic heading based on the configured level
+   * @param text - Text content for the heading
+   * @param className - Optional CSS class for the heading
+   * @param offset - Optional level offset from the base heading level
+   * @returns Template result for the heading
+   */
+  renderHeading(text: string, className?: string, offset: number = 0): TemplateResult {
+    // If offset is provided, calculate a different heading level
+    const level = offset === 0 ? this.getValidHeadingLevel() : this.getSubHeadingLevel(offset)
+    const classAttr = className ? `class="${className}"` : ""
+    
+    // Using unsafeHTML to dynamically create the appropriate heading element
+    return html`${unsafeHTML(`<${level} ${classAttr}>${text}</${level}>`)}`
+  }
+
+  /**
    * Main element renderer - delegates to specific renderers based on element type
    * @param element - The knowledge panel element to render
    * @returns Template result for the element
@@ -285,7 +349,7 @@ export class KnowledgePanelComponent extends LitElement {
       return html``
     }
 
-    console.log("Rendering element type:", element.element_type, element)
+    // console.log("Rendering element type:", element.element_type, element)
 
     switch (element.element_type) {
       case "text":
@@ -340,7 +404,7 @@ export class KnowledgePanelComponent extends LitElement {
 
     return html`
       <div class="table_element">
-        ${tableData.title ? html`<h4>${tableData.title}</h4>` : ""}
+        ${tableData.title ? this.renderHeading(tableData.title, "table-title") : ""}
         <table>
           <thead>
             <tr>
@@ -398,7 +462,7 @@ export class KnowledgePanelComponent extends LitElement {
     } else if (element.elements && Array.isArray(element.elements)) {
       return html`
         <div class="sub-panel">
-          ${element.title ? html`<h4>${element.title}</h4>` : ""}
+          ${element.title ? this.renderHeading(element.title, "sub-panel-title") : ""}
           <div class="elements">
             ${element.elements.map((subElement: KnowledgePanelElement) =>
               this.renderElement(subElement)
@@ -418,12 +482,15 @@ export class KnowledgePanelComponent extends LitElement {
   renderPanelGroup(element: KnowledgePanelElement): TemplateResult {
     const panelGroup = element.panel_group_element
     if (!panelGroup) {
-      return html`<div class="warning">Panel group without data</div>`
+      return html`<div class="warning">
+        ${this.renderHeading("Missing Data", "warning-title", 1)}
+        <p>Panel group without data</p>
+      </div>`
     }
 
     return html`
       <div class="panel-group">
-        ${panelGroup.title ? html`<h4>${panelGroup.title}</h4>` : ""}
+        ${panelGroup.title ? this.renderHeading(panelGroup.title, "panel-group-title", 1) : ""}
         ${this.renderPanelGroupImage(panelGroup)} ${this.renderPanelGroupPanels(panelGroup)}
       </div>
     `
@@ -535,7 +602,7 @@ export class KnowledgePanelComponent extends LitElement {
 
     return html`
       <div class="panel-header">
-        <h3 class="panel-title">${title}</h3>
+        ${this.renderHeading(title, "panel-title")}
         ${subtitle ? html`<div class="panel-subtitle">${subtitle}</div>` : ""}
       </div>
     `
@@ -548,13 +615,19 @@ export class KnowledgePanelComponent extends LitElement {
   override render(): TemplateResult {
     return this._knowledgePanelsTask.render({
       initial: () => html``, // Provide a default value
-      pending: () => html`<off-wc-loader></off-wc-loader>`, // Use the loader component
+      pending: () => html`
+        ${this.renderHeading("Loading Knowledge Panels", "loading-title")}
+        <off-wc-loader></off-wc-loader>
+      `, // Use the loader component with a heading
       complete: (result) => this.renderPanelsResult(result),
       error: (error: unknown) => {
         console.error("Task error:", error)
-        return html`<div class="error">
-          ${error instanceof Error ? error.message : String(error)}
-        </div>`
+        return html`
+          <div class="error">
+            ${this.renderHeading("Error Loading Knowledge Panels", "error-title")}
+            <p>${error instanceof Error ? error.message : String(error)}</p>
+          </div>
+        `
       },
     })
   }
@@ -574,7 +647,14 @@ export class KnowledgePanelComponent extends LitElement {
     }
 
     if (Object.keys(panels).length === 0) {
-      return html`<div class="info">No knowledge panels found.</div>`
+      // Use a heading for the empty state message
+      const emptyHeading = `No Knowledge Panels Available`
+      return html`
+        <div class="info">
+          ${this.renderHeading(emptyHeading, "empty-heading")}
+          <p>No knowledge panels were found for this request.</p>
+        </div>
+      `
     }
 
     // Store panels in the instance for reference in renderElement
@@ -587,8 +667,12 @@ export class KnowledgePanelComponent extends LitElement {
     // If no top-level panels found, show all panels
     const panelsToRender = topLevelPanels.length > 0 ? topLevelPanels : Object.values(panels)
 
+    // Optional: Add a section title for the overall panels
+    const sectionTitle = "Knowledge Panels"
+
     return html`
       <div>
+        ${this.renderHeading(sectionTitle, "knowledge-panels-section-title")}
         ${panelsToRender.map((panel: KnowledgePanel) => (panel ? this.renderPanel(panel) : html``))}
       </div>
     `
