@@ -4,6 +4,7 @@ import { fetchKnowledgePanels } from "../../api/knowledgepanel"
 import { Task } from "@lit/task"
 import { unsafeHTML } from "lit/directives/unsafe-html.js"
 import { ALERT } from "../../styles/alert"
+import { ButtonType, getButtonClasses } from "../../styles/buttons" // Import button styles
 import {
   KnowledgePanel,
   KnowledgePanelElement,
@@ -12,7 +13,7 @@ import {
   TableRow,
   TableCell,
   TableElement,
-} from "../../types/knowledgepanel"
+} from "../../types/knowledge-panel"
 
 /**
  * `knowledge-panels` - A web component to display knowledge panels from any source
@@ -26,6 +27,7 @@ import {
 export class KnowledgePanelComponent extends LitElement {
   static override styles = [
     ALERT,
+    ...getButtonClasses([ButtonType.Chocolate, ButtonType.Cappucino]), // Add button styles
     css`
       :host {
         display: block;
@@ -244,24 +246,8 @@ export class KnowledgePanelComponent extends LitElement {
         border: 1px solid #eee;
       }
 
-      .action button {
-        background-color: #5cb85c;
-        color: white;
-        border: none;
-        padding: 0.5rem 1rem;
-        border-radius: 4px;
-        cursor: not-allowed;
-        opacity: 0.7;
-        font-weight: 500;
-        transition:
-          background-color 0.2s ease,
-          opacity 0.2s ease;
-      }
-
-      .action button:hover {
-        background-color: #4cae4c;
-      }
-
+      /* Remove button styling - now using imported styles */
+      
       .action small {
         display: block;
         color: #999;
@@ -449,6 +435,12 @@ export class KnowledgePanelComponent extends LitElement {
         return html`
           <div class="action">
             <div>${unsafeHTML(actionElement.html || "")}</div>
+            <button class="button chocolate-button" disabled>
+              ${(actionElement as any).action_text || (() => {
+                console.warn("Missing action_text for action element:", actionElement)
+                return "Default Action"
+              })()}
+            </button>
             <small>(Actions are displayed but not functional in this version)</small>
           </div>
         `

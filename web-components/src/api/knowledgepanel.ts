@@ -1,4 +1,4 @@
-import { KnowledgePanelsData } from "../types/knowledgepanel"
+import { KnowledgePanelsData } from "../types/knowledge-panel"
 
 /**
  * Fetches knowledge panels data from specified URL and extracts data at the given path
