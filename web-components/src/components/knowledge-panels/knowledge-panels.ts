@@ -486,7 +486,6 @@ export class KnowledgePanelComponent extends LitElement {
 
   override render(): TemplateResult {
     return this._knowledgePanelsTask.render({
-      initial: () => html``, // Provide a default value
       pending: () => html`<div class="loading">Loading knowledge panels...</div>`,
       complete: (result) => {
         const panels = result as KnowledgePanelsData
