@@ -251,10 +251,10 @@ export class KnowledgePanelComponent extends LitElement {
     `,
   ]
 
-  @property({ 
+  @property({
     type: String,
     reflect: true,
-    attribute: 'heading-level' // Explicitly match the attribute name
+    attribute: "heading-level", // Explicitly match the attribute name
   })
   headingLevel = "h3" // Set a default value
 
@@ -271,7 +271,7 @@ export class KnowledgePanelComponent extends LitElement {
    * Add debug information to see what's happening with the component
    */
   override connectedCallback(): void {
-    super.connectedCallback();
+    super.connectedCallback()
     // console.log("Knowledge Panels Component Connected");
     // console.log("Heading Level Attribute:", this.getAttribute('heading-level'));
     // console.log("Heading Level Property:", this.headingLevel);
@@ -281,10 +281,14 @@ export class KnowledgePanelComponent extends LitElement {
   /**
    * Also add debug for attribute changes
    */
-  override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
-    super.attributeChangedCallback(name, oldValue, newValue);
-    if (name === 'heading-level') {
-      console.log("Heading Level Attribute Changed:", oldValue, "->", newValue);
+  override attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null
+  ): void {
+    super.attributeChangedCallback(name, oldValue, newValue)
+    if (name === "heading-level") {
+      console.log("Heading Level Attribute Changed:", oldValue, "->", newValue)
     }
   }
 
@@ -333,7 +337,7 @@ export class KnowledgePanelComponent extends LitElement {
     // If offset is provided, calculate a different heading level
     const level = offset === 0 ? this.getValidHeadingLevel() : this.getSubHeadingLevel(offset)
     const classAttr = className ? `class="${className}"` : ""
-    
+
     // Using unsafeHTML to dynamically create the appropriate heading element
     return html`${unsafeHTML(`<${level} ${classAttr}>${text}</${level}>`)}`
   }
@@ -648,7 +652,7 @@ export class KnowledgePanelComponent extends LitElement {
 
     if (Object.keys(panels).length === 0) {
       // Use a heading for the empty state message
-      const emptyHeading = `No Knowledge Panels Available`
+      const emptyHeading = "No Knowledge Panels Available"
       return html`
         <div class="info">
           ${this.renderHeading(emptyHeading, "empty-heading")}
