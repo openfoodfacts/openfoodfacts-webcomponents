@@ -12,18 +12,18 @@ export const fetchKnowledgePanels = async (
 ): Promise<KnowledgePanelsData> => {
   try {
     const response = await fetch(url)
-    
+
     if (!response.ok) {
       throw new Error(`Failed to fetch: ${response.statusText}`)
     }
-    
+
     const data = await response.json()
     console.log("Raw API response:", data)
-    
+
     // Navigate through the path to find the knowledge panels
     let result = data
     const pathParts = path.split(".")
-    
+
     for (const part of pathParts) {
       console.log(`Navigating to "${part}"`, result)
       if (result && typeof result === "object" && part in result) {
@@ -32,7 +32,7 @@ export const fetchKnowledgePanels = async (
         throw new Error(`Path "${path}" not found in the response data`)
       }
     }
-    
+
     console.log("Final knowledge panels result:", result)
     return result as KnowledgePanelsData
   } catch (error) {
