@@ -300,6 +300,11 @@ export class KnowledgePanelComponent extends LitElement {
     args: () => [this.url, this.path] as [string, string],
   })
 
+  /**
+   * Main element renderer - delegates to specific renderers based on element type
+   * @param element - The knowledge panel element to render
+   * @returns Template result for the element
+   */
   renderElement(element: KnowledgePanelElement): TemplateResult {
     if (!element || !element.element_type) {
       console.error("Invalid element:", element)
@@ -310,146 +315,216 @@ export class KnowledgePanelComponent extends LitElement {
 
     switch (element.element_type) {
       case "text":
-        const textContent =
-          element.text_element?.html || element.text_element?.text || element.text || ""
-        return html`<div class="text_element">${unsafeHTML(textContent)}</div>`
-
-      case "table": {
-        const tableData = element.table_element || ({} as TableElement)
-
-        if (!tableData) {
-          console.error("Invalid table element - missing table_element:", element)
-          return html`<div class="error">Invalid table format</div>`
-        }
-
-        const columns = tableData.columns || []
-        const rows = tableData.rows || []
-
-        if (!Array.isArray(columns) || !Array.isArray(rows)) {
-          console.error("Invalid table structure:", tableData)
-          return html`<div class="error">Invalid table structure</div>`
-        }
-
-        return html`
-          <div class="table_element">
-            ${tableData.title ? html`<h4>${tableData.title}</h4>` : ""}
-            <table>
-              <thead>
-                <tr>
-                  ${columns.map(
-                    (column: TableColumn) => html`<th>${column.text || column.id || ""}</th>`
-                  )}
-                </tr>
-              </thead>
-              <tbody>
-                ${rows.map(
-                  (row: TableRow) => html`
-                    <tr>
-                      ${(row.cells || []).map(
-                        (cell: TableCell) => html`<td>${cell.text || cell.value || ""}</td>`
-                      )}
-                    </tr>
-                  `
-                )}
-              </tbody>
-            </table>
-          </div>
-        `
-      }
-
+        return this.renderText(element)
+      case "table":
+        return this.renderTable(element)
       case "titled_text":
-        return html`
-          <div class="element">
-            <div class="element-title">${element.title || ""}</div>
-            <div class="element-value">${element.text || ""}</div>
-          </div>
-        `
-
+        return this.renderTitledText(element)
       case "panel":
-        // For panel elements, we either render the referenced panel or its own content
-        if (element.panel_element?.panel_id) {
-          const panelId = element.panel_element.panel_id
-          // We need to get the actual panel from the panels data
-          const referencedPanel = this.knowledgePanels?.[panelId]
-          if (referencedPanel) {
-            return this.renderPanel(referencedPanel)
-          } else {
-            return html`<div class="warning">Referenced panel not found: ${panelId}</div>`
-          }
-        } else if (element.elements && Array.isArray(element.elements)) {
-          return html`
-            <div class="sub-panel">
-              ${element.title ? html`<h4>${element.title}</h4>` : ""}
-              <div class="elements">
-                ${element.elements.map((subElement: KnowledgePanelElement) =>
-                  this.renderElement(subElement)
-                )}
-              </div>
-            </div>
-          `
-        }
-        return html`<div class="warning">Panel without elements</div>`
-
-      case "panel_group": {
-        const panelGroup = element.panel_group_element
-        if (!panelGroup) {
-          return html`<div class="warning">Panel group without data</div>`
-        }
-
-        return html`
-          <div class="panel-group">
-            ${panelGroup.title ? html`<h4>${panelGroup.title}</h4>` : ""}
-            ${panelGroup.image
-              ? html`
-                  <div class="panel-image">
-                    <img
-                      src="${panelGroup.image.sizes?.["400"]?.url ||
-                      panelGroup.image.sizes?.["full"]?.url ||
-                      ""}"
-                      alt="${panelGroup.image.alt || ""}"
-                    />
-                  </div>
-                `
-              : ""}
-            ${(panelGroup.panel_ids || []).map((panelId: string) => {
-              const panel = this.knowledgePanels?.[panelId]
-              if (panel) {
-                return this.renderPanel(panel)
-              } else {
-                return html`<div class="warning">Referenced panel not found: ${panelId}</div>`
-              }
-            })}
-          </div>
-        `
-      }
-
-      case "action": {
-        const actionElement = element.action_element
-        if (!actionElement) {
-          return html``
-        }
-
-        return html`
-          <div class="action">
-            <div>${unsafeHTML(actionElement.html || "")}</div>
-            <button class="button chocolate-button" disabled>
-              ${(actionElement as any).action_text ||
-              (() => {
-                console.warn("Missing action_text for action element:", actionElement)
-                return "Default Action"
-              })()}
-            </button>
-            <small>(Actions are displayed but not functional in this version)</small>
-          </div>
-        `
-      }
-
+        return this.renderPanelElement(element)
+      case "panel_group":
+        return this.renderPanelGroup(element)
+      case "action":
+        return this.renderAction(element)
       default:
         console.log(`Unsupported element type: ${element.element_type}`, element)
         return html``
     }
   }
 
+  /**
+   * Renders a text element with HTML or plain text content
+   * @param element - The text element to render
+   * @returns Template result for the text element
+   */
+  renderText(element: KnowledgePanelElement): TemplateResult {
+    const textContent =
+      element.text_element?.html || element.text_element?.text || element.text || ""
+    return html`<div class="text_element">${unsafeHTML(textContent)}</div>`
+  }
+
+  /**
+   * Renders a table element with columns and rows
+   * @param element - The table element to render
+   * @returns Template result for the table element
+   */
+  renderTable(element: KnowledgePanelElement): TemplateResult {
+    const tableData = element.table_element || ({} as TableElement)
+
+    if (!tableData) {
+      console.error("Invalid table element - missing table_element:", element)
+      return html`<div class="error">Invalid table format</div>`
+    }
+
+    const columns = tableData.columns || []
+    const rows = tableData.rows || []
+
+    if (!Array.isArray(columns) || !Array.isArray(rows)) {
+      console.error("Invalid table structure:", tableData)
+      return html`<div class="error">Invalid table structure</div>`
+    }
+
+    return html`
+      <div class="table_element">
+        ${tableData.title ? html`<h4>${tableData.title}</h4>` : ""}
+        <table>
+          <thead>
+            <tr>
+              ${columns.map(
+                (column: TableColumn) => html`<th>${column.text || column.id || ""}</th>`
+              )}
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(
+              (row: TableRow) => html`
+                <tr>
+                  ${(row.cells || []).map(
+                    (cell: TableCell) => html`<td>${cell.text || cell.value || ""}</td>`
+                  )}
+                </tr>
+              `
+            )}
+          </tbody>
+        </table>
+      </div>
+    `
+  }
+
+  /**
+   * Renders a titled text element with a title and value
+   * @param element - The titled text element to render
+   * @returns Template result for the titled text element
+   */
+  renderTitledText(element: KnowledgePanelElement): TemplateResult {
+    return html`
+      <div class="element">
+        <div class="element-title">${element.title || ""}</div>
+        <div class="element-value">${element.text || ""}</div>
+      </div>
+    `
+  }
+
+  /**
+   * Renders a panel element, which can either reference another panel or contain its own elements
+   * @param element - The panel element to render
+   * @returns Template result for the panel element
+   */
+  renderPanelElement(element: KnowledgePanelElement): TemplateResult {
+    // For panel elements, we either render the referenced panel or its own content
+    if (element.panel_element?.panel_id) {
+      const panelId = element.panel_element.panel_id
+      // We need to get the actual panel from the panels data
+      const referencedPanel = this.knowledgePanels?.[panelId]
+      if (referencedPanel) {
+        return this.renderPanel(referencedPanel)
+      } else {
+        return html`<div class="warning">Referenced panel not found: ${panelId}</div>`
+      }
+    } else if (element.elements && Array.isArray(element.elements)) {
+      return html`
+        <div class="sub-panel">
+          ${element.title ? html`<h4>${element.title}</h4>` : ""}
+          <div class="elements">
+            ${element.elements.map((subElement: KnowledgePanelElement) =>
+              this.renderElement(subElement)
+            )}
+          </div>
+        </div>
+      `
+    }
+    return html`<div class="warning">Panel without elements</div>`
+  }
+
+  /**
+   * Renders a panel group element with a title, optional image, and referenced panels
+   * @param element - The panel group element to render
+   * @returns Template result for the panel group element
+   */
+  renderPanelGroup(element: KnowledgePanelElement): TemplateResult {
+    const panelGroup = element.panel_group_element
+    if (!panelGroup) {
+      return html`<div class="warning">Panel group without data</div>`
+    }
+
+    return html`
+      <div class="panel-group">
+        ${panelGroup.title ? html`<h4>${panelGroup.title}</h4>` : ""}
+        ${this.renderPanelGroupImage(panelGroup)}
+        ${this.renderPanelGroupPanels(panelGroup)}
+      </div>
+    `
+  }
+
+  /**
+   * Renders the image for a panel group if it exists
+   * @param panelGroup - The panel group containing the image
+   * @returns Template result for the panel group image
+   */
+  renderPanelGroupImage(panelGroup: any): TemplateResult {
+    if (!panelGroup.image) {
+      return html``
+    }
+    
+    return html`
+      <div class="panel-image">
+        <img
+          src="${panelGroup.image.sizes?.["400"]?.url ||
+          panelGroup.image.sizes?.["full"]?.url ||
+          ""}"
+          alt="${panelGroup.image.alt || ""}"
+        />
+      </div>
+    `
+  }
+
+  /**
+   * Renders the panels referenced by a panel group
+   * @param panelGroup - The panel group containing panel references
+   * @returns Template result for the referenced panels
+   */
+  renderPanelGroupPanels(panelGroup: any): TemplateResult[] {
+    return (panelGroup.panel_ids || []).map((panelId: string) => {
+      const panel = this.knowledgePanels?.[panelId]
+      if (panel) {
+        return this.renderPanel(panel)
+      } else {
+        return html`<div class="warning">Referenced panel not found: ${panelId}</div>`
+      }
+    })
+  }
+
+  /**
+   * Renders an action element with a button (disabled in this version)
+   * @param element - The action element to render
+   * @returns Template result for the action element
+   */
+  renderAction(element: KnowledgePanelElement): TemplateResult {
+    const actionElement = element.action_element
+    if (!actionElement) {
+      return html``
+    }
+
+    return html`
+      <div class="action">
+        <div>${unsafeHTML(actionElement.html || "")}</div>
+        <button class="button chocolate-button" disabled>
+          ${(actionElement as any).action_text ||
+          (() => {
+            console.warn("Missing action_text for action element:", actionElement)
+            return "Default Action"
+          })()}
+        </button>
+        <small>(Actions are displayed but not functional in this version)</small>
+      </div>
+    `
+  }
+
+  /**
+   * Renders a complete knowledge panel with title and elements
+   * @param panel - The knowledge panel to render
+   * @returns Template result for the knowledge panel
+   */
   renderPanel(panel: KnowledgePanel): TemplateResult {
     if (!panel) {
       console.error("Attempted to render null or undefined panel")
@@ -464,17 +539,7 @@ export class KnowledgePanelComponent extends LitElement {
 
     return html`
       <div class="panel ${panel.level || ""} ${panel.size || ""}">
-        ${title
-          ? html`
-              <div class="panel-header">
-                <h3 class="panel-title">${title}</h3>
-                ${panel.title_element?.subtitle
-                  ? html`<div class="panel-subtitle">${panel.title_element.subtitle}</div>`
-                  : ""}
-              </div>
-            `
-          : ""}
-
+        ${this.renderPanelHeader(title, panel.title_element?.subtitle)}
         <div class="panel-content">
           <div class="elements">
             ${elements.map((element: KnowledgePanelElement) => this.renderElement(element))}
@@ -484,40 +549,34 @@ export class KnowledgePanelComponent extends LitElement {
     `
   }
 
+  /**
+   * Renders the header section of a knowledge panel
+   * @param title - The panel title
+   * @param subtitle - Optional subtitle for the panel
+   * @returns Template result for the panel header
+   */
+  renderPanelHeader(title: string, subtitle?: string): TemplateResult {
+    if (!title) {
+      return html``
+    }
+    
+    return html`
+      <div class="panel-header">
+        <h3 class="panel-title">${title}</h3>
+        ${subtitle ? html`<div class="panel-subtitle">${subtitle}</div>` : ""}
+      </div>
+    `
+  }
+
+  /**
+   * Main render method for the component
+   * @returns Template result for the entire component
+   */
   override render(): TemplateResult {
     return this._knowledgePanelsTask.render({
+      initial: () => html``, // Provide a default value
       pending: () => html`<div class="loading">Loading knowledge panels...</div>`,
-      complete: (result) => {
-        const panels = result as KnowledgePanelsData
-        console.log("Panels received:", panels)
-
-        if (!panels || typeof panels !== "object") {
-          console.error("Invalid panels data:", panels)
-          return html`<div class="error">Invalid data format received</div>`
-        }
-
-        if (Object.keys(panels).length === 0) {
-          return html`<div class="info">No knowledge panels found.</div>`
-        }
-
-        // Store panels in the instance for reference in renderElement
-        this.knowledgePanels = panels
-
-        // Create an array of top-level panels (ones that aren't only referenced by others)
-        const topLevelPanelIds = ["health_card", "environment_card"]
-        const topLevelPanels = topLevelPanelIds.filter((id) => panels[id]).map((id) => panels[id])
-
-        // If no top-level panels found, show all panels
-        const panelsToRender = topLevelPanels.length > 0 ? topLevelPanels : Object.values(panels)
-
-        return html`
-          <div>
-            ${panelsToRender.map((panel: KnowledgePanel) =>
-              panel ? this.renderPanel(panel) : html``
-            )}
-          </div>
-        `
-      },
+      complete: (result) => this.renderPanelsResult(result),
       error: (error: unknown) => {
         console.error("Task error:", error)
         return html`<div class="error">
@@ -525,6 +584,43 @@ export class KnowledgePanelComponent extends LitElement {
         </div>`
       },
     })
+  }
+
+  /**
+   * Renders the panels data once it has been loaded
+   * @param result - The panels data from the API
+   * @returns Template result for the panels
+   */
+  renderPanelsResult(result: unknown): TemplateResult {
+    const panels = result as KnowledgePanelsData
+    console.log("Panels received:", panels)
+
+    if (!panels || typeof panels !== "object") {
+      console.error("Invalid panels data:", panels)
+      return html`<div class="error">Invalid data format received</div>`
+    }
+
+    if (Object.keys(panels).length === 0) {
+      return html`<div class="info">No knowledge panels found.</div>`
+    }
+
+    // Store panels in the instance for reference in renderElement
+    this.knowledgePanels = panels
+
+    // Create an array of top-level panels (ones that aren't only referenced by others)
+    const topLevelPanelIds = ["health_card", "environment_card"]
+    const topLevelPanels = topLevelPanelIds.filter((id) => panels[id]).map((id) => panels[id])
+
+    // If no top-level panels found, show all panels
+    const panelsToRender = topLevelPanels.length > 0 ? topLevelPanels : Object.values(panels)
+
+    return html`
+      <div>
+        ${panelsToRender.map((panel: KnowledgePanel) =>
+          panel ? this.renderPanel(panel) : html``
+        )}
+      </div>
+    `
   }
 }
 
