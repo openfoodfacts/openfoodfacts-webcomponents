@@ -5,6 +5,7 @@ import { Task } from "@lit/task"
 import { unsafeHTML } from "lit/directives/unsafe-html.js"
 import { ALERT } from "../../styles/alert"
 import { ButtonType, getButtonClasses } from "../../styles/buttons" // Import button styles
+import { VISUALLY_HIDDEN_FOCUSABLE } from "../../styles/accessibility" // Import accessibility styles
 import {
   KnowledgePanel,
   KnowledgePanelElement,
@@ -26,6 +27,7 @@ import {
 @customElement("knowledge-panels")
 export class KnowledgePanelComponent extends LitElement {
   static override styles = [
+    VISUALLY_HIDDEN_FOCUSABLE,
     ALERT,
     ...getButtonClasses([ButtonType.Chocolate, ButtonType.Cappucino]), // Add button styles
     css`
@@ -273,11 +275,7 @@ export class KnowledgePanelComponent extends LitElement {
         }
       }
 
-      /* Accessibility Improvements */
-      :focus-visible {
-        outline: 2px solid #5bc0de;
-        outline-offset: 2px;
-      }
+     
     `,
   ]
 
