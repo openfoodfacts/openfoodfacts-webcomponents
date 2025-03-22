@@ -3,6 +3,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { fetchKnowledgePanels } from '../../api/knowledgepanel';
 import { Task } from '@lit/task';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
+import { ALERT } from '../../styles/alert';
 import { 
   KnowledgePanel,
   KnowledgePanelElement,
@@ -23,7 +24,8 @@ import {
  */
 @customElement('knowledge-panels')
 export class KnowledgePanelComponent extends LitElement {
-  static override styles = css`
+  static override styles =[ALERT, css`
+     
     :host {
       display: block;
       font-family: var(--font-family, "Public Sans", Helvetica, Roboto, Arial, sans-serif);
@@ -150,7 +152,7 @@ export class KnowledgePanelComponent extends LitElement {
       to { transform: rotate(360deg); }
     }
     
-   
+  
     
     /* Special Element Styling */
     .text_element {
@@ -286,7 +288,7 @@ export class KnowledgePanelComponent extends LitElement {
       outline: 2px solid #5bc0de;
       outline-offset: 2px;
     }
-  `;
+  `];
   @property({ type: String })
   url = '';
 
