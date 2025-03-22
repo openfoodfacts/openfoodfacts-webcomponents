@@ -133,8 +133,6 @@ export class KnowledgePanelComponent extends LitElement {
         color: #555;
       }
 
-     
-
       /* Special Element Styling */
       .text_element {
         margin-bottom: 0.75rem;
