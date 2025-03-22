@@ -7,6 +7,7 @@ import { ALERT } from "../../styles/alert"
 import { ButtonType, getButtonClasses } from "../../styles/buttons" // Import button styles
 import { VISUALLY_HIDDEN_FOCUSABLE } from "../../styles/accessibility" // Import accessibility styles
 import { BASE } from "../../styles/base" // Import BASE for font styles
+
 import {
   KnowledgePanel,
   KnowledgePanelElement,
@@ -132,33 +133,7 @@ export class KnowledgePanelComponent extends LitElement {
         color: #555;
       }
 
-      /* Status Indicators */
-      .loading {
-        padding: 1rem;
-        text-align: center;
-        color: #777;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .loading::before {
-        content: "";
-        display: inline-block;
-        width: 1rem;
-        height: 1rem;
-        border: 2px solid #ddd;
-        border-radius: 50%;
-        border-top-color: #5bc0de;
-        animation: spin 1s linear infinite;
-      }
-
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
+     
 
       /* Special Element Styling */
       .text_element {
@@ -574,7 +549,7 @@ export class KnowledgePanelComponent extends LitElement {
   override render(): TemplateResult {
     return this._knowledgePanelsTask.render({
       initial: () => html``, // Provide a default value
-      pending: () => html`<div class="loading">Loading knowledge panels...</div>`,
+      pending: () => html`<off-wc-loader></off-wc-loader>`, // Use the loader component
       complete: (result) => this.renderPanelsResult(result),
       error: (error: unknown) => {
         console.error("Task error:", error)
