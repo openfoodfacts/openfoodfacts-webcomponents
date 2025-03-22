@@ -6,7 +6,10 @@ import { KnowledgePanelsData } from "../types/knowledgepanel"
  * @param path The path to the knowledge panels in the JSON response
  * @returns The knowledge panels data
  */
-export const fetchKnowledgePanels = async (url: string, path: string): Promise<KnowledgePanelsData> => {
+export const fetchKnowledgePanels = async (
+  url: string,
+  path: string
+): Promise<KnowledgePanelsData> => {
   try {
     const response = await fetch(url)
     
