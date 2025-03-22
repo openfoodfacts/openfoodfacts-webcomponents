@@ -450,8 +450,7 @@ export class KnowledgePanelComponent extends LitElement {
     return html`
       <div class="panel-group">
         ${panelGroup.title ? html`<h4>${panelGroup.title}</h4>` : ""}
-        ${this.renderPanelGroupImage(panelGroup)}
-        ${this.renderPanelGroupPanels(panelGroup)}
+        ${this.renderPanelGroupImage(panelGroup)} ${this.renderPanelGroupPanels(panelGroup)}
       </div>
     `
   }
@@ -465,7 +464,7 @@ export class KnowledgePanelComponent extends LitElement {
     if (!panelGroup.image) {
       return html``
     }
-    
+
     return html`
       <div class="panel-image">
         <img
@@ -559,7 +558,7 @@ export class KnowledgePanelComponent extends LitElement {
     if (!title) {
       return html``
     }
-    
+
     return html`
       <div class="panel-header">
         <h3 class="panel-title">${title}</h3>
@@ -616,9 +615,7 @@ export class KnowledgePanelComponent extends LitElement {
 
     return html`
       <div>
-        ${panelsToRender.map((panel: KnowledgePanel) =>
-          panel ? this.renderPanel(panel) : html``
-        )}
+        ${panelsToRender.map((panel: KnowledgePanel) => (panel ? this.renderPanel(panel) : html``))}
       </div>
     `
   }
