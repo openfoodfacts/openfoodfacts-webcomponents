@@ -42,7 +42,6 @@ export class KnowledgePanelComponent extends LitElement {
         margin-bottom: 1.5rem;
         box-sizing: border-box;
         overflow-x: hidden; /* Prevent horizontal scrolling */
-        
       }
 
       /* Apply box-sizing to all elements */
@@ -100,7 +99,6 @@ export class KnowledgePanelComponent extends LitElement {
         border-bottom: 1px solid #eeeeee;
         padding: 1rem 1.25rem;
         display: block;
-        
       }
 
       .panel-title {
@@ -352,7 +350,6 @@ export class KnowledgePanelComponent extends LitElement {
         width: 100%;
         text-align: left;
         overflow-x: hidden; /* Prevent horizontal scrolling */
-        
       }
 
       .knowledge-panels-section-title {
@@ -361,7 +358,7 @@ export class KnowledgePanelComponent extends LitElement {
         margin-bottom: 1.25rem;
         word-wrap: break-word;
         font-weight: 600;
-      
+
         font-size: 1.3rem;
       }
 
