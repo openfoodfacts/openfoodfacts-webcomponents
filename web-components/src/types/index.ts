@@ -23,3 +23,10 @@ export type QuestionStateEventDetail = {
 } & BasicStateEventDetail
 
 export type QuestionStateEvent = CustomEvent<QuestionStateEventDetail>
+
+export type CropResult = {
+  x: number
+  y: number
+  width: number
+  height: number
+}
