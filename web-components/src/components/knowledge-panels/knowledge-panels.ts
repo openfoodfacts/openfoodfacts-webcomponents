@@ -74,7 +74,7 @@ export class KnowledgePanelComponent extends LitElement {
 
       /* Panel Contextual Variations - More pronounced curves */
       .panel.info {
-        border-left: 4px solid #5bc0de;
+        border-left: 4px solid #79e1a6;
         border-radius: 0 8px 8px 0;
       }
 
