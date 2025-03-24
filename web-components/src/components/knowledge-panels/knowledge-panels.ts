@@ -7,6 +7,7 @@ import { ALERT } from "../../styles/alert"
 import "../../components/shared/loader" // Import the loader component
 import { ButtonType, getButtonClasses } from "../../styles/buttons" // Import button styles
 import { BASE } from "../../styles/base" // Import BASE for font styles
+import DOMPurify from "dompurify"
 
 import {
   KnowledgePanel,
@@ -553,7 +554,8 @@ export class KnowledgePanelComponent extends LitElement {
     const classAttr = className ? `class="${className}"` : ""
 
     // Using unsafeHTML to dynamically create the appropriate heading element
-    return html`${unsafeHTML(`<${level} ${classAttr}>${text}</${level}>`)}`
+    const sanitizedHTML = DOMPurify.sanitize(`<${level} ${classAttr}>${text}</${level}>`)
+    return html`${unsafeHTML(sanitizedHTML)}`
   }
 
   /**
@@ -594,7 +596,11 @@ export class KnowledgePanelComponent extends LitElement {
   renderText(element: KnowledgePanelElement): TemplateResult {
     const textContent =
       element.text_element?.html || element.text_element?.text || element.text || ""
-    return html`<div class="text_element">${unsafeHTML(textContent)}</div>`
+    // Sanitize the HTML first
+    const sanitizedContent = DOMPurify.sanitize(textContent)
+
+    // Then use it with unsafeHTML
+    return html`<div class="text_element">${unsafeHTML(sanitizedContent)}</div>`
   }
 
   /**
@@ -765,10 +771,11 @@ export class KnowledgePanelComponent extends LitElement {
 
     const actionText = (actionElement as any).action_text || "Default Action"
     const actionDescription = (actionElement as any).description || ""
+    const sanitizedHTML = DOMPurify.sanitize(actionElement.html || "")
 
     return html`
       <div class="action">
-        <div>${unsafeHTML(actionElement.html || "")}</div>
+        <div>${unsafeHTML(sanitizedHTML)}</div>
         <button class="button chocolate-button" disabled>${actionText}</button>
         ${actionDescription ? html`<small>${actionDescription}</small>` : ""}
         <small>(Actions are displayed but not functional in this version)</small>
