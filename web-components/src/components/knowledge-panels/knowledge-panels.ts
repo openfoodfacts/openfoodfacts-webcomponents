@@ -36,332 +36,331 @@ export class KnowledgePanelComponent extends LitElement {
     ALERT,
     ...getButtonClasses([ButtonType.Chocolate, ButtonType.Cappucino]), // Add button styles
     css`
-   
-/* Full-width panel styles with overflow fixes */
-:host {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  margin-bottom: 1rem;
-  box-sizing: border-box;
-  overflow-x: hidden; /* Prevent horizontal scrolling */
-}
+      /* Full-width panel styles with overflow fixes */
+      :host {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 1rem;
+        box-sizing: border-box;
+        overflow-x: hidden; /* Prevent horizontal scrolling */
+      }
 
-/* Apply box-sizing to all elements */
-*, *:before, *:after {
-  box-sizing: border-box;
-}
+      /* Apply box-sizing to all elements */
+      *,
+      *:before,
+      *:after {
+        box-sizing: border-box;
+      }
 
-/* Panel Base Styles */
-.panel {
-  width: 100%;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-  margin-bottom: 1rem;
-  overflow: hidden;
-  transition: box-shadow 0.2s ease;
-}
+      /* Panel Base Styles */
+      .panel {
+        width: 100%;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+        margin-bottom: 1rem;
+        overflow: hidden;
+        transition: box-shadow 0.2s ease;
+      }
 
-.panel:hover {
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
-}
+      .panel:hover {
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
+      }
 
-/* Remove small panel size limit */
-.panel.small {
-  max-width: 100%;
-}
+      /* Remove small panel size limit */
+      .panel.small {
+        max-width: 100%;
+      }
 
-/* Panel Contextual Variations */
-.panel.info {
-  border-left: 3px solid #5bc0de;
-}
+      /* Panel Contextual Variations */
+      .panel.info {
+        border-left: 3px solid #5bc0de;
+      }
 
-.panel.warning {
-  border-left: 3px solid #f0ad4e;
-}
+      .panel.warning {
+        border-left: 3px solid #f0ad4e;
+      }
 
-.panel.success {
-  border-left: 3px solid #5cb85c;
-}
+      .panel.success {
+        border-left: 3px solid #5cb85c;
+      }
 
-.panel.danger {
-  border-left: 3px solid #d9534f;
-}
+      .panel.danger {
+        border-left: 3px solid #d9534f;
+      }
 
-/* Panel Components */
-.panel-header {
-  width: 100%;
-  background-color: #f8f8f8;
-  border-bottom: 1px solid #ddd;
-  padding: 0.75rem 1rem;
-  display: block;
-}
+      /* Panel Components */
+      .panel-header {
+        width: 100%;
+        background-color: #f8f8f8;
+        border-bottom: 1px solid #ddd;
+        padding: 0.75rem 1rem;
+        display: block;
+      }
 
-.panel-title {
-  width: 100%;
-  color: #333;
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin: 0;
-  line-height: 1.3;
-  text-align: left;
-  word-wrap: break-word; /* Handle long titles */
-}
+      .panel-title {
+        width: 100%;
+        color: #333;
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 0;
+        line-height: 1.3;
+        text-align: left;
+        word-wrap: break-word; /* Handle long titles */
+      }
 
-.panel-subtitle {
-  width: 100%;
-  color: #666;
-  font-size: 0.9rem;
-  margin-top: 0.25rem;
-  text-align: left;
-  word-wrap: break-word;
-}
+      .panel-subtitle {
+        width: 100%;
+        color: #666;
+        font-size: 0.9rem;
+        margin-top: 0.25rem;
+        text-align: left;
+        word-wrap: break-word;
+      }
 
-/* Panel content */
-.panel-content {
-  width: 100%;
-  padding: 1rem;
-  display: block;
-}
+      /* Panel content */
+      .panel-content {
+        width: 100%;
+        padding: 1rem;
+        display: block;
+      }
 
-/* Layout for all panels - including nutrition */
-.nutrition-panel .panel-content {
-  width: 100%;
-  display: block;
-}
+      /* Layout for all panels - including nutrition */
+      .nutrition-panel .panel-content {
+        width: 100%;
+        display: block;
+      }
 
-.nutrition-panel .panel-content .panel-left,
-.nutrition-panel .panel-content .panel-right {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  margin: 0 0 1rem 0;
-}
+      .nutrition-panel .panel-content .panel-left,
+      .nutrition-panel .panel-content .panel-right {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        margin: 0 0 1rem 0;
+      }
 
-.nutrition-panel .panel-content .panel-right img {
-  width: auto;
-  max-width: 100%;
-  height: auto;
-  border-radius: 4px;
-  border: 1px solid #eee;
-  display: block;
-  margin: 0;
-}
+      .nutrition-panel .panel-content .panel-right img {
+        width: auto;
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+        border: 1px solid #eee;
+        display: block;
+        margin: 0;
+      }
 
-/* Element Layout */
-.elements {
-  width: 100%;
-  display: block;
-}
+      /* Element Layout */
+      .elements {
+        width: 100%;
+        display: block;
+      }
 
-.element {
-  width: 100%;
-  display: block;
-  padding-bottom: 0.75rem;
-  margin-bottom: 0.75rem;
-  border-bottom: 1px solid #f0f0f0;
-  text-align: left;
-}
+      .element {
+        width: 100%;
+        display: block;
+        padding-bottom: 0.75rem;
+        margin-bottom: 0.75rem;
+        border-bottom: 1px solid #f0f0f0;
+        text-align: left;
+      }
 
-.element:last-child {
-  border-bottom: none;
-  margin-bottom: 0;
-}
+      .element:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+      }
 
-.element-title {
-  width: 100%;
-  display: block;
-  font-weight: 600;
-  color: #444;
-  margin-bottom: 0.5rem;
-  text-align: left;
-  word-wrap: break-word;
-}
+      .element-title {
+        width: 100%;
+        display: block;
+        font-weight: 600;
+        color: #444;
+        margin-bottom: 0.5rem;
+        text-align: left;
+        word-wrap: break-word;
+      }
 
-.element-value {
-  width: 100%;
-  display: block;
-  color: #555;
-  text-align: left;
-  word-wrap: break-word;
-}
+      .element-value {
+        width: 100%;
+        display: block;
+        color: #555;
+        text-align: left;
+        word-wrap: break-word;
+      }
 
-/* Special Element Styling */
-.text_element {
-  width: 100%;
-  margin-bottom: 0.75rem;
-  line-height: 1.5;
-  text-align: left;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-}
+      /* Special Element Styling */
+      .text_element {
+        width: 100%;
+        margin-bottom: 0.75rem;
+        line-height: 1.5;
+        text-align: left;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
 
-/* Table Styling */
-.table_element {
-  width: 100%;
-  overflow-x: auto; /* Allow horizontal scrolling for tables on small screens */
-  margin-bottom: 1rem;
-}
+      /* Table Styling */
+      .table_element {
+        width: 100%;
+        overflow-x: auto; /* Allow horizontal scrolling for tables on small screens */
+        margin-bottom: 1rem;
+      }
 
-.table_element table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 0.5rem;
-  text-align: left;
-}
+      .table_element table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 0.5rem;
+        text-align: left;
+      }
 
-.table_element th,
-.table_element td {
-  border: 1px solid #ddd;
-  padding: 0.625rem;
-  text-align: left;
-}
+      .table_element th,
+      .table_element td {
+        border: 1px solid #ddd;
+        padding: 0.625rem;
+        text-align: left;
+      }
 
-.table_element th {
-  background-color: #f8f8f8;
-  font-weight: 600;
-  color: #444;
-}
+      .table_element th {
+        background-color: #f8f8f8;
+        font-weight: 600;
+        color: #444;
+      }
 
-.table_element tr:nth-child(even) {
-  background-color: #fafafa;
-}
+      .table_element tr:nth-child(even) {
+        background-color: #fafafa;
+      }
 
-.table_element tr:hover {
-  background-color: #f5f5f5;
-}
+      .table_element tr:hover {
+        background-color: #f5f5f5;
+      }
 
-/* Panel Groups */
-.panel-group {
-  width: 100%;
-  margin-bottom: 1.5rem;
-  text-align: left;
-}
+      /* Panel Groups */
+      .panel-group {
+        width: 100%;
+        margin-bottom: 1.5rem;
+        text-align: left;
+      }
 
-.panel-group-title {
-  width: 100%;
-  margin-top: 0;
-  margin-bottom: 0.75rem;
-  font-size: 1.1rem;
-  color: #444;
-  font-weight: 600;
-  padding-bottom: 0.375rem;
-  border-bottom: 1px solid #eee;
-  text-align: left;
-  word-wrap: break-word;
-}
+      .panel-group-title {
+        width: 100%;
+        margin-top: 0;
+        margin-bottom: 0.75rem;
+        font-size: 1.1rem;
+        color: #444;
+        font-weight: 600;
+        padding-bottom: 0.375rem;
+        border-bottom: 1px solid #eee;
+        text-align: left;
+        word-wrap: break-word;
+      }
 
-/* Panel Images and Text */
-.panel-image {
-  width: 100%;
-  margin-bottom: 1rem;
-  text-align: left;
-}
+      /* Panel Images and Text */
+      .panel-image {
+        width: 100%;
+        margin-bottom: 1rem;
+        text-align: left;
+      }
 
-.panel-image img {
-  width: auto; /* Allow image to maintain its aspect ratio */
-  max-width: 100%; /* Ensure image doesn't overflow its container */
-  height: auto;
-  border-radius: 4px;
-  border: 1px solid #eee;
-  display: block;
-}
+      .panel-image img {
+        width: auto; /* Allow image to maintain its aspect ratio */
+        max-width: 100%; /* Ensure image doesn't overflow its container */
+        height: auto;
+        border-radius: 4px;
+        border: 1px solid #eee;
+        display: block;
+      }
 
-.panel-image-text {
-  width: 100%;
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  color: #555;
-  line-height: 1.4;
-  text-align: left;
-  font-style: italic;
-  word-wrap: break-word;
-}
+      .panel-image-text {
+        width: 100%;
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        color: #555;
+        line-height: 1.4;
+        text-align: left;
+        font-style: italic;
+        word-wrap: break-word;
+      }
 
-/* Don't hide nutrition images since we're not using the two-column layout anymore */
-.nutrition-panel .panel-image {
-  display: block;
-  width: 100%;
-}
+      /* Don't hide nutrition images since we're not using the two-column layout anymore */
+      .nutrition-panel .panel-image {
+        display: block;
+        width: 100%;
+      }
 
-/* Sub Panels */
-.sub-panel {
-  width: 100%; /* Takes full width of its parent container */
-  margin-bottom: 1rem;
-  padding: 0.75rem;
-  border-left: 2px solid #eee;
-  background-color: #fafafa;
-  border-radius: 0 4px 4px 0;
-  text-align: left;
-}
+      /* Sub Panels */
+      .sub-panel {
+        width: 100%; /* Takes full width of its parent container */
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        border-left: 2px solid #eee;
+        background-color: #fafafa;
+        border-radius: 0 4px 4px 0;
+        text-align: left;
+      }
 
-.sub-panel-title {
-  width: 100%;
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-  font-size: 1rem;
-  color: #555;
-  border-bottom: none;
-  padding-bottom: 0;
-  text-align: left;
-  word-wrap: break-word;
-}
+      .sub-panel-title {
+        width: 100%;
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+        font-size: 1rem;
+        color: #555;
+        border-bottom: none;
+        padding-bottom: 0;
+        text-align: left;
+        word-wrap: break-word;
+      }
 
-/* Sub panel elements */
-.sub-panel .element {
-  width: 100%;
-}
+      /* Sub panel elements */
+      .sub-panel .element {
+        width: 100%;
+      }
 
-.sub-panel .elements {
-  width: 100%;
-}
+      .sub-panel .elements {
+        width: 100%;
+      }
 
-/* Action Components */
-.action {
-  width: 100%;
-  margin: 0.75rem 0;
-  padding: 0.75rem;
-  background-color: #f9f9f9;
-  border-radius: 4px;
-  border: 1px solid #eee;
-  text-align: left;
-}
+      /* Action Components */
+      .action {
+        width: 100%;
+        margin: 0.75rem 0;
+        padding: 0.75rem;
+        background-color: #f9f9f9;
+        border-radius: 4px;
+        border: 1px solid #eee;
+        text-align: left;
+      }
 
+      .action small {
+        width: 100%;
+        display: block;
+        color: #999;
+        margin-top: 0.375rem;
+        font-style: italic;
+        font-size: 0.85rem;
+        word-wrap: break-word;
+      }
 
+      /* Knowledge panels container */
+      .knowledge-panels-container {
+        width: 100%;
+        text-align: left;
+        overflow-x: hidden; /* Prevent horizontal scrolling */
+      }
 
-.action small {
-  width: 100%;
-  display: block;
-  color: #999;
-  margin-top: 0.375rem;
-  font-style: italic;
-  font-size: 0.85rem;
-  word-wrap: break-word;
-}
+      .knowledge-panels-section-title {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 1rem;
+        word-wrap: break-word;
+      }
 
-/* Knowledge panels container */
-.knowledge-panels-container {
-  width: 100%;
-  text-align: left;
-  overflow-x: hidden; /* Prevent horizontal scrolling */
-}
-
-.knowledge-panels-section-title {
-  width: 100%;
-  text-align: left;
-  margin-bottom: 1rem;
-  word-wrap: break-word;
-}
-
-/* Make buttons full width on mobile */
-@media (max-width: 768px) {
-  .button {
-    width: 100%;
-    display: block;
-  }
-}
+      /* Make buttons full width on mobile */
+      @media (max-width: 768px) {
+        .button {
+          width: 100%;
+          display: block;
+        }
+      }
     `,
   ]
 
@@ -403,22 +402,22 @@ export class KnowledgePanelComponent extends LitElement {
    */
   private extractImages(panels: KnowledgePanelsData): void {
     this.nutritionImages = []
-    
+
     // First look for the nutrition panel
     let nutritionPanel: KnowledgePanel | null = null
     for (const panelId in panels) {
       const panel = panels[panelId]
       if (
-        panel.title === "Nutrition" || 
+        panel.title === "Nutrition" ||
         panel.title === "Nutrition facts" ||
-        panel.title_element?.title === "Nutrition" || 
+        panel.title_element?.title === "Nutrition" ||
         panel.title_element?.title === "Nutrition facts"
       ) {
         nutritionPanel = panel
         break
       }
     }
-    
+
     // If we found a nutrition panel, extract all images from it and all sub-panels
     if (nutritionPanel && nutritionPanel.elements) {
       // Process all elements in the nutrition panel
@@ -434,7 +433,7 @@ export class KnowledgePanelComponent extends LitElement {
             }
           }
         }
-        
+
         // Process panel group elements with images
         if (element.element_type === "panel_group" && element.panel_group_element?.image) {
           const image = element.panel_group_element.image
@@ -443,12 +442,12 @@ export class KnowledgePanelComponent extends LitElement {
             this.nutritionImages.push(imageUrl)
           }
         }
-        
+
         // Check nested elements
         if (element.elements) {
           this.extractNestedImages(element.elements)
         }
-        
+
         // Check referenced panels
         if (element.element_type === "panel" && element.panel_element?.panel_id) {
           const referencedPanel = panels[element.panel_element.panel_id]
@@ -458,7 +457,7 @@ export class KnowledgePanelComponent extends LitElement {
         }
       }
     }
-    
+
     // Look through all panels if we didn't find any nutrition images
     if (this.nutritionImages.length === 0) {
       for (const panelId in panels) {
@@ -468,10 +467,10 @@ export class KnowledgePanelComponent extends LitElement {
         }
       }
     }
-    
+
     console.log("Extracted nutrition images:", this.nutritionImages)
   }
-  
+
   /**
    * Helper to extract images from nested elements
    * @param elements - Array of panel elements to process
@@ -489,7 +488,7 @@ export class KnowledgePanelComponent extends LitElement {
           }
         }
       }
-      
+
       // Process panel group elements with images
       if (element.element_type === "panel_group" && element.panel_group_element?.image) {
         const image = element.panel_group_element.image
@@ -498,7 +497,7 @@ export class KnowledgePanelComponent extends LitElement {
           this.nutritionImages.push(imageUrl)
         }
       }
-      
+
       // Recursively process nested elements
       if (element.elements) {
         this.extractNestedImages(element.elements)
@@ -709,22 +708,16 @@ export class KnowledgePanelComponent extends LitElement {
       return html``
     }
 
-    const imageUrl = panelGroup.image.sizes?.["400"]?.url || 
-                     panelGroup.image.sizes?.["full"]?.url || 
-                     "";
-    
-    const imageAlt = panelGroup.image.alt || "Panel image";
-    const imageCaption = panelGroup.image.caption || panelGroup.image.description || "";
+    const imageUrl =
+      panelGroup.image.sizes?.["400"]?.url || panelGroup.image.sizes?.["full"]?.url || ""
+
+    const imageAlt = panelGroup.image.alt || "Panel image"
+    const imageCaption = panelGroup.image.caption || panelGroup.image.description || ""
 
     return html`
       <div class="panel-image">
-        <img
-          src="${imageUrl}"
-          alt="${imageAlt}"
-        />
-        ${imageCaption ? 
-          html`<div class="panel-image-text">${imageCaption}</div>` : 
-          html``}
+        <img src="${imageUrl}" alt="${imageAlt}" />
+        ${imageCaption ? html`<div class="panel-image-text">${imageCaption}</div>` : html``}
       </div>
     `
   }
@@ -756,15 +749,13 @@ export class KnowledgePanelComponent extends LitElement {
       return html``
     }
 
-    const actionText = (actionElement as any).action_text || "Default Action";
-    const actionDescription = (actionElement as any).description || "";
+    const actionText = (actionElement as any).action_text || "Default Action"
+    const actionDescription = (actionElement as any).description || ""
 
     return html`
       <div class="action">
         <div>${unsafeHTML(actionElement.html || "")}</div>
-        <button class="button chocolate-button" disabled>
-          ${actionText}
-        </button>
+        <button class="button chocolate-button" disabled>${actionText}</button>
         ${actionDescription ? html`<small>${actionDescription}</small>` : ""}
         <small>(Actions are displayed but not functional in this version)</small>
       </div>
@@ -797,13 +788,13 @@ export class KnowledgePanelComponent extends LitElement {
     console.log("Rendering panel:", title, panel)
     // Get elements
     const elements = panel.elements || []
-    
+
     // Check if this is a nutrition panel that should have the special layout
     const isNutrition = this.isNutritionPanel(panel)
-    const panelClass = isNutrition ? 
-      `panel nutrition-panel ${panel.level || ""} ${panel.size || ""}`.trim() : 
-      `panel ${panel.level || ""} ${panel.size || ""}`.trim()
-    
+    const panelClass = isNutrition
+      ? `panel nutrition-panel ${panel.level || ""} ${panel.size || ""}`.trim()
+      : `panel ${panel.level || ""} ${panel.size || ""}`.trim()
+
     if (isNutrition && this.nutritionImages.length > 0) {
       return html`
         <div class="${panelClass}">
@@ -816,7 +807,9 @@ export class KnowledgePanelComponent extends LitElement {
             </div>
             <div class="panel-right">
               <img src="${this.nutritionImages[0]}" alt="Nutrition Information" />
-              ${panel.title_element?.subtitle ? html`<div class="panel-image-text">${panel.title_element.subtitle}</div>` : ""}
+              ${panel.title_element?.subtitle
+                ? html`<div class="panel-image-text">${panel.title_element.subtitle}</div>`
+                : ""}
             </div>
           </div>
         </div>
@@ -863,7 +856,7 @@ export class KnowledgePanelComponent extends LitElement {
   renderError(error: unknown): TemplateResult {
     console.error("Task error:", error)
     const errorMessage = error instanceof Error ? error.message : String(error)
-    
+
     return html`
       <div class="error">
         ${this.renderHeading("Error Loading Knowledge Panels", "error-title")}
@@ -872,7 +865,7 @@ export class KnowledgePanelComponent extends LitElement {
       </div>
     `
   }
-  
+
   /**
    * Handle retry of data loading
    * @private
@@ -894,7 +887,7 @@ export class KnowledgePanelComponent extends LitElement {
         </div>
       `,
       complete: (result) => this.renderPanelsResult(result),
-      error: (error: unknown) => this.renderError(error)
+      error: (error: unknown) => this.renderError(error),
     })
   }
 
@@ -925,7 +918,7 @@ export class KnowledgePanelComponent extends LitElement {
 
     // Store panels in the instance for reference in renderElement
     this.knowledgePanels = panels
-    
+
     // Extract all nutrition-related images
     this.extractImages(panels)
 
@@ -935,8 +928,8 @@ export class KnowledgePanelComponent extends LitElement {
 
     // If no top-level panels found, show all panels
     const panelsToRender = topLevelPanels.length > 0 ? topLevelPanels : Object.values(panels)
-    console.log("Panels to render:", panelsToRender);
-    
+    console.log("Panels to render:", panelsToRender)
+
     // Add a section title for the overall panels
     const sectionTitle = "Knowledge Panels"
 
@@ -970,11 +963,11 @@ export class KnowledgePanelComponent extends LitElement {
    */
   override updated(changedProperties: Map<string, unknown>): void {
     super.updated(changedProperties)
-    
+
     if (changedProperties.has("url") || changedProperties.has("path")) {
       // Reset state when URL or path changes
-      this.knowledgePanels = null;
-      this.nutritionImages = [];
+      this.knowledgePanels = null
+      this.nutritionImages = []
     }
   }
 }
