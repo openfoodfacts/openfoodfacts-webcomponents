@@ -2,7 +2,6 @@ import { css, html, LitElement, nothing } from "lit"
 import { styleMap } from "lit/directives/style-map.js"
 import { customElement, property, query, state } from "lit/decorators.js"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
-import { FLEX } from "../../styles/utils"
 import "../icons/rotate-left"
 import "../icons/rotate-right"
 import { localized, msg } from "@lit/localize"
@@ -14,6 +13,8 @@ import CropperHandle from "@cropper/element-handle"
 import CropperSelection from "@cropper/element-selection"
 import CropperCrosshair from "@cropper/element-crosshair"
 import CropperShade from "@cropper/element-shade"
+import type { Selection } from "@cropper/element-selection"
+import { FLEX } from "../../styles/utils"
 
 /**
  * A simple zoomable image component.
@@ -41,9 +42,18 @@ export class ZoomableImage extends LitElement {
         gap: 0.5rem;
         margin-top: 0.5rem;
       }
+      .crop-result-title {
+        font-weight: bold;
+        text-align: center;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+      }
+      .crop-result-buttons {
+        margin-top: 0.5rem;
+      }
     `,
     FLEX,
-    getButtonClasses([ButtonType.White, ButtonType.Chocolate]),
+    getButtonClasses([ButtonType.White, ButtonType.Chocolate, ButtonType.LINK]),
   ]
 
   @query("cropper-canvas")
@@ -124,11 +134,13 @@ export class ZoomableImage extends LitElement {
     CropperImage.$define()
     CropperHandle.$define()
 
-    if (this.cropMode) {
-      CropperSelection.$define()
-      CropperCrosshair.$define()
-      CropperShade.$define()
-    }
+    CropperSelection.$define()
+    CropperCrosshair.$define()
+    CropperShade.$define()
+  }
+
+  override firstUpdated() {
+    this.initCropper()
   }
 
   rotateImage(rotation: number) {
@@ -161,10 +173,21 @@ export class ZoomableImage extends LitElement {
     `
   }
 
-  async validateCrop() {
+  async showCrop() {
     const element = this.hasSelection() ? this.selectionElement : this.canvasElement
     const result = await element.$toCanvas()
     this.cropResult = result.toDataURL()
+  }
+
+  resetSelection() {
+    this.selectionElement?.$clear()
+  }
+  resetCrop() {
+    this.cropResult = ""
+    this.resetSelection()
+  }
+
+  submitCrop() {
     this.dispatchEvent(
       new CustomEvent("save", {
         detail: {
@@ -174,17 +197,13 @@ export class ZoomableImage extends LitElement {
     )
   }
 
-  resetSelection() {
-    this.selectionElement?.$clear()
-  }
-
   renderCropMode() {
     return html`
       <div class="button-container">
-        <button class="button white-button small" @click=${this.resetSelection}>
+        <button class="button white-button small" @click=${this.resetCrop}>
           ${msg("Reset selection")}
         </button>
-        <button class="button chocolate-button small" @click=${() => this.validateCrop()}>
+        <button class="button chocolate-button small" @click=${this.showCrop}>
           ${msg("Show crop")}
         </button>
       </div>
@@ -194,15 +213,23 @@ export class ZoomableImage extends LitElement {
   renderCropResult() {
     return html`
       <div>
-        <div>Crop Result</h3>
-        <img src=${this.cropResult} alt="Cropped Image" />
+        <div class="crop-result-title">${msg("Crop Result")}</div>
+        <div class="flex justify-center">
+          <img src=${this.cropResult} alt="Cropped Image" />
+        </div>
+        <div class="crop-result-buttons flex justify-center gap-0_5">
+          <button class="button chocolate-button" @click=${this.submitCrop}>
+            ${msg("Validate crop")}
+          </button>
+          <button class="button white-button" @click=${this.resetCrop}>${msg("Reset crop")}</button>
+        </div>
       </div>
     `
   }
 
   renderCropperControls() {
     if (!this.cropMode) {
-      return nothing
+      return html` <cropper-handle action="move" plain></cropper-handle> `
     }
     return html` <cropper-shade hidden></cropper-shade>
       <cropper-handle action="select" plain></cropper-handle>
@@ -318,8 +345,9 @@ export class ZoomableImage extends LitElement {
             ${this.renderCropperControls()}
           </cropper-canvas>
         </div>
-        ${this.cropMode ? this.renderCropMode() : nothing}
-        ${this.cropResult ? this.renderCropResult() : nothing}
+        ${this.cropMode
+          ? html` ${this.renderCropMode()} ${this.cropResult ? this.renderCropResult() : nothing} `
+          : nothing}
       </div>
     `
   }
