@@ -6,7 +6,6 @@ import { unsafeHTML } from "lit/directives/unsafe-html.js"
 import { ALERT } from "../../styles/alert"
 import "../../components/shared/loader" // Import the loader component
 import { ButtonType, getButtonClasses } from "../../styles/buttons" // Import button styles
-import { VISUALLY_HIDDEN_FOCUSABLE } from "../../styles/accessibility" // Import accessibility styles
 import { BASE } from "../../styles/base" // Import BASE for font styles
 
 import {
@@ -29,19 +28,18 @@ import {
  * @property {string} headingLevel - The heading level to use for panel titles (h2, h3, h4, h5, h6)
  */
 @customElement("knowledge-panels")
+/* Updated Knowledge Panel Component CSS */
 export class KnowledgePanelComponent extends LitElement {
   static override styles = [
     BASE,
-    VISUALLY_HIDDEN_FOCUSABLE,
     ALERT,
     ...getButtonClasses([ButtonType.Chocolate, ButtonType.Cappucino]), // Add button styles
     css`
-      /* Full-width panel styles with overflow fixes */
       :host {
         display: block;
         width: 100%;
         max-width: 100%;
-        margin-bottom: 1rem;
+        margin-bottom: 1.5rem;
         box-sizing: border-box;
         overflow-x: hidden; /* Prevent horizontal scrolling */
       }
@@ -53,20 +51,20 @@ export class KnowledgePanelComponent extends LitElement {
         box-sizing: border-box;
       }
 
-      /* Panel Base Styles */
+      /* Panel Base Styles - Improved curves and shadows */
       .panel {
         width: 100%;
         background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-        margin-bottom: 1rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        margin-bottom: 1.5rem;
         overflow: hidden;
         transition: box-shadow 0.2s ease;
       }
 
       .panel:hover {
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
       }
 
       /* Remove small panel size limit */
@@ -74,36 +72,39 @@ export class KnowledgePanelComponent extends LitElement {
         max-width: 100%;
       }
 
-      /* Panel Contextual Variations */
+      /* Panel Contextual Variations - More pronounced curves */
       .panel.info {
-        border-left: 3px solid #5bc0de;
+        border-left: 4px solid #5bc0de;
+        border-radius: 0 8px 8px 0;
       }
 
       .panel.warning {
-        border-left: 3px solid #f0ad4e;
+        border-left: 4px solid #f0ad4e;
+        border-radius: 0 8px 8px 0;
       }
 
       .panel.success {
-        border-left: 3px solid #5cb85c;
+        border-left: 4px solid #5cb85c;
+        border-radius: 0 8px 8px 0;
       }
 
       .panel.danger {
-        border-left: 3px solid #d9534f;
+        border-left: 4px solid #d9534f;
+        border-radius: 0 8px 8px 0;
       }
 
-      /* Panel Components */
+      /* Panel Components - Refined spacing */
       .panel-header {
         width: 100%;
-        background-color: #f8f8f8;
-        border-bottom: 1px solid #ddd;
-        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #eeeeee;
+        padding: 1rem 1.25rem;
         display: block;
       }
 
       .panel-title {
         width: 100%;
-        color: #333;
-        font-size: 1.2rem;
+        color: #222;
+        font-size: 1.25rem;
         font-weight: 600;
         margin: 0;
         line-height: 1.3;
@@ -113,17 +114,17 @@ export class KnowledgePanelComponent extends LitElement {
 
       .panel-subtitle {
         width: 100%;
-        color: #666;
-        font-size: 0.9rem;
-        margin-top: 0.25rem;
+        color: #555;
+        font-size: 0.95rem;
+        margin-top: 0.35rem;
         text-align: left;
         word-wrap: break-word;
       }
 
-      /* Panel content */
+      /* Panel content - Improved padding */
       .panel-content {
         width: 100%;
-        padding: 1rem;
+        padding: 1.25rem;
         display: block;
       }
 
@@ -138,20 +139,20 @@ export class KnowledgePanelComponent extends LitElement {
         display: block;
         width: 100%;
         max-width: 100%;
-        margin: 0 0 1rem 0;
+        margin: 0 0 1.25rem 0;
       }
 
       .nutrition-panel .panel-content .panel-right img {
         width: auto;
         max-width: 100%;
         height: auto;
-        border-radius: 4px;
+        border-radius: 8px;
         border: 1px solid #eee;
         display: block;
         margin: 0;
       }
 
-      /* Element Layout */
+      /* Element Layout - Better spacing */
       .elements {
         width: 100%;
         display: block;
@@ -160,9 +161,9 @@ export class KnowledgePanelComponent extends LitElement {
       .element {
         width: 100%;
         display: block;
-        padding-bottom: 0.75rem;
-        margin-bottom: 0.75rem;
-        border-bottom: 1px solid #f0f0f0;
+        padding-bottom: 0.85rem;
+        margin-bottom: 0.85rem;
+        border-bottom: 1px solid #f5f5f5;
         text-align: left;
       }
 
@@ -175,7 +176,7 @@ export class KnowledgePanelComponent extends LitElement {
         width: 100%;
         display: block;
         font-weight: 600;
-        color: #444;
+        color: #333;
         margin-bottom: 0.5rem;
         text-align: left;
         word-wrap: break-word;
@@ -184,80 +185,88 @@ export class KnowledgePanelComponent extends LitElement {
       .element-value {
         width: 100%;
         display: block;
-        color: #555;
+        color: #444;
         text-align: left;
         word-wrap: break-word;
+        line-height: 1.6;
       }
 
-      /* Special Element Styling */
+      /* Special Element Styling - Improved readability */
       .text_element {
         width: 100%;
-        margin-bottom: 0.75rem;
-        line-height: 1.5;
+        margin-bottom: 0.85rem;
+        line-height: 1.6;
         text-align: left;
         word-wrap: break-word;
         overflow-wrap: break-word;
+        color: #333;
       }
 
-      /* Table Styling */
+      /* Table Styling - Improved borders and radius */
       .table_element {
         width: 100%;
         overflow-x: auto; /* Allow horizontal scrolling for tables on small screens */
-        margin-bottom: 1rem;
+        margin-bottom: 1.25rem;
+        border-radius: 6px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
       }
 
       .table_element table {
         width: 100%;
-        border-collapse: collapse;
+        border-collapse: separate;
+        border-spacing: 0;
         margin-bottom: 0.5rem;
         text-align: left;
+        border: 1px solid #e6e6e6;
+        border-radius: 6px;
+        overflow: hidden;
       }
 
       .table_element th,
       .table_element td {
-        border: 1px solid #ddd;
-        padding: 0.625rem;
+        border: 1px solid #e6e6e6;
+        padding: 0.75rem;
         text-align: left;
       }
 
       .table_element th {
-        background-color: #f8f8f8;
+        background-color: #f8f9fa;
         font-weight: 600;
-        color: #444;
+        color: #333;
       }
 
       .table_element tr:nth-child(even) {
-        background-color: #fafafa;
+        background-color: #fcfcfc;
       }
 
       .table_element tr:hover {
-        background-color: #f5f5f5;
+        background-color: #f7f7f7;
       }
 
-      /* Panel Groups */
+      /* Panel Groups - Enhanced typography */
       .panel-group {
         width: 100%;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.75rem;
         text-align: left;
       }
 
       .panel-group-title {
         width: 100%;
         margin-top: 0;
-        margin-bottom: 0.75rem;
-        font-size: 1.1rem;
-        color: #444;
+        margin-bottom: 1rem;
+        font-size: 1.15rem;
+        color: #333;
         font-weight: 600;
-        padding-bottom: 0.375rem;
-        border-bottom: 1px solid #eee;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #f0f0f0;
         text-align: left;
         word-wrap: break-word;
       }
 
-      /* Panel Images and Text */
+      /* Panel Images and Text - Improved image handling */
       .panel-image {
         width: 100%;
-        margin-bottom: 1rem;
+        margin-bottom: 1.25rem;
         text-align: left;
       }
 
@@ -265,17 +274,18 @@ export class KnowledgePanelComponent extends LitElement {
         width: auto; /* Allow image to maintain its aspect ratio */
         max-width: 100%; /* Ensure image doesn't overflow its container */
         height: auto;
-        border-radius: 4px;
-        border: 1px solid #eee;
+        border-radius: 8px;
+        border: 1px solid #efefef;
         display: block;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
       }
 
       .panel-image-text {
         width: 100%;
-        margin-top: 0.5rem;
+        margin-top: 0.65rem;
         font-size: 0.9rem;
-        color: #555;
-        line-height: 1.4;
+        color: #666;
+        line-height: 1.5;
         text-align: left;
         font-style: italic;
         word-wrap: break-word;
@@ -287,23 +297,24 @@ export class KnowledgePanelComponent extends LitElement {
         width: 100%;
       }
 
-      /* Sub Panels */
+      /* Sub Panels - Improved curves and borders */
       .sub-panel {
         width: 100%; /* Takes full width of its parent container */
-        margin-bottom: 1rem;
-        padding: 0.75rem;
-        border-left: 2px solid #eee;
+        margin-bottom: 1.25rem;
+        padding: 1rem;
+        border-left: 3px solid #e8e8e8;
         background-color: #fafafa;
-        border-radius: 0 4px 4px 0;
+        border-radius: 0 8px 8px 0;
         text-align: left;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
       }
 
       .sub-panel-title {
         width: 100%;
         margin-top: 0;
-        margin-bottom: 0.5rem;
-        font-size: 1rem;
-        color: #555;
+        margin-bottom: 0.65rem;
+        font-size: 1.05rem;
+        color: #444;
         border-bottom: none;
         padding-bottom: 0;
         text-align: left;
@@ -319,25 +330,27 @@ export class KnowledgePanelComponent extends LitElement {
         width: 100%;
       }
 
-      /* Action Components */
+      /* Action Components - Enhanced for better visibility */
       .action {
         width: 100%;
-        margin: 0.75rem 0;
-        padding: 0.75rem;
-        background-color: #f9f9f9;
-        border-radius: 4px;
-        border: 1px solid #eee;
+        margin: 1rem 0;
+        padding: 1rem;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        border: 1px solid #e8e8e8;
         text-align: left;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
       }
 
       .action small {
         width: 100%;
         display: block;
-        color: #999;
-        margin-top: 0.375rem;
+        color: #888;
+        margin-top: 0.5rem;
         font-style: italic;
         font-size: 0.85rem;
         word-wrap: break-word;
+        line-height: 1.5;
       }
 
       /* Knowledge panels container */
@@ -350,8 +363,23 @@ export class KnowledgePanelComponent extends LitElement {
       .knowledge-panels-section-title {
         width: 100%;
         text-align: left;
-        margin-bottom: 1rem;
+        margin-bottom: 1.25rem;
         word-wrap: break-word;
+        font-weight: 600;
+        color: #222;
+        font-size: 1.3rem;
+      }
+
+      /* Button styling improvements */
+      .button {
+        border-radius: 6px;
+        font-weight: 500;
+        padding: 0.65rem 1.25rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+
+      .button:hover {
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
       }
 
       /* Make buttons full width on mobile */
@@ -359,6 +387,21 @@ export class KnowledgePanelComponent extends LitElement {
         .button {
           width: 100%;
           display: block;
+        }
+      }
+
+      /* Responsive improvements for various screen sizes */
+      @media (min-width: 769px) {
+        .panel-header {
+          padding: 1.25rem 1.5rem;
+        }
+
+        .panel-content {
+          padding: 1.5rem;
+        }
+
+        .sub-panel {
+          padding: 1.25rem;
         }
       }
     `,
