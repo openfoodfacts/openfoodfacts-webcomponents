@@ -42,6 +42,7 @@ export class KnowledgePanelComponent extends LitElement {
         margin-bottom: 1.5rem;
         box-sizing: border-box;
         overflow-x: hidden; /* Prevent horizontal scrolling */
+        
       }
 
       /* Apply box-sizing to all elements */
@@ -51,12 +52,12 @@ export class KnowledgePanelComponent extends LitElement {
         box-sizing: border-box;
       }
 
-      /* Panel Base Styles - Improved curves and shadows */
+      /* Panel Base Styles - Even more roundness */
       .panel {
         width: 100%;
         background-color: #fff;
         border: 1px solid #e0e0e0;
-        border-radius: 8px;
+        border-radius: 24px; /* Further increased for maximum roundness */
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         margin-bottom: 1.5rem;
         overflow: hidden;
@@ -72,25 +73,25 @@ export class KnowledgePanelComponent extends LitElement {
         max-width: 100%;
       }
 
-      /* Panel Contextual Variations - More pronounced curves */
+      /* Panel Contextual Variations - Flat left side, rounded right corners */
       .panel.info {
         border-left: 4px solid #79e1a6;
-        border-radius: 0 8px 8px 0;
+        border-radius: 0 24px 24px 0; /* Flat left side, extra rounded right corners */
       }
 
       .panel.warning {
         border-left: 4px solid #f0ad4e;
-        border-radius: 0 8px 8px 0;
+        border-radius: 0 24px 24px 0; /* Flat left side, extra rounded right corners */
       }
 
       .panel.success {
         border-left: 4px solid #5cb85c;
-        border-radius: 0 8px 8px 0;
+        border-radius: 0 24px 24px 0; /* Flat left side, extra rounded right corners */
       }
 
       .panel.danger {
         border-left: 4px solid #d9534f;
-        border-radius: 0 8px 8px 0;
+        border-radius: 0 24px 24px 0; /* Flat left side, extra rounded right corners */
       }
 
       /* Panel Components - Refined spacing */
@@ -99,11 +100,11 @@ export class KnowledgePanelComponent extends LitElement {
         border-bottom: 1px solid #eeeeee;
         padding: 1rem 1.25rem;
         display: block;
+        
       }
 
       .panel-title {
         width: 100%;
-        color: #222;
         font-size: 1.25rem;
         font-weight: 600;
         margin: 0;
@@ -114,7 +115,6 @@ export class KnowledgePanelComponent extends LitElement {
 
       .panel-subtitle {
         width: 100%;
-        color: #555;
         font-size: 0.95rem;
         margin-top: 0.35rem;
         text-align: left;
@@ -146,7 +146,7 @@ export class KnowledgePanelComponent extends LitElement {
         width: auto;
         max-width: 100%;
         height: auto;
-        border-radius: 8px;
+        border-radius: 20px; /* Further increased roundness */
         border: 1px solid #eee;
         display: block;
         margin: 0;
@@ -176,7 +176,6 @@ export class KnowledgePanelComponent extends LitElement {
         width: 100%;
         display: block;
         font-weight: 600;
-        color: #333;
         margin-bottom: 0.5rem;
         text-align: left;
         word-wrap: break-word;
@@ -202,12 +201,12 @@ export class KnowledgePanelComponent extends LitElement {
         color: #333;
       }
 
-      /* Table Styling - Improved borders and radius */
+      /* Table Styling - Maximally rounded borders */
       .table_element {
         width: 100%;
         overflow-x: auto; /* Allow horizontal scrolling for tables on small screens */
         margin-bottom: 1.25rem;
-        border-radius: 6px;
+        border-radius: 20px; /* Even more rounded */
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
       }
 
@@ -218,7 +217,7 @@ export class KnowledgePanelComponent extends LitElement {
         margin-bottom: 0.5rem;
         text-align: left;
         border: 1px solid #e6e6e6;
-        border-radius: 6px;
+        border-radius: 20px; /* Even more rounded */
         overflow: hidden;
       }
 
@@ -232,7 +231,6 @@ export class KnowledgePanelComponent extends LitElement {
       .table_element th {
         background-color: #f8f9fa;
         font-weight: 600;
-        color: #333;
       }
 
       .table_element tr:nth-child(even) {
@@ -255,7 +253,6 @@ export class KnowledgePanelComponent extends LitElement {
         margin-top: 0;
         margin-bottom: 1rem;
         font-size: 1.15rem;
-        color: #333;
         font-weight: 600;
         padding-bottom: 0.5rem;
         border-bottom: 1px solid #f0f0f0;
@@ -263,7 +260,7 @@ export class KnowledgePanelComponent extends LitElement {
         word-wrap: break-word;
       }
 
-      /* Panel Images and Text - Improved image handling */
+      /* Panel Images and Text - Improved image handling with increased roundness */
       .panel-image {
         width: 100%;
         margin-bottom: 1.25rem;
@@ -274,7 +271,7 @@ export class KnowledgePanelComponent extends LitElement {
         width: auto; /* Allow image to maintain its aspect ratio */
         max-width: 100%; /* Ensure image doesn't overflow its container */
         height: auto;
-        border-radius: 8px;
+        border-radius: 20px; /* Further increased roundness */
         border: 1px solid #efefef;
         display: block;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
@@ -284,7 +281,6 @@ export class KnowledgePanelComponent extends LitElement {
         width: 100%;
         margin-top: 0.65rem;
         font-size: 0.9rem;
-        color: #666;
         line-height: 1.5;
         text-align: left;
         font-style: italic;
@@ -297,14 +293,14 @@ export class KnowledgePanelComponent extends LitElement {
         width: 100%;
       }
 
-      /* Sub Panels - Improved curves and borders */
+      /* Sub Panels - All corners rounded with increased radius */
       .sub-panel {
         width: 100%; /* Takes full width of its parent container */
         margin-bottom: 1.25rem;
         padding: 1rem;
         border-left: 3px solid #e8e8e8;
         background-color: #fafafa;
-        border-radius: 0 8px 8px 0;
+        border-radius: 20px; /* All corners rounded now */
         text-align: left;
         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
       }
@@ -314,7 +310,6 @@ export class KnowledgePanelComponent extends LitElement {
         margin-top: 0;
         margin-bottom: 0.65rem;
         font-size: 1.05rem;
-        color: #444;
         border-bottom: none;
         padding-bottom: 0;
         text-align: left;
@@ -330,13 +325,13 @@ export class KnowledgePanelComponent extends LitElement {
         width: 100%;
       }
 
-      /* Action Components - Enhanced for better visibility */
+      /* Action Components - Maximally enhanced roundness */
       .action {
         width: 100%;
         margin: 1rem 0;
         padding: 1rem;
         background-color: #f8f9fa;
-        border-radius: 8px;
+        border-radius: 22px; /* Further increased for maximum roundness */
         border: 1px solid #e8e8e8;
         text-align: left;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
@@ -345,7 +340,6 @@ export class KnowledgePanelComponent extends LitElement {
       .action small {
         width: 100%;
         display: block;
-        color: #888;
         margin-top: 0.5rem;
         font-style: italic;
         font-size: 0.85rem;
@@ -358,6 +352,7 @@ export class KnowledgePanelComponent extends LitElement {
         width: 100%;
         text-align: left;
         overflow-x: hidden; /* Prevent horizontal scrolling */
+        
       }
 
       .knowledge-panels-section-title {
@@ -366,28 +361,8 @@ export class KnowledgePanelComponent extends LitElement {
         margin-bottom: 1.25rem;
         word-wrap: break-word;
         font-weight: 600;
-        color: #222;
+      
         font-size: 1.3rem;
-      }
-
-      /* Button styling improvements */
-      .button {
-        border-radius: 6px;
-        font-weight: 500;
-        padding: 0.65rem 1.25rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-      }
-
-      .button:hover {
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
-      }
-
-      /* Make buttons full width on mobile */
-      @media (max-width: 768px) {
-        .button {
-          width: 100%;
-          display: block;
-        }
       }
 
       /* Responsive improvements for various screen sizes */
@@ -406,7 +381,6 @@ export class KnowledgePanelComponent extends LitElement {
       }
     `,
   ]
-
   @property({
     type: String,
     reflect: true,
@@ -636,7 +610,7 @@ export class KnowledgePanelComponent extends LitElement {
 
     if (!tableData) {
       console.error("Invalid table element - missing table_element:", element)
-      return html`<div class="error">Invalid table format</div>`
+      return html`<slot name="error">Invalid table format</slot>`
     }
 
     const columns = tableData.columns || []
@@ -644,7 +618,7 @@ export class KnowledgePanelComponent extends LitElement {
 
     if (!Array.isArray(columns) || !Array.isArray(rows)) {
       console.error("Invalid table structure:", tableData)
-      return html`<div class="error">Invalid table structure</div>`
+      return html`<slot name="error">Invalid table structure</slot>`
     }
 
     return html`
@@ -901,11 +875,11 @@ export class KnowledgePanelComponent extends LitElement {
     const errorMessage = error instanceof Error ? error.message : String(error)
 
     return html`
-      <div class="error">
+      <slot name="error">
         ${this.renderHeading("Error Loading Knowledge Panels", "error-title")}
         <p>${errorMessage}</p>
         <button class="button cappucino-button" @click=${this._retryLoad}>Retry</button>
-      </div>
+      </slot>
     `
   }
 
@@ -945,7 +919,7 @@ export class KnowledgePanelComponent extends LitElement {
 
     if (!panels || typeof panels !== "object") {
       console.error("Invalid panels data:", panels)
-      return html`<div class="error">Invalid data format received</div>`
+      return html`<slot name="error">Invalid data format received</slot>`
     }
 
     if (Object.keys(panels).length === 0) {
