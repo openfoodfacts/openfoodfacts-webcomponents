@@ -43,3 +43,9 @@ export type AutocompleteSuggestion = {
   label?: string
   value: string
 }
+export type CropResult = {
+  x: number
+  y: number
+  width: number
+  height: number
+}
