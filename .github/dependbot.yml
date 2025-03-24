@@ -1,0 +1,57 @@
+version: 2
+updates:
+  # Keep npm dependencies up to date in web-components
+  - package-ecosystem: "npm"
+    directory: "/web-components"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      # Group for UI/interface libraries
+      interface-libraries:
+        patterns:
+          - "@lit/*"
+          - "lit"
+          - "lit-*"
+          - "@panzoom/panzoom"
+        update-types:
+          - "minor"
+          - "patch"
+      
+      # Group for development tooling
+      dev-tooling:
+        patterns:
+          - "@custom-elements-manifest/analyzer"
+          - "@lit/localize-tools"
+          - "@open-wc/testing"
+          - "@rollup*"
+          - "rollup*"
+          - "@web*"
+          - "@types*"
+          - "rollup*"
+          - "concurrently"
+          - "dotenv"
+          - "eslint*"
+          - "glob"
+          - "lit-analyzer"
+          - "prettier"
+          - "rimraf"
+          - "ts-node"
+          - "typescript*"
+        update-types:
+          - "minor"
+          - "patch"
+    commit-message:
+      prefix: "fix"
+      prefix-development: "chore"
+      include: "scope"
+
+  # Keep GitHub Actions up to date
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "chore"
+      include: "scope"
