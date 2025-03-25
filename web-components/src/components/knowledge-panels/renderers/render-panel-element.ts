@@ -7,7 +7,7 @@ import "./render-panel"
 
 /**
  * Panel element renderer component
- * 
+ *
  * @element panel-element-renderer
  */
 @customElement("panel-element-renderer")
@@ -81,10 +81,11 @@ export class PanelElementRenderer extends LitElement {
       // We need to get the actual panel from the panels data
       const referencedPanel = this.knowledgePanels?.[panelId]
       if (referencedPanel) {
-        return html`<panel-renderer 
-          .panel=${referencedPanel} 
+        return html`<panel-renderer
+          .panel=${referencedPanel}
           .knowledgePanels=${this.knowledgePanels}
-          headingLevel=${this.headingLevel}>
+          headingLevel=${this.headingLevel}
+        >
         </panel-renderer>`
       } else {
         return html`<div class="warning">Referenced panel not found: ${panelId}</div>`
@@ -92,22 +93,24 @@ export class PanelElementRenderer extends LitElement {
     } else if (this.element.elements && Array.isArray(this.element.elements)) {
       return html`
         <div class="sub-panel">
-          ${this.element.title ? 
-            html`<heading-renderer 
-              text="${this.element.title}" 
-              class-name="sub-panel-title" 
-              heading-level="${this.headingLevel}" 
-              offset="1">
-            </heading-renderer>` : 
-            ""
-          }
+          ${this.element.title
+            ? html`<heading-renderer
+                text="${this.element.title}"
+                class-name="sub-panel-title"
+                heading-level="${this.headingLevel}"
+                offset="1"
+              >
+              </heading-renderer>`
+            : ""}
           <div class="elements">
-            ${this.element.elements.map((subElement: KnowledgePanelElement) =>
-              html`<element-renderer 
-                .element=${subElement} 
-                .knowledgePanels=${this.knowledgePanels}
-                headingLevel=${this.headingLevel}>
-              </element-renderer>`
+            ${this.element.elements.map(
+              (subElement: KnowledgePanelElement) =>
+                html`<element-renderer
+                  .element=${subElement}
+                  .knowledgePanels=${this.knowledgePanels}
+                  headingLevel=${this.headingLevel}
+                >
+                </element-renderer>`
             )}
           </div>
         </div>

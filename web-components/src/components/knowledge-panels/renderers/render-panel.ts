@@ -27,7 +27,6 @@ export class PanelRenderer extends LitElement {
       margin-bottom: 1.5rem;
       overflow: hidden;
       transition: box-shadow 0.2s ease;
-
     }
 
     .panel:hover {
