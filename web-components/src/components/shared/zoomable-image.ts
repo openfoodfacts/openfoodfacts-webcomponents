@@ -15,6 +15,11 @@ import CropperShade from "@cropper/element-shade"
 import type { Selection } from "@cropper/element-selection"
 import { FLEX } from "../../styles/utils"
 
+export enum CropMode {
+  IMAGE_ONLY = "image-only",
+  CROP_READ = "crop-read",
+  CROP = "crop",
+}
 /**
  * A simple zoomable image component.
  * It allows to display an image that can be zoomed, and rotated.
@@ -65,19 +70,8 @@ export class ZoomableImage extends LitElement {
   @property({ type: String, attribute: "src" })
   src = ""
 
-  @property({ type: Number, attribute: "current-zoom" })
-  currentZoom = 1
-
-  @property({ type: Number, attribute: "step-size" })
-  stepSize = 0.1
-
-  @property({ type: Number, attribute: "min-zoom" })
-  minZoom = 1
-  @property({ type: Number, attribute: "max-zoom" })
-  maxZoom = 5
-
-  @property({ type: Boolean, attribute: "crop-mode" })
-  cropMode: boolean = false
+  @property({ type: String, attribute: "crop-mode" })
+  cropMode: string = CropMode.IMAGE_ONLY
 
   @state()
   rotation = 0
@@ -142,18 +136,25 @@ export class ZoomableImage extends LitElement {
 
   renderCropMode() {
     return html`
-      <div class="button-container">
-        <button class="button white-button small" @click=${this.resetCrop}>
-          ${msg("Reset selection")}
-        </button>
-        <button class="button chocolate-button small" @click=${this.showCrop}>
-          ${msg("Show crop")}
-        </button>
+      <div>
+        <div class="button-container">
+          <button class="button white-button small" @click=${this.resetCrop}>
+            ${msg("Reset selection")}
+          </button>
+          <button class="button chocolate-button small" @click=${this.showCrop}>
+            ${msg("Show crop")}
+          </button>
+        </div>
+
+        ${this.renderCropResult()}
       </div>
     `
   }
 
   renderCropResult() {
+    if (!this.cropResult) {
+      return nothing
+    }
     return html`
       <div>
         <div class="crop-result-title">${msg("Crop Result")}</div>
@@ -171,8 +172,19 @@ export class ZoomableImage extends LitElement {
   }
 
   renderCropperControls() {
-    if (!this.cropMode) {
+    if (this.cropMode === CropMode.IMAGE_ONLY) {
       return html` <cropper-handle action="move" plain></cropper-handle> `
+    } else if (this.cropMode === CropMode.CROP_READ) {
+      return html` <cropper-shade></cropper-shade>
+        <cropper-selection
+          movable
+          @change="${this.onCropperSelectionChange}"
+          x="0"
+          y="0"
+          width="100"
+          height="100"
+        >
+        </cropper-selection>`
     }
     return html` <cropper-shade hidden></cropper-shade>
       <cropper-handle action="select" plain></cropper-handle>
@@ -269,7 +281,7 @@ export class ZoomableImage extends LitElement {
     }
   }
   override render() {
-    const crossorigin = this.cropMode ? "anonymous" : undefined
+    const crossorigin = this.cropMode !== CropMode.IMAGE_ONLY ? "anonymous" : undefined
     return html`
       <div>
         <div class="flex justify-end">
@@ -303,9 +315,7 @@ export class ZoomableImage extends LitElement {
             ${this.renderCropperControls()}
           </cropper-canvas>
         </div>
-        ${this.cropMode
-          ? html` ${this.renderCropMode()} ${this.cropResult ? this.renderCropResult() : nothing} `
-          : nothing}
+        ${this.cropMode === CropMode.CROP ? html` ${this.renderCropMode()} ` : nothing}
       </div>
     `
   }
