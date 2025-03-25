@@ -15,6 +15,8 @@ import CropperCrosshair from "@cropper/element-crosshair"
 import CropperShade from "@cropper/element-shade"
 import type { Selection } from "@cropper/element-selection"
 import { FLEX } from "../../styles/utils"
+import { CropImageBoundingBox } from "../../types"
+import { EventType } from "../../constants"
 
 export enum CropMode {
   IMAGE_ONLY = "image-only",
@@ -112,6 +114,9 @@ export class ZoomableImage extends LitElement {
   @state()
   private cropResult: string = ""
 
+  @state()
+  private resultBoundingBox?: CropImageBoundingBox
+
   @property({ type: Object })
   size: {
     width?: string
@@ -121,6 +126,22 @@ export class ZoomableImage extends LitElement {
   } = {
     width: "100%",
     height: "30vh",
+  }
+
+  @property({ type: Object })
+  initialImageSize: {
+    width?: string
+    height?: string
+    "max-width"?: string
+    "max-height"?: string
+  } = {}
+
+  @property({ type: Object })
+  boundingBox: CropImageBoundingBox = {
+    x: 0,
+    y: 0,
+    width: 100,
+    height: 100,
   }
 
   get canZoom() {
@@ -178,9 +199,28 @@ export class ZoomableImage extends LitElement {
     `
   }
 
+  getBoundingBoxFromSelectionElement() {
+    const { x: offsetX, y: offsetY } = this.getOffset()
+    const { x: scaleX, y: scaleY } = this.getScale()
+    const boundingBox = {
+      x: (this.selectionElement.x - offsetX) / scaleX,
+      y: (this.selectionElement.y - offsetY) / scaleY,
+      width: this.selectionElement.width / scaleX,
+      height: this.selectionElement.height / scaleY,
+    }
+    console.log("Bounding Box:", boundingBox)
+    return boundingBox
+  }
+
   async showCrop() {
-    const element = this.hasSelection() ? this.selectionElement : this.canvasElement
-    const result = await element.$toCanvas()
+    if (!this.hasSelection()) {
+      alert(msg("Please select a region to crop."))
+      return
+    }
+
+    this.resultBoundingBox = this.getBoundingBoxFromSelectionElement()
+
+    const result = await this.selectionElement.$toCanvas()
     this.cropResult = result.toDataURL()
   }
 
@@ -189,14 +229,16 @@ export class ZoomableImage extends LitElement {
   }
   resetCrop() {
     this.cropResult = ""
+    this.resultBoundingBox = undefined
     this.resetSelection()
   }
 
   submitCrop() {
     this.dispatchEvent(
-      new CustomEvent("save", {
+      new CustomEvent(EventType.SUBMIT, {
         detail: {
-          crop: this.cropResult,
+          newBoundingBox: this.resultBoundingBox,
+          oldBoundingBox: this.boundingBox,
         },
       })
     )
@@ -214,12 +256,12 @@ export class ZoomableImage extends LitElement {
           </button>
         </div>
 
-        ${this.renderCropResult()}
+        ${this.renderCropImageBoundingBox()}
       </div>
     `
   }
 
-  renderCropResult() {
+  renderCropImageBoundingBox() {
     if (!this.cropResult) {
       return nothing
     }
@@ -239,24 +281,79 @@ export class ZoomableImage extends LitElement {
     `
   }
 
+  getOffset() {
+    const cropperImageRect = this.imageElement.getBoundingClientRect()
+    const cropperCanvasRect = this.canvasElement.getBoundingClientRect()
+    return {
+      x: cropperImageRect.left - cropperCanvasRect.left,
+      y: cropperImageRect.top - cropperCanvasRect.top,
+    }
+  }
+
+  getScale() {
+    const transformValue = this.imageElement.$getTransform()
+    return {
+      x: transformValue[0],
+      y: transformValue[3],
+    }
+  }
+
+  getBoundingBoxDependOnImageSize() {
+    const image = this.imageElement?.$image
+    if (!this.boundingBox) {
+      console.error("No bounding box")
+    }
+    if (!image) {
+      return this.boundingBox
+    }
+    const { x: offsetX, y: offsetY } = this.getOffset()
+    const { x: scaleX, y: scaleY } = this.getScale()
+
+    console.log("getBoundingBoxDependOnImageSize", {
+      scaleX,
+      scaleY,
+      offsetX,
+      offsetY,
+      boundingBox: this.boundingBox,
+    })
+    return {
+      x: this.boundingBox.x * scaleX + offsetX,
+      y: this.boundingBox.y * scaleY + offsetY,
+      width: this.boundingBox.width * scaleX,
+      height: this.boundingBox.height * scaleY,
+    }
+  }
+
   renderCropperControls() {
     if (this.cropMode === CropMode.IMAGE_ONLY) {
       return html` <cropper-handle action="move" plain></cropper-handle> `
     } else if (this.cropMode === CropMode.CROP_READ) {
+      const boundingBox = this.getBoundingBoxDependOnImageSize()
       return html` <cropper-shade></cropper-shade>
         <cropper-selection
-          movable
+          outlined
           @change="${this.onCropperSelectionChange}"
-          x="0"
-          y="0"
-          width="100"
-          height="100"
+          x=${boundingBox?.x ?? 0}
+          y=${boundingBox?.y ?? 0}
+          width=${boundingBox?.width ?? 0}
+          height=${boundingBox?.height ?? 0}
+          dynamic
+          movable
+          resizable
+          zoomable
+          movable
         >
         </cropper-selection>`
     }
     return html` <cropper-shade hidden></cropper-shade>
       <cropper-handle action="select" plain></cropper-handle>
-      <cropper-selection movable resizable hidden @change="${this.onCropperSelectionChange}">
+      <cropper-selection
+        dynamic
+        movable
+        resizable
+        hidden
+        @change="${this.onCropperSelectionChange}"
+      >
         <cropper-handle action="move" plain></cropper-handle>
         <cropper-handle action="n-resize"></cropper-handle>
         <cropper-handle action="e-resize"></cropper-handle>
@@ -285,6 +382,21 @@ export class ZoomableImage extends LitElement {
   }
 
   onCropperImageTransform(event: CustomEvent) {
+    if (this.cropMode !== CropMode.CROP) {
+      this.imageElement.$ready(() => {
+        const boundingBox = this.getBoundingBoxDependOnImageSize()
+        if (boundingBox) {
+          this.selectionElement.$change(
+            boundingBox.x,
+            boundingBox.y,
+            boundingBox.width,
+            boundingBox.height
+          )
+        }
+      })
+      return
+    }
+
     const cropperCanvas = this.canvasElement
 
     if (!cropperCanvas || !this.hasSelection()) {
@@ -326,6 +438,9 @@ export class ZoomableImage extends LitElement {
     }
   }
   onCropperSelectionChange(event: CustomEvent) {
+    if (this.cropMode !== CropMode.CROP) {
+      return
+    }
     const cropperCanvas = this.canvasElement
 
     if (!cropperCanvas) {
@@ -348,13 +463,39 @@ export class ZoomableImage extends LitElement {
       event.preventDefault()
     }
   }
+  renderTopPanel() {
+    if (this.cropMode === CropMode.CROP_READ) {
+      return html``
+    }
+    return html`<div class="flex justify-end">
+      <button
+        class="link-button"
+        @click=${() => this.rotateImage(-90)}
+        title=${msg("Rotate image to the left")}
+      >
+        <rotate-left-icon></rotate-left-icon>
+      </button>
+      <button
+        class="link-button"
+        @click=${() => this.rotateImage(90)}
+        title=${msg("Rotate image to the right")}
+      >
+        <rotate-right-icon></rotate-right-icon>
+      </button>
+    </div>`
+  }
   override render() {
     const crossorigin = this.cropMode !== CropMode.IMAGE_ONLY ? "anonymous" : undefined
     return html`
       <div>
-        ${this.renderButtons()}
+        <<<<<<< HEAD ${this.renderButtons()} ======= ${this.renderTopPanel()} >>>>>>> 63148a5 (feat:
+        finish integration of crop)
         <div class="cropper-parent">
-          <cropper-canvas background style=${styleMap(this.size)}>
+          <cropper-canvas
+            background
+            style=${styleMap(this.size)}
+            ?disabled=${this.cropMode === CropMode.CROP_READ}
+          >
             <cropper-image
               src=${this.src}
               alt="Picture"

@@ -43,9 +43,14 @@ export type AutocompleteSuggestion = {
   label?: string
   value: string
 }
-export type CropResult = {
+export type CropImageBoundingBox = {
   x: number
   y: number
   width: number
   height: number
+}
+
+export type CropResult = {
+  newBoundingBox: CropImageBoundingBox
+  oldBoundingBox?: CropImageBoundingBox
 }
