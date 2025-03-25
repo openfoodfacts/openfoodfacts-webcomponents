@@ -2,22 +2,17 @@ import { LitElement, html, css, TemplateResult } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { fetchKnowledgePanels } from "../../api/knowledgepanel"
 import { Task } from "@lit/task"
-import { unsafeHTML } from "lit/directives/unsafe-html.js"
-import { ALERT } from "../../styles/alert"
 import "../../components/shared/loader" // Import the loader component
-import { ButtonType, getButtonClasses } from "../../styles/buttons" // Import button styles
-import { BASE } from "../../styles/base" // Import BASE for font styles
-import DOMPurify from "dompurify"
+import { BASE } from "../../styles/base"
+import { ALERT } from "../../styles/alert"
+import { ButtonType, getButtonClasses } from "../../styles/buttons"
 
-import {
-  KnowledgePanel,
-  KnowledgePanelElement,
-  KnowledgePanelsData,
-  TableColumn,
-  TableRow,
-  TableCell,
-  TableElement,
-} from "../../types/knowledge-panel"
+import { KnowledgePanel, KnowledgePanelsData } from "../../types/knowledge-panel"
+
+// Import all renderer modules
+import { renderPanel } from "./renderers/render-panel"
+import { renderHeading } from "./utils/heading-utils"
+import { extractImages } from "./utils/extract-images"
 
 /**
  * `knowledge-panels` - A web component to display knowledge panels from any source
@@ -29,12 +24,11 @@ import {
  * @property {string} headingLevel - The heading level to use for panel titles (h2, h3, h4, h5, h6)
  */
 @customElement("knowledge-panels")
-/* Updated Knowledge Panel Component CSS */
 export class KnowledgePanelComponent extends LitElement {
   static override styles = [
     BASE,
     ALERT,
-    ...getButtonClasses([ButtonType.Chocolate, ButtonType.Cappucino]), // Add button styles
+    ...getButtonClasses([ButtonType.Chocolate, ButtonType.Cappucino]),
     css`
       :host {
         display: block;
@@ -359,7 +353,6 @@ export class KnowledgePanelComponent extends LitElement {
         margin-bottom: 1.25rem;
         word-wrap: break-word;
         font-weight: 600;
-
         font-size: 1.3rem;
       }
 
@@ -379,6 +372,7 @@ export class KnowledgePanelComponent extends LitElement {
       }
     `,
   ]
+
   @property({
     type: String,
     reflect: true,
@@ -412,464 +406,6 @@ export class KnowledgePanelComponent extends LitElement {
   })
 
   /**
-   * Extracts images from all panels
-   * @param panels - The knowledge panels data
-   */
-  private extractImages(panels: KnowledgePanelsData): void {
-    this.nutritionImages = []
-
-    // First look for the nutrition panel
-    let nutritionPanel: KnowledgePanel | null = null
-    for (const panelId in panels) {
-      const panel = panels[panelId]
-      if (
-        panel.title === "Nutrition" ||
-        panel.title === "Nutrition facts" ||
-        panel.title_element?.title === "Nutrition" ||
-        panel.title_element?.title === "Nutrition facts"
-      ) {
-        nutritionPanel = panel
-        break
-      }
-    }
-
-    // If we found a nutrition panel, extract all images from it and all sub-panels
-    if (nutritionPanel && nutritionPanel.elements) {
-      // Process all elements in the nutrition panel
-      for (const element of nutritionPanel.elements) {
-        // Process text elements that might contain HTML with images
-        if (element.element_type === "text" && element.text_element?.html) {
-          const htmlContent = element.text_element.html
-          const imgRegex = /<img[^>]+src="([^"]+)"[^>]*>/g
-          let match
-          while ((match = imgRegex.exec(htmlContent)) !== null) {
-            if (match[1]) {
-              this.nutritionImages.push(match[1])
-            }
-          }
-        }
-
-        // Process panel group elements with images
-        if (element.element_type === "panel_group" && element.panel_group_element?.image) {
-          const image = element.panel_group_element.image
-          const imageUrl = image.sizes?.["400"]?.url || image.sizes?.["full"]?.url
-          if (imageUrl) {
-            this.nutritionImages.push(imageUrl)
-          }
-        }
-
-        // Check nested elements
-        if (element.elements) {
-          this.extractNestedImages(element.elements)
-        }
-
-        // Check referenced panels
-        if (element.element_type === "panel" && element.panel_element?.panel_id) {
-          const referencedPanel = panels[element.panel_element.panel_id]
-          if (referencedPanel && referencedPanel.elements) {
-            this.extractNestedImages(referencedPanel.elements)
-          }
-        }
-      }
-    }
-
-    // Look through all panels if we didn't find any nutrition images
-    if (this.nutritionImages.length === 0) {
-      for (const panelId in panels) {
-        const panel = panels[panelId]
-        if (panel.elements) {
-          this.extractNestedImages(panel.elements)
-        }
-      }
-    }
-
-    console.log("Extracted nutrition images:", this.nutritionImages)
-  }
-
-  /**
-   * Helper to extract images from nested elements
-   * @param elements - Array of panel elements to process
-   */
-  private extractNestedImages(elements: KnowledgePanelElement[]): void {
-    for (const element of elements) {
-      // Process text elements that might contain HTML with images
-      if (element.element_type === "text" && element.text_element?.html) {
-        const htmlContent = element.text_element.html
-        const imgRegex = /<img[^>]+src="([^"]+)"[^>]*>/g
-        let match
-        while ((match = imgRegex.exec(htmlContent)) !== null) {
-          if (match[1]) {
-            this.nutritionImages.push(match[1])
-          }
-        }
-      }
-
-      // Process panel group elements with images
-      if (element.element_type === "panel_group" && element.panel_group_element?.image) {
-        const image = element.panel_group_element.image
-        const imageUrl = image.sizes?.["400"]?.url || image.sizes?.["full"]?.url
-        if (imageUrl) {
-          this.nutritionImages.push(imageUrl)
-        }
-      }
-
-      // Recursively process nested elements
-      if (element.elements) {
-        this.extractNestedImages(element.elements)
-      }
-    }
-  }
-
-  /**
-   * Validates and normalizes the heading level
-   * @returns Validated heading level string
-   */
-  private getValidHeadingLevel(): string {
-    const validLevels = ["h1", "h2", "h3", "h4", "h5", "h6"]
-    const level = this.headingLevel.toLowerCase()
-    return validLevels.includes(level) ? level : "h3" // Default to h3 if invalid
-  }
-
-  /**
-   * Calculates a subordinate heading level based on the main heading level
-   * @param offset - Number of levels to add (1 = one level deeper)
-   * @returns A valid heading level string (h1-h6)
-   */
-  private getSubHeadingLevel(offset: number = 1): string {
-    const currentLevel = parseInt(this.getValidHeadingLevel().substring(1))
-    const newLevel = Math.min(currentLevel + offset, 6) // Ensure we don't go beyond h6
-    return `h${newLevel}`
-  }
-
-  /**
-   * Renders a dynamic heading based on the configured level
-   * @param text - Text content for the heading
-   * @param className - Optional CSS class for the heading
-   * @param offset - Optional level offset from the base heading level
-   * @returns Template result for the heading
-   */
-  renderHeading(text: string, className?: string, offset: number = 0): TemplateResult {
-    // If offset is provided, calculate a different heading level
-    const level = offset === 0 ? this.getValidHeadingLevel() : this.getSubHeadingLevel(offset)
-    const classAttr = className ? `class="${className}"` : ""
-
-    // Using unsafeHTML to dynamically create the appropriate heading element
-    const sanitizedHTML = DOMPurify.sanitize(`<${level} ${classAttr}>${text}</${level}>`)
-    return html`${unsafeHTML(sanitizedHTML)}`
-  }
-
-  /**
-   * Main element renderer - delegates to specific renderers based on element type
-   * @param element - The knowledge panel element to render
-   * @returns Template result for the element
-   */
-  renderElement(element: KnowledgePanelElement): TemplateResult {
-    if (!element || !element.element_type) {
-      console.error("Invalid element:", element)
-      return html``
-    }
-
-    switch (element.element_type) {
-      case "text":
-        return this.renderText(element)
-      case "table":
-        return this.renderTable(element)
-      case "titled_text":
-        return this.renderTitledText(element)
-      case "panel":
-        return this.renderPanelElement(element)
-      case "panel_group":
-        return this.renderPanelGroup(element)
-      case "action":
-        return this.renderAction(element)
-      default:
-        console.log(`Unsupported element type: ${element.element_type}`, element)
-        return html``
-    }
-  }
-
-  /**
-   * Renders a text element with HTML or plain text content
-   * @param element - The text element to render
-   * @returns Template result for the text element
-   */
-  renderText(element: KnowledgePanelElement): TemplateResult {
-    const textContent =
-      element.text_element?.html || element.text_element?.text || element.text || ""
-    // Sanitize the HTML first
-    const sanitizedContent = DOMPurify.sanitize(textContent)
-
-    // Then use it with unsafeHTML
-    return html`<div class="text_element">${unsafeHTML(sanitizedContent)}</div>`
-  }
-
-  /**
-   * Renders a table element with columns and rows
-   * @param element - The table element to render
-   * @returns Template result for the table element
-   */
-  renderTable(element: KnowledgePanelElement): TemplateResult {
-    const tableData = element.table_element || ({} as TableElement)
-
-    if (!tableData) {
-      console.error("Invalid table element - missing table_element:", element)
-      return html`<slot name="error">Invalid table format</slot>`
-    }
-
-    const columns = tableData.columns || []
-    const rows = tableData.rows || []
-
-    if (!Array.isArray(columns) || !Array.isArray(rows)) {
-      console.error("Invalid table structure:", tableData)
-      return html`<slot name="error">Invalid table structure</slot>`
-    }
-
-    return html`
-      <div class="table_element">
-        ${tableData.title ? this.renderHeading(tableData.title, "table-title") : ""}
-        <table>
-          <thead>
-            <tr>
-              ${columns.map(
-                (column: TableColumn) => html`<th>${column.text || column.id || ""}</th>`
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            ${rows.map(
-              (row: TableRow) => html`
-                <tr>
-                  ${(row.cells || []).map(
-                    (cell: TableCell) => html`<td>${cell.text || cell.value || ""}</td>`
-                  )}
-                </tr>
-              `
-            )}
-          </tbody>
-        </table>
-      </div>
-    `
-  }
-
-  /**
-   * Renders a titled text element with a title and value
-   * @param element - The titled text element to render
-   * @returns Template result for the titled text element
-   */
-  renderTitledText(element: KnowledgePanelElement): TemplateResult {
-    return html`
-      <div class="element">
-        <div class="element-title">${element.title || ""}</div>
-        <div class="element-value">${element.text || ""}</div>
-      </div>
-    `
-  }
-
-  /**
-   * Renders a panel element, which can either reference another panel or contain its own elements
-   * @param element - The panel element to render
-   * @returns Template result for the panel element
-   */
-  renderPanelElement(element: KnowledgePanelElement): TemplateResult {
-    // For panel elements, we either render the referenced panel or its own content
-    if (element.panel_element?.panel_id) {
-      const panelId = element.panel_element.panel_id
-      // We need to get the actual panel from the panels data
-      const referencedPanel = this.knowledgePanels?.[panelId]
-      if (referencedPanel) {
-        return this.renderPanel(referencedPanel)
-      } else {
-        return html`<div class="warning">Referenced panel not found: ${panelId}</div>`
-      }
-    } else if (element.elements && Array.isArray(element.elements)) {
-      return html`
-        <div class="sub-panel">
-          ${element.title ? this.renderHeading(element.title, "sub-panel-title") : ""}
-          <div class="elements">
-            ${element.elements.map((subElement: KnowledgePanelElement) =>
-              this.renderElement(subElement)
-            )}
-          </div>
-        </div>
-      `
-    }
-    return html`<div class="warning">Panel without elements</div>`
-  }
-
-  /**
-   * Renders a panel group element with a title, optional image, and referenced panels
-   * @param element - The panel group element to render
-   * @returns Template result for the panel group element
-   */
-  renderPanelGroup(element: KnowledgePanelElement): TemplateResult {
-    const panelGroup = element.panel_group_element
-    if (!panelGroup) {
-      return html`<div class="warning">
-        ${this.renderHeading("Missing Data", "warning-title", 1)}
-        <p>Panel group without data</p>
-      </div>`
-    }
-
-    return html`
-      <div class="panel-group">
-        ${panelGroup.title ? this.renderHeading(panelGroup.title, "panel-group-title", 1) : ""}
-        ${this.renderPanelGroupImage(panelGroup)} ${this.renderPanelGroupPanels(panelGroup)}
-      </div>
-    `
-  }
-
-  /**
-   * Renders the image and associated text for a panel group if it exists
-   * @param panelGroup - The panel group containing the image
-   * @returns Template result for the panel group image with text
-   */
-  renderPanelGroupImage(panelGroup: any): TemplateResult {
-    if (!panelGroup.image) {
-      return html``
-    }
-
-    const imageUrl =
-      panelGroup.image.sizes?.["400"]?.url || panelGroup.image.sizes?.["full"]?.url || ""
-
-    const imageAlt = panelGroup.image.alt || "Panel image"
-    const imageCaption = panelGroup.image.caption || panelGroup.image.description || ""
-
-    return html`
-      <div class="panel-image">
-        <img src="${imageUrl}" alt="${imageAlt}" />
-        ${imageCaption ? html`<div class="panel-image-text">${imageCaption}</div>` : html``}
-      </div>
-    `
-  }
-
-  /**
-   * Renders the panels referenced by a panel group
-   * @param panelGroup - The panel group containing panel references
-   * @returns Template result for the referenced panels
-   */
-  renderPanelGroupPanels(panelGroup: any): TemplateResult[] {
-    return (panelGroup.panel_ids || []).map((panelId: string) => {
-      const panel = this.knowledgePanels?.[panelId]
-      if (panel) {
-        return this.renderPanel(panel)
-      } else {
-        return html`<div class="warning">Referenced panel not found: ${panelId}</div>`
-      }
-    })
-  }
-
-  /**
-   * Renders an action element with a button and improved styling
-   * @param element - The action element to render
-   * @returns Template result for the action element
-   */
-  renderAction(element: KnowledgePanelElement): TemplateResult {
-    const actionElement = element.action_element
-    if (!actionElement) {
-      return html``
-    }
-
-    const actionText = (actionElement as any).action_text || "Default Action"
-    const actionDescription = (actionElement as any).description || ""
-    const sanitizedHTML = DOMPurify.sanitize(actionElement.html || "")
-
-    return html`
-      <div class="action">
-        <div>${unsafeHTML(sanitizedHTML)}</div>
-        <button class="button chocolate-button" disabled>${actionText}</button>
-        ${actionDescription ? html`<small>${actionDescription}</small>` : ""}
-        <small>(Actions are displayed but not functional in this version)</small>
-      </div>
-    `
-  }
-
-  /**
-   * Checks if a panel is a nutrition panel
-   * @param panel - The panel to check
-   * @returns True if it's a nutrition panel
-   */
-  private isNutritionPanel(panel: KnowledgePanel): boolean {
-    const title = panel.title_element?.title || panel.title || ""
-    return title.toLowerCase().includes("nutrition") || title.toLowerCase().includes("nutritional")
-  }
-
-  /**
-   * Renders a complete knowledge panel with title and elements
-   * @param panel - The knowledge panel to render
-   * @returns Template result for the knowledge panel
-   */
-  renderPanel(panel: KnowledgePanel): TemplateResult {
-    if (!panel) {
-      console.error("Attempted to render null or undefined panel")
-      return html`` // Return empty template instead of undefined
-    }
-
-    // Get title from title_element if available
-    const title = panel.title_element?.title || panel.title || ""
-    console.log("Rendering panel:", title, panel)
-    // Get elements
-    const elements = panel.elements || []
-
-    // Check if this is a nutrition panel that should have the special layout
-    const isNutrition = this.isNutritionPanel(panel)
-    const panelClass = isNutrition
-      ? `panel nutrition-panel ${panel.level || ""} ${panel.size || ""}`.trim()
-      : `panel ${panel.level || ""} ${panel.size || ""}`.trim()
-
-    if (isNutrition && this.nutritionImages.length > 0) {
-      return html`
-        <div class="${panelClass}">
-          ${this.renderPanelHeader(title, panel.title_element?.subtitle)}
-          <div class="panel-content">
-            <div class="panel-left">
-              <div class="elements">
-                ${elements.map((element: KnowledgePanelElement) => this.renderElement(element))}
-              </div>
-            </div>
-            <div class="panel-right">
-              <img src="${this.nutritionImages[0]}" alt="Nutrition Information" />
-              ${panel.title_element?.subtitle
-                ? html`<div class="panel-image-text">${panel.title_element.subtitle}</div>`
-                : ""}
-            </div>
-          </div>
-        </div>
-      `
-    }
-
-    // Standard panel layout for non-nutrition panels or nutrition panels without images
-    return html`
-      <div class="${panelClass}">
-        ${this.renderPanelHeader(title, panel.title_element?.subtitle)}
-        <div class="panel-content">
-          <div class="elements">
-            ${elements.map((element: KnowledgePanelElement) => this.renderElement(element))}
-          </div>
-        </div>
-      </div>
-    `
-  }
-
-  /**
-   * Renders the header section of a knowledge panel
-   * @param title - The panel title
-   * @param subtitle - Optional subtitle for the panel
-   * @returns Template result for the panel header
-   */
-  renderPanelHeader(title: string, subtitle?: string): TemplateResult {
-    if (!title) {
-      return html``
-    }
-
-    return html`
-      <div class="panel-header">
-        ${this.renderHeading(title, "panel-title")}
-        ${subtitle ? html`<div class="panel-subtitle">${subtitle}</div>` : ""}
-      </div>
-    `
-  }
-
-  /**
    * Handle errors in a more user-friendly way
    * @param error - The error to display
    * @returns Template result for the error display
@@ -880,7 +416,7 @@ export class KnowledgePanelComponent extends LitElement {
 
     return html`
       <slot name="error">
-        ${this.renderHeading("Error Loading Knowledge Panels", "error-title")}
+        ${renderHeading("Error Loading Knowledge Panels", "error-title", this.headingLevel)}
         <p>${errorMessage}</p>
         <button class="button cappucino-button" @click=${this._retryLoad}>Retry</button>
       </slot>
@@ -931,17 +467,17 @@ export class KnowledgePanelComponent extends LitElement {
       const emptyHeading = "No Knowledge Panels Available"
       return html`
         <div class="info">
-          ${this.renderHeading(emptyHeading, "empty-heading")}
+          ${renderHeading(emptyHeading, "empty-heading", this.headingLevel)}
           <p>No knowledge panels were found for this request.</p>
         </div>
       `
     }
 
-    // Store panels in the instance for reference in renderElement
+    // Store panels in the instance for reference
     this.knowledgePanels = panels
 
     // Extract all nutrition-related images
-    this.extractImages(panels)
+    this.nutritionImages = extractImages(panels)
 
     // Create an array of top-level panels (ones that aren't only referenced by others)
     const topLevelPanelIds = ["health_card", "product_card", "product_details"]
@@ -956,8 +492,12 @@ export class KnowledgePanelComponent extends LitElement {
 
     return html`
       <div class="knowledge-panels-container">
-        ${this.renderHeading(sectionTitle, "knowledge-panels-section-title")}
-        ${panelsToRender.map((panel: KnowledgePanel) => (panel ? this.renderPanel(panel) : html``))}
+        ${renderHeading(sectionTitle, "knowledge-panels-section-title", this.headingLevel)}
+        ${panelsToRender.map((panel: KnowledgePanel) =>
+          panel
+            ? renderPanel(panel, this.knowledgePanels, this.nutritionImages, this.headingLevel)
+            : html``
+        )}
       </div>
     `
   }
