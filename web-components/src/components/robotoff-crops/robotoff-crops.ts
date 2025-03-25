@@ -13,6 +13,8 @@ import { getRobotoffImageUrl } from "../../signals/robotoff"
 import { localized, msg } from "@lit/localize"
 import "../shared/loader"
 import { FLEX } from "../../styles/utils"
+import { CropResult } from "../../types"
+import * as ZoomableImage from "../shared/zoomable-image"
 
 @customElement("robotoff-crops")
 @localized()
@@ -67,7 +69,7 @@ export class RobotoffCrops extends LitElement {
   predictions: ImagePredictionsResponse | null = null
 
   @state()
-  cropMode: boolean = false
+  cropMode: ZoomableImage.CropMode = ZoomableImage.CropMode.CROP_READ
 
   private _predictionTask = new Task(this, {
     task: async (
@@ -90,7 +92,7 @@ export class RobotoffCrops extends LitElement {
   })
 
   renderCropAnswerButtons() {
-    if (this.cropMode) {
+    if (this.cropMode === ZoomableImage.CropMode.CROP) {
       return html`
         <div>
           <div class="crop-button-container">
@@ -153,7 +155,7 @@ export class RobotoffCrops extends LitElement {
           <zoomable-image
             src=${imgUrl}
             .size="${{ width: "500px", height: "500px" }}"
-            ?crop-mode=${this.cropMode}
+            crop-mode=${this.cropMode}
             @save=${this.onCropSave}
           ></zoomable-image>
         </div>
@@ -163,11 +165,14 @@ export class RobotoffCrops extends LitElement {
   }
 
   toggleCropMode() {
-    this.cropMode = !this.cropMode
+    this.cropMode =
+      this.cropMode === ZoomableImage.CropMode.CROP
+        ? ZoomableImage.CropMode.CROP_READ
+        : ZoomableImage.CropMode.CROP
   }
 
   onCropSave(event: CustomEvent<CropResult>) {
-    this.cropResult = event.detail.cropResult
+    // this.cropResult = event.detail.cropResult
   }
 
   answer(value: QuestionAnnotationAnswer) {
