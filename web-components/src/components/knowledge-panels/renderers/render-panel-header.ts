@@ -1,5 +1,6 @@
 import { LitElement, html, css, TemplateResult } from "lit"
 import { customElement, property } from "lit/decorators.js"
+import "../utils/heading-utils" // Import heading renderer component
 
 /**
  * Panel header renderer component

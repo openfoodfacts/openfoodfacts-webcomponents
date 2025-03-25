@@ -11,7 +11,7 @@ import { KnowledgePanel, KnowledgePanelsData } from "../../types/knowledge-panel
 
 // Import all renderer components
 import "./renderers/render-panel"
-import "./utils/heading-utils"
+import "./utils/heading-utils" // Import heading renderer component
 import { extractImages } from "./utils/extract-images"
 
 /**

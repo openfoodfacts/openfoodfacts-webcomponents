@@ -1,4 +1,5 @@
-import { html, TemplateResult } from "lit"
+import { LitElement, html, css, TemplateResult } from "lit"
+import { customElement, property } from "lit/decorators.js"
 import { unsafeHTML } from "lit/directives/unsafe-html.js"
 import DOMPurify from "dompurify"
 
@@ -26,26 +27,47 @@ export function getSubHeadingLevel(headingLevel: string, offset: number = 1): st
 }
 
 /**
- * Renders a dynamic heading based on the configured level
- * @param text - Text content for the heading
- * @param className - Optional CSS class for the heading
- * @param headingLevel - Base heading level to use
- * @param offset - Optional level offset from the base heading level
- * @returns Template result for the heading
+ * Dynamic heading renderer component
+ *
+ * @element heading-renderer
  */
-export function renderHeading(
-  text: string,
-  className?: string,
-  headingLevel: string = "h3",
-  offset: number = 0
-): TemplateResult {
-  // If offset is provided, calculate a different heading level
-  const level =
-    offset === 0 ? getValidHeadingLevel(headingLevel) : getSubHeadingLevel(headingLevel, offset)
+@customElement("heading-renderer")
+export class HeadingRenderer extends LitElement {
+  static override styles = css`
+    :host {
+      display: block;
+    }
+  `
 
-  const classAttr = className ? `class="${className}"` : ""
+  @property({ type: String })
+  text = ""
 
-  // Using unsafeHTML to dynamically create the appropriate heading element
-  const sanitizedHTML = DOMPurify.sanitize(`<${level} ${classAttr}>${text}</${level}>`)
-  return html`${unsafeHTML(sanitizedHTML)}`
+  @property({ type: String, attribute: "class-name" })
+  override className: string = ""
+
+  @property({ type: String, attribute: "heading-level" })
+  headingLevel = "h3"
+
+  @property({ type: Number })
+  offset = 0
+
+  override render(): TemplateResult {
+    // If offset is provided, calculate a different heading level
+    const level =
+      this.offset === 0
+        ? getValidHeadingLevel(this.headingLevel)
+        : getSubHeadingLevel(this.headingLevel, this.offset)
+
+    const classAttr = this.className ? `class="${this.className}"` : ""
+
+    // Using unsafeHTML to dynamically create the appropriate heading element
+    const sanitizedHTML = DOMPurify.sanitize(`<${level} ${classAttr}>${this.text}</${level}>`)
+    return html`${unsafeHTML(sanitizedHTML)}`
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "heading-renderer": HeadingRenderer
+  }
 }
