@@ -4,6 +4,7 @@ import "../shared/zoomable-image"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import robotoff from "../../api/robotoff"
 import {
+  CropBoundingBox,
   ImagePrediction,
   ImagePredictionsResponse,
   QuestionAnnotationAnswer,
@@ -15,6 +16,10 @@ import "../shared/loader"
 import { FLEX } from "../../styles/utils"
 import { CropResult } from "../../types"
 import * as ZoomableImage from "../shared/zoomable-image"
+import {
+  cropImageBoundingBoxToRobotoffBoundingBox,
+  robotoffBoundingBoxToCropImageBoundingBox,
+} from "../../utils/crop"
 
 @customElement("robotoff-crops")
 @localized()
@@ -106,13 +111,22 @@ export class RobotoffCrops extends LitElement {
     return html`
       <div class="flex flex-col align-center">
         <div class="button-container">
-          <button class="button cappucino-button" @click="${() => this.answer("1")}">
+          <button
+            class="button cappucino-button"
+            @click="${() => this.answer(QuestionAnnotationAnswer.YES)}"
+          >
             ${msg("Yes")}
           </button>
-          <button class="button cappucino-button" @click="${() => this.answer("0")}">
+          <button
+            class="button cappucino-button"
+            @click="${() => this.answer(QuestionAnnotationAnswer.NO)}"
+          >
             ${msg("No")}
           </button>
-          <button class="button white-button" @click="${() => this.answer("-1")}">
+          <button
+            class="button white-button"
+            @click="${() => this.answer(QuestionAnnotationAnswer.SKIP)}"
+          >
             ${msg("Skip")}
           </button>
         </div>
@@ -131,21 +145,26 @@ export class RobotoffCrops extends LitElement {
   override render() {
     return this._predictionTask.render({
       pending: () => html`<off-wc-loading></off-wc-loading>`,
-      complete: (predictions?: ImagePredictionsResponse) => {
+      complete: (predictions: ImagePredictionsResponse | undefined) => {
         if (!predictions) {
           return nothing
         }
 
+        // TODO: handle multiple predictions
         const imagePrediction = predictions.image_predictions[0]
 
         return this.renderImagePrediction(imagePrediction)
       },
-      error: (error: string) => html`<p>Error: ${error}</p>`,
+      error: (error: unknown) => html`<p>Error: ${String(error)}</p>`,
     })
   }
 
   private renderImagePrediction(prediction: ImagePrediction) {
     const imgUrl = getRobotoffImageUrl(prediction.image.source_image)
+    const boundingBox = prediction.data.entities[0]?.bounding_box
+      ? robotoffBoundingBoxToCropImageBoundingBox(prediction.data.entities[0].bounding_box)
+      : undefined
+
     return html`
       <div>
         <div>
@@ -154,9 +173,10 @@ export class RobotoffCrops extends LitElement {
           </p>
           <zoomable-image
             src=${imgUrl}
-            .size="${{ width: "500px", height: "500px" }}"
+            .size="${{ "max-width": "500px", height: "500px", width: "100%" }}"
             crop-mode=${this.cropMode}
-            @save=${this.onCropSave}
+            .boundingBox=${boundingBox}
+            @submit=${this.onCropSave}
           ></zoomable-image>
         </div>
         ${this.renderCropAnswerButtons()}
@@ -172,17 +192,29 @@ export class RobotoffCrops extends LitElement {
   }
 
   onCropSave(event: CustomEvent<CropResult>) {
-    // this.cropResult = event.detail.cropResult
+    const oldBoundingBox = event.detail.oldBoundingBox
+      ? cropImageBoundingBoxToRobotoffBoundingBox(event.detail.oldBoundingBox)
+      : null
+    const robotoffBoundingBox = cropImageBoundingBoxToRobotoffBoundingBox(
+      event.detail.newBoundingBox
+    )
+    // TODO : integrate logic with robotoff insight api
+
+    alert(
+      "initial bounding box: " +
+        JSON.stringify(oldBoundingBox) +
+        "\n" +
+        "Crop bounding box: " +
+        JSON.stringify(robotoffBoundingBox)
+    )
+    this.answer(QuestionAnnotationAnswer.NO, robotoffBoundingBox)
   }
 
-  answer(value: QuestionAnnotationAnswer) {
-    console.log("Validate button clicked", value)
-    // Add validation logic here
-  }
-
-  handleUpdate() {
-    console.log("Update button clicked")
-    // Add update logic here
+  answer(value: QuestionAnnotationAnswer, boundingBox?: CropBoundingBox) {
+    // TODO : integrate logic with robotoff insight api
+    alert(
+      "Validate button clicked: " + value + "\n" + "bounding box: " + JSON.stringify(boundingBox)
+    )
   }
 }
 
