@@ -41,15 +41,66 @@
 <trans-unit id="s13d6dffec1a1ec2b">
   <source>Nutrients</source>
 </trans-unit>
-<trans-unit id="se08df1c0fa856132">
-  <source>Serving size:</source>
+<trans-unit id="s59df20feee978e5b">
+  <source>Error: Invalid value.</source>
 </trans-unit>
-<trans-unit id="h276ecd60f2ffe8fd">
-  <source>Openfoodfacts lives thanks to its community.<x id="0" equiv-text="&lt;br&gt;"/>
+<trans-unit id="s090c321cc9301918">
+  <source>Error: Value must have only 2 decimal</source>
+</trans-unit>
+<trans-unit id="sbd9a0b2293b3cd3c">
+  <source>Serving size</source>
+</trans-unit>
+<trans-unit id="sbb623d6b18d966a0">
+  <source>Nutrition facts are displayed on the packaging:</source>
+</trans-unit>
+<trans-unit id="se206feec7ec57b28">
+  <source>per 100g</source>
+</trans-unit>
+<trans-unit id="s453188ea728f64da">
+  <source>Add a nutrient</source>
+</trans-unit>
+<trans-unit id="hf83972f67d491f69">
+  <source>Open food facts lives thanks to its community.<x id="0" equiv-text="&lt;br&gt;"/>
           Can you help us validate nutritional information?</source>
 </trans-unit>
-<trans-unit id="s78f63546f502a6f0">
-  <source>Thank you for your help!</source>
+<trans-unit id="s7d8eadc53978967f">
+  <source>Thank you for your contribution!</source>
+</trans-unit>
+<trans-unit id="s475b08749d0706ed">
+  <source>Help us inform millions of consumers around the world about what they eat</source>
+</trans-unit>
+<trans-unit id="s06b3b3ee211d15ae">
+  <source>Please give to our 2024 Fundraiser</source>
+</trans-unit>
+<trans-unit id="sfc40ea3d5d5aa6f8">
+  <source>Your donations fund the day-to-day operations of our non-profit association:</source>
+</trans-unit>
+<trans-unit id="s1c5031113de500ce">
+  <source>keeping our database open &amp; available to all,</source>
+</trans-unit>
+<trans-unit id="sebb2c6c830a44574">
+  <source>technical infrastructure (website/mobile app) &amp; a small permanent team</source>
+</trans-unit>
+<trans-unit id="sd82bc2decefa621b">
+  <source>remain independent of the food industry,</source>
+</trans-unit>
+<trans-unit id="sb3bdd638a58d30f4">
+  <source>engage a community of committed citizens,</source>
+</trans-unit>
+<trans-unit id="s100c4928cc74642a">
+  <source>support the advancement of public health research.</source>
+</trans-unit>
+<trans-unit id="s6d7b6cdedaadfb6e">
+  <source>Each donation counts! We appreciate your support in bringing further food transparency in the world.</source>
+</trans-unit>
+<trans-unit id="s6306a31415aea913">
+  <source>I SUPPORT</source>
+</trans-unit>
+<trans-unit id="sca0c3305aff570b8">
+  <source>per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
+</trans-unit>
+<trans-unit id="s688d3d95ca7c01db">
+  <source>Specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
 </trans-unit>
 </body>
 </file>
