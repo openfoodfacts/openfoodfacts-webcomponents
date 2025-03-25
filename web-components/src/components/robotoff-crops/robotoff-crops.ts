@@ -154,6 +154,7 @@ export class RobotoffCrops extends LitElement {
             src=${imgUrl}
             .size="${{ width: "500px", height: "500px" }}"
             ?crop-mode=${this.cropMode}
+            @save=${this.onCropSave}
           ></zoomable-image>
         </div>
         ${this.renderCropAnswerButtons()}
@@ -163,6 +164,10 @@ export class RobotoffCrops extends LitElement {
 
   toggleCropMode() {
     this.cropMode = !this.cropMode
+  }
+
+  onCropSave(event: CustomEvent<CropResult>) {
+    this.cropResult = event.detail.cropResult
   }
 
   answer(value: QuestionAnnotationAnswer) {
