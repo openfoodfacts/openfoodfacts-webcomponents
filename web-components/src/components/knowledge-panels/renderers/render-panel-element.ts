@@ -1,17 +1,24 @@
 import { LitElement, html, css, TemplateResult } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { KnowledgePanelElement, KnowledgePanelsData } from "../../../types/knowledge-panel"
+import "../utils/heading-utils" // Import heading renderer component
 import "./render-element"
 import "./render-panel"
 
 /**
  * Panel element renderer component
- *
+ * 
  * @element panel-element-renderer
  */
 @customElement("panel-element-renderer")
 export class PanelElementRenderer extends LitElement {
   static override styles = css`
+    :host {
+      display: block;
+      width: 100%;
+      overflow-x: hidden; /* Prevent horizontal overflow at component level */
+    }
+
     .warning {
       padding: 0.75rem;
       margin-bottom: 1rem;
@@ -23,6 +30,7 @@ export class PanelElementRenderer extends LitElement {
     }
 
     .sub-panel {
+      box-sizing: border-box; /* Include padding in width calculation */
       width: 100%;
       margin-bottom: 1.25rem;
       padding: 1rem;
@@ -31,6 +39,9 @@ export class PanelElementRenderer extends LitElement {
       border-radius: 20px;
       text-align: left;
       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+      overflow-x: hidden; /* Prevent horizontal overflow */
+      word-wrap: break-word; /* Ensure long words don't cause overflow */
+      overflow-wrap: break-word; /* Modern version of word-wrap */
     }
 
     .sub-panel-title {
@@ -46,6 +57,7 @@ export class PanelElementRenderer extends LitElement {
 
     .elements {
       width: 100%;
+      overflow-x: hidden; /* Prevent horizontal overflow in nested elements */
     }
   `
 
@@ -69,11 +81,10 @@ export class PanelElementRenderer extends LitElement {
       // We need to get the actual panel from the panels data
       const referencedPanel = this.knowledgePanels?.[panelId]
       if (referencedPanel) {
-        return html`<panel-renderer
-          .panel=${referencedPanel}
+        return html`<panel-renderer 
+          .panel=${referencedPanel} 
           .knowledgePanels=${this.knowledgePanels}
-          headingLevel=${this.headingLevel}
-        >
+          headingLevel=${this.headingLevel}>
         </panel-renderer>`
       } else {
         return html`<div class="warning">Referenced panel not found: ${panelId}</div>`
@@ -81,24 +92,22 @@ export class PanelElementRenderer extends LitElement {
     } else if (this.element.elements && Array.isArray(this.element.elements)) {
       return html`
         <div class="sub-panel">
-          ${this.element.title
-            ? html`<heading-renderer
-                text="${this.element.title}"
-                class-name="sub-panel-title"
-                heading-level="${this.headingLevel}"
-                offset="1"
-              >
-              </heading-renderer>`
-            : ""}
+          ${this.element.title ? 
+            html`<heading-renderer 
+              text="${this.element.title}" 
+              class-name="sub-panel-title" 
+              heading-level="${this.headingLevel}" 
+              offset="1">
+            </heading-renderer>` : 
+            ""
+          }
           <div class="elements">
-            ${this.element.elements.map(
-              (subElement: KnowledgePanelElement) =>
-                html`<element-renderer
-                  .element=${subElement}
-                  .knowledgePanels=${this.knowledgePanels}
-                  headingLevel=${this.headingLevel}
-                >
-                </element-renderer>`
+            ${this.element.elements.map((subElement: KnowledgePanelElement) =>
+              html`<element-renderer 
+                .element=${subElement} 
+                .knowledgePanels=${this.knowledgePanels}
+                headingLevel=${this.headingLevel}>
+              </element-renderer>`
             )}
           </div>
         </div>

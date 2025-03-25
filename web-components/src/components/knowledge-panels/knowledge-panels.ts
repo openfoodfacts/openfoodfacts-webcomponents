@@ -37,6 +37,7 @@ export class KnowledgePanelsComponent extends LitElement {
         margin-bottom: 1.5rem;
         box-sizing: border-box;
         overflow-x: hidden; /* Prevent horizontal scrolling */
+        padding: 0 0.5rem;
       }
 
       /* Apply box-sizing to all elements */

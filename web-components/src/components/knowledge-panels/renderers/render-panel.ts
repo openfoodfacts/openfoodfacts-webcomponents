@@ -19,7 +19,7 @@ import "../utils/extract-images"
 export class PanelRenderer extends LitElement {
   static override styles = css`
     .panel {
-      width: 100%;
+      width: 96%;
       background-color: #fff;
       border: 1px solid #e0e0e0;
       border-radius: 24px;
@@ -27,6 +27,7 @@ export class PanelRenderer extends LitElement {
       margin-bottom: 1.5rem;
       overflow: hidden;
       transition: box-shadow 0.2s ease;
+
     }
 
     .panel:hover {
