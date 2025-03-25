@@ -1,5 +1,5 @@
 import { LitElement, html, css } from "lit"
-import { customElement } from "lit/decorators.js"
+import { customElement, property } from "lit/decorators.js"
 import { localized, msg } from "@lit/localize"
 import { getLocale } from "../../localization"
 
@@ -10,6 +10,11 @@ import { getLocale } from "../../localization"
 @customElement("fundraiser-banner")
 @localized()
 export class FundraiserBanner extends LitElement {
+  @property() link =
+    getLocale() === "fr"
+      ? "https://open-food-facts.assoconnect.com/collect/description/476750-c-faire-un-don-a-open-food-facts"
+      : "https://world.openfoodfacts.org/donate-to-open-food-facts"
+
   static override styles = css`
     .donation-banner,
     .donation-banner-footer {
@@ -252,11 +257,8 @@ export class FundraiserBanner extends LitElement {
           </div>
           <div class="donation-banner-footer__actions-section__donate-button">
             <a
-              href="${msg(
-                getLocale() === "fr"
-                  ? "https://open-food-facts.assoconnect.com/collect/description/476750-c-faire-un-don-a-open-food-facts"
-                  : "https://world.openfoodfacts.org/donate-to-open-food-facts"
-              )}?utm_source=off&utm_medium=web&utm_campaign=donate-2024-a&utm_term=en-text-button"
+              href="${this
+                .link}?utm_source=off&utm_medium=web&utm_campaign=donate-2024-a&utm_term=en-text-button"
             >
               <button>${msg("I SUPPORT")}</button>
             </a>
