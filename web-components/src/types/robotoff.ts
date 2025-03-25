@@ -32,7 +32,12 @@ export type QuestionsResponse = {
   questions: Question[]
 }
 
-export type QuestionAnnotationAnswer = "2" | "1" | "0" | "-1" // https://openfoodfacts.github.io/robotoff/references/api/#tag/Insights/paths/~1insights~1annotate/post
+export enum QuestionAnnotationAnswer {
+  YES = "1",
+  NO = "0",
+  ANNOTATED = "2",
+  SKIP = "-1",
+} // https://openfoodfacts.github.io/robotoff/references/api/#tag/Insights/paths/~1insights~1annotate/post
 export enum InsightAnnotationType {
   CENTGRAMS = "100g",
   SERVING = "serving",
@@ -140,6 +145,7 @@ export type IngredientPrediction = {
   ciqual_proxy_food_code?: string
   ingredients?: IngredientPrediction[]
 }
+export type CropBoundingBox = [number, number, number, number]
 
 export type ImagePrediction = {
   id: number
@@ -158,7 +164,7 @@ export type ImagePrediction = {
       start: number
       raw_end: number
       ingredients: IngredientPrediction[]
-      bounding_box: number[]
+      bounding_box: CropBoundingBox
       ingredients_n: number
       known_ingredients_n: number
       unknown_ingredients_n: number

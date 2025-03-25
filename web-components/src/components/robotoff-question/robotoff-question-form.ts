@@ -7,6 +7,7 @@ import { classMap } from "lit/directives/class-map.js"
 import { answerQuestion } from "../../signals/questions"
 import "../buttons/zoom-unzoom-button"
 import { SignalWatcher } from "@lit-labs/signals"
+import { localized, msg } from "@lit/localize"
 /**
  * RobotoffQuestionForm component
  * It displays a form to answer a question about a product.
@@ -14,6 +15,7 @@ import { SignalWatcher } from "@lit-labs/signals"
  * @fires {EventType.SUBMIT} - When the form is submitted
  */
 @customElement("robotoff-question-form")
+@localized()
 export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
   static override styles = [
     ...getButtonClasses([ButtonType.Cappucino, ButtonType.White, ButtonType.LINK]),
@@ -133,21 +135,22 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
           <p></p>
           <button
             class="button cappucino-button"
-            @click="${(event: Event) => this._annotateProduct(event, "1")}"
+            @click="${(event: Event) => this._annotateProduct(event, QuestionAnnotationAnswer.YES)}"
           >
-            Yes
+            ${msg("Yes")}
           </button>
           <button
             class="button cappucino-button"
-            @click="${(event: Event) => this._annotateProduct(event, "0")}"
+            @click="${(event: Event) => this._annotateProduct(event, QuestionAnnotationAnswer.NO)}"
           >
-            No
+            ${msg("No")}
           </button>
           <button
             class="button white-button"
-            @click="${(event: Event) => this._annotateProduct(event, "-1")}"
+            @click="${(event: Event) =>
+              this._annotateProduct(event, QuestionAnnotationAnswer.SKIP)}"
           >
-            Skip
+            ${msg("Skip")}
           </button>
         </div>
       </div>
