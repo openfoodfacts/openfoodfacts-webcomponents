@@ -1,46 +1,80 @@
-import { html, TemplateResult } from "lit"
+import { LitElement, html, TemplateResult } from "lit"
+import { customElement, property } from "lit/decorators.js"
 import { KnowledgePanelElement, KnowledgePanelsData } from "../../../types/knowledge-panel"
-import { renderText } from "./render-text"
-import { renderTable } from "./render-table"
-import { renderTitledText } from "./render-titled-text"
-import { renderPanelElement } from "./render-panel-element"
-import { renderPanelGroup } from "./render-panel-group"
-import { renderAction } from "./render-action"
+
+// Import all element renderer components so they're registered
+import "./render-text"
+import "./render-table"
+import "./render-titled-text"
+import "./render-panel-element"
+import "./render-panel-group"
+import "./render-action"
 
 /**
- * Main element renderer - delegates to specific renderers based on element type
- * @param element - The knowledge panel element to render
- * @param knowledgePanels - All available knowledge panels
- * @param nutritionImages - Array of nutrition-related image URLs
- * @param headingLevel - The heading level to use
- * @returns Template result for the element
+ * Element renderer dispatcher component
+ *
+ * @element element-renderer
  */
-export function renderElement(
-  element: KnowledgePanelElement,
-  knowledgePanels: KnowledgePanelsData | null,
-  nutritionImages: string[],
-  headingLevel: string
-): TemplateResult {
-  if (!element || !element.element_type) {
-    console.error("Invalid element:", element)
-    return html``
-  }
+@customElement("element-renderer")
+export class ElementRenderer extends LitElement {
+  @property({ type: Object })
+  element?: KnowledgePanelElement
 
-  switch (element.element_type) {
-    case "text":
-      return renderText(element)
-    case "table":
-      return renderTable(element, headingLevel)
-    case "titled_text":
-      return renderTitledText(element)
-    case "panel":
-      return renderPanelElement(element, knowledgePanels, nutritionImages, headingLevel)
-    case "panel_group":
-      return renderPanelGroup(element, knowledgePanels, headingLevel)
-    case "action":
-      return renderAction(element)
-    default:
-      console.log(`Unsupported element type: ${element.element_type}`, element)
+  @property({ type: Object })
+  knowledgePanels: KnowledgePanelsData | null = null
+
+  @property({ type: String })
+  headingLevel = "h3"
+
+  override render(): TemplateResult {
+    if (!this.element || !this.element.element_type) {
+      console.error("Invalid element:", this.element)
       return html``
+    }
+
+    switch (this.element.element_type) {
+      case "text":
+        return html`<text-element-renderer .element=${this.element}></text-element-renderer>`
+
+      case "table":
+        return html`<table-element-renderer
+          .element=${this.element}
+          headingLevel=${this.headingLevel}
+        >
+        </table-element-renderer>`
+
+      case "titled_text":
+        return html`<titled-text-element-renderer .element=${this.element}>
+        </titled-text-element-renderer>`
+
+      case "panel":
+        return html`<panel-element-renderer
+          .element=${this.element}
+          .knowledgePanels=${this.knowledgePanels}
+          headingLevel=${this.headingLevel}
+        >
+        </panel-element-renderer>`
+
+      case "panel_group":
+        return html`<panel-group-element-renderer
+          .element=${this.element}
+          .knowledgePanels=${this.knowledgePanels}
+          headingLevel=${this.headingLevel}
+        >
+        </panel-group-element-renderer>`
+
+      case "action":
+        return html`<action-element-renderer .element=${this.element}> </action-element-renderer>`
+
+      default:
+        console.log(`Unsupported element type: ${this.element.element_type}`, this.element)
+        return html``
+    }
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "element-renderer": ElementRenderer
   }
 }

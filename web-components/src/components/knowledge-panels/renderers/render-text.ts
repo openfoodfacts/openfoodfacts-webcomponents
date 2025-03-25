@@ -1,19 +1,48 @@
-import { html, TemplateResult } from "lit"
+import { LitElement, html, css, TemplateResult } from "lit"
+import { customElement, property } from "lit/decorators.js"
 import { unsafeHTML } from "lit/directives/unsafe-html.js"
 import DOMPurify from "dompurify"
 import { KnowledgePanelElement } from "../../../types/knowledge-panel"
 
 /**
- * Renders a text element with HTML or plain text content
- * @param element - The text element to render
- * @returns Template result for the text element
+ * Text element renderer component
+ *
+ * @element text-element-renderer
  */
-export function renderText(element: KnowledgePanelElement): TemplateResult {
-  const textContent = element.text_element?.html || element.text_element?.text || element.text || ""
+@customElement("text-element-renderer")
+export class TextElementRenderer extends LitElement {
+  static override styles = css`
+    .text_element {
+      width: 100%;
+      margin-bottom: 0.85rem;
+      line-height: 1.6;
+      text-align: left;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      color: #333;
+    }
+  `
 
-  // Sanitize the HTML first
-  const sanitizedContent = DOMPurify.sanitize(textContent)
+  @property({ type: Object })
+  element?: KnowledgePanelElement
 
-  // Then use it with unsafeHTML
-  return html`<div class="text_element">${unsafeHTML(sanitizedContent)}</div>`
+  override render(): TemplateResult {
+    const textContent =
+      this.element?.text_element?.html ||
+      this.element?.text_element?.text ||
+      this.element?.text ||
+      ""
+
+    // Sanitize the HTML first
+    const sanitizedContent = DOMPurify.sanitize(textContent)
+
+    // Then use it with unsafeHTML
+    return html`<div class="text_element">${unsafeHTML(sanitizedContent)}</div>`
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "text-element-renderer": TextElementRenderer
+  }
 }

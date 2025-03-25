@@ -9,9 +9,9 @@ import { ButtonType, getButtonClasses } from "../../styles/buttons"
 
 import { KnowledgePanel, KnowledgePanelsData } from "../../types/knowledge-panel"
 
-// Import all renderer modules
-import { renderPanel } from "./renderers/render-panel"
-import { renderHeading } from "./utils/heading-utils"
+// Import all renderer components
+import "./renderers/render-panel"
+import "./utils/heading-utils"
 import { extractImages } from "./utils/extract-images"
 
 /**
@@ -24,7 +24,7 @@ import { extractImages } from "./utils/extract-images"
  * @property {string} headingLevel - The heading level to use for panel titles (h2, h3, h4, h5, h6)
  */
 @customElement("knowledge-panels")
-export class KnowledgePanelComponent extends LitElement {
+export class KnowledgePanelsComponent extends LitElement {
   static override styles = [
     BASE,
     ALERT,
@@ -46,300 +46,6 @@ export class KnowledgePanelComponent extends LitElement {
         box-sizing: border-box;
       }
 
-      /* Panel Base Styles - Even more roundness */
-      .panel {
-        width: 100%;
-        background-color: #fff;
-        border: 1px solid #e0e0e0;
-        border-radius: 24px; /* Further increased for maximum roundness */
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        margin-bottom: 1.5rem;
-        overflow: hidden;
-        transition: box-shadow 0.2s ease;
-      }
-
-      .panel:hover {
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-      }
-
-      /* Remove small panel size limit */
-      .panel.small {
-        max-width: 100%;
-      }
-
-      /* Panel Contextual Variations - Flat left side, rounded right corners */
-      .panel.info {
-        border-left: 4px solid #79e1a6;
-        border-radius: 0 24px 24px 0; /* Flat left side, extra rounded right corners */
-      }
-
-      .panel.warning {
-        border-left: 4px solid #f0ad4e;
-        border-radius: 0 24px 24px 0; /* Flat left side, extra rounded right corners */
-      }
-
-      .panel.success {
-        border-left: 4px solid #5cb85c;
-        border-radius: 0 24px 24px 0; /* Flat left side, extra rounded right corners */
-      }
-
-      .panel.danger {
-        border-left: 4px solid #d9534f;
-        border-radius: 0 24px 24px 0; /* Flat left side, extra rounded right corners */
-      }
-
-      /* Panel Components - Refined spacing */
-      .panel-header {
-        width: 100%;
-        border-bottom: 1px solid #eeeeee;
-        padding: 1rem 1.25rem;
-        display: block;
-      }
-
-      .panel-title {
-        width: 100%;
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin: 0;
-        line-height: 1.3;
-        text-align: left;
-        word-wrap: break-word; /* Handle long titles */
-      }
-
-      .panel-subtitle {
-        width: 100%;
-        font-size: 0.95rem;
-        margin-top: 0.35rem;
-        text-align: left;
-        word-wrap: break-word;
-      }
-
-      /* Panel content - Improved padding */
-      .panel-content {
-        width: 100%;
-        padding: 1.25rem;
-        display: block;
-      }
-
-      /* Layout for all panels - including nutrition */
-      .nutrition-panel .panel-content {
-        width: 100%;
-        display: block;
-      }
-
-      .nutrition-panel .panel-content .panel-left,
-      .nutrition-panel .panel-content .panel-right {
-        display: block;
-        width: 100%;
-        max-width: 100%;
-        margin: 0 0 1.25rem 0;
-      }
-
-      .nutrition-panel .panel-content .panel-right img {
-        width: auto;
-        max-width: 100%;
-        height: auto;
-        border-radius: 20px; /* Further increased roundness */
-        border: 1px solid #eee;
-        display: block;
-        margin: 0;
-      }
-
-      /* Element Layout - Better spacing */
-      .elements {
-        width: 100%;
-        display: block;
-      }
-
-      .element {
-        width: 100%;
-        display: block;
-        padding-bottom: 0.85rem;
-        margin-bottom: 0.85rem;
-        border-bottom: 1px solid #f5f5f5;
-        text-align: left;
-      }
-
-      .element:last-child {
-        border-bottom: none;
-        margin-bottom: 0;
-      }
-
-      .element-title {
-        width: 100%;
-        display: block;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-        text-align: left;
-        word-wrap: break-word;
-      }
-
-      .element-value {
-        width: 100%;
-        display: block;
-        color: #444;
-        text-align: left;
-        word-wrap: break-word;
-        line-height: 1.6;
-      }
-
-      /* Special Element Styling - Improved readability */
-      .text_element {
-        width: 100%;
-        margin-bottom: 0.85rem;
-        line-height: 1.6;
-        text-align: left;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        color: #333;
-      }
-
-      /* Table Styling - Maximally rounded borders */
-      .table_element {
-        width: 100%;
-        overflow-x: auto; /* Allow horizontal scrolling for tables on small screens */
-        margin-bottom: 1.25rem;
-        border-radius: 20px; /* Even more rounded */
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-      }
-
-      .table_element table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        margin-bottom: 0.5rem;
-        text-align: left;
-        border: 1px solid #e6e6e6;
-        border-radius: 20px; /* Even more rounded */
-        overflow: hidden;
-      }
-
-      .table_element th,
-      .table_element td {
-        border: 1px solid #e6e6e6;
-        padding: 0.75rem;
-        text-align: left;
-      }
-
-      .table_element th {
-        background-color: #f8f9fa;
-        font-weight: 600;
-      }
-
-      .table_element tr:nth-child(even) {
-        background-color: #fcfcfc;
-      }
-
-      .table_element tr:hover {
-        background-color: #f7f7f7;
-      }
-
-      /* Panel Groups - Enhanced typography */
-      .panel-group {
-        width: 100%;
-        margin-bottom: 1.75rem;
-        text-align: left;
-      }
-
-      .panel-group-title {
-        width: 100%;
-        margin-top: 0;
-        margin-bottom: 1rem;
-        font-size: 1.15rem;
-        font-weight: 600;
-        padding-bottom: 0.5rem;
-        border-bottom: 1px solid #f0f0f0;
-        text-align: left;
-        word-wrap: break-word;
-      }
-
-      /* Panel Images and Text - Improved image handling with increased roundness */
-      .panel-image {
-        width: 100%;
-        margin-bottom: 1.25rem;
-        text-align: left;
-      }
-
-      .panel-image img {
-        width: auto; /* Allow image to maintain its aspect ratio */
-        max-width: 100%; /* Ensure image doesn't overflow its container */
-        height: auto;
-        border-radius: 20px; /* Further increased roundness */
-        border: 1px solid #efefef;
-        display: block;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-      }
-
-      .panel-image-text {
-        width: 100%;
-        margin-top: 0.65rem;
-        font-size: 0.9rem;
-        line-height: 1.5;
-        text-align: left;
-        font-style: italic;
-        word-wrap: break-word;
-      }
-
-      /* Don't hide nutrition images since we're not using the two-column layout anymore */
-      .nutrition-panel .panel-image {
-        display: block;
-        width: 100%;
-      }
-
-      /* Sub Panels - All corners rounded with increased radius */
-      .sub-panel {
-        width: 100%; /* Takes full width of its parent container */
-        margin-bottom: 1.25rem;
-        padding: 1rem;
-        border-left: 3px solid #e8e8e8;
-        background-color: #fafafa;
-        border-radius: 20px; /* All corners rounded now */
-        text-align: left;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
-      }
-
-      .sub-panel-title {
-        width: 100%;
-        margin-top: 0;
-        margin-bottom: 0.65rem;
-        font-size: 1.05rem;
-        border-bottom: none;
-        padding-bottom: 0;
-        text-align: left;
-        word-wrap: break-word;
-      }
-
-      /* Sub panel elements */
-      .sub-panel .element {
-        width: 100%;
-      }
-
-      .sub-panel .elements {
-        width: 100%;
-      }
-
-      /* Action Components - Maximally enhanced roundness */
-      .action {
-        width: 100%;
-        margin: 1rem 0;
-        padding: 1rem;
-        background-color: #f8f9fa;
-        border-radius: 22px; /* Further increased for maximum roundness */
-        border: 1px solid #e8e8e8;
-        text-align: left;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-      }
-
-      .action small {
-        width: 100%;
-        display: block;
-        margin-top: 0.5rem;
-        font-style: italic;
-        font-size: 0.85rem;
-        word-wrap: break-word;
-        line-height: 1.5;
-      }
-
       /* Knowledge panels container */
       .knowledge-panels-container {
         width: 100%;
@@ -356,19 +62,21 @@ export class KnowledgePanelComponent extends LitElement {
         font-size: 1.3rem;
       }
 
-      /* Responsive improvements for various screen sizes */
-      @media (min-width: 769px) {
-        .panel-header {
-          padding: 1.25rem 1.5rem;
-        }
+      .info {
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        border: 1px solid transparent;
+        border-radius: 0.25rem;
+        color: #0c5460;
+        background-color: #d1ecf1;
+        border-color: #bee5eb;
+      }
 
-        .panel-content {
-          padding: 1.5rem;
-        }
-
-        .sub-panel {
-          padding: 1.25rem;
-        }
+      .loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
       }
     `,
   ]
@@ -416,7 +124,12 @@ export class KnowledgePanelComponent extends LitElement {
 
     return html`
       <slot name="error">
-        ${renderHeading("Error Loading Knowledge Panels", "error-title", this.headingLevel)}
+        <heading-renderer
+          text="Error Loading Knowledge Panels"
+          class-name="error-title"
+          heading-level="${this.headingLevel}"
+        >
+        </heading-renderer>
         <p>${errorMessage}</p>
         <button class="button cappucino-button" @click=${this._retryLoad}>Retry</button>
       </slot>
@@ -467,7 +180,12 @@ export class KnowledgePanelComponent extends LitElement {
       const emptyHeading = "No Knowledge Panels Available"
       return html`
         <div class="info">
-          ${renderHeading(emptyHeading, "empty-heading", this.headingLevel)}
+          <heading-renderer
+            text="${emptyHeading}"
+            class-name="empty-heading"
+            heading-level="${this.headingLevel}"
+          >
+          </heading-renderer>
           <p>No knowledge panels were found for this request.</p>
         </div>
       `
@@ -492,10 +210,21 @@ export class KnowledgePanelComponent extends LitElement {
 
     return html`
       <div class="knowledge-panels-container">
-        ${renderHeading(sectionTitle, "knowledge-panels-section-title", this.headingLevel)}
+        <heading-renderer
+          text="${sectionTitle}"
+          class-name="knowledge-panels-section-title"
+          heading-level="${this.headingLevel}"
+        >
+        </heading-renderer>
         ${panelsToRender.map((panel: KnowledgePanel) =>
           panel
-            ? renderPanel(panel, this.knowledgePanels, this.nutritionImages, this.headingLevel)
+            ? html` <panel-renderer
+                .panel=${panel}
+                .knowledgePanels=${this.knowledgePanels}
+                .nutritionImages=${this.nutritionImages}
+                headingLevel=${this.headingLevel}
+              >
+              </panel-renderer>`
             : html``
         )}
       </div>
@@ -535,6 +264,6 @@ export class KnowledgePanelComponent extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "knowledge-panels": KnowledgePanelComponent
+    "knowledge-panels": KnowledgePanelsComponent
   }
 }

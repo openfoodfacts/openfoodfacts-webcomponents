@@ -1,26 +1,60 @@
-import { html, TemplateResult } from "lit"
-import { renderHeading } from "../utils/heading-utils"
+import { LitElement, html, css, TemplateResult } from "lit"
+import { customElement, property } from "lit/decorators.js"
 
 /**
- * Renders the header section of a knowledge panel
- * @param title - The panel title
- * @param subtitle - Optional subtitle for the panel
- * @param headingLevel - The heading level to use
- * @returns Template result for the panel header
+ * Panel header renderer component
+ *
+ * @element panel-header-renderer
  */
-export function renderPanelHeader(
-  title: string,
-  subtitle?: string,
-  headingLevel: string = "h3"
-): TemplateResult {
-  if (!title) {
-    return html``
-  }
+@customElement("panel-header-renderer")
+export class PanelHeaderRenderer extends LitElement {
+  static override styles = css`
+    .panel-header {
+      width: 100%;
+      border-bottom: 1px solid #eeeeee;
+      padding: 1rem 1.25rem;
+      display: block;
+    }
 
-  return html`
-    <div class="panel-header">
-      ${renderHeading(title, "panel-title", headingLevel)}
-      ${subtitle ? html`<div class="panel-subtitle">${subtitle}</div>` : ""}
-    </div>
+    .panel-subtitle {
+      width: 100%;
+      font-size: 0.95rem;
+      margin-top: 0.35rem;
+      text-align: left;
+      word-wrap: break-word;
+    }
   `
+
+  @property({ type: String })
+  override title = ""
+
+  @property({ type: String })
+  subtitle = ""
+
+  @property({ type: String })
+  headingLevel = "h3"
+
+  override render(): TemplateResult {
+    if (!this.title) {
+      return html``
+    }
+
+    return html`
+      <div class="panel-header">
+        <heading-renderer
+          text="${this.title}"
+          class-name="panel-title"
+          heading-level="${this.headingLevel}"
+        >
+        </heading-renderer>
+        ${this.subtitle ? html`<div class="panel-subtitle">${this.subtitle}</div>` : ""}
+      </div>
+    `
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "panel-header-renderer": PanelHeaderRenderer
+  }
 }
