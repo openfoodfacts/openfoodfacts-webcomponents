@@ -169,7 +169,7 @@ export class RobotoffCrops extends LitElement {
       <div>
         <div>
           <p class="question">
-            <i>${msg("Is this picture a good view of the ingredients in the food?")}</i>
+            <i>${msg("Is this selection a good crop of the ingredients in the food?")}</i>
           </p>
           <zoomable-image
             src=${imgUrl}
