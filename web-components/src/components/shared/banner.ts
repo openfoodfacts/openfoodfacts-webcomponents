@@ -280,7 +280,7 @@ export class FundraiserBanner extends LitElement {
           </div>
           <div class="donation-banner-footer__actions-section__donate-button">
             <a
-              href="${this.donateLink}"
+              href="${this.donateLink}">
               <button>${msg("I SUPPORT")}</button>
             </a>
           </div>
