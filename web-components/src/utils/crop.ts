@@ -1,9 +1,14 @@
-import { CropImageBoundingBox } from "../types"
+import { CropperImageBoundingBox } from "../types"
 import { CropBoundingBox } from "../types/robotoff"
 
+/**
+ * Converts a bounding box from the robotoff format to the crop image format.
+ * @param boundingBox - The bounding box in the robotoff format.
+ * @returns The bounding box in the cropperjs image format.
+ */
 export const robotoffBoundingBoxToCropImageBoundingBox = (
   boundingBox: CropBoundingBox
-): CropImageBoundingBox => {
+): CropperImageBoundingBox => {
   const [top, left, bottom, right] = boundingBox
   const x = left
   const y = top
@@ -18,8 +23,13 @@ export const robotoffBoundingBoxToCropImageBoundingBox = (
   }
 }
 
+/**
+ * Converts a bounding box from the crop image format to the robotoff format.
+ * @param boundingBox - The bounding box in the cropperjs image format.
+ * @returns The bounding box in the robotoff format.
+ */
 export const cropImageBoundingBoxToRobotoffBoundingBox = (
-  boundingBox: CropImageBoundingBox
+  boundingBox: CropperImageBoundingBox
 ): CropBoundingBox => {
   const { x, y, width, height } = boundingBox
   const top = y
