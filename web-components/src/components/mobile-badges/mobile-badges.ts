@@ -125,18 +125,27 @@ export class MobileBadges extends LitElement {
   androidApkAppLink = "https://world.openfoodfacts.org/images/apps/off.apk"
 
   @property({ type: String })
-  iosAppIconUrl = "https://world.openfoodfacts.org/images/misc/appstore/black/appstore_US.svg"
-
-  @property({ type: String })
   androidAppIconUrl = "/images/misc/playstore/img/en_get.svg"
 
   @property({ type: String })
   androidApkAppIconUrl = "/images/misc/android-apk.svg"
 
+  getIosAppIconPath(language: string): string {
+    return `/ios/${language}_app_store.svg`
+  }
+
+  getAndroidAppIconPath(language: string): string {
+    return `/playstore/img/${language}_get.svg`
+  }
+
+  getFDroidAppIconPath(language: string): string {
+    return `/f-droid/get-it-on-${language}.png`
+  }
+
   override render() {
     const language = getLocale()
     return html`
-      <div class="block_light bg-white" id="install_the_app_block">
+      <div class="block_light bg-white" id="install_the_app_block ">
         <div class="row">
           <div class="small-12 flex-grid v-space-short v-align-center direction-row h-space-tiny">
             <div class="cell small-100 medium-100 large-50 flex-grid v-align-center direction-row">
@@ -154,44 +163,62 @@ export class MobileBadges extends LitElement {
               </div>
             </div>
             <div class="cell small-100 medium-100 large-50 flex-grid v-align-center direction-row">
-              <!-- msgid "https://apps.apple.com/app/open-beauty-facts/id1122926380" -->
-              <a
-                class="cell small-50 medium-25 large-25 h-space-short v-align-center"
-                href="${this.iosAppLink}&utm_campaign=install_the_app_ios_footer_${language}"
-              >
-                <img
-                  src="${this.iosAppIconUrl}"
-                  alt="${msg("Download on the App Store")}"
-                  loading="lazy"
-                  class="full-width"
-                />
-              </a>
-              <!-- android_app_link - https://play.google.com/store/apps/details?id=org.openbeautyfacts.scanner&hl=en -->
-              <a
-                class="cell small-50 medium-25 large-25 h-space-short v-align-center"
-                href="${this
-                  .androidAppLink}&utm_campaign=install_the_app_android_footer_${language}"
-              >
-                <img
-                  src="https://static.openfoodfacts.org${this.androidAppIconUrl}"
-                  alt="${msg("Get It On Google Play")}"
-                  loading="lazy"
-                  class="full-width"
-                />
-              </a>
-              <!-- android_apk_app_link - https://world.openfoodfacts.org/images/apps/off.apk -->
-              <a
-                class="cell small-50 medium-25 large-25 h-space-short v-align-center"
-                href="${this
-                  .androidApkAppLink}?utm_source=off&utf_medium=web&utm_campaign=install_the_app_apk_footer_${language}"
-              >
-                <img
-                  src="https://static.openfoodfacts.org${this.androidApkAppIconUrl}"
-                  alt="${msg("Android APK")}"
-                  loading="lazy"
-                  class="full-width"
-                />
-              </a>
+              <div class="small-12 medium-12 large-12 v-space-normal column badge-container">
+                <!-- android_app_link - https://play.google.com/store/apps/details?id=org.openbeautyfacts.scanner&hl=en -->
+                <a
+                  class="cell small-50 medium-25 large-25 h-space-short v-align-center"
+                  href="${this
+                    .androidAppLink}&utm_campaign=install_the_app_android_footer_${language}"
+                >
+                  <img
+                    src="${getImageUrl(this.getAndroidAppIconPath(language))}"
+                    alt="${msg("Get It On Google Play")}"
+                    loading="lazy"
+                    height="40"
+                    width="120"
+                  />
+                </a>
+                <a
+                  class="cell small-50 medium-25 large-25 h-space-short v-align-center"
+                  href="${this
+                    .androidAppLink}&utm_campaign=install_the_app_android_footer_${language}"
+                >
+                  <img
+                    src="${getImageUrl(this.getFDroidAppIconPath(language))}"
+                    alt="${msg("Available on F-Droid")}"
+                    loading="lazy"
+                    height="40"
+                    width="120"
+                  />
+                </a>
+                <!-- android_apk_app_link - https://world.openfoodfacts.org/images/apps/off.apk -->
+                <a
+                  class="cell small-50 medium-25 large-25 h-space-short v-align-center"
+                  href="${this
+                    .androidApkAppLink}?utm_source=off&utf_medium=web&utm_campaign=install_the_app_apk_footer_${language}"
+                >
+                  <img
+                    src="https://static.openfoodfacts.org${this.androidApkAppIconUrl}"
+                    alt="${msg("Android APK")}"
+                    loading="lazy"
+                    height="40"
+                    width="120"
+                  />
+                </a>
+                <!-- msgid "https://apps.apple.com/app/open-beauty-facts/id1122926380" -->
+                <a
+                  class="cell small-50 medium-25 large-25 h-space-short v-align-center"
+                  href="${this.iosAppLink}&utm_campaign=install_the_app_ios_footer_${language}"
+                >
+                  <img
+                    src="${getImageUrl(this.getIosAppIconPath(language))}"
+                    alt="${msg("Download on the App Store")}"
+                    loading="lazy"
+                    height="40"
+                    width="120"
+                  />
+                </a>
+              </div>
             </div>
           </div>
         </div>
