@@ -8,8 +8,8 @@ import {
 import "./render-panel-header"
 import "./render-element"
 import "./render-image"
-import "../utils/extract-images"
-
+import "../../../utils/knowledge-panels/heading-utils"
+import "../../../utils/knowledge-panels/extract-images"
 /**
  * Panel renderer component
  *
