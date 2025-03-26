@@ -7,7 +7,7 @@ import {
   InsightAnnotationType,
   InsightAnnotationAnswer,
 } from "../../types/robotoff"
-import { localized, msg } from "@lit/localize"
+import { localized, msg, str } from "@lit/localize"
 import {
   getTaxonomyNameByIdAndLang,
   getTaxonomyUnitById,
@@ -551,7 +551,7 @@ export class RobotoffNutrientsTable extends LitElement {
               />
             </label>
             <label>
-              <span>${msg(`per specified serving "${this._servingSizeValue}"`)}</span>
+              <span>${msg(str`per specified serving "${this._servingSizeValue}"`)}</span>
               <input
                 type="radio"
                 name="${SERVING_SIZE_SELECT_NAME}"
@@ -637,7 +637,7 @@ export class RobotoffNutrientsTable extends LitElement {
               ? html` <th scope="col">100g</th> `
               : html`
                   <th scope="col" class="flex flex-col align-center serving-size-wrapper">
-                    <span>${msg(`Specified serving "${this._servingSizeValue}"`)}</span>
+                    <span>${msg(str`Specified serving "${this._servingSizeValue}"`)}</span>
                   </th>
                 `}
           </tr>
