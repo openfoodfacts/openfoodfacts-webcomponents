@@ -1,3 +1,13 @@
+/**
+ * RobotoffCrops Component
+ *
+ * This component is responsible for displaying and managing the cropping of images
+ * for the Robotoff application. It integrates with the Robotoff API to fetch image
+ * predictions and allows users to crop and annotate images.
+ *
+ * @element robotoff-crops
+ */
+
 import { LitElement, css, html, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import "../shared/zoomable-image"
@@ -56,31 +66,57 @@ export class RobotoffCrops extends LitElement {
     ]),
   ]
 
+  /**
+   * Number of predictions to fetch
+   * @type {number}
+   */
   @property({ type: Number })
   count: number = 5
 
+  /**
+   * Current page number for pagination
+   * @type {number}
+   */
   @property({ type: Number })
   page: number = 1
+
+  /**
+   * Barcode of the product
+   * @type {string}
+   */
   @property({ type: String })
   barcode?: string = undefined
 
+  /**
+   * Name of the model to use for predictions
+   * @type {string}
+   */
   @property({ type: String })
   modelName: string = "ingredient-detection"
 
+  /**
+   * Minimum confidence threshold for predictions
+   * @type {number}
+   */
   @property({ type: Number })
   minConfidence: number = 0.8
 
+  /**
+   * Predictions fetched from the Robotoff API
+   * @type {ImagePredictionsResponse | null}
+   */
   @property({ type: Object })
   predictions: ImagePredictionsResponse | null = null
 
+  /**
+   * Current crop mode
+   * @type {ZoomableImage.CropMode}
+   */
   @state()
   cropMode: ZoomableImage.CropMode = ZoomableImage.CropMode.CROP_READ
 
   private _predictionTask = new Task(this, {
-    task: async (
-      [count, page, barcode, modelName, minConfidence]: [number, number, string, string, number],
-      {}
-    ) => {
+    task: async ([count, page, barcode, modelName, minConfidence], {}) => {
       if (!barcode) {
         return
       }
@@ -96,6 +132,10 @@ export class RobotoffCrops extends LitElement {
     args: () => [this.count, this.page, this.barcode, this.modelName, this.minConfidence],
   })
 
+  /**
+   * Renders the crop answer buttons
+   * @returns {TemplateResult}
+   */
   renderCropAnswerButtons() {
     if (this.cropMode === ZoomableImage.CropMode.CROP) {
       return html`
@@ -142,16 +182,20 @@ export class RobotoffCrops extends LitElement {
     `
   }
 
+  /**
+   * Renders the component
+   * @returns {TemplateResult}
+   */
   override render() {
     return this._predictionTask.render({
       pending: () => html`<off-wc-loading></off-wc-loading>`,
-      complete: (predictions: ImagePredictionsResponse | undefined) => {
+      complete: (predictions) => {
         if (!predictions) {
           return nothing
         }
 
         // TODO: handle multiple predictions
-        const imagePrediction = predictions.image_predictions[0]
+        const imagePrediction = (predictions as ImagePredictionsResponse).image_predictions[0]
 
         return this.renderImagePrediction(imagePrediction)
       },
@@ -159,6 +203,11 @@ export class RobotoffCrops extends LitElement {
     })
   }
 
+  /**
+   * Renders an image prediction
+   * @param {ImagePrediction} prediction - The image prediction to render
+   * @returns {TemplateResult}
+   */
   private renderImagePrediction(prediction: ImagePrediction) {
     const imgUrl = getRobotoffImageUrl(prediction.image.source_image)
     const boundingBox = prediction.data.entities[0]?.bounding_box
@@ -184,6 +233,9 @@ export class RobotoffCrops extends LitElement {
     `
   }
 
+  /**
+   * Toggles the crop mode
+   */
   toggleCropMode() {
     this.cropMode =
       this.cropMode === ZoomableImage.CropMode.CROP
@@ -191,6 +243,10 @@ export class RobotoffCrops extends LitElement {
         : ZoomableImage.CropMode.CROP
   }
 
+  /**
+   * Handles the crop save event
+   * @param {CustomEvent<CropResult>} event - The crop save event
+   */
   onCropSave(event: CustomEvent<CropResult>) {
     const oldBoundingBox = event.detail.oldBoundingBox
       ? cropImageBoundingBoxToRobotoffBoundingBox(event.detail.oldBoundingBox)
@@ -210,6 +266,11 @@ export class RobotoffCrops extends LitElement {
     this.answer(QuestionAnnotationAnswer.NO, robotoffBoundingBox)
   }
 
+  /**
+   * Handles the answer event
+   * @param {QuestionAnnotationAnswer} value - The answer value
+   * @param {CropBoundingBox} [boundingBox] - The bounding box for the answer
+   */
   answer(value: QuestionAnnotationAnswer, boundingBox?: CropBoundingBox) {
     // TODO : integrate logic with robotoff insight api
     alert(
