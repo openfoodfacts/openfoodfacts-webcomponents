@@ -152,7 +152,7 @@ export class KnowledgePanelsComponent extends LitElement {
   override render(): TemplateResult {
     return this._knowledgePanelsTask.render({
       initial: () => html`<div class="info">Ready to load knowledge panels.</div>`,
-      pending: () => html`off-wc-loader></off-wc-loader>`,
+      pending: () => html`<off-wc-loader></off-wc-loader>`,
       complete: (result) => this.renderPanelsResult(result),
       error: (error: unknown) => this.renderError(error),
     })
