@@ -1,10 +1,15 @@
 import { robotoffConfiguration } from "../../signals/robotoff"
-import { DEFAULT_LANGUAGE_CODE, DEFAULT_ROBOTOFF_CONFIGURATION } from "../../constants"
+import {
+  DEFAULT_ASSETS_IMAGES_PATH,
+  DEFAULT_LANGUAGE_CODE,
+  DEFAULT_ROBOTOFF_CONFIGURATION,
+} from "../../constants"
 import { LitElement } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { OffWebcomponentConfigurationOptions } from "../../types"
 import { RobotoffConfigurationOptions } from "../../types/robotoff"
 import { setLocale } from "../../localization"
+import { assetsImagesPath } from "../../signals/app"
 
 /**
  * The configuration properties of the webcomponent configuration element.
@@ -36,12 +41,18 @@ const CONFIGURATION_PROPERTIES: Record<
       setLocale(value)
     },
   },
+  "assets-images-path": {
+    propertyName: "assetsImagesPath",
+    fn: (value: string) => {
+      assetsImagesPath.set(value)
+    },
+  },
 }
 
 /**
  * Robotoff configuration element.
  * It is used to configure the robotoff parameters.
- * @element off-w-configuration
+ * @element off-webcomponents-configuration
  */
 @customElement("off-webcomponents-configuration")
 export class OffWebcomponentsConfiguration extends LitElement {
@@ -61,6 +72,13 @@ export class OffWebcomponentsConfiguration extends LitElement {
   @property({ type: String, attribute: "language-code" })
   languageCode?: string = DEFAULT_LANGUAGE_CODE
 
+  /**
+   * The image path we need to use to retrieve the images in assets/images folder.
+   * @attr image-path
+   */
+  @property({ type: String, attribute: "assets-images-path" })
+  assetsImagesPath?: string = DEFAULT_ASSETS_IMAGES_PATH
+
   override attributeChangedCallback(name: string, oldval: string, newval: string) {
     super.attributeChangedCallback(name, oldval, newval)
     if (name in CONFIGURATION_PROPERTIES) {
@@ -73,7 +91,7 @@ export class OffWebcomponentsConfiguration extends LitElement {
         value = this[propertyName]
       }
       // Run the callback function that apply configuration
-      config.fn(value)
+      config.fn.call(this, value)
     }
   }
 }
