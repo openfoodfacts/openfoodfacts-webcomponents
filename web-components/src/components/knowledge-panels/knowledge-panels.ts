@@ -11,8 +11,8 @@ import { KnowledgePanel, KnowledgePanelsData } from "../../types/knowledge-panel
 
 // Import all renderer components
 import "./renderers/render-panel"
-import "./utils/heading-utils" // Import heading renderer component
-import { extractImages } from "./utils/extract-images"
+import "../../utils/knowledge-panels/heading-utils" // Import heading renderer component
+import { extractImages } from "../../utils/knowledge-panels/extract-images"
 
 /**
  * `knowledge-panels` - A web component to display knowledge panels from any source

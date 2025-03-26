@@ -7,7 +7,7 @@ import {
   TableCell,
   TableElement,
 } from "../../../types/knowledge-panel"
-import "../utils/heading-utils" // Import heading renderer component
+import "../../../utils/knowledge-panels/heading-utils" // Import heading renderer component
 
 /**
  * Table element renderer component
