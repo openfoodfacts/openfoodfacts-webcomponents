@@ -29,7 +29,7 @@ export type QuestionStateEventDetail = {
 
 export type QuestionStateEvent = CustomEvent<QuestionStateEventDetail>
 
-export type CropImageBoundingBox = {
+export type CropperImageBoundingBox = {
   x: number
   y: number
   width: number
@@ -37,6 +37,6 @@ export type CropImageBoundingBox = {
 }
 
 export type CropResult = {
-  newBoundingBox: CropImageBoundingBox
-  oldBoundingBox?: CropImageBoundingBox
+  newBoundingBox: CropperImageBoundingBox
+  oldBoundingBox?: CropperImageBoundingBox
 }
