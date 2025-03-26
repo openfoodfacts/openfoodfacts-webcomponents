@@ -25,7 +25,7 @@ export enum CropMode {
 }
 /**
  * A simple zoomable image component.
- * It allows to display an image that can be zoomed, and rotated.
+ * It allows to display an image that can be zoomed, and rotated, cropped.
  * It uses the cropperjs library.
  * @element zoomable-image
  **/
@@ -155,6 +155,9 @@ export class ZoomableImage extends LitElement {
     super.disconnectedCallback()
   }
 
+  /**
+   * Initializes the cropper components.
+   */
   initCropper() {
     CropperCanvas.$define()
     CropperImage.$define()
@@ -169,6 +172,10 @@ export class ZoomableImage extends LitElement {
     this.initCropper()
   }
 
+  /**
+   * Rotates the image by the specified angle.
+   * @param rotation - The angle to rotate the image by.
+   */
   rotateImage(rotation: number) {
     this.resetSelection()
     if (!this.imageElement.rotatable) {
@@ -199,6 +206,10 @@ export class ZoomableImage extends LitElement {
     `
   }
 
+  /**
+   * Gets the bounding box from the selection element.
+   * @returns The bounding box coordinates.
+   */
   getBoundingBoxFromSelectionElement() {
     const { x: offsetX, y: offsetY } = this.getOffset()
     const { x: scaleX, y: scaleY } = this.getScale()
@@ -208,10 +219,12 @@ export class ZoomableImage extends LitElement {
       width: this.selectionElement.width / scaleX,
       height: this.selectionElement.height / scaleY,
     }
-    console.log("Bounding Box:", boundingBox)
     return boundingBox
   }
 
+  /**
+   * Shows the cropped image.
+   */
   async showCrop() {
     if (!this.hasSelection()) {
       alert(msg("Please select a region to crop."))
@@ -224,15 +237,25 @@ export class ZoomableImage extends LitElement {
     this.cropResult = result.toDataURL()
   }
 
+  /**
+   * Resets the selection.
+   */
   resetSelection() {
     this.selectionElement?.$clear()
   }
+
+  /**
+   * Resets the crop.
+   */
   resetCrop() {
     this.cropResult = ""
     this.resultBoundingBox = undefined
     this.resetSelection()
   }
 
+  /**
+   * Submits the crop.
+   */
   submitCrop() {
     this.dispatchEvent(
       new CustomEvent(EventType.SUBMIT, {
@@ -244,6 +267,10 @@ export class ZoomableImage extends LitElement {
     )
   }
 
+  /**
+   * Renders the crop mode UI.
+   * @returns The crop mode UI.
+   */
   renderCropMode() {
     return html`
       <div>
@@ -261,6 +288,10 @@ export class ZoomableImage extends LitElement {
     `
   }
 
+  /**
+   * Renders the crop image bounding box.
+   * @returns The crop image bounding box UI.
+   */
   renderCropImageBoundingBox() {
     if (!this.cropResult) {
       return nothing
@@ -281,6 +312,10 @@ export class ZoomableImage extends LitElement {
     `
   }
 
+  /**
+   * Gets the offset of the cropper image relative to the canvas.
+   * @returns The offset coordinates.
+   */
   getOffset() {
     const cropperImageRect = this.imageElement.getBoundingClientRect()
     const cropperCanvasRect = this.canvasElement.getBoundingClientRect()
@@ -290,6 +325,10 @@ export class ZoomableImage extends LitElement {
     }
   }
 
+  /**
+   * Gets the scale of the cropper image.
+   * @returns The scale coordinates.
+   */
   getScale() {
     const transformValue = this.imageElement.$getTransform()
     return {
@@ -298,6 +337,10 @@ export class ZoomableImage extends LitElement {
     }
   }
 
+  /**
+   * Gets the bounding box depending on the image size.
+   * @returns The bounding box coordinates.
+   */
   getBoundingBoxDependOnImageSize() {
     const image = this.imageElement?.$image
     if (!this.boundingBox) {
@@ -309,13 +352,6 @@ export class ZoomableImage extends LitElement {
     const { x: offsetX, y: offsetY } = this.getOffset()
     const { x: scaleX, y: scaleY } = this.getScale()
 
-    console.log("getBoundingBoxDependOnImageSize", {
-      scaleX,
-      scaleY,
-      offsetX,
-      offsetY,
-      boundingBox: this.boundingBox,
-    })
     return {
       x: this.boundingBox.x * scaleX + offsetX,
       y: this.boundingBox.y * scaleY + offsetY,
@@ -324,6 +360,10 @@ export class ZoomableImage extends LitElement {
     }
   }
 
+  /**
+   * Renders the cropper controls.
+   * @returns The cropper controls UI.
+   */
   renderCropperControls() {
     if (this.cropMode === CropMode.IMAGE_ONLY) {
       return html` <cropper-handle action="move" plain></cropper-handle> `
@@ -366,6 +406,12 @@ export class ZoomableImage extends LitElement {
       </cropper-selection>`
   }
 
+  /**
+   * Checks if the selection is within the maximum selection.
+   * @param selection - The selection to check.
+   * @param maxSelection - The maximum selection.
+   * @returns True if the selection is within the maximum selection, false otherwise.
+   */
   inSelection(selection: Selection, maxSelection: Selection) {
     return (
       selection.x >= maxSelection.x &&
@@ -375,12 +421,20 @@ export class ZoomableImage extends LitElement {
     )
   }
 
+  /**
+   * Checks if there is a selection.
+   * @returns True if there is a selection, false otherwise.
+   */
   hasSelection() {
     const isSelectionHidden = this.selectionElement?.hidden ?? true
     const hasNoSize = this.selectionElement?.width === 0 || this.selectionElement?.height === 0
     return !isSelectionHidden && !hasNoSize
   }
 
+  /**
+   * Handles the cropper image transform event.
+   * @param event - The transform event.
+   */
   onCropperImageTransform(event: CustomEvent) {
     if (this.cropMode !== CropMode.CROP) {
       this.imageElement.$ready(() => {
@@ -437,6 +491,11 @@ export class ZoomableImage extends LitElement {
       event.preventDefault()
     }
   }
+
+  /**
+   * Handles the cropper selection change event.
+   * @param event - The selection change event.
+   */
   onCropperSelectionChange(event: CustomEvent) {
     if (this.cropMode !== CropMode.CROP) {
       return
@@ -463,6 +522,11 @@ export class ZoomableImage extends LitElement {
       event.preventDefault()
     }
   }
+
+  /**
+   * Renders the top panel.
+   * @returns The top panel UI.
+   */
   renderTopPanel() {
     if (this.cropMode === CropMode.CROP_READ) {
       return html``
@@ -484,6 +548,11 @@ export class ZoomableImage extends LitElement {
       </button>
     </div>`
   }
+
+  /**
+   * Renders the component.
+   * @returns The component UI.
+   */
   override render() {
     const crossorigin = this.cropMode !== CropMode.IMAGE_ONLY ? "anonymous" : undefined
     return html`
