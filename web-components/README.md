@@ -75,6 +75,6 @@ The default configuration is :
           "apiUrl": "https://robotoff.openfoodfacts.net/api/v1",
           "imgUrl": "https://images.openfoodfacts.net/images/products"
         }'
-  images-path="./assets/images"
+  images-path="/assets/images"
 ></off-webcomponents-configuration>
 ```
