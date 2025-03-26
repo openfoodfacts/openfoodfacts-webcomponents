@@ -15,7 +15,7 @@ import CropperCrosshair from "@cropper/element-crosshair"
 import CropperShade from "@cropper/element-shade"
 import type { Selection } from "@cropper/element-selection"
 import { FLEX } from "../../styles/utils"
-import { CropImageBoundingBox } from "../../types"
+import { CropperImageBoundingBox } from "../../types"
 import { EventType } from "../../constants"
 
 export enum CropMode {
@@ -115,7 +115,7 @@ export class ZoomableImage extends LitElement {
   private cropResult: string = ""
 
   @state()
-  private resultBoundingBox?: CropImageBoundingBox
+  private resultBoundingBox?: CropperImageBoundingBox
 
   @property({ type: Object })
   size: {
@@ -137,7 +137,7 @@ export class ZoomableImage extends LitElement {
   } = {}
 
   @property({ type: Object })
-  boundingBox: CropImageBoundingBox = {
+  boundingBox: CropperImageBoundingBox = {
     x: 0,
     y: 0,
     width: 100,
@@ -177,8 +177,10 @@ export class ZoomableImage extends LitElement {
    * @param rotation - The angle to rotate the image by.
    */
   rotateImage(rotation: number) {
+    // Reset the selection before rotating the image
     this.resetSelection()
     if (!this.imageElement.rotatable) {
+      // Enable rotation if it's not already enabled (bug fix)
       this.imageElement.rotatable = true
     }
     this.imageElement.$rotate(`${rotation}deg`)
