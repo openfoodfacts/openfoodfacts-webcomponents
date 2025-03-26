@@ -2,14 +2,19 @@ import { LitElement, html, css } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { localized, msg } from "@lit/localize"
 import { getLocale } from "../../localization"
+import { getImageUrl } from "../../signals/app"
 
 /**
  * Donation banner
- * @element fundraiser-banner
+ * @element donation-banner
+ * It requires one of the following fonts for each list item to be loaded:
+ * - "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif
+ * - "Public Sans", Helvetica, Roboto, Arial, sans-serif
+ * - "Segoe UI", Tahoma, Geneva, Verdana, sans-serif
  */
-@customElement("fundraiser-banner")
+@customElement("donation-banner")
 @localized()
-export class FundraiserBanner extends LitElement {
+export class DonationBanner extends LitElement {
   /**
    * The links to the donation page
    * @type {Object}
@@ -190,6 +195,7 @@ export class FundraiserBanner extends LitElement {
       padding: 1.1428571429rem 2.2857142857rem 1.2142857143rem;
       color: white;
       border: none;
+      cursor: pointer;
     }
     @media (max-width: 837px) {
       .donation-banner-footer__actions-section__donate-button a button {
@@ -230,17 +236,17 @@ export class FundraiserBanner extends LitElement {
         </div>
         <img
           class="group-image"
-          src="../../assets/donation-banner-group-photo.png"
+          src="${getImageUrl("donation-banner-group-photo.png")}"
           alt="group photo donation 2024"
         />
       </div>
       <div style="donation-banner__main-div-wrapper">
-        <div class="donation-banner__main-div">
+        <div class="donation-banner__main-div-wrapper">
           <div class="donation-banner-footer__main-section">
             <img
               width="50"
               height="50"
-              src="https://world.openfoodfacts.org/images/logos/logo-variants/CMJN-ICON_WHITE_BG_OFF.svg"
+              src="${getImageUrl("CMJN-ICON_WHITE_BG_OFF.svg")}"
               alt="open food facts logo"
             />
             <h3 class="donation-banner-footer__main-title">
@@ -279,8 +285,7 @@ export class FundraiserBanner extends LitElement {
             </p>
           </div>
           <div class="donation-banner-footer__actions-section__donate-button">
-            <a
-              href="${this.donateLink}">
+            <a href="${this.donateLink}">
               <button>${msg("I SUPPORT")}</button>
             </a>
           </div>
@@ -292,6 +297,6 @@ export class FundraiserBanner extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "fundraiser-banner": FundraiserBanner
+    "donation-banner": DonationBanner
   }
 }
