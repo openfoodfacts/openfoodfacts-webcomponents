@@ -233,22 +233,6 @@ export class KnowledgePanelsComponent extends LitElement {
   }
 
   /**
-   * Connected callback - called when the element is added to the DOM
-   */
-  override connectedCallback(): void {
-    super.connectedCallback()
-    // Add any initialization code here if needed
-  }
-
-  /**
-   * Disconnected callback - called when the element is removed from the DOM
-   */
-  override disconnectedCallback(): void {
-    super.disconnectedCallback()
-    // Clean up any resources here if needed
-  }
-
-  /**
    * Updated callback - called when element attributes change
    * @param changedProperties - Map of changed properties
    */
