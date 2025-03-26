@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <script type="module" src="https://jspm.dev/api-viewer-element"></script>
@@ -10,6 +10,7 @@
     <!-- Configuration for the demo -->
     <off-webcomponents-configuration
       robotoff-configuration='{"dryRun": true}'
+      assets-images-path="/assets/images"
     ></off-webcomponents-configuration>
 
     <h1>Open Food Facts Web Components</h1>
@@ -22,6 +23,10 @@
     </div>
     <div style="margin-top: 1rem">
       <api-viewer src="custom-elements.json" only="robotoff-nutrients"></api-viewer>
+    </div>
+
+    <div style="margin-top: 1rem">
+      <api-viewer src="custom-elements.json" only="donation-banner"></api-viewer>
     </div>
   </body>
 </html>

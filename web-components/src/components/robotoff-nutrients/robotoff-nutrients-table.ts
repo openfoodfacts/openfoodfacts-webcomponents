@@ -7,7 +7,7 @@ import {
   InsightAnnotationType,
   InsightAnnotationAnswer,
 } from "../../types/robotoff"
-import { localized, msg } from "@lit/localize"
+import { localized, msg, str } from "@lit/localize"
 import {
   getTaxonomyNameByIdAndLang,
   getTaxonomyUnitById,
@@ -22,9 +22,10 @@ import {
   NUTRIENT_UNIT_NAME_PREFIX,
 } from "../../utils/nutrients"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
-import { EventType } from "../../constants"
+import { EventType, SELECT_ICON_FILE_NAME } from "../../constants"
 import { INPUT, SELECT } from "../../styles/form"
 import { FLEX } from "../../styles/utils"
+import { backgroundImage } from "../../directives/background-image"
 
 // A handy data structure for nutrients information
 export type FormatedNutrients = {
@@ -550,7 +551,7 @@ export class RobotoffNutrientsTable extends LitElement {
               />
             </label>
             <label>
-              <span>${msg(`per specified serving "${this._servingSizeValue}"`)}</span>
+              <span>${msg(str`per specified serving "${this._servingSizeValue}"`)}</span>
               <input
                 type="radio"
                 name="${SERVING_SIZE_SELECT_NAME}"
@@ -606,7 +607,11 @@ export class RobotoffNutrientsTable extends LitElement {
     return html`
       <tr class="add-nutrient-row">
         <td>
-          <select class="select" @change=${this.onAddNutrient}>
+          <select
+            class="select"
+            @change=${this.onAddNutrient}
+            style=${backgroundImage(SELECT_ICON_FILE_NAME)}
+          >
             <option>${msg("Add a nutrient")}</option>
             ${filteredNutrientTaxonomies.map(
               (taxonomy) => html`
@@ -632,7 +637,7 @@ export class RobotoffNutrientsTable extends LitElement {
               ? html` <th scope="col">100g</th> `
               : html`
                   <th scope="col" class="flex flex-col align-center serving-size-wrapper">
-                    <span>${msg(`Specified serving "${this._servingSizeValue}"`)}</span>
+                    <span>${msg(str`Specified serving "${this._servingSizeValue}"`)}</span>
                   </th>
                 `}
           </tr>

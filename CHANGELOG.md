@@ -39,3 +39,10 @@
 
 - Update event to simplify this behavior to simplify the code and make it more easier to integrate in openfoodfacts-server.
 - Add `annotated: false` to insights api call to get only the nutrients without the annotations.
+
+## [1.2.2] - 2025-03-26
+
+## Changed
+
+- Add `donation-banner` web component to show the donation banner in the web components.
+- Add parameter `assets-images-path` to `off-web-components-configuration` to allow to change the path of the assets images.

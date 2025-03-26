@@ -85,6 +85,13 @@ npm run dev
 
 Go to http://localhost:8000 to see the demo.
 
+#### In addition to above steps, please also follow the below steps to generate translations and for tests.
+
+1. Export your component in `webcomponents/src/off-webcomponents.ts`
+2. Run `npm run translations:build` to build translation.
+3. Add this to `webcomponents/index.html` to display it during test.
+4. Also add the new component in `webcomponents/docs/index.html`.
+
 #### How to test annotating in local
 
 To test annotating nutrients in local you need credential cookie for dev api.
