@@ -4,6 +4,7 @@ import { RobotoffConfigurationOptions } from "./robotoff"
 export type OffWebcomponentConfigurationOptions = {
   robotoffConfiguration: RobotoffConfigurationOptions
   languageCode: string
+  assetsImagesPath: string
 }
 
 export type Product = {

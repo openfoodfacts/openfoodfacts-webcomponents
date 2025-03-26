@@ -7,7 +7,6 @@ export const SELECT = css`
     -webkit-appearance: none !important;
     -moz-appearance: none !important;
     background-color: #fafafa;
-    background-image: url("assets/carret-bottom.svg");
     background-position: 100% center;
     background-repeat: no-repeat;
     border-style: solid;

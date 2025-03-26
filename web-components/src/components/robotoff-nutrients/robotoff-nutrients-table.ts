@@ -22,9 +22,10 @@ import {
   NUTRIENT_UNIT_NAME_PREFIX,
 } from "../../utils/nutrients"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
-import { EventType } from "../../constants"
+import { EventType, SELECT_ICON_FILE_NAME } from "../../constants"
 import { INPUT, SELECT } from "../../styles/form"
 import { FLEX } from "../../styles/utils"
+import { backgroundImage } from "../../directives/background-image"
 
 // A handy data structure for nutrients information
 export type FormatedNutrients = {
@@ -606,7 +607,11 @@ export class RobotoffNutrientsTable extends LitElement {
     return html`
       <tr class="add-nutrient-row">
         <td>
-          <select class="select" @change=${this.onAddNutrient}>
+          <select
+            class="select"
+            @change=${this.onAddNutrient}
+            style=${backgroundImage(SELECT_ICON_FILE_NAME)}
+          >
             <option>${msg("Add a nutrient")}</option>
             ${filteredNutrientTaxonomies.map(
               (taxonomy) => html`
