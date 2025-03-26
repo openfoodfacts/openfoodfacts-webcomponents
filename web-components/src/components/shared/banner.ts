@@ -10,10 +10,33 @@ import { getLocale } from "../../localization"
 @customElement("fundraiser-banner")
 @localized()
 export class FundraiserBanner extends LitElement {
-  @property() link =
-    getLocale() === "fr"
-      ? "https://open-food-facts.assoconnect.com/collect/description/476750-c-faire-un-don-a-open-food-facts"
-      : "https://world.openfoodfacts.org/donate-to-open-food-facts"
+  /**
+   * The links to the donation page
+   * @type {Object}
+   */
+  @property({ type: Object })
+  links = {
+    fr: "https://open-food-facts.assoconnect.com/collect/description/476750-c-faire-un-don-a-open-food-facts",
+    default: "https://world.openfoodfacts.org/donate-to-open-food-facts",
+  }
+
+  getLinkWithQueryParams(link: string) {
+    const url = new URL(link)
+    const params = new URLSearchParams(url.search)
+    if (!params.has("utm_source")) params.set("utm_source", "off")
+    if (!params.has("utm_medium")) params.set("utm_medium", "web")
+    if (!params.has("utm_campaign")) params.set("utm_campaign", "donate-2024-a")
+    if (!params.has("utm_term")) params.set("utm_term", "en-text-button")
+    url.search = params.toString()
+    return url.toString()
+  }
+
+  get donateLink() {
+    const locale = getLocale()
+    const link =
+      locale in this.links ? this.links[locale as keyof typeof this.links] : this.links.default
+    return this.getLinkWithQueryParams(link)
+  }
 
   static override styles = css`
     .donation-banner,
@@ -257,9 +280,7 @@ export class FundraiserBanner extends LitElement {
           </div>
           <div class="donation-banner-footer__actions-section__donate-button">
             <a
-              href="${this
-                .link}?utm_source=off&utm_medium=web&utm_campaign=donate-2024-a&utm_term=en-text-button"
-            >
+              href="${this.donateLink}"
               <button>${msg("I SUPPORT")}</button>
             </a>
           </div>

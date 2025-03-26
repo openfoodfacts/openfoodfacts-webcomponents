@@ -90,6 +90,7 @@ Go to http://localhost:8000 to see the demo.
 1. Export your component in `webcomponents/src/off-webcomponents.ts`
 2. Run `npm run translations:build` to build translation.
 3. Add this to `webcomponents/index.html` to display it during test.
+4. Also add the new component in `webcomponents/docs/index.html`.
 
 #### How to test annotating in local
 
