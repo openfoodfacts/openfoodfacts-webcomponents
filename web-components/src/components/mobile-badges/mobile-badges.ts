@@ -201,6 +201,16 @@ export class MobileBadges extends LitElement {
         margin-top: 0.5rem;
       }
     }
+    #fdroid_badge {
+      transform: scale(1.1);
+      height: 50px;
+      margin-top: -4px;
+    }
+    #playstore_badge {
+      transform: scale(1.3);
+      margin-right: 1px;
+      height: 42px;
+    }
   `
 
   @property({ type: String })
@@ -263,6 +273,7 @@ export class MobileBadges extends LitElement {
                     .androidAppLink}&utm_campaign=install_the_app_android_footer_${language}"
                 >
                   <img
+                    id="playstore_badge"
                     src="${getImageUrl(this.getAndroidAppIconPath(language))}"
                     alt="${msg("Get It On Google Play")}"
                     loading="lazy"
@@ -276,6 +287,7 @@ export class MobileBadges extends LitElement {
                     .androidAppLink}&utm_campaign=install_the_app_android_footer_${language}"
                 >
                   <img
+                    id="fdroid_badge"
                     src="${getImageUrl(this.getFDroidAppIconPath(language))}"
                     alt="${msg("Available on F-Droid")}"
                     loading="lazy"
@@ -290,7 +302,7 @@ export class MobileBadges extends LitElement {
                     .androidApkAppLink}?utm_source=off&utf_medium=web&utm_campaign=install_the_app_apk_footer_${language}"
                 >
                   <img
-                    src="https://static.openfoodfacts.org${this.androidApkAppIconUrl}"
+                    src="${getImageUrl("download-apk_en.svg")}"
                     alt="${msg("Android APK")}"
                     loading="lazy"
                     height="40"
