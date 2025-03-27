@@ -237,13 +237,14 @@ export class MobileBadges extends LitElement {
   getIosAppIconPath(language: string): string {
     console.log("language", language)
     if (language === "en") {
-      return `/appstore/black/appstore_UK.svg`
+      return "/appstore/black/appstore_UK.svg"
     }
     return `/appstore/black/appstore_${language.toLocaleUpperCase()}.svg`
   }
 
   getIosAppLink(language: string): string {
-    const baseURI = "https://apps.apple.com/app/open-food-facts/id588797948?utm_source=off&utf_medium=web"
+    const baseURI =
+      "https://apps.apple.com/app/open-food-facts/id588797948?utm_source=off&utf_medium=web"
     return `${baseURI}&utm_campaign=install_the_app_ios_footer_${language}`
   }
 
@@ -253,14 +254,20 @@ export class MobileBadges extends LitElement {
       <div class="block_light bg-white" id="install_the_app_block ">
         <div class="row">
           <div class="small-12 flex-grid v-space-short v-align-center direction-row h-space-tiny">
-            <div class="cell small-100 medium-100 large-50 flex-grid v-align-center direction-row responsive-container">
+            <div
+              class="cell small-100 medium-100 large-50 flex-grid v-align-center direction-row responsive-container"
+            >
               <img
                 class="cell small-50 v-align-center responsive-image"
                 src="${getImageUrl("app-icon-in-the-clouds.svg")}"
                 alt="The Open Food Facts logo in the cloud"
                 style="height:120px"
               />
-              <div class="cell small-50 v-align-center responsive-text" id="footer_scan" style="display:block">
+              <div
+                class="cell small-50 v-align-center responsive-text"
+                id="footer_scan"
+                style="display:block"
+              >
                 <div id="footer_install_the_app">${msg("Install the app!")}</div>
                 ${msg(
                   html`Scan your <span id="everyday">everyday</span> <span id="foods">foods</span>`
@@ -270,10 +277,7 @@ export class MobileBadges extends LitElement {
             <div class="cell small-100 medium-100 large-50 flex-grid v-align-center direction-row">
               <div class="small-12 medium-12 large-12 v-space-normal badge-container">
                 <!-- android_app_link - https://play.google.com/store/apps/details?id=org.openbeautyfacts.scanner&hl=en -->
-                <a
-                  class="no-text-decoration"
-                  href="${this.getAndroidAppLink(language)}"
-                >
+                <a class="no-text-decoration" href="${this.getAndroidAppLink(language)}">
                   <img
                     id="playstore_badge"
                     src="${getImageUrl(this.getAndroidAppIconPath(language))}"
@@ -287,11 +291,7 @@ export class MobileBadges extends LitElement {
                     }}
                   />
                 </a>
-                <a
-                  class="no-text-decoration"
-                  href="${this
-                    .fDroidAppLink}"
-                >
+                <a class="no-text-decoration" href="${this.fDroidAppLink}">
                   <img
                     id="fdroid_badge"
                     src="${getImageUrl(this.getFDroidAppIconPath(language))}"
@@ -306,10 +306,7 @@ export class MobileBadges extends LitElement {
                   />
                 </a>
                 <!-- android_apk_app_link - https://world.openfoodfacts.org/images/apps/off.apk -->
-                <a
-                  class="no-text-decoration"
-                  href="${this.getAndroidApkAppLink(language)}"
-                >
+                <a class="no-text-decoration" href="${this.getAndroidApkAppLink(language)}">
                   <img
                     src="${getImageUrl("download-apk_en.svg")}"
                     alt="${msg("Android APK")}"
@@ -319,10 +316,7 @@ export class MobileBadges extends LitElement {
                   />
                 </a>
                 <!-- msgid "https://apps.apple.com/app/open-beauty-facts/id1122926380" -->
-                <a
-                  class="no-text-decoration"
-                  href="${this.getIosAppLink(language)}"
-                >
+                <a class="no-text-decoration" href="${this.getIosAppLink(language)}">
                   <img
                     src="${getImageUrl(this.getIosAppIconPath(language))}"
                     alt="${msg("Download on the App Store")}"
