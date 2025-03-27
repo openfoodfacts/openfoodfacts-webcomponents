@@ -281,6 +281,10 @@ export class MobileBadges extends LitElement {
                     loading="lazy"
                     height="40"
                     width="120"
+                    @error=${(e: Event) => {
+                      const target = e.target as HTMLImageElement
+                      target.src = getImageUrl(this.getAndroidAppIconPath("en"))
+                    }}
                   />
                 </a>
                 <a
@@ -295,6 +299,10 @@ export class MobileBadges extends LitElement {
                     loading="lazy"
                     height="40"
                     width="120"
+                    @error=${(e: Event) => {
+                      const target = e.target as HTMLImageElement
+                      target.src = getImageUrl(this.getFDroidAppIconPath("en"))
+                    }}
                   />
                 </a>
                 <!-- android_apk_app_link - https://world.openfoodfacts.org/images/apps/off.apk -->
@@ -321,6 +329,10 @@ export class MobileBadges extends LitElement {
                     loading="lazy"
                     height="40"
                     width="120"
+                    @error=${(e: Event) => {
+                      const target = e.target as HTMLImageElement
+                      target.src = getImageUrl(this.getIosAppIconPath("en"))
+                    }}
                   />
                 </a>
               </div>
