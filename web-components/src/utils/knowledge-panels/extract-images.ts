@@ -2,7 +2,7 @@ import {
   KnowledgePanelsData,
   KnowledgePanel,
   KnowledgePanelElement,
-} from "../../../types/knowledge-panel"
+} from "../../types/knowledge-panel"
 
 /**
  * Extracts images from all panels
