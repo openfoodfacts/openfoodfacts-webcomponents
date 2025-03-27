@@ -91,6 +91,36 @@ export class MobileBadges extends LitElement {
       text-align: center;
       color: #000;
     }
+    @media (max-width: 480px) {
+      #footer_install_the_app {
+        font-size: 20px;
+        line-height: 24px;
+      }
+      #footer_scan {
+        font-size: 18px;
+        line-height: 22px;
+      }
+    }
+    @media (min-width: 768px) {
+      #footer_install_the_app {
+        font-size: 28px;
+        line-height: 32px;
+      }
+      #footer_scan {
+        font-size: 24px;
+        line-height: 30px;
+      }
+    }
+    @media (min-width: 1024px) {
+      #footer_install_the_app {
+        font-size: 30px;
+        line-height: 34px;
+      }
+      #footer_scan {
+        font-size: 26px;
+        line-height: 32px;
+      }
+    }
     #everyday {
       transform: rotate(2.5deg);
       background-color: #0064c8;
@@ -113,6 +143,64 @@ export class MobileBadges extends LitElement {
       text-transform: uppercase;
       display: inline-block;
     }
+    .no-text-decoration {
+      text-decoration: none;
+    }
+    .badge-container {
+      display: grid;
+      gap: 0.2rem; /* Reduced horizontal gap */
+    }
+    @media (max-width: 767px) {
+      .badge-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (min-width: 768px) {
+      .badge-container {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    .responsive-container {
+      flex-direction: column;
+      text-align: center;
+    }
+    .responsive-image {
+      height: auto;
+      max-width: 100%;
+      margin: 0 auto;
+    }
+    .responsive-text {
+      margin-top: 1rem;
+    }
+    @media (min-width: 768px) {
+      .responsive-container {
+        flex-direction: row;
+        text-align: left;
+      }
+      .responsive-text {
+        margin-top: 0;
+      }
+      .badge-container {
+        display: flex;
+        justify-content: center;
+      }
+    }
+    @media (max-width: 480px) {
+      .badge-container {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+      .responsive-container {
+        flex-direction: column;
+        text-align: center;
+      }
+      .responsive-image {
+        margin-bottom: 1rem;
+      }
+      .responsive-text {
+        margin-top: 0.5rem;
+      }
+    }
   `
 
   @property({ type: String })
@@ -131,7 +219,11 @@ export class MobileBadges extends LitElement {
   androidApkAppIconUrl = "/images/misc/android-apk.svg"
 
   getIosAppIconPath(language: string): string {
-    return `/ios/${language}_app_store.svg`
+    console.log("language", language)
+    if (language === "en") {
+      return `/appstore/black/appstore_UK.svg`
+    }
+    return `/appstore/black/appstore_${language.toLocaleUpperCase}.svg`
   }
 
   getAndroidAppIconPath(language: string): string {
@@ -148,14 +240,14 @@ export class MobileBadges extends LitElement {
       <div class="block_light bg-white" id="install_the_app_block ">
         <div class="row">
           <div class="small-12 flex-grid v-space-short v-align-center direction-row h-space-tiny">
-            <div class="cell small-100 medium-100 large-50 flex-grid v-align-center direction-row">
+            <div class="cell small-100 medium-100 large-50 flex-grid v-align-center direction-row responsive-container">
               <img
-                class="cell small-50 v-align-center"
+                class="cell small-50 v-align-center responsive-image"
                 src="${getImageUrl("app-icon-in-the-clouds.svg")}"
                 alt="The Open Food Facts logo in the cloud"
                 style="height:120px"
               />
-              <div class="cell small-50 v-align-center" id="footer_scan" style="display:block">
+              <div class="cell small-50 v-align-center responsive-text" id="footer_scan" style="display:block">
                 <div id="footer_install_the_app">${msg("Install the app!")}</div>
                 ${msg(
                   html`Scan your <span id="everyday">everyday</span> <span id="foods">foods</span>`
@@ -163,10 +255,10 @@ export class MobileBadges extends LitElement {
               </div>
             </div>
             <div class="cell small-100 medium-100 large-50 flex-grid v-align-center direction-row">
-              <div class="small-12 medium-12 large-12 v-space-normal column badge-container">
+              <div class="small-12 medium-12 large-12 v-space-normal badge-container">
                 <!-- android_app_link - https://play.google.com/store/apps/details?id=org.openbeautyfacts.scanner&hl=en -->
                 <a
-                  class="cell small-50 medium-25 large-25 h-space-short v-align-center"
+                  class="no-text-decoration"
                   href="${this
                     .androidAppLink}&utm_campaign=install_the_app_android_footer_${language}"
                 >
@@ -179,7 +271,7 @@ export class MobileBadges extends LitElement {
                   />
                 </a>
                 <a
-                  class="cell small-50 medium-25 large-25 h-space-short v-align-center"
+                  class="no-text-decoration"
                   href="${this
                     .androidAppLink}&utm_campaign=install_the_app_android_footer_${language}"
                 >
@@ -193,7 +285,7 @@ export class MobileBadges extends LitElement {
                 </a>
                 <!-- android_apk_app_link - https://world.openfoodfacts.org/images/apps/off.apk -->
                 <a
-                  class="cell small-50 medium-25 large-25 h-space-short v-align-center"
+                  class="no-text-decoration"
                   href="${this
                     .androidApkAppLink}?utm_source=off&utf_medium=web&utm_campaign=install_the_app_apk_footer_${language}"
                 >
@@ -207,7 +299,7 @@ export class MobileBadges extends LitElement {
                 </a>
                 <!-- msgid "https://apps.apple.com/app/open-beauty-facts/id1122926380" -->
                 <a
-                  class="cell small-50 medium-25 large-25 h-space-short v-align-center"
+                  class="no-text-decoration"
                   href="${this.iosAppLink}&utm_campaign=install_the_app_ios_footer_${language}"
                 >
                   <img
