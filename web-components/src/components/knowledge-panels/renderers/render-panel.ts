@@ -5,9 +5,6 @@ import {
   KnowledgePanelElement,
   KnowledgePanelsData,
 } from "../../../types/knowledge-panel"
-import "./render-panel-header"
-import "./render-element"
-import "./render-image"
 import "../../../utils/knowledge-panels/heading-utils"
 import "../../../utils/knowledge-panels/extract-images"
 /**

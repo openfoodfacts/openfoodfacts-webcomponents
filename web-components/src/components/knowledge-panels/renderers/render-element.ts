@@ -2,14 +2,6 @@ import { LitElement, html, TemplateResult } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { KnowledgePanelElement, KnowledgePanelsData } from "../../../types/knowledge-panel"
 
-// Import all element renderer components so they're registered
-import "./render-text"
-import "./render-table"
-import "./render-titled-text"
-import "./render-panel-element"
-import "./render-panel-group"
-import "./render-action"
-
 /**
  * Element renderer dispatcher component
  *

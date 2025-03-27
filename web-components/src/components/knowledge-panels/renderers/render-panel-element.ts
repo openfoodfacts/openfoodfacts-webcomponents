@@ -2,8 +2,6 @@ import { LitElement, html, css, TemplateResult } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { KnowledgePanelElement, KnowledgePanelsData } from "../../../types/knowledge-panel"
 import "../../../utils/knowledge-panels/heading-utils" // Import heading renderer component
-import "./render-element"
-import "./render-panel"
 
 /**
  * Panel element renderer component

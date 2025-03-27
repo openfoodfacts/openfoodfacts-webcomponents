@@ -1,8 +1,6 @@
 import { LitElement, html, css, TemplateResult } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { KnowledgePanelElement, KnowledgePanelsData } from "../../../types/knowledge-panel"
-import "./render-image"
-import "./render-panel"
 import "../../../utils/knowledge-panels/heading-utils"
 
 /**
