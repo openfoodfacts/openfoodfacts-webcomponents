@@ -12,7 +12,7 @@ if (!["dev", "prod"].includes(mode)) {
 }
 
 export default {
-  rootDir: "docs",
+  rootDir: "docs/dist",
   nodeResolve: {
     exportConditions: mode === "dev" ? ["development"] : [],
     browser: true,

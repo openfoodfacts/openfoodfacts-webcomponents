@@ -39,7 +39,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "./web-components/docs"
+          path: "./web-components/docs/dist"
 
   deploy:
     environment:
