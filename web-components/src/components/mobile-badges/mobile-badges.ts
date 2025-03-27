@@ -214,26 +214,11 @@ export class MobileBadges extends LitElement {
   `
 
   @property({ type: String })
-  iosAppLink = "https://apps.apple.com/app/open-beauty-facts/id1122926380"
+  fDroidAppLink = "https://f-droid.org/packages/openfoodfacts.github.scrachx.openfood"
 
-  @property({ type: String })
-  androidAppLink = "https://play.google.com/store/apps/details?id=org.openbeautyfacts.scanner&hl=en"
-
-  @property({ type: String })
-  androidApkAppLink = "https://world.openfoodfacts.org/images/apps/off.apk"
-
-  @property({ type: String })
-  androidAppIconUrl = "/images/misc/playstore/img/en_get.svg"
-
-  @property({ type: String })
-  androidApkAppIconUrl = "/images/misc/android-apk.svg"
-
-  getIosAppIconPath(language: string): string {
-    console.log("language", language)
-    if (language === "en") {
-      return `/appstore/black/appstore_UK.svg`
-    }
-    return `/appstore/black/appstore_${language.toLocaleUpperCase}.svg`
+  getAndroidAppLink(language: string): string {
+    const baseURI = `https://play.google.com/store/apps/details?id=org.openfoodfacts.scanner&hl=${language}`
+    return `${baseURI}&utm_source=off&utf_medium=web&utm_campaign=install_the_app_android_footer_${language}`
   }
 
   getAndroidAppIconPath(language: string): string {
@@ -242,6 +227,24 @@ export class MobileBadges extends LitElement {
 
   getFDroidAppIconPath(language: string): string {
     return `/f-droid/get-it-on-${language}.png`
+  }
+
+  getAndroidApkAppLink(language: string): string {
+    const baseURI = "https://github.com/openfoodfacts/smooth-app/releases/latest"
+    return `${baseURI}?utm_source=off&utf_medium=web&utm_campaign=install_the_app_apk_footer_${language}`
+  }
+
+  getIosAppIconPath(language: string): string {
+    console.log("language", language)
+    if (language === "en") {
+      return `/appstore/black/appstore_UK.svg`
+    }
+    return `/appstore/black/appstore_${language.toLocaleUpperCase()}.svg`
+  }
+
+  getIosAppLink(language: string): string {
+    const baseURI = "https://apps.apple.com/app/open-food-facts/id588797948?utm_source=off&utf_medium=web"
+    return `${baseURI}&utm_campaign=install_the_app_ios_footer_${language}`
   }
 
   override render() {
@@ -269,8 +272,7 @@ export class MobileBadges extends LitElement {
                 <!-- android_app_link - https://play.google.com/store/apps/details?id=org.openbeautyfacts.scanner&hl=en -->
                 <a
                   class="no-text-decoration"
-                  href="${this
-                    .androidAppLink}&utm_campaign=install_the_app_android_footer_${language}"
+                  href="${this.getAndroidAppLink(language)}"
                 >
                   <img
                     id="playstore_badge"
@@ -284,7 +286,7 @@ export class MobileBadges extends LitElement {
                 <a
                   class="no-text-decoration"
                   href="${this
-                    .androidAppLink}&utm_campaign=install_the_app_android_footer_${language}"
+                    .fDroidAppLink}"
                 >
                   <img
                     id="fdroid_badge"
@@ -298,8 +300,7 @@ export class MobileBadges extends LitElement {
                 <!-- android_apk_app_link - https://world.openfoodfacts.org/images/apps/off.apk -->
                 <a
                   class="no-text-decoration"
-                  href="${this
-                    .androidApkAppLink}?utm_source=off&utf_medium=web&utm_campaign=install_the_app_apk_footer_${language}"
+                  href="${this.getAndroidApkAppLink(language)}"
                 >
                   <img
                     src="${getImageUrl("download-apk_en.svg")}"
@@ -312,7 +313,7 @@ export class MobileBadges extends LitElement {
                 <!-- msgid "https://apps.apple.com/app/open-beauty-facts/id1122926380" -->
                 <a
                   class="no-text-decoration"
-                  href="${this.iosAppLink}&utm_campaign=install_the_app_ios_footer_${language}"
+                  href="${this.getIosAppLink(language)}"
                 >
                   <img
                     src="${getImageUrl(this.getIosAppIconPath(language))}"
