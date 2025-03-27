@@ -27,7 +27,7 @@ export default {
     },
     // Comment because it overwrites the esm files
     // {
-        
+
     //   dir: distDir,
     //   format: "cjs",
     //   sourcemap: true,
@@ -56,16 +56,16 @@ export default {
      * This minification setup serves the static site generation.
      * For bundling and minification, check the README.md file.
      */
-    
+
     terser({
-    ecma: 2021,
-    module: true,
-    warnings: true,
-    mangle: {
+      ecma: 2021,
+      module: true,
+      warnings: true,
+      mangle: {
         properties: {
-        regex: /^__/,
+          regex: /^__/,
         },
-    },
+      },
     }),
     summary(),
   ],
