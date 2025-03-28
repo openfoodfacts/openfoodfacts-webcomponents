@@ -112,3 +112,5 @@ To have it, you need to follow these steps:
 You can find the documentation [here](https://openfoodfacts.github.io/openfoodfacts-webcomponents)
 
 To work on documentation let see [this](web-components/docs/README.md)
+
+## Translations
