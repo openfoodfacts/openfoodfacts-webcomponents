@@ -19,8 +19,6 @@ export const getLanguageCodes = async () => {
     })
     // flatten array because language_codes is a string with comma separated values
     .flat()
-    // remove english language code because it's the default language
-    .filter((languageCode) => languageCode !== "en")
 
   // remove duplicates
   return [...new Set(languageCodes)]
