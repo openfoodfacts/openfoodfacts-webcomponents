@@ -1,6 +1,13 @@
 import { LitElement, html, css } from "lit"
 import { customElement, query, state } from "lit/decorators.js"
-import { MultiFormatReader, NotFoundException, Result } from "@zxing/library"
+import {
+  BinaryBitmap,
+  HybridBinarizer,
+  MultiFormatReader,
+  NotFoundException,
+  Result,
+  RGBLuminanceSource,
+} from "@zxing/library"
 
 @customElement("barcode-scanner")
 export class BarcodeScanner extends LitElement {
@@ -16,6 +23,11 @@ export class BarcodeScanner extends LitElement {
       max-width: 100%;
       background-color: black;
     }
+
+    canvas {
+      background-color: transparent;
+      border: 1px solid black;
+    }
   `
 
   @state() barcode = ""
@@ -27,60 +39,17 @@ export class BarcodeScanner extends LitElement {
   private stream: MediaStream | null = null
 
   @state()
-  private codeReader: any
+  private codeReader: any | null = null
 
   @state()
   private detectFn?: (imageData: ImageBitmap) => Promise<string | undefined>
 
+  @state()
+  private lastUpdateTime: number = 0
+
   constructor() {
     super()
-    this.initializeDector()
-  }
-
-  setupBarcodeDetector() {
-    this.codeReader = new BarcodeDetector()
-    this.detectFn = this.detectWithBarcodeDetector
-    alert("BarcodeDetector is supported by this browser.")
-  }
-  setupZxing() {
-    this.codeReader = new MultiFormatReader()
-    this.detectFn = this.detectWithZxing
-  }
-  async detectWithBarcodeDetector(imageData: ImageBitmap): Promise<string | undefined> {
-    try {
-      const value = await this.codeReader.detect(imageData)
-      if (value.length > 0) {
-        return value[0].rawValue
-      }
-    } catch (error) {
-      console.error("Error detecting barcode:", error)
-      return undefined
-    }
-  }
-
-  async detectWithZxing(imageData: ImageBitmap): Promise<string | undefined> {
-    try {
-      let result: Result = await this.codeReader.decode(this.video)
-      alert("Barcode detected: " + result.getText())
-      let value = result.getText()
-      if (value) {
-        return value
-      }
-    } catch (e) {
-      if (e instanceof NotFoundException) {
-        return ""
-      }
-      alert(e)
-      throw e
-    }
-  }
-
-  initializeDector() {
-    if ("BarcodeDetector" in window) {
-      this.setupBarcodeDetector()
-    } else {
-      this.setupZxing()
-    }
+    this.initializeDetector()
   }
 
   override async firstUpdated() {
@@ -88,17 +57,99 @@ export class BarcodeScanner extends LitElement {
     await this.askPermission()
   }
 
-  askPermission() {
-    navigator.permissions.query({ name: "camera" }).then((permissionStatus) => {
-      if (["granted", "prompt"].includes(permissionStatus.state)) {
-        this.startCamera()
-      } else {
-        alert("Camera permission denied. Please enable it in your browser settings.")
-      }
-    })
+  private setupBarcodeDetector() {
+    try {
+      throw new Error("BarcodeDetector not available")
+      this.codeReader = new BarcodeDetector()
+      this.detectFn = this.detectWithBarcodeDetector
+      console.log("BarcodeDetector is supported by this browser.")
+    } catch (error) {
+      console.warn("BarcodeDetector not available:", error)
+      this.setupZxing()
+    }
   }
 
-  async startCamera() {
+  private setupZxing() {
+    this.codeReader = new MultiFormatReader()
+    this.detectFn = this.detectWithZxing
+    console.log("Falling back to ZXing barcode detection")
+  }
+
+  private async detectWithBarcodeDetector(imageData: ImageBitmap): Promise<string | undefined> {
+    try {
+      // Type assertion for BarcodeDetector
+      const detector = this.codeReaders
+      const barcodes = await detector.detect(imageData)
+      if (barcodes.length > 0) {
+        return barcodes[0].rawValue
+      }
+    } catch (error) {
+      console.error("Error detecting barcode:", error)
+    }
+    return undefined
+  }
+
+  private async detectWithZxing(): Promise<string | undefined> {
+    try {
+      this.updateCanvasFromVideo()
+
+      const imageDataObj = this.canvas
+        .getContext("2d")!
+        .getImageData(0, 0, this.canvas.width, this.canvas.height)
+
+      // Prepare luminance source for ZXing
+      const luminanceSource = new RGBLuminanceSource(
+        imageDataObj.data,
+        imageDataObj.width,
+        imageDataObj.height
+      )
+      const binaryBitmap = new BinaryBitmap(new HybridBinarizer(luminanceSource))
+      // Type assertion for MultiFormatReader
+      const reader = this.codeReader as MultiFormatReader
+      const result: Result = reader.decode(binaryBitmap)
+      const value = result.getText()
+      if (value) {
+        return value
+      }
+    } catch (e) {
+      if (e instanceof NotFoundException) {
+        console.log("not found")
+
+        return undefined
+      }
+      console.error("ZXing detection error:", e)
+    }
+    return undefined
+  }
+
+  private initializeDetector() {
+    if ("BarcodeDetector" in window) {
+      this.setupBarcodeDetector()
+    } else {
+      this.setupZxing()
+    }
+  }
+
+  private async askPermission() {
+    try {
+      const permissionStatus = await navigator.permissions.query({
+        name: "camera" as PermissionName,
+      })
+
+      if (["granted", "prompt"].includes(permissionStatus.state)) {
+        await this.startCamera()
+      } else {
+        alert("Camera permission denied. Please enable it in your browser settings.")
+
+        console.warn("Camera permission denied. Please enable it in your browser settings.")
+      }
+    } catch (error) {
+      alert("Camera permission denied. Please enable it in your browser settings.")
+      console.error("Permission query error:", error)
+    }
+  }
+
+  private async startCamera() {
     try {
       this.stream = await navigator.mediaDevices.getUserMedia({
         video: {
@@ -107,9 +158,10 @@ export class BarcodeScanner extends LitElement {
           height: { ideal: 480, max: 720 },
         },
       })
+
       if (this.video) {
         this.video.srcObject = this.stream
-        this.video.play()
+        await this.video.play()
 
         // Set up video frame capture
         this.setupFrameCapture()
@@ -119,66 +171,65 @@ export class BarcodeScanner extends LitElement {
     }
   }
 
-  updateCanvasFromVideo() {
+  private updateCanvasFromVideo() {
+    // const currentTime = Date.now()
+    // if (currentTime - this.lastUpdateTime < 5000) {
+    //   return
+    // }
+    // this.lastUpdateTime = currentTime
+
     const context = this.canvas.getContext("2d")
     if (context) {
-      context.drawImage(this.video, 0, 0, this.video.width, this.video.height)
+      this.canvas.width = this.video.videoWidth
+      this.canvas.height = this.video.videoHeight
+      context.drawImage(this.video, 0, 0, this.video.videoWidth, this.video.videoHeight)
     }
   }
 
-  stopVideo() {
+  private stopVideo() {
     if (this.stream) {
       this.stream.getTracks().forEach((track) => track.stop())
     }
   }
 
   private setupFrameCapture() {
-    const canvas = this.canvas
     const video = this.video
-
     const processFrame = async () => {
       if (video.paused || video.ended) {
         requestAnimationFrame(processFrame)
         return
       }
-      let imageBitmap
+
+      let imageBitmap: ImageBitmap | undefined
       try {
         imageBitmap = await createImageBitmap(video, 0, 0, video.videoWidth, video.videoHeight)
-        this.updateCanvasFromVideo()
       } catch (e) {
-        console.log(e)
+        console.error("Error creating image bitmap:", e)
       }
 
-      if (imageBitmap) {
-        const result: string | undefined = await this.detectFn!(imageBitmap)
-        if (result) {
-          console.log(result)
-          debugger
-          this.barcode = result
-          console.log(this.barcode)
-          alert("barcode " + JSON.stringify(this.barcode))
-          this.stopVideo()
+      if (imageBitmap && this.detectFn) {
+        try {
+          const result = await this.detectFn(imageBitmap)
+          if (result) {
+            this.barcode = result
+            console.log("Barcode detected:", this.barcode)
+            this.stopVideo()
+            return
+          }
+        } catch (error) {
+          console.error("Barcode detection error:", error)
         }
       }
 
       requestAnimationFrame(processFrame)
     }
 
-    video.addEventListener("play", () => {
-      // Adjust canvas to match video dimensions
-      canvas.width = video.videoWidth
-      canvas.height = video.videoHeight
-      processFrame()
-    })
+    requestAnimationFrame(processFrame)
   }
 
   override disconnectedCallback() {
     super.disconnectedCallback()
-
-    // Stop all tracks to release camera
-    if (this.stream) {
-      this.stream.getTracks().forEach((track) => track.stop())
-    }
+    this.stopVideo()
   }
 
   override render() {
