@@ -61,6 +61,7 @@
     "@lit/task": "^1.0.2",
     "@panzoom/panzoom": "^4.6.0",
     "@types/dompurify": "^3.0.5",
+    "@zxing/library": "^0.21.3",
     "dompurify": "^3.2.4",
     "lit": "^3.2.1",
     "lit-html": "^3.2.1"
@@ -86,6 +87,7 @@
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.3",
     "glob": "^11.0.1",
+    "html5-qrcode": "^2.3.8",
     "lit-analyzer": "^2.0.3",
     "prettier": "^3.5.3",
     "rimraf": "^3.0.2",
