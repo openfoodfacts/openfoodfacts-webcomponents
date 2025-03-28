@@ -87,7 +87,6 @@
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.3",
     "glob": "^11.0.1",
-    "html5-qrcode": "^2.3.8",
     "lit-analyzer": "^2.0.3",
     "prettier": "^3.5.3",
     "rimraf": "^3.0.2",

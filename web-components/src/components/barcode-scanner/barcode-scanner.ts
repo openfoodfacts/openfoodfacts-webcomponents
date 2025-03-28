@@ -40,18 +40,28 @@ export class BarcodeScanner extends LitElement {
   setupBarcodeDetector() {
     this.codeReader = new BarcodeDetector()
     this.detectFn = this.detectWithBarcodeDetector
+    alert("BarcodeDetector is supported by this browser.")
   }
   setupZxing() {
     this.codeReader = new MultiFormatReader()
     this.detectFn = this.detectWithZxing
   }
   async detectWithBarcodeDetector(imageData: ImageBitmap): Promise<string | undefined> {
-    return await this.codeReader.detect(imageData)
+    try {
+      const value = await this.codeReader.detect(imageData)
+      if (value.length > 0) {
+        return value[0].rawValue
+      }
+    } catch (error) {
+      console.error("Error detecting barcode:", error)
+      return undefined
+    }
   }
 
   async detectWithZxing(imageData: ImageBitmap): Promise<string | undefined> {
     try {
-      let result: Result = await this.codeReader.decode(imageData)
+      let result: Result = await this.codeReader.decode(this.video)
+      alert("Barcode detected: " + result.getText())
       let value = result.getText()
       if (value) {
         return value
@@ -60,12 +70,13 @@ export class BarcodeScanner extends LitElement {
       if (e instanceof NotFoundException) {
         return ""
       }
+      alert(e)
       throw e
     }
   }
 
   initializeDector() {
-    if (false) {
+    if ("BarcodeDetector" in window) {
       this.setupBarcodeDetector()
     } else {
       this.setupZxing()
@@ -78,11 +89,11 @@ export class BarcodeScanner extends LitElement {
   }
 
   askPermission() {
-    navigator.permissions.query({ name: "camera" }).then((result) => {
-      if (result.state === "granted") {
+    navigator.permissions.query({ name: "camera" }).then((permissionStatus) => {
+      if (["granted", "prompt"].includes(permissionStatus.state)) {
         this.startCamera()
       } else {
-        alert("Camera permission denied")
+        alert("Camera permission denied. Please enable it in your browser settings.")
       }
     })
   }
@@ -104,7 +115,6 @@ export class BarcodeScanner extends LitElement {
         this.setupFrameCapture()
       }
     } catch (err) {
-      alert(err)
       console.error("Error accessing camera: ", err)
     }
   }
@@ -112,7 +122,13 @@ export class BarcodeScanner extends LitElement {
   updateCanvasFromVideo() {
     const context = this.canvas.getContext("2d")
     if (context) {
-      context.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height)
+      context.drawImage(this.video, 0, 0, this.video.width, this.video.height)
+    }
+  }
+
+  stopVideo() {
+    if (this.stream) {
+      this.stream.getTracks().forEach((track) => track.stop())
     }
   }
 
@@ -132,10 +148,6 @@ export class BarcodeScanner extends LitElement {
       } catch (e) {
         console.log(e)
       }
-      // // get image from video
-      // context.drawImage(video, 0, 0, 400, 400)
-      // convert image to imageData
-      // const imageData = context.getImageData(0, 0, 400, 400)
 
       if (imageBitmap) {
         const result: string | undefined = await this.detectFn!(imageBitmap)
@@ -144,7 +156,8 @@ export class BarcodeScanner extends LitElement {
           debugger
           this.barcode = result
           console.log(this.barcode)
-          debugger
+          alert("barcode " + JSON.stringify(this.barcode))
+          this.stopVideo()
         }
       }
 
