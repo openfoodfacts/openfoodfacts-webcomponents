@@ -3,6 +3,10 @@ export const DEFAULT_ROBOTOFF_CONFIGURATION = {
   dryRun: false,
   imgUrl: "https://images.openfoodfacts.org/images/products",
 }
+export const DEFAULT_NUTRIPATROL_CONFIGURATION = {
+  apiUrl: "https://nutripatrol.openfoodfacts.org",
+  dryRun: false,
+}
 export const PAGE_SIZE = 25
 
 export enum EventType {
