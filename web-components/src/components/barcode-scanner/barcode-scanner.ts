@@ -7,6 +7,7 @@ import "../icons/search"
 import "../icons/close"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { EventType } from "../../constants"
+import { StyleInfo, styleMap } from "lit-html/directives/style-map.js"
 
 export enum BarcodeState {
   EXITED,
@@ -22,13 +23,16 @@ export class BarcodeScanner extends LitElement {
     BASE,
     getButtonClasses([ButtonType.White]),
     css`
-      .barcode-scanner {
-        position: relative;
-        max-width: 300px;
+      :host {
         width: 100%;
-        height: 300px;
       }
-      video {
+      .barcode-scanner {
+        display: block;
+        position: relative;
+        width: 100%;
+      }
+      .barcode-scanner video {
+        display: block;
         background-color: black;
         border-radius: 8px;
         width: 100%;
@@ -146,6 +150,13 @@ export class BarcodeScanner extends LitElement {
       }
     `,
   ]
+
+  @property({ type: Object })
+  wrapperStyle: StyleInfo = {
+    height: "300px",
+    width: "100%",
+    "max-width": "100%",
+  }
 
   @property({ type: Boolean })
   runScanner = false
@@ -358,8 +369,8 @@ export class BarcodeScanner extends LitElement {
 
   override render() {
     return html`
-      <div class="barcode-scanner">
-        <video></video>
+      <div class="barcode-scanner" style=${styleMap(this.wrapperStyle)}>
+        <video width="100%"></video>
         <div class="overlay-wrapper">${this.renderOverlay()}</div>
       </div>
     `
