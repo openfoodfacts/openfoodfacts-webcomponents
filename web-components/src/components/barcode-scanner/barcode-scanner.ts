@@ -1,21 +1,89 @@
+import { localized, msg } from "@lit/localize"
 import { LitElement, html, css } from "lit"
-import { customElement, query, state } from "lit/decorators.js"
+import { customElement, property, query, state } from "lit/decorators.js"
+import { BASE } from "../../styles/base"
+import "../icons/barcode"
+import "../icons/search"
 
 @customElement("barcode-scanner")
+@localized()
 export class BarcodeScanner extends LitElement {
-  static override styles = css`
-    :host {
-      display: block;
-      padding: 16px;
-    }
-    video {
-      width: 400px;
-      height: 400px;
-      max-width: 100%;
-      background-color: black;
-    }
-  `
+  static override styles = [
+    BASE,
+    css`
+      .barcode-scanner {
+        position: relative;
+        max-width: 300px;
+        width: 100%;
+        height: 300px;
+      }
+      video {
+        background-color: black;
+        border-radius: 8px;
+        width: 100%;
+        height: 100%;
+      }
+      .overlay-wrapper {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        cursor: pointer;
+        z-index: 1;
+      }
+      .centered-overlay {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        max-width: 100%;
+        padding-right: 10%;
+        padding-left: 10%;
+        width: 100%;
+        box-sizing: border-box;
+        height: 100%;
+      }
+      .video-frame {
+        border: 3px solid #fff;
+        border-radius: 8px;
+        box-sizing: border-box;
+      }
+      .cta-overlay-wrapper {
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+      }
 
+      .cta-overlay-text {
+        text-align: center;
+        color: white;
+      }
+      .cta-overlay-icon {
+        display: flex;
+        justify-content: center;
+      }
+      .cta-overlay-button {
+        z-index: 2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        border: none;
+        margin-top: 1rem;
+        cursor: pointer;
+        margin-bottom: 1rem;
+      }
+      .cta-overlay-button.start-scanning {
+        background-color: #4c4c4d;
+      }
+    `,
+  ]
+
+  @property({ type: Boolean })
+  runScanner = false
   @state() barcode = ""
 
   @query("video") private video!: HTMLVideoElement
@@ -29,13 +97,17 @@ export class BarcodeScanner extends LitElement {
   @state()
   private detectFn?: (imageData: ImageBitmap) => Promise<string | undefined>
 
+  get isVideoPlaying() {
+    return this.stream !== null
+  }
+
   constructor() {
     super()
     this.setupBarcodeDetector()
   }
 
   override async firstUpdated() {
-    if (this.codeReader) {
+    if (this.codeReader && this.runScanner) {
       await this.askPermission()
     }
   }
@@ -44,9 +116,7 @@ export class BarcodeScanner extends LitElement {
     try {
       this.codeReader = new BarcodeDetector()
       this.detectFn = this.detectWithBarcodeDetector
-      console.log("BarcodeDetector is supported by this browser.")
     } catch (error) {
-      alert("BarcodeDetector not available. Please use a browser that supports BarcodeDetector.")
       console.warn("BarcodeDetector not available:", error)
     }
   }
@@ -69,19 +139,14 @@ export class BarcodeScanner extends LitElement {
 
   private async askPermission() {
     try {
-      const permissionStatus = await navigator.permissions.query({
-        name: "camera" as PermissionName,
-      })
+      const permissionStatus = await navigator.permissions.query({ name: "camera" })
 
       if (["granted", "prompt"].includes(permissionStatus.state)) {
         await this.startCamera()
       } else {
-        alert("Camera permission denied. Please enable it in your browser settings.")
-
         console.warn("Camera permission denied. Please enable it in your browser settings.")
       }
     } catch (error) {
-      alert("Camera permission denied. Please enable it in your browser settings.")
       console.error("Permission query error:", error)
     }
   }
@@ -111,6 +176,7 @@ export class BarcodeScanner extends LitElement {
   private stopVideo() {
     if (this.stream) {
       this.stream.getTracks().forEach((track) => track.stop())
+      this.stream = null
     }
   }
 
@@ -134,7 +200,8 @@ export class BarcodeScanner extends LitElement {
           const result = await this.detectFn!(imageBitmap)
           if (result) {
             this.barcode = result
-            console.log("Barcode detected:", this.barcode)
+            alert("Barcode detected: " + this.barcode)
+
             this.stopVideo()
             return
           }
@@ -154,11 +221,56 @@ export class BarcodeScanner extends LitElement {
     this.stopVideo()
   }
 
+  private renderOverlay() {
+    if (!this.codeReader) {
+      return html` <div class="cta-overlay-wrapper">
+        <div class="centered-overlay">
+          <div class="cta-overlay">
+            <div class="cta-overlay-text">
+              ${msg("Your browser does not support barcode scanning.")}
+            </div>
+          </div>
+        </div>
+      </div>`
+    }
+    if (this.isVideoPlaying) {
+      return html`
+        <div class="cta-overlay-wrapper" @click=${this.askPermission}>
+          <div class="centered-overlay">
+            <div class="cta-overlay">
+              <div class="cta-overlay-icon">
+                <button class="cta-overlay-button">
+                  <search-icon></search-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `
+    }
+    return html`
+      <div class="cta-overlay-wrapper" @click=${this.askPermission}>
+        <div class="centered-overlay">
+          <div class="cta-overlay">
+            <div class="cta-overlay-icon">
+              <button class="cta-overlay-button start-scanning">
+                <barcode-icon></barcode-icon>
+              </button>
+            </div>
+            <div class="cta-overlay-text">
+              ${msg("Click to scan a barcode and find out its details (health, preferences, etc.)")}
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+  }
+
   override render() {
     return html`
-      <div>
-        <div>Scanned Barcode: ${this.barcode}</div>
+      <div class="barcode-scanner">
         <video></video>
+        <div class="overlay-wrapper">${this.renderOverlay()}</div>
       </div>
     `
   }
