@@ -151,7 +151,7 @@ export class BarcodeScanner extends LitElement {
     `,
   ]
 
-  @property({ type: Object })
+  @property({ type: Object, attribute: "wrapper-style", reflect: true })
   wrapperStyle: StyleInfo = {
     height: "300px",
     width: "100%",
@@ -185,6 +185,17 @@ export class BarcodeScanner extends LitElement {
   override async firstUpdated() {
     if (this.codeReader && this.runScanner) {
       await this.askPermission()
+    }
+  }
+
+  override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
+    super.attributeChangedCallback(name, _old, value)
+    if (name === "run-scanner") {
+      if (value === "true") {
+        this.askPermission()
+      } else {
+        this.stopVideo()
+      }
     }
   }
 
