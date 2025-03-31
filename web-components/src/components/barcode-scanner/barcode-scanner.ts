@@ -17,6 +17,10 @@ export enum BarcodeState {
   STARTED,
 }
 
+interface BarcodeDetector {
+  detect(video: ImageBitmap): Promise<{ rawValue: string }[]>
+}
+
 @customElement("barcode-scanner")
 @localized()
 export class BarcodeScanner extends LitElement {
@@ -202,6 +206,8 @@ export class BarcodeScanner extends LitElement {
 
   private setupBarcodeDetector() {
     try {
+      // Remove the type assertion for BarcodeDetector to avoid TypeScript error
+      // @ts-ignore
       this.codeReader = new BarcodeDetector()
       this.detectFn = this.detectWithBarcodeDetector
       this.sendBarcodeStateEvent({ state: BarcodeState.DETECTOR_AVAILABLE })
