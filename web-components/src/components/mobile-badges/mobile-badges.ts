@@ -1,5 +1,5 @@
 import { LitElement, html, css } from "lit"
-import { customElement, property } from "lit/decorators.js"
+import { customElement, state } from "lit/decorators.js"
 import { localized, msg } from "@lit/localize"
 import { getLocale } from "../../localization"
 import { getImageUrl } from "../../signals/app"
@@ -225,7 +225,7 @@ export class MobileBadges extends LitElement {
   /**
    * Link to the F-Droid app page.
    */
-  @property({ type: String })
+  @state()
   fDroidAppLink = "https://f-droid.org/packages/openfoodfacts.github.scrachx.openfood";
 
   /**
@@ -301,11 +301,71 @@ export class MobileBadges extends LitElement {
   }
 
   /**
-   * Renders the component.
-   * @returns The HTML template for the component.
+   * Generates the HTML for a badge link.
+   * @param href - The URL for the badge link.
+   * @param src - The source of the badge image.
+   * @param alt - The alt text for the badge image.
+   * @param id - The id for the badge image.
+   * @param errorHandler - The error handler for the image.
+   * @returns The HTML template for the badge link.
    */
+  private generateBadgeLink(href: string, src: string, alt: string, id: string, errorHandler?: (e: Event) => void) {
+    return html`
+      <a class="no-text-decoration" href="${href}">
+        <img
+          id="${id}"
+          src="${getImageUrl(src)}"
+          alt="${msg(alt)}"
+          loading="lazy"
+          height="40"
+          width="120"
+          @error=${errorHandler}
+        />
+      </a>
+    `;
+  }
+
   override render() {
     const language = getLocale();
+    const badges = [
+      {
+        href: this.getAndroidAppLink(language),
+        src: this.getAndroidAppIconPath(language),
+        alt: "Get It On Google Play",
+        id: "playstore_badge",
+        errorHandler: (e: Event) => {
+          const target = e.target as HTMLImageElement;
+          target.src = getImageUrl(this.getAndroidAppIconPath("en"));
+        },
+      },
+      {
+        href: this.fDroidAppLink,
+        src: this.getFDroidAppIconPath(language),
+        alt: "Available on F-Droid",
+        id: "fdroid_badge",
+        errorHandler: (e: Event) => {
+          const target = e.target as HTMLImageElement;
+          target.src = getImageUrl(this.getFDroidAppIconPath("en"));
+        },
+      },
+      {
+        href: this.getAndroidApkAppLink(language),
+        src: "download-apk_en.svg",
+        alt: "Android APK",
+        id: "apk_badge",
+      },
+      {
+        href: this.getIosAppLink(language),
+        src: this.getIosAppIconPath(language),
+        alt: "Download on the App Store",
+        id: "appstore_badge",
+        errorHandler: (e: Event) => {
+          const target = e.target as HTMLImageElement;
+          target.src = getImageUrl(this.getIosAppIconPath("en"));
+        },
+      },
+    ];
+
     return html`
       <div class="block_light bg-white" id="install_the_app_block ">
         <div class="row">
@@ -315,7 +375,7 @@ export class MobileBadges extends LitElement {
             >
               <img
                 class="cell small-50 v-align-center responsive-image"
-                src="${getImageUrl("app-icon-in-the-clouds.svg")}"
+                src="${getImageUrl("app-icon-in-the-clouds.svg")}" 
                 alt="The Open Food Facts logo in the cloud"
                 style="height:120px"
               />
@@ -332,64 +392,14 @@ export class MobileBadges extends LitElement {
             </div>
             <div class="cell small-100 medium-100 large-50 flex-grid v-align-center direction-row">
               <div class="small-12 medium-12 large-12 v-space-normal badge-container">
-                <!-- android_app_link - https://play.google.com/store/apps/details?id=org.openbeautyfacts.scanner&hl=en -->
-                <a class="no-text-decoration" href="${this.getAndroidAppLink(language)}">
-                  <img
-                    id="playstore_badge"
-                    src="${getImageUrl(this.getAndroidAppIconPath(language))}"
-                    alt="${msg("Get It On Google Play")}"
-                    loading="lazy"
-                    height="40"
-                    width="120"
-                    @error=${(e: Event) => {
-                      const target = e.target as HTMLImageElement
-                      target.src = getImageUrl(this.getAndroidAppIconPath("en"))
-                    }}
-                  />
-                </a>
-                <a class="no-text-decoration" href="${this.fDroidAppLink}">
-                  <img
-                    id="fdroid_badge"
-                    src="${getImageUrl(this.getFDroidAppIconPath(language))}"
-                    alt="${msg("Available on F-Droid")}"
-                    loading="lazy"
-                    height="40"
-                    width="120"
-                    @error=${(e: Event) => {
-                      const target = e.target as HTMLImageElement
-                      target.src = getImageUrl(this.getFDroidAppIconPath("en"))
-                    }}
-                  />
-                </a>
-                <!-- android_apk_app_link - https://world.openfoodfacts.org/images/apps/off.apk -->
-                <a class="no-text-decoration" href="${this.getAndroidApkAppLink(language)}">
-                  <img
-                    src="${getImageUrl("download-apk_en.svg")}"
-                    alt="${msg("Android APK")}"
-                    loading="lazy"
-                    height="40"
-                    width="120"
-                  />
-                </a>
-                <!-- msgid "https://apps.apple.com/app/open-beauty-facts/id1122926380" -->
-                <a class="no-text-decoration" href="${this.getIosAppLink(language)}">
-                  <img
-                    src="${getImageUrl(this.getIosAppIconPath(language))}"
-                    alt="${msg("Download on the App Store")}"
-                    loading="lazy"
-                    height="40"
-                    width="120"
-                    @error=${(e: Event) => {
-                      const target = e.target as HTMLImageElement
-                      target.src = getImageUrl(this.getIosAppIconPath("en"))
-                    }}
-                  />
-                </a>
+                ${badges.map((badge) =>
+                  this.generateBadgeLink(badge.href, badge.src, badge.alt, badge.id, badge.errorHandler)
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
-    `
+    `;
   }
 }
