@@ -220,13 +220,13 @@ export class MobileBadges extends LitElement {
       margin-right: 1px;
       height: 42px;
     }
-  `;
+  `
 
   /**
    * Link to the F-Droid app page.
    */
   @state()
-  fDroidAppLink = "https://f-droid.org/packages/openfoodfacts.github.scrachx.openfood";
+  fDroidAppLink = "https://f-droid.org/packages/openfoodfacts.github.scrachx.openfood"
 
   /**
    * Generates the URL suffix for Android app links.
@@ -235,7 +235,7 @@ export class MobileBadges extends LitElement {
    * @returns The URL suffix with UTM parameters.
    */
   private getAndroidUrlSuffix(language: string, campaign: string): string {
-    return `?utm_source=off&utf_medium=web&utm_campaign=${campaign}_${language}`;
+    return `?utm_source=off&utf_medium=web&utm_campaign=${campaign}_${language}`
   }
 
   /**
@@ -244,8 +244,8 @@ export class MobileBadges extends LitElement {
    * @returns The Google Play Store link.
    */
   getAndroidAppLink(language: string): string {
-    const baseURI = `https://play.google.com/store/apps/details?id=org.openfoodfacts.scanner&hl=${language}`;
-    return `${baseURI}${this.getAndroidUrlSuffix(language, 'install_the_app_android_footer')}`;
+    const baseURI = `https://play.google.com/store/apps/details?id=org.openfoodfacts.scanner&hl=${language}`
+    return `${baseURI}${this.getAndroidUrlSuffix(language, "install_the_app_android_footer")}`
   }
 
   /**
@@ -254,8 +254,8 @@ export class MobileBadges extends LitElement {
    * @returns The APK download link.
    */
   getAndroidApkAppLink(language: string): string {
-    const baseURI = "https://github.com/openfoodfacts/smooth-app/releases/latest";
-    return `${baseURI}${this.getAndroidUrlSuffix(language, 'install_the_app_apk_footer')}`;
+    const baseURI = "https://github.com/openfoodfacts/smooth-app/releases/latest"
+    return `${baseURI}${this.getAndroidUrlSuffix(language, "install_the_app_apk_footer")}`
   }
 
   /**
@@ -264,7 +264,7 @@ export class MobileBadges extends LitElement {
    * @returns The path to the badge icon.
    */
   getAndroidAppIconPath(language: string): string {
-    return `/playstore/img/${language}_get.svg`;
+    return `/playstore/img/${language}_get.svg`
   }
 
   /**
@@ -273,7 +273,7 @@ export class MobileBadges extends LitElement {
    * @returns The path to the badge icon.
    */
   getFDroidAppIconPath(language: string): string {
-    return `/f-droid/get-it-on-${language}.png`;
+    return `/f-droid/get-it-on-${language}.png`
   }
 
   /**
@@ -284,9 +284,9 @@ export class MobileBadges extends LitElement {
    */
   getIosAppIconPath(language: string): string {
     if (language === "en") {
-      return "/appstore/black/appstore_UK.svg";
+      return "/appstore/black/appstore_UK.svg"
     }
-    return `/appstore/black/appstore_${language.toLocaleUpperCase()}.svg`;
+    return `/appstore/black/appstore_${language.toLocaleUpperCase()}.svg`
   }
 
   /**
@@ -296,8 +296,8 @@ export class MobileBadges extends LitElement {
    */
   getIosAppLink(language: string): string {
     const baseURI =
-      "https://apps.apple.com/app/open-food-facts/id588797948?utm_source=off&utf_medium=web";
-    return `${baseURI}&utm_campaign=install_the_app_ios_footer_${language}`;
+      "https://apps.apple.com/app/open-food-facts/id588797948?utm_source=off&utf_medium=web"
+    return `${baseURI}&utm_campaign=install_the_app_ios_footer_${language}`
   }
 
   /**
@@ -309,7 +309,13 @@ export class MobileBadges extends LitElement {
    * @param errorHandler - The error handler for the image.
    * @returns The HTML template for the badge link.
    */
-  private generateBadgeLink(href: string, src: string, alt: string, id: string, errorHandler?: (e: Event) => void) {
+  private generateBadgeLink(
+    href: string,
+    src: string,
+    alt: string,
+    id: string,
+    errorHandler?: (e: Event) => void
+  ) {
     return html`
       <a class="no-text-decoration" href="${href}">
         <img
@@ -322,11 +328,11 @@ export class MobileBadges extends LitElement {
           @error=${errorHandler}
         />
       </a>
-    `;
+    `
   }
 
   override render() {
-    const language = getLocale();
+    const language = getLocale()
     const badges = [
       {
         href: this.getAndroidAppLink(language),
@@ -334,8 +340,8 @@ export class MobileBadges extends LitElement {
         alt: "Get It On Google Play",
         id: "playstore_badge",
         errorHandler: (e: Event) => {
-          const target = e.target as HTMLImageElement;
-          target.src = getImageUrl(this.getAndroidAppIconPath("en"));
+          const target = e.target as HTMLImageElement
+          target.src = getImageUrl(this.getAndroidAppIconPath("en"))
         },
       },
       {
@@ -344,8 +350,8 @@ export class MobileBadges extends LitElement {
         alt: "Available on F-Droid",
         id: "fdroid_badge",
         errorHandler: (e: Event) => {
-          const target = e.target as HTMLImageElement;
-          target.src = getImageUrl(this.getFDroidAppIconPath("en"));
+          const target = e.target as HTMLImageElement
+          target.src = getImageUrl(this.getFDroidAppIconPath("en"))
         },
       },
       {
@@ -360,11 +366,11 @@ export class MobileBadges extends LitElement {
         alt: "Download on the App Store",
         id: "appstore_badge",
         errorHandler: (e: Event) => {
-          const target = e.target as HTMLImageElement;
-          target.src = getImageUrl(this.getIosAppIconPath("en"));
+          const target = e.target as HTMLImageElement
+          target.src = getImageUrl(this.getIosAppIconPath("en"))
         },
       },
-    ];
+    ]
 
     return html`
       <div class="block_light bg-white" id="install_the_app_block ">
@@ -375,7 +381,7 @@ export class MobileBadges extends LitElement {
             >
               <img
                 class="cell small-50 v-align-center responsive-image"
-                src="${getImageUrl("app-icon-in-the-clouds.svg")}" 
+                src="${getImageUrl("app-icon-in-the-clouds.svg")}"
                 alt="The Open Food Facts logo in the cloud"
                 style="height:120px"
               />
@@ -393,13 +399,19 @@ export class MobileBadges extends LitElement {
             <div class="cell small-100 medium-100 large-50 flex-grid v-align-center direction-row">
               <div class="small-12 medium-12 large-12 v-space-normal badge-container">
                 ${badges.map((badge) =>
-                  this.generateBadgeLink(badge.href, badge.src, badge.alt, badge.id, badge.errorHandler)
+                  this.generateBadgeLink(
+                    badge.href,
+                    badge.src,
+                    badge.alt,
+                    badge.id,
+                    badge.errorHandler
+                  )
                 )}
               </div>
             </div>
           </div>
         </div>
       </div>
-    `;
+    `
   }
 }
