@@ -14,6 +14,7 @@ export enum BarcodeState {
   DETECTED,
   DETECTOR_AVAILABLE,
   DETECTOR_NOT_AVAILABLE,
+  STARTED,
 }
 
 @customElement("barcode-scanner")
@@ -253,6 +254,9 @@ export class BarcodeScanner extends LitElement {
       if (this.video) {
         this.video.srcObject = this.stream
         await this.video.play()
+        this.sendBarcodeStateEvent({
+          state: BarcodeState.STARTED,
+        })
 
         // Set up video frame capture
         this.setupFrameCapture()
