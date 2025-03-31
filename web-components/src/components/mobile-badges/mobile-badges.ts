@@ -4,9 +4,18 @@ import { localized, msg } from "@lit/localize"
 import { getLocale } from "../../localization"
 import { getImageUrl } from "../../signals/app"
 
+/**
+ * Mobile Badges
+ * @element mobile-badges
+ * A web component that displays mobile app badges for downloading the Open Food Facts app.
+ * It includes badges for Google Play, F-Droid, APK, and the Apple App Store.
+ */
 @customElement("mobile-badges")
 @localized()
 export class MobileBadges extends LitElement {
+  /**
+   * Styles for the component.
+   */
   static override styles = css`
     .block_light {
       color: #000000;
@@ -211,45 +220,92 @@ export class MobileBadges extends LitElement {
       margin-right: 1px;
       height: 42px;
     }
-  `
+  `;
 
+  /**
+   * Link to the F-Droid app page.
+   */
   @property({ type: String })
-  fDroidAppLink = "https://f-droid.org/packages/openfoodfacts.github.scrachx.openfood"
+  fDroidAppLink = "https://f-droid.org/packages/openfoodfacts.github.scrachx.openfood";
 
+  /**
+   * Generates the URL suffix for Android app links.
+   * @param language - The language code.
+   * @param campaign - The campaign identifier.
+   * @returns The URL suffix with UTM parameters.
+   */
+  private getAndroidUrlSuffix(language: string, campaign: string): string {
+    return `?utm_source=off&utf_medium=web&utm_campaign=${campaign}_${language}`;
+  }
+
+  /**
+   * Generates the Google Play Store link for the app.
+   * @param language - The language code.
+   * @returns The Google Play Store link.
+   */
   getAndroidAppLink(language: string): string {
-    const baseURI = `https://play.google.com/store/apps/details?id=org.openfoodfacts.scanner&hl=${language}`
-    return `${baseURI}&utm_source=off&utf_medium=web&utm_campaign=install_the_app_android_footer_${language}`
+    const baseURI = `https://play.google.com/store/apps/details?id=org.openfoodfacts.scanner&hl=${language}`;
+    return `${baseURI}${this.getAndroidUrlSuffix(language, 'install_the_app_android_footer')}`;
   }
 
-  getAndroidAppIconPath(language: string): string {
-    return `/playstore/img/${language}_get.svg`
-  }
-
-  getFDroidAppIconPath(language: string): string {
-    return `/f-droid/get-it-on-${language}.png`
-  }
-
+  /**
+   * Generates the APK download link for the app.
+   * @param language - The language code.
+   * @returns The APK download link.
+   */
   getAndroidApkAppLink(language: string): string {
-    const baseURI = "https://github.com/openfoodfacts/smooth-app/releases/latest"
-    return `${baseURI}?utm_source=off&utf_medium=web&utm_campaign=install_the_app_apk_footer_${language}`
+    const baseURI = "https://github.com/openfoodfacts/smooth-app/releases/latest";
+    return `${baseURI}${this.getAndroidUrlSuffix(language, 'install_the_app_apk_footer')}`;
   }
 
+  /**
+   * Generates the path to the Google Play Store badge icon.
+   * @param language - The language code.
+   * @returns The path to the badge icon.
+   */
+  getAndroidAppIconPath(language: string): string {
+    return `/playstore/img/${language}_get.svg`;
+  }
+
+  /**
+   * Generates the path to the F-Droid badge icon.
+   * @param language - The language code.
+   * @returns The path to the badge icon.
+   */
+  getFDroidAppIconPath(language: string): string {
+    return `/f-droid/get-it-on-${language}.png`;
+  }
+
+  /**
+   * Generates the path to the Apple App Store badge icon.
+   * Note: This code does not handle the US locale specifically.
+   * @param language - The language code.
+   * @returns The path to the badge icon.
+   */
   getIosAppIconPath(language: string): string {
-    console.log("language", language)
     if (language === "en") {
-      return "/appstore/black/appstore_UK.svg"
+      return "/appstore/black/appstore_UK.svg";
     }
-    return `/appstore/black/appstore_${language.toLocaleUpperCase()}.svg`
+    return `/appstore/black/appstore_${language.toLocaleUpperCase()}.svg`;
   }
 
+  /**
+   * Generates the Apple App Store link for the app.
+   * @param language - The language code.
+   * @returns The Apple App Store link.
+   */
   getIosAppLink(language: string): string {
     const baseURI =
-      "https://apps.apple.com/app/open-food-facts/id588797948?utm_source=off&utf_medium=web"
-    return `${baseURI}&utm_campaign=install_the_app_ios_footer_${language}`
+      "https://apps.apple.com/app/open-food-facts/id588797948?utm_source=off&utf_medium=web";
+    return `${baseURI}&utm_campaign=install_the_app_ios_footer_${language}`;
   }
 
+  /**
+   * Renders the component.
+   * @returns The HTML template for the component.
+   */
   override render() {
-    const language = getLocale()
+    const language = getLocale();
     return html`
       <div class="block_light bg-white" id="install_the_app_block ">
         <div class="row">
