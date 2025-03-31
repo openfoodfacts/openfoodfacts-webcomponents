@@ -29,7 +29,7 @@
     "lit-analyzer": "lit-analyzer",
     "lint:eslint": "eslint --config eslint.config.js",
     "lint:eslint:fix": "eslint --config eslint.config.js --fix",
-    "translations:update-language-codes": "NODE_PATH=. node scripts/update-language-codes.js",
+    "translations:update-language-codes": "set NODE_PATH=. && node scripts/update-language-codes.js",
     "translations:build": "lit-localize build && rollup -c language.rollup.config.js",
     "translations:extract": "npm run translations:update-language-codes && lit-localize extract",
     "format": "prettier \"**/*.{cjs,html,js,json,md,ts}\" --ignore-path ./.eslintignore --write",

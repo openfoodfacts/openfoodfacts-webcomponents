@@ -13,6 +13,200 @@ import { FlagCreate, IssueType, SourceType, Flavor } from "../../types/nutripatr
 @customElement("report-product")
 @localized()
 export class ReportProduct extends LitElement {
+  static override styles = css`
+    :host {
+      display: inline-block;
+    }
+
+    .report-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-family: "Public Sans", Helvetica, Roboto, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition:
+        background-color 0.2s,
+        border-color 0.2s;
+      border: 1px solid;
+    }
+
+    .report-button.primary {
+      background-color: #ff6e78;
+      color: white;
+      border-color: #ff6e78;
+    }
+
+    .report-button.primary:hover {
+      background-color: rgba(255, 110, 120, 0.8);
+    }
+
+    .report-button.secondary {
+      background-color: #008c8c;
+      color: white;
+      border-color: #008c8c;
+    }
+
+    .report-button.secondary:hover {
+      background-color: rgba(0, 140, 140, 0.8);
+    }
+
+    .report-button.outline {
+      background-color: transparent;
+      color: #008c8c;
+      border-color: #008c8c;
+    }
+
+    .report-button.outline:hover {
+      background-color: rgba(0, 140, 140, 0.1);
+    }
+
+    .report-button svg {
+      margin-right: 6px;
+    }
+
+    .dialog-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .dialog {
+      background-color: white;
+      border-radius: 8px;
+      padding: 24px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .dialog-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .dialog-title {
+      font-family: "Public Sans", Helvetica, Roboto, Arial, sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0;
+      color: #008c8c;
+    }
+
+    .close-button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      color: #666;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-family: "Public Sans", Helvetica, Roboto, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    select,
+    textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 14px;
+    }
+
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #008c8c;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .dialog-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .dialog-button {
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-family: "Public Sans", Helvetica, Roboto, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      border: none;
+    }
+
+    .cancel-button {
+      background-color: #f2f2f2;
+      color: #333;
+    }
+
+    .cancel-button:hover {
+      background-color: #e5e5e5;
+    }
+
+    .submit-button {
+      background-color: #008c8c;
+      color: white;
+    }
+
+    .submit-button:hover {
+      background-color: rgba(0, 140, 140, 0.8);
+    }
+
+    .submit-button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+
+    .error-message {
+      color: #d32f2f;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    .success-message {
+      color: #2e7d32;
+      font-size: 14px;
+      text-align: center;
+      padding: 16px;
+    }
+
+    .flag-icon {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      margin-right: 4px;
+    }
+  `
   /**
    * Barcode of the product
    * @type {string|null}
@@ -242,201 +436,6 @@ export class ReportProduct extends LitElement {
       this.isSubmitting = false
     }
   }
-
-  static override styles = css`
-    :host {
-      display: inline-block;
-    }
-
-    .report-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 8px 16px;
-      border-radius: 4px;
-      font-family: "Public Sans", Helvetica, Roboto, Arial, sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition:
-        background-color 0.2s,
-        border-color 0.2s;
-      border: 1px solid;
-    }
-
-    .report-button.primary {
-      background-color: #ff6e78;
-      color: white;
-      border-color: #ff6e78;
-    }
-
-    .report-button.primary:hover {
-      background-color: rgba(255, 110, 120, 0.8);
-    }
-
-    .report-button.secondary {
-      background-color: #008c8c;
-      color: white;
-      border-color: #008c8c;
-    }
-
-    .report-button.secondary:hover {
-      background-color: rgba(0, 140, 140, 0.8);
-    }
-
-    .report-button.outline {
-      background-color: transparent;
-      color: #008c8c;
-      border-color: #008c8c;
-    }
-
-    .report-button.outline:hover {
-      background-color: rgba(0, 140, 140, 0.1);
-    }
-
-    .report-button svg {
-      margin-right: 6px;
-    }
-
-    .dialog-backdrop {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-
-    .dialog {
-      background-color: white;
-      border-radius: 8px;
-      padding: 24px;
-      width: 100%;
-      max-width: 480px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .dialog-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .dialog-title {
-      font-family: "Public Sans", Helvetica, Roboto, Arial, sans-serif;
-      font-size: 20px;
-      font-weight: 600;
-      margin: 0;
-      color: #008c8c;
-    }
-
-    .close-button {
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      padding: 4px;
-      color: #666;
-    }
-
-    .form-group {
-      margin-bottom: 16px;
-    }
-
-    .form-label {
-      display: block;
-      font-family: "Public Sans", Helvetica, Roboto, Arial, sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      margin-bottom: 6px;
-    }
-
-    select,
-    textarea {
-      width: 100%;
-      padding: 8px 12px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-family: inherit;
-      font-size: 14px;
-    }
-
-    select:focus,
-    textarea:focus {
-      outline: none;
-      border-color: #008c8c;
-    }
-
-    textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-
-    .dialog-footer {
-      display: flex;
-      justify-content: flex-end;
-      gap: 12px;
-      margin-top: 24px;
-    }
-
-    .dialog-button {
-      padding: 8px 16px;
-      border-radius: 4px;
-      font-family: "Public Sans", Helvetica, Roboto, Arial, sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background-color 0.2s;
-      border: none;
-    }
-
-    .cancel-button {
-      background-color: #f2f2f2;
-      color: #333;
-    }
-
-    .cancel-button:hover {
-      background-color: #e5e5e5;
-    }
-
-    .submit-button {
-      background-color: #008c8c;
-      color: white;
-    }
-
-    .submit-button:hover {
-      background-color: rgba(0, 140, 140, 0.8);
-    }
-
-    .submit-button:disabled {
-      background-color: #cccccc;
-      cursor: not-allowed;
-    }
-
-    .error-message {
-      color: #d32f2f;
-      font-size: 14px;
-      margin-top: 8px;
-    }
-
-    .success-message {
-      color: #2e7d32;
-      font-size: 14px;
-      text-align: center;
-      padding: 16px;
-    }
-
-    .flag-icon {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      margin-right: 4px;
-    }
-  `
 
   /**
    * Render method
