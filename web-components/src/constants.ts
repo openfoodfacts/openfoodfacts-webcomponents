@@ -9,6 +9,7 @@ export enum EventType {
   SUBMIT = "submit",
   QUESTION_STATE = "question-state",
   NUTRIENT_STATE = "nutrient-state",
+  BARCODE_STATE = "barcode-state",
 }
 
 export enum LoadingState {

@@ -27,6 +27,11 @@ export const getDefaultButtonClasses = (): CSSResult => {
       outline: 1px solid black;
       outline-offset: 4px;
     }
+
+    .button.small {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+    }
   `
 }
 

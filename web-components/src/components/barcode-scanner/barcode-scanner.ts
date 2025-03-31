@@ -4,12 +4,23 @@ import { customElement, property, query, state } from "lit/decorators.js"
 import { BASE } from "../../styles/base"
 import "../icons/barcode"
 import "../icons/search"
+import "../icons/close"
+import { ButtonType, getButtonClasses } from "../../styles/buttons"
+import { EventType } from "../../constants"
+
+export enum BarcodeState {
+  EXITED,
+  DETECTED,
+  DETECTOR_AVAILABLE,
+  DETECTOR_NOT_AVAILABLE,
+}
 
 @customElement("barcode-scanner")
 @localized()
 export class BarcodeScanner extends LitElement {
   static override styles = [
     BASE,
+    getButtonClasses([ButtonType.White]),
     css`
       .barcode-scanner {
         position: relative;
@@ -33,17 +44,16 @@ export class BarcodeScanner extends LitElement {
         z-index: 1;
       }
       .centered-overlay {
+        position: relative;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         max-width: 100%;
-        padding-right: 10%;
-        padding-left: 10%;
         width: 100%;
-        box-sizing: border-box;
         height: 100%;
       }
+
       .video-frame {
         border: 3px solid #fff;
         border-radius: 8px;
@@ -52,7 +62,20 @@ export class BarcodeScanner extends LitElement {
       .cta-overlay-wrapper {
         width: 100%;
         height: 100%;
+        padding: 10%;
         cursor: pointer;
+        box-sizing: border-box;
+      }
+
+      .cta-exit-button {
+        position: absolute;
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+
+        top: 3px;
+        left: 3px;
+        z-index: 2;
       }
 
       .cta-overlay-text {
@@ -75,9 +98,51 @@ export class BarcodeScanner extends LitElement {
         margin-top: 1rem;
         cursor: pointer;
         margin-bottom: 1rem;
+        background-color: transparent;
       }
       .cta-overlay-button.start-scanning {
         background-color: #4c4c4d;
+      }
+
+      .cta-overlay {
+        position: relative;
+      }
+
+      .cta-overlay-frame {
+        width: 15%;
+        height: 15%;
+        position: absolute;
+      }
+
+      .cta-overlay-frame.left-top-border {
+        top: 40px;
+        left: 0px;
+        border-left: 2px solid white;
+        border-top: 2px solid white;
+        border-radius: 8px 0 0 0;
+      }
+
+      .cta-overlay-frame.left-bottom-border {
+        left: 0px;
+        bottom: 40px;
+        border-left: 2px solid white;
+        border-bottom: 2px solid white;
+        border-radius: 0 0 0 8px;
+      }
+      .cta-overlay-frame.right-bottom-border {
+        right: 0px;
+        bottom: 40px;
+        border-right: 2px solid white;
+        border-bottom: 2px solid white;
+        border-radius: 0 0 8px 0;
+      }
+
+      .cta-overlay-frame.right-top-border {
+        right: 0px;
+        top: 40px;
+        border-right: 2px solid white;
+        border-top: 2px solid white;
+        border-radius: 0 8px 0 0;
       }
     `,
   ]
@@ -116,7 +181,9 @@ export class BarcodeScanner extends LitElement {
     try {
       this.codeReader = new BarcodeDetector()
       this.detectFn = this.detectWithBarcodeDetector
+      this.sendBarcodeStateEvent({ state: BarcodeState.DETECTOR_AVAILABLE })
     } catch (error) {
+      this.sendBarcodeStateEvent({ state: BarcodeState.DETECTOR_NOT_AVAILABLE })
       console.warn("BarcodeDetector not available:", error)
     }
   }
@@ -176,8 +243,22 @@ export class BarcodeScanner extends LitElement {
   private stopVideo() {
     if (this.stream) {
       this.stream.getTracks().forEach((track) => track.stop())
+      // clean video
+      this.video.srcObject = null
       this.stream = null
     }
+  }
+
+  private sendBarcodeStateEvent(detail: { barcode?: string; state: BarcodeState }) {
+    this.dispatchEvent(new CustomEvent(EventType.BARCODE_STATE, { detail }))
+  }
+
+  private exit(event: Event) {
+    event.stopPropagation()
+    this.stopVideo()
+    this.sendBarcodeStateEvent({
+      state: BarcodeState.EXITED,
+    })
   }
 
   private setupFrameCapture() {
@@ -200,7 +281,7 @@ export class BarcodeScanner extends LitElement {
           const result = await this.detectFn!(imageBitmap)
           if (result) {
             this.barcode = result
-            alert("Barcode detected: " + this.barcode)
+            this.sendBarcodeStateEvent({ barcode: this.barcode, state: BarcodeState.DETECTED })
 
             this.stopVideo()
             return
@@ -236,7 +317,16 @@ export class BarcodeScanner extends LitElement {
     if (this.isVideoPlaying) {
       return html`
         <div class="cta-overlay-wrapper" @click=${this.askPermission}>
+          <div class="cta-exit-button">
+            <button class="button white-button small" @click=${this.exit}>
+              <close-icon></close-icon><span>${msg("Close")}</span>
+            </button>
+          </div>
           <div class="centered-overlay">
+            <div class="cta-overlay-frame right-top-border"></div>
+            <div class="cta-overlay-frame left-top-border"></div>
+            <div class="cta-overlay-frame right-bottom-border"></div>
+            <div class="cta-overlay-frame left-bottom-border"></div>
             <div class="cta-overlay">
               <div class="cta-overlay-icon">
                 <button class="cta-overlay-button">

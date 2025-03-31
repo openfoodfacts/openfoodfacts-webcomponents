@@ -3,7 +3,12 @@ import { customElement } from "lit/decorators.js"
 
 @customElement("search-icon")
 class SearchIcon extends LitElement {
-  static override styles = css``
+  static override styles = css`
+    svg,
+    svg path {
+      fill: #ffffff;
+    }
+  `
   override render() {
     return html`
       <svg
