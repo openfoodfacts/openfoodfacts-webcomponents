@@ -9,7 +9,7 @@ import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { EventType } from "../../constants"
 import { StyleInfo, styleMap } from "lit-html/directives/style-map.js"
 
-export enum BarcodeState {
+export enum BarcodeScannerState {
   EXITED,
   DETECTED,
   DETECTOR_AVAILABLE,
@@ -210,9 +210,9 @@ export class BarcodeScanner extends LitElement {
       // @ts-ignore
       this.codeReader = new BarcodeDetector()
       this.detectFn = this.detectWithBarcodeDetector
-      this.sendBarcodeStateEvent({ state: BarcodeState.DETECTOR_AVAILABLE })
+      this.sendBarcodeStateEvent({ state: BarcodeScannerState.DETECTOR_AVAILABLE })
     } catch (error) {
-      this.sendBarcodeStateEvent({ state: BarcodeState.DETECTOR_NOT_AVAILABLE })
+      this.sendBarcodeStateEvent({ state: BarcodeScannerState.DETECTOR_NOT_AVAILABLE })
       console.warn("BarcodeDetector not available:", error)
     }
   }
@@ -261,7 +261,7 @@ export class BarcodeScanner extends LitElement {
         this.video.srcObject = this.stream
         await this.video.play()
         this.sendBarcodeStateEvent({
-          state: BarcodeState.STARTED,
+          state: BarcodeScannerState.STARTED,
         })
 
         // Set up video frame capture
@@ -281,15 +281,15 @@ export class BarcodeScanner extends LitElement {
     }
   }
 
-  private sendBarcodeStateEvent(detail: { barcode?: string; state: BarcodeState }) {
-    this.dispatchEvent(new CustomEvent(EventType.BARCODE_STATE, { detail }))
+  private sendBarcodeStateEvent(detail: { barcode?: string; state: BarcodeScannerState }) {
+    this.dispatchEvent(new CustomEvent(EventType.BARCODE_SCANNER_STATE, { detail }))
   }
 
   private exit(event: Event) {
     event.stopPropagation()
     this.stopVideo()
     this.sendBarcodeStateEvent({
-      state: BarcodeState.EXITED,
+      state: BarcodeScannerState.EXITED,
     })
   }
 
@@ -313,7 +313,10 @@ export class BarcodeScanner extends LitElement {
           const result = await this.detectFn!(imageBitmap)
           if (result) {
             this.barcode = result
-            this.sendBarcodeStateEvent({ barcode: this.barcode, state: BarcodeState.DETECTED })
+            this.sendBarcodeStateEvent({
+              barcode: this.barcode,
+              state: BarcodeScannerState.DETECTED,
+            })
 
             this.stopVideo()
             return
