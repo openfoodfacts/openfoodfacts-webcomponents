@@ -1,5 +1,5 @@
 import { LitElement, html, css } from "lit"
-import { customElement, state } from "lit/decorators.js"
+import { customElement, state, property } from "lit/decorators.js"
 import { localized, msg } from "@lit/localize"
 import { getLocale } from "../../localization"
 import { getImageUrl } from "../../signals/app"
@@ -13,6 +13,34 @@ import { getImageUrl } from "../../signals/app"
 @customElement("mobile-badges")
 @localized()
 export class MobileBadges extends LitElement {
+  /**
+   * Controls visibility of Google Play Store badge
+   * @type {boolean}
+   */
+  @property({ type: Boolean, attribute: "hide-playstore"  })
+  hidePlayStore = false;
+
+  /**
+   * Controls visibility of F-Droid badge
+   * @type {boolean}
+   */
+  @property({ type: Boolean, attribute: "hide-fdroid" })
+  hideFDroid = false;
+
+  /**
+   * Controls visibility of APK download badge
+   * @type {boolean}
+   */
+  @property({ type: Boolean, attribute: "hide-apk" })
+  hideApk = false;
+
+  /**
+   * Controls visibility of App Store badge
+   * @type {boolean}
+   */
+  @property({ type: Boolean, attribute: "hide-appstore" })
+  hideAppStore = false;
+
   /**
    * Styles for the component.
    */
@@ -218,6 +246,31 @@ export class MobileBadges extends LitElement {
     #playstore_badge {
       height: 45px;
     }
+    @media (max-width: 768px) {
+      #variable_image {
+        display: block;
+        height: auto;
+        max-width: 100%;
+        margin: 1rem auto;
+      }
+    }
+
+    @media (min-width: 769px) {
+      #variable_image {
+        display: none;
+      }
+    }
+    @media (max-width: 768px) {
+      a {
+        display: flex;
+        justify-content: center;
+      }
+    }
+    @media (max-width: 768px) {
+      .responsive-image {
+        display: none;
+      }
+    }
   `
 
   /**
@@ -330,6 +383,12 @@ export class MobileBadges extends LitElement {
   }
 
   override render() {
+    // console log all properties values
+    console.log("hidePlayStore", this.hidePlayStore)
+    console.log("hideFDroid", this.hideFDroid)
+    console.log("hideApk", this.hideApk)
+    console.log("hideAppStore", this.hideAppStore)
+
     const language = getLocale()
     const badges = [
       {
@@ -337,6 +396,7 @@ export class MobileBadges extends LitElement {
         src: this.getAndroidAppIconPath(language),
         alt: "Get It On Google Play",
         id: "playstore_badge",
+        hide: this.hidePlayStore,
         errorHandler: (e: Event) => {
           const target = e.target as HTMLImageElement
           target.src = this.getAndroidAppIconPath("en")
@@ -347,6 +407,7 @@ export class MobileBadges extends LitElement {
         src: this.getFDroidAppIconPath(language),
         alt: "Available on F-Droid",
         id: "fdroid_badge",
+        hide: this.hideFDroid,
         errorHandler: (e: Event) => {
           const target = e.target as HTMLImageElement
           target.src = this.getFDroidAppIconPath("en")
@@ -357,12 +418,14 @@ export class MobileBadges extends LitElement {
         src: getImageUrl("download-apk_en.svg"),
         alt: "Android APK",
         id: "apk_badge",
+        hide: this.hideApk,
       },
       {
         href: this.getIosAppLink(language),
         src: getImageUrl(this.getIosAppIconPath(language)),
         alt: "Download on the App Store",
         id: "appstore_badge",
+        hide: this.hideAppStore,
         errorHandler: (e: Event) => {
           const target = e.target as HTMLImageElement
           target.src = getImageUrl(this.getIosAppIconPath("en"))
@@ -394,17 +457,27 @@ export class MobileBadges extends LitElement {
                 )}
               </div>
             </div>
-            <div class="cell small-100 medium-100 large-50 flex-grid v-align-center direction-row">
-              <div class="small-12 medium-12 large-12 v-space-normal badge-container">
-                ${badges.map((badge) =>
-                  this.generateBadgeLink(
-                    badge.href,
-                    badge.src,
-                    badge.alt,
-                    badge.id,
-                    badge.errorHandler
-                  )
-                )}
+             <div class="cell small-100 medium-100 large-50 ">
+              <div>
+                <img
+                class=""
+                  src="${getImageUrl("app-icon-in-the-clouds.svg")}"
+                  alt="Everyday foods"
+                  id="variable_image"
+                />
+              </div>
+              <div class="small-12 medium-12 large-12 v-space-normal badge-container flex-grid v-align-center direction-row">
+                ${badges
+                  .filter(badge => badge.hide == false)
+                  .map((badge) =>
+                    this.generateBadgeLink(
+                      badge.href,
+                      badge.src,
+                      badge.alt,
+                      badge.id,
+                      badge.errorHandler
+                    )
+                  )}
               </div>
             </div>
           </div>
