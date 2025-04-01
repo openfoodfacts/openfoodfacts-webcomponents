@@ -3,10 +3,10 @@ import { customElement, property, state } from "lit/decorators.js"
 import { Question, QuestionAnnotationAnswer } from "../../types/robotoff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { EventType } from "../../constants"
-import { classMap } from "lit/directives/class-map.js"
 import { answerQuestion } from "../../signals/questions"
 import "../buttons/zoom-unzoom-button"
 import { SignalWatcher } from "@lit-labs/signals"
+import { msg } from "@lit/localize"
 /**
  * RobotoffQuestionForm component
  * It displays a form to answer a question about a product.
@@ -16,7 +16,12 @@ import { SignalWatcher } from "@lit-labs/signals"
 @customElement("robotoff-question-form")
 export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
   static override styles = [
-    ...getButtonClasses([ButtonType.Cappucino, ButtonType.White, ButtonType.LINK]),
+    ...getButtonClasses([
+      ButtonType.Cappucino,
+      ButtonType.Success,
+      ButtonType.Danger,
+      ButtonType.LINK,
+    ]),
     css`
       :host {
         display: block;
@@ -26,21 +31,6 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
         display: flex;
         align-items: center;
         flex-direction: column;
-      }
-      .question-img-wrapper {
-        margin-top: 1rem;
-        position: relative;
-        justify-content: center;
-        width: 100px;
-      }
-
-      .question-img-wrapper.enlarged {
-        width: 100%;
-        max-width: 400px;
-      }
-
-      .question-img-wrapper img {
-        width: 100%;
       }
 
       .img-button-wrapper {
@@ -66,10 +56,10 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
   showImage?: boolean = true
 
   /**
-   * The image size is zoomed or not.
+   * State to manage the display of the image.
    */
   @state()
-  private _zoomed = false
+  displayImage = true
 
   /**
    * Emit an event submit when the user clicks on a button.
@@ -90,8 +80,8 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
     this.emitEventClick(event, value)
   }
 
-  private _toggleImageSize() {
-    this._zoomed = !this._zoomed
+  private _toggleImage = () => {
+    this.displayImage = !this.displayImage
   }
 
   private _renderImage() {
@@ -99,25 +89,25 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
       return nothing
     }
 
-    return html`<div>
-      <div
-        class=${classMap({
-          "question-img-wrapper": true,
-          enlarged: this._zoomed,
-        })}
-      >
+    return html`
+      <div>
+        ${this.displayImage
+          ? html`
+              <div>
+                <zoomable-image
+                  src=${this.question?.source_image_url}
+                  .size="${{ height: "350px", width: "100%", "max-width": "300px" }}"
+                ></zoomable-image>
+              </div>
+            `
+          : nothing}
         <div>
-          <img .src=${this.question?.source_image_url} alt="Product image" />
-        </div>
-
-        <div class="img-button-wrapper">
-          <zoom-unzoom-button
-            .zoomed=${this._zoomed}
-            @click=${this._toggleImageSize}
-          ></zoom-unzoom-button>
+          <button class="link-button small" @click="${this._toggleImage}">
+            ${this.displayImage ? msg("Hide") : msg("Show")} image
+          </button>
         </div>
       </div>
-    </div> `
+    `
   }
 
   override render() {
@@ -132,19 +122,19 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
         <div>
           <p></p>
           <button
-            class="button cappucino-button"
+            class="button success-button"
             @click="${(event: Event) => this._annotateProduct(event, "1")}"
           >
             Yes
           </button>
           <button
-            class="button cappucino-button"
+            class="button danger-button"
             @click="${(event: Event) => this._annotateProduct(event, "0")}"
           >
             No
           </button>
           <button
-            class="button white-button"
+            class="button cappucino-button"
             @click="${(event: Event) => this._annotateProduct(event, "-1")}"
           >
             Skip
