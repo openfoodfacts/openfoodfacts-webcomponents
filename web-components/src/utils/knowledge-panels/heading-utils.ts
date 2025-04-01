@@ -8,10 +8,10 @@ import DOMPurify from "dompurify"
  * @param headingLevel - The heading level to validate
  * @returns Validated heading level string
  */
-export function getValidHeadingLevel(headingLevel: string): string {
+export function getValidHeadingLevel(headingLevel: string, defaultLevel: string = "h3"): string {
   const validLevels = ["h1", "h2", "h3", "h4", "h5", "h6"]
   const level = headingLevel.toLowerCase()
-  return validLevels.includes(level) ? level : "h3" // Default to h3 if invalid
+  return validLevels.includes(level) ? level : defaultLevel // Default to h3 if invalid
 }
 
 /**
