@@ -216,9 +216,7 @@ export class MobileBadges extends LitElement {
       margin-top: -4px;
     }
     #playstore_badge {
-      transform: scale(1.3);
-      margin-right: 1px;
-      height: 42px;
+      height: 45px;
     }
   `
 
@@ -264,7 +262,7 @@ export class MobileBadges extends LitElement {
    * @returns The path to the badge icon.
    */
   getAndroidAppIconPath(language: string): string {
-    return `/playstore/img/${language}_get.svg`
+    return `https://play.google.com/intl/en_us/badges/static/images/badges/${language}_badge_web_generic.png`
   }
 
   /**
@@ -273,7 +271,7 @@ export class MobileBadges extends LitElement {
    * @returns The path to the badge icon.
    */
   getFDroidAppIconPath(language: string): string {
-    return `/f-droid/get-it-on-${language}.png`
+    return `https://fdroid.gitlab.io/artwork/badge/get-it-on-${language}.png`
   }
 
   /**
@@ -320,7 +318,7 @@ export class MobileBadges extends LitElement {
       <a class="no-text-decoration" href="${href}">
         <img
           id="${id}"
-          src="${getImageUrl(src)}"
+          src="${src}"
           alt="${msg(alt)}"
           loading="lazy"
           height="40"
@@ -341,7 +339,7 @@ export class MobileBadges extends LitElement {
         id: "playstore_badge",
         errorHandler: (e: Event) => {
           const target = e.target as HTMLImageElement
-          target.src = getImageUrl(this.getAndroidAppIconPath("en"))
+          target.src = this.getAndroidAppIconPath("en")
         },
       },
       {
@@ -351,18 +349,18 @@ export class MobileBadges extends LitElement {
         id: "fdroid_badge",
         errorHandler: (e: Event) => {
           const target = e.target as HTMLImageElement
-          target.src = getImageUrl(this.getFDroidAppIconPath("en"))
+          target.src = this.getFDroidAppIconPath("en")
         },
       },
       {
         href: this.getAndroidApkAppLink(language),
-        src: "download-apk_en.svg",
+        src: getImageUrl("download-apk_en.svg"),
         alt: "Android APK",
         id: "apk_badge",
       },
       {
         href: this.getIosAppLink(language),
-        src: this.getIosAppIconPath(language),
+        src: getImageUrl(this.getIosAppIconPath(language)),
         alt: "Download on the App Store",
         id: "appstore_badge",
         errorHandler: (e: Event) => {
