@@ -4,7 +4,6 @@ import { BASE } from "../../styles/base"
 import { msg, str } from "@lit/localize"
 import { getValidHeadingLevel } from "../../utils/knowledge-panels/heading-utils"
 import { getTranslationsByQuantity } from "../../utils/internalization"
-import { getLocale } from "../../localization"
 
 @customElement("robotoff-ingredients")
 export class RobotoffIngredients extends LitElement {
@@ -90,8 +89,8 @@ export class RobotoffIngredients extends LitElement {
           <div>
             <p>
               ${getTranslationsByQuantity(quantity, {
-                singular: msg(`${quantity} suggestion`),
-                plural: msg(`${quantity} suggestions`),
+                singular: msg(str`${quantity} suggestion`),
+                plural: msg(str`${quantity} suggestions`),
               })}
             </p>
             <div>
