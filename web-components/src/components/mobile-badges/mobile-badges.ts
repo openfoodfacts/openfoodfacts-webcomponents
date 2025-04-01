@@ -17,29 +17,29 @@ export class MobileBadges extends LitElement {
    * Controls visibility of Google Play Store badge
    * @type {boolean}
    */
-  @property({ type: Boolean, attribute: "hide-playstore"  })
-  hidePlayStore = false;
+  @property({ type: Boolean, attribute: "hide-playstore" })
+  hidePlayStore = false
 
   /**
    * Controls visibility of F-Droid badge
    * @type {boolean}
    */
   @property({ type: Boolean, attribute: "hide-fdroid" })
-  hideFDroid = false;
+  hideFDroid = false
 
   /**
    * Controls visibility of APK download badge
    * @type {boolean}
    */
   @property({ type: Boolean, attribute: "hide-apk" })
-  hideApk = false;
+  hideApk = false
 
   /**
    * Controls visibility of App Store badge
    * @type {boolean}
    */
   @property({ type: Boolean, attribute: "hide-appstore" })
-  hideAppStore = false;
+  hideAppStore = false
 
   /**
    * Styles for the component.
@@ -267,7 +267,7 @@ export class MobileBadges extends LitElement {
       }
     }
     @media (max-width: 768px) {
-      .responsive-image {
+      .responsive-image-hide {
         display: none;
       }
     }
@@ -383,12 +383,6 @@ export class MobileBadges extends LitElement {
   }
 
   override render() {
-    // console log all properties values
-    console.log("hidePlayStore", this.hidePlayStore)
-    console.log("hideFDroid", this.hideFDroid)
-    console.log("hideApk", this.hideApk)
-    console.log("hideAppStore", this.hideAppStore)
-
     const language = getLocale()
     const badges = [
       {
@@ -433,6 +427,8 @@ export class MobileBadges extends LitElement {
       },
     ]
 
+    const filteredBadges = badges.filter((badge) => badge.hide == false)
+
     return html`
       <div class="block_light bg-white" id="install_the_app_block ">
         <div class="row">
@@ -441,7 +437,9 @@ export class MobileBadges extends LitElement {
               class="cell small-100 medium-100 large-50 flex-grid v-align-center direction-row responsive-container"
             >
               <img
-                class="cell small-50 v-align-center responsive-image"
+                class="cell small-50 v-align-center responsive-image ${filteredBadges.length > 0
+                  ? "responsive-image-hide"
+                  : ""}"
                 src="${getImageUrl("app-icon-in-the-clouds.svg")}"
                 alt="The Open Food Facts logo in the cloud"
                 style="height:120px"
@@ -457,29 +455,30 @@ export class MobileBadges extends LitElement {
                 )}
               </div>
             </div>
-             <div class="cell small-100 medium-100 large-50 ">
-              <div>
-                <img
-                class=""
-                  src="${getImageUrl("app-icon-in-the-clouds.svg")}"
-                  alt="Everyday foods"
-                  id="variable_image"
-                />
-              </div>
-              <div class="small-12 medium-12 large-12 v-space-normal badge-container flex-grid v-align-center direction-row">
-                ${badges
-                  .filter(badge => badge.hide == false)
-                  .map((badge) =>
-                    this.generateBadgeLink(
-                      badge.href,
-                      badge.src,
-                      badge.alt,
-                      badge.id,
-                      badge.errorHandler
-                    )
-                  )}
-              </div>
-            </div>
+            ${filteredBadges.length > 0
+              ? html` <div class="cell small-100 medium-100 large-50 ">
+                  <div>
+                    <img
+                      src="${getImageUrl("app-icon-in-the-clouds.svg")}"
+                      alt="Everyday foods"
+                      id="variable_image"
+                    />
+                  </div>
+                  <div
+                    class="small-12 medium-12 large-12 v-space-normal badge-container flex-grid v-align-center direction-row"
+                  >
+                    ${filteredBadges.map((badge) =>
+                      this.generateBadgeLink(
+                        badge.href,
+                        badge.src,
+                        badge.alt,
+                        badge.id,
+                        badge.errorHandler
+                      )
+                    )}
+                  </div>
+                </div>`
+              : ""}
           </div>
         </div>
       </div>
