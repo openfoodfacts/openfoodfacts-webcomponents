@@ -102,6 +102,81 @@
 <trans-unit id="s688d3d95ca7c01db">
   <source>Specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
 </trans-unit>
+<trans-unit id="sb0e6c705f608b55c">
+  <source>Inappropriate content</source>
+</trans-unit>
+<trans-unit id="sc5f1c7f21eaecc49">
+  <source>Contains identifiable person</source>
+</trans-unit>
+<trans-unit id="s15057b147cce6798">
+  <source>Beauty product (not food)</source>
+</trans-unit>
+<trans-unit id="sb60bbe250aad3fa8">
+  <source>Spam</source>
+</trans-unit>
+<trans-unit id="s511bac936c4b21de">
+  <source>Shows face</source>
+</trans-unit>
+<trans-unit id="s63760ee27ba2149e">
+  <source>Other issue</source>
+</trans-unit>
+<trans-unit id="s21c09fb1988c4ba5">
+  <source>Product should be deleted</source>
+</trans-unit>
+<trans-unit id="s0f938ebe98092c53">
+  <source>URL is required</source>
+</trans-unit>
+<trans-unit id="sff43d816f5f13253">
+  <source>Image ID is required for image reports</source>
+</trans-unit>
+<trans-unit id="s6b28b03509d1dace">
+  <source>User ID is required</source>
+</trans-unit>
+<trans-unit id="s3f9c368cd44f682b">
+  <source>An error occurred</source>
+</trans-unit>
+<trans-unit id="s2ffb565b9c2f4ece">
+  <source>Report this product</source>
+</trans-unit>
+<trans-unit id="s9b6b1422027158eb">
+  <source>Report</source>
+</trans-unit>
+<trans-unit id="s05af0a3d17efe867">
+  <source>Thank you for your report. It has been submitted successfully.</source>
+</trans-unit>
+<trans-unit id="s6f6bcfbc4d7fb0e0">
+  <source>Report Product</source>
+</trans-unit>
+<trans-unit id="s71e7c38131e9f386">
+  <source>Report Image</source>
+</trans-unit>
+<trans-unit id="se0711d586dedc286">
+  <source>Report Search Issue</source>
+</trans-unit>
+<trans-unit id="s5e8250fb85d64c23">
+  <source>Close</source>
+</trans-unit>
+<trans-unit id="s01085e29662cbde8">
+  <source>Reason for reporting</source>
+</trans-unit>
+<trans-unit id="sc272d34748f32dc2">
+  <source>Select a reason</source>
+</trans-unit>
+<trans-unit id="s14fb4517efe730d6">
+  <source>Additional comments</source>
+</trans-unit>
+<trans-unit id="sdf9d0d1037698e84">
+  <source>Please describe the issue in detail</source>
+</trans-unit>
+<trans-unit id="s2ceb11be2290bb1b">
+  <source>Cancel</source>
+</trans-unit>
+<trans-unit id="se7c56a68f0ecf6e9">
+  <source>Submitting...</source>
+</trans-unit>
+<trans-unit id="s0f37b1461ec66221">
+  <source>Submit Report</source>
+</trans-unit>
 </body>
 </file>
 </xliff>
