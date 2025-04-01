@@ -19,6 +19,9 @@ import { localized, msg } from "@lit/localize"
 export class ZoomableImage extends LitElement {
   static override styles = [
     css`
+      :host {
+        display: block;
+      }
       .panzoom-parent {
         position: relative;
         position: relative;
@@ -117,8 +120,8 @@ export class ZoomableImage extends LitElement {
             <rotate-right-icon></rotate-right-icon>
           </button>
         </div>
-        <div class="panzoom-parent">
-          <div class="panzoom" style=${styleMap(this.size)}>
+        <div class="panzoom-parent" style=${styleMap(this.size)}>
+          <div class="panzoom">
             <img src=${this.src} @load=${this.initPanzoom} style=${styleMap(imageStyle)} />
           </div>
         </div>
