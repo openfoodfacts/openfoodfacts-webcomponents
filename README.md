@@ -114,3 +114,4 @@ You can find the documentation [here](https://openfoodfacts.github.io/openfoodfa
 To work on documentation let see [this](web-components/docs/README.md)
 
 ## Translations
+https://translate.openfoodfacts.org/
