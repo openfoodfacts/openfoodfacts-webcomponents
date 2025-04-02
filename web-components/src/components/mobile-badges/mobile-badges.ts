@@ -378,6 +378,7 @@ export class MobileBadges extends LitElement {
         />
         <div id="footer_scan" style="display:block">
           <div id="footer_install_the_app">${msg("Install the app!")}</div>
+          <!-- TODO find fix to add text between span for translations ex for fr : "Scannez vos <span class="foods">aliments</span> de votre <span class="everyday">quotidien</span>" -->
           ${msg(
             html`Scan your <span class="everyday">everyday</span> <span class="foods">foods</span>`
           )}
