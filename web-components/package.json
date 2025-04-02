@@ -88,7 +88,7 @@
     "glob": "^11.0.1",
     "lit-analyzer": "^2.0.3",
     "prettier": "^3.5.3",
-    "rimraf": "^3.0.2",
+    "rimraf": "^6.0.1",
     "rollup": "^4.34.8",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-livereload": "^2.0.5",
