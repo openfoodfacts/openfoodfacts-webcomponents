@@ -104,6 +104,11 @@ export class ZoomableImage extends LitElement {
     }
     return html`
       <div>
+        <div class="panzoom-parent" style=${styleMap(this.size)}>
+          <div class="panzoom">
+            <img src=${this.src} @load=${this.initPanzoom} style=${styleMap(imageStyle)} />
+          </div>
+        </div>
         <div class="flex justify-end">
           <button
             class="link-button"
@@ -119,11 +124,6 @@ export class ZoomableImage extends LitElement {
           >
             <rotate-right-icon></rotate-right-icon>
           </button>
-        </div>
-        <div class="panzoom-parent" style=${styleMap(this.size)}>
-          <div class="panzoom">
-            <img src=${this.src} @load=${this.initPanzoom} style=${styleMap(imageStyle)} />
-          </div>
         </div>
       </div>
     `
