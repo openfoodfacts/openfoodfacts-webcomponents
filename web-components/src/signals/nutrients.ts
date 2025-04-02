@@ -38,7 +38,7 @@ export const fetchInsightsByProductCode = (productCode: string) => {
       barcode: productCode,
       insight_types: "nutrient_extraction",
       // Add this to filter out already annotated insights
-      // annotated: false,
+      annotated: false,
     })
     .then((response) => {
       if (response.insights?.length === 0) {
