@@ -100,7 +100,7 @@ export const BUTTON_CLASS_BY_TYPE: Record<ButtonType, CSSResult> = {
     }
   `,
   [ButtonType.Success]: css`
-   .success-button {
+    .success-button {
       background-color: ${SAFE_SUCCESS};
       border-color: ${SAFE_SUCCESS};
       color: white;
@@ -109,8 +109,7 @@ export const BUTTON_CLASS_BY_TYPE: Record<ButtonType, CSSResult> = {
       background-color: white;
       color: ${SAFE_SUCCESS};
     }
-      }
-    `,
+  `,
   [ButtonType.Danger]: css`
     .danger-button {
       background-color: ${SAFE_DANGER};
