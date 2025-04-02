@@ -26,6 +26,7 @@ import { EventType, SELECT_ICON_FILE_NAME } from "../../constants"
 import { INPUT, SELECT } from "../../styles/form"
 import { FLEX } from "../../styles/utils"
 import { backgroundImage } from "../../directives/background-image"
+import { ALERT } from "../../styles/alert"
 
 export const ALLOWED_SPECIAL_VALUES = ["", "-", "traces"]
 
@@ -64,10 +65,10 @@ export class RobotoffNutrientsTable extends LitElement {
     SELECT,
     INPUT,
     FLEX,
+    ALERT,
     css`
       :host {
         font-weight: normal;
-        font-size: 0.8rem;
       }
       table th[scope="col"] {
         vertical-align: top;
@@ -106,10 +107,6 @@ export class RobotoffNutrientsTable extends LitElement {
         box-sizing: border-box;
       }
 
-      table .select {
-        font-size: 0.7rem;
-      }
-
       table .unit-select {
         box-sizing: border-box;
         height: 100%;
@@ -145,11 +142,18 @@ export class RobotoffNutrientsTable extends LitElement {
         font-weight: bold;
       }
       label,
-      legend {
-        font-size: 0.8rem;
+      legend,
+      tbody th {
+        font-weight: semi-bold;
+        font-size: 0.9rem;
       }
       .add-nutrient-row select {
         width: 10rem;
+      }
+      .info {
+        display: block;
+        padding: 0;
+        width: ${SERVING_MAX_SIZE}rem;
       }
     `,
   ]

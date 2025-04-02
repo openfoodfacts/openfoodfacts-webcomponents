@@ -42,7 +42,7 @@ export class RobotoffNutrients extends LitElement {
         justify-content: center;
         flex-wrap: wrap;
         align-items: center;
-        gap: 2rem 5rem;
+        gap: 0.5rem 5rem;
       }
 
       .nutrients {
