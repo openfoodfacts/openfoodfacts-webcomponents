@@ -100,10 +100,6 @@
         <source>Help us inform millions of consumers around the world about what they eat</source>
         <target state="translated">உலகெங்கிலும் உள்ள மில்லியன் கணக்கான நுகர்வோருக்கு அவர்கள் என்ன சாப்பிடுகிறார்கள் என்பதைப் பற்றித் தெரிவிக்க எங்களுக்கு உதவுங்கள்</target>
       </trans-unit>
-      <trans-unit id="s06b3b3ee211d15ae">
-        <source>Please give to our 2024 Fundraiser</source>
-        <target state="translated">எங்கள் 2024 நிதி திரட்டிக்கு நிதி வழங்கவும்</target>
-      </trans-unit>
       <trans-unit id="sfc40ea3d5d5aa6f8">
         <source>Your donations fund the day-to-day operations of our non-profit association:</source>
         <target state="translated">எங்கள் இலாப நோக்கற்ற சங்கத்தின் அன்றாட நடவடிக்கைகளுக்கு உங்கள் நன்கொடைகள் நிதியளிக்கின்றன:</target>
@@ -135,6 +131,38 @@
       <trans-unit id="s6306a31415aea913">
         <source>I SUPPORT</source>
         <target state="translated">நான் ஆதரிக்கிறேன்</target>
+      </trans-unit>
+      <trans-unit id="scbab4bd737ba7934">
+        <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
+        <target state="needs-translation">group photo donation <x id="0" equiv-text="${this.currentYear}"/></target>
+      </trans-unit>
+      <trans-unit id="s43df2e8395f6834e">
+        <source>Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</source>
+        <target state="needs-translation">Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</target>
+      </trans-unit>
+      <trans-unit id="s000d98595e959c1e">
+        <source>Get It On Google Play</source>
+        <target state="translated">Google Play இல் பெறவும்</target>
+      </trans-unit>
+      <trans-unit id="s547c12ae169d00bc">
+        <source>Available on F-Droid</source>
+        <target state="translated">F-Droid இல் கிடைக்கிறது</target>
+      </trans-unit>
+      <trans-unit id="s7124dde792a8faa2">
+        <source>Android APK</source>
+        <target state="needs-translation">Android APK</target>
+      </trans-unit>
+      <trans-unit id="s21e73088de6f26f3">
+        <source>Download on the App Store</source>
+        <target state="needs-translation">Download on the App Store</target>
+      </trans-unit>
+      <trans-unit id="sc52696641af72b53">
+        <source>Install the app!</source>
+        <target state="needs-translation">Install the app!</target>
+      </trans-unit>
+      <trans-unit id="h5d824b4954e56ea5">
+        <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
+        <target state="needs-translation">Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></target>
       </trans-unit>
     </body>
   </file>
