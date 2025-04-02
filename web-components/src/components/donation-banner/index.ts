@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { localized, msg } from "@lit/localize"
+import { localized, msg, str } from "@lit/localize"
 import { getLocale } from "../../localization"
 import { getImageUrl } from "../../signals/app"
 
@@ -23,6 +23,17 @@ export class DonationBanner extends LitElement {
   links = {
     fr: "https://open-food-facts.assoconnect.com/collect/description/476750-c-faire-un-don-a-open-food-facts",
     default: "https://world.openfoodfacts.org/donate-to-open-food-facts",
+  }
+
+  /**
+   * The current year
+   * @type {String}
+   */
+  @property({ type: String, reflect: true })
+  currentYear: string = this.getDefaultYear()
+
+  getDefaultYear() {
+    return new Date().getFullYear().toString()
   }
 
   getLinkWithQueryParams(link: string) {
@@ -237,7 +248,7 @@ export class DonationBanner extends LitElement {
         <img
           class="group-image"
           src="${getImageUrl("donation-banner-group-photo.png")}"
-          alt="group photo donation 2024"
+          alt="${msg(str`group photo donation ${this.currentYear}`)}"
         />
       </div>
       <div style="donation-banner__main-div-wrapper">
@@ -250,7 +261,7 @@ export class DonationBanner extends LitElement {
               alt="open food facts logo"
             />
             <h3 class="donation-banner-footer__main-title">
-              ${msg("Please give to our 2024 Fundraiser")}
+              ${msg(`Please give to our ${this.currentYear} Fundraiser`)}
             </h3>
           </div>
           <p style="margin: 0 0 20px; font-size: 14px;">
