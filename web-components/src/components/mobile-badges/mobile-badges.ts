@@ -26,68 +26,12 @@ export class MobileBadges extends LitElement {
    * Styles for the component.
    */
   static override styles = css`
-    .block_light {
-      color: #000000;
-    }
-    .small-12 {
-      width: 100%;
-    }
-    .row {
-      margin: 0 auto;
-      width: 100%;
-    }
-    .flex-grid {
+    #install_the_app_block {
       display: flex;
-    }
-    .v-space-short {
-      margin-top: 1rem;
-      margin-bottom: 1rem;
-    }
-    .v-align-center {
       align-items: center;
-    }
-    .direction-row {
-      flex-direction: row;
-    }
-    .h-space-tiny {
-      margin-left: 0.5rem;
-      margin-right: 0.5rem;
-    }
-    .cell {
-      flex: 1;
-    }
-    .small-100 {
-      width: 100%;
-    }
-    .medium-100 {
-      @media (min-width: 768px) {
-        width: 100%;
-      }
-    }
-    .large-50 {
-      @media (min-width: 1024px) {
-        width: 50%;
-      }
-    }
-    .small-50 {
-      width: 50%;
-    }
-    .medium-25 {
-      @media (min-width: 768px) {
-        width: 25%;
-      }
-    }
-    .large-25 {
-      @media (min-width: 1024px) {
-        width: 25%;
-      }
-    }
-    .h-space-short {
-      margin-left: 1rem;
-      margin-right: 1rem;
-    }
-    .full-width {
-      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 2rem;
     }
     #footer_install_the_app {
       font-family: "Public Sans", Helvetica, Roboto, Arial, sans-serif;
@@ -182,22 +126,7 @@ export class MobileBadges extends LitElement {
       flex-direction: column;
       text-align: center;
     }
-    .responsive-image {
-      height: auto;
-      max-width: 100%;
-      margin: 0 auto;
-    }
-    .responsive-text {
-      margin-top: 1rem;
-    }
     @media (min-width: 768px) {
-      .responsive-container {
-        flex-direction: row;
-        text-align: left;
-      }
-      .responsive-text {
-        margin-top: 0;
-      }
       .badge-container {
         display: flex;
         justify-content: center;
@@ -227,34 +156,21 @@ export class MobileBadges extends LitElement {
     #playstore_badge {
       height: 45px;
     }
-    @media (max-width: 768px) {
-      #variable_image {
-        display: block;
-        height: auto;
-        max-width: 100%;
-        margin: 1rem auto;
-      }
-    }
 
-    @media (min-width: 769px) {
-      #variable_image {
-        display: none;
-      }
-    }
     @media (max-width: 768px) {
       a {
         display: flex;
         justify-content: center;
       }
     }
-    @media (max-width: 768px) {
-      .responsive-image-hide {
-        display: none;
-      }
-    }
 
     .logo-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       max-width: 720px;
+      gap: 2rem;
+      flex-wrap: wrap;
     }
   `
 
@@ -451,27 +367,19 @@ export class MobileBadges extends LitElement {
     return filteredBadges
   }
 
-  renderImage(filteredBadges: Badge[]) {
+  renderImage() {
     if (this.hideImage) {
       return nothing
     }
     return html`
-      <div
-        class="cell small-100 medium-100 large-50 flex-grid v-align-center direction-row responsive-container logo-container"
-      >
+      <div class="logo-container">
         <img
-          class="cell small-50 v-align-center responsive-image ${filteredBadges.length > 0
-            ? "responsive-image-hide"
-            : ""}"
+          class="responsive-image"
           src="${getImageUrl("app-icon-in-the-clouds.svg")}"
           alt="The Open Food Facts logo in the cloud"
           style="height:120px"
         />
-        <div
-          class="cell small-50 v-align-center responsive-text"
-          id="footer_scan"
-          style="display:block"
-        >
+        <div id="footer_scan" style="display:block">
           <div id="footer_install_the_app">${msg("Install the app!")}</div>
           ${msg(html`Scan your <span id="everyday">everyday</span> <span id="foods">foods</span>`)}
         </div>
@@ -479,37 +387,23 @@ export class MobileBadges extends LitElement {
     `
   }
 
-  renderBadges(filteredBadges: Badge[]) {
+  renderBadges() {
+    const filteredBadges = this.getFilteredBadges()
+
     return html` ${filteredBadges.length > 0
-      ? html` <div class="cell small-100 medium-100 large-50 ">
-          <div>
-            <img
-              src="${getImageUrl("app-icon-in-the-clouds.svg")}"
-              alt="Everyday foods"
-              id="variable_image"
-            />
-          </div>
-          <div
-            class="small-12 medium-12 large-12 v-space-normal badge-container flex-grid v-align-center direction-row"
-          >
+      ? html`
+          <div class="badge-container ">
             ${filteredBadges.map((badge) =>
               this.generateBadgeLink(badge.href, badge.src, badge.alt, badge.id, badge.errorHandler)
             )}
           </div>
-        </div>`
+        `
       : ""}`
   }
 
   override render() {
-    const filteredBadges = this.getFilteredBadges()
     return html`
-      <div class="block_light bg-white" id="install_the_app_block ">
-        <div class="row">
-          <div class="small-12 flex-grid v-space-short v-align-center direction-row h-space-tiny">
-            ${this.renderImage(filteredBadges)} ${this.renderBadges(filteredBadges)}
-          </div>
-        </div>
-      </div>
+      <div class="" id="install_the_app_block">${this.renderImage()} ${this.renderBadges()}</div>
     `
   }
 }
