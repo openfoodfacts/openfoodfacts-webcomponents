@@ -36,10 +36,6 @@ export class DonationBanner extends LitElement {
     return new Date().getFullYear().toString()
   }
 
-  get displayYear() {
-    return this.currentYear || new Date().getFullYear().toString()
-  }
-
   getLinkWithQueryParams(link: string) {
     const url = new URL(link)
     const params = new URLSearchParams(url.search)
