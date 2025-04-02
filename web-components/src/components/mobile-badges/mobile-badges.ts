@@ -111,11 +111,7 @@ export class MobileBadges extends LitElement {
     .badge-container {
       display: grid;
       gap: 0.2rem; /* Reduced horizontal gap */
-    }
-    @media (max-width: 767px) {
-      .badge-container {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      grid-template-columns: repeat(2, 1fr);
     }
     @media (min-width: 768px) {
       .badge-container {
@@ -155,13 +151,6 @@ export class MobileBadges extends LitElement {
     }
     #playstore_badge {
       height: 45px;
-    }
-
-    @media (max-width: 768px) {
-      a {
-        display: flex;
-        justify-content: center;
-      }
     }
 
     .logo-container {
@@ -318,6 +307,10 @@ export class MobileBadges extends LitElement {
     `
   }
 
+  /**
+   * Filters the badges based on the hide properties.
+   * @returns The filtered list of badges.
+   **/
   getFilteredBadges(): Badge[] {
     const language = getLocale()
     const badges: Badge[] = [
@@ -367,6 +360,10 @@ export class MobileBadges extends LitElement {
     return filteredBadges
   }
 
+  /**
+   * Renders the image if hideImage is false
+   * @returns The image HTML or nothing if hideImage is true.
+   **/
   renderImage() {
     if (this.hideImage) {
       return nothing
@@ -387,6 +384,10 @@ export class MobileBadges extends LitElement {
     `
   }
 
+  /**
+   * Renders the badges if there are any filtered badges
+   * @returns The badges HTML or nothing if there are no filtered badges.
+   **/
   renderBadges() {
     const filteredBadges = this.getFilteredBadges()
 
