@@ -30,14 +30,7 @@
         <label for="insight-types">Insight Types :</label>
         <input type="text" id="insight-types" placeholder="Insight types" />
       </div>
-      <div style="display: flex; margin-top: 1rem">
-        <robotoff-question
-          product-code="5000354922848"
-          insight-types=""
-          options='{"showMessage": true, "showLoading": true, "showError": true, "showImage": true}'
-          id="robotoff-question"
-        />
-      </div>
+
       <div style="display: flex; margin-top: 3rem">
         <robotoff-nutrients
           id="robotoff-nutrients"
@@ -46,6 +39,15 @@
         >
           <p slot="no-insight" style="text-align: center"><i>No insight</i></p>
         </robotoff-nutrients>
+      </div>
+
+      <div style="display: flex; margin-top: 3rem">
+        <robotoff-question
+          product-code="5000354922848"
+          insight-types=""
+          options='{"showMessage": true, "showLoading": true, "showError": true, "showImage": true}'
+          id="robotoff-question"
+        />
       </div>
 
       <div style="margin-top: 1rem">

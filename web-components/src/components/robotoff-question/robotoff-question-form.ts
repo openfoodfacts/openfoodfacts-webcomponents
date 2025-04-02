@@ -29,10 +29,25 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
 
       .question-form {
         display: flex;
-        align-items: center;
         flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
       }
 
+      .question-form-content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1rem;
+      }
+
+      .question-form-buttons {
+        position: sticky;
+        bottom: 1rem;
+        z-index: 1;
+      }
       .img-button-wrapper {
         position: absolute;
         bottom: 0.5rem;
@@ -101,11 +116,36 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
               </div>
             `
           : nothing}
-        <div>
+        <!-- <div>
           <button class="link-button small" @click="${this._toggleImage}">
             ${this.displayImage ? msg("Hide") : msg("Show")} image
           </button>
-        </div>
+        </div> -->
+      </div>
+    `
+  }
+
+  renderButtons() {
+    return html`
+      <div class="question-form-buttons">
+        <button
+          class="button success-button"
+          @click="${(event: Event) => this._annotateProduct(event, "1")}"
+        >
+          ${msg("Yes")}
+        </button>
+        <button
+          class="button danger-button"
+          @click="${(event: Event) => this._annotateProduct(event, "0")}"
+        >
+          ${msg("No")}
+        </button>
+        <button
+          class="button cappucino-button"
+          @click="${(event: Event) => this._annotateProduct(event, "-1")}"
+        >
+          ${msg("Skip")}
+        </button>
       </div>
     `
   }
@@ -118,27 +158,9 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
     return html`
       <div class="question-form">
         <p>${this.question.question} <strong> ${this.question.value} </strong></p>
-        <div>${this._renderImage()}</div>
-        <div>
-          <p></p>
-          <button
-            class="button success-button"
-            @click="${(event: Event) => this._annotateProduct(event, "1")}"
-          >
-            Yes
-          </button>
-          <button
-            class="button danger-button"
-            @click="${(event: Event) => this._annotateProduct(event, "0")}"
-          >
-            No
-          </button>
-          <button
-            class="button cappucino-button"
-            @click="${(event: Event) => this._annotateProduct(event, "-1")}"
-          >
-            Skip
-          </button>
+        <div class="question-form-content">
+          <div>${this._renderImage()}</div>
+          ${this.renderButtons()}
         </div>
       </div>
     `
