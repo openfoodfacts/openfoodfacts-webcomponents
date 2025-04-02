@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { localized, msg } from "@lit/localize"
+import { localized, msg, str } from "@lit/localize"
 import { getLocale } from "../../localization"
 import { getImageUrl } from "../../signals/app"
 
@@ -30,7 +30,11 @@ export class DonationBanner extends LitElement {
    * @type {String}
    */
   @property({ type: String, reflect: true })
-  currentYear?: string
+  currentYear: string = this.getDefaultYear()
+
+  getDefaultYear() {
+    return new Date().getFullYear().toString()
+  }
 
   get displayYear() {
     return this.currentYear || new Date().getFullYear().toString()
@@ -248,7 +252,7 @@ export class DonationBanner extends LitElement {
         <img
           class="group-image"
           src="${getImageUrl("donation-banner-group-photo.png")}"
-          alt="group photo donation ${this.currentYear}"
+          alt="${msg(str`group photo donation ${this.currentYear}`)}"
         />
       </div>
       <div style="donation-banner__main-div-wrapper">
