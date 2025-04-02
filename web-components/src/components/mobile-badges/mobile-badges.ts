@@ -107,6 +107,7 @@ export class MobileBadges extends LitElement {
       align-items: center;
       text-align: center;
       color: #000;
+      max-width: 420px;
     }
     @media (max-width: 480px) {
       #footer_install_the_app {
@@ -250,6 +251,10 @@ export class MobileBadges extends LitElement {
       .responsive-image-hide {
         display: none;
       }
+    }
+
+    .logo-container {
+      max-width: 720px;
     }
   `
 
@@ -452,7 +457,7 @@ export class MobileBadges extends LitElement {
     }
     return html`
       <div
-        class="cell small-100 medium-100 large-50 flex-grid v-align-center direction-row responsive-container"
+        class="cell small-100 medium-100 large-50 flex-grid v-align-center direction-row responsive-container logo-container"
       >
         <img
           class="cell small-50 v-align-center responsive-image ${filteredBadges.length > 0

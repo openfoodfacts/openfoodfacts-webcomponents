@@ -142,7 +142,7 @@
 </trans-unit>
 <trans-unit id="h2dc86cd122504a1d">
   <source>Scan your <x id="0" equiv-text="&lt;span id=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span id=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
-  <target state="translated">Scannez les <x id="0" equiv-text="&lt;span id=&quot;everyday&quot;&gt;"/>quotidien<x id="1" equiv-text="&lt;/span&gt; &lt;span id=&quot;foods&quot;&gt;"/>aliments<x id="2" equiv-text="&lt;/span&gt;"/></target>
+  <target state="translated">Scannez les <x id="1" equiv-text="&lt;/span&gt; &lt;span id=&quot;foods&quot;&gt;"/>aliments<x id="2" equiv-text="&lt;/span&gt;"/> de votre <x id="0" equiv-text="&lt;span id=&quot;everyday&quot;&gt;"/>quotidien</target>
 </trans-unit>
 <trans-unit id="s000d98595e959c1e">
   <source>Get It On Google Play</source>
