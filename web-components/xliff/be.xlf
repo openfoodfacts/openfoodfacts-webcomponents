@@ -1,125 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-<file target-language="be" source-language="en" original="lit-localize-inputs" datatype="plaintext">
-<body>
-<trans-unit id="s01d2865e3e1d5501">
-  <source>Thank you for your assistance!</source>
-</trans-unit>
-<trans-unit id="s4e94adf723979402">
-  <source>Open Food Facts needs your help with this product.</source>
-</trans-unit>
-<trans-unit id="s25e94495991e95ba">
-  <source>Thanks for your help! Can you assist with another question?</source>
-</trans-unit>
-<trans-unit id="s49730f3d5751a433">
-  <source>Loading...</source>
-</trans-unit>
-<trans-unit id="s95d23d03f9147581">
-  <source>Unzoom</source>
-</trans-unit>
-<trans-unit id="s166bd56d19670a72">
-  <source>Zoom</source>
-</trans-unit>
-<trans-unit id="sc5575e3107f87874">
-  <source>Rotate image to the left</source>
-</trans-unit>
-<trans-unit id="se773f50d2a16d481">
-  <source>Rotate image to the right</source>
-</trans-unit>
-<trans-unit id="sb4ff51a46f0cd54c">
-  <source>Hide image</source>
-</trans-unit>
-<trans-unit id="sf854ab8601cebb10">
-  <source>Voir image</source>
-</trans-unit>
-<trans-unit id="s7ce4fd9430e80cea">
-  <source>value</source>
-</trans-unit>
-<trans-unit id="s6498dfe4855bb3a7">
-  <source>unit</source>
-</trans-unit>
-<trans-unit id="s13d6dffec1a1ec2b">
-  <source>Nutrients</source>
-</trans-unit>
-<trans-unit id="s59df20feee978e5b">
-  <source>Error: Invalid value.</source>
-</trans-unit>
-<trans-unit id="s090c321cc9301918">
-  <source>Error: Value must have only 2 decimal</source>
-</trans-unit>
-<trans-unit id="sbd9a0b2293b3cd3c">
-  <source>Serving size</source>
-</trans-unit>
-<trans-unit id="sbb623d6b18d966a0">
-  <source>Nutrition facts are displayed on the packaging:</source>
-</trans-unit>
-<trans-unit id="se206feec7ec57b28">
-  <source>per 100g</source>
-</trans-unit>
-<trans-unit id="s453188ea728f64da">
-  <source>Add a nutrient</source>
-</trans-unit>
-<trans-unit id="hf83972f67d491f69">
-  <source>Open food facts lives thanks to its community.<x id="0" equiv-text="&lt;br&gt;"/>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file target-language="be" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+    <body>
+      <trans-unit id="s49730f3d5751a433">
+        <source>Loading...</source>
+        <target state="translated">Загрузка...</target>
+      </trans-unit>
+      <trans-unit id="s95d23d03f9147581">
+        <source>Unzoom</source>
+        <target state="needs-translation">Unzoom</target>
+      </trans-unit>
+      <trans-unit id="s166bd56d19670a72">
+        <source>Zoom</source>
+        <target state="translated">Маштаб</target>
+      </trans-unit>
+      <trans-unit id="s01d2865e3e1d5501">
+        <source>Thank you for your assistance!</source>
+        <target state="needs-translation">Thank you for your assistance!</target>
+      </trans-unit>
+      <trans-unit id="s4e94adf723979402">
+        <source>Open Food Facts needs your help with this product.</source>
+        <target state="needs-translation">Open Food Facts needs your help with this product.</target>
+      </trans-unit>
+      <trans-unit id="s25e94495991e95ba">
+        <source>Thanks for your help! Can you assist with another question?</source>
+        <target state="needs-translation">Thanks for your help! Can you assist with another question?</target>
+      </trans-unit>
+      <trans-unit id="s7ce4fd9430e80cea">
+        <source>value</source>
+        <target state="needs-translation">value</target>
+      </trans-unit>
+      <trans-unit id="s6498dfe4855bb3a7">
+        <source>unit</source>
+        <target state="needs-translation">unit</target>
+      </trans-unit>
+      <trans-unit id="s59df20feee978e5b">
+        <source>Error: Invalid value.</source>
+        <target state="needs-translation">Error: Invalid value.</target>
+      </trans-unit>
+      <trans-unit id="s090c321cc9301918">
+        <source>Error: Value must have only 2 decimal</source>
+        <target state="needs-translation">Error: Value must have only 2 decimal</target>
+      </trans-unit>
+      <trans-unit id="sbd9a0b2293b3cd3c">
+        <source>Serving size</source>
+        <target state="needs-translation">Serving size</target>
+      </trans-unit>
+      <trans-unit id="sbb623d6b18d966a0">
+        <source>Nutrition facts are displayed on the packaging:</source>
+        <target state="needs-translation">Nutrition facts are displayed on the packaging:</target>
+      </trans-unit>
+      <trans-unit id="se206feec7ec57b28">
+        <source>per 100g</source>
+        <target state="translated">на 100 г</target>
+      </trans-unit>
+      <trans-unit id="sca0c3305aff570b8">
+        <source>per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
+        <target state="needs-translation">per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</target>
+      </trans-unit>
+      <trans-unit id="s453188ea728f64da">
+        <source>Add a nutrient</source>
+        <target state="needs-translation">Add a nutrient</target>
+      </trans-unit>
+      <trans-unit id="s13d6dffec1a1ec2b">
+        <source>Nutrients</source>
+        <target state="needs-translation">Nutrients</target>
+      </trans-unit>
+      <trans-unit id="s688d3d95ca7c01db">
+        <source>Specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
+        <target state="needs-translation">Specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</target>
+      </trans-unit>
+      <trans-unit id="sc5575e3107f87874">
+        <source>Rotate image to the left</source>
+        <target state="needs-translation">Rotate image to the left</target>
+      </trans-unit>
+      <trans-unit id="se773f50d2a16d481">
+        <source>Rotate image to the right</source>
+        <target state="needs-translation">Rotate image to the right</target>
+      </trans-unit>
+      <trans-unit id="hf83972f67d491f69">
+        <source>Open food facts lives thanks to its community.<x id="0" equiv-text="&lt;br&gt;"/>
           Can you help us validate nutritional information?</source>
-</trans-unit>
-<trans-unit id="s7d8eadc53978967f">
-  <source>Thank you for your contribution!</source>
-</trans-unit>
-<trans-unit id="s475b08749d0706ed">
-  <source>Help us inform millions of consumers around the world about what they eat</source>
-</trans-unit>
-<trans-unit id="s06b3b3ee211d15ae">
-  <source>Please give to our 2024 Fundraiser</source>
-</trans-unit>
-<trans-unit id="sfc40ea3d5d5aa6f8">
-  <source>Your donations fund the day-to-day operations of our non-profit association:</source>
-</trans-unit>
-<trans-unit id="s1c5031113de500ce">
-  <source>keeping our database open &amp; available to all,</source>
-</trans-unit>
-<trans-unit id="sebb2c6c830a44574">
-  <source>technical infrastructure (website/mobile app) &amp; a small permanent team</source>
-</trans-unit>
-<trans-unit id="sd82bc2decefa621b">
-  <source>remain independent of the food industry,</source>
-</trans-unit>
-<trans-unit id="sb3bdd638a58d30f4">
-  <source>engage a community of committed citizens,</source>
-</trans-unit>
-<trans-unit id="s100c4928cc74642a">
-  <source>support the advancement of public health research.</source>
-</trans-unit>
-<trans-unit id="s6d7b6cdedaadfb6e">
-  <source>Each donation counts! We appreciate your support in bringing further food transparency in the world.</source>
-</trans-unit>
-<trans-unit id="s6306a31415aea913">
-  <source>I SUPPORT</source>
-</trans-unit>
-<trans-unit id="sca0c3305aff570b8">
-  <source>per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
-</trans-unit>
-<trans-unit id="s688d3d95ca7c01db">
-  <source>Specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
-</trans-unit>
-<trans-unit id="sc52696641af72b53">
-  <source>Install the app!</source>
-</trans-unit>
-<trans-unit id="h2dc86cd122504a1d">
-  <source>Scan your <x id="0" equiv-text="&lt;span id=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span id=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
-</trans-unit>
-<trans-unit id="s000d98595e959c1e">
-  <source>Get It On Google Play</source>
-</trans-unit>
-<trans-unit id="s547c12ae169d00bc">
-  <source>Available on F-Droid</source>
-</trans-unit>
-<trans-unit id="s7124dde792a8faa2">
-  <source>Android APK</source>
-</trans-unit>
-<trans-unit id="s21e73088de6f26f3">
-  <source>Download on the App Store</source>
-</trans-unit>
-</body>
-</file>
+        <target state="needs-translation">Open food facts lives thanks to its community.<x id="0" equiv-text="&lt;br&gt;"/>
+          Can you help us validate nutritional information?</target>
+      </trans-unit>
+      <trans-unit id="s7d8eadc53978967f">
+        <source>Thank you for your contribution!</source>
+        <target state="needs-translation">Thank you for your contribution!</target>
+      </trans-unit>
+      <trans-unit id="sb4ff51a46f0cd54c">
+        <source>Hide image</source>
+        <target state="needs-translation">Hide image</target>
+      </trans-unit>
+      <trans-unit id="sf854ab8601cebb10">
+        <source>Voir image</source>
+        <target state="needs-translation">Voir image</target>
+      </trans-unit>
+      <trans-unit id="s475b08749d0706ed">
+        <source>Help us inform millions of consumers around the world about what they eat</source>
+        <target state="needs-translation">Help us inform millions of consumers around the world about what they eat</target>
+      </trans-unit>
+      <trans-unit id="s06b3b3ee211d15ae">
+        <source>Please give to our 2024 Fundraiser</source>
+        <target state="needs-translation">Please give to our 2024 Fundraiser</target>
+      </trans-unit>
+      <trans-unit id="sfc40ea3d5d5aa6f8">
+        <source>Your donations fund the day-to-day operations of our non-profit association:</source>
+        <target state="needs-translation">Your donations fund the day-to-day operations of our non-profit association:</target>
+      </trans-unit>
+      <trans-unit id="s1c5031113de500ce">
+        <source>keeping our database open &amp; available to all,</source>
+        <target state="needs-translation">keeping our database open &amp; available to all,</target>
+      </trans-unit>
+      <trans-unit id="sebb2c6c830a44574">
+        <source>technical infrastructure (website/mobile app) &amp; a small permanent team</source>
+        <target state="needs-translation">technical infrastructure (website/mobile app) &amp; a small permanent team</target>
+      </trans-unit>
+      <trans-unit id="sd82bc2decefa621b">
+        <source>remain independent of the food industry,</source>
+        <target state="needs-translation">remain independent of the food industry,</target>
+      </trans-unit>
+      <trans-unit id="sb3bdd638a58d30f4">
+        <source>engage a community of committed citizens,</source>
+        <target state="needs-translation">engage a community of committed citizens,</target>
+      </trans-unit>
+      <trans-unit id="s100c4928cc74642a">
+        <source>support the advancement of public health research.</source>
+        <target state="needs-translation">support the advancement of public health research.</target>
+      </trans-unit>
+      <trans-unit id="s6d7b6cdedaadfb6e">
+        <source>Each donation counts! We appreciate your support in bringing further food transparency in the world.</source>
+        <target state="needs-translation">Each donation counts! We appreciate your support in bringing further food transparency in the world.</target>
+      </trans-unit>
+      <trans-unit id="s6306a31415aea913">
+        <source>I SUPPORT</source>
+        <target state="needs-translation">I SUPPORT</target>
+      </trans-unit>
+    </body>
+  </file>
 </xliff>
