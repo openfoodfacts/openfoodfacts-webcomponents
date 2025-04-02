@@ -69,9 +69,6 @@
 <trans-unit id="s475b08749d0706ed">
   <source>Help us inform millions of consumers around the world about what they eat</source>
 </trans-unit>
-<trans-unit id="s06b3b3ee211d15ae">
-  <source>Please give to our 2024 Fundraiser</source>
-</trans-unit>
 <trans-unit id="sfc40ea3d5d5aa6f8">
   <source>Your donations fund the day-to-day operations of our non-profit association:</source>
 </trans-unit>
@@ -101,6 +98,34 @@
 </trans-unit>
 <trans-unit id="s688d3d95ca7c01db">
   <source>Specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
+</trans-unit>
+<trans-unit id="sc52696641af72b53">
+  <source>Install the app!</source>
+  <target state="translated">Встановити додаток</target>
+</trans-unit>
+<trans-unit id="s000d98595e959c1e">
+  <source>Get It On Google Play</source>
+  <target state="translated">Завантажити з Google Play</target>
+</trans-unit>
+<trans-unit id="s547c12ae169d00bc">
+  <source>Available on F-Droid</source>
+</trans-unit>
+<trans-unit id="s7124dde792a8faa2">
+  <source>Android APK</source>
+  <target state="translated">АРК для Android</target>
+</trans-unit>
+<trans-unit id="s21e73088de6f26f3">
+  <source>Download on the App Store</source>
+  <target state="translated">Завантажити із App Store</target>
+</trans-unit>
+<trans-unit id="scbab4bd737ba7934">
+  <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
+</trans-unit>
+<trans-unit id="s43df2e8395f6834e">
+  <source>Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</source>
+</trans-unit>
+<trans-unit id="h5d824b4954e56ea5">
+  <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
 </trans-unit>
 </body>
 </file>
