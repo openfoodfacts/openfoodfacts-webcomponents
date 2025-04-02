@@ -25,6 +25,17 @@ export class DonationBanner extends LitElement {
     default: "https://world.openfoodfacts.org/donate-to-open-food-facts",
   }
 
+  /**
+   * The current year
+   * @type {String}
+   */
+  @property({ type: String, reflect: true })
+  currentYear?: string
+
+  get displayYear() {
+    return this.currentYear || new Date().getFullYear().toString()
+  }
+
   getLinkWithQueryParams(link: string) {
     const url = new URL(link)
     const params = new URLSearchParams(url.search)
@@ -237,7 +248,7 @@ export class DonationBanner extends LitElement {
         <img
           class="group-image"
           src="${getImageUrl("donation-banner-group-photo.png")}"
-          alt="group photo donation 2024"
+          alt="group photo donation ${this.currentYear}"
         />
       </div>
       <div style="donation-banner__main-div-wrapper">
@@ -250,7 +261,7 @@ export class DonationBanner extends LitElement {
               alt="open food facts logo"
             />
             <h3 class="donation-banner-footer__main-title">
-              ${msg("Please give to our 2024 Fundraiser")}
+              ${msg(`Please give to our ${this.currentYear} Fundraiser`)}
             </h3>
           </div>
           <p style="margin: 0 0 20px; font-size: 14px;">
