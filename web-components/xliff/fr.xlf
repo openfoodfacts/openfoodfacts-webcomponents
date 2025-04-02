@@ -92,10 +92,6 @@
   <source>Help us inform millions of consumers around the world about what they eat</source>
   <target state="translated">Aidez-nous à informer des millions de consommateurs dans le monde sur ce qu'ils mangent</target>
 </trans-unit>
-<trans-unit id="s06b3b3ee211d15ae">
-  <source>Please give to our 2024 Fundraiser</source>
-  <target state="translated">Merci de contribuer à notre collecte de fonds 2024</target>
-</trans-unit>
 <trans-unit id="sfc40ea3d5d5aa6f8">
   <source>Your donations fund the day-to-day operations of our non-profit association:</source>
   <target state="translated">Vos dons financent le fonctionnement quotidien de notre association à but non lucratif :</target>
@@ -140,10 +136,6 @@
   <source>Install the app!</source>
   <target state="translated">Installez l'app</target>
 </trans-unit>
-<trans-unit id="h2dc86cd122504a1d">
-  <source>Scan your <x id="0" equiv-text="&lt;span id=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span id=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
-  <target state="translated">Scannez les <x id="1" equiv-text="&lt;/span&gt; &lt;span id=&quot;foods&quot;&gt;"/>aliments<x id="2" equiv-text="&lt;/span&gt;"/> de votre <x id="0" equiv-text="&lt;span id=&quot;everyday&quot;&gt;"/>quotidien</target>
-</trans-unit>
 <trans-unit id="s000d98595e959c1e">
   <source>Get It On Google Play</source>
   <target state="translated">Disponible sur Google Play</target>
@@ -158,6 +150,15 @@
 <trans-unit id="s21e73088de6f26f3">
   <source>Download on the App Store</source>
   <target state="translated">Disponible sur l'App Store</target>
+</trans-unit>
+<trans-unit id="scbab4bd737ba7934">
+  <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
+</trans-unit>
+<trans-unit id="s43df2e8395f6834e">
+  <source>Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</source>
+</trans-unit>
+<trans-unit id="h5d824b4954e56ea5">
+  <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
 </trans-unit>
 </body>
 </file>

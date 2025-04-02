@@ -261,7 +261,7 @@ export class DonationBanner extends LitElement {
               alt="open food facts logo"
             />
             <h3 class="donation-banner-footer__main-title">
-              ${msg(`Please give to our ${this.currentYear} Fundraiser`)}
+              ${msg(str`Please give to our ${this.currentYear} Fundraiser`)}
             </h3>
           </div>
           <p style="margin: 0 0 20px; font-size: 14px;">
