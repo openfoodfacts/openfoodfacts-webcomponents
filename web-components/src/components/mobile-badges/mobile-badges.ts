@@ -1,8 +1,17 @@
-import { LitElement, html, css } from "lit"
+import { LitElement, html, css, nothing } from "lit"
 import { customElement, state, property } from "lit/decorators.js"
 import { localized, msg } from "@lit/localize"
 import { getLocale } from "../../localization"
 import { getImageUrl } from "../../signals/app"
+
+export type Badge = {
+  href: string
+  src: string
+  alt: string
+  id: string
+  hide: boolean
+  errorHandler?: (event: Event) => void
+}
 
 /**
  * Mobile Badges
@@ -13,34 +22,6 @@ import { getImageUrl } from "../../signals/app"
 @customElement("mobile-badges")
 @localized()
 export class MobileBadges extends LitElement {
-  /**
-   * Controls visibility of Google Play Store badge
-   * @type {boolean}
-   */
-  @property({ type: Boolean, attribute: "hide-playstore" })
-  hidePlayStore = false
-
-  /**
-   * Controls visibility of F-Droid badge
-   * @type {boolean}
-   */
-  @property({ type: Boolean, attribute: "hide-fdroid" })
-  hideFDroid = false
-
-  /**
-   * Controls visibility of APK download badge
-   * @type {boolean}
-   */
-  @property({ type: Boolean, attribute: "hide-apk" })
-  hideApk = false
-
-  /**
-   * Controls visibility of App Store badge
-   * @type {boolean}
-   */
-  @property({ type: Boolean, attribute: "hide-appstore" })
-  hideAppStore = false
-
   /**
    * Styles for the component.
    */
@@ -53,7 +34,6 @@ export class MobileBadges extends LitElement {
     }
     .row {
       margin: 0 auto;
-      max-width: 91.4285714286rem;
       width: 100%;
     }
     .flex-grid {
@@ -274,6 +254,41 @@ export class MobileBadges extends LitElement {
   `
 
   /**
+   * Controls visibility of Google Play Store badge
+   * @type {boolean}
+   */
+  @property({ type: Boolean, attribute: "hide-playstore" })
+  hidePlayStore = false
+
+  /**
+   * Controls visibility of F-Droid badge
+   * @type {boolean}
+   */
+  @property({ type: Boolean, attribute: "hide-fdroid" })
+  hideFDroid = false
+
+  /**
+   * Controls visibility of APK download badge
+   * @type {boolean}
+   */
+  @property({ type: Boolean, attribute: "hide-apk" })
+  hideApk = false
+
+  /**
+   * Controls visibility of App Store badge
+   * @type {boolean}
+   */
+  @property({ type: Boolean, attribute: "hide-appstore" })
+  hideAppStore = false
+
+  /**
+   * Controls visibility of App Store badge
+   * @type {boolean}
+   */
+  @property({ type: Boolean, attribute: "hide-image" })
+  hideImage = false
+
+  /**
    * Link to the F-Droid app page.
    */
   @state()
@@ -382,9 +397,9 @@ export class MobileBadges extends LitElement {
     `
   }
 
-  override render() {
+  getFilteredBadges(): Badge[] {
     const language = getLocale()
-    const badges = [
+    const badges: Badge[] = [
       {
         href: this.getAndroidAppLink(language),
         src: this.getAndroidAppIconPath(language),
@@ -428,57 +443,65 @@ export class MobileBadges extends LitElement {
     ]
 
     const filteredBadges = badges.filter((badge) => badge.hide == false)
+    return filteredBadges
+  }
 
+  renderImage(filteredBadges: Badge[]) {
+    if (this.hideImage) {
+      return nothing
+    }
+    return html`
+      <div
+        class="cell small-100 medium-100 large-50 flex-grid v-align-center direction-row responsive-container"
+      >
+        <img
+          class="cell small-50 v-align-center responsive-image ${filteredBadges.length > 0
+            ? "responsive-image-hide"
+            : ""}"
+          src="${getImageUrl("app-icon-in-the-clouds.svg")}"
+          alt="The Open Food Facts logo in the cloud"
+          style="height:120px"
+        />
+        <div
+          class="cell small-50 v-align-center responsive-text"
+          id="footer_scan"
+          style="display:block"
+        >
+          <div id="footer_install_the_app">${msg("Install the app!")}</div>
+          ${msg(html`Scan your <span id="everyday">everyday</span> <span id="foods">foods</span>`)}
+        </div>
+      </div>
+    `
+  }
+
+  renderBadges(filteredBadges: Badge[]) {
+    return html` ${filteredBadges.length > 0
+      ? html` <div class="cell small-100 medium-100 large-50 ">
+          <div>
+            <img
+              src="${getImageUrl("app-icon-in-the-clouds.svg")}"
+              alt="Everyday foods"
+              id="variable_image"
+            />
+          </div>
+          <div
+            class="small-12 medium-12 large-12 v-space-normal badge-container flex-grid v-align-center direction-row"
+          >
+            ${filteredBadges.map((badge) =>
+              this.generateBadgeLink(badge.href, badge.src, badge.alt, badge.id, badge.errorHandler)
+            )}
+          </div>
+        </div>`
+      : ""}`
+  }
+
+  override render() {
+    const filteredBadges = this.getFilteredBadges()
     return html`
       <div class="block_light bg-white" id="install_the_app_block ">
         <div class="row">
           <div class="small-12 flex-grid v-space-short v-align-center direction-row h-space-tiny">
-            <div
-              class="cell small-100 medium-100 large-50 flex-grid v-align-center direction-row responsive-container"
-            >
-              <img
-                class="cell small-50 v-align-center responsive-image ${filteredBadges.length > 0
-                  ? "responsive-image-hide"
-                  : ""}"
-                src="${getImageUrl("app-icon-in-the-clouds.svg")}"
-                alt="The Open Food Facts logo in the cloud"
-                style="height:120px"
-              />
-              <div
-                class="cell small-50 v-align-center responsive-text"
-                id="footer_scan"
-                style="display:block"
-              >
-                <div id="footer_install_the_app">${msg("Install the app!")}</div>
-                ${msg(
-                  html`Scan your <span id="everyday">everyday</span> <span id="foods">foods</span>`
-                )}
-              </div>
-            </div>
-            ${filteredBadges.length > 0
-              ? html` <div class="cell small-100 medium-100 large-50 ">
-                  <div>
-                    <img
-                      src="${getImageUrl("app-icon-in-the-clouds.svg")}"
-                      alt="Everyday foods"
-                      id="variable_image"
-                    />
-                  </div>
-                  <div
-                    class="small-12 medium-12 large-12 v-space-normal badge-container flex-grid v-align-center direction-row"
-                  >
-                    ${filteredBadges.map((badge) =>
-                      this.generateBadgeLink(
-                        badge.href,
-                        badge.src,
-                        badge.alt,
-                        badge.id,
-                        badge.errorHandler
-                      )
-                    )}
-                  </div>
-                </div>`
-              : ""}
+            ${this.renderImage(filteredBadges)} ${this.renderBadges(filteredBadges)}
           </div>
         </div>
       </div>
