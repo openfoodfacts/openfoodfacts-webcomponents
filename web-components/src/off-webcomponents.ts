@@ -7,3 +7,4 @@ export { RobotoffNutrients } from "./components/robotoff-nutrients/robotoff-nutr
 // export { KnowledgePanelsComponent } from "./components/knowledge-panels/knowledge-panels"
 
 export { DonationBanner } from "./components/donation-banner"
+export { MobileBadges } from "./components/mobile-badges/mobile-badges"
