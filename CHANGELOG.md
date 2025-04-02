@@ -46,3 +46,10 @@
 
 - Add `donation-banner` web component to show the donation banner in the web components.
 - Add parameter `assets-images-path` to `off-web-components-configuration` to allow to change the path of the assets images.
+
+## [1.3.0] - 2025-04-02
+
+## Changed
+
+- Add `mobile-badges` web component to show the mobile badges in the web components.
+- Update `donation-banner` web component to automatically update the year in the donation banner. And allow to change the year with the `year` property.
