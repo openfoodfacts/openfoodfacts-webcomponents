@@ -83,7 +83,7 @@ export class MobileBadges extends LitElement {
         line-height: 32px;
       }
     }
-    #everyday {
+    .everyday {
       transform: rotate(2.5deg);
       background-color: #0064c8;
       border-inline: 5px solid #0064c8;
@@ -94,7 +94,7 @@ export class MobileBadges extends LitElement {
       text-transform: uppercase;
       display: inline-block;
     }
-    #foods {
+    .foods {
       transform: rotate(-3deg);
       background-color: #ff8714;
       border-inline: 5px solid #ff8714;
@@ -297,7 +297,7 @@ export class MobileBadges extends LitElement {
         <img
           id="${id}"
           src="${src}"
-          alt="${msg(alt)}"
+          alt="${alt}"
           loading="lazy"
           height="40"
           width="120"
@@ -317,7 +317,7 @@ export class MobileBadges extends LitElement {
       {
         href: this.getAndroidAppLink(language),
         src: this.getAndroidAppIconPath(language),
-        alt: "Get It On Google Play",
+        alt: msg("Get It On Google Play"),
         id: "playstore_badge",
         hide: this.hidePlayStore,
         errorHandler: (e: Event) => {
@@ -328,7 +328,7 @@ export class MobileBadges extends LitElement {
       {
         href: this.fDroidAppLink,
         src: this.getFDroidAppIconPath(language),
-        alt: "Available on F-Droid",
+        alt: msg("Available on F-Droid"),
         id: "fdroid_badge",
         hide: this.hideFDroid,
         errorHandler: (e: Event) => {
@@ -339,14 +339,14 @@ export class MobileBadges extends LitElement {
       {
         href: this.getAndroidApkAppLink(language),
         src: getImageUrl("download-apk_en.svg"),
-        alt: "Android APK",
+        alt: msg("Android APK"),
         id: "apk_badge",
         hide: this.hideApk,
       },
       {
         href: this.getIosAppLink(language),
         src: getImageUrl(this.getIosAppIconPath(language)),
-        alt: "Download on the App Store",
+        alt: msg("Download on the App Store"),
         id: "appstore_badge",
         hide: this.hideAppStore,
         errorHandler: (e: Event) => {
@@ -378,7 +378,9 @@ export class MobileBadges extends LitElement {
         />
         <div id="footer_scan" style="display:block">
           <div id="footer_install_the_app">${msg("Install the app!")}</div>
-          ${msg(html`Scan your <span id="everyday">everyday</span> <span id="foods">foods</span>`)}
+          ${msg(
+            html`Scan your <span class="everyday">everyday</span> <span class="foods">foods</span>`
+          )}
         </div>
       </div>
     `
