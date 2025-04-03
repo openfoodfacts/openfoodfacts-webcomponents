@@ -8,8 +8,9 @@ import { LitElement } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { OffWebcomponentConfigurationOptions } from "../../types"
 import { RobotoffConfigurationOptions } from "../../types/robotoff"
-import { setLocale } from "../../localization"
+import { getLocale, setLocale } from "../../localization"
 import { assetsImagesPath } from "../../signals/app"
+import { sourceLocale } from "../../localization/dist/locale-codes"
 
 /**
  * The configuration properties of the webcomponent configuration element.
@@ -38,6 +39,7 @@ const CONFIGURATION_PROPERTIES: Record<
     propertyName: "languageCode",
     fn: (value: string) => {
       // Set the language code
+      debugger
       setLocale(value)
     },
   },
@@ -81,6 +83,7 @@ export class OffWebcomponentsConfiguration extends LitElement {
 
   override attributeChangedCallback(name: string, oldval: string, newval: string) {
     super.attributeChangedCallback(name, oldval, newval)
+    debugger
     if (name in CONFIGURATION_PROPERTIES) {
       let value
       const config = CONFIGURATION_PROPERTIES[name]
@@ -92,6 +95,14 @@ export class OffWebcomponentsConfiguration extends LitElement {
       }
       // Run the callback function that apply configuration
       config.fn.call(this, value)
+    }
+  }
+
+  override connectedCallback(): void {
+    super.connectedCallback()
+    // Set the language code to default language code (en) if local is still in source locale
+    if (getLocale() !== sourceLocale) {
+      CONFIGURATION_PROPERTIES["language-code"].fn.call(this, this.languageCode)
     }
   }
 }
