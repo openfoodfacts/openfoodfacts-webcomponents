@@ -53,8 +53,10 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
     showMessage?: boolean
     showLoading?: boolean
     showError?: boolean
-    showImage?: boolean
-  } = {}
+    isImageExpanded?: boolean
+  } = {
+    isImageExpanded: false,
+  }
 
   /**
    * The product code to fetch questions for
@@ -162,8 +164,6 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
         if (!hasQuestions(this.productCode).get()) {
           return html`<slot></slot>`
         }
-        // Hide image only if explicitly set to false
-        const isImageShowned = this.options.showImage !== false
         return html`
           <div class="question-wrapper">
             ${this.renderMessage()}
@@ -171,7 +171,7 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
               ? nothing
               : html`
                   <robotoff-question-form
-                    .showImage=${isImageShowned}
+                    .is-image-expanded=${this.options.isImageExpanded}
                     .question=${question}
                     @submit=${this.onQuestionAnswered}
                   ></robotoff-question-form>

@@ -32,7 +32,7 @@ export const getDefaultButtonClasses = (): CSSResult => {
 
     .button.small {
       padding: 0.25rem 0.5rem;
-      font-size: 0.75rem;
+      font-size: 0.875rem;
     }
   `
 }
