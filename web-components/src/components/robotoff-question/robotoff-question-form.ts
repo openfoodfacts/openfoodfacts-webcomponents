@@ -1,5 +1,5 @@
 import { LitElement, html, css, nothing } from "lit"
-import { customElement, property, state } from "lit/decorators.js"
+import { customElement, property } from "lit/decorators.js"
 import { Question, QuestionAnnotationAnswer } from "../../types/robotoff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { EventType } from "../../constants"
@@ -17,6 +17,7 @@ import { msg } from "@lit/localize"
 export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
   static override styles = [
     ...getButtonClasses([
+      ButtonType.White,
       ButtonType.Cappucino,
       ButtonType.Success,
       ButtonType.Danger,
@@ -50,16 +51,21 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
   question?: Question
 
   /**
-   * Show the image or not.
+   * Is the image expanded
+   * @type {boolean}
+   * @default false
    */
-  @property({ type: Boolean })
-  showImage?: boolean = true
+  @property({ type: Boolean, attribute: "is-image-expanded" })
+  isImageExpanded = false
 
-  /**
-   * State to manage the display of the image.
-   */
-  @state()
-  displayImage = true
+  get imageSize() {
+    return this.isImageExpanded
+      ? { height: "350px", width: "100%", "max-width": "350px" }
+      : {
+          height: "100px",
+          width: "100px",
+        }
+  }
 
   /**
    * Emit an event submit when the user clicks on a button.
@@ -80,30 +86,26 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
     this.emitEventClick(event, value)
   }
 
-  private _toggleImage = () => {
-    this.displayImage = !this.displayImage
+  toggleIsImageExpanded() {
+    this.isImageExpanded = !this.isImageExpanded
   }
 
   private _renderImage() {
-    if (!this.showImage || !this.question?.source_image_url) {
+    if (!this.question?.source_image_url) {
       return nothing
     }
 
     return html`
       <div>
-        ${this.displayImage
-          ? html`
-              <div>
-                <zoomable-image
-                  src=${this.question?.source_image_url}
-                  .size="${{ height: "350px", width: "100%", "max-width": "300px" }}"
-                ></zoomable-image>
-              </div>
-            `
-          : nothing}
         <div>
-          <button class="link-button small" @click="${this._toggleImage}">
-            ${this.displayImage ? msg("Hide") : msg("Show")} image
+          <zoomable-image
+            src=${this.question?.source_image_url}
+            .size="${this.imageSize}"
+          ></zoomable-image>
+        </div>
+        <div>
+          <button class="button white-button small" @click="${this.toggleIsImageExpanded}">
+            ${this.isImageExpanded ? msg("Reduce image") : msg("Expand image")}
           </button>
         </div>
       </div>
