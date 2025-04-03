@@ -39,7 +39,6 @@ const CONFIGURATION_PROPERTIES: Record<
     propertyName: "languageCode",
     fn: (value: string) => {
       // Set the language code
-      debugger
       setLocale(value)
     },
   },
@@ -83,7 +82,6 @@ export class OffWebcomponentsConfiguration extends LitElement {
 
   override attributeChangedCallback(name: string, oldval: string, newval: string) {
     super.attributeChangedCallback(name, oldval, newval)
-    debugger
     if (name in CONFIGURATION_PROPERTIES) {
       let value
       const config = CONFIGURATION_PROPERTIES[name]
