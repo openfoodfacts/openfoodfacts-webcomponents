@@ -72,7 +72,7 @@
       </trans-unit>
       <trans-unit id="sc5575e3107f87874">
         <source>Rotate image to the left</source>
-        <target state="needs-translation">Rotate image to the left</target>
+        <target state="translated">画像を左に回転</target>
       </trans-unit>
       <trans-unit id="se773f50d2a16d481">
         <source>Rotate image to the right</source>
