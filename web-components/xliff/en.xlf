@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file target-language="en-GB" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+  <file target-language="en" source-language="en" original="lit-localize-inputs" datatype="plaintext">
     <body>
       <trans-unit id="s49730f3d5751a433">
         <source>Loading...</source>
@@ -12,7 +12,7 @@
       </trans-unit>
       <trans-unit id="s166bd56d19670a72">
         <source>Zoom</source>
-        <target state="translated">Zoom</target>
+        <target state="needs-translation">Zoom</target>
       </trans-unit>
       <trans-unit id="s01d2865e3e1d5501">
         <source>Thank you for your assistance!</source>
@@ -26,9 +26,9 @@
         <source>Thanks for your help! Can you assist with another question?</source>
         <target state="needs-translation">Thanks for your help! Can you assist with another question?</target>
       </trans-unit>
-      <trans-unit id="s7ce4fd9430e80cea">
+      <trans-unit id="s7ce4fd9430e80cea" approved="yes">
         <source>value</source>
-        <target state="translated">value</target>
+        <target state="final">value</target>
       </trans-unit>
       <trans-unit id="s6498dfe4855bb3a7">
         <source>unit</source>
@@ -42,9 +42,9 @@
         <source>Error: Value must have only 2 decimal</source>
         <target state="needs-translation">Error: Value must have only 2 decimal</target>
       </trans-unit>
-      <trans-unit id="sbd9a0b2293b3cd3c">
+      <trans-unit id="sbd9a0b2293b3cd3c" approved="yes">
         <source>Serving size</source>
-        <target state="translated">Serving size</target>
+        <target state="final">Serving size</target>
       </trans-unit>
       <trans-unit id="sbb623d6b18d966a0">
         <source>Nutrition facts are displayed on the packaging:</source>
@@ -58,9 +58,9 @@
         <source>per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
         <target state="needs-translation">per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</target>
       </trans-unit>
-      <trans-unit id="s453188ea728f64da">
+      <trans-unit id="s453188ea728f64da" approved="yes">
         <source>Add a nutrient</source>
-        <target state="translated">Add a nutrient</target>
+        <target state="final">Add a nutrient</target>
       </trans-unit>
       <trans-unit id="s13d6dffec1a1ec2b">
         <source>Nutrients</source>
@@ -164,9 +164,10 @@
         <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
         <target state="needs-translation">Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></target>
       </trans-unit>
-<trans-unit id="s8a8bfd67f2dd2810">
-  <source>Download the OFF app with this QR code</source>
-</trans-unit>
+      <trans-unit id="s8a8bfd67f2dd2810">
+        <source>Download the OFF app with this QR code</source>
+        <target state="needs-translation">Download the OFF app with this QR code</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
