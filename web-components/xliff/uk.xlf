@@ -166,7 +166,7 @@
       </trans-unit>
       <trans-unit id="s8a8bfd67f2dd2810">
         <source>Download the OFF app with this QR code</source>
-        <target state="needs-translation">Download the OFF app with this QR code</target>
+        <target state="translated">Завантажте програму OFF за допомогою цього QR-коду</target>
       </trans-unit>
     </body>
   </file>
