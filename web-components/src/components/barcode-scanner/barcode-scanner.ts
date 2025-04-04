@@ -15,15 +15,25 @@ export enum BarcodeScannerState {
   DETECTOR_AVAILABLE,
   DETECTOR_NOT_AVAILABLE,
   STARTED,
+  NO_PERMISSION,
 }
 
 interface BarcodeDetector {
   detect(video: ImageBitmap): Promise<{ rawValue: string }[]>
 }
 
+/**
+ * BarcodeScanner is a custom web component that allows users to scan barcodes using their device's camera.
+ * It uses the BarcodeDetector API to detect barcodes in real-time and dispatches custom events with the detected barcode data.
+ * The component provides a user interface with an overlay that guides the user to scan a barcode and displays the detected barcode value.
+ */
 @customElement("barcode-scanner")
 @localized()
 export class BarcodeScanner extends LitElement {
+  /**
+   * Static styles for the BarcodeScanner component.
+   * These styles define the appearance of the component, including the video element, overlay, and buttons.
+   */
   static override styles = [
     BASE,
     getButtonClasses([ButtonType.White]),
@@ -156,6 +166,10 @@ export class BarcodeScanner extends LitElement {
     `,
   ]
 
+  /**
+   * The style information for the wrapper element of the BarcodeScanner component.
+   * This property is reflected as an attribute on the component and can be used to customize the size and appearance of the component.
+   */
   @property({ type: Object, attribute: "wrapper-style", reflect: true })
   wrapperStyle: StyleInfo = {
     height: "300px",
@@ -163,36 +177,81 @@ export class BarcodeScanner extends LitElement {
     "max-width": "100%",
   }
 
+  /**
+   * A boolean property that indicates whether the barcode scanner should be running.
+   * When set to true, the component will attempt to start the camera and detect barcodes.
+   */
   @property({ type: Boolean })
   runScanner = false
-  @state() barcode = ""
 
-  @query("video") private video!: HTMLVideoElement
+  /**
+   * The barcode detected by the scanner
+   */
+  /**
+   * The barcode detected by the scanner.
+   * This state property is updated whenever a barcode is successfully detected.
+   */
+  @state()
+  barcode = ""
 
+  /**
+   * A reference to the video element used for displaying the camera feed.
+   * This query selector is used to access the video element within the component's template.
+   */
+  @query("video")
+  private video!: HTMLVideoElement
+
+  /**
+   * The media stream used for the camera feed.
+   * This state property is updated when the camera is started and cleared when the camera is stopped.
+   */
   @state()
   private stream: MediaStream | null = null
 
+  /**
+   * The BarcodeDetector instance used for detecting barcodes.
+   * This state property is initialized when the component is constructed and used for barcode detection.
+   */
   @state()
   private codeReader: BarcodeDetector | null = null
 
+  /**
+   * A function that detects barcodes in an image bitmap.
+   * This state property is updated when the BarcodeDetector is available and used for barcode detection.
+   */
   @state()
   private detectFn?: (imageData: ImageBitmap) => Promise<string | undefined>
 
+  /**
+   * A getter that returns whether the video is currently playing.
+   * This getter is used to determine the state of the video element and update the component's UI accordingly.
+   */
   get isVideoPlaying() {
     return this.stream !== null
   }
 
+  /**
+   * The constructor for the BarcodeScanner component.
+   * This constructor initializes the BarcodeDetector and sets up the component's state.
+   */
   constructor() {
     super()
     this.setupBarcodeDetector()
   }
 
+  /**
+   * This lifecycle method is used to start the barcode scanner if the runScanner property is set to true.
+   */
   override async firstUpdated() {
     if (this.codeReader && this.runScanner) {
       await this.askPermission()
     }
   }
 
+  /**
+   * A lifecycle method that is called when an attribute on the component is changed.
+   * This method is used to handle changes to the run-scanner attribute and start or stop the barcode scanner accordingly.
+   */
   override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
     super.attributeChangedCallback(name, _old, value)
     if (name === "run-scanner") {
@@ -204,6 +263,10 @@ export class BarcodeScanner extends LitElement {
     }
   }
 
+  /**
+   * A private method that sets up the BarcodeDetector instance.
+   * This method is called when the component is constructed and initializes the BarcodeDetector and detectFn properties.
+   */
   private setupBarcodeDetector() {
     try {
       // Remove the type assertion for BarcodeDetector to avoid TypeScript error
@@ -217,6 +280,10 @@ export class BarcodeScanner extends LitElement {
     }
   }
 
+  /**
+   * A private method that detects barcodes in an image bitmap using the BarcodeDetector.
+   * This method is called when a video frame is captured and used to detect barcodes in the frame.
+   */
   private async detectWithBarcodeDetector(imageData: ImageBitmap): Promise<string | undefined> {
     try {
       // Type assertion for BarcodeDetector
@@ -233,22 +300,36 @@ export class BarcodeScanner extends LitElement {
     return undefined
   }
 
+  /**
+   * A private method that asks for camera permission and starts the barcode scanner if permission is granted.
+   * This method is called when the user clicks the start scanning button or when the runScanner property is set to true.
+   */
   private async askPermission() {
     try {
       const permissionStatus = await navigator.permissions.query({ name: "camera" })
 
       if (["granted", "prompt"].includes(permissionStatus.state)) {
         await this.startCamera()
+        return
       } else {
         console.warn("Camera permission denied. Please enable it in your browser settings.")
       }
     } catch (error) {
       console.error("Permission query error:", error)
     }
+    this.sendBarcodeStateEvent({
+      barcode: this.barcode,
+      state: BarcodeScannerState.NO_PERMISSION,
+    })
   }
 
+  /**
+   * A private method that starts the camera and sets up the video element.
+   * This method is called when camera permission is granted and used to start the camera feed.
+   */
   private async startCamera() {
     try {
+      // Request the camera stream with specified constraints
       this.stream = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: "environment",
@@ -257,6 +338,7 @@ export class BarcodeScanner extends LitElement {
         },
       })
 
+      // Set the video source to the camera stream and play the video
       if (this.video) {
         this.video.srcObject = this.stream
         await this.video.play()
@@ -272,6 +354,10 @@ export class BarcodeScanner extends LitElement {
     }
   }
 
+  /**
+   * A private method that stops the video and clears the media stream.
+   * This method is called when the barcode scanner is stopped or when the component is disconnected.
+   */
   private stopVideo() {
     if (this.stream) {
       this.stream.getTracks().forEach((track) => track.stop())
@@ -281,10 +367,18 @@ export class BarcodeScanner extends LitElement {
     }
   }
 
+  /**
+   * A private method that sends a custom event with the barcode scanner's state.
+   * This method is called whenever the barcode scanner's state changes and used to notify other components of the state change.
+   */
   private sendBarcodeStateEvent(detail: { barcode?: string; state: BarcodeScannerState }) {
     this.dispatchEvent(new CustomEvent(EventType.BARCODE_SCANNER_STATE, { detail }))
   }
 
+  /**
+   * A private method that handles the exit button click event.
+   * This method is called when the user clicks the exit button and used to stop the barcode scanner and clear the video element.
+   */
   private exit(event: Event) {
     event.stopPropagation()
     this.stopVideo()
@@ -293,9 +387,15 @@ export class BarcodeScanner extends LitElement {
     })
   }
 
+  /**
+   * A private method that sets up the video frame capture for barcode detection.
+   * This method is called when the camera is started and used to capture video frames and detect barcodes in the frames.
+   */
   private setupFrameCapture() {
     const video = this.video
+    // Process video frames for barcode detection
     const processFrame = async () => {
+      // Check if the video is paused or ended
       if (video.paused || video.ended) {
         requestAnimationFrame(processFrame)
         return
@@ -303,6 +403,7 @@ export class BarcodeScanner extends LitElement {
 
       let imageBitmap: ImageBitmap | undefined
       try {
+        // Create an image bitmap from the current video frame
         imageBitmap = await createImageBitmap(video, 0, 0, video.videoWidth, video.videoHeight)
       } catch (e) {
         console.error("Error creating image bitmap:", e)
@@ -310,6 +411,7 @@ export class BarcodeScanner extends LitElement {
 
       if (imageBitmap) {
         try {
+          // Detect barcodes in the image bitmap
           const result = await this.detectFn!(imageBitmap)
           if (result) {
             this.barcode = result
@@ -318,6 +420,7 @@ export class BarcodeScanner extends LitElement {
               state: BarcodeScannerState.DETECTED,
             })
 
+            // Stop the video after detecting a barcode
             this.stopVideo()
             return
           }
@@ -326,17 +429,26 @@ export class BarcodeScanner extends LitElement {
         }
       }
 
+      // Continue processing frames if no barcode is detected
       requestAnimationFrame(processFrame)
     }
 
     requestAnimationFrame(processFrame)
   }
 
+  /**
+   * A lifecycle method that is called when the component is disconnected from the DOM.
+   * This method is used to stop the barcode scanner and clear the video element when the component is removed from the DOM.
+   */
   override disconnectedCallback() {
     super.disconnectedCallback()
     this.stopVideo()
   }
 
+  /**
+   * A private method that renders the overlay for the barcode scanner.
+   * This method is called whenever the component's UI needs to be updated and used to render the overlay based on the component's state.
+   */
   private renderOverlay() {
     if (!this.codeReader) {
       return html` <div class="cta-overlay-wrapper">
@@ -391,6 +503,10 @@ export class BarcodeScanner extends LitElement {
     `
   }
 
+  /**
+   * A lifecycle method that renders the component's template.
+   * This method is called whenever the component's UI needs to be updated and used to render the component's template based on its state.
+   */
   override render() {
     return html`
       <div class="barcode-scanner" style=${styleMap(this.wrapperStyle)}>
