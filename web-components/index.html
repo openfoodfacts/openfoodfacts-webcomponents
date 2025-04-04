@@ -115,8 +115,9 @@
     console.log("nutrient-state", event.detail)
   })
 
-  barcodeScanner.addEventListener("barcode-state", (event) => {
+  barcodeScanner.addEventListener("barcode-scanner-state", (event) => {
     productCode.value = event.detail
+
     if (event.detail.barcode) {
       alert(`Barcode detected: ${event.detail.barcode}`)
     }

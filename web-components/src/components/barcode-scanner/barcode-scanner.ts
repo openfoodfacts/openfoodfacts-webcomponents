@@ -274,7 +274,7 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
     try {
       // Remove the type assertion for BarcodeDetector to avoid TypeScript error
       // @ts-ignore
-      this.codeReader = new BarcodeDetector()
+      this.codeReader = new BarcodeDetector({ formats: ["ean_13", "ean_8"] })
       this.detectFn = this.detectWithBarcodeDetector
       this.sendBarcodeStateEvent({ state: BarcodeScannerState.DETECTOR_AVAILABLE })
     } catch (error) {
