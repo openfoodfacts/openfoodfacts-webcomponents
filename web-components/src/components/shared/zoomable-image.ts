@@ -19,6 +19,9 @@ import { localized, msg } from "@lit/localize"
 export class ZoomableImage extends LitElement {
   static override styles = [
     css`
+      :host {
+        display: block;
+      }
       .panzoom-parent {
         position: relative;
         position: relative;
@@ -41,6 +44,9 @@ export class ZoomableImage extends LitElement {
   @query(".panzoom")
   element!: HTMLElement
 
+  @query("img")
+  imageElement!: HTMLImageElement
+
   @state()
   panzoom!: any
 
@@ -54,7 +60,7 @@ export class ZoomableImage extends LitElement {
   stepSize = 0.1
 
   @property({ type: Number, attribute: "min-zoom" })
-  minZoom = 1
+  minZoom = 0
   @property({ type: Number, attribute: "max-zoom" })
   maxZoom = 5
 
@@ -68,6 +74,13 @@ export class ZoomableImage extends LitElement {
   } = {
     width: "100%",
     height: "30vh",
+  }
+
+  override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
+    super.attributeChangedCallback(name, _old, value)
+    if (["src", "size"].includes(name)) {
+      this.onImageChange()
+    }
   }
 
   override connectedCallback(): void {
@@ -84,15 +97,52 @@ export class ZoomableImage extends LitElement {
       maxScale: this.maxZoom,
       minScale: this.minZoom,
       canvas: true,
-      startScale: this.currentZoom,
       increment: this.stepSize,
+      contain: "inside",
     })
+
     this.element.addEventListener("wheel", panzoom.zoomWithWheel)
     this.panzoom = panzoom
+    this.onImageChange()
+  }
+
+  resetContain() {
+    setTimeout(() => {
+      this.panzoom.setOptions({
+        contain: undefined,
+      })
+    }, 100)
+  }
+
+  onImageChange() {
+    if (!this.panzoom) return
+    this.rotation = 0
+    this.panzoom.setOptions({
+      contain: "inside",
+    })
+    setTimeout(() => {
+      this.panzoom.reset({
+        animate: false,
+      })
+      this.resetContain()
+    }, 100)
   }
 
   rotateImage(rotation: number) {
     this.rotation += rotation
+  }
+
+  /**
+   * Fit and center the image in the container
+   */
+  fitAndCenterImage() {
+    if (!this.panzoom) return
+
+    setTimeout(() => {
+      this.panzoom.constrainXY(0, 0, 0, {
+        contain: "inside",
+      })
+    }, 100)
   }
 
   override render() {
@@ -101,6 +151,11 @@ export class ZoomableImage extends LitElement {
     }
     return html`
       <div>
+        <div class="panzoom-parent" style=${styleMap(this.size)}>
+          <div class="panzoom">
+            <img src=${this.src} @load=${this.initPanzoom} style=${styleMap(imageStyle)} />
+          </div>
+        </div>
         <div class="flex justify-end">
           <button
             class="link-button"
@@ -116,11 +171,6 @@ export class ZoomableImage extends LitElement {
           >
             <rotate-right-icon></rotate-right-icon>
           </button>
-        </div>
-        <div class="panzoom-parent">
-          <div class="panzoom" style=${styleMap(this.size)}>
-            <img src=${this.src} @load=${this.initPanzoom} style=${styleMap(imageStyle)} />
-          </div>
         </div>
       </div>
     `
