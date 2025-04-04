@@ -8,6 +8,7 @@ import "../icons/close"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { EventType } from "../../constants"
 import { StyleInfo, styleMap } from "lit-html/directives/style-map.js"
+import { ConsoleLogMixin } from "../../mixins/console-log-mixin"
 
 export enum BarcodeScannerState {
   EXITED,
@@ -31,7 +32,7 @@ interface BarcodeDetector {
  */
 @customElement("barcode-scanner")
 @localized()
-export class BarcodeScanner extends LitElement {
+export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
   /**
    * Static styles for the BarcodeScanner component.
    * These styles define the appearance of the component, including the video element, overlay, and buttons.
@@ -408,7 +409,7 @@ export class BarcodeScanner extends LitElement {
         // Create an image bitmap from the current video frame
         imageBitmap = await createImageBitmap(video, 0, 0, video.videoWidth, video.videoHeight)
       } catch (e) {
-        console.error("Error creating image bitmap:", e)
+        this.logToConsole("image-bitmap", `Error creating image bitmap: ${e}`)
       }
 
       if (imageBitmap) {
