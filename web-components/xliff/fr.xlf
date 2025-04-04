@@ -1,164 +1,172 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-<file target-language="fr" source-language="en" original="lit-localize-inputs" datatype="plaintext">
-<body>
-<trans-unit id="s01d2865e3e1d5501">
-  <source>Thank you for your assistance!</source>
-  <target state="translated">Merci pour votre aide !</target>
-</trans-unit>
-<trans-unit id="s4e94adf723979402">
-  <source>Open Food Facts needs your help with this product.</source>
-  <target state="translated">Open Food Facts a besoin de votre aide pour ce produit.</target>
-</trans-unit>
-<trans-unit id="s25e94495991e95ba">
-  <source>Thanks for your help! Can you assist with another question?</source>
-  <target state="translated">Merci pour votre aide ! Pouvez-vous aider pour une autre question ?</target>
-</trans-unit>
-<trans-unit id="s166bd56d19670a72">
-  <source>Zoom</source>
-  <target state="translated">Zoomer</target>
-</trans-unit>
-<trans-unit id="s95d23d03f9147581">
-  <source>Unzoom</source>
-  <target state="translated">Dézoomer</target>
-</trans-unit>
-<trans-unit id="s49730f3d5751a433">
-  <source>Loading...</source>
-  <target state="translated">Chargement...</target>
-</trans-unit>
-<trans-unit id="sc5575e3107f87874">
-  <source>Rotate image to the left</source>
-  <target state="translated">Pivoter l'image vers la gauche</target>
-</trans-unit>
-<trans-unit id="se773f50d2a16d481">
-  <source>Rotate image to the right</source>
-  <target state="translated">Pivoter l'image vers la droite</target>
-</trans-unit>
-<trans-unit id="sb4ff51a46f0cd54c">
-  <source>Hide image</source>
-  <target state="translated">Masquer l'image</target>
-</trans-unit>
-<trans-unit id="sf854ab8601cebb10">
-  <source>Voir image</source>
-  <target state="translated">Afficher l'image</target>
-</trans-unit>
-<trans-unit id="s7ce4fd9430e80cea">
-  <source>value</source>
-  <target state="translated">valeur</target>
-</trans-unit>
-<trans-unit id="s6498dfe4855bb3a7">
-  <source>unit</source>
-  <target state="translated">unité</target>
-</trans-unit>
-<trans-unit id="s13d6dffec1a1ec2b">
-  <source>Nutrients</source>
-  <target state="translated">Nutriments</target>
-</trans-unit>
-<trans-unit id="s59df20feee978e5b">
-  <source>Error: Invalid value.</source>
-  <target state="translated">Erreur : Valeur invalide.</target>
-</trans-unit>
-<trans-unit id="s090c321cc9301918">
-  <source>Error: Value must have only 2 decimal</source>
-  <target state="translated">Erreur : La valeur doit avoir seulement 2 décimales</target>
-</trans-unit>
-<trans-unit id="sbd9a0b2293b3cd3c">
-  <source>Serving size</source>
-  <target state="translated">Taille d'une portion</target>
-</trans-unit>
-<trans-unit id="sbb623d6b18d966a0">
-  <source>Nutrition facts are displayed on the packaging:</source>
-  <target state="translated">Les informations nutritionnelles sont affichées sur l'emballage :</target>
-</trans-unit>
-<trans-unit id="se206feec7ec57b28">
-  <source>per 100g</source>
-  <target state="translated">par 100g</target>
-</trans-unit>
-<trans-unit id="s453188ea728f64da">
-  <source>Add a nutrient</source>
-  <target state="translated">Ajouter un nutriment</target>
-</trans-unit>
-<trans-unit id="hf83972f67d491f69">
-  <source>Open food facts lives thanks to its community.<x id="0" equiv-text="&lt;br&gt;"/>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file target-language="fr" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+    <body>
+      <trans-unit id="s49730f3d5751a433">
+        <source>Loading...</source>
+        <target state="translated">Chargement ...</target>
+      </trans-unit>
+      <trans-unit id="s95d23d03f9147581">
+        <source>Unzoom</source>
+        <target state="translated">Dézoom</target>
+      </trans-unit>
+      <trans-unit id="s166bd56d19670a72">
+        <source>Zoom</source>
+        <target state="translated">Zoom</target>
+      </trans-unit>
+      <trans-unit id="s01d2865e3e1d5501">
+        <source>Thank you for your assistance!</source>
+        <target state="translated">Merci pour votre aide !</target>
+      </trans-unit>
+      <trans-unit id="s4e94adf723979402">
+        <source>Open Food Facts needs your help with this product.</source>
+        <target state="translated">Open Food Facts a besoin de votre aide avec ce produit.</target>
+      </trans-unit>
+      <trans-unit id="s25e94495991e95ba">
+        <source>Thanks for your help! Can you assist with another question?</source>
+        <target state="translated">Merci pour votre aide ! Pouvez-vous répondre à une autre question ?</target>
+      </trans-unit>
+      <trans-unit id="s7ce4fd9430e80cea">
+        <source>value</source>
+        <target state="translated">valeur</target>
+      </trans-unit>
+      <trans-unit id="s6498dfe4855bb3a7">
+        <source>unit</source>
+        <target state="translated">unité</target>
+      </trans-unit>
+      <trans-unit id="s59df20feee978e5b">
+        <source>Error: Invalid value.</source>
+        <target state="translated">Erreur : valeur invalide.</target>
+      </trans-unit>
+      <trans-unit id="s090c321cc9301918">
+        <source>Error: Value must have only 2 decimal</source>
+        <target state="translated">Erreur : la valeur ne peut contenir que 2 décimales</target>
+      </trans-unit>
+      <trans-unit id="sbd9a0b2293b3cd3c">
+        <source>Serving size</source>
+        <target state="translated">Taille d'une portion</target>
+      </trans-unit>
+      <trans-unit id="sbb623d6b18d966a0">
+        <source>Nutrition facts are displayed on the packaging:</source>
+        <target state="translated">Les informations nutritionnelles sont affichées sur l'emballage :</target>
+      </trans-unit>
+      <trans-unit id="se206feec7ec57b28">
+        <source>per 100g</source>
+        <target state="translated">pour 100g</target>
+      </trans-unit>
+      <trans-unit id="sca0c3305aff570b8">
+        <source>per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
+        <target state="needs-translation">per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</target>
+      </trans-unit>
+      <trans-unit id="s453188ea728f64da">
+        <source>Add a nutrient</source>
+        <target state="translated">Ajouter un nutriment</target>
+      </trans-unit>
+      <trans-unit id="s13d6dffec1a1ec2b">
+        <source>Nutrients</source>
+        <target state="translated">Nutriments</target>
+      </trans-unit>
+      <trans-unit id="s688d3d95ca7c01db">
+        <source>Specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
+        <target state="needs-translation">Specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</target>
+      </trans-unit>
+      <trans-unit id="sc5575e3107f87874">
+        <source>Rotate image to the left</source>
+        <target state="needs-translation">Rotate image to the left</target>
+      </trans-unit>
+      <trans-unit id="se773f50d2a16d481">
+        <source>Rotate image to the right</source>
+        <target state="needs-translation">Rotate image to the right</target>
+      </trans-unit>
+      <trans-unit id="hf83972f67d491f69">
+        <source>Open food facts lives thanks to its community.<x id="0" equiv-text="&lt;br&gt;"/>
           Can you help us validate nutritional information?</source>
-  <target state="translated">Open Food Facts vit grâce à sa communauté.<x id="0" equiv-text="&lt;br&gt;"/>
-          Pouvez-vous nous aider à valider les informations nutritionnelles ?</target>
+        <target state="needs-translation">Open food facts lives thanks to its community.<x id="0" equiv-text="&lt;br&gt;"/>
+          Can you help us validate nutritional information?</target>
+      </trans-unit>
+      <trans-unit id="s7d8eadc53978967f">
+        <source>Thank you for your contribution!</source>
+        <target state="translated">Un grand merci pour votre contribution !</target>
+      </trans-unit>
+      <trans-unit id="sb4ff51a46f0cd54c">
+        <source>Hide image</source>
+        <target state="translated">Cacher l'image</target>
+      </trans-unit>
+      <trans-unit id="sf854ab8601cebb10">
+        <source>Voir image</source>
+        <target state="translated">Voir image</target>
+      </trans-unit>
+      <trans-unit id="s475b08749d0706ed">
+        <source>Help us inform millions of consumers around the world about what they eat</source>
+        <target state="translated">Aidez-nous à informer des millions de consommateurs à travers le monde sur ce qu'ils mangent</target>
+      </trans-unit>
+      <trans-unit id="sfc40ea3d5d5aa6f8">
+        <source>Your donations fund the day-to-day operations of our non-profit association:</source>
+        <target state="translated">Vos dons financent le fonctionnement quotidien de notre association à but non lucratif :</target>
+      </trans-unit>
+      <trans-unit id="s1c5031113de500ce">
+        <source>keeping our database open &amp; available to all,</source>
+        <target state="needs-translation">keeping our database open &amp; available to all,</target>
+      </trans-unit>
+      <trans-unit id="sebb2c6c830a44574">
+        <source>technical infrastructure (website/mobile app) &amp; a small permanent team</source>
+        <target state="needs-translation">technical infrastructure (website/mobile app) &amp; a small permanent team</target>
+      </trans-unit>
+      <trans-unit id="sd82bc2decefa621b">
+        <source>remain independent of the food industry,</source>
+        <target state="translated">rester indépendant de l'industrie alimentaire,</target>
+      </trans-unit>
+      <trans-unit id="sb3bdd638a58d30f4">
+        <source>engage a community of committed citizens,</source>
+        <target state="translated">mobiliser une communauté de citoyens engagés,</target>
+      </trans-unit>
+      <trans-unit id="s100c4928cc74642a">
+        <source>support the advancement of public health research.</source>
+        <target state="translated">soutenir l’avancement de la recherche en santé publique.</target>
+      </trans-unit>
+      <trans-unit id="s6d7b6cdedaadfb6e">
+        <source>Each donation counts! We appreciate your support in bringing further food transparency in the world.</source>
+        <target state="translated">Chaque don compte ! Nous apprécions votre soutien pour une plus grande transparence alimentaire dans le monde.</target>
+      </trans-unit>
+      <trans-unit id="s6306a31415aea913">
+        <source>I SUPPORT</source>
+        <target state="translated">JE SOUTIENS</target>
+      </trans-unit>
+      <trans-unit id="scbab4bd737ba7934">
+        <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
+        <target state="needs-translation">group photo donation <x id="0" equiv-text="${this.currentYear}"/></target>
+      </trans-unit>
+      <trans-unit id="s43df2e8395f6834e">
+        <source>Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</source>
+        <target state="needs-translation">Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</target>
+      </trans-unit>
+      <trans-unit id="s000d98595e959c1e">
+        <source>Get It On Google Play</source>
+        <target state="translated">Disponible sur Google Play</target>
+      </trans-unit>
+      <trans-unit id="s547c12ae169d00bc">
+        <source>Available on F-Droid</source>
+        <target state="translated">Disponible sur F-Droid</target>
+      </trans-unit>
+      <trans-unit id="s7124dde792a8faa2">
+        <source>Android APK</source>
+        <target state="translated">APK Android</target>
+      </trans-unit>
+      <trans-unit id="s21e73088de6f26f3">
+        <source>Download on the App Store</source>
+        <target state="translated">Disponible sur l'App Store</target>
+      </trans-unit>
+      <trans-unit id="sc52696641af72b53">
+        <source>Install the app!</source>
+        <target state="translated">Installer l'app!</target>
+      </trans-unit>
+      <trans-unit id="h5d824b4954e56ea5">
+        <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
+        <target state="needs-translation">Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></target>
+      </trans-unit>
+<trans-unit id="s8a8bfd67f2dd2810">
+  <source>Download the OFF app with this QR code</source>
 </trans-unit>
-<trans-unit id="s7d8eadc53978967f">
-  <source>Thank you for your contribution!</source>
-  <target state="translated">Merci pour votre contribution !</target>
-</trans-unit>
-<trans-unit id="s475b08749d0706ed">
-  <source>Help us inform millions of consumers around the world about what they eat</source>
-  <target state="translated">Aidez-nous à informer des millions de consommateurs dans le monde sur ce qu'ils mangent</target>
-</trans-unit>
-<trans-unit id="s06b3b3ee211d15ae">
-  <source>Please give to our 2024 Fundraiser</source>
-  <target state="translated">Merci de contribuer à notre collecte de fonds 2024</target>
-</trans-unit>
-<trans-unit id="sfc40ea3d5d5aa6f8">
-  <source>Your donations fund the day-to-day operations of our non-profit association:</source>
-  <target state="translated">Vos dons financent le fonctionnement quotidien de notre association à but non lucratif :</target>
-</trans-unit>
-<trans-unit id="s1c5031113de500ce">
-  <source>keeping our database open &amp; available to all,</source>
-  <target state="translated">garder notre base de données ouverte et accessible à tous,</target>
-</trans-unit>
-<trans-unit id="sebb2c6c830a44574">
-  <source>technical infrastructure (website/mobile app) &amp; a small permanent team</source>
-  <target state="translated">infrastructure technique (site web/application mobile) et une petite équipe permanente</target>
-</trans-unit>
-<trans-unit id="sd82bc2decefa621b">
-  <source>remain independent of the food industry,</source>
-  <target state="translated">rester indépendant de l'industrie alimentaire,</target>
-</trans-unit>
-<trans-unit id="sb3bdd638a58d30f4">
-  <source>engage a community of committed citizens,</source>
-  <target state="translated">mobiliser une communauté de citoyens engagés,</target>
-</trans-unit>
-<trans-unit id="s100c4928cc74642a">
-  <source>support the advancement of public health research.</source>
-  <target state="translated">soutenir l’avancement de la recherche en santé publique.</target>
-</trans-unit>
-<trans-unit id="s6d7b6cdedaadfb6e">
-  <source>Each donation counts! We appreciate your support in bringing further food transparency in the world.</source>
-  <target state="translated">Chaque don compte ! Nous apprécions votre soutien pour une plus grande transparence alimentaire dans le monde.</target>
-</trans-unit>
-<trans-unit id="s6306a31415aea913">
-  <source>I SUPPORT</source>
-  <target>JE SOUTIENS</target>
-</trans-unit>
-<trans-unit id="sca0c3305aff570b8">
-  <source>per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
-  <target state="translated">par portion spécifiée "<x id="0" equiv-text="${this._servingSizeValue}"/>"</target>
-</trans-unit>
-<trans-unit id="s688d3d95ca7c01db">
-  <source>Specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
-  <target state="translated">Portion spécifiée "<x id="0" equiv-text="${this._servingSizeValue}"/>"</target>
-</trans-unit>
-<trans-unit id="sc52696641af72b53">
-  <source>Install the app!</source>
-  <target state="translated">Installez l'app</target>
-</trans-unit>
-<trans-unit id="h2dc86cd122504a1d">
-  <source>Scan your <x id="0" equiv-text="&lt;span id=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span id=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
-  <target state="translated">Scannez les <x id="1" equiv-text="&lt;/span&gt; &lt;span id=&quot;foods&quot;&gt;"/>aliments<x id="2" equiv-text="&lt;/span&gt;"/> de votre <x id="0" equiv-text="&lt;span id=&quot;everyday&quot;&gt;"/>quotidien</target>
-</trans-unit>
-<trans-unit id="s000d98595e959c1e">
-  <source>Get It On Google Play</source>
-  <target state="translated">Disponible sur Google Play</target>
-</trans-unit>
-<trans-unit id="s547c12ae169d00bc">
-  <source>Available on F-Droid</source>
-</trans-unit>
-<trans-unit id="s7124dde792a8faa2">
-  <source>Android APK</source>
-  <target state="translated">APK Android</target>
-</trans-unit>
-<trans-unit id="s21e73088de6f26f3">
-  <source>Download on the App Store</source>
-  <target state="translated">Disponible sur l'App Store</target>
-</trans-unit>
-</body>
-</file>
+    </body>
+  </file>
 </xliff>
