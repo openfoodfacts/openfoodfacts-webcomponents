@@ -26,6 +26,8 @@ interface BarcodeDetector {
  * BarcodeScanner is a custom web component that allows users to scan barcodes using their device's camera.
  * It uses the BarcodeDetector API to detect barcodes in real-time and dispatches custom events with the detected barcode data.
  * The component provides a user interface with an overlay that guides the user to scan a barcode and displays the detected barcode value.
+ * @fires barcode-scanner-state - Indicates the state of the barcode scanner.
+ * @slot message-before-scanning - The message to display before scanning.
  */
 @customElement("barcode-scanner")
 @localized()
@@ -495,7 +497,11 @@ export class BarcodeScanner extends LitElement {
               </button>
             </div>
             <div class="cta-overlay-text">
-              ${msg("Click to scan a barcode and find out its details (health, preferences, etc.)")}
+              <slot name="message-before-scanning">
+                ${msg(
+                  "Click to scan a barcode and find out its details (health, preferences, etc.)"
+                )}
+              </slot>
             </div>
           </div>
         </div>
