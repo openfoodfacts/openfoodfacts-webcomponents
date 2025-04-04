@@ -9,3 +9,4 @@ export { RobotoffNutrients } from "./components/robotoff-nutrients/robotoff-nutr
 export { DonationBanner } from "./components/donation-banner/donation-banner"
 export { MobileBadges } from "./components/mobile-badges/mobile-badges"
 export { DownloadAppQrCode } from "./components/download-app-qr-code/download-app-qr-code"
+export { BarcodeScanner } from "./components/barcode-scanner/barcode-scanner"

@@ -65,6 +65,12 @@
       <div style="display: flex; margin: 2rem; margin-left: 10px; margin-right: 10px">
         <download-app-qr-code qrCodeUrl="https://example.com/qr-code.png" />
       </div>
+
+      <div
+        style="display: flex; margin: 2rem; margin-left: 10px; margin-right: 40px; max-width: 300px"
+      >
+        <barcode-scanner id="barcode-scanner"></barcode-scanner>
+      </div>
     </div>
   </body>
 </html>
@@ -84,6 +90,7 @@
   const robotoffNutrients = document.getElementById("robotoff-nutrients")
   const productCode = document.getElementById("product-code")
   const insightTypes = document.getElementById("insight-types")
+  const barcodeScanner = document.getElementById("barcode-scanner")
 
   const productDebounce = debounce((value) => {
     robotoffQuestion.setAttribute("product-code", value)
@@ -106,5 +113,13 @@
 
   robotoffNutrients.addEventListener("nutrient-state", (event) => {
     console.log("nutrient-state", event.detail)
+  })
+
+  barcodeScanner.addEventListener("barcode-scanner-state", (event) => {
+    productCode.value = event.detail
+
+    if (event.detail.barcode) {
+      alert(`Barcode detected: ${event.detail.barcode}`)
+    }
   })
 </script>
