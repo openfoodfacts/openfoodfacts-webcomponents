@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-import {legacyPlugin} from '@web/dev-server-legacy';
-import {playwrightLauncher} from '@web/test-runner-playwright';
+import { legacyPlugin } from "@web/dev-server-legacy"
+import { playwrightLauncher } from "@web/test-runner-playwright"
 
-const mode = process.env.MODE || 'dev';
-if (!['dev', 'prod'].includes(mode)) {
-  throw new Error(`MODE must be "dev" or "prod", was "${mode}"`);
+const mode = process.env.MODE || "dev"
+if (!["dev", "prod"].includes(mode)) {
+  throw new Error(`MODE must be "dev" or "prod", was "${mode}"`)
 }
 
 // Uncomment for testing on Sauce Labs
@@ -53,9 +53,9 @@ if (!['dev', 'prod'].includes(mode)) {
 const browsers = {
   // Local browser testing via playwright
   // ===========
-  chromium: playwrightLauncher({product: 'chromium'}),
-  firefox: playwrightLauncher({product: 'firefox'}),
-  webkit: playwrightLauncher({product: 'webkit'}),
+  chromium: playwrightLauncher({ product: "chromium" }),
+  firefox: playwrightLauncher({ product: "firefox" }),
+  webkit: playwrightLauncher({ product: "webkit" }),
 
   // Uncomment example launchers for running on Sauce Labs
   // ===========
@@ -68,34 +68,32 @@ const browsers = {
   // chromium: browserstackLauncher({browserName: 'Chrome', os: 'Windows', os_version: '10'}),
   // firefox: browserstackLauncher({browserName: 'Firefox', os: 'Windows', os_version: '10'}),
   // safari: browserstackLauncher({browserName: 'Safari', browser_version: '14.0', os: 'OS X', os_version: 'Big Sur'}),
-};
+}
 
 // Prepend BROWSERS=x,y to `npm run test` to run a subset of browsers
 // e.g. `BROWSERS=chromium,firefox npm run test`
 const noBrowser = (b) => {
-  throw new Error(`No browser configured named '${b}'; using defaults`);
-};
-let commandLineBrowsers;
+  throw new Error(`No browser configured named '${b}'; using defaults`)
+}
+let commandLineBrowsers
 try {
-  commandLineBrowsers = process.env.BROWSERS?.split(',').map(
-    (b) => browsers[b] ?? noBrowser(b)
-  );
+  commandLineBrowsers = process.env.BROWSERS?.split(",").map((b) => browsers[b] ?? noBrowser(b))
 } catch (e) {
-  console.warn(e);
+  console.warn(e)
 }
 
 // https://modern-web.dev/docs/test-runner/cli-and-configuration/
 export default {
-  rootDir: '.',
-  files: ['./test/**/*_test.js'],
-  nodeResolve: {exportConditions: mode === 'dev' ? ['development'] : []},
+  rootDir: ".",
+  files: ["./test/**/*_test.js"],
+  nodeResolve: { exportConditions: mode === "dev" ? ["development"] : [] },
   preserveSymlinks: true,
   browsers: commandLineBrowsers ?? Object.values(browsers),
   testFramework: {
     // https://mochajs.org/api/mocha
     config: {
-      ui: 'tdd',
-      timeout: '60000',
+      ui: "tdd",
+      timeout: "60000",
     },
   },
   plugins: [
@@ -108,8 +106,8 @@ export default {
         // for interfacing with the webcomponents polyfills
         custom: [
           {
-            name: 'lit-polyfill-support',
-            path: 'node_modules/lit/polyfill-support.js',
+            name: "lit-polyfill-support",
+            path: "node_modules/lit/polyfill-support.js",
             test: "!('attachShadow' in Element.prototype) || !('getRootNode' in Element.prototype) || window.ShadyDOM && window.ShadyDOM.force",
             module: false,
           },
@@ -117,4 +115,4 @@ export default {
       },
     }),
   ],
-};
+}
