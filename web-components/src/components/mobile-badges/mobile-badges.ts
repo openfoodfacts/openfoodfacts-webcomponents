@@ -167,14 +167,14 @@ export class MobileBadges extends LitElement {
    * Controls visibility of Google Play Store badge
    * @type {boolean}
    */
-  @property({ type: Boolean, attribute: "hide-playstore" })
+  @property({ type: Boolean, attribute: "hide-play-store" })
   hidePlayStore = false
 
   /**
    * Controls visibility of F-Droid badge
    * @type {boolean}
    */
-  @property({ type: Boolean, attribute: "hide-fdroid" })
+  @property({ type: Boolean, attribute: "hide-f-droid" })
   hideFDroid = false
 
   /**
@@ -188,7 +188,7 @@ export class MobileBadges extends LitElement {
    * Controls visibility of App Store badge
    * @type {boolean}
    */
-  @property({ type: Boolean, attribute: "hide-appstore" })
+  @property({ type: Boolean, attribute: "hide-app-store" })
   hideAppStore = false
 
   /**

@@ -77,4 +77,21 @@ The default configuration is :
         }'
   assets-images-path="/assets/images"
 ></off-webcomponents-configuration>
+<off-boolean-attribute></off-boolean-attribute>
+```
+
+#### Boolean attributes
+
+For boolean we follow the convention of lit [here](https://lit.dev/docs/components/properties/#boolean-attributes) Boolean is set to `false` by default and ca be use like this:
+
+- `true` :
+
+```html
+<off-boolean-attribute hide></off-boolean-attribute>
+```
+
+- `false` :
+
+```html
+<off-boolean-attribute></off-boolean-attribute>
 ```
