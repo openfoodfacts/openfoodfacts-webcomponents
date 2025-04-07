@@ -164,11 +164,11 @@
       </trans-unit>
       <trans-unit id="s145e6e6c7a7bcf7a">
         <source>Reduce image</source>
-        <target state="needs-translation">Reduce image</target>
+        <target state="translated">Зменшити зображення</target>
       </trans-unit>
       <trans-unit id="sc0520e1732a5c568">
         <source>Expand image</source>
-        <target state="needs-translation">Expand image</target>
+        <target state="translated">Розгорнути зображення</target>
       </trans-unit>
     </body>
   </file>
