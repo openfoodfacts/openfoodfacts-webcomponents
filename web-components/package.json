@@ -61,7 +61,7 @@
     "@lit/task": "^1.0.2",
     "@panzoom/panzoom": "^4.6.0",
     "@types/dompurify": "^3.0.5",
-    "dompurify": "^3.2.4",
+    "dompurify": "^3.2.5",
     "lit": "^3.2.1",
     "lit-html": "^3.2.1"
   },
@@ -82,9 +82,9 @@
     "@webcomponents/webcomponentsjs": "^2.8.0",
     "concurrently": "^9.1.2",
     "dotenv": "^16.4.7",
-    "eslint": "^9.22.0",
+    "eslint": "^9.24.0",
     "eslint-config-prettier": "^10.1.1",
-    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-prettier": "^5.2.6",
     "glob": "^11.0.1",
     "lit-analyzer": "^2.0.3",
     "prettier": "^3.5.3",
@@ -96,7 +96,7 @@
     "rollup-plugin-sourcemaps": "^0.6.3",
     "rollup-plugin-summary": "^3.0.0",
     "ts-node": "^10.9.2",
-    "typescript": "~5.8.2"
+    "typescript": "~5.8.3"
   },
   "customElements": "custom-elements.json"
 }
