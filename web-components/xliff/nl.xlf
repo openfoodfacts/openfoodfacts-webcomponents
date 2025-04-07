@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file target-language="nl-BE" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+  <file target-language="nl" source-language="en" original="lit-localize-inputs" datatype="plaintext">
     <body>
       <trans-unit id="s49730f3d5751a433" approved="yes">
         <source>Loading...</source>
-        <target state="final">Bezig met laden...</target>
+        <target state="final">Aan het laden...</target>
       </trans-unit>
       <trans-unit id="s95d23d03f9147581" approved="yes">
         <source>Unzoom</source>
@@ -12,7 +12,7 @@
       </trans-unit>
       <trans-unit id="s166bd56d19670a72" approved="yes">
         <source>Zoom</source>
-        <target state="final">Inzoomen</target>
+        <target state="final">Zoom</target>
       </trans-unit>
       <trans-unit id="s01d2865e3e1d5501" approved="yes">
         <source>Thank you for your assistance!</source>
@@ -167,6 +167,18 @@
       <trans-unit id="s8a8bfd67f2dd2810" approved="yes">
         <source>Download the OFF app with this QR code</source>
         <target state="final">Download de OFF-app met deze QR-code</target>
+      </trans-unit>
+      <trans-unit id="s4bbc7472834a9686">
+        <source>Your browser does not support barcode scanning.</source>
+        <target state="needs-translation">Your browser does not support barcode scanning.</target>
+      </trans-unit>
+      <trans-unit id="s5e8250fb85d64c23" approved="yes">
+        <source>Close</source>
+        <target state="final">Sluit</target>
+      </trans-unit>
+      <trans-unit id="s976dfd19ef58a1e1">
+        <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
+        <target state="needs-translation">Click to scan a barcode and find out its details (health, preferences, etc.)</target>
       </trans-unit>
     </body>
   </file>
