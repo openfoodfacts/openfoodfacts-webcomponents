@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file target-language="pt-BR" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+  <file target-language="pt-PT" source-language="en" original="lit-localize-inputs" datatype="plaintext">
     <body>
       <trans-unit id="s49730f3d5751a433">
         <source>Loading...</source>
-        <target state="translated">Carregando...</target>
+        <target state="translated">A carregar...</target>
       </trans-unit>
       <trans-unit id="s95d23d03f9147581">
         <source>Unzoom</source>
@@ -12,7 +12,7 @@
       </trans-unit>
       <trans-unit id="s166bd56d19670a72">
         <source>Zoom</source>
-        <target state="translated">Zoom</target>
+        <target state="translated">Ampliar</target>
       </trans-unit>
       <trans-unit id="s01d2865e3e1d5501">
         <source>Thank you for your assistance!</source>
@@ -98,11 +98,11 @@
       </trans-unit>
       <trans-unit id="s475b08749d0706ed">
         <source>Help us inform millions of consumers around the world about what they eat</source>
-        <target state="translated">Ajude-nos a informar a milhões de consumidores em todo o mundo sobre o que eles comem</target>
+        <target state="translated">Ajude-nos a informar milhões de consumidores em todo o mundo sobre o que comem</target>
       </trans-unit>
       <trans-unit id="sfc40ea3d5d5aa6f8">
         <source>Your donations fund the day-to-day operations of our non-profit association:</source>
-        <target state="translated">Suas doações financiam as operações diárias de nossa associação sem fins lucrativos:</target>
+        <target state="translated">Os seus donativos financiam as operações diárias da nossa associação sem fins lucrativos:</target>
       </trans-unit>
       <trans-unit id="s1c5031113de500ce">
         <source>keeping our database open &amp; available to all,</source>
@@ -114,19 +114,19 @@
       </trans-unit>
       <trans-unit id="sd82bc2decefa621b">
         <source>remain independent of the food industry,</source>
-        <target state="translated">permaneça independente da indústria alimentar,</target>
+        <target state="translated">permanecer independente da indústria alimentar,</target>
       </trans-unit>
       <trans-unit id="sb3bdd638a58d30f4">
         <source>engage a community of committed citizens,</source>
-        <target state="translated">envolva uma comunidade de cidadãos empenhados,</target>
+        <target state="translated">envolver uma comunidade de cidadãos empenhados,</target>
       </trans-unit>
       <trans-unit id="s100c4928cc74642a">
         <source>support the advancement of public health research.</source>
-        <target state="translated">apoio ao avanço da investigação no domínio da saúde pública.</target>
+        <target state="translated">apoiar o avanço da investigação no domínio da saúde pública.</target>
       </trans-unit>
       <trans-unit id="s6d7b6cdedaadfb6e">
         <source>Each donation counts! We appreciate your support in bringing further food transparency in the world.</source>
-        <target state="translated">Cada doação é importante! Nós agradecemos seu apoio em trazer mais transparência alimentar no mundo.</target>
+        <target state="translated">Cada donativo conta! Agradecemos o seu apoio para aumentar a transparência alimentar no mundo.</target>
       </trans-unit>
       <trans-unit id="s6306a31415aea913">
         <source>I SUPPORT</source>
@@ -158,7 +158,7 @@
       </trans-unit>
       <trans-unit id="sc52696641af72b53">
         <source>Install the app!</source>
-        <target state="translated">Instale o app!</target>
+        <target state="translated">Instale a aplicação!</target>
       </trans-unit>
       <trans-unit id="h5d824b4954e56ea5">
         <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
@@ -167,6 +167,18 @@
       <trans-unit id="s8a8bfd67f2dd2810">
         <source>Download the OFF app with this QR code</source>
         <target state="needs-translation">Download the OFF app with this QR code</target>
+      </trans-unit>
+      <trans-unit id="s4bbc7472834a9686">
+        <source>Your browser does not support barcode scanning.</source>
+        <target state="needs-translation">Your browser does not support barcode scanning.</target>
+      </trans-unit>
+      <trans-unit id="s5e8250fb85d64c23">
+        <source>Close</source>
+        <target state="translated">Fechar</target>
+      </trans-unit>
+      <trans-unit id="s976dfd19ef58a1e1">
+        <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
+        <target state="needs-translation">Click to scan a barcode and find out its details (health, preferences, etc.)</target>
       </trans-unit>
     </body>
   </file>
