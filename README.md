@@ -10,6 +10,32 @@ A set of web components for Open Food Facts to help build edition interfaces
 - API calls could be delegated to [openfoodfacts-nodejs](https://github.com/openfoodfacts/openfoodfacts-nodejs)
 - Candidates for using such webcomponents are: [openfoodfacts-server](https://github.com/openfoodfacts/openfoodfacts-server), [openfoodfacts-explorer](https://github.com/openfoodfacts/openfoodfacts-explorer) , [hunger-games](https://github.com/openfoodfacts/hunger-games) and potentially open-prices
 
+## Currently available webcomponents
+
+- Nutrition editing (with Nutri-Sight integration)
+- Robotoff Questions
+- Donation banner
+- Mobile badges
+- Knowledge Panels
+
+## Design
+
+- openfoodfacts-webcomo is a set of web components for Open Food Facts to help build interfaces (view and edits). The idea is to reach feature parity on the essential stuff with the main frontend to eventually replace it, with a great responsive UI (80%+ of our traffic is mobile web).
+- We currently don’t have any real visual mockup of it, nor “artistic direction” so for the time being, we're copying key features from the current frontend, improving them whenever we can.
+- [![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?logo=figma&logoColor=white) Mockups on the current website](<[https://www.figma.com/design/Qg9URUyrjHgYmnDHXRsTTB/Current-Website-design?m=auto&t=RokuCr1uXrGFMhTB-6](https://www.figma.com/design/Qg9URUyrjHgYmnDHXRsTTB/Current-Website-design?m=auto&t=RokuCr1uXrGFMhTB-6)>)
+- TODO: Create a webcomponents FIGMA file
+
+## Weekly meetings
+
+- We e-meet Wednesdays · 11:00 – 11:25am - Time zone: Europe/Paris
+- ![Google Meet](https://meet.google.com/uep-fhvf-gto) Video call link: https://meet.google.com/uep-fhvf-gto
+- Join by phone: https://tel.meet/uep-fhvf-gto?pin=8160344286211
+- Add the Event to your Calendar by [adding the Open Food Facts community calendar to your calendar](https://wiki.openfoodfacts.org/Events)
+- [Weekly Agenda](https://docs.google.com/document/d/1BGHfvrgx5eFIGjK8aTNPK2QwAggRp4oohGuYG9lNX8g/edit?tab=t.0): please add the Agenda items as early as you can. Make sure to check the Agenda items in advance of the meeting, so that we have the most informed discussions possible, leading to argumented decisions.
+- The meeting will handle Agenda items first, and if time permits, collaborative bug triage.
+- We strive to timebox the core of the meeting (decision making) to 30 minutes, with an optional free discussion/live debugging afterwards.
+- We take comprehensive notes in the Weekly Agenda of agenda item discussions and of decisions taken.
+
 ## NPM Package
 
 The components are now published on NPM here: https://www.npmjs.com/package/@openfoodfacts/openfoodfacts-webcomponents
@@ -112,3 +138,11 @@ To have it, you need to follow these steps:
 You can find the documentation [here](https://openfoodfacts.github.io/openfoodfacts-webcomponents)
 
 To work on documentation let see [this](web-components/docs/README.md)
+
+## Rules
+
+Each component has to follow this rules :
+
+- its own folder in the `src` folder.
+- attributes are in kebab-case
+- boolean attributes have to be `false` by default to follow this [rule](https://lit.dev/docs/components/properties/#boolean-attributes)

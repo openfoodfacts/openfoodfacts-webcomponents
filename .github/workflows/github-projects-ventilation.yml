@@ -1,0 +1,64 @@
+name: Ventilate issues to the right GitHub projects
+
+on:
+  issues:
+    types:
+      - opened
+      - edited
+      - deleted
+      - transferred
+      - pinned
+      - unpinned
+      - closed
+      - reopened
+      - assigned
+      - unassigned
+      - labeled
+      - unlabeled
+      - locked
+      - unlocked
+      - milestoned
+      - demilestoned
+
+  pull_request_target:
+    types:
+    - assigned
+    - unassigned
+    - labeled
+    - unlabeled
+    - opened
+    - edited
+    - closed
+    - reopened
+    - synchronize
+    - converted_to_draft
+    - ready_for_review
+    - locked
+    - unlocked
+    - review_requested
+    - review_request_removed
+    - auto_merge_enabled
+    - auto_merge_disabled
+jobs:
+  add-to-projects:
+    name: Ventilate issues to the right GitHub projects
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/add-to-project@main
+        with:
+          project-url: https://github.com/orgs/openfoodfacts/projects/11 # Add issue to the openfoodfacts-design project
+          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+          labeled: 🎨 Mockup available, 🎨 Mockup required
+          label-operator: OR
+      - uses: actions/add-to-project@main
+        with:
+          project-url: https://github.com/orgs/openfoodfacts/projects/57 # Add issue to the Most impactful issues board
+          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+          labeled: 🎯 P0, 🎯 P1
+          label-operator: OR
+      - uses: actions/add-to-project@main
+        with:
+          project-url: https://github.com/orgs/openfoodfacts/projects/136 # Add issue to the Translations project
+          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+          labeled: 🌐 Translations, translations, i18n, Translations
+          label-operator: OR
