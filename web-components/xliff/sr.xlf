@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file target-language="sr-Cyrl-ME" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+  <file target-language="sr" source-language="en" original="lit-localize-inputs" datatype="plaintext">
     <body>
       <trans-unit id="s49730f3d5751a433">
         <source>Loading...</source>
@@ -44,7 +44,7 @@
       </trans-unit>
       <trans-unit id="sbd9a0b2293b3cd3c">
         <source>Serving size</source>
-        <target state="translated">Porcija</target>
+        <target state="needs-translation">Serving size</target>
       </trans-unit>
       <trans-unit id="sbb623d6b18d966a0">
         <source>Nutrition facts are displayed on the packaging:</source>
@@ -156,18 +156,20 @@
       </trans-unit>
       <trans-unit id="s5e8250fb85d64c23">
         <source>Close</source>
-        <target state="translated">Zatvori</target>
+        <target state="translated">Затвори</target>
       </trans-unit>
       <trans-unit id="s976dfd19ef58a1e1">
         <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
         <target state="needs-translation">Click to scan a barcode and find out its details (health, preferences, etc.)</target>
       </trans-unit>
-<trans-unit id="s145e6e6c7a7bcf7a">
-  <source>Reduce image</source>
-</trans-unit>
-<trans-unit id="sc0520e1732a5c568">
-  <source>Expand image</source>
-</trans-unit>
+      <trans-unit id="s145e6e6c7a7bcf7a">
+        <source>Reduce image</source>
+        <target state="needs-translation">Reduce image</target>
+      </trans-unit>
+      <trans-unit id="sc0520e1732a5c568">
+        <source>Expand image</source>
+        <target state="needs-translation">Expand image</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
