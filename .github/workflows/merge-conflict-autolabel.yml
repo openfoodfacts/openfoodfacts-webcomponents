@@ -1,13 +1,13 @@
-name: '💥 Auto-Label Merge Conflicts on PRs'
+name: "💥 Auto-Label Merge Conflicts on PRs"
 on:
-  push:
+  pull_request:
     branches:
       - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-  
+
 jobs:
   triage:
     runs-on: ubuntu-latest
