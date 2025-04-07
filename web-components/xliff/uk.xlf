@@ -162,12 +162,14 @@
         <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
         <target state="translated">Клацніть, щоб відсканувати штрих-код і дізнатися його деталі (здоров’я, уподобання тощо)</target>
       </trans-unit>
-<trans-unit id="s145e6e6c7a7bcf7a">
-  <source>Reduce image</source>
-</trans-unit>
-<trans-unit id="sc0520e1732a5c568">
-  <source>Expand image</source>
-</trans-unit>
+      <trans-unit id="s145e6e6c7a7bcf7a">
+        <source>Reduce image</source>
+        <target state="needs-translation">Reduce image</target>
+      </trans-unit>
+      <trans-unit id="sc0520e1732a5c568">
+        <source>Expand image</source>
+        <target state="needs-translation">Expand image</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
