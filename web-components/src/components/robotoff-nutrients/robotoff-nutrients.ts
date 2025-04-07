@@ -59,25 +59,11 @@ export class RobotoffNutrients extends LitElement {
   productCode = ""
 
   /**
-   * Show messages
-   * @type {boolean}
-   */
-  @property({ type: Boolean, attribute: "show-messages" })
-  showMessages = false
-
-  /**
    * Is the form submited
    * @type {boolean}
    */
   @state()
   isSubmited = false
-
-  /**
-   * Show success message
-   * @type {boolean}
-   */
-  @state()
-  showSuccessMessage = false
 
   /**
    * Emit the state event
@@ -124,7 +110,6 @@ export class RobotoffNutrients extends LitElement {
   async onSubmit(event: CustomEvent<InsightAnnotationAnswer>) {
     await annotateNutrients(event.detail)
     this.isSubmited = true
-    this.showSuccessMessage = true
     this.emitNutrientEvent(EventState.ANNOTATED)
   }
 
