@@ -53,3 +53,12 @@
 
 - Add `mobile-badges` web component to show the mobile badges in the web components.
 - Update `donation-banner` web component to automatically update the year in the donation banner. And allow to change the year with the `year` property.
+
+## [1.4.0] - 2025-04-07
+
+- Use kebab-case for each property of the web components to be more consistent.
+- Add `barcode-scanner` web component to scan a barcode and find out its details (health, preferences, etc.).
+- Add `download-app-qr-code` web component to show the QR code to download the app.
+- Fix boolean properties to be `false` by default.
+- Update `robotoff-question` and `robotoff-nutrients` web components to be more easier to use in openfoodfacts website.
+- Add some translations for the web components.
