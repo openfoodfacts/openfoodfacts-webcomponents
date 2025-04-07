@@ -152,7 +152,7 @@
       </trans-unit>
       <trans-unit id="s4bbc7472834a9686">
         <source>Your browser does not support barcode scanning.</source>
-        <target state="translated">Dein Browser unterstützt das Scannen von Barcodes leider nicht.</target>
+        <target state="translated">Ihr Browser unterstützt kein Einlesen von Strichcodes.</target>
       </trans-unit>
       <trans-unit id="s5e8250fb85d64c23">
         <source>Close</source>
@@ -160,15 +160,15 @@
       </trans-unit>
       <trans-unit id="s976dfd19ef58a1e1">
         <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
-        <target state="translated">Tippe hier, um einen Barcode zu scannen und mehr über die Produkteigenschaften zu erfahren (Gesundheit, Eigenschaften, usw.)</target>
+        <target state="translated">Klicken Sie hier, um einen Strichcode einzulesen und Details zu erfahren (Gesundheit, Vorlieben usw.)</target>
       </trans-unit>
       <trans-unit id="s145e6e6c7a7bcf7a">
         <source>Reduce image</source>
-        <target state="needs-translation">Reduce image</target>
+        <target state="translated">Bild verkleinern</target>
       </trans-unit>
       <trans-unit id="sc0520e1732a5c568">
         <source>Expand image</source>
-        <target state="needs-translation">Expand image</target>
+        <target state="translated">Bild vergrößern</target>
       </trans-unit>
     </body>
   </file>
