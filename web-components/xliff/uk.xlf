@@ -170,7 +170,7 @@
       </trans-unit>
       <trans-unit id="s4bbc7472834a9686">
         <source>Your browser does not support barcode scanning.</source>
-        <target state="needs-translation">Your browser does not support barcode scanning.</target>
+        <target state="translated">Ваш браузер не підтримує сканування штрих-кодів.</target>
       </trans-unit>
       <trans-unit id="s5e8250fb85d64c23">
         <source>Close</source>
@@ -178,7 +178,7 @@
       </trans-unit>
       <trans-unit id="s976dfd19ef58a1e1">
         <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
-        <target state="needs-translation">Click to scan a barcode and find out its details (health, preferences, etc.)</target>
+        <target state="translated">Клацніть, щоб відсканувати штрих-код і дізнатися його деталі (здоров’я, уподобання тощо)</target>
       </trans-unit>
     </body>
   </file>
