@@ -160,12 +160,11 @@
         <source>Install the app!</source>
         <target state="translated">Installér appen!</target>
       </trans-unit>
-      <trans-unit id="h5d824b4954e56ea5">
-        <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
-        <target state="needs-translation">Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></target>
-      </trans-unit>
 <trans-unit id="s8a8bfd67f2dd2810">
   <source>Download the OFF app with this QR code</source>
+</trans-unit>
+<trans-unit id="h7c201d2f266e70f3">
+  <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt;"/>__TO_BE_REPLACE__<x id="2" equiv-text="&lt;span class=&quot;foods&quot;&gt;"/>foods<x id="3" equiv-text="&lt;/span&gt;"/></source>
 </trans-unit>
     </body>
   </file>
