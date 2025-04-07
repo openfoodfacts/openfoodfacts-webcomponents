@@ -1,0 +1,31 @@
+name: Check build works
+
+on:
+  push:
+    paths:
+      - "web-components/**"
+  pull_request:
+    paths:
+      - "web-components/**"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+          cache-dependency-path: "./web-components/package-lock.json"
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./web-components
+
+      - name: Build
+        run: npm run build
+        working-directory: ./web-components
