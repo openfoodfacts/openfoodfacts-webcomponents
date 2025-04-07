@@ -167,6 +167,15 @@
 <trans-unit id="s8a8bfd67f2dd2810">
   <source>Download the OFF app with this QR code</source>
 </trans-unit>
+<trans-unit id="s4bbc7472834a9686">
+  <source>Your browser does not support barcode scanning.</source>
+</trans-unit>
+<trans-unit id="s5e8250fb85d64c23">
+  <source>Close</source>
+</trans-unit>
+<trans-unit id="s976dfd19ef58a1e1">
+  <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
+</trans-unit>
     </body>
   </file>
 </xliff>
