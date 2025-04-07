@@ -9,7 +9,6 @@ import "../shared/loader"
 import { fetchNutrientsTaxonomies } from "../../signals/taxonomies"
 import { Insight, InsightAnnotationAnswer } from "../../types/robotoff"
 import { BASE } from "../../styles/base"
-import { msg } from "@lit/localize"
 import { robotoffConfiguration } from "../../signals/robotoff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { FLEX } from "../../styles/utils"
@@ -31,10 +30,6 @@ export class RobotoffNutrients extends LitElement {
     ...getButtonClasses([ButtonType.LINK]),
 
     css`
-      .messages-wrapper p {
-        max-width: 400px;
-      }
-
       .image-wrapper {
         display: flex;
         justify-content: center;
@@ -43,7 +38,15 @@ export class RobotoffNutrients extends LitElement {
       }
 
       .nutrients-content-wrapper {
-        gap: 2rem 5rem;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem 5rem;
+      }
+
+      .nutrients {
+        display: flex;
       }
     `,
   ]
@@ -56,31 +59,11 @@ export class RobotoffNutrients extends LitElement {
   productCode = ""
 
   /**
-   * Show messages
-   * @type {boolean}
-   */
-  @property({ type: Boolean, attribute: "show-messages" })
-  showMessages = false
-
-  /**
    * Is the form submited
    * @type {boolean}
    */
   @state()
   isSubmited = false
-
-  /**
-   * Show success message
-   * @type {boolean}
-   */
-  @state()
-  showSuccessMessage = false
-
-  /**
-   * Do we show the image of the product by default
-   */
-  @property({ type: Boolean, attribute: "show-image" })
-  showImage = true
 
   /**
    * Emit the state event
@@ -121,42 +104,13 @@ export class RobotoffNutrients extends LitElement {
   })
 
   /**
-   * Render messages
-   * @returns {TemplateResult | typeof nothing}
-   */
-  renderMessages() {
-    if (!this.showMessages) {
-      return nothing
-    }
-
-    if (!this.isSubmited) {
-      return msg(
-        html`Open food facts lives thanks to its community.<br />
-          Can you help us validate nutritional information?`
-      )
-    }
-    if (this.showSuccessMessage) {
-      return msg("Thank you for your contribution!")
-    }
-    return nothing
-  }
-
-  /**
    * Annotate the nutrients insights
    * @returns {Promise<void>}
    */
   async onSubmit(event: CustomEvent<InsightAnnotationAnswer>) {
     await annotateNutrients(event.detail)
     this.isSubmited = true
-    this.showSuccessMessage = true
     this.emitNutrientEvent(EventState.ANNOTATED)
-  }
-
-  hideImage() {
-    this.showImage = false
-  }
-  displayImage() {
-    this.showImage = true
   }
 
   renderImage(insight: Insight) {
@@ -166,21 +120,16 @@ export class RobotoffNutrients extends LitElement {
     const imgUrl = `${robotoffConfiguration.getItem("imgUrl")}${insight.source_image}`
     return html`
       <div>
-        <div class="flex justify-center">
-          ${this.showImage
-            ? html`<button class="link-button" @click=${this.hideImage}>
-                ${msg("Hide image")}
-              </button>`
-            : html`<button class="link-button is-closed" @click=${this.displayImage}>
-                ${msg("Voir image")}
-              </button>`}
+        <div class="image-wrapper">
+          <zoomable-image
+            src=${imgUrl}
+            .size="${{
+              height: "400px",
+              width: "100%",
+              "max-width": "500px",
+            }}"
+          ></zoomable-image>
         </div>
-
-        ${this.showImage
-          ? html`<div class="image-wrapper">
-              <zoomable-image src=${imgUrl} .size="${{ height: "350px" }}"></zoomable-image>
-            </div>`
-          : nothing}
       </div>
     `
   }
@@ -193,12 +142,7 @@ export class RobotoffNutrients extends LitElement {
           return html`<slot name="no-insight"></slot>`
         }
         return html`
-          <div part="nutrients">
-            <div part="messages-wrapper" class="messages-wrapper">
-              <p>
-                <i>${this.renderMessages()}</i>
-              </p>
-            </div>
+          <div class="nutrients" part="nutrients">
             <div part="nutrients-content-wrapper" class="nutrients-content-wrapper">
               ${this.renderImage(insight as Insight)}
               <robotoff-nutrients-table

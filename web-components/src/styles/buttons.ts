@@ -1,5 +1,5 @@
 import { css, type CSSResult } from "lit-element"
-import { SAFE_CAPPUCINO, SAFE_CHOCOLATE } from "../utils/colors"
+import { SAFE_CAPPUCINO, SAFE_CHOCOLATE, SAFE_DANGER, SAFE_SUCCESS } from "../utils/colors"
 
 export enum ButtonType {
   Chocolate = "chocolate",
@@ -7,6 +7,8 @@ export enum ButtonType {
   ChocolateOutline = "chocolate-outline",
   White = "white",
   LINK = "link",
+  Success = "success",
+  Danger = "danger",
 }
 
 export const getDefaultButtonClasses = (): CSSResult => {
@@ -30,7 +32,7 @@ export const getDefaultButtonClasses = (): CSSResult => {
 
     .button.small {
       padding: 0.25rem 0.5rem;
-      font-size: 0.75rem;
+      font-size: 0.875rem;
     }
   `
 }
@@ -95,6 +97,28 @@ export const BUTTON_CLASS_BY_TYPE: Record<ButtonType, CSSResult> = {
 
     .link-button:hover {
       text-decoration: underline;
+    }
+  `,
+  [ButtonType.Success]: css`
+    .success-button {
+      background-color: ${SAFE_SUCCESS};
+      border-color: ${SAFE_SUCCESS};
+      color: white;
+    }
+    .success-button:hover {
+      background-color: white;
+      color: ${SAFE_SUCCESS};
+    }
+  `,
+  [ButtonType.Danger]: css`
+    .danger-button {
+      background-color: ${SAFE_DANGER};
+      border-color: ${SAFE_DANGER};
+      color: white;
+    }
+    .danger-button:hover {
+      background-color: white;
+      color: ${SAFE_DANGER};
     }
   `,
 }
