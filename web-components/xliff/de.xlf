@@ -78,24 +78,6 @@
         <source>Rotate image to the right</source>
         <target state="translated">Bild nach rechts drehen</target>
       </trans-unit>
-      <trans-unit id="hf83972f67d491f69">
-        <source>Open food facts lives thanks to its community.<x id="0" equiv-text="&lt;br&gt;"/>
-          Can you help us validate nutritional information?</source>
-        <target state="translated">Open food facts lebt dank seiner Gemeinschaft.<x id="0" equiv-text="&lt;br&gt;"/>
-          Könnten Sie bei der Prüfung von Nährwertangaben helfen?</target>
-      </trans-unit>
-      <trans-unit id="s7d8eadc53978967f">
-        <source>Thank you for your contribution!</source>
-        <target state="translated">Vielen Dank für Ihren Beitrag!</target>
-      </trans-unit>
-      <trans-unit id="sb4ff51a46f0cd54c">
-        <source>Hide image</source>
-        <target state="translated">Bild ausblenden</target>
-      </trans-unit>
-      <trans-unit id="sf854ab8601cebb10">
-        <source>Voir image</source>
-        <target state="translated">Bild anzeigen</target>
-      </trans-unit>
       <trans-unit id="s475b08749d0706ed">
         <source>Help us inform millions of consumers around the world about what they eat</source>
         <target state="translated">Helfen Sie uns, Millionen von Verbrauchern auf der ganzen Welt darüber zu informieren, was sie essen</target>
@@ -162,7 +144,7 @@
       </trans-unit>
       <trans-unit id="h5d824b4954e56ea5">
         <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
-        <target state="translated">Scannen Sie <x id="0" equiv-text=„&lt;span class=&quot;everyday&quot;&gt;“/>täglich Ihre<x id="1" equiv-text=„&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;“/>Lebensmittel<x id="2" equiv-text=„&lt;/span&gt;“/></target>
+        <target state="translated">Scannen Sie <x id="0" equiv-text="„&lt;span"/>täglich Ihre&lt;x id="1" equiv-text=„&lt;/span&gt; &lt;span class="foods"&gt;“/&gt;Lebensmittel<x id="2" equiv-text="„&lt;/span&gt;“"/></target>
       </trans-unit>
       <trans-unit id="s8a8bfd67f2dd2810">
         <source>Download the OFF app with this QR code</source>
@@ -182,12 +164,21 @@
       </trans-unit>
 <trans-unit id="s4bbc7472834a9686">
   <source>Your browser does not support barcode scanning.</source>
+  <target>Your browser does not support barcode scanning.</target>
 </trans-unit>
 <trans-unit id="s5e8250fb85d64c23">
   <source>Close</source>
+  <target>Schließen</target>
 </trans-unit>
 <trans-unit id="s976dfd19ef58a1e1">
   <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
+  <target>Click to scan a barcode and find out its details (health, preferences, etc.)</target>
+</trans-unit>
+<trans-unit id="s145e6e6c7a7bcf7a">
+  <source>Reduce image</source>
+</trans-unit>
+<trans-unit id="sc0520e1732a5c568">
+  <source>Expand image</source>
 </trans-unit>
     </body>
   </file>

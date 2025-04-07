@@ -26,12 +26,6 @@
 <trans-unit id="se773f50d2a16d481">
   <source>Rotate image to the right</source>
 </trans-unit>
-<trans-unit id="sb4ff51a46f0cd54c">
-  <source>Hide image</source>
-</trans-unit>
-<trans-unit id="sf854ab8601cebb10">
-  <source>Voir image</source>
-</trans-unit>
 <trans-unit id="s7ce4fd9430e80cea">
   <source>value</source>
 </trans-unit>
@@ -58,13 +52,6 @@
 </trans-unit>
 <trans-unit id="s453188ea728f64da">
   <source>Add a nutrient</source>
-</trans-unit>
-<trans-unit id="hf83972f67d491f69">
-  <source>Open food facts lives thanks to its community.<x id="0" equiv-text="&lt;br&gt;"/>
-          Can you help us validate nutritional information?</source>
-</trans-unit>
-<trans-unit id="s7d8eadc53978967f">
-  <source>Thank you for your contribution!</source>
 </trans-unit>
 <trans-unit id="s475b08749d0706ed">
   <source>Help us inform millions of consumers around the world about what they eat</source>
@@ -134,6 +121,12 @@
 </trans-unit>
 <trans-unit id="s976dfd19ef58a1e1">
   <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
+</trans-unit>
+<trans-unit id="s145e6e6c7a7bcf7a">
+  <source>Reduce image</source>
+</trans-unit>
+<trans-unit id="sc0520e1732a5c568">
+  <source>Expand image</source>
 </trans-unit>
 </body>
 </file>
