@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file target-language="sr-Cyrl-ME" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+  <file target-language="sr" source-language="en" original="lit-localize-inputs" datatype="plaintext">
     <body>
       <trans-unit id="s49730f3d5751a433">
         <source>Loading...</source>
@@ -44,7 +44,7 @@
       </trans-unit>
       <trans-unit id="sbd9a0b2293b3cd3c">
         <source>Serving size</source>
-        <target state="translated">Porcija</target>
+        <target state="needs-translation">Serving size</target>
       </trans-unit>
       <trans-unit id="sbb623d6b18d966a0">
         <source>Nutrition facts are displayed on the packaging:</source>
@@ -167,6 +167,18 @@
       <trans-unit id="s8a8bfd67f2dd2810">
         <source>Download the OFF app with this QR code</source>
         <target state="needs-translation">Download the OFF app with this QR code</target>
+      </trans-unit>
+      <trans-unit id="s4bbc7472834a9686">
+        <source>Your browser does not support barcode scanning.</source>
+        <target state="needs-translation">Your browser does not support barcode scanning.</target>
+      </trans-unit>
+      <trans-unit id="s5e8250fb85d64c23">
+        <source>Close</source>
+        <target state="translated">Затвори</target>
+      </trans-unit>
+      <trans-unit id="s976dfd19ef58a1e1">
+        <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
+        <target state="needs-translation">Click to scan a barcode and find out its details (health, preferences, etc.)</target>
       </trans-unit>
     </body>
   </file>
