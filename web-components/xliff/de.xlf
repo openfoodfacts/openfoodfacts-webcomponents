@@ -144,6 +144,7 @@
       </trans-unit>
       <trans-unit id="h5d824b4954e56ea5">
         <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
+        <target state="translated">Scannen Sie <x id="0" equiv-text=„&lt;span class=&quot;everyday&quot;&gt;“/>täglich Ihre<x id="1" equiv-text=„&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;“/>Lebensmittel<x id="2" equiv-text=„&lt;/span&gt;“/></target>
       </trans-unit>
       <trans-unit id="s8a8bfd67f2dd2810">
         <source>Download the OFF app with this QR code</source>
@@ -151,7 +152,7 @@
       </trans-unit>
       <trans-unit id="s4bbc7472834a9686">
         <source>Your browser does not support barcode scanning.</source>
-        <target state="needs-translation">Your browser does not support barcode scanning.</target>
+        <target state="translated">Dein Browser unterstützt das Scannen von Barcodes leider nicht.</target>
       </trans-unit>
       <trans-unit id="s5e8250fb85d64c23">
         <source>Close</source>
@@ -159,26 +160,16 @@
       </trans-unit>
       <trans-unit id="s976dfd19ef58a1e1">
         <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
-        <target state="needs-translation">Click to scan a barcode and find out its details (health, preferences, etc.)</target>
+        <target state="translated">Tippe hier, um einen Barcode zu scannen und mehr über die Produkteigenschaften zu erfahren (Gesundheit, Eigenschaften, usw.)</target>
       </trans-unit>
-<trans-unit id="s4bbc7472834a9686">
-  <source>Your browser does not support barcode scanning.</source>
-  <target>Your browser does not support barcode scanning.</target>
-</trans-unit>
-<trans-unit id="s5e8250fb85d64c23">
-  <source>Close</source>
-  <target>Schließen</target>
-</trans-unit>
-<trans-unit id="s976dfd19ef58a1e1">
-  <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
-  <target>Click to scan a barcode and find out its details (health, preferences, etc.)</target>
-</trans-unit>
-<trans-unit id="s145e6e6c7a7bcf7a">
-  <source>Reduce image</source>
-</trans-unit>
-<trans-unit id="sc0520e1732a5c568">
-  <source>Expand image</source>
-</trans-unit>
+      <trans-unit id="s145e6e6c7a7bcf7a">
+        <source>Reduce image</source>
+        <target state="needs-translation">Reduce image</target>
+      </trans-unit>
+      <trans-unit id="sc0520e1732a5c568">
+        <source>Expand image</source>
+        <target state="needs-translation">Expand image</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
