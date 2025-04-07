@@ -82,9 +82,16 @@ The default configuration is :
 
 #### Boolean attributes
 
-For boolean we follow the convention of lit [here](https://lit.dev/docs/components/properties/#boolean-attributes) Boolean has to be set to `false` by
-default and can be set to `true` by adding the attribute in the html. Example : for `hide`
+For boolean we follow the convention of lit [here](https://lit.dev/docs/components/properties/#boolean-attributes) Boolean is set to `false` by default and ca be use like this:
+
+- `true` :
 
 ```html
 <off-boolean-attribute hide></off-boolean-attribute>
+```
+
+- `false` :
+
+```html
+<off-boolean-attribute></off-boolean-attribute>
 ```

@@ -145,3 +145,4 @@ Each component has to follow this rules :
 
 - its own folder in the `src` folder.
 - attributes are in kebab-case
+- boolean attributes have to be `false` by default
