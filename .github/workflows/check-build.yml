@@ -2,8 +2,8 @@ name: Check build works
 
 on:
   push:
-    paths:
-      - "web-components/**"
+    branches:
+      - main
   pull_request:
     paths:
       - "web-components/**"
