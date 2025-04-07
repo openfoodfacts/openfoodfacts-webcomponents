@@ -36,8 +36,6 @@ export type FormatedNutrients = {
   "100g": Record<string, InsightDatum>
   // nutrients per serving
   serving: Record<string, InsightDatum>
-  // preprocessed history of the nutrients
-  history: Record<string, InsightDatum>
   // all nutrients present per 100g or serving
   keys: string[]
   servingSize?: InsightDatum
@@ -236,7 +234,6 @@ export class RobotoffNutrientsTable extends LitElement {
     const nutrients: FormatedNutrients = {
       servingSize: undefined,
       keys: [],
-      history: {},
       "100g": {},
       serving: {},
     }
@@ -263,17 +260,6 @@ export class RobotoffNutrientsTable extends LitElement {
         keysSet.add(nutrientKey)
       })
 
-    this.insight!.data.entities.postprocessed.forEach((insightDatum: InsightDatum) => {
-      const key = insightDatum.entity
-        .replace(NUTRIENT_SUFFIX[InsightAnnotationType.SERVING], "")
-        .replace(NUTRIENT_SUFFIX[InsightAnnotationType.CENTGRAMS], "")
-      nutrients.history[insightDatum.entity] = insightDatum
-      if (key === NUTRIENT_SERVING_SIZE_KEY) {
-        return
-      }
-      keysSet.add(key)
-    })
-    nutrients.keys = [...Array.from(keysSet), ...this._addedNutrientKey]
     this.nutrients = nutrients
     return this.nutrients
   }
