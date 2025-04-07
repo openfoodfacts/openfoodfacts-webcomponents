@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file target-language="sr" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+  <file target-language="sr-CS" source-language="en" original="lit-localize-inputs" datatype="plaintext">
     <body>
       <trans-unit id="s49730f3d5751a433">
         <source>Loading...</source>
@@ -44,7 +44,7 @@
       </trans-unit>
       <trans-unit id="sbd9a0b2293b3cd3c">
         <source>Serving size</source>
-        <target state="needs-translation">Serving size</target>
+        <target state="translated">Porcija</target>
       </trans-unit>
       <trans-unit id="sbb623d6b18d966a0">
         <source>Nutrition facts are displayed on the packaging:</source>
@@ -174,7 +174,7 @@
       </trans-unit>
       <trans-unit id="s5e8250fb85d64c23">
         <source>Close</source>
-        <target state="translated">Затвори</target>
+        <target state="translated">Zatvori</target>
       </trans-unit>
       <trans-unit id="s976dfd19ef58a1e1">
         <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
