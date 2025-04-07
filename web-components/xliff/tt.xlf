@@ -164,6 +164,22 @@
         <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
         <target state="needs-translation">Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></target>
       </trans-unit>
+      <trans-unit id="s8a8bfd67f2dd2810">
+        <source>Download the OFF app with this QR code</source>
+        <target state="needs-translation">Download the OFF app with this QR code</target>
+      </trans-unit>
+      <trans-unit id="s4bbc7472834a9686">
+        <source>Your browser does not support barcode scanning.</source>
+        <target state="needs-translation">Your browser does not support barcode scanning.</target>
+      </trans-unit>
+      <trans-unit id="s5e8250fb85d64c23">
+        <source>Close</source>
+        <target state="translated">Ябу</target>
+      </trans-unit>
+      <trans-unit id="s976dfd19ef58a1e1">
+        <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
+        <target state="needs-translation">Click to scan a barcode and find out its details (health, preferences, etc.)</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

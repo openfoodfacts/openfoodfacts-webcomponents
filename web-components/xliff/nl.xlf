@@ -78,24 +78,6 @@
         <source>Rotate image to the right</source>
         <target state="final">Afbeelding naar rechts draaien</target>
       </trans-unit>
-      <trans-unit id="hf83972f67d491f69" approved="yes">
-        <source>Open food facts lives thanks to its community.<x id="0" equiv-text="&lt;br&gt;"/>
-          Can you help us validate nutritional information?</source>
-        <target state="final">Open Food Facts leeft dankzij de gemeenschap.<x id="0" equiv-text="&lt;br&gt;"/>
-          Kun je ons helpen voedingsinformatie te valideren?</target>
-      </trans-unit>
-      <trans-unit id="s7d8eadc53978967f" approved="yes">
-        <source>Thank you for your contribution!</source>
-        <target state="final">Bedankt voor je bijdrage!</target>
-      </trans-unit>
-      <trans-unit id="sb4ff51a46f0cd54c" approved="yes">
-        <source>Hide image</source>
-        <target state="final">Afbeelding verbergen</target>
-      </trans-unit>
-      <trans-unit id="sf854ab8601cebb10" approved="yes">
-        <source>Voir image</source>
-        <target state="final">Afbeelding bekijken</target>
-      </trans-unit>
       <trans-unit id="s475b08749d0706ed" approved="yes">
         <source>Help us inform millions of consumers around the world about what they eat</source>
         <target state="final">Help ons miljoenen consumenten over de hele wereld te informeren over wat ze eten</target>
@@ -132,13 +114,13 @@
         <source>I SUPPORT</source>
         <target state="final">IK STEUN</target>
       </trans-unit>
-      <trans-unit id="scbab4bd737ba7934">
+      <trans-unit id="scbab4bd737ba7934" approved="yes">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
-        <target state="needs-translation">group photo donation <x id="0" equiv-text="${this.currentYear}"/></target>
+        <target state="final">groepsfoto donatie <x id="0" equiv-text="${this.currentYear}"/></target>
       </trans-unit>
-      <trans-unit id="s43df2e8395f6834e">
+      <trans-unit id="s43df2e8395f6834e" approved="yes">
         <source>Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</source>
-        <target state="needs-translation">Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</target>
+        <target state="final">Doneer alstublieft aan onze <x id="0" equiv-text="${this.currentYear}"/> inzamelingsactie</target>
       </trans-unit>
       <trans-unit id="s000d98595e959c1e" approved="yes">
         <source>Get It On Google Play</source>
@@ -160,21 +142,31 @@
         <source>Install the app!</source>
         <target state="final">Installeer de app!</target>
       </trans-unit>
-      <trans-unit id="h5d824b4954e56ea5">
+      <trans-unit id="h5d824b4954e56ea5" approved="yes">
         <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
-        <target state="needs-translation">Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></target>
+        <target state="final">Scan uw <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>dagelijkse<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>voedingsmiddelen<x id="2" equiv-text="&lt;/span&gt;"/></target>
       </trans-unit>
-<trans-unit id="s8a8bfd67f2dd2810">
-  <source>Download the OFF app with this QR code</source>
+      <trans-unit id="s8a8bfd67f2dd2810" approved="yes">
+        <source>Download the OFF app with this QR code</source>
+        <target state="final">Download de OFF-app met deze QR-code</target>
+      </trans-unit>
+      <trans-unit id="s4bbc7472834a9686">
+        <source>Your browser does not support barcode scanning.</source>
+        <target state="needs-translation">Your browser does not support barcode scanning.</target>
+      </trans-unit>
+      <trans-unit id="s5e8250fb85d64c23" approved="yes">
+        <source>Close</source>
+        <target state="final">Sluit</target>
+      </trans-unit>
+      <trans-unit id="s976dfd19ef58a1e1">
+        <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
+        <target state="needs-translation">Click to scan a barcode and find out its details (health, preferences, etc.)</target>
+      </trans-unit>
+<trans-unit id="s145e6e6c7a7bcf7a">
+  <source>Reduce image</source>
 </trans-unit>
-<trans-unit id="s4bbc7472834a9686">
-  <source>Your browser does not support barcode scanning.</source>
-</trans-unit>
-<trans-unit id="s5e8250fb85d64c23">
-  <source>Close</source>
-</trans-unit>
-<trans-unit id="s976dfd19ef58a1e1">
-  <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
+<trans-unit id="sc0520e1732a5c568">
+  <source>Expand image</source>
 </trans-unit>
     </body>
   </file>
