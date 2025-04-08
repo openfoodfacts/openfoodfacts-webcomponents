@@ -160,7 +160,7 @@
       </trans-unit>
       <trans-unit id="s976dfd19ef58a1e1">
         <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
-        <target state="needs-translation">Click to scan a barcode and find out its details (health, preferences, etc.)</target>
+        <target state="translated">Spustelėkite, kad nuskaitytumėte brūkšninį kodą ir sužinotumėte jo informaciją (sveikatą, nuostatas ir kt.)</target>
       </trans-unit>
       <trans-unit id="s145e6e6c7a7bcf7a">
         <source>Reduce image</source>
