@@ -62,3 +62,7 @@
 - Fix boolean properties to be `false` by default.
 - Update `robotoff-question` and `robotoff-nutrients` web components to be more easier to use in openfoodfacts website.
 - Add some translations for the web components.
+
+## [1.4.1] - 2025-04-08
+
+- Fix `BarcodeScannerState` enum to be string instead of number.
