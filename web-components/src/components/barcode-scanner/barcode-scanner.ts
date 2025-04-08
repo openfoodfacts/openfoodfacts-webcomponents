@@ -11,12 +11,12 @@ import { StyleInfo, styleMap } from "lit-html/directives/style-map.js"
 import { ConsoleLogMixin } from "../../mixins/console-log-mixin"
 
 export enum BarcodeScannerState {
-  EXITED,
-  DETECTED,
-  DETECTOR_AVAILABLE,
-  DETECTOR_NOT_AVAILABLE,
-  STARTED,
-  NO_PERMISSION,
+  EXITED = "exited",
+  DETECTED = "detected",
+  DETECTOR_AVAILABLE = "detector-available",
+  DETECTOR_NOT_AVAILABLE = "detector-not-available",
+  STARTED = "started",
+  NO_PERMISSION = "no-permission",
 }
 
 interface BarcodeDetector {
