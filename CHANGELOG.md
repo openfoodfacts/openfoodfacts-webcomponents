@@ -66,3 +66,8 @@
 ## [1.4.1] - 2025-04-08
 
 - Fix `BarcodeScannerState` enum to be string instead of number.
+
+## [1.4.2] - 2025-04-08
+
+- Fix `runScanner` property to be kebab-case : `run-scanner`.
+- Fix `runScanner` property to detect update, and start the scanner when it is set to `true` if the scanner has code reader available.

@@ -184,7 +184,7 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
    * A boolean property that indicates whether the barcode scanner should be running.
    * When set to true, the component will attempt to start the camera and detect barcodes.
    */
-  @property({ type: Boolean })
+  @property({ type: Boolean, attribute: "run-scanner", reflect: true })
   runScanner = false
 
   /**
@@ -233,6 +233,10 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
     return this.stream !== null
   }
 
+  get canDetect() {
+    return this.detectFn !== undefined
+  }
+
   /**
    * The constructor for the BarcodeScanner component.
    * This constructor initializes the BarcodeDetector and sets up the component's state.
@@ -246,7 +250,7 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
    * This lifecycle method is used to start the barcode scanner if the runScanner property is set to true.
    */
   override async firstUpdated() {
-    if (this.codeReader && this.runScanner) {
+    if (this.runScanner) {
       await this.askPermission()
     }
   }
@@ -257,10 +261,14 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
    */
   override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
     super.attributeChangedCallback(name, _old, value)
+    // if first update not run yet, do nothing
+    if (!this.hasUpdated) {
+      return
+    }
     if (name === "run-scanner") {
-      if (value === "true") {
+      if (this.runScanner) {
         this.askPermission()
-      } else {
+      } else if (this.stream) {
         this.stopVideo()
       }
     }
@@ -308,6 +316,13 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
    * This method is called when the user clicks the start scanning button or when the runScanner property is set to true.
    */
   private async askPermission() {
+    // If it can't detect, don't ask for permission
+    if (!this.canDetect) {
+      this.sendBarcodeStateEvent({
+        state: BarcodeScannerState.DETECTOR_NOT_AVAILABLE,
+      })
+      return
+    }
     try {
       const permissionStatus = await navigator.permissions.query({ name: "camera" })
 
@@ -453,7 +468,7 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
    * This method is called whenever the component's UI needs to be updated and used to render the overlay based on the component's state.
    */
   private renderOverlay() {
-    if (!this.codeReader) {
+    if (!this.canDetect) {
       return html` <div class="cta-overlay-wrapper">
         <div class="centered-overlay">
           <div class="cta-overlay">
