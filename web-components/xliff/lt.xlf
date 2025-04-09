@@ -152,7 +152,7 @@
       </trans-unit>
       <trans-unit id="s4bbc7472834a9686">
         <source>Your browser does not support barcode scanning.</source>
-        <target state="needs-translation">Your browser does not support barcode scanning.</target>
+        <target state="translated">Jūsų naršyklė nepalaiko brūkšninio kodo nuskaitymo.</target>
       </trans-unit>
       <trans-unit id="s5e8250fb85d64c23">
         <source>Close</source>
@@ -160,14 +160,16 @@
       </trans-unit>
       <trans-unit id="s976dfd19ef58a1e1">
         <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
-        <target state="needs-translation">Click to scan a barcode and find out its details (health, preferences, etc.)</target>
+        <target state="translated">Spustelėkite, kad nuskaitytumėte brūkšninį kodą ir sužinotumėte jo informaciją (sveikatą, nuostatas ir kt.)</target>
       </trans-unit>
-<trans-unit id="s145e6e6c7a7bcf7a">
-  <source>Reduce image</source>
-</trans-unit>
-<trans-unit id="sc0520e1732a5c568">
-  <source>Expand image</source>
-</trans-unit>
+      <trans-unit id="s145e6e6c7a7bcf7a">
+        <source>Reduce image</source>
+        <target state="needs-translation">Reduce image</target>
+      </trans-unit>
+      <trans-unit id="sc0520e1732a5c568">
+        <source>Expand image</source>
+        <target state="needs-translation">Expand image</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
