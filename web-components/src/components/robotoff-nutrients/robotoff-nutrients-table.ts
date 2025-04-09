@@ -260,6 +260,8 @@ export class RobotoffNutrientsTable extends LitElement {
         keysSet.add(nutrientKey)
       })
 
+    nutrients.keys = Array.from(keysSet)
+
     this.nutrients = nutrients
     return this.nutrients
   }

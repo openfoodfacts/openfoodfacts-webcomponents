@@ -170,6 +170,12 @@
         <source>Expand image</source>
         <target state="translated">Bild vergrößern</target>
       </trans-unit>
+      <trans-unit id="s145e6e6c7a7bcf7a">
+        <source>Reduce image</source>
+      </trans-unit>
+      <trans-unit id="sc0520e1732a5c568">
+        <source>Expand image</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>
