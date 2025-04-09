@@ -24,3 +24,10 @@ export type QuestionStateEventDetail = {
 } & BasicStateEventDetail
 
 export type QuestionStateEvent = CustomEvent<QuestionStateEventDetail>
+
+export type TextDiffEventDetail = CustomEvent<{
+  correction?: string
+  insight: IngredientInsight
+  annotation: 
+
+}>
