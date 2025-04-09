@@ -13,11 +13,11 @@
 
     <div>
       <off-webcomponents-configuration
-        language-code="fr"
+        language-code="en"
         robotoff-configuration='{
           "dryRun": true,
-          "apiUrl": "https://robotoff.openfoodfacts.net/api/v1",
-          "imgUrl": "https://images.openfoodfacts.net/images/products"
+          "apiUrl": "https://robotoff.openfoodfacts.org/api/v1",
+          "imgUrl": "https://images.openfoodfacts.org/images/products"
         }'
       />
     </div>
@@ -79,7 +79,10 @@
       </div>
 
       <div style="display: flex; margin-top: 1rem">
-        <robotoff-ingredients></robotoff-ingredients>
+        <robotoff-ingredients
+          product-code="3512030013211"
+          id="robotoff-ingredients"
+        ></robotoff-ingredients>
       </div>
     </div>
   </body>
@@ -101,10 +104,12 @@
   const productCode = document.getElementById("product-code")
   const insightTypes = document.getElementById("insight-types")
   const barcodeScanner = document.getElementById("barcode-scanner")
+  const robotoffIngredients = document.getElementById("robotoff-ingredients")
 
   const productDebounce = debounce((value) => {
     robotoffQuestion.setAttribute("product-code", value)
     robotoffNutrients.setAttribute("product-code", value)
+    robotoffIngredients.setAttribute("product-code", value)
   })
   productCode.addEventListener("input", (event) => {
     productDebounce(event.target.value)

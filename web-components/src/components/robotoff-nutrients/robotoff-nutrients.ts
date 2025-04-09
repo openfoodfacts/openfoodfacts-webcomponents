@@ -7,7 +7,7 @@ import "../shared/zoomable-image"
 import "../shared/loader"
 
 import { fetchNutrientsTaxonomies } from "../../signals/taxonomies"
-import { Insight, InsightAnnotationAnswer } from "../../types/robotoff"
+import { NutrientsInsight, InsightAnnotationAnswer } from "../../types/robotoff"
 import { BASE } from "../../styles/base"
 import { robotoffConfiguration } from "../../signals/robotoff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
@@ -113,7 +113,7 @@ export class RobotoffNutrients extends LitElement {
     this.emitNutrientEvent(EventState.ANNOTATED)
   }
 
-  renderImage(insight: Insight) {
+  renderImage(insight: NutrientsInsight) {
     if (!insight?.source_image) {
       return nothing
     }
@@ -145,9 +145,9 @@ export class RobotoffNutrients extends LitElement {
         return html`
           <div class="nutrients" part="nutrients">
             <div part="nutrients-content-wrapper" class="nutrients-content-wrapper">
-              ${this.renderImage(insight as Insight)}
+              ${this.renderImage(insight as NutrientsInsight)}
               <robotoff-nutrients-table
-                .insight="${insight as Insight}"
+                .insight="${insight as NutrientsInsight}"
                 @submit="${this.onSubmit}"
               ></robotoff-nutrients-table>
             </div>
