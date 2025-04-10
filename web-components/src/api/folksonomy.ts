@@ -84,7 +84,7 @@ async function updateProductProperty(product: string, k: string, v: string, vers
       throw new Error(`HTTP error! status: ${response.status}`)
     }
     const data = await response.json()
-    return {...data, value: v}
+    return { ...data, key: k, value: v, version: version + 1 }
   } catch (error) {
     console.error("Error updating product property:", error)
     throw error

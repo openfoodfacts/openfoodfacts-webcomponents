@@ -240,8 +240,18 @@ export class AddProperty extends LitElement {
         this.tempValue,
         this.version
       )
-      this.value = updatedProperty.value
       this.editable = false
+
+      const updateEvent = new CustomEvent("update-row", {
+        detail: {
+          key: updatedProperty.key,
+          value: updatedProperty.value,
+          version: updatedProperty.version,
+        },
+        bubbles: true,
+        composed: true,
+      })
+      this.dispatchEvent(updateEvent)
     } catch (error) {
       console.error("Failed to update property", error)
     }
@@ -282,7 +292,7 @@ export class AddProperty extends LitElement {
           this.version
         )
         this.dispatchEvent(
-          new CustomEvent("add-property", {
+          new CustomEvent("add-row", {
             detail: { key: newProperty.key, value: newProperty.value },
             bubbles: true,
             composed: true,

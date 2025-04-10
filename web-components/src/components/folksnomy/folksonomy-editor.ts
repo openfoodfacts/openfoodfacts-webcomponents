@@ -134,41 +134,41 @@ export class FolksonomyEditor extends LitElement {
   properties: Array<{ key: string; value: string; version: number }> = []
 
   private handleRowDelete(event: CustomEvent) {
-    const { key } = event.detail;
-    this.properties = this.properties.filter((property) => property.key !== key);
+    const { key } = event.detail
+    this.properties = this.properties.filter((property) => property.key !== key)
   }
 
   private handleRowAdd(event: CustomEvent) {
-    const { key, value } = event.detail;
+    const { key, value } = event.detail
     if (key && value) {
-      this.properties = [...this.properties, { key, value, version: 1 }];
+      this.properties = [...this.properties, { key, value, version: 1 }]
     } else {
-      console.error("Key or value is missing in the event detail.");
+      console.error("Key or value is missing in the event detail.")
     }
   }
 
-  private handleRowEdit(event: CustomEvent) {
-    const { key, value } = event.detail;
+  private handleRowUpdate(event: CustomEvent) {
+    const { key, value, version } = event.detail
     this.properties = this.properties.map((property) =>
-      property.key === key ? { ...property, value } : property
-    );
+      property.key === key ? { ...property, value, version } : property
+    )
   }
 
   override connectedCallback() {
-    super.connectedCallback();
-    this.fetchAndLogFolksonomyKeys();
+    super.connectedCallback()
+    this.fetchAndLogFolksonomyKeys()
 
-    this.addEventListener("delete-row", this.handleRowDelete as EventListener);
-    this.addEventListener("add-property", this.handleRowAdd as EventListener);
-    this.addEventListener("edit-property", this.handleRowEdit as EventListener);
+    this.addEventListener("add-row", this.handleRowAdd as EventListener)
+    this.addEventListener("update-row", this.handleRowUpdate as EventListener)
+    this.addEventListener("delete-row", this.handleRowDelete as EventListener)
   }
 
   override disconnectedCallback() {
-    super.disconnectedCallback();
+    super.disconnectedCallback()
 
-    this.removeEventListener("delete-row", this.handleRowDelete as EventListener);
-    this.removeEventListener("add-property", this.handleRowAdd as EventListener);
-    this.removeEventListener("edit-property", this.handleRowEdit as EventListener);
+    this.removeEventListener("add-row", this.handleRowAdd as EventListener)
+    this.removeEventListener("update-row", this.handleRowUpdate as EventListener)
+    this.removeEventListener("delete-row", this.handleRowDelete as EventListener)
   }
 
   private async fetchAndLogFolksonomyKeys() {
@@ -242,7 +242,7 @@ export class FolksonomyEditor extends LitElement {
                   )}
                   <tr>
                     <td colspan="3">
-                      <folksonomy-editor-row product-id=${this.productId} empty></add-property>
+                      <folksonomy-editor-row product-id=${this.productId} empty />
                     </td>
                   </tr>
                 </table>
