@@ -133,9 +133,42 @@ export class FolksonomyEditor extends LitElement {
   @state()
   properties: Array<{ key: string; value: string; version: number }> = []
 
+  private handleRowDelete(event: CustomEvent) {
+    const { key } = event.detail;
+    this.properties = this.properties.filter((property) => property.key !== key);
+  }
+
+  private handleRowAdd(event: CustomEvent) {
+    const { key, value } = event.detail;
+    if (key && value) {
+      this.properties = [...this.properties, { key, value, version: 1 }];
+    } else {
+      console.error("Key or value is missing in the event detail.");
+    }
+  }
+
+  private handleRowEdit(event: CustomEvent) {
+    const { key, value } = event.detail;
+    this.properties = this.properties.map((property) =>
+      property.key === key ? { ...property, value } : property
+    );
+  }
+
   override connectedCallback() {
-    super.connectedCallback()
-    this.fetchAndLogFolksonomyKeys()
+    super.connectedCallback();
+    this.fetchAndLogFolksonomyKeys();
+
+    this.addEventListener("delete-row", this.handleRowDelete as EventListener);
+    this.addEventListener("add-property", this.handleRowAdd as EventListener);
+    this.addEventListener("edit-property", this.handleRowEdit as EventListener);
+  }
+
+  override disconnectedCallback() {
+    super.disconnectedCallback();
+
+    this.removeEventListener("delete-row", this.handleRowDelete as EventListener);
+    this.removeEventListener("add-property", this.handleRowAdd as EventListener);
+    this.removeEventListener("edit-property", this.handleRowEdit as EventListener);
   }
 
   private async fetchAndLogFolksonomyKeys() {

@@ -30,13 +30,13 @@ async function addProductProperty(product: string, k: string, v: string, version
         ...getAuthHeader(),
         "Content-Type": "application/json",
       } as HeadersInit,
-      body: JSON.stringify({ product, ...{ k, v, version: version + 1 } }),
+      body: JSON.stringify({ product, ...{ k, v, version } }),
     })
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
     const data = await response.json()
-    return data
+    return { ...data, key: k, value: v }
   } catch (error) {
     console.error("Error adding product property:", error)
     throw error
@@ -84,7 +84,7 @@ async function updateProductProperty(product: string, k: string, v: string, vers
       throw new Error(`HTTP error! status: ${response.status}`)
     }
     const data = await response.json()
-    return data
+    return {...data, value: v}
   } catch (error) {
     console.error("Error updating product property:", error)
     throw error
