@@ -238,11 +238,16 @@ export class FolksonomyEditor extends LitElement {
                         key=${item.key}
                         value=${item.value}
                         version=${item.version}
+                        page-type=${this.pageType}
                       />`
                   )}
                   <tr>
                     <td colspan="3">
-                      <folksonomy-editor-row product-id=${this.productId} empty />
+                      <folksonomy-editor-row
+                        product-id=${this.productId}
+                        page-type=${this.pageType}
+                        empty
+                      />
                     </td>
                   </tr>
                 </table>

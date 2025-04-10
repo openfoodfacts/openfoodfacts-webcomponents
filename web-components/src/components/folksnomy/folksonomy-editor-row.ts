@@ -11,16 +11,6 @@ import folksonomyApi from "../../api/folksonomy"
 // <folksonomy-editor-row page-type=”view” k=”has_funny_barcode” v=”yes” empty />
 @customElement("folksonomy-editor-row")
 export class AddProperty extends LitElement {
-  /**
-   * The product ID for which the properties are being added
-   * @type {boolean}
-   */
-  @property({ type: String, attribute: "product-id" })
-  productId = ""
-
-  @property({ type: Number })
-  version = 1
-
   static override styles = css`
     :host {
       font-family: Arial, sans-serif;
@@ -175,10 +165,66 @@ export class AddProperty extends LitElement {
     }
   `
 
-  @property({ type: String }) key = ""
-  @property({ type: String }) value = ""
-  @property({ type: Boolean }) empty = false
+  /**
+   * The product ID for which the properties are being added
+   * @type {string}
+   */
+  @property({ type: String, attribute: "product-id" })
+  productId = ""
+
+  /**
+   * The version of the product property being edited
+   * @type {number}
+   */
+  @property({ type: Number })
+  version = 1
+
+  /**
+   * The key of the property being edited
+   * @type {string}
+   */
+  @property({ type: String })
+  key = ""
+
+  /**
+   * The value of the property being edited
+   * @type {string}
+   */
+  @property({ type: String })
+  value = ""
+
+  /**
+   * The type of page being displayed (e.g., "view", "edit")
+   * @type {string}
+   */
+  @property({ type: String, attribute: "page-type" })
+  pageType = "view"
+
+  /**
+   * Indicates whether the row is empty and ready for new input
+   * @type {boolean}
+   */
+  @property({ type: Boolean })
+  empty = false
+
+  /**
+   * Indicates whether the row is in an editable state.
+   * @type {boolean}
+   */
   @state() editable = false
+
+  override connectedCallback() {
+    super.connectedCallback()
+    if (this.pageType == "edit") {
+      this.editable = true
+      this.tempValue = this.value
+    }
+  }
+
+  /**
+   * Temporary value used while editing the property
+   * @type {string}
+   */
   @state() private tempValue = ""
 
   override render() {
