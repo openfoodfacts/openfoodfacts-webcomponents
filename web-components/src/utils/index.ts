@@ -49,8 +49,28 @@ export const capitaliseName = (string: string | undefined) => {
   return name.charAt(0).toUpperCase() + name.slice(1)
 }
 
+export const paramToString = (key: string, value: any): string => {
+  if (isNullOrUndefined(value)) {
+    return ""
+  }
+  if (Array.isArray(value)) {
+    return value.join(",")
+  }
+  if (typeof value === "object") {
+    return JSON.stringify(value)
+  }
+  return value.toString()
+}
+
 export const paramsToUrl = (params: Record<string, any>) => {
-  return new URLSearchParams(params).toString()
+  const paramsToStringRecord = Object.entries(params).reduce(
+    (acc, [key, value]) => {
+      acc[key] = paramToString(key, value)
+      return acc
+    },
+    {} as Record<string, string>
+  )
+  return new URLSearchParams(paramsToStringRecord).toString()
 }
 
 export const addParamsToUrl = (url: string, params: Record<string, any>) => {

@@ -7,6 +7,7 @@ import {
   fetchSpellcheckInsights,
   fetchSpellcheckInsightsByProductCode,
   getIngredientSpellcheckInsightsByProductCode,
+  ingredientSpellcheckInsights,
 } from "../../signals/ingredients"
 import { getValidHeadingLevel } from "../../utils/knowledge-panels/heading-utils"
 import { getTranslationsByQuantity } from "../../utils/internalization"
@@ -15,8 +16,13 @@ import { getLocale } from "../../localization"
 import { getWordDiff } from "../../utils/word-diff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import robotoff from "../../api/robotoff"
-import { EventType } from "../../constants"
-import "./spellchecker"
+import { EventState, EventType } from "../../constants"
+import "./text-corrector"
+import "../shared/zoomable-image"
+import { fetchProduct } from "../../api/openfoodfacts"
+import { insight, insightById } from "../../signals/nutrients"
+import { ImageIngredientsProductType } from "../../types/openfoodfacts"
+import { TextCorrectorEvent } from "../../types"
 
 @customElement("robotoff-ingredients")
 export class RobotoffIngredients extends LitElement {
@@ -82,10 +88,29 @@ export class RobotoffIngredients extends LitElement {
   private _currentIndex = 0
 
   @state()
-  private _insights: IngredientsInsight[] = []
+  private _insigthIds: string[] = []
 
   @state()
-  value = ""
+  private productData: {
+    imageUrl?: string
+    name?: string
+  } = {}
+
+  get fullImageUrl() {
+    return this.productData.imageUrl
+      ? this.productData.imageUrl.replace(/400.jpg$/, "full.jpg")
+      : undefined
+  }
+
+  get languageCode() {
+    return getLocale()
+  }
+
+  get _insight(): IngredientsInsight | undefined {
+    const id: string | undefined = this._insigthIds[this._currentIndex]
+    const value = ingredientSpellcheckInsights.getItem(id)
+    return value
+  }
 
   renderHeader() {
     // const titleLevel = getValidHeadingLevel(this.titleLevel, "h2")
@@ -94,150 +119,119 @@ export class RobotoffIngredients extends LitElement {
         <div>
           <div>${msg("Extract ingredients")}</div>
         </div>
-        <p>
-          <!-- TODO Change later -->
-          Poulet tika
-        </p>
+        <p>${this.productData.name}</p>
       </div>
     `
   }
 
   updateValue() {
-    const insight = this._insights[this._currentIndex]
-    if (insight) {
-      this.value = insight.data.original
+    const insight = this._insight
+    this.updateIngredientsImageUrl(insight)
+  }
+
+  async updateIngredientsImageUrl(insight?: IngredientsInsight) {
+    if (!insight) {
+      this.productData.imageUrl = undefined
+      this.productData.name = undefined
+      return
+    }
+    const result = await fetchProduct<ImageIngredientsProductType>(insight.barcode, {
+      lc: this.languageCode,
+      fields: ["image_ingredients_url", "product_name"],
+    })
+
+    this.productData = {
+      imageUrl: result.product.image_ingredients_url,
+      name: result.product.product_name,
     }
   }
 
   private _spellcheckTask = new Task(this, {
-    task: async ([productCode], {}) => {
-      this._insights = []
-      if (!productCode) {
-        return []
-      }
-      // const lang = getLocale()
-      // await fetchSpellcheckInsightsByProductCode(productCode)
-
-      // this._insights = getIngredientSpellcheckInsightsByProductCode(productCode)
-      // .filter(
-      //   (insight) => insight!.data.lang === lang
-      // )
-      // return this._insights
-      this._insights = (await fetchSpellcheckInsights()).filter(
-        (insight) => insight.data.correction !== insight.data.original
-      )
+    task: async ([productCode]) => {
+      const lang = this.languageCode
+      this._insigthIds = []
+      const insights = await fetchSpellcheckInsights(productCode ? productCode : undefined)
+      this._insigthIds = insights
+        .filter((insight) => insight.data.lang === lang)
+        .map((insight) => insight.id)
       this.updateValue()
-      return this._insights
     },
     args: () => [this.productCode],
   })
 
   @state()
-  suggestions: { old: string; new: string }[] = [
-    { old: "Poulat", new: "Poulet" },
-    { old: "Tikal", new: "Tika" },
-  ]
-
-  @state()
   values: Record<number, string> = {}
-
-  get currentSuggestion() {
-    return this.suggestions[this._currentIndex]
-  }
 
   nextInsight() {
     this._currentIndex++
     this.updateValue()
   }
 
-  submitAnnotation(event) {
-    if (!this._insights.length) {
-      return
-    }
-
-    // Get the current insight
-    const currentInsight = this._insights[this._currentIndex]
-
-    // Check if insight exists
-    if (!currentInsight) {
+  async submitAnnotation(event: TextCorrectorEvent) {
+    const insight = this._insight
+    if (!insight) {
       console.error("No insight found at index", this._currentIndex)
       return
     }
 
     // Send the annotation to Robotoff API
-    robotoff
-      .annotateIngredients(currentInsight.id, this.value)
-      .then(() => {
-        // Dispatch a submit event to notify parent components
-        this.dispatchEvent(
-          new CustomEvent(EventType.SUBMIT, {
-            bubbles: true,
-            composed: true,
-            detail: {
-              insightId: currentInsight.id,
-              correction: this.value,
-              original: currentInsight.data.original,
-            },
-          })
-        )
-
-        // Move to next insight or finish
-        if (this._currentIndex < this._insights.length - 1) {
-          this.nextInsight()
-        } else {
-          // All insights processed
-          console.log("All ingredients insights processed")
-        }
+    await robotoff.annotateIngredients(insight.id, event.detail.annotation, event.detail.correction)
+    // Dispatch a submit event to notify parent components
+    this.dispatchEvent(
+      new CustomEvent(EventType.INGREDIENTS_STATE, {
+        bubbles: true,
+        composed: true,
+        detail: {
+          state: EventState.ANNOTATED,
+          insightId: insight.id,
+          ...event.detail,
+        },
       })
-      .catch((error) => {
-        console.error("Error annotating ingredient insight:", error)
-      })
-  }
+    )
 
-  onUpdate(event: CustomEvent) {
-    const { result } = event.detail
-    this.value = result
+    // Move to next insight or finish
+    if (this._currentIndex < this._insigthIds.length - 1) {
+      this.nextInsight()
+    } else {
+      // All insights processed
+      alert("All ingredients insights processed")
+    }
   }
 
   override render() {
     return this._spellcheckTask.render({
       pending: () => html`<off-wc-loader></off-wc-loader>`,
-      complete: (spellcheckInsights: readonly IngredientsInsight[]) => {
-        if (!spellcheckInsights.length) {
+      complete: () => {
+        const insight = this._insight
+        if (!insight) {
           return nothing
         }
-        const lang = getLocale()
 
         // Make sure we have a valid insight at the current index
-        const currentInsight = spellcheckInsights[this._currentIndex]
-        if (!currentInsight) {
-          return nothing
-        }
+        const correction = insight.data.correction
+        const original = insight.data.original
 
-        const correction = currentInsight.data.correction
-        const original = currentInsight.data.original
         return html`
           <div>
             ${this.renderHeader()}
             <div>
-              <zoomable-image
-                src="https://static.openfoodfacts.org/images/products/322/989/000/0007/front_fr.10.400.jpg"
-                .size="${{ width: "100%" }}"
-              ></zoomable-image>
-            </div>
-            <div>
               <label>
                 <div>${msg("Language")}</div>
-                <input type="text" disabled value="${lang}" />
+                <input type="text" disabled value="${this.languageCode}" />
               </label>
               <div>
-                <spellchecker
-                  value=${this.value}
+                <zoomable-image
+                  src=${this.fullImageUrl}
+                  fallbackSrc=${this.productData.imageUrl}
+                  .size="${{ width: "100%" }}"
+                ></zoomable-image>
+              </div>
+              <div>
+                <text-corrector
                   correction=${correction}
                   original=${original}
-                  @update=${this.onUpdate}
                   @submit=${this.submitAnnotation}
-                ></spellchecker>
+                ></text-corrector>
               </div>
             </div>
           </div>

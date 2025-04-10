@@ -10,6 +10,7 @@ export enum EventType {
   QUESTION_STATE = "question-state",
   NUTRIENT_STATE = "nutrient-state",
   BARCODE_SCANNER_STATE = "barcode-scanner-state",
+  INGREDIENTS_STATE = "ingredients-state",
 }
 
 export enum LoadingState {
