@@ -1,4 +1,6 @@
-const BASE_URL = "https://api.folksonomy.openfoodfacts.org" // Base URL for the API
+import { DEFAULT_FOLKSONOMY_CONFIGURATION } from "../constants"
+
+const BASE_URL = DEFAULT_FOLKSONOMY_CONFIGURATION.baseUrl
 
 function getAuthHeader() {
   const token = localStorage.getItem("bearer")

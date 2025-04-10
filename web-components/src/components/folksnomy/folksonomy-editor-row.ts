@@ -5,13 +5,12 @@ import folksonomyApi from "../../api/folksonomy"
 import { msg } from "@lit/localize"
 
 /**
- * AddProperty Component
+ * FolksonomyEditorRow Component
  * @element folksonomy-editor-row
- * Allows users to input a new property and value.
+ * @description A component for adding and editing product properties in a table row format.
  */
-// <folksonomy-editor-row page-type=”view” k=”has_funny_barcode” v=”yes” empty />
 @customElement("folksonomy-editor-row")
-export class AddProperty extends LitElement {
+export class FolksonomyEditorRow extends LitElement {
   static override styles = css`
     :host {
       font-family: Arial, sans-serif;
@@ -374,6 +373,6 @@ export class AddProperty extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "folksonomy-editor-row": AddProperty
+    "folksonomy-editor-row": FolksonomyEditorRow
   }
 }

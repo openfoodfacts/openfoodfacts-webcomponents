@@ -3,6 +3,12 @@ import { customElement, property, state } from "lit/decorators.js"
 import folksonomyApi from "../../api/folksonomy"
 import { msg } from "@lit/localize"
 
+/**
+ * FolksonomyAuth Component
+ * @element folksonomy-auth
+ * A web component for user authentication using the Folksonomy API.
+ * This component provides a login form for users to enter their credentials.
+ */
 @customElement("folksonomy-auth")
 export class FolksonomyAuth extends LitElement {
   static override styles = css`
@@ -59,8 +65,19 @@ export class FolksonomyAuth extends LitElement {
     }
   `
 
+  /**
+   * The username entered by the user.
+   */
   @property({ type: String }) username = ""
+
+  /**
+   * The password entered by the user.
+   */
   @property({ type: String }) password = ""
+
+  /**
+   * A message displayed to the user, such as login success or failure.
+   */
   @state() message = ""
 
   private handleInputChange(e: Event) {

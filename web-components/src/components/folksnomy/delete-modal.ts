@@ -2,6 +2,12 @@ import { msg } from "@lit/localize"
 import { LitElement, html, css } from "lit-element"
 import { customElement, state } from "lit/decorators.js"
 
+/**
+ * @customElement("delete-modal")
+ * @lit
+ * @element delete-modal
+ * @description A modal dialog for confirming deletion of an item.
+ */
 @customElement("delete-modal")
 export class DeleteModal extends LitElement {
   @state() open = true

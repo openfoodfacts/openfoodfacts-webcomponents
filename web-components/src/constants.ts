@@ -30,3 +30,7 @@ export enum EventState {
 export const DEFAULT_ASSETS_IMAGES_PATH = "/assets/images"
 
 export const SELECT_ICON_FILE_NAME = "carret-bottom.svg"
+
+export const DEFAULT_FOLKSONOMY_CONFIGURATION = {
+  baseUrl: "https://api.folksonomy.openfoodfacts.org",
+}
