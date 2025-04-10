@@ -211,7 +211,7 @@ export class FolksonomyEditor extends LitElement {
                 These properties are created and filed by users for any kind of usages. Feel free to
                 add your own. The properties and values you create <strong>must be factual</strong>.
                 You can dive into
-                <a href="/properties">the list of properties already used by the community</a>
+                <a href="https://openfoodfacts-explorer.vercel.app/folksonomy">the list of properties already used by the community</a>
                 or explore the
                 <a href="https://wiki.openfoodfacts.org/Folksonomy/Property"
                   >properties' documentation and its search engine</a

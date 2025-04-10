@@ -72,7 +72,7 @@ export class AddProperty extends LitElement {
 
     .create-button {
       width: 10rem;
-      margin-left: 1rem;
+      margin-left: 1.3rem;
     }
 
     :host {
@@ -163,6 +163,10 @@ export class AddProperty extends LitElement {
       gap: 0.5rem;
       align-items: center;
     }
+
+    .property-link {
+      color: black;
+    }
   `
 
   /**
@@ -252,7 +256,7 @@ export class AddProperty extends LitElement {
 
     return html`
       <tr>
-        <td>${this.key}</td>
+        <td><a class="property-link" href="https://openfoodfacts-explorer.vercel.app/folksonomy/${this.key}">${this.key}</a></td>
         <td>
           ${this.editable
             ? html`<input type="text" .value=${this.tempValue} @input=${this.handleInputChange} />`
