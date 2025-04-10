@@ -1,10 +1,11 @@
 import { EventState } from "../constants"
-import { RobotoffConfigurationOptions } from "./robotoff"
+import { QuestionAnnotationAnswer, RobotoffConfigurationOptions } from "./robotoff"
 
 export type OffWebcomponentConfigurationOptions = {
   robotoffConfiguration: RobotoffConfigurationOptions
   languageCode: string
   assetsImagesPath: string
+  openfoodfactsApiUrl: string
 }
 
 export type Product = {
@@ -25,9 +26,7 @@ export type QuestionStateEventDetail = {
 
 export type QuestionStateEvent = CustomEvent<QuestionStateEventDetail>
 
-export type TextDiffEventDetail = CustomEvent<{
+export type TextCorrectorEvent = CustomEvent<{
   correction?: string
-  insight: IngredientInsight
-  annotation: 
-
+  annotation: QuestionAnnotationAnswer
 }>

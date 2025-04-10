@@ -26,11 +26,8 @@ export enum SubmitType {
   REJECT = "reject",
   SKIP = "skip",
 }
-@customElement("spellchecker")
-export class Spellchecker extends LitElement {
-  @property({ type: String })
-  value = ""
-
+@customElement("text-corrector")
+export class TextCorrector extends LitElement {
   @property({ type: String })
   original = ""
 
@@ -42,6 +39,12 @@ export class Spellchecker extends LitElement {
 
   @state()
   groupedChanges: IndexedGroupedChange[] = []
+
+  @state()
+  value = ""
+
+  @state()
+  textToCompare = ""
 
   static override styles = [
     BASE,
@@ -86,9 +89,15 @@ export class Spellchecker extends LitElement {
     `,
   ]
 
+  updateValues() {
+    this.value = this.original
+    this.textToCompare = this.correction
+  }
+
   override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
     super.attributeChangedCallback(name, _old, value)
     if (name === "original" || name === "correction") {
+      this.updateValues()
       this.computeWordDiff()
     }
   }
@@ -135,7 +144,7 @@ export class Spellchecker extends LitElement {
 
   computeWordDiff() {
     // Use diffWords from the diff library for word-level diffing
-    this.diffResult = diffWords(this.value, this.correction).map((part, index) => {
+    this.diffResult = diffWords(this.value, this.textToCompare).map((part, index) => {
       return {
         ...part,
         index,
@@ -196,7 +205,7 @@ export class Spellchecker extends LitElement {
         } else if (item.type === ChangeType.ADDED) {
           return html`
             <div class="summary-item">
-              <span class="summary-label">${msg("Add:")}:</span>
+              <span class="summary-label">${msg("Add:")}</span>
               <span class="code">${item.value}</span>
               ${this.renderSuggestionButtons(item)}
             </div>
@@ -281,7 +290,7 @@ export class Spellchecker extends LitElement {
               ${msg("Accepter le texte")}
             </button>
 
-            <button class="button cappucino-button" @click=${this.skip()}>${msg("Skip")}</button>
+            <button class="button cappucino-button" @click=${this.skip}>${msg("Skip")}</button>
           </div>
         </div>
       `
@@ -304,6 +313,6 @@ export class Spellchecker extends LitElement {
 // Define the custom element
 declare global {
   interface HTMLElementTagNameMap {
-    spellchecker: Spellchecker
+    "text-corrector": TextCorrector
   }
 }

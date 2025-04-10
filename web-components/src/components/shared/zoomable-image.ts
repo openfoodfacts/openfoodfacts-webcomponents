@@ -53,6 +53,9 @@ export class ZoomableImage extends LitElement {
   @property({ type: String, attribute: "src" })
   src = ""
 
+  @property({ type: String, attribute: "fallback-src" })
+  fallbackSrc = ""
+
   @property({ type: Number, attribute: "current-zoom" })
   currentZoom = 1
 
@@ -178,7 +181,14 @@ export class ZoomableImage extends LitElement {
       <div>
         <div class="panzoom-parent" style=${styleMap(this.size)}>
           <div class="panzoom">
-            <img src=${this.src} @load=${this.initPanzoom} style=${styleMap(imageStyle)} />
+            <img
+              src=${this.src}
+              @error=${() => {
+                this.src = this.fallbackSrc
+              }}
+              @load=${this.initPanzoom}
+              style=${styleMap(imageStyle)}
+            />
           </div>
         </div>
         ${this.renderButtons()}

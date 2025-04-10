@@ -32,16 +32,18 @@ export type QuestionsResponse = {
   questions: Question[]
 }
 
+// https://openfoodfacts.github.io/robotoff/references/api/#tag/Insights/paths/~1insights~1annotate/post
 export enum QuestionAnnotationAnswer {
   ACCEPT_AND_ADD_DATA = "2",
   ACCEPT = "1",
   REFUSE = "0",
   SKIP = "-1",
-} // https://openfoodfacts.github.io/robotoff/references/api/#tag/Insights/paths/~1insights~1annotate/post
+}
 export enum InsightAnnotationType {
   CENTGRAMS = "100g",
   SERVING = "serving",
 }
+
 export type InsightAnnotatationData = Record<string, { value: string; unit: string | null }>
 
 export type InsightAnnotationAnswer = {
