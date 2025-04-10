@@ -1,9 +1,8 @@
 import { LitElement, html, css } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { localized } from "@lit/localize"
-import "./data-row" // Import the new DataRow component
-import "./add-property" // Import the new AddProperty component
-import folksonomyApi from "../../api/folksonomy" // Import the API module
+import "./folksonomy-editor-row"
+import folksonomyApi from "../../api/folksonomy"
 
 /**
  * Folksonomy Editor
@@ -132,7 +131,7 @@ export class FolksonomyEditor extends LitElement {
    * State representing all the properties and values
    */
   @state()
-  properties: Array<{ key: string; value: string }> = []
+  properties: Array<{ key: string; value: string; version: number }> = []
 
   override connectedCallback() {
     super.connectedCallback()
@@ -148,8 +147,8 @@ export class FolksonomyEditor extends LitElement {
       this.properties = product_properties.map((item: any) => ({
         key: item.k,
         value: item.v,
+        version: item.version,
       }))
-
     } catch (error) {
       console.error("Error fetching folksonomy keys:", error)
     }
@@ -200,11 +199,17 @@ export class FolksonomyEditor extends LitElement {
                     <th>Actions</th>
                   </tr>
                   ${this.properties.map(
-                    (item) => html`<data-row .key=${item.key} .value=${item.value}></data-row>`
+                    (item) =>
+                      html`<folksonomy-editor-row
+                        product-id=${this.productId}
+                        key=${item.key}
+                        value=${item.value}
+                        version=${item.version}
+                      />`
                   )}
                   <tr>
                     <td colspan="3">
-                      <add-property @add-property=${this.handleAddProperty}></add-property>
+                      <folksonomy-editor-row product-id=${this.productId} empty></add-property>
                     </td>
                   </tr>
                 </table>
@@ -214,11 +219,6 @@ export class FolksonomyEditor extends LitElement {
         </div>
       </section>
     `
-  }
-
-  private handleAddProperty(event: CustomEvent) {
-    const { key, value } = event.detail
-    this.properties = [...this.properties, { key, value }]
   }
 }
 
