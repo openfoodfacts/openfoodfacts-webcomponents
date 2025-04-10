@@ -2,6 +2,7 @@ import { LitElement, html, css } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import "./delete-modal"
 import folksonomyApi from "../../api/folksonomy"
+import { msg } from "@lit/localize"
 
 /**
  * AddProperty Component
@@ -237,18 +238,18 @@ export class AddProperty extends LitElement {
         <div class="input-group">
           <input
             type="text"
-            placeholder="New key"
+            placeholder=${msg("New key")}
             .value=${this.key}
             @input=${(e: Event) => (this.key = (e.target as HTMLInputElement).value)}
           />
           <input
             type="text"
-            placeholder="New value"
+            placeholder=${msg("New value")}
             .value=${this.value}
             @input=${(e: Event) => (this.value = (e.target as HTMLInputElement).value)}
           />
           <div class="button-container">
-            <button @click=${this.addProperty} class="create-button">Submit</button>
+            <button @click=${this.addProperty} class="create-button">${msg("Submit")}</button>
           </div>
         </div>
       `
@@ -256,7 +257,13 @@ export class AddProperty extends LitElement {
 
     return html`
       <tr>
-        <td><a class="property-link" href="https://openfoodfacts-explorer.vercel.app/folksonomy/${this.key}">${this.key}</a></td>
+        <td>
+          <a
+            class="property-link"
+            href="https://openfoodfacts-explorer.vercel.app/folksonomy/${this.key}"
+            >${this.key}</a
+          >
+        </td>
         <td>
           ${this.editable
             ? html`<input type="text" .value=${this.tempValue} @input=${this.handleInputChange} />`
@@ -266,11 +273,15 @@ export class AddProperty extends LitElement {
           <div class="button-group">
             ${this.editable
               ? html`
-                  <button class="actions save-button" @click=${this.handleSave}>Save</button>
-                  <button class="actions" @click=${this.handleCancel}>Cancel</button>
+                  <button class="actions save-button" @click=${this.handleSave}>
+                    ${msg("Save")}
+                  </button>
+                  <button class="actions" @click=${this.handleCancel}>${msg("Cancel")}</button>
                 `
-              : html`<button class="actions" @click=${this.handleEdit}>Edit</button>`}
-            <button class="actions delete-button" @click=${this.handleDelete}>Delete</button>
+              : html`<button class="actions" @click=${this.handleEdit}>${msg("Edit")}</button>`}
+            <button class="actions delete-button" @click=${this.handleDelete}>
+              ${msg("Delete")}
+            </button>
           </div>
         </td>
       </tr>

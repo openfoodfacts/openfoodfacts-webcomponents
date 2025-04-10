@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
-import { localized } from "@lit/localize"
+import { localized, msg } from "@lit/localize"
 import "./folksonomy-editor-row"
 import folksonomyApi from "../../api/folksonomy"
 
@@ -174,7 +174,6 @@ export class FolksonomyEditor extends LitElement {
   private async fetchAndLogFolksonomyKeys() {
     try {
       const product_properties = await folksonomyApi.fetchProductProperties(this.productId)
-      console.log("Product properties:", product_properties)
 
       // update the state with the fetched properties
       this.properties = product_properties.map((item: any) => ({
@@ -188,48 +187,52 @@ export class FolksonomyEditor extends LitElement {
   }
 
   override render() {
-    console.log("chekcing state: ", this.properties)
-
     return html`
       <section class="row">
         <div id="free_properties_1" class="large-12 column feus">
           <div class="card">
             <div class="card-section h-space-tiny">
               <h2>
-                Personalized properties (<span
+                ${msg("Personalized properties")} (<span
                   data-tooltip
                   aria-haspopup="true"
                   class="has-tip"
                   data-position="top"
                   data-alignment="left"
-                  title="Be aware the data model might be modified. Use at your own risk."
+                  title=${msg("Be aware the data model might be modified. Use at your own risk.")}
                   >beta</span
                 >)
               </h2>
               <p id="fe_login_info"></p>
               <p>
-                These properties are created and filed by users for any kind of usages. Feel free to
-                add your own. The properties and values you create <strong>must be factual</strong>.
-                You can dive into
-                <a href="https://openfoodfacts-explorer.vercel.app/folksonomy">the list of properties already used by the community</a>
-                or explore the
-                <a href="https://wiki.openfoodfacts.org/Folksonomy/Property"
-                  >properties' documentation and its search engine</a
-                >.
+                ${msg(
+                  html`These properties are created and filed by users for any kind of usages. Feel
+                    free to add your own. The properties and values you create
+                    <strong>must be factual</strong>. You can dive into
+                    <a href="https://openfoodfacts-explorer.vercel.app/folksonomy"
+                      >the list of properties already used by the community</a
+                    >
+                    or explore the
+                    <a href="https://wiki.openfoodfacts.org/Folksonomy/Property"
+                      >properties' documentation and its search engine</a
+                    >.`
+                )}
               </p>
-              <p>Be aware the data model might be modified. Use at your own risk.</p>
+              <p>${msg("Be aware the data model might be modified. Use at your own risk.")}</p>
               <p>
-                This is brought by the
-                <a href="https://wiki.openfoodfacts.org/Folksonomy_Engine"
-                  >folksonomy engine project</a
-                >. Don't hesitate to participate or give feedback.
+                ${msg(
+                  html`This is brought by the
+                    <a href="https://wiki.openfoodfacts.org/Folksonomy_Engine"
+                      >folksonomy engine project</a
+                    >. Don't hesitate to participate or give feedback.`
+                )}
               </p>
               <form id="free_properties_form">
                 <table>
                   <tr>
-                    <th>Property</th>
-                    <th>Value</th>
-                    <th>Actions</th>
+                    <th>${msg("Property")}</th>
+                    <th>${msg("Value")}</th>
+                    <th>${msg("Actions")}</th>
                   </tr>
                   ${this.properties.map(
                     (item) =>

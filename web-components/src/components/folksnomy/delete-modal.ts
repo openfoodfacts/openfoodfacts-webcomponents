@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize"
 import { LitElement, html, css } from "lit-element"
 import { customElement, state } from "lit/decorators.js"
 
@@ -95,10 +96,12 @@ export class DeleteModal extends LitElement {
       <div class="overlay" @click="${this.handleCancel}"></div>
       <modal>
         <h2>Confirm Delete</h2>
-        <p>Are you sure you want to delete this item?</p>
+        <p>${msg("Are you sure you want to delete this item?")}</p>
         <div style="display: flex; justify-content: space-between;">
-          <button @click="${this.handleDelete}">Delete</button>
-          <button type="button" class="cancel" @click="${this.handleCancel}">Cancel</button>
+          <button @click="${this.handleDelete}">${msg("Delete")}</button>
+          <button type="button" class="cancel" @click="${this.handleCancel}">
+            ${msg("Cancel")}
+          </button>
         </div>
       </modal>
     `

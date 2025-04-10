@@ -1,9 +1,10 @@
 import { LitElement, html, css } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
-import folksonomyApi from "./../../api/folksonomy"
+import folksonomyApi from "../../api/folksonomy"
+import { msg } from "@lit/localize"
 
-@customElement("auth-signin-form")
-export class AuthSignInForm extends LitElement {
+@customElement("folksonomy-auth")
+export class FolksonomyAuth extends LitElement {
   static override styles = css`
     :host {
       display: block;
@@ -71,19 +72,17 @@ export class AuthSignInForm extends LitElement {
     e.preventDefault()
     try {
       const result = await folksonomyApi.signIn(this.username, this.password)
-      console.log(result)
       localStorage.setItem("bearer", result.access_token)
 
-      console.log(localStorage.getItem("bearer"))
       const event = new CustomEvent("signin", {
         detail: { username: this.username, password: this.password },
       })
       this.dispatchEvent(event)
 
-      this.message = "Login successful!"
+      this.message = msg("Login successful!")
     } catch (error) {
       console.error("Sign-in failed", error)
-      this.message = "Login failed. Please try again."
+      this.message = msg("Login failed. Please try again.")
     }
   }
 
@@ -91,7 +90,7 @@ export class AuthSignInForm extends LitElement {
     return html`
       <form @submit="${this.handleSubmit}">
         <div class="form-group">
-          <label for="username">Username</label>
+          <label for="username">${msg("Username")}</label>
           <input
             type="text"
             id="username"
@@ -103,7 +102,7 @@ export class AuthSignInForm extends LitElement {
         </div>
 
         <div class="form-group">
-          <label for="password">Password</label>
+          <label for="password">${msg("Password")}</label>
           <input
             type="password"
             id="password"
@@ -114,7 +113,7 @@ export class AuthSignInForm extends LitElement {
           />
         </div>
 
-        <button type="submit">Sign In</button>
+        <button type="submit">${msg("Sign In")}</button>
       </form>
       <p>${this.message}</p>
     `
