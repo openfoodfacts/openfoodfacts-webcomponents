@@ -59,7 +59,7 @@ export class FolksonomyEditor extends LitElement {
       margin-top: 1rem;
       border: solid 1px #ddd;
       font-size: 0.9rem;
-      table-layout: fixed; /* Ensure fixed column widths */
+      table-layout: fixed;
     }
 
     #free_properties_form table th,
@@ -67,24 +67,24 @@ export class FolksonomyEditor extends LitElement {
       padding: 0.8rem;
       text-align: left;
       border: solid 1px #ddd;
-      overflow: hidden; /* Prevent content overflow */
-      text-overflow: ellipsis; /* Add ellipsis for overflowed text */
-      white-space: nowrap; /* Prevent text wrapping */
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     #free_properties_form table th:nth-child(1),
     #free_properties_form table td:nth-child(1) {
-      width: 30%; /* Property column */
+      width: 30%;
     }
 
     #free_properties_form table th:nth-child(2),
     #free_properties_form table td:nth-child(2) {
-      width: 30%; /* Value column */
+      width: 30%;
     }
 
     #free_properties_form table th:nth-child(3),
     #free_properties_form table td:nth-child(3) {
-      width: 40%; /* Actions column */
+      width: 40%;
     }
 
     #free_properties_form table th {
@@ -94,7 +94,7 @@ export class FolksonomyEditor extends LitElement {
     }
 
     #free_properties_form table tr {
-      height: 4rem; /* Fixed row height */
+      height: 4rem;
     }
 
     #free_properties_form table tr:nth-child(even) {
@@ -114,7 +114,7 @@ export class FolksonomyEditor extends LitElement {
 
     button {
       padding: 0.5rem 1rem;
-      background-color: #341100; /* Updated background color */
+      background-color: #341100;
       color: white;
       border: none;
       border-radius: 4px;
@@ -123,7 +123,7 @@ export class FolksonomyEditor extends LitElement {
     }
 
     button:hover {
-      background-color: #5a2a00; /* Slightly darker shade */
+      background-color: #5a2a00;
     }
   `
 

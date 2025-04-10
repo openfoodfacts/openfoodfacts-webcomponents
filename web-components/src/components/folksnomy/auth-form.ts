@@ -54,7 +54,7 @@ export class AuthSignInForm extends LitElement {
     }
 
     p {
-      margin-top: 8px; /* Decreased the gap */
+      margin-top: 8px;
     }
   `
 

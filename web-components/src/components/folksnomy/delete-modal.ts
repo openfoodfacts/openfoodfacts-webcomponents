@@ -36,7 +36,7 @@ export class DeleteModal extends LitElement {
     }
     button {
       padding: 0.8rem;
-      background-color: #d9534f; /* Updated color for delete */
+      background-color: #d9534f;
       color: white;
       border: none;
       border-radius: 8px;

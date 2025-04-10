@@ -17,7 +17,7 @@ export class AddProperty extends LitElement {
       font-size: 0.9rem;
       color: #333;
       display: block;
-      width: 100%; /* Match table width */
+      width: 100%;
     }
 
     .input-group {
@@ -28,27 +28,26 @@ export class AddProperty extends LitElement {
     }
 
     .input-group input:nth-child(1) {
-      width: 30%; /* Match Property column width */
+      width: 30%;
     }
 
     .input-group input:nth-child(2) {
-      width: 30%; /* Match Value column width */
+      width: 30%;
     }
 
     .button-container {
       display: flex;
       gap: 0.5rem;
       align-items: center;
-      justify-content: center; /* Center align buttons */
-      width: 40%; /* Match Actions column width */
+      width: 40%;
     }
 
     input {
       padding: 0.5rem;
       border: 1px solid #ccc;
-      border-radius: 20px; /* Rounded corners */
+      border-radius: 20px;
       font-size: 0.9rem;
-      height: 1.8rem; /* Match height with table rows */
+      height: 1.8rem;
     }
 
     input:focus {
@@ -57,22 +56,23 @@ export class AddProperty extends LitElement {
 
     button {
       padding: 0.5rem 1rem;
-      background-color: #341100; /* Updated background color */
+      background-color: #341100;
       color: white;
       border: none;
-      border-radius: 20px; /* Rounded corners */
+      border-radius: 20px;
       cursor: pointer;
       font-size: 0.9rem;
-      height: 2.5rem; /* Match height with input fields */
-      width: 100%; /* Full width */
+      height: 2.5rem;
+      width: 100%;
     }
 
     button:hover {
-      background-color: #5a2a00; /* Slightly darker shade */
+      background-color: #5a2a00;
     }
 
     .create-button {
-      width: auto;
+      width: 10rem;
+      margin-left: 1rem;
     }
 
     :host {
@@ -84,40 +84,40 @@ export class AddProperty extends LitElement {
 
     table {
       width: 100%;
-      table-layout: fixed; /* Ensure fixed column widths */
+      table-layout: fixed;
     }
 
     td {
-      padding: 0.8rem;
+      padding: 0.5rem 1.2rem;
       text-align: left;
       vertical-align: middle;
-      border: none; /* Remove borders */
-      overflow: hidden; /* Prevent content overflow */
-      text-overflow: ellipsis; /* Add ellipsis for overflowed text */
-      white-space: nowrap; /* Prevent text wrapping */
+      border: none;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     td:nth-child(1) {
-      width: 30%; /* Key column */
+      width: 30%;
     }
 
     td:nth-child(2) {
-      width: 30%; /* Value column */
+      width: 30%;
     }
 
     td:nth-child(3) {
-      width: 40%; /* Actions column */
+      width: 40%;
     }
 
     input[type="text"] {
       width: 100%;
       padding: 0.5rem;
       border: 1px solid #ccc;
-      border-radius: 20px; /* Rounded corners */
+      border-radius: 20px;
       box-sizing: border-box;
       font-size: 0.9rem;
-      height: 2.5rem; /* Match height with other components */
-      background-color: #f9f9f9; /* Light background */
+      height: 2.5rem;
+      background-color: #f9f9f9;
     }
 
     input[type="text"]:focus {
@@ -128,40 +128,40 @@ export class AddProperty extends LitElement {
 
     .actions {
       color: white;
-      background-color: #341100; /* Updated background color */
+      background-color: #341100;
       border: none;
-      border-radius: 20px; /* Rounded corners */
+      border-radius: 20px;
       padding: 0.5rem 1rem;
       cursor: pointer;
       font-size: 0.9rem;
       text-align: center;
+      width: 10rem;
     }
 
     .actions:hover {
-      background-color: #5a2a00; /* Slightly darker shade */
+      background-color: #5a2a00;
     }
 
     .save-button {
-      background-color: #341100; /* Updated background color */
+      background-color: #341100;
     }
 
     .save-button:hover {
-      background-color: #5a2a00; /* Slightly darker shade */
+      background-color: #5a2a00;
     }
 
     .delete-button {
-      background-color: #341100; /* Updated background color */
+      background-color: #341100;
     }
 
     .delete-button:hover {
-      background-color: #5a2a00; /* Slightly darker shade */
+      background-color: #5a2a00;
     }
 
     .button-group {
       display: flex;
       gap: 0.5rem;
       align-items: center;
-      justify-content: center; /* Center align buttons */
     }
   `
 
@@ -244,7 +244,7 @@ export class AddProperty extends LitElement {
             @input=${(e: Event) => (this.value = (e.target as HTMLInputElement).value)}
           />
           <div class="button-container">
-            <button @click=${this.addProperty} class="create-button">Create</button>
+            <button @click=${this.addProperty} class="create-button">Submit</button>
           </div>
         </div>
       `
