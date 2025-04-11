@@ -104,10 +104,10 @@ export class DeleteModal extends LitElement {
         <h2>Confirm Delete</h2>
         <p>${msg("Are you sure you want to delete this item?")}</p>
         <div style="display: flex; justify-content: space-between;">
-          <button @click="${this.handleDelete}">${msg("Delete")}</button>
           <button type="button" class="cancel" @click="${this.handleCancel}">
             ${msg("Cancel")}
           </button>
+          <button @click="${this.handleDelete}">${msg("Delete")}</button>
         </div>
       </modal>
     `
