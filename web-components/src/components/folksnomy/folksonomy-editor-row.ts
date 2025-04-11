@@ -20,26 +20,12 @@ export class FolksonomyEditorRow extends LitElement {
       width: 100%;
     }
 
-    .input-group {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .input-group input:nth-child(1) {
-      width: 30%;
-    }
-
-    .input-group input:nth-child(2) {
-      width: 30%;
-    }
 
     .button-container {
       display: flex;
       gap: 0.5rem;
       align-items: center;
-      width: 40%;
+      width: 10rem;
     }
 
     input {
@@ -70,11 +56,6 @@ export class FolksonomyEditorRow extends LitElement {
       background-color: #5a2a00;
     }
 
-    .create-button {
-      width: 10rem;
-      margin-left: 1.3rem;
-    }
-
     :host {
       display: contents;
       font-family: Arial, sans-serif;
@@ -96,24 +77,12 @@ export class FolksonomyEditorRow extends LitElement {
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-
-    td:nth-child(1) {
-      width: 30%;
-    }
-
-    td:nth-child(2) {
-      width: 30%;
-    }
-
-    td:nth-child(3) {
-      width: 40%;
-    }
-
+   
     input[type="text"] {
       width: 100%;
       padding: 0.5rem;
       border: 1px solid #ccc;
-      border-radius: 20px;
+      border-radius: 15px;
       box-sizing: border-box;
       font-size: 0.9rem;
       height: 2.5rem;
@@ -166,6 +135,62 @@ export class FolksonomyEditorRow extends LitElement {
 
     .property-link {
       color: black;
+    }
+
+    #create-button {
+      width: 10rem;
+      padding: 0.4rem 0.8rem;
+    }
+
+    @media (max-width: 768px) {
+      .button-group {
+        flex-direction: column;
+      }
+
+      .button-container {
+        flex-direction: column;
+      }
+
+      #create-button {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+        height: 2rem;
+        width: 7rem;
+      }
+
+      .actions {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+        height: 2rem;
+        width: 7rem;
+        background-color: red;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .actions {
+        background-color: green;
+        width: 5rem;
+        font-size: 0.7rem;
+        padding: 0.3rem 0.5rem;
+        height: 1.6rem;
+      }
+
+      .button-container {
+        flex-direction: column;
+      }
+
+      #create-button {
+        width: 5rem;
+        font-size: 0.7rem;
+        padding: 0.3rem 0.5rem;
+        height: 1.6rem;
+       }
+      }
+
+      td {
+        padding: 0.4rem 0.5rem;
+      }      
     }
   `
 
@@ -234,23 +259,31 @@ export class FolksonomyEditorRow extends LitElement {
   override render() {
     if (this.empty) {
       return html`
-        <div class="input-group">
-          <input
-            type="text"
-            placeholder=${msg("New key")}
-            .value=${this.key}
-            @input=${(e: Event) => (this.key = (e.target as HTMLInputElement).value)}
-          />
-          <input
-            type="text"
-            placeholder=${msg("New value")}
-            .value=${this.value}
-            @input=${(e: Event) => (this.value = (e.target as HTMLInputElement).value)}
-          />
-          <div class="button-container">
-            <button @click=${this.addProperty} class="create-button">${msg("Submit")}</button>
-          </div>
-        </div>
+        <tr>
+          <td>
+            <input
+              type="text"
+              placeholder=${msg("New key")}
+              .value=${this.key}
+              @input=${(e: Event) => (this.key = (e.target as HTMLInputElement).value)}
+            />
+          </td>
+          <td>
+            <input
+              type="text"
+              placeholder=${msg("New value")}
+              .value=${this.value}
+              @input=${(e: Event) => (this.value = (e.target as HTMLInputElement).value)}
+            />
+          </td>
+          <td>
+            <div class="button-group">
+              <div class="button-container">
+                <button @click=${this.addProperty} id="create-button">${msg("Submit")}</button>
+              </div>
+            </div>
+          </td>
+        </tr>
       `
     }
 
@@ -259,7 +292,7 @@ export class FolksonomyEditorRow extends LitElement {
         <td>
           <a
             class="property-link"
-            href="https://openfoodfacts-explorer.vercel.app/folksonomy/${this.key}"
+            href="https://wiki.openfoodfacts.org/Folksonomy/Property/${this.key}"
             >${this.key}</a
           >
         </td>

@@ -72,21 +72,6 @@ export class FolksonomyEditor extends LitElement {
       white-space: nowrap;
     }
 
-    #free_properties_form table th:nth-child(1),
-    #free_properties_form table td:nth-child(1) {
-      width: 30%;
-    }
-
-    #free_properties_form table th:nth-child(2),
-    #free_properties_form table td:nth-child(2) {
-      width: 30%;
-    }
-
-    #free_properties_form table th:nth-child(3),
-    #free_properties_form table td:nth-child(3) {
-      width: 40%;
-    }
-
     #free_properties_form table th {
       background-color: #f1f1f1;
       font-weight: bold;
@@ -124,6 +109,12 @@ export class FolksonomyEditor extends LitElement {
 
     button:hover {
       background-color: #5a2a00;
+    }
+
+    @media (max-width: 480px) {
+      #free_properties_form table tr:first-child {
+        height: 0.5rem;
+      }
     }
   `
 
@@ -223,7 +214,7 @@ export class FolksonomyEditor extends LitElement {
                 ${msg(
                   html`This is brought by the
                     <a href="https://wiki.openfoodfacts.org/Folksonomy_Engine"
-                      >folksonomy engine project</a
+                      >Folksonomy Engine project</a
                     >. Don't hesitate to participate or give feedback.`
                 )}
               </p>
@@ -244,15 +235,11 @@ export class FolksonomyEditor extends LitElement {
                         page-type=${this.pageType}
                       />`
                   )}
-                  <tr>
-                    <td colspan="3">
-                      <folksonomy-editor-row
-                        product-id=${this.productId}
-                        page-type=${this.pageType}
-                        empty
-                      />
-                    </td>
-                  </tr>
+                  ${html`<folksonomy-editor-row
+                    product-id=${this.productId}
+                    page-type=${this.pageType}
+                    empty
+                  />`}
                 </table>
               </form>
             </div>
