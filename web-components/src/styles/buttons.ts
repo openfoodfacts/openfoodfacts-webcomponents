@@ -13,6 +13,10 @@ export enum ButtonType {
 
 export const getDefaultButtonClasses = (): CSSResult => {
   return css`
+    .buttons-row {
+      display: flex;
+      gap: 0.5rem;
+    }
     .button {
       padding: 0.5rem 1rem;
       border-radius: 0.25rem;
@@ -33,6 +37,16 @@ export const getDefaultButtonClasses = (): CSSResult => {
     .button.small {
       padding: 0.25rem 0.5rem;
       font-size: 0.875rem;
+    }
+
+    .button.with-icon {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .button:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
     }
   `
 }
