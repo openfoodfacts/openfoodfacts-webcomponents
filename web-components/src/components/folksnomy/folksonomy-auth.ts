@@ -15,16 +15,27 @@ export class FolksonomyAuth extends LitElement {
     :host {
       display: block;
       font-family: Arial, sans-serif;
+      padding: 16px;
+      box-sizing: border-box;
     }
 
     form {
       display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 600px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: stretch;
+      max-width: 100%;
       margin: 0 auto;
       gap: 20px;
+    }
+
+    @media (min-width: 600px) {
+      form {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 600px;
+      }
     }
 
     label {

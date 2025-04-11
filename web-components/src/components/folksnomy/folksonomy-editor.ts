@@ -73,7 +73,7 @@ export class FolksonomyEditor extends LitElement {
     }
 
     #free_properties_form table th {
-      background-color: #f1f1f1;
+      background-color: #dedede;
       font-weight: bold;
       color: #555;
     }
@@ -226,18 +226,20 @@ export class FolksonomyEditor extends LitElement {
                     <th>${msg("Actions")}</th>
                   </tr>
                   ${this.properties.map(
-                    (item) =>
+                    (item, index) =>
                       html`<folksonomy-editor-row
                         product-id=${this.productId}
                         key=${item.key}
                         value=${item.value}
                         version=${item.version}
+                        row-number=${index + 1}
                         page-type=${this.pageType}
                       />`
                   )}
                   ${html`<folksonomy-editor-row
                     product-id=${this.productId}
                     page-type=${this.pageType}
+                    row-number=${this.properties.length + 1}
                     empty
                   />`}
                 </table>

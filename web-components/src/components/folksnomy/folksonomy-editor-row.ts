@@ -16,10 +16,17 @@ export class FolksonomyEditorRow extends LitElement {
       font-family: Arial, sans-serif;
       font-size: 0.9rem;
       color: #333;
-      display: block;
       width: 100%;
+      display: contents;
     }
 
+    .odd-row {
+      background-color: #ffffff;
+    }
+
+    .even-row {
+      background-color: #f2f2f2;
+    }
 
     .button-container {
       display: flex;
@@ -56,13 +63,6 @@ export class FolksonomyEditorRow extends LitElement {
       background-color: #5a2a00;
     }
 
-    :host {
-      display: contents;
-      font-family: Arial, sans-serif;
-      font-size: 0.9rem;
-      color: #333;
-    }
-
     table {
       width: 100%;
       table-layout: fixed;
@@ -77,7 +77,7 @@ export class FolksonomyEditorRow extends LitElement {
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-   
+
     input[type="text"] {
       width: 100%;
       padding: 0.5rem;
@@ -163,13 +163,11 @@ export class FolksonomyEditorRow extends LitElement {
         padding: 0.4rem 0.8rem;
         height: 2rem;
         width: 7rem;
-        background-color: red;
       }
     }
 
     @media (max-width: 480px) {
       .actions {
-        background-color: green;
         width: 5rem;
         font-size: 0.7rem;
         padding: 0.3rem 0.5rem;
@@ -185,12 +183,11 @@ export class FolksonomyEditorRow extends LitElement {
         font-size: 0.7rem;
         padding: 0.3rem 0.5rem;
         height: 1.6rem;
-       }
       }
+    }
 
-      td {
-        padding: 0.4rem 0.5rem;
-      }      
+    td {
+      padding: 0.4rem 0.5rem;
     }
   `
 
@@ -207,6 +204,13 @@ export class FolksonomyEditorRow extends LitElement {
    */
   @property({ type: Number })
   version = 1
+
+  /**
+   * The row number of the property row
+   * @type {number}
+   */
+  @property({ type: Number, attribute: "row-number" })
+  rowNumber = 1
 
   /**
    * The key of the property being edited
@@ -259,7 +263,7 @@ export class FolksonomyEditorRow extends LitElement {
   override render() {
     if (this.empty) {
       return html`
-        <tr>
+        <tr class="${this.rowNumber % 2 === 0 ? "even-row" : "odd-row"}">
           <td>
             <input
               type="text"
@@ -288,7 +292,7 @@ export class FolksonomyEditorRow extends LitElement {
     }
 
     return html`
-      <tr>
+      <tr class="${this.rowNumber % 2 === 0 ? "even-row" : "odd-row"}">
         <td>
           <a
             class="property-link"
