@@ -128,6 +128,7 @@ export class RobotoffNutrients extends LitElement {
               width: "100%",
               "max-width": "500px",
             }}"
+            show-buttons
           ></zoomable-image>
         </div>
       </div>

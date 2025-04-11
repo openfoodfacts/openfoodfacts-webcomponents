@@ -1,4 +1,4 @@
-import { css, html, LitElement } from "lit"
+import { css, html, LitElement, nothing } from "lit"
 import { customElement, property, query, state } from "lit/decorators.js"
 import Panzoom from "@panzoom/panzoom"
 import { styleMap } from "lit/directives/style-map.js"
@@ -63,6 +63,9 @@ export class ZoomableImage extends LitElement {
   minZoom = 0
   @property({ type: Number, attribute: "max-zoom" })
   maxZoom = 5
+
+  @property({ type: Boolean, attribute: "show-buttons" })
+  showButtons = false
 
   @state()
   rotation = 0
@@ -145,6 +148,28 @@ export class ZoomableImage extends LitElement {
     }, 100)
   }
 
+  renderButtons() {
+    if (!this.showButtons) return nothing
+    return html`
+      <div class="flex justify-end">
+        <button
+          class="link-button"
+          @click=${() => this.rotateImage(-90)}
+          title=${msg("Rotate image to the left")}
+        >
+          <rotate-left-icon></rotate-left-icon>
+        </button>
+        <button
+          class="link-button"
+          @click=${() => this.rotateImage(90)}
+          title=${msg("Rotate image to the right")}
+        >
+          <rotate-right-icon></rotate-right-icon>
+        </button>
+      </div>
+    `
+  }
+
   override render() {
     const imageStyle = {
       transform: `rotate(${this.rotation}deg)`,
@@ -156,22 +181,7 @@ export class ZoomableImage extends LitElement {
             <img src=${this.src} @load=${this.initPanzoom} style=${styleMap(imageStyle)} />
           </div>
         </div>
-        <div class="flex justify-end">
-          <button
-            class="link-button"
-            @click=${() => this.rotateImage(-90)}
-            title=${msg("Rotate image to the left")}
-          >
-            <rotate-left-icon></rotate-left-icon>
-          </button>
-          <button
-            class="link-button"
-            @click=${() => this.rotateImage(90)}
-            title=${msg("Rotate image to the right")}
-          >
-            <rotate-right-icon></rotate-right-icon>
-          </button>
-        </div>
+        ${this.renderButtons()}
       </div>
     `
   }
