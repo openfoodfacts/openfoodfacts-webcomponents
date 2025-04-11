@@ -148,6 +148,20 @@ export class RobotoffIngredients extends LitElement {
     }
   }
 
+  renderImage() {
+    if (!this.fullImageUrl) {
+      return nothing
+    }
+    return html`
+      <div>
+        <zoomable-image
+          src=${this.fullImageUrl}
+          fallbackSrc=${this.productData.imageUrl}
+          .size="${{ width: "100%" }}"
+        ></zoomable-image>
+      </div>
+    `
+  }
   override render() {
     return this._spellcheckTask.render({
       pending: () => html`<off-wc-loader></off-wc-loader>`,
@@ -165,13 +179,7 @@ export class RobotoffIngredients extends LitElement {
           <div class="container">
             ${this.renderHeader()}
             <div>
-              <div>
-                <zoomable-image
-                  src=${this.fullImageUrl}
-                  fallbackSrc=${this.productData.imageUrl}
-                  .size="${{ width: "100%" }}"
-                ></zoomable-image>
-              </div>
+              ${this.renderImage()}
               <div>
                 <text-corrector
                   correction=${correction}
