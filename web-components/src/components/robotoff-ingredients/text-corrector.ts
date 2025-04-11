@@ -1,5 +1,5 @@
 import { LitElement, html, css, nothing } from "lit"
-import { Change, diffWords } from "diff"
+import { Change, diffWordsWithSpace } from "diff"
 import { customElement, property, state } from "lit/decorators.js"
 import { BASE } from "../../styles/base"
 import { msg } from "@lit/localize"
@@ -37,15 +37,13 @@ export class TextCorrector extends LitElement {
   static override styles = [
     BASE,
     TEXTAREA,
-    getButtonClasses([ButtonType.Cappucino, ButtonType.Success, ButtonType.Danger]),
+    getButtonClasses([
+      ButtonType.Cappucino,
+      ButtonType.Success,
+      ButtonType.Danger,
+      ButtonType.White,
+    ]),
     css`
-      .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 1rem;
-        border: 1px solid #eee;
-        border-radius: 4px;
-      }
       .text-section {
         margin-bottom: 1.5rem;
       }
@@ -97,6 +95,10 @@ export class TextCorrector extends LitElement {
   @state()
   value = ""
 
+  // Keeps track of the value of the input when the user is editing the text
+  @state()
+  _value = ""
+
   @state()
   textToCompare = ""
 
@@ -104,7 +106,7 @@ export class TextCorrector extends LitElement {
   isEditMode = false
 
   get isConfirmDisabled() {
-    return this.groupedChanges.length !== 0
+    return !this.isEditMode && this.groupedChanges.length !== 0
   }
 
   get updateTextMsg() {
@@ -145,8 +147,8 @@ export class TextCorrector extends LitElement {
         // This is a "changed" item (something was removed and something else was added)
         this.groupedChanges.push({
           type: ChangeType.CHANGED,
-          oldValue: current.value.trim(),
-          newValue: next.value.trim(),
+          oldValue: current.value,
+          newValue: next.value,
           indexes: [i, nextIndex],
         })
         i++ // Skip the next item as we've already processed it
@@ -154,14 +156,14 @@ export class TextCorrector extends LitElement {
         // This is a pure removal
         this.groupedChanges.push({
           type: ChangeType.REMOVED,
-          value: current.value.trim(),
+          value: current.value,
           indexes: [i],
         })
       } else if (current.added) {
         // This is a pure addition
         this.groupedChanges.push({
           type: ChangeType.ADDED,
-          value: current.value.trim(),
+          value: current.value,
           indexes: [i],
         })
       }
@@ -169,8 +171,16 @@ export class TextCorrector extends LitElement {
   }
 
   computeWordDiff() {
-    // Use diffWords from the diff library for word-level diffing
-    this.diffResult = diffWords(this.value, this.textToCompare).map((part, index) => {
+    // Use diffWordsWithSpace from the diff library for word-level diffing with preserved whitespace (including new lines)
+    let value, textToCompare
+    if (this.isEditMode) {
+      value = this._value
+      textToCompare = this.value
+    } else {
+      value = this.value
+      textToCompare = this.textToCompare
+    }
+    this.diffResult = diffWordsWithSpace(value, textToCompare).map((part, index) => {
       return {
         ...part,
         index,
@@ -225,15 +235,16 @@ export class TextCorrector extends LitElement {
 
   renderSummaryContent() {
     return html`<div class="summary">
-      <p>${this.updateTextMsg}</p>
       <ul>
         ${this.groupedChanges.map((item) => {
           let content
           if (item.type === ChangeType.CHANGED) {
+            const oldValue = item.oldValue!.replace(/ /g, "\u2423")
+            const newValue = item.newValue?.replace(/ /g, "\u2423")
             content = html`
               <span class="summary-label">${msg("Change:")}</span>
-              <span class="code deletion">${item.oldValue}</span> →
-              <span class="code addition">${item.newValue}</span>
+              <span class="code deletion">${oldValue}</span> →
+              <span class="code addition">${newValue}</span>
               ${this.renderSuggestionButtons(item)}
             `
           } else if (item.type === ChangeType.REMOVED) {
@@ -293,7 +304,7 @@ export class TextCorrector extends LitElement {
     }
     return html`
       <div class="summary">
-        <h2>${msg("Suggested changes:")}</h2>
+        <h2>${msg("Validate proposed changes:")}</h2>
         ${this.renderSummaryContent()}
       </div>
     `
@@ -354,6 +365,7 @@ export class TextCorrector extends LitElement {
     this.dispatchSubmitEvent({ type: QuestionAnnotationAnswer.ACCEPT })
   }
   confirmText() {
+    this.isEditMode = false
     if (this.correction === this.value) {
       this.acceptText()
     } else if (this.original === this.value) {
@@ -374,9 +386,12 @@ export class TextCorrector extends LitElement {
   }
   enterEditMode() {
     this.isEditMode = true
+    this._value = this.value
+    this.computeWordDiff()
   }
 
-  exitEditMode() {
+  cancelEditMode() {
+    this.value = this._value
     this.isEditMode = false
     this.computeWordDiff()
   }
@@ -390,6 +405,10 @@ export class TextCorrector extends LitElement {
 
   renderEditTextarea() {
     return html`
+      <div class="text-section">
+        <h2>${msg("Preview")}</h2>
+        <p class="text-content">${this.renderHighlightedDiff()}</p>
+      </div>
       <div class="text-section">
         <h2>${msg("Edit text")}</h2>
         <textarea
@@ -405,11 +424,20 @@ export class TextCorrector extends LitElement {
   renderButtons() {
     const confirmTitle = this.isConfirmDisabled ? this.updateTextMsg : ""
 
+    const successButton = html` <button
+      class="button success-button with-icon"
+      @click=${this.confirmText}
+      ?disabled=${this.isConfirmDisabled}
+      title=${confirmTitle}
+    >
+      <span>${msg("Confirm the text")}</span><check-icon></check-icon>
+    </button>`
     if (this.isEditMode) {
       return html`
         <div class="buttons-row">
-          <button class="button success-button with-icon" @click=${this.exitEditMode}>
-            <span>${msg("Done editing")}</span><check-icon></check-icon>
+          ${successButton}
+          <button class="button cappucino-button with-icon" @click=${this.cancelEditMode}>
+            <span>${msg("Reset edit")}</span><cross-icon></cross-icon>
           </button>
         </div>
       `
@@ -417,20 +445,13 @@ export class TextCorrector extends LitElement {
 
     return html`
       <div class="buttons-row">
-        <button
-          class="button success-button with-icon"
-          @click=${this.confirmText}
-          ?disabled=${this.isConfirmDisabled}
-          title=${confirmTitle}
-        >
-          <span>${msg("Confirm the text")}</span><check-icon></check-icon>
-        </button>
+        ${successButton}
 
         <button class="button cappucino-button with-icon" @click=${this.enterEditMode}>
           <span>${msg("Edit")}</span><edit-icon></edit-icon>
         </button>
 
-        <button class="button cappucino-button with-icon" @click=${this.skip}>
+        <button class="button white-button with-icon" @click=${this.skip}>
           <span>${msg("Skip")}</span><skip-icon></skip-icon>
         </button>
       </div>
@@ -438,12 +459,11 @@ export class TextCorrector extends LitElement {
   }
   override render() {
     return html`
-      <div class="container">
+      <div>
         ${this.isEditMode
           ? this.renderEditTextarea()
           : html`
               <div class="text-section">
-                <h2>${msg("Text to be validated")}</h2>
                 <p class="text-content">${this.renderHighlightedDiff()}</p>
               </div>
               <div class="text-section">${this.renderSummary()}</div>

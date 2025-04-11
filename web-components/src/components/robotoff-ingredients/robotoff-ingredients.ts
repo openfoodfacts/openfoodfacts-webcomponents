@@ -3,78 +3,32 @@ import { customElement, property, state } from "lit/decorators.js"
 import { BASE } from "../../styles/base"
 import { msg } from "@lit/localize"
 import { Task } from "@lit/task"
-import {
-  fetchSpellcheckInsights,
-  fetchSpellcheckInsightsByProductCode,
-  getIngredientSpellcheckInsightsByProductCode,
-  ingredientSpellcheckInsights,
-} from "../../signals/ingredients"
-import { getValidHeadingLevel } from "../../utils/knowledge-panels/heading-utils"
-import { getTranslationsByQuantity } from "../../utils/internalization"
-import { IngredientsInsight, QuestionAnnotationAnswer } from "../../types/robotoff"
+import { fetchSpellcheckInsights, ingredientSpellcheckInsights } from "../../signals/ingredients"
+import { IngredientsInsight } from "../../types/robotoff"
 import { getLocale } from "../../localization"
-import { getWordDiff } from "../../utils/word-diff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import robotoff from "../../api/robotoff"
 import { EventState, EventType } from "../../constants"
 import "./text-corrector"
 import "../shared/zoomable-image"
 import { fetchProduct } from "../../api/openfoodfacts"
-import { insight, insightById } from "../../signals/nutrients"
 import { ImageIngredientsProductType } from "../../types/openfoodfacts"
 import { TextCorrectorEvent } from "../../types"
+import { INPUT } from "../../styles/form"
 
 @customElement("robotoff-ingredients")
 export class RobotoffIngredients extends LitElement {
   static override styles = [
     BASE,
+    INPUT,
     getButtonClasses([ButtonType.Cappucino, ButtonType.Success, ButtonType.Danger]),
     css`
-      :host {
-      }
       .container {
         max-width: 800px;
         margin: 0 auto;
         padding: 1rem;
         border: 1px solid #eee;
         border-radius: 4px;
-      }
-      .text-section {
-        margin-bottom: 1.5rem;
-      }
-      h2 {
-        font-size: 1.2rem;
-        margin-bottom: 0.5rem;
-      }
-      .text-content {
-        background-color: #f8f8f8;
-        padding: 1rem;
-        border-radius: 4px;
-        white-space: pre-wrap;
-        line-height: 1.5;
-      }
-      .diff-highlight .deletion {
-        background-color: #ffcccc;
-        text-decoration: line-through;
-      }
-      .diff-highlight .addition {
-        background-color: #ccffcc;
-      }
-      .diff-highlight .change-old {
-        background-color: #ffcccc;
-        text-decoration: line-through;
-      }
-      .diff-highlight .change-new {
-        background-color: #ccffcc;
-      }
-      .summary-item {
-        margin-bottom: 0.5rem;
-      }
-      .summary-label {
-        font-weight: bold;
-      }
-      .code {
-        font-family: monospace;
       }
     `,
   ]
@@ -113,11 +67,10 @@ export class RobotoffIngredients extends LitElement {
   }
 
   renderHeader() {
-    // const titleLevel = getValidHeadingLevel(this.titleLevel, "h2")
     return html`
       <div>
         <div>
-          <div>${msg("Extract ingredients")}</div>
+          <h2>${msg("Help us fix errors in ingredients list")}</h2>
         </div>
         <p>${this.productData.name}</p>
       </div>
@@ -158,9 +111,6 @@ export class RobotoffIngredients extends LitElement {
     },
     args: () => [this.productCode],
   })
-
-  @state()
-  values: Record<number, string> = {}
 
   nextInsight() {
     this._currentIndex++
@@ -212,13 +162,9 @@ export class RobotoffIngredients extends LitElement {
         const original = insight.data.original
 
         return html`
-          <div>
+          <div class="container">
             ${this.renderHeader()}
             <div>
-              <label>
-                <div>${msg("Language")}</div>
-                <input type="text" disabled value="${this.languageCode}" />
-              </label>
               <div>
                 <zoomable-image
                   src=${this.fullImageUrl}
