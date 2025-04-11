@@ -1,5 +1,29 @@
 import { css } from "lit"
 
+export const TEXTAREA = css`
+  .textarea {
+    width: 100%;
+    min-height: 10px;
+    background-color: #fafafa;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #ccc;
+    color: rgba(0, 0, 0, 0.75);
+    line-height: 1.5;
+    padding: 0.5rem;
+    border-radius: 4px;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 1rem;
+  }
+
+  .textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  }
+`
+
 export const SELECT = css`
   .select {
     width: 100%;

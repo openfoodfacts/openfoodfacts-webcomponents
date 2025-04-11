@@ -8,7 +8,9 @@ import { QuestionAnnotationAnswer } from "../../types/robotoff"
 import "../icons/check"
 import "../icons/cross"
 import "../icons/skip"
+import "../icons/edit"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
+import { TEXTAREA } from "../../styles/form"
 
 export enum ChangeType {
   ADDED = "added",
@@ -34,6 +36,7 @@ export enum SubmitType {
 export class TextCorrector extends LitElement {
   static override styles = [
     BASE,
+    TEXTAREA,
     getButtonClasses([ButtonType.Cappucino, ButtonType.Success, ButtonType.Danger]),
     css`
       .container {
@@ -96,6 +99,9 @@ export class TextCorrector extends LitElement {
 
   @state()
   textToCompare = ""
+
+  @state()
+  isEditMode = false
 
   get isConfirmDisabled() {
     return this.groupedChanges.length !== 0
@@ -177,17 +183,15 @@ export class TextCorrector extends LitElement {
   }
 
   renderHighlightedDiff() {
-    return html`
-      ${this.diffResult.map((part) => {
-        if (part.added) {
-          return html`<span class="addition">${part.value}</span>`
-        } else if (part.removed) {
-          return html`<span class="deletion">${part.value}</span>`
-        } else {
-          return html`<span>${part.value}</span>`
-        }
-      })}
-    `
+    return html`${this.diffResult.map((part) => {
+      if (part.added) {
+        return html`<span class="addition">${part.value}</span>`
+      } else if (part.removed) {
+        return html`<span class="deletion">${part.value}</span>`
+      } else {
+        return html`<span>${part.value}</span>`
+      }
+    })}`
   }
   getAcceptSuggestionMsg(item: IndexedGroupedChange) {
     if (item.type === ChangeType.CHANGED) {
@@ -368,30 +372,82 @@ export class TextCorrector extends LitElement {
   getResult() {
     return this.diffResult.map((change) => change.value).join("")
   }
+  enterEditMode() {
+    this.isEditMode = true
+  }
+
+  exitEditMode() {
+    this.isEditMode = false
+    this.computeWordDiff()
+  }
+
+  handleTextareaChange(e: Event) {
+    const textarea = e.target as HTMLTextAreaElement
+    this.value = textarea.value
+    this.computeWordDiff()
+    this.dispatchEvent(new CustomEvent("update", { detail: { result: this.value } }))
+  }
+
+  renderEditTextarea() {
+    return html`
+      <div class="text-section">
+        <h2>${msg("Edit text")}</h2>
+        <textarea
+          class="textarea"
+          .value=${this.value}
+          @input=${this.handleTextareaChange}
+          rows="6"
+        ></textarea>
+      </div>
+    `
+  }
+
   renderButtons() {
     const confirmTitle = this.isConfirmDisabled ? this.updateTextMsg : ""
-    return html`
-        <div class="buttons-row">
-            <button class="button success-button with-icon" @click=${this.confirmText} ?disabled=${this.isConfirmDisabled} title=${confirmTitle}>
-              <span>${msg("Confirm the text")}</span><check-icon></check-icon>
-            </button>
 
-            <button class="button cappucino-button with-icon" @click=${this.skip}>
-              <span>${msg("Skip")}</span><skip-icon></skip-icon>
-            </button>
-          </div>
+    if (this.isEditMode) {
+      return html`
+        <div class="buttons-row">
+          <button class="button success-button with-icon" @click=${this.exitEditMode}>
+            <span>${msg("Done editing")}</span><check-icon></check-icon>
+          </button>
         </div>
       `
+    }
+
+    return html`
+      <div class="buttons-row">
+        <button
+          class="button success-button with-icon"
+          @click=${this.confirmText}
+          ?disabled=${this.isConfirmDisabled}
+          title=${confirmTitle}
+        >
+          <span>${msg("Confirm the text")}</span><check-icon></check-icon>
+        </button>
+
+        <button class="button cappucino-button with-icon" @click=${this.enterEditMode}>
+          <span>${msg("Edit")}</span><edit-icon></edit-icon>
+        </button>
+
+        <button class="button cappucino-button with-icon" @click=${this.skip}>
+          <span>${msg("Skip")}</span><skip-icon></skip-icon>
+        </button>
+      </div>
+    `
   }
   override render() {
     return html`
       <div class="container">
-        <div class="text-section">
-          <h2>${msg("Text to be validated")}</h2>
-          <p class="text-content">${this.renderHighlightedDiff()}</p>
-        </div>
-
-        <div class="text-section">${this.renderSummary()}</div>
+        ${this.isEditMode
+          ? this.renderEditTextarea()
+          : html`
+              <div class="text-section">
+                <h2>${msg("Text to be validated")}</h2>
+                <p class="text-content">${this.renderHighlightedDiff()}</p>
+              </div>
+              <div class="text-section">${this.renderSummary()}</div>
+            `}
         ${this.renderButtons()}
       </div>
     `
