@@ -38,6 +38,9 @@ export class RobotoffIngredients extends LitElement {
   @property({ type: String, attribute: "product-code" })
   productCode = ""
 
+  @property({ type: String, attribute: "language-code" })
+  languageCode = ""
+
   @state()
   private _currentIndex = 0
 
@@ -56,8 +59,8 @@ export class RobotoffIngredients extends LitElement {
       : undefined
   }
 
-  get languageCode() {
-    return getLocale()
+  get _languageCode() {
+    return this.languageCode || getLocale()
   }
 
   get _insight(): IngredientsInsight | undefined {
@@ -89,7 +92,7 @@ export class RobotoffIngredients extends LitElement {
       return
     }
     const result = await fetchProduct<ImageIngredientsProductType>(insight.barcode, {
-      lc: this.languageCode,
+      lc: this._languageCode,
       fields: ["image_ingredients_url", "product_name"],
     })
 
@@ -101,7 +104,7 @@ export class RobotoffIngredients extends LitElement {
 
   private _spellcheckTask = new Task(this, {
     task: async ([productCode]) => {
-      const lang = this.languageCode
+      const lang = this._languageCode
       this._insigthIds = []
       const insights = await fetchSpellcheckInsights(productCode ? productCode : undefined)
       this._insigthIds = insights
