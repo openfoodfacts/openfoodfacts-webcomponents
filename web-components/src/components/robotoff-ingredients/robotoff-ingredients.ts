@@ -75,7 +75,6 @@ export class RobotoffIngredients extends LitElement {
         <div>
           <h2>${msg("Help us fix errors in ingredients list")}</h2>
         </div>
-        <p>${this.productData.name}</p>
       </div>
     `
   }
