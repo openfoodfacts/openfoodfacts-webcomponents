@@ -5,6 +5,10 @@ import { BASE } from "../../styles/base"
 import { msg } from "@lit/localize"
 import { EventType } from "../../constants"
 import { QuestionAnnotationAnswer } from "../../types/robotoff"
+import "../icons/check"
+import "../icons/cross"
+import "../icons/skip"
+import { ButtonType, getButtonClasses } from "../../styles/buttons"
 
 export enum ChangeType {
   ADDED = "added",
@@ -28,26 +32,9 @@ export enum SubmitType {
 }
 @customElement("text-corrector")
 export class TextCorrector extends LitElement {
-  @property({ type: String })
-  original = ""
-
-  @property({ type: String })
-  correction = ""
-
-  @state()
-  diffResult: IndexedChange[] = []
-
-  @state()
-  groupedChanges: IndexedGroupedChange[] = []
-
-  @state()
-  value = ""
-
-  @state()
-  textToCompare = ""
-
   static override styles = [
     BASE,
+    getButtonClasses([ButtonType.Cappucino, ButtonType.Success, ButtonType.Danger]),
     css`
       .container {
         max-width: 800px;
@@ -78,7 +65,10 @@ export class TextCorrector extends LitElement {
         background-color: #ccffcc;
       }
       .summary-item {
+        display: flex;
+        align-items: center;
         margin-bottom: 0.5rem;
+        gap: 1rem;
       }
       .summary-label {
         font-weight: bold;
@@ -88,6 +78,31 @@ export class TextCorrector extends LitElement {
       }
     `,
   ]
+  @property({ type: String })
+  original = ""
+
+  @property({ type: String })
+  correction = ""
+
+  @state()
+  diffResult: IndexedChange[] = []
+
+  @state()
+  groupedChanges: IndexedGroupedChange[] = []
+
+  @state()
+  value = ""
+
+  @state()
+  textToCompare = ""
+
+  get isConfirmDisabled() {
+    return this.groupedChanges.length !== 0
+  }
+
+  get updateTextMsg() {
+    return msg("Please fix the errors or modify the text before confirming")
+  }
 
   updateValues() {
     this.value = this.original
@@ -105,13 +120,17 @@ export class TextCorrector extends LitElement {
   computeGroupedChanges(): void {
     this.groupedChanges = []
 
-    const changes = this.diffResult.filter((part) => part.added || part.removed)
+    const changes = this.diffResult
     if (changes.length === 0) {
       return
     }
 
     for (let i = 0; i < changes.length; i++) {
       const current = changes[i]
+
+      if (!current.added && !current.removed) {
+        continue
+      }
       const nextIndex = i + 1
       const next = nextIndex < changes.length ? changes[nextIndex] : null
 
@@ -169,54 +188,103 @@ export class TextCorrector extends LitElement {
       })}
     `
   }
+  getAcceptSuggestionMsg(item: IndexedGroupedChange) {
+    if (item.type === ChangeType.CHANGED) {
+      return msg("Accept this change")
+    } else if (item.type === ChangeType.ADDED) {
+      return msg("Accept this addition")
+    } else if (item.type === ChangeType.REMOVED) {
+      return msg("Accept this removal")
+    }
+    return ""
+  }
+  getRejectSuggestionMsg(item: IndexedGroupedChange) {
+    if (item.type === ChangeType.CHANGED) {
+      return msg("Reject this change")
+    } else if (item.type === ChangeType.ADDED) {
+      return msg("Reject this addition")
+    } else if (item.type === ChangeType.REMOVED) {
+      return msg("Reject this removal")
+    }
+    return ""
+  }
 
   renderSuggestionButtons(item: IndexedGroupedChange) {
     return html`
-      <span class="button-section">
-        <button @click="${() => this.updateResult(true, item)}">Allow Changes</button>
-        <button @click="${() => this.updateResult(false, item)}">Reject Changes</button>
+      <span class="buttons-row">
+        <button class="button success-button small" @click="${() => this.updateResult(true, item)}" title="${this.getAcceptSuggestionMsg(item)}"><check-icon></check-icon></button>
+        <button class="button danger-button small" @click="${() => this.updateResult(false, item)}" title="${this.getRejectSuggestionMsg(item)}"><cross-icon></cross-icon></button>
       </div>
     `
   }
 
   renderSummaryContent() {
-    if (this.groupedChanges.length === 0) {
-      return html`<p>${msg("No suggestions.")}</p>`
-    }
     return html`<div class="summary">
-      ${this.groupedChanges.map((item) => {
-        if (item.type === ChangeType.CHANGED) {
-          return html`
-            <div class="summary-item">
-              <span class="summary-label">${msg("Change:")}</span>
-              <span class="code deletion">${item.oldValue}</span> →
-              <span class="code addition">${item.newValue}</span>
-              ${this.renderSuggestionButtons(item)}
-            </div>
-          `
-        } else if (item.type === ChangeType.REMOVED) {
-          return html`
-            <div class="summary-item">
-              <span class="summary-label">${msg("Remove:")}</span>
-              <span class="code">${item.value}</span>
-              ${this.renderSuggestionButtons(item)}
-            </div>
-          `
-        } else if (item.type === ChangeType.ADDED) {
-          return html`
-            <div class="summary-item">
-              <span class="summary-label">${msg("Add:")}</span>
-              <span class="code">${item.value}</span>
-              ${this.renderSuggestionButtons(item)}
-            </div>
-          `
-        }
-        return nothing
-      })}
+      <p>${this.updateTextMsg}</p>
+      <ul>
+        ${this.groupedChanges.map((item) => {
+          if (item.type === ChangeType.CHANGED) {
+            return html`
+              <li class="summary-item">
+                <span class="summary-label">${msg("Change:")}</span>
+                <span class="code deletion">${item.oldValue}</span> →
+                <span class="code addition">${item.newValue}</span>
+                ${this.renderSuggestionButtons(item)}
+              </li>
+            `
+          } else if (item.type === ChangeType.REMOVED) {
+            return html`
+              <li class="summary-item">
+                <span class="summary-label">${msg("Remove:")}</span>
+                <span class="code deletion">${item.value}</span>
+                ${this.renderSuggestionButtons(item)}
+              </li>
+            `
+          } else if (item.type === ChangeType.ADDED) {
+            return html`
+              <li class="summary-item">
+                <span class="summary-label">${msg("Add:")}</span>
+                <span class="code addition">${item.value}</span>
+                ${this.renderSuggestionButtons(item)}
+              </li>
+            `
+          }
+          return nothing
+        })}
+      </ul>
+      ${this.renderBatchSuggestionsButtons()}
     </div> `
   }
 
+  renderBatchSuggestionsButtons() {
+    if (this.groupedChanges.length <= 1) {
+      return nothing
+    }
+    return html`
+      <div class="buttons-row">
+        <button
+          class="button success-button with-icon"
+          @click="${() => this.updateBatchResult(true)}"
+        >
+          <span>${msg("Accept all suggestions")}</span>
+
+          <check-icon></check-icon>
+        </button>
+        <button
+          class="button danger-button with-icon"
+          @click="${() => this.updateBatchResult(false)}"
+        >
+          <span>${msg("Reject all suggestions")}</span>
+          <cross-icon></cross-icon>
+        </button>
+      </div>
+    `
+  }
+
   renderSummary() {
+    if (this.groupedChanges.length === 0) {
+      return nothing
+    }
     return html`
       <div class="summary">
         <h2>${msg("Suggested changes:")}</h2>
@@ -229,26 +297,41 @@ export class TextCorrector extends LitElement {
     console.log("Changes allowed", item)
 
     let value = ""
-
+    let textToCompare = ""
     for (const [index, change] of this.diffResult.entries()) {
       if (item.indexes.includes(index)) {
+        let newValue
         if (item.type === ChangeType.REMOVED) {
-          value += validate ? "" : change.value
+          newValue = validate ? "" : change.value
         } else if (item.type === ChangeType.ADDED) {
-          value += validate ? change.value : ""
+          newValue = validate ? change.value : ""
         } else if (item.type === ChangeType.CHANGED) {
           // If the change is a change, we need to check if the index is the first or second index to skip the other one
           if (item.indexes[1] === index) {
             continue
           }
-          value += validate ? item.newValue : item.oldValue
+          newValue = validate ? item.newValue : item.oldValue
         }
+        value += newValue
+        textToCompare += newValue
+      } else if (change.added) {
+        textToCompare += change.value
+      } else if (change.removed) {
+        value += change.value
       } else {
         value += change.value
+        textToCompare += change.value
       }
     }
 
+    this.value = value
+    this.textToCompare = textToCompare
+    this.computeWordDiff()
     this.dispatchEvent(new CustomEvent("update", { detail: { result: value } }))
+  }
+
+  updateBatchResult(validate: boolean) {
+    this.groupedChanges.forEach((item) => this.updateResult(validate, item))
   }
 
   dispatchSubmitEvent(detail: { correction?: string; type: QuestionAnnotationAnswer }) {
@@ -284,13 +367,16 @@ export class TextCorrector extends LitElement {
     return this.diffResult.map((change) => change.value).join("")
   }
   renderButtons() {
+    const confirmTitle = this.isConfirmDisabled ? this.updateTextMsg : ""
     return html`
-        <div>
-            <button class="button success-button" @click=${this.confirmText}>
-              ${msg("Accepter le texte")}
+        <div class="buttons-row">
+            <button class="button success-button with-icon" @click=${this.confirmText} ?disabled=${this.isConfirmDisabled} title=${confirmTitle}>
+              <span>${msg("Confirm the text")}</span><check-icon></check-icon>
             </button>
 
-            <button class="button cappucino-button" @click=${this.skip}>${msg("Skip")}</button>
+            <button class="button cappucino-button with-icon" @click=${this.skip}>
+              <span>${msg("Skip")}</span><skip-icon></skip-icon>
+            </button>
           </div>
         </div>
       `
