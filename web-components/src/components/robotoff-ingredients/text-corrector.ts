@@ -64,7 +64,8 @@ export class TextCorrector extends LitElement {
       .addition {
         background-color: #ccffcc;
       }
-      .summary-item {
+
+      .summary-item-content {
         display: flex;
         align-items: center;
         margin-bottom: 0.5rem;
@@ -223,33 +224,34 @@ export class TextCorrector extends LitElement {
       <p>${this.updateTextMsg}</p>
       <ul>
         ${this.groupedChanges.map((item) => {
+          let content
           if (item.type === ChangeType.CHANGED) {
-            return html`
-              <li class="summary-item">
-                <span class="summary-label">${msg("Change:")}</span>
-                <span class="code deletion">${item.oldValue}</span> →
-                <span class="code addition">${item.newValue}</span>
-                ${this.renderSuggestionButtons(item)}
-              </li>
+            content = html`
+              <span class="summary-label">${msg("Change:")}</span>
+              <span class="code deletion">${item.oldValue}</span> →
+              <span class="code addition">${item.newValue}</span>
+              ${this.renderSuggestionButtons(item)}
             `
           } else if (item.type === ChangeType.REMOVED) {
-            return html`
-              <li class="summary-item">
-                <span class="summary-label">${msg("Remove:")}</span>
-                <span class="code deletion">${item.value}</span>
-                ${this.renderSuggestionButtons(item)}
-              </li>
+            content = html`
+              <span class="summary-label">${msg("Remove:")}</span>
+              <span class="code deletion">${item.value}</span>
+              ${this.renderSuggestionButtons(item)}
             `
           } else if (item.type === ChangeType.ADDED) {
-            return html`
-              <li class="summary-item">
-                <span class="summary-label">${msg("Add:")}</span>
-                <span class="code addition">${item.value}</span>
-                ${this.renderSuggestionButtons(item)}
-              </li>
+            content = html`
+              <span class="summary-label">${msg("Add:")}</span>
+              <span class="code addition">${item.value}</span>
+              ${this.renderSuggestionButtons(item)}
             `
+          } else {
+            return nothing
           }
-          return nothing
+          return html`
+            <li class="summary-item">
+              <div class="summary-item-content">${content}</div>
+            </li>
+          `
         })}
       </ul>
       ${this.renderBatchSuggestionsButtons()}
