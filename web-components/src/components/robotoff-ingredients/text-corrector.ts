@@ -11,6 +11,7 @@ import "../icons/skip"
 import "../icons/edit"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { TEXTAREA } from "../../styles/form"
+import { SAFE_DARKER_WHITE, SAFE_LIGHT_GREY } from "../../utils/colors"
 
 export enum ChangeType {
   ADDED = "added",
@@ -52,7 +53,9 @@ export class TextCorrector extends LitElement {
         margin-bottom: 0.5rem;
       }
       .text-content {
-        background-color: #f8f8f8;
+        background-color: ${SAFE_DARKER_WHITE};
+        border: 1px solid ${SAFE_LIGHT_GREY};
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         padding: 1rem;
         border-radius: 4px;
         white-space: pre-wrap;
@@ -64,6 +67,9 @@ export class TextCorrector extends LitElement {
       }
       .addition {
         background-color: #ccffcc;
+      }
+      .no-changes {
+        background-color: ${SAFE_LIGHT_GREY};
       }
 
       .summary-item-content {
@@ -224,6 +230,26 @@ export class TextCorrector extends LitElement {
     return ""
   }
 
+  renderAcceptSuggestionButton(item: IndexedGroupedChange) {
+    return html` <button
+      class="button success-button small"
+      @click="${() => this.updateResult(true, item)}"
+      title="${this.getAcceptSuggestionMsg(item)}"
+    >
+      <check-icon></check-icon>
+    </button>`
+  }
+  renderRejectSuggestionButton(item: IndexedGroupedChange) {
+    return html`
+      <button
+        class="button danger-button small"
+        @click="${() => this.updateResult(false, item)}"
+        title="${this.getRejectSuggestionMsg(item)}"
+      >
+        <cross-icon></cross-icon>
+      </button>
+    `
+  }
   renderSuggestionButtons(item: IndexedGroupedChange) {
     return html`
       <span class="buttons-row">
@@ -243,21 +269,26 @@ export class TextCorrector extends LitElement {
             const newValue = item.newValue?.replace(/ /g, "\u2423")
             content = html`
               <span class="summary-label">${msg("Change:")}</span>
+              ${this.renderRejectSuggestionButton(item)}
               <span class="code deletion">${oldValue}</span> →
               <span class="code addition">${newValue}</span>
-              ${this.renderSuggestionButtons(item)}
+              ${this.renderAcceptSuggestionButton(item)}
             `
           } else if (item.type === ChangeType.REMOVED) {
             content = html`
-              <span class="summary-label">${msg("Remove:")}</span>
+              <span class="summary-label">${msg("Change:")}</span>
+              ${this.renderRejectSuggestionButton(item)}
+              <span class="code no-changes"> ${item.value} </span> →
               <span class="code deletion">${item.value}</span>
-              ${this.renderSuggestionButtons(item)}
+              ${this.renderAcceptSuggestionButton(item)}
             `
           } else if (item.type === ChangeType.ADDED) {
             content = html`
-              <span class="summary-label">${msg("Add:")}</span>
+              <span class="summary-label">${msg("Change:")}</span>
+              ${this.renderRejectSuggestionButton(item)}
+              <span class="code deletion"></span> →
               <span class="code addition">${item.value}</span>
-              ${this.renderSuggestionButtons(item)}
+              ${this.renderAcceptSuggestionButton(item)}
             `
           } else {
             return nothing
