@@ -38,21 +38,45 @@ export class RobotoffIngredients extends LitElement {
       }
     `,
   ]
+  /**
+   * The HTML tag level for the title of the component.
+   * @type {string}
+   */
   @property({ type: String, attribute: "title-level" })
   titleLevel = "h2"
 
+  /**
+   * The product code for which the ingredients are being corrected.
+   * @type {string}
+   */
   @property({ type: String, attribute: "product-code" })
   productCode = ""
 
+  /**
+   * The language code for the product.
+   * @type {string}
+   */
   @property({ type: String, attribute: "language-code" })
   languageCode = ""
 
+  /**
+   * The current index of the insight being displayed.
+   * @type {number}
+   */
   @state()
   private _currentIndex = 0
 
+  /**
+   * An array of insight IDs for the product.
+   * @type {string[]}
+   */
   @state()
   private _insightIds: string[] = []
 
+  /**
+   * The product data, including the image URL and name.
+   * @type {{ imageUrl?: string, name?: string }}
+   */
   @state()
   private productData: {
     imageUrl?: string
@@ -138,6 +162,10 @@ export class RobotoffIngredients extends LitElement {
     }
   }
 
+  /**
+   * A task to fetch spellcheck insights for the product.
+   * @type {Task}
+   */
   private _spellcheckTask = new Task(this, {
     task: async ([productCode]) => {
       const lang = this._languageCode
@@ -222,7 +250,7 @@ export class RobotoffIngredients extends LitElement {
       <div>
         <zoomable-image
           src=${this.fullImageUrl}
-          fallback-src=${this.productData.imageUrl ?? ""}
+          fallback-src=${this.productData.imageUrl}
           .size="${{ width: "100%", height: "30vh" }}"
         ></zoomable-image>
       </div>
