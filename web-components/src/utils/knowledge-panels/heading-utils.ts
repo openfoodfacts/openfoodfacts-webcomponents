@@ -1,6 +1,6 @@
 import { LitElement, html, css, TemplateResult } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { sanitizeHtml } from ".."
+import { sanitizeHtml } from "../html"
 
 /**
  * Validates and normalizes the heading level

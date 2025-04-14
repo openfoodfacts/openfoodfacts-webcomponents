@@ -16,7 +16,7 @@ import { ImageIngredientsProductType } from "../../types/openfoodfacts"
 import { RobotoffIngredientsStateEventDetail, TextCorrectorEvent } from "../../types/ingredients"
 import { INPUT } from "../../styles/form"
 import { getValidHeadingLevel } from "../../utils/knowledge-panels/heading-utils"
-import { sanitizeHtml } from "../../utils"
+import { sanitizeHtml } from "../../utils/html"
 
 /**
  * RobotoffIngredients component

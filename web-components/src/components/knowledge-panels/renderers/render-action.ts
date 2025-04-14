@@ -1,7 +1,7 @@
 import { LitElement, html, css, TemplateResult } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { KnowledgePanelElement } from "../../../types/knowledge-panel"
-import { sanitizeHtml } from "../../../utils"
+import { sanitizeHtml } from "../../../utils/html"
 
 /**
  * Action element renderer component
