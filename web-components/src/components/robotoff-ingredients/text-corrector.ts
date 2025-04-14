@@ -1,5 +1,5 @@
 import { LitElement, html, css, nothing } from "lit"
-import { Change, diffWordsWithSpace } from "diff"
+import { diffWordsWithSpace } from "diff"
 import { customElement, property, state } from "lit/decorators.js"
 import { BASE } from "../../styles/base"
 import { msg } from "@lit/localize"
@@ -14,27 +14,19 @@ import { TEXTAREA } from "../../styles/form"
 import { POPOVER } from "../../styles/popover"
 import { SAFE_DARKER_WHITE, SAFE_LIGHT_GREY } from "../../utils/colors"
 import { clickOutside } from "../../directives/click-outside"
+import {
+  ChangeType,
+  IndexedChange,
+  IndexedGroupedChange,
+  TextCorrectorEventDetail,
+} from "../../types/ingredients"
 
-export enum ChangeType {
-  ADDED = "added",
-  REMOVED = "removed",
-  CHANGED = "changed",
-}
-
-export type IndexedChange = Change & { index: number }
-export type IndexedGroupedChange = {
-  type: ChangeType
-  value?: string
-  oldValue?: string
-  newValue?: string
-  indexes: number[]
-}
-
-export enum SubmitType {
-  ACCEPT = "accept",
-  REJECT = "reject",
-  SKIP = "skip",
-}
+/**
+ * TextCorrector component
+ *
+ * @fires submit - when the user submits the form
+ * @fires skip - when the user skips the question
+ */
 @customElement("text-corrector")
 export class TextCorrector extends LitElement {
   static override styles = [
@@ -124,20 +116,37 @@ export class TextCorrector extends LitElement {
   @state()
   groupedChangesPopover?: IndexedGroupedChange = undefined
 
+  /**
+   * Checks if the confirm button should be disabled.
+   * @returns {boolean} True if the confirm button should be disabled, false otherwise.
+   */
   get isConfirmDisabled() {
     return !this.isEditMode && this.groupedChanges.length !== 0
   }
 
+  /**
+   * Gets the message to display when the confirm button is disabled.
+   * @returns {string} The message to display.
+   */
   get updateTextMsg() {
     return msg("Please fix the errors or modify the text before confirming")
   }
 
+  /**
+   * Updates the values of the component.
+   */
   updateValues() {
     this.value = this.original
     this.textToCompare = this.correction
     this.groupedChangesPopover = undefined
   }
 
+  /**
+   * Called when an attribute is changed.
+   * @param {string} name - The name of the attribute.
+   * @param {string | null} _old - The old value of the attribute.
+   * @param {string | null} value - The new value of the attribute.
+   */
   override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
     super.attributeChangedCallback(name, _old, value)
     if (name === "original" || name === "correction") {
@@ -146,6 +155,13 @@ export class TextCorrector extends LitElement {
     }
   }
 
+  /**
+   * Computes the grouped changes based on the diff result.
+   * This method allows to group additions and removals in "changed" type.
+   * For example, if the text is "hello world" and the correction is "hello universe"
+   * The grouped change will be of type "changed" with the value "world" and the new value "universe"
+   * instead of remove "world" and add "universe" separately
+   */
   computeGroupedChanges(): void {
     this.groupedChanges = []
 
@@ -190,6 +206,10 @@ export class TextCorrector extends LitElement {
     }
   }
 
+  /**
+   * Computes the word-level diff between the original and corrected text.
+   * @returns {IndexedChange[]} The diff result.
+   */
   computeWordDiff() {
     // Use diffWordsWithSpace from the diff library for word-level diffing with preserved whitespace (including new lines)
     let value, textToCompare
@@ -211,6 +231,11 @@ export class TextCorrector extends LitElement {
     this.computeGroupedChanges()
     return this.diffResult
   }
+  /**
+   * Renders the suggestion popover for a given part of the diff.
+   * @param {IndexedChange} part - The part of the diff to render the popover for.
+   * @returns {TemplateResult | typeof nothing} The rendered popover or nothing if no popover should be shown.
+   */
   renderSuggestionPopover(part: IndexedChange) {
     const self = this
     if (!this.groupedChangesPopover || part.index !== this.groupedChangesPopover.indexes[0])
@@ -226,10 +251,17 @@ export class TextCorrector extends LitElement {
     </div>`
   }
 
+  /**
+   * Hides the suggestion popover.
+   */
   hideSuggestionPopover() {
     this.groupedChangesPopover = undefined
   }
 
+  /**
+   * Shows the suggestion popover for a given part of the diff.
+   * @param {IndexedChange} indexedChange - The part of the diff to show the popover for.
+   */
   showSuggestionPopover(indexedChange: IndexedChange) {
     const groupedChange = this.groupedChanges.find((change) =>
       change.indexes.includes(indexedChange.index)
@@ -238,6 +270,10 @@ export class TextCorrector extends LitElement {
     this.groupedChangesPopover = groupedChange
   }
 
+  /**
+   * Renders the highlighted diff between the original and corrected text.
+   * @returns {TemplateResult} The rendered highlighted diff.
+   */
   renderHighlightedDiff() {
     return html`${this.diffResult.map((part) => {
       if (part.added) {
@@ -257,6 +293,11 @@ export class TextCorrector extends LitElement {
       }
     })}`
   }
+  /**
+   * Gets the message to display for accepting a suggestion.
+   * @param {IndexedGroupedChange} item - The suggestion to get the message for.
+   * @returns {string} The message to display.
+   */
   getAcceptSuggestionMsg(item: IndexedGroupedChange) {
     if (item.type === ChangeType.CHANGED) {
       return msg("Accept this change")
@@ -267,6 +308,11 @@ export class TextCorrector extends LitElement {
     }
     return ""
   }
+  /**
+   * Gets the message to display for rejecting a suggestion.
+   * @param {IndexedGroupedChange} item - The suggestion to get the message for.
+   * @returns {string} The message to display.
+   */
   getRejectSuggestionMsg(item: IndexedGroupedChange) {
     if (item.type === ChangeType.CHANGED) {
       return msg("Reject this change")
@@ -278,6 +324,11 @@ export class TextCorrector extends LitElement {
     return ""
   }
 
+  /**
+   * Renders the button for accepting a suggestion.
+   * @param {IndexedGroupedChange} item - The suggestion to render the button for.
+   * @returns {TemplateResult} The rendered button.
+   */
   renderAcceptSuggestionButton(item: IndexedGroupedChange) {
     return html` <button
       class="button success-button small"
@@ -287,6 +338,11 @@ export class TextCorrector extends LitElement {
       <check-icon></check-icon>
     </button>`
   }
+  /**
+   * Renders the button for rejecting a suggestion.
+   * @param {IndexedGroupedChange} item - The suggestion to render the button for.
+   * @returns {TemplateResult} The rendered button.
+   */
   renderRejectSuggestionButton(item: IndexedGroupedChange) {
     return html`
       <button
@@ -299,6 +355,11 @@ export class TextCorrector extends LitElement {
     `
   }
 
+  /**
+   * Renders the content of a summary item.
+   * @param {IndexedGroupedChange} item - The summary item to render the content for.
+   * @returns {TemplateResult | undefined} The rendered content or undefined if the item type is not recognized.
+   */
   renderSummaryItemContent(item: IndexedGroupedChange) {
     if (item.type === ChangeType.CHANGED) {
       const oldValue = item.oldValue!.replace(/ /g, "\u2423")
@@ -343,6 +404,10 @@ export class TextCorrector extends LitElement {
     }
   }
 
+  /**
+   * Renders the content of the summary.
+   * @returns {TemplateResult} The rendered summary content.
+   */
   renderSummaryContent() {
     return html`<div class="summary">
       <ul>
@@ -362,6 +427,10 @@ export class TextCorrector extends LitElement {
     </div> `
   }
 
+  /**
+   * Renders the buttons for batch suggestions.
+   * @returns {TemplateResult | typeof nothing} The rendered buttons or nothing if there are no batch suggestions.
+   */
   renderBatchSuggestionsButtons() {
     if (this.groupedChanges.length <= 1) {
       return nothing
@@ -387,6 +456,10 @@ export class TextCorrector extends LitElement {
     `
   }
 
+  /**
+   * Renders the summary of the component.
+   * @returns {TemplateResult | typeof nothing} The rendered summary or nothing if there are no grouped changes.
+   */
   renderSummary() {
     if (this.groupedChanges.length === 0) {
       return nothing
@@ -399,6 +472,11 @@ export class TextCorrector extends LitElement {
     `
   }
 
+  /**
+   * Updates the result based on the validation of a suggestion.
+   * @param {boolean} validate - Whether to validate the suggestion.
+   * @param {IndexedGroupedChange} item - The suggestion to update the result for.
+   */
   updateResult(validate: boolean, item: IndexedGroupedChange) {
     console.log("Changes allowed", item)
 
@@ -436,23 +514,42 @@ export class TextCorrector extends LitElement {
     this.dispatchEvent(new CustomEvent("update", { detail: { result: value } }))
   }
 
+  /**
+   * Updates the result based on the validation of batch suggestions.
+   * @param {boolean} validate - Whether to validate the suggestions.
+   */
   updateBatchResult(validate: boolean) {
     this.groupedChanges.forEach((item) => this.updateResult(validate, item))
   }
 
-  dispatchSubmitEvent(detail: { correction?: string; type: QuestionAnnotationAnswer }) {
-    this.dispatchEvent(new CustomEvent(EventType.SUBMIT, { detail }))
+  /**
+   * Dispatches a submit event with the provided detail.
+   * @param {object} detail - The detail of the event.
+   * @param {string} [detail.correction] - The correction to include in the event.
+   * @param {QuestionAnnotationAnswer} detail.type - The type of the event.
+   */
+  dispatchSubmitEvent(detail: TextCorrectorEventDetail) {
+    this.dispatchEvent(new CustomEvent<TextCorrectorEventDetail>(EventType.SUBMIT, { detail }))
   }
 
+  /**
+   * Accepts the text with a correction.
+   */
   acceptTextWithCorrection() {
     this.dispatchSubmitEvent({
       correction: this.value,
       type: QuestionAnnotationAnswer.ACCEPT_AND_ADD_DATA,
     })
   }
+  /**
+   * Accepts the text.
+   */
   acceptText() {
     this.dispatchSubmitEvent({ type: QuestionAnnotationAnswer.ACCEPT })
   }
+  /**
+   * Confirms the text.
+   */
   confirmText() {
     this.isEditMode = false
     if (this.correction === this.value) {
@@ -463,28 +560,48 @@ export class TextCorrector extends LitElement {
       this.acceptTextWithCorrection()
     }
   }
+  /**
+   * Rejects the text.
+   */
   rejectText() {
     this.dispatchSubmitEvent({ type: QuestionAnnotationAnswer.REFUSE })
   }
+  /**
+   * Skips the text.
+   */
   skip() {
     this.dispatchSubmitEvent({ type: QuestionAnnotationAnswer.SKIP })
   }
 
+  /**
+   * Gets the result of the diff.
+   * @returns {string} The result of the diff.
+   */
   getResult() {
     return this.diffResult.map((change) => change.value).join("")
   }
+  /**
+   * Enters edit mode.
+   */
   enterEditMode() {
     this.isEditMode = true
     this._value = this.value
     this.computeWordDiff()
   }
 
+  /**
+   * Cancels edit mode.
+   */
   cancelEditMode() {
     this.value = this._value
     this.isEditMode = false
     this.computeWordDiff()
   }
 
+  /**
+   * Handles the change event of the textarea.
+   * @param {Event} e - The change event.
+   */
   handleTextareaChange(e: Event) {
     const textarea = e.target as HTMLTextAreaElement
     this.value = textarea.value
@@ -492,6 +609,10 @@ export class TextCorrector extends LitElement {
     this.dispatchEvent(new CustomEvent("update", { detail: { result: this.value } }))
   }
 
+  /**
+   * Renders the textarea for editing the text.
+   * @returns {TemplateResult} The rendered textarea.
+   */
   renderEditTextarea() {
     return html`
       <div class="text-section">
@@ -510,6 +631,10 @@ export class TextCorrector extends LitElement {
     `
   }
 
+  /**
+   * Renders the buttons of the component.
+   * @returns {TemplateResult} The rendered buttons.
+   */
   renderButtons() {
     const confirmTitle = this.isConfirmDisabled ? this.updateTextMsg : ""
 
@@ -546,6 +671,10 @@ export class TextCorrector extends LitElement {
       </div>
     `
   }
+  /**
+   * Renders the component.
+   * @returns {TemplateResult} The rendered component.
+   */
   override render() {
     return html`
       <div>
