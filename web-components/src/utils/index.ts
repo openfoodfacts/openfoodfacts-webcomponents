@@ -1,6 +1,3 @@
-import DOMPurify from "dompurify"
-import { unsafeHTML } from "lit-html/directives/unsafe-html.js"
-
 export const paramToString = (value: any): string => {
   if (isNullOrUndefined(value)) {
     return ""
@@ -36,7 +33,3 @@ export const addParamsToUrl = (url: string, params: Record<string, any>) => {
 export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
 
 export const isNullOrUndefined = (value: any) => value === null || value === undefined
-
-// Function to sanitize HTML and return it as unsafeHTML for Lit rendering
-// It allow to dynamically create HTML elements with a specific tag name and be sure it's safe
-export const sanitizeHtml = (html: string) => unsafeHTML(DOMPurify.sanitize(html))
