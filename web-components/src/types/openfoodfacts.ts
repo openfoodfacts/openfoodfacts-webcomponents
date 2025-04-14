@@ -4,7 +4,6 @@ export type RequestProductParams = {
 }
 
 // type for the response of the product API
-// {"code":"3512030013211","product":{"image_ingredients_url":"https://images.openfoodfacts.org/images/products/351/203/001/3211/ingredients_en.18.400.jpg","schema_version":998},"status":1,"status_verbose":"product found"}
 export type BaseProductType = {
   schema_version: number
 }
