@@ -108,11 +108,11 @@
       </trans-unit>
       <trans-unit id="s6d7b6cdedaadfb6e">
         <source>Each donation counts! We appreciate your support in bringing further food transparency in the world.</source>
-        <target state="needs-translation">Each donation counts! We appreciate your support in bringing further food transparency in the world.</target>
+        <target state="translated">كل تبرع يُحسب! نقدّر دعمكم لتعزيز الشفافية الغذائية في العالم.</target>
       </trans-unit>
       <trans-unit id="s6306a31415aea913">
         <source>I SUPPORT</source>
-        <target state="needs-translation">I SUPPORT</target>
+        <target state="translated">انا ادعم</target>
       </trans-unit>
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
