@@ -80,6 +80,8 @@ export class TextCorrector extends LitElement {
         align-items: center;
         margin-bottom: 0.5rem;
         gap: 1rem;
+      }
+      .summary-item-content.wrappable {
         flex-wrap: wrap;
       }
       .summary-label {
@@ -314,17 +316,27 @@ export class TextCorrector extends LitElement {
       `
     } else if (item.type === ChangeType.REMOVED) {
       return html`
-        ${this.renderRejectSuggestionButton(item)}
-        <span class="code no-changes"> ${item.value} </span> →
-        <span class="code deletion">${item.value}</span>
-        ${this.renderAcceptSuggestionButton(item)}
+        <div class="summary-item-content">
+          ${this.renderRejectSuggestionButton(item)}
+          <span class="code no-changes"> ${item.value} </span>
+        </div>
+        <div class="summary-item-content">→</div>
+        <div class="summary-item-content">
+          <span class="code deletion">${item.value}</span>
+          ${this.renderAcceptSuggestionButton(item)}
+        </div>
       `
     } else if (item.type === ChangeType.ADDED) {
       return html`
-        ${this.renderRejectSuggestionButton(item)}
-        <span class="code deletion"></span> →
-        <span class="code addition">${item.value}</span>
-        ${this.renderAcceptSuggestionButton(item)}
+        <div class="summary-item-content">
+          ${this.renderRejectSuggestionButton(item)}
+          <span class="code deletion"></span>
+        </div>
+        <div class="summary-item-content">→</div>
+        <div class="summary-item-content">
+          <span class="code addition">${item.value}</span>
+          ${this.renderAcceptSuggestionButton(item)}
+        </div>
       `
     } else {
       return
@@ -341,7 +353,7 @@ export class TextCorrector extends LitElement {
           }
           return html`
             <li class="summary-item">
-              <div class="summary-item-content">${content}</div>
+              <div class="summary-item-content wrappable">${content}</div>
             </li>
           `
         })}
