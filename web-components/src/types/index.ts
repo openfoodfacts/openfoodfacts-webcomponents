@@ -26,7 +26,15 @@ export type QuestionStateEventDetail = {
 
 export type QuestionStateEvent = CustomEvent<QuestionStateEventDetail>
 
-export type TextCorrectorEvent = CustomEvent<{
+export type TextCorrectorEventDetail = {
   correction?: string
   annotation: QuestionAnnotationAnswer
-}>
+}
+
+export type TextCorrectorEvent = CustomEvent<TextCorrectorEventDetail>
+
+export type RobotoffIngredientsStateEventDetail = {
+  state: EventState
+  insightId?: string
+  productCode?: string
+} & Partial<TextCorrectorEventDetail>

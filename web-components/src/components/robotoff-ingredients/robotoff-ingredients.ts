@@ -13,7 +13,7 @@ import "./text-corrector"
 import "../shared/zoomable-image"
 import { fetchProduct } from "../../api/openfoodfacts"
 import { ImageIngredientsProductType } from "../../types/openfoodfacts"
-import { TextCorrectorEvent } from "../../types"
+import { RobotoffIngredientsStateEventDetail, TextCorrectorEvent } from "../../types"
 import { INPUT } from "../../styles/form"
 
 @customElement("robotoff-ingredients")
@@ -63,6 +63,10 @@ export class RobotoffIngredients extends LitElement {
     return this.languageCode || getLocale()
   }
 
+  get allInsightsAreAnswered() {
+    return this._currentIndex >= this._insigthIds.length
+  }
+
   get _insight(): IngredientsInsight | undefined {
     const id: string | undefined = this._insigthIds[this._currentIndex]
     const value = ingredientSpellcheckInsights.getItem(id)
@@ -105,18 +109,41 @@ export class RobotoffIngredients extends LitElement {
     task: async ([productCode]) => {
       const lang = this._languageCode
       this._insigthIds = []
+      this._currentIndex = 0
+      this.dispatchIngredientsStateEvent({
+        state: EventState.LOADING,
+      })
       const insights = await fetchSpellcheckInsights(productCode ? productCode : undefined)
       this._insigthIds = insights
+        // Currently we filter by lang here but we should do it in the API when is available
         .filter((insight) => insight.data.lang === lang)
         .map((insight) => insight.id)
       this.updateValue()
+      this.dispatchIngredientsStateEvent({
+        state: this._insigthIds.length ? EventState.HAS_DATA : EventState.NO_DATA,
+      })
     },
     args: () => [this.productCode],
   })
 
   nextInsight() {
     this._currentIndex++
-    this.updateValue()
+    if (!this.allInsightsAreAnswered) {
+      this.updateValue()
+    }
+  }
+
+  dispatchIngredientsStateEvent(detail: RobotoffIngredientsStateEventDetail) {
+    this.dispatchEvent(
+      new CustomEvent<RobotoffIngredientsStateEventDetail>(EventType.INGREDIENTS_STATE, {
+        bubbles: true,
+        composed: true,
+        detail: {
+          productCode: this.productCode,
+          ...detail,
+        },
+      })
+    )
   }
 
   async submitAnnotation(event: TextCorrectorEvent) {
@@ -128,26 +155,15 @@ export class RobotoffIngredients extends LitElement {
 
     // Send the annotation to Robotoff API
     await robotoff.annotateIngredients(insight.id, event.detail.annotation, event.detail.correction)
-    // Dispatch a submit event to notify parent components
-    this.dispatchEvent(
-      new CustomEvent(EventType.INGREDIENTS_STATE, {
-        bubbles: true,
-        composed: true,
-        detail: {
-          state: EventState.ANNOTATED,
-          insightId: insight.id,
-          ...event.detail,
-        },
-      })
-    )
 
     // Move to next insight or finish
-    if (this._currentIndex < this._insigthIds.length - 1) {
-      this.nextInsight()
-    } else {
-      // All insights processed
-      alert("All ingredients insights processed")
-    }
+    this.nextInsight()
+
+    this.dispatchIngredientsStateEvent({
+      state: this.allInsightsAreAnswered ? EventState.ANNOTATED : EventState.ANSWERED,
+      insightId: insight.id,
+      ...event.detail,
+    })
   }
 
   renderImage() {
@@ -169,6 +185,11 @@ export class RobotoffIngredients extends LitElement {
       pending: () => html`<off-wc-loader></off-wc-loader>`,
       complete: () => {
         const insight = this._insight
+        if (this.allInsightsAreAnswered) {
+          return html`<slot name="complete">
+            <p>${msg("All insights have been answered! Thanks for your help!")}</p>
+          </slot>`
+        }
         if (!insight) {
           return nothing
         }
