@@ -15,6 +15,8 @@ import { fetchProduct } from "../../api/openfoodfacts"
 import { ImageIngredientsProductType } from "../../types/openfoodfacts"
 import { RobotoffIngredientsStateEventDetail, TextCorrectorEvent } from "../../types/ingredients"
 import { INPUT } from "../../styles/form"
+import { getValidHeadingLevel } from "../../utils/knowledge-panels/heading-utils"
+import { sanitizeHtml } from "../../utils"
 
 /**
  * RobotoffIngredients component
@@ -124,11 +126,11 @@ export class RobotoffIngredients extends LitElement {
    * @returns {TemplateResult} The rendered header.
    */
   renderHeader() {
+    const headingLevel = getValidHeadingLevel(this.titleLevel)
+    const title = `<${headingLevel}>${msg("Help us fix errors in ingredients list")}</${headingLevel}>`
     return html`
       <div>
-        <div>
-          <h2>${msg("Help us fix errors in ingredients list")}</h2>
-        </div>
+        <div>${sanitizeHtml(title)}</div>
       </div>
     `
   }

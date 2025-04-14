@@ -1,3 +1,6 @@
+import DOMPurify from "dompurify"
+import { unsafeHTML } from "lit-html/directives/unsafe-html.js"
+
 const reformatTagMapping = {
   " ": "-",
   "'": "-",
@@ -49,7 +52,7 @@ export const capitaliseName = (string: string | undefined) => {
   return name.charAt(0).toUpperCase() + name.slice(1)
 }
 
-export const paramToString = (key: string, value: any): string => {
+export const paramToString = (value: any): string => {
   if (isNullOrUndefined(value)) {
     return ""
   }
@@ -65,7 +68,7 @@ export const paramToString = (key: string, value: any): string => {
 export const paramsToUrl = (params: Record<string, any>) => {
   const paramsToStringRecord = Object.entries(params).reduce(
     (acc, [key, value]) => {
-      acc[key] = paramToString(key, value)
+      acc[key] = paramToString(value)
       return acc
     },
     {} as Record<string, string>
@@ -84,3 +87,7 @@ export const addParamsToUrl = (url: string, params: Record<string, any>) => {
 export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
 
 export const isNullOrUndefined = (value: any) => value === null || value === undefined
+
+// Function to sanitize HTML and return it as unsafeHTML for Lit rendering
+// It allow to dynamically create HTML elements with a specific tag name and be sure it's safe
+export const sanitizeHtml = (html: string) => unsafeHTML(DOMPurify.sanitize(html))
