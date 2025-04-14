@@ -77,6 +77,8 @@ export class ZoomableImage extends LitElement {
   size: {
     width?: string
     height?: string
+    "max-width"?: string
+    "max-height"?: string
   } = {
     width: "100%",
     height: "30vh",

@@ -159,7 +159,7 @@ export class RobotoffIngredients extends LitElement {
         <zoomable-image
           src=${this.fullImageUrl}
           fallbackSrc=${this.productData.imageUrl}
-          .size="${{ width: "100%", "max-height": "40vh" }}"
+          .size="${{ width: "100%", height: "30vh" }}"
         ></zoomable-image>
       </div>
     `

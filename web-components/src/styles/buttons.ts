@@ -17,6 +17,11 @@ export const getDefaultButtonClasses = (): CSSResult => {
       display: flex;
       gap: 0.5rem;
     }
+
+    .buttons-row.can-wrap {
+      flex-wrap: wrap;
+    }
+
     .button {
       padding: 0.5rem 1rem;
       border-radius: 0.25rem;

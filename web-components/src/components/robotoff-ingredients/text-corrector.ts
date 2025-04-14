@@ -77,6 +77,7 @@ export class TextCorrector extends LitElement {
         align-items: center;
         margin-bottom: 0.5rem;
         gap: 1rem;
+        flex-wrap: wrap;
       }
       .summary-label {
         font-weight: bold;
@@ -268,15 +269,18 @@ export class TextCorrector extends LitElement {
             const oldValue = item.oldValue!.replace(/ /g, "\u2423")
             const newValue = item.newValue?.replace(/ /g, "\u2423")
             content = html`
-              <span class="summary-label">${msg("Change:")}</span>
-              ${this.renderRejectSuggestionButton(item)}
-              <span class="code deletion">${oldValue}</span> →
-              <span class="code addition">${newValue}</span>
-              ${this.renderAcceptSuggestionButton(item)}
+              <div class="summary-item-content">
+                ${this.renderRejectSuggestionButton(item)}
+                <span class="code deletion">${oldValue}</span>
+              </div>
+              <div class="summary-item-content">→</div>
+              <div class="summary-item-content">
+                <span class="code addition">${newValue}</span>
+                ${this.renderAcceptSuggestionButton(item)}
+              </div>
             `
           } else if (item.type === ChangeType.REMOVED) {
             content = html`
-              <span class="summary-label">${msg("Change:")}</span>
               ${this.renderRejectSuggestionButton(item)}
               <span class="code no-changes"> ${item.value} </span> →
               <span class="code deletion">${item.value}</span>
@@ -284,7 +288,6 @@ export class TextCorrector extends LitElement {
             `
           } else if (item.type === ChangeType.ADDED) {
             content = html`
-              <span class="summary-label">${msg("Change:")}</span>
               ${this.renderRejectSuggestionButton(item)}
               <span class="code deletion"></span> →
               <span class="code addition">${item.value}</span>
@@ -309,21 +312,21 @@ export class TextCorrector extends LitElement {
       return nothing
     }
     return html`
-      <div class="buttons-row">
+      <div class="buttons-row" style="margin-left: 40px">
         <button
-          class="button success-button with-icon"
-          @click="${() => this.updateBatchResult(true)}"
-        >
-          <span>${msg("Accept all suggestions")}</span>
-
-          <check-icon></check-icon>
-        </button>
-        <button
-          class="button danger-button with-icon"
+          class="button danger-button small with-icon"
           @click="${() => this.updateBatchResult(false)}"
         >
-          <span>${msg("Reject all suggestions")}</span>
+          <span>${msg("Reject all")}</span>
           <cross-icon></cross-icon>
+        </button>
+        <button
+          class="button success-button small with-icon"
+          @click="${() => this.updateBatchResult(true)}"
+        >
+          <span>${msg("Accept all")}</span>
+
+          <check-icon></check-icon>
         </button>
       </div>
     `
@@ -465,7 +468,7 @@ export class TextCorrector extends LitElement {
     </button>`
     if (this.isEditMode) {
       return html`
-        <div class="buttons-row">
+        <div class="buttons-row can-wrap">
           ${successButton}
           <button class="button cappucino-button with-icon" @click=${this.cancelEditMode}>
             <span>${msg("Reset edit")}</span><cross-icon></cross-icon>
@@ -475,7 +478,7 @@ export class TextCorrector extends LitElement {
     }
 
     return html`
-      <div class="buttons-row">
+      <div class="buttons-row can-wrap">
         ${successButton}
 
         <button class="button cappucino-button with-icon" @click=${this.enterEditMode}>
