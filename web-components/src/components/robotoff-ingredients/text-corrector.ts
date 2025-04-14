@@ -88,31 +88,66 @@ export class TextCorrector extends LitElement {
       }
     `,
   ]
+  /**
+   * The original text to be corrected.
+   * @type {string}
+   */
   @property({ type: String })
   original = ""
 
+  /**
+   * The corrected text.
+   * @type {string}
+   */
   @property({ type: String })
   correction = ""
 
+  /**
+   * The result of the diff between the original and corrected text.
+   * @type {IndexedChange[]}
+   */
   @state()
   diffResult: IndexedChange[] = []
 
+  /**
+   * The grouped changes based on the diff result.
+   * @type {IndexedGroupedChange[]}
+   */
   @state()
   groupedChanges: IndexedGroupedChange[] = []
 
+  /**
+   * The current value of the text being edited.
+   * @type {string}
+   */
   @state()
   value = ""
 
-  // Keeps track of the value of the input when the user is editing the text
+  /**
+   * Keeps track of the value of the input when the user is editing the text.
+   * @type {string}
+   */
   @state()
   _value = ""
 
+  /**
+   * The text to compare against the current value.
+   * @type {string}
+   */
   @state()
   textToCompare = ""
 
+  /**
+   * Indicates whether the component is in edit mode.
+   * @type {boolean}
+   */
   @state()
   isEditMode = false
 
+  /**
+   * The grouped change currently displayed in the popover.
+   * @type {IndexedGroupedChange | undefined}
+   */
   @state()
   groupedChangesPopover?: IndexedGroupedChange = undefined
 
@@ -538,14 +573,14 @@ export class TextCorrector extends LitElement {
   acceptTextWithCorrection() {
     this.dispatchSubmitEvent({
       correction: this.value,
-      type: QuestionAnnotationAnswer.ACCEPT_AND_ADD_DATA,
+      annotation: QuestionAnnotationAnswer.ACCEPT_AND_ADD_DATA,
     })
   }
   /**
    * Accepts the text.
    */
   acceptText() {
-    this.dispatchSubmitEvent({ type: QuestionAnnotationAnswer.ACCEPT })
+    this.dispatchSubmitEvent({ annotation: QuestionAnnotationAnswer.ACCEPT })
   }
   /**
    * Confirms the text.
@@ -564,13 +599,13 @@ export class TextCorrector extends LitElement {
    * Rejects the text.
    */
   rejectText() {
-    this.dispatchSubmitEvent({ type: QuestionAnnotationAnswer.REFUSE })
+    this.dispatchSubmitEvent({ annotation: QuestionAnnotationAnswer.REFUSE })
   }
   /**
    * Skips the text.
    */
   skip() {
-    this.dispatchSubmitEvent({ type: QuestionAnnotationAnswer.SKIP })
+    this.dispatchSubmitEvent({ annotation: QuestionAnnotationAnswer.SKIP })
   }
 
   /**
