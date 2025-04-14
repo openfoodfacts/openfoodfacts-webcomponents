@@ -1,7 +1,6 @@
 import { LitElement, html, css, TemplateResult } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { unsafeHTML } from "lit/directives/unsafe-html.js"
-import DOMPurify from "dompurify"
+import { sanitizeHtml } from ".."
 
 /**
  * Validates and normalizes the heading level
@@ -61,8 +60,8 @@ export class HeadingRenderer extends LitElement {
     const classAttr = this.className ? `class="${this.className}"` : ""
 
     // Using unsafeHTML to dynamically create the appropriate heading element
-    const sanitizedHTML = DOMPurify.sanitize(`<${level} ${classAttr}>${this.text}</${level}>`)
-    return html`${unsafeHTML(sanitizedHTML)}`
+    const sanitizedHTML = sanitizeHtml(`<${level} ${classAttr}>${this.text}</${level}>`)
+    return html`${sanitizedHTML}`
   }
 }
 
