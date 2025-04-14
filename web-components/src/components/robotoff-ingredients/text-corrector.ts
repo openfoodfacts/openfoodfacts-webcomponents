@@ -83,6 +83,7 @@ export class TextCorrector extends LitElement {
         font-weight: bold;
       }
       .code {
+        white-space: pre-wrap;
         font-family: monospace;
       }
     `,
