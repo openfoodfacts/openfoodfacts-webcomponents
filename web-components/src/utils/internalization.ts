@@ -1,5 +1,14 @@
 import { getLocale } from "../localization"
 
+/**
+ *
+ * @param quantity number of items
+ * @param translations object with singular and plural translations
+ * @param languageCode language code to use for the translation
+ * @returns the translation for the given quantity and language code
+ * @example
+ * getTranslationsByQuantity(1, { singular: "item", plural: "items" }, "en") // returns "item"
+ */
 export const getTranslationsByQuantity = (
   quantity: number,
   translations: { singular: string; plural: string },
