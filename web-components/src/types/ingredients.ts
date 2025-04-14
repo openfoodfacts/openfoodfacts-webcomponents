@@ -31,13 +31,25 @@ export type IndexedGroupedChange = {
   indexes: number[]
 }
 
+/**
+ * Type for the event detail of the text corrector
+ */
 export type TextCorrectorEventDetail = {
   correction?: string
   annotation: QuestionAnnotationAnswer
 }
 
+/**
+ * Type for the event of the text corrector
+ *
+ * It is a custom event with the detail of the text corrector
+ */
 export type TextCorrectorEvent = CustomEvent<TextCorrectorEventDetail>
 
+/**
+ * Type for the event detail of the robotoff ingredients state
+ *  It is a custom event with the detail of the robotoff ingredients state
+ */
 export type RobotoffIngredientsStateEventDetail = {
   state: EventState
   insightId?: string
