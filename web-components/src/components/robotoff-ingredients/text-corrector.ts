@@ -11,6 +11,7 @@ import "../icons/skip"
 import "../icons/edit"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { TEXTAREA } from "../../styles/form"
+import { POPOVER } from "../../styles/popover"
 import { SAFE_DARKER_WHITE, SAFE_LIGHT_GREY } from "../../utils/colors"
 
 export enum ChangeType {
@@ -38,6 +39,7 @@ export class TextCorrector extends LitElement {
   static override styles = [
     BASE,
     TEXTAREA,
+    POPOVER,
     getButtonClasses([
       ButtonType.Cappucino,
       ButtonType.Success,
@@ -86,6 +88,9 @@ export class TextCorrector extends LitElement {
         white-space: pre-wrap;
         font-family: monospace;
       }
+      .popover {
+        width: 86px;
+      }
     `,
   ]
   @property({ type: String })
@@ -113,6 +118,9 @@ export class TextCorrector extends LitElement {
   @state()
   isEditMode = false
 
+  @state()
+  groupedChangesPopover?: IndexedGroupedChange = undefined
+
   get isConfirmDisabled() {
     return !this.isEditMode && this.groupedChanges.length !== 0
   }
@@ -124,6 +132,7 @@ export class TextCorrector extends LitElement {
   updateValues() {
     this.value = this.original
     this.textToCompare = this.correction
+    this.groupedChangesPopover = undefined
   }
 
   override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
@@ -199,13 +208,42 @@ export class TextCorrector extends LitElement {
     this.computeGroupedChanges()
     return this.diffResult
   }
+  renderSuggestionPopover(part: IndexedChange) {
+    if (!this.groupedChangesPopover || part.index !== this.groupedChangesPopover.indexes[0])
+      return nothing
+    // Be careful, do not add spaces before and after the popover, it will break parent element's layout
+    return html`<div class="popover">
+      <div class="popover-content">
+        <div class="buttons-row">
+          ${this.renderRejectSuggestionButton(this.groupedChangesPopover)}
+          ${this.renderAcceptSuggestionButton(this.groupedChangesPopover)}
+        </div>
+      </div>
+    </div>`
+  }
+
+  showSuggestionPopover(indexedChange: IndexedChange) {
+    const groupedChange = this.groupedChanges.find((change) =>
+      change.indexes.includes(indexedChange.index)
+    )
+    if (!groupedChange) return
+    this.groupedChangesPopover = groupedChange
+  }
 
   renderHighlightedDiff() {
     return html`${this.diffResult.map((part) => {
       if (part.added) {
-        return html`<span class="addition">${part.value}</span>`
+        return html`<span
+          class="addition popover-wrapper"
+          @click="${() => this.showSuggestionPopover(part)}"
+          >${part.value}${this.renderSuggestionPopover(part)}</span
+        >`
       } else if (part.removed) {
-        return html`<span class="deletion">${part.value}</span>`
+        return html`<span
+          class="deletion popover-wrapper"
+          @click="${() => this.showSuggestionPopover(part)}"
+          >${part.value}${this.renderSuggestionPopover(part)}</span
+        >`
       } else {
         return html`<span>${part.value}</span>`
       }
@@ -252,49 +290,47 @@ export class TextCorrector extends LitElement {
       </button>
     `
   }
-  renderSuggestionButtons(item: IndexedGroupedChange) {
-    return html`
-      <span class="buttons-row">
-        <button class="button success-button small" @click="${() => this.updateResult(true, item)}" title="${this.getAcceptSuggestionMsg(item)}"><check-icon></check-icon></button>
-        <button class="button danger-button small" @click="${() => this.updateResult(false, item)}" title="${this.getRejectSuggestionMsg(item)}"><cross-icon></cross-icon></button>
-      </div>
-    `
+
+  renderSummaryItemContent(item: IndexedGroupedChange) {
+    if (item.type === ChangeType.CHANGED) {
+      const oldValue = item.oldValue!.replace(/ /g, "\u2423")
+      const newValue = item.newValue?.replace(/ /g, "\u2423")
+      return html`
+        <div class="summary-item-content">
+          ${this.renderRejectSuggestionButton(item)}
+          <span class="code deletion">${oldValue}</span>
+        </div>
+        <div class="summary-item-content">→</div>
+        <div class="summary-item-content">
+          <span class="code addition">${newValue}</span>
+          ${this.renderAcceptSuggestionButton(item)}
+        </div>
+      `
+    } else if (item.type === ChangeType.REMOVED) {
+      return html`
+        ${this.renderRejectSuggestionButton(item)}
+        <span class="code no-changes"> ${item.value} </span> →
+        <span class="code deletion">${item.value}</span>
+        ${this.renderAcceptSuggestionButton(item)}
+      `
+    } else if (item.type === ChangeType.ADDED) {
+      return html`
+        ${this.renderRejectSuggestionButton(item)}
+        <span class="code deletion"></span> →
+        <span class="code addition">${item.value}</span>
+        ${this.renderAcceptSuggestionButton(item)}
+      `
+    } else {
+      return
+    }
   }
 
   renderSummaryContent() {
     return html`<div class="summary">
       <ul>
         ${this.groupedChanges.map((item) => {
-          let content
-          if (item.type === ChangeType.CHANGED) {
-            const oldValue = item.oldValue!.replace(/ /g, "\u2423")
-            const newValue = item.newValue?.replace(/ /g, "\u2423")
-            content = html`
-              <div class="summary-item-content">
-                ${this.renderRejectSuggestionButton(item)}
-                <span class="code deletion">${oldValue}</span>
-              </div>
-              <div class="summary-item-content">→</div>
-              <div class="summary-item-content">
-                <span class="code addition">${newValue}</span>
-                ${this.renderAcceptSuggestionButton(item)}
-              </div>
-            `
-          } else if (item.type === ChangeType.REMOVED) {
-            content = html`
-              ${this.renderRejectSuggestionButton(item)}
-              <span class="code no-changes"> ${item.value} </span> →
-              <span class="code deletion">${item.value}</span>
-              ${this.renderAcceptSuggestionButton(item)}
-            `
-          } else if (item.type === ChangeType.ADDED) {
-            content = html`
-              ${this.renderRejectSuggestionButton(item)}
-              <span class="code deletion"></span> →
-              <span class="code addition">${item.value}</span>
-              ${this.renderAcceptSuggestionButton(item)}
-            `
-          } else {
+          const content = this.renderSummaryItemContent(item)
+          if (!content) {
             return nothing
           }
           return html`
