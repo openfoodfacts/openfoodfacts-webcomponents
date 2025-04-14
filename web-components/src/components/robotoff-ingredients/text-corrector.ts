@@ -13,6 +13,7 @@ import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { TEXTAREA } from "../../styles/form"
 import { POPOVER } from "../../styles/popover"
 import { SAFE_DARKER_WHITE, SAFE_LIGHT_GREY } from "../../utils/colors"
+import { clickOutside } from "../../directives/click-outside"
 
 export enum ChangeType {
   ADDED = "added",
@@ -209,10 +210,11 @@ export class TextCorrector extends LitElement {
     return this.diffResult
   }
   renderSuggestionPopover(part: IndexedChange) {
+    const self = this
     if (!this.groupedChangesPopover || part.index !== this.groupedChangesPopover.indexes[0])
       return nothing
     // Be careful, do not add spaces before and after the popover, it will break parent element's layout
-    return html`<div class="popover">
+    return html`<div class="popover" ${clickOutside(() => self.hideSuggestionPopover())}>
       <div class="popover-content">
         <div class="buttons-row">
           ${this.renderRejectSuggestionButton(this.groupedChangesPopover)}
@@ -220,6 +222,10 @@ export class TextCorrector extends LitElement {
         </div>
       </div>
     </div>`
+  }
+
+  hideSuggestionPopover() {
+    this.groupedChangesPopover = undefined
   }
 
   showSuggestionPopover(indexedChange: IndexedChange) {
