@@ -45,7 +45,7 @@ export class RobotoffIngredients extends LitElement {
   private _currentIndex = 0
 
   @state()
-  private _insigthIds: string[] = []
+  private _insightIds: string[] = []
 
   @state()
   private productData: {
@@ -64,11 +64,11 @@ export class RobotoffIngredients extends LitElement {
   }
 
   get allInsightsAreAnswered() {
-    return this._currentIndex >= this._insigthIds.length
+    return this._currentIndex >= this._insightIds.length
   }
 
   get _insight(): IngredientsInsight | undefined {
-    const id: string | undefined = this._insigthIds[this._currentIndex]
+    const id: string | undefined = this._insightIds[this._currentIndex]
     const value = ingredientSpellcheckInsights.getItem(id)
     return value
   }
@@ -108,19 +108,19 @@ export class RobotoffIngredients extends LitElement {
   private _spellcheckTask = new Task(this, {
     task: async ([productCode]) => {
       const lang = this._languageCode
-      this._insigthIds = []
+      this._insightIds = []
       this._currentIndex = 0
       this.dispatchIngredientsStateEvent({
         state: EventState.LOADING,
       })
       const insights = await fetchSpellcheckInsights(productCode ? productCode : undefined)
-      this._insigthIds = insights
+      this._insightIds = insights
         // Currently we filter by lang here but we should do it in the API when is available
         .filter((insight) => insight.data.lang === lang)
         .map((insight) => insight.id)
       this.updateValue()
       this.dispatchIngredientsStateEvent({
-        state: this._insigthIds.length ? EventState.HAS_DATA : EventState.NO_DATA,
+        state: this._insightIds.length ? EventState.HAS_DATA : EventState.NO_DATA,
       })
     },
     args: () => [this.productCode],
