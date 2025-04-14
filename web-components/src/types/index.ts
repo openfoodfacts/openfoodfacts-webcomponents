@@ -1,5 +1,5 @@
 import { EventState } from "../constants"
-import { QuestionAnnotationAnswer, RobotoffConfigurationOptions } from "./robotoff"
+import { RobotoffConfigurationOptions } from "./robotoff"
 
 export type OffWebcomponentConfigurationOptions = {
   robotoffConfiguration: RobotoffConfigurationOptions
@@ -25,16 +25,3 @@ export type QuestionStateEventDetail = {
 } & BasicStateEventDetail
 
 export type QuestionStateEvent = CustomEvent<QuestionStateEventDetail>
-
-export type TextCorrectorEventDetail = {
-  correction?: string
-  annotation: QuestionAnnotationAnswer
-}
-
-export type TextCorrectorEvent = CustomEvent<TextCorrectorEventDetail>
-
-export type RobotoffIngredientsStateEventDetail = {
-  state: EventState
-  insightId?: string
-  productCode?: string
-} & Partial<TextCorrectorEventDetail>

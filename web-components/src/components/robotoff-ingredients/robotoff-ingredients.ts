@@ -13,9 +13,15 @@ import "./text-corrector"
 import "../shared/zoomable-image"
 import { fetchProduct } from "../../api/openfoodfacts"
 import { ImageIngredientsProductType } from "../../types/openfoodfacts"
-import { RobotoffIngredientsStateEventDetail, TextCorrectorEvent } from "../../types"
+import { RobotoffIngredientsStateEventDetail, TextCorrectorEvent } from "../../types/ingredients"
 import { INPUT } from "../../styles/form"
 
+/**
+ * RobotoffIngredients component
+ *
+ * @fires state - when the state of the component changes
+ * @fires submit - when the user submits the form
+ */
 @customElement("robotoff-ingredients")
 export class RobotoffIngredients extends LitElement {
   static override styles = [
@@ -53,26 +59,46 @@ export class RobotoffIngredients extends LitElement {
     name?: string
   } = {}
 
+  /**
+   * Gets the full image URL by replacing the '400.jpg' suffix with 'full.jpg'.
+   * @returns {string | undefined} The full image URL or undefined if no image URL is available.
+   */
   get fullImageUrl() {
     return this.productData.imageUrl
       ? this.productData.imageUrl.replace(/400.jpg$/, "full.jpg")
       : undefined
   }
 
+  /**
+   * Gets the language code, defaulting to the locale if not set.
+   * @returns {string} The language code.
+   */
   get _languageCode() {
     return this.languageCode || getLocale()
   }
 
+  /**
+   * Checks if all insights have been answered.
+   * @returns {boolean} True if all insights are answered, false otherwise.
+   */
   get allInsightsAreAnswered() {
     return this._currentIndex >= this._insightIds.length
   }
 
+  /**
+   * Gets the current insight based on the current index.
+   * @returns {IngredientsInsight | undefined} The current insight or undefined if no insight is available.
+   */
   get _insight(): IngredientsInsight | undefined {
     const id: string | undefined = this._insightIds[this._currentIndex]
     const value = ingredientSpellcheckInsights.getItem(id)
     return value
   }
 
+  /**
+   * Renders the header of the component.
+   * @returns {TemplateResult} The rendered header.
+   */
   renderHeader() {
     return html`
       <div>
@@ -83,11 +109,18 @@ export class RobotoffIngredients extends LitElement {
     `
   }
 
+  /**
+   * Updates the value based on the current insight.
+   */
   updateValue() {
     const insight = this._insight
     this.updateIngredientsImageUrl(insight)
   }
 
+  /**
+   * Updates the ingredients image URL based on the provided insight.
+   * @param {IngredientsInsight | undefined} insight - The insight to use for updating the image URL.
+   */
   async updateIngredientsImageUrl(insight?: IngredientsInsight) {
     if (!insight) {
       this.productData.imageUrl = undefined
@@ -126,6 +159,9 @@ export class RobotoffIngredients extends LitElement {
     args: () => [this.productCode],
   })
 
+  /**
+   * Moves to the next insight and updates the value if not all insights are answered.
+   */
   nextInsight() {
     this._currentIndex++
     if (!this.allInsightsAreAnswered) {
@@ -133,6 +169,10 @@ export class RobotoffIngredients extends LitElement {
     }
   }
 
+  /**
+   * Dispatches an ingredients state event with the provided detail.
+   * @param {RobotoffIngredientsStateEventDetail} detail - The detail of the event.
+   */
   dispatchIngredientsStateEvent(detail: RobotoffIngredientsStateEventDetail) {
     this.dispatchEvent(
       new CustomEvent<RobotoffIngredientsStateEventDetail>(EventType.INGREDIENTS_STATE, {
@@ -146,6 +186,10 @@ export class RobotoffIngredients extends LitElement {
     )
   }
 
+  /**
+   * Submits an annotation based on the provided event.
+   * @param {TextCorrectorEvent} event - The event containing the annotation details.
+   */
   async submitAnnotation(event: TextCorrectorEvent) {
     const insight = this._insight
     if (!insight) {
@@ -166,6 +210,10 @@ export class RobotoffIngredients extends LitElement {
     })
   }
 
+  /**
+   * Renders the image based on the full image URL.
+   * @returns {TemplateResult | typeof nothing} The rendered image or nothing if no image URL is available.
+   */
   renderImage() {
     if (!this.fullImageUrl) {
       return nothing
@@ -180,6 +228,10 @@ export class RobotoffIngredients extends LitElement {
       </div>
     `
   }
+  /**
+   * Renders the component based on the spellcheck task state.
+   * @returns {TemplateResult} The rendered component.
+   */
   override render() {
     return this._spellcheckTask.render({
       pending: () => html`<off-wc-loader></off-wc-loader>`,
