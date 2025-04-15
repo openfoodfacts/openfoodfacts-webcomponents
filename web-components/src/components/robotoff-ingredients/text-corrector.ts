@@ -67,6 +67,12 @@ export class TextCorrector extends LitElement {
         background-color: #ffcccc;
         text-decoration: line-through;
       }
+      .no-text-decoration {
+        text-decoration: none;
+      }
+      .line-through {
+        text-decoration: line-through;
+      }
       .addition {
         background-color: #ccffcc;
       }
@@ -398,51 +404,79 @@ export class TextCorrector extends LitElement {
   }
 
   /**
+   * Renders a summary item content.
+   * @param {Object} params - The parameters for rendering the summary item.
+   * @param {IndexedGroupedChange} params.item - The suggestion to render.
+   * @param {string} params.oldValue - The old value.
+   * @param {string} params.newValue - The new value.
+   * @param {string} [params.oldValueClass] - The class for the old value.
+   * @param {string} [params.newValueClass] - The class for the new value.
+   * @returns {TemplateResult} The rendered summary item.
+   * */
+  renderSummaryItemContent({
+    item,
+    oldValue,
+    newValue,
+    oldValueClass,
+    newValueClass,
+  }: {
+    item: IndexedGroupedChange
+    oldValue: string
+    newValue: string
+    oldValueClass?: string
+    newValueClass?: string
+  }) {
+    return html`
+      <div class="summary-item-content">
+        <div class="summary-item-content">
+          <span class="code ${oldValueClass}">${oldValue}</span>
+          <div class="summary-item-content">→</div>
+        </div>
+        <div class="summary-item-content">
+          <span class="code ${newValueClass}">${newValue}</span>
+        </div>
+        <div class="summary-item-actions">
+          ${this.renderAcceptSuggestionButton(item)} ${this.renderRejectSuggestionButton(item)}
+        </div>
+      </div>
+    `
+  }
+
+  /**
    * Renders the content of a summary item.
    * @param {IndexedGroupedChange} item - The summary item to render the content for.
    * @returns {TemplateResult | undefined} The rendered content or undefined if the item type is not recognized.
    */
-  renderSummaryItemContent(item: IndexedGroupedChange) {
-    if (item.type === ChangeType.CHANGED) {
-      const oldValue = item.oldValue!.replace(/ /g, "\u2423")
-      const newValue = item.newValue?.replace(/ /g, "\u2423")
-      return html`
-        <div class="summary-item-content">
-          ${this.renderRejectSuggestionButton(item)}
-          <span class="code deletion">${oldValue}</span>
-        </div>
-        <div class="summary-item-content">→</div>
-        <div class="summary-item-content">
-          <span class="code addition">${newValue}</span>
-          ${this.renderAcceptSuggestionButton(item)}
-        </div>
-      `
-    } else if (item.type === ChangeType.REMOVED) {
-      return html`
-        <div class="summary-item-content">
-          ${this.renderRejectSuggestionButton(item)}
-          <span class="code no-changes"> ${item.value} </span>
-        </div>
-        <div class="summary-item-content">→</div>
-        <div class="summary-item-content">
-          <span class="code deletion">${item.value}</span>
-          ${this.renderAcceptSuggestionButton(item)}
-        </div>
-      `
-    } else if (item.type === ChangeType.ADDED) {
-      return html`
-        <div class="summary-item-content">
-          ${this.renderRejectSuggestionButton(item)}
-          <span class="code deletion"></span>
-        </div>
-        <div class="summary-item-content">→</div>
-        <div class="summary-item-content">
-          <span class="code addition">${item.value}</span>
-          ${this.renderAcceptSuggestionButton(item)}
-        </div>
-      `
-    } else {
-      return
+  renderSummaryItemContentPerType(item: IndexedGroupedChange) {
+    switch (item.type) {
+      case ChangeType.CHANGED:
+        const oldValue = item.oldValue!
+        const newValue = item.newValue!
+        return this.renderSummaryItemContent({
+          item,
+          oldValue,
+          newValue,
+          oldValueClass: "deletion",
+          newValueClass: "addition",
+        })
+      case ChangeType.REMOVED:
+        return this.renderSummaryItemContent({
+          item,
+          oldValue: item.value!,
+          newValue: item.value!,
+          oldValueClass: "deletion no-text-decoration",
+          newValueClass: "addition line-through",
+        })
+      case ChangeType.ADDED:
+        return this.renderSummaryItemContent({
+          item,
+          oldValue: "",
+          newValue: item.value!,
+          oldValueClass: "deletion",
+          newValueClass: "addition",
+        })
+      default:
+        return nothing
     }
   }
 
@@ -454,7 +488,7 @@ export class TextCorrector extends LitElement {
     return html`<div class="summary">
       <ul>
         ${this.groupedChanges.map((item) => {
-          const content = this.renderSummaryItemContent(item)
+          const content = this.renderSummaryItemContentPerType(item)
           if (!content) {
             return nothing
           }
@@ -483,14 +517,14 @@ export class TextCorrector extends LitElement {
           class="button danger-button small with-icon"
           @click="${() => this.updateBatchResult(false)}"
         >
-          <span>${msg("Reject all")}</span>
+          <span>${msg("Reject all corrections")}</span>
           <cross-icon></cross-icon>
         </button>
         <button
           class="button success-button small with-icon"
           @click="${() => this.updateBatchResult(true)}"
         >
-          <span>${msg("Accept all")}</span>
+          <span>${msg("Accept all corrections")}</span>
 
           <check-icon></check-icon>
         </button>
@@ -686,23 +720,21 @@ export class TextCorrector extends LitElement {
       ?disabled=${this.isConfirmDisabled}
       title=${confirmTitle}
     >
-      <span>${msg("Confirm the text")}</span><check-icon></check-icon>
+      <span>${msg("Save")}</span><check-icon></check-icon>
     </button>`
     if (this.isEditMode) {
       return html`
         <div class="buttons-row can-wrap">
-          ${successButton}
           <button class="button cappucino-button with-icon" @click=${this.cancelEditMode}>
             <span>${msg("Reset edit")}</span><cross-icon></cross-icon>
           </button>
+          ${successButton}
         </div>
       `
     }
 
     return html`
       <div class="buttons-row can-wrap">
-        ${successButton}
-
         <button class="button cappucino-button with-icon" @click=${this.enterEditMode}>
           <span>${msg("Edit")}</span><edit-icon></edit-icon>
         </button>
@@ -710,6 +742,7 @@ export class TextCorrector extends LitElement {
         <button class="button white-button with-icon" @click=${this.skip}>
           <span>${msg("Skip")}</span><skip-icon></skip-icon>
         </button>
+        ${successButton}
       </div>
     `
   }
