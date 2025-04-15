@@ -201,7 +201,7 @@ export class TextCorrector extends LitElement {
    * Computes the grouped changes based on the diff result.
    * This method allows to group additions and removals in "changed" type.
    * For example, if the text is "hello world" and the correction is "hello universe"
-   * The grouped change will be of type "changed" with the value "world" and the new value "universe"
+   * The grouped change will be of type "changed" with the oldValue "world" and the newValue "universe"
    * instead of remove "world" and add "universe" separately
    */
   computeGroupedChanges(): void {
