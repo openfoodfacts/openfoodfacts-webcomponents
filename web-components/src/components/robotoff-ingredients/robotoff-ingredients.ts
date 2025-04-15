@@ -17,6 +17,7 @@ import { RobotoffIngredientsStateEventDetail, TextCorrectorEvent } from "../../t
 import { INPUT } from "../../styles/form"
 import { getValidHeadingLevel } from "../../utils/knowledge-panels/heading-utils"
 import { sanitizeHtml } from "../../utils/html"
+import { getFullImageUrl } from "../../utils/openfoodfacts"
 
 /**
  * RobotoffIngredients component
@@ -97,9 +98,7 @@ export class RobotoffIngredients extends LitElement {
    * @returns {string | undefined} The full image URL or undefined if no image URL is available.
    */
   get fullImageUrl() {
-    return this.productData.imageUrl
-      ? this.productData.imageUrl.replace(/400.jpg$/, "full.jpg")
-      : undefined
+    return getFullImageUrl(this.productData.imageUrl)
   }
 
   /**
