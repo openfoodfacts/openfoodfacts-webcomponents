@@ -2,9 +2,9 @@ name: TypeScript Lint
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    
+
   workflow_dispatch:
 
 jobs:
@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
-          cache: 'npm'
+          cache: "npm"
           cache-dependency-path: ./web-components/package-lock.json
 
       - name: Install dependencies
