@@ -1,3 +1,7 @@
+export type FolksonomyConfigurationOptions = {
+  apiUrl: string
+}
+
 export interface ProductProperty {
   k: string
   v: string

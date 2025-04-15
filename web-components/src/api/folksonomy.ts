@@ -4,21 +4,21 @@ import {
   DeleteProductPropertyResponse,
   UpdateProductPropertyResponse,
 } from "../types/folksonomy"
-import { DEFAULT_FOLKSONOMY_CONFIGURATION } from "../constants"
+import { folksonomyConfiguration } from "../signals/folksonomy"
 
-const BASE_URL = DEFAULT_FOLKSONOMY_CONFIGURATION.baseUrl
+/**
+ * Get the API URL for a given path with the current configuration
+ * @param path
+ * @returns {string}
+ */
 
-function getAuthHeader() {
-  const token = localStorage.getItem("bearer")
-  if (!token) {
-    return {}
-  }
-  return { Authorization: `Bearer ${token}` }
+const getApiUrl = (path: string) => {
+  return `${folksonomyConfiguration.getItem("apiUrl")}${path}`
 }
 
 async function fetchProductProperties(product: string): Promise<FetchProductPropertiesResponse> {
   try {
-    const response = await fetch(`${BASE_URL}/product/${product}`)
+    const response = await fetch(getApiUrl(`/product/${product}`))
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
@@ -37,13 +37,13 @@ async function addProductProperty(
   version: number
 ): Promise<AddProductPropertyResponse> {
   try {
-    const response = await fetch(`${BASE_URL}/product`, {
+    const response = await fetch(getApiUrl(`/product`), {
       method: "POST",
       headers: {
-        ...getAuthHeader(),
         "Content-Type": "application/json",
       } as HeadersInit,
       body: JSON.stringify({ product, ...{ k, v, version } }),
+      credentials: "include",
     })
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
@@ -61,12 +61,12 @@ async function deleteProductProperty(
   version: number
 ): Promise<DeleteProductPropertyResponse> {
   try {
-    const response = await fetch(`${BASE_URL}/product/${product}/${k}?version=${version}`, {
+    const response = await fetch(getApiUrl(`/product/${product}/${k}?version=${version}`), {
       method: "DELETE",
       headers: {
-        ...getAuthHeader(),
         "Content-Type": "application/json",
       } as HeadersInit,
+      credentials: "include",
     })
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
@@ -85,13 +85,13 @@ async function updateProductProperty(
   version: number
 ): Promise<UpdateProductPropertyResponse> {
   try {
-    const response = await fetch(`${BASE_URL}/product`, {
+    const response = await fetch(getApiUrl(`/product`), {
       method: "PUT",
       headers: {
-        ...getAuthHeader(),
         "Content-Type": "application/json",
       } as HeadersInit,
       body: JSON.stringify({ product, ...{ k, v, version: version + 1 } }),
+      credentials: "include",
     })
 
     if (!response.ok) {
@@ -104,37 +104,9 @@ async function updateProductProperty(
   }
 }
 
-async function signIn(username: string, password: string) {
-  try {
-    const body = new URLSearchParams({
-      username,
-      password,
-    }).toString()
-
-    const response = await fetch(`${BASE_URL}/auth`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body,
-    })
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-
-    const data = await response.json()
-    return data
-  } catch (error) {
-    console.error("Error signing In", error)
-    throw error
-  }
-}
-
 export default {
   fetchProductProperties,
   addProductProperty,
   deleteProductProperty,
   updateProductProperty,
-  signIn,
 }

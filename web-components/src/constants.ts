@@ -3,6 +3,11 @@ export const DEFAULT_ROBOTOFF_CONFIGURATION = {
   dryRun: false,
   imgUrl: "https://images.openfoodfacts.org/images/products",
 }
+
+export const DEFAULT_FOLKSONOMY_CONFIGURATION = {
+  apiUrl: "https://api.folksonomy.openfoodfacts.org",
+}
+
 export const PAGE_SIZE = 25
 
 export enum EventType {
@@ -30,7 +35,3 @@ export enum EventState {
 export const DEFAULT_ASSETS_IMAGES_PATH = "/assets/images"
 
 export const SELECT_ICON_FILE_NAME = "carret-bottom.svg"
-
-export const DEFAULT_FOLKSONOMY_CONFIGURATION = {
-  baseUrl: "https://api.folksonomy.openfoodfacts.org",
-}

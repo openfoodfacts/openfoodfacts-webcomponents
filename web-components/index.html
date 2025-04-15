@@ -19,6 +19,11 @@
           "apiUrl": "https://robotoff.openfoodfacts.net/api/v1",
           "imgUrl": "https://images.openfoodfacts.net/images/products"
         }'
+        ,
+        folksonomy-configuration='{
+          "apiUrl": "https://api.folksonomy.openfoodfacts.org"
+        }'
+        ,
       />
     </div>
     <div>
@@ -76,10 +81,6 @@
         style="display: flex; margin: 2rem; margin-left: 10px; margin-right: 40px; max-width: 300px"
       >
         <barcode-scanner id="barcode-scanner"></barcode-scanner>
-      </div>
-
-      <div style="display: flex">
-        <folksonomy-auth />
       </div>
 
       <div style="display: flex">
