@@ -24,6 +24,13 @@ import {
 /**
  * TextCorrector component
  *
+ * It allows the user to correct a text with the help of a list of changes.
+ * It displays the text with the changes highlighted.
+ * You can validate or reject the changes.
+ * It also allows the user to edit the text manually.
+ * The user can validates, rejects the changes, or skips the correction.
+ * Validation can be done when all the changes are validated/rejected or if the user has edited the text manually.
+ * @element text-corrector
  * @fires submit - when the user submits the form
  * @fires skip - when the user skips the question
  */
