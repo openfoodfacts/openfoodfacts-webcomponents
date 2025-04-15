@@ -1,12 +1,12 @@
 import { Computed } from "@lit-labs/signals"
 import robotoff from "../api/robotoff"
-import { Insight, InsightAnnotationAnswer } from "../types/robotoff"
+import { NutrientsInsight, InsightAnnotationAnswer, InsightType } from "../types/robotoff"
 import { SignalMap } from "../utils/signals"
 
 /**
  * Nutrients insights by insight id
  */
-export const insightById = new SignalMap<Insight>({})
+export const insightById = new SignalMap<NutrientsInsight>({})
 
 /**
  * Nutrients insights id by product code
@@ -16,10 +16,10 @@ export const insightIdByProductCode = new SignalMap<string | null>({})
 /**
  * Get the insight for a given product code
  * @param productCode
- * @returns {Computed<Insight | undefined>}
+ * @returns {Computed<NutrientsInsight | undefined>}
  */
 export const insight = (productCode: string) => {
-  return new Computed<Insight | undefined>(() => {
+  return new Computed<NutrientsInsight | undefined>(() => {
     const insightId = insightIdByProductCode.getItem(productCode)
     if (!insightId) {
       return undefined
@@ -34,9 +34,9 @@ export const insight = (productCode: string) => {
  */
 export const fetchInsightsByProductCode = (productCode: string) => {
   return robotoff
-    .insights({
+    .insights<NutrientsInsight>({
       barcode: productCode,
-      insight_types: "nutrient_extraction",
+      insight_types: InsightType.nutrient_extraction,
       // Add this to filter out already annotated insights
       annotated: false,
     })

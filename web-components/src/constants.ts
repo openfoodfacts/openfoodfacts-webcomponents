@@ -10,6 +10,7 @@ export enum EventType {
   QUESTION_STATE = "question-state",
   NUTRIENT_STATE = "nutrient-state",
   BARCODE_SCANNER_STATE = "barcode-scanner-state",
+  INGREDIENTS_STATE = "ingredients-state",
 }
 
 export enum LoadingState {
@@ -21,10 +22,11 @@ export enum LoadingState {
 export const DEFAULT_LANGUAGE_CODE = "en"
 
 export enum EventState {
-  LOADING = "loading",
-  NO_DATA = "no-data",
-  HAS_DATA = "has-data",
-  ANNOTATED = "annotated",
+  LOADING = "loading", // loading data
+  NO_DATA = "no-data", // no data to display
+  HAS_DATA = "has-data", // data to display
+  ANSWERED = "answered", // user answered the question
+  ANNOTATED = "annotated", // user answered to all questions
 }
 
 export const DEFAULT_ASSETS_IMAGES_PATH = "/assets/images"
