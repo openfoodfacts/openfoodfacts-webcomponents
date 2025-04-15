@@ -282,7 +282,6 @@ export class RobotoffIngredients extends LitElement {
           return nothing
         }
 
-        // Make sure we have a valid insight at the current index
         const correction = insight.data.correction
         const original = insight.data.original
 
