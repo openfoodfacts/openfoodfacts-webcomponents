@@ -45,14 +45,14 @@ export class FolksonomyEditorRow extends LitElement {
       }
 
       td {
-      padding: 0.5rem 1.2rem;
-      text-align: left;
-      vertical-align: middle;
-      border: none;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+        padding: 0.5rem 1.2rem;
+        text-align: left;
+        vertical-align: middle;
+        border: none;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
 
       input[type="text"] {
         width: 100%;
@@ -131,11 +131,11 @@ export class FolksonomyEditorRow extends LitElement {
   ]
 
   /**
-   * The product ID for which the properties are being added
+   * The product code for which the properties are being added
    * @type {string}
    */
-  @property({ type: String, attribute: "product-id" })
-  productId = ""
+  @property({ type: String, attribute: "product-code" })
+  productCode = ""
 
   /**
    * The version of the product property being edited
@@ -221,13 +221,9 @@ export class FolksonomyEditorRow extends LitElement {
           </td>
           <td>
             <div class="button-container">
-                <button
-                  class="button chocolate-button"
-                  @click=${this.addProperty}
-                  id="create-button"
-                >
-                  ${msg("Submit")}
-                </button>
+              <button class="button chocolate-button" @click=${this.addProperty} id="create-button">
+                ${msg("Submit")}
+              </button>
             </div>
           </td>
         </tr>
@@ -279,7 +275,7 @@ export class FolksonomyEditorRow extends LitElement {
   private async handleSave() {
     try {
       const updatedProperty = await folksonomyApi.updateProductProperty(
-        this.productId,
+        this.productCode,
         this.key,
         this.tempValue,
         this.version
@@ -310,7 +306,7 @@ export class FolksonomyEditorRow extends LitElement {
     const deleteModal = document.createElement("delete-modal")
     deleteModal.addEventListener("confirm-delete", async () => {
       try {
-        await folksonomyApi.deleteProductProperty(this.productId, this.key, this.version)
+        await folksonomyApi.deleteProductProperty(this.productCode, this.key, this.version)
         const deleteEvent = new CustomEvent("delete-row", {
           detail: { key: this.key },
           bubbles: true,
@@ -330,7 +326,7 @@ export class FolksonomyEditorRow extends LitElement {
     if (this.key && this.value) {
       try {
         const newProperty = await folksonomyApi.addProductProperty(
-          this.productId,
+          this.productCode,
           this.key,
           this.value,
           this.version

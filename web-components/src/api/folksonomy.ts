@@ -1,3 +1,9 @@
+import {
+  FetchProductPropertiesResponse,
+  AddProductPropertyResponse,
+  DeleteProductPropertyResponse,
+  UpdateProductPropertyResponse,
+} from "../types/folksonomy"
 import { DEFAULT_FOLKSONOMY_CONFIGURATION } from "../constants"
 
 const BASE_URL = DEFAULT_FOLKSONOMY_CONFIGURATION.baseUrl
@@ -10,13 +16,13 @@ function getAuthHeader() {
   return { Authorization: `Bearer ${token}` }
 }
 
-async function fetchProductProperties(product: string) {
+async function fetchProductProperties(product: string): Promise<FetchProductPropertiesResponse> {
   try {
     const response = await fetch(`${BASE_URL}/product/${product}`)
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
-    const data = await response.json()
+    const data: FetchProductPropertiesResponse = await response.json()
     return data
   } catch (error) {
     console.error("Error fetching product properties:", error)
@@ -24,7 +30,12 @@ async function fetchProductProperties(product: string) {
   }
 }
 
-async function addProductProperty(product: string, k: string, v: string, version: number) {
+async function addProductProperty(
+  product: string,
+  k: string,
+  v: string,
+  version: number
+): Promise<AddProductPropertyResponse> {
   try {
     const response = await fetch(`${BASE_URL}/product`, {
       method: "POST",
@@ -37,15 +48,18 @@ async function addProductProperty(product: string, k: string, v: string, version
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
-    const data = await response.json()
-    return { ...data, key: k, value: v }
+    return { key: k, value: v, version: 1 }
   } catch (error) {
     console.error("Error adding product property:", error)
     throw error
   }
 }
 
-async function deleteProductProperty(product: string, k: string, version: number) {
+async function deleteProductProperty(
+  product: string,
+  k: string,
+  version: number
+): Promise<DeleteProductPropertyResponse> {
   try {
     const response = await fetch(`${BASE_URL}/product/${product}/${k}?version=${version}`, {
       method: "DELETE",
@@ -64,7 +78,12 @@ async function deleteProductProperty(product: string, k: string, version: number
   }
 }
 
-async function updateProductProperty(product: string, k: string, v: string, version: number) {
+async function updateProductProperty(
+  product: string,
+  k: string,
+  v: string,
+  version: number
+): Promise<UpdateProductPropertyResponse> {
   try {
     const response = await fetch(`${BASE_URL}/product`, {
       method: "PUT",
@@ -75,18 +94,10 @@ async function updateProductProperty(product: string, k: string, v: string, vers
       body: JSON.stringify({ product, ...{ k, v, version: version + 1 } }),
     })
 
-    console.log("headers:", {
-      ...getAuthHeader(),
-      "Content-Type": "application/json",
-    })
-
-    console.log("requestBody: ", JSON.stringify({ product, ...{ k, v } }))
-
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
-    const data = await response.json()
-    return { ...data, key: k, value: v, version: version + 1 }
+    return { key: k, value: v, version: version + 1 }
   } catch (error) {
     console.error("Error updating product property:", error)
     throw error

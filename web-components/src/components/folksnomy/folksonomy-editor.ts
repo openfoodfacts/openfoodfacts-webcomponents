@@ -16,8 +16,8 @@ export class FolksonomyEditor extends LitElement {
    * The product ID for which the properties are being added
    * @type {boolean}
    */
-  @property({ type: String, attribute: "product-id" })
-  productId = ""
+  @property({ type: String, attribute: "product-code" })
+  productCode = ""
 
   /**
    * The type of page being displayed (e.g., "view", "edit")
@@ -139,7 +139,7 @@ export class FolksonomyEditor extends LitElement {
 
   private async fetchAndLogFolksonomyKeys() {
     try {
-      const product_properties = await folksonomyApi.fetchProductProperties(this.productId)
+      const product_properties = await folksonomyApi.fetchProductProperties(this.productCode)
 
       // update the state with the fetched properties
       this.properties = product_properties.map((item: any) => ({
@@ -164,7 +164,7 @@ export class FolksonomyEditor extends LitElement {
           ${this.properties.map(
             (item, index) =>
               html`<folksonomy-editor-row
-                product-id=${this.productId}
+                product-code=${this.productCode}
                 key=${item.key}
                 value=${item.value}
                 version=${item.version}
@@ -173,7 +173,7 @@ export class FolksonomyEditor extends LitElement {
               />`
           )}
           ${html`<folksonomy-editor-row
-            product-id=${this.productId}
+            product-code=${this.productCode}
             page-type=${this.pageType}
             row-number=${this.properties.length + 1}
             empty
