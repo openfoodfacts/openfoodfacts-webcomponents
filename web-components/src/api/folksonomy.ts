@@ -37,7 +37,7 @@ async function addProductProperty(
   version: number
 ): Promise<AddProductPropertyResponse> {
   try {
-    const response = await fetch(getApiUrl(`/product`), {
+    const response = await fetch(getApiUrl("/product"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -85,7 +85,7 @@ async function updateProductProperty(
   version: number
 ): Promise<UpdateProductPropertyResponse> {
   try {
-    const response = await fetch(getApiUrl(`/product`), {
+    const response = await fetch(getApiUrl("/product"), {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
