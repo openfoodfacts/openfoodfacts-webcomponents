@@ -86,31 +86,6 @@ export class FolksonomyEditor extends LitElement {
       background-color: #f9f9f9;
     }
 
-    .actions {
-      color: #007bff;
-      cursor: pointer;
-      text-decoration: underline;
-      font-size: 0.9rem;
-    }
-
-    .actions:hover {
-      color: #0056b3;
-    }
-
-    button {
-      padding: 0.5rem 1rem;
-      background-color: #341100;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-
-    button:hover {
-      background-color: #5a2a00;
-    }
-
     @media (max-width: 480px) {
       #free_properties_form table tr:first-child {
         height: 0.5rem;
@@ -177,24 +152,53 @@ export class FolksonomyEditor extends LitElement {
     }
   }
 
+  private renderForm() {
+    return html`
+      <form id="free_properties_form">
+        <table>
+          <tr>
+            <th>${msg("Property")}</th>
+            <th>${msg("Value")}</th>
+            <th>${msg("Actions")}</th>
+          </tr>
+          ${this.properties.map(
+            (item, index) =>
+              html`<folksonomy-editor-row
+                product-id=${this.productId}
+                key=${item.key}
+                value=${item.value}
+                version=${item.version}
+                row-number=${index + 1}
+                page-type=${this.pageType}
+              />`
+          )}
+          ${html`<folksonomy-editor-row
+            product-id=${this.productId}
+            page-type=${this.pageType}
+            row-number=${this.properties.length + 1}
+            empty
+          />`}
+        </table>
+      </form>
+    `
+  }
+
   override render() {
     return html`
-      <section class="row">
-        <div id="free_properties_1" class="large-12 column feus">
-          <div class="card">
-            <div class="card-section h-space-tiny">
+      <section>
+        <div class="feus">
+          <div>
+            <div>
               <h2>
                 ${msg("Personalized properties")} (<span
                   data-tooltip
                   aria-haspopup="true"
-                  class="has-tip"
                   data-position="top"
                   data-alignment="left"
                   title=${msg("Be aware the data model might be modified. Use at your own risk.")}
                   >beta</span
                 >)
               </h2>
-              <p id="fe_login_info"></p>
               <p>
                 ${msg(
                   html`These properties are created and filed by users for any kind of usages. Feel
@@ -218,32 +222,7 @@ export class FolksonomyEditor extends LitElement {
                     >. Don't hesitate to participate or give feedback.`
                 )}
               </p>
-              <form id="free_properties_form">
-                <table>
-                  <tr>
-                    <th>${msg("Property")}</th>
-                    <th>${msg("Value")}</th>
-                    <th>${msg("Actions")}</th>
-                  </tr>
-                  ${this.properties.map(
-                    (item, index) =>
-                      html`<folksonomy-editor-row
-                        product-id=${this.productId}
-                        key=${item.key}
-                        value=${item.value}
-                        version=${item.version}
-                        row-number=${index + 1}
-                        page-type=${this.pageType}
-                      />`
-                  )}
-                  ${html`<folksonomy-editor-row
-                    product-id=${this.productId}
-                    page-type=${this.pageType}
-                    row-number=${this.properties.length + 1}
-                    empty
-                  />`}
-                </table>
-              </form>
+              ${this.renderForm()}
             </div>
           </div>
         </div>

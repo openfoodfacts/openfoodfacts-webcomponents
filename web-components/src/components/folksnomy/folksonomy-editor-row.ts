@@ -3,6 +3,8 @@ import { customElement, property, state } from "lit/decorators.js"
 import "./delete-modal"
 import folksonomyApi from "../../api/folksonomy"
 import { msg } from "@lit/localize"
+import { INPUT } from "../../styles/form"
+import { getButtonClasses, ButtonType } from "../../styles/buttons"
 
 /**
  * FolksonomyEditorRow Component
@@ -11,64 +13,38 @@ import { msg } from "@lit/localize"
  */
 @customElement("folksonomy-editor-row")
 export class FolksonomyEditorRow extends LitElement {
-  static override styles = css`
-    :host {
-      font-family: Arial, sans-serif;
-      font-size: 0.9rem;
-      color: #333;
-      width: 100%;
-      display: contents;
-    }
+  static override styles = [
+    INPUT,
+    ...getButtonClasses([ButtonType.Chocolate]),
+    css`
+      :host {
+        font-family: Arial, sans-serif;
+        font-size: 0.9rem;
+        color: #333;
+        width: 100%;
+        display: contents;
+      }
 
-    .odd-row {
-      background-color: #ffffff;
-    }
+      .odd-row {
+        background-color: #ffffff;
+      }
 
-    .even-row {
-      background-color: #f2f2f2;
-    }
+      .even-row {
+        background-color: #f2f2f2;
+      }
 
-    .button-container {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-      width: 10rem;
-    }
+      .button-container {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        width: 10rem;
+      }
 
-    input {
-      padding: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 20px;
-      font-size: 0.9rem;
-      height: 1.8rem;
-    }
+      .button-container button {
+        width: 10rem;
+      }
 
-    input:focus {
-      outline: none;
-    }
-
-    button {
-      padding: 0.5rem 1rem;
-      background-color: #341100;
-      color: white;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      height: 2.5rem;
-      width: 100%;
-    }
-
-    button:hover {
-      background-color: #5a2a00;
-    }
-
-    table {
-      width: 100%;
-      table-layout: fixed;
-    }
-
-    td {
+      td {
       padding: 0.5rem 1.2rem;
       text-align: left;
       vertical-align: middle;
@@ -78,118 +54,81 @@ export class FolksonomyEditorRow extends LitElement {
       white-space: nowrap;
     }
 
-    input[type="text"] {
-      width: 100%;
-      padding: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 15px;
-      box-sizing: border-box;
-      font-size: 0.9rem;
-      height: 2.5rem;
-      background-color: #f9f9f9;
-    }
-
-    input[type="text"]:focus {
-      outline: none;
-      border-color: #007bff;
-      box-shadow: 0 0 3px rgba(0, 123, 255, 0.5);
-    }
-
-    .actions {
-      color: white;
-      background-color: #341100;
-      border: none;
-      border-radius: 20px;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-      font-size: 0.9rem;
-      text-align: center;
-      width: 10rem;
-    }
-
-    .actions:hover {
-      background-color: #5a2a00;
-    }
-
-    .save-button {
-      background-color: #341100;
-    }
-
-    .save-button:hover {
-      background-color: #5a2a00;
-    }
-
-    .delete-button {
-      background-color: #341100;
-    }
-
-    .delete-button:hover {
-      background-color: #5a2a00;
-    }
-
-    .button-group {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-    }
-
-    .property-link {
-      color: black;
-    }
-
-    #create-button {
-      width: 10rem;
-      padding: 0.4rem 0.8rem;
-    }
-
-    @media (max-width: 768px) {
-      .button-group {
-        flex-direction: column;
+      input[type="text"] {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 15px;
+        box-sizing: border-box;
+        font-size: 0.9rem;
+        height: 2.5rem;
+        background-color: #f9f9f9;
       }
 
-      .button-container {
-        flex-direction: column;
+      input[type="text"]:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 3px rgba(0, 123, 255, 0.5);
+      }
+
+      .property-link {
+        color: black;
       }
 
       #create-button {
-        font-size: 0.8rem;
+        width: 10rem;
         padding: 0.4rem 0.8rem;
-        height: 2rem;
-        width: 7rem;
       }
 
-      .actions {
-        font-size: 0.8rem;
-        padding: 0.4rem 0.8rem;
-        height: 2rem;
-        width: 7rem;
-      }
-    }
+      @media (max-width: 768px) {
+        .button-container {
+          flex-direction: column;
+        }
 
-    @media (max-width: 480px) {
-      .actions {
-        width: 5rem;
-        font-size: 0.7rem;
-        padding: 0.3rem 0.5rem;
-        height: 1.6rem;
+        .button-container {
+          width: 7rem;
+        }
+
+        .button-container button {
+          font-size: 0.8rem;
+          padding: 0.4rem 0.8rem;
+          height: 2rem;
+          width: 7rem;
+        }
+
+        #create-button {
+          font-size: 0.8rem;
+          padding: 0.4rem 0.8rem;
+          height: 2rem;
+          width: 7rem;
+        }
       }
 
-      .button-container {
-        flex-direction: column;
-      }
+      @media (max-width: 480px) {
+        .button-container {
+          width: 5rem;
+        }
 
-      #create-button {
-        width: 5rem;
-        font-size: 0.7rem;
-        padding: 0.3rem 0.5rem;
-        height: 1.6rem;
-      }
-    }
+        .button-container button {
+          width: 5rem;
+          font-size: 0.7rem;
+          padding: 0.3rem 0.5rem;
+          height: 1.6rem;
+        }
 
-    td {
-      padding: 0.4rem 0.5rem;
-    }
-  `
+        #create-button {
+          width: 5rem;
+          font-size: 0.7rem;
+          padding: 0.3rem 0.5rem;
+          height: 1.6rem;
+        }
+
+        td {
+          padding: 0.4rem 0.5rem;
+        }
+      }
+    `,
+  ]
 
   /**
    * The product ID for which the properties are being added
@@ -281,10 +220,14 @@ export class FolksonomyEditorRow extends LitElement {
             />
           </td>
           <td>
-            <div class="button-group">
-              <div class="button-container">
-                <button @click=${this.addProperty} id="create-button">${msg("Submit")}</button>
-              </div>
+            <div class="button-container">
+                <button
+                  class="button chocolate-button"
+                  @click=${this.addProperty}
+                  id="create-button"
+                >
+                  ${msg("Submit")}
+                </button>
             </div>
           </td>
         </tr>
@@ -306,16 +249,20 @@ export class FolksonomyEditorRow extends LitElement {
             : this.value}
         </td>
         <td>
-          <div class="button-group">
+          <div class="button-container">
             ${this.editable
               ? html`
-                  <button class="actions save-button" @click=${this.handleSave}>
+                  <button class="button chocolate-button" @click=${this.handleSave}>
                     ${msg("Save")}
                   </button>
-                  <button class="actions" @click=${this.handleCancel}>${msg("Cancel")}</button>
+                  <button class="button chocolate-button" @click=${this.handleCancel}>
+                    ${msg("Cancel")}
+                  </button>
                 `
-              : html`<button class="actions" @click=${this.handleEdit}>${msg("Edit")}</button>`}
-            <button class="actions delete-button" @click=${this.handleDelete}>
+              : html`<button class="button chocolate-button" @click=${this.handleEdit}>
+                  ${msg("Edit")}
+                </button>`}
+            <button class="button chocolate-button" @click=${this.handleDelete}>
               ${msg("Delete")}
             </button>
           </div>
