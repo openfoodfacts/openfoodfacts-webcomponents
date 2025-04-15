@@ -20,9 +20,16 @@ import { sanitizeHtml } from "../../utils/html"
 
 /**
  * RobotoffIngredients component
- *
+ * It allows the user to correct the ingredients list of a product
+ * with the help of robotoff that suggests corrections.
+ * It handle the data fetching and the state management.
+ * It also handle the user interactions and the form submission.
+ * It uses the `text-corrector` component to handle the text correction.
+ * @element robotoff-ingredients
  * @fires state - when the state of the component changes
  * @fires submit - when the user submits the form
+ * @slot complete - The content to display when the component is complete
+ * @slot pending - The content to display when the component is pending
  */
 @customElement("robotoff-ingredients")
 export class RobotoffIngredients extends LitElement {
@@ -264,7 +271,7 @@ export class RobotoffIngredients extends LitElement {
    */
   override render() {
     return this._spellcheckTask.render({
-      pending: () => html`<off-wc-loader></off-wc-loader>`,
+      pending: () => html`<slot name="pending"><off-wc-loader></off-wc-loader></slot>`,
       complete: () => {
         const insight = this._insight
         if (this.allInsightsAreAnswered) {
