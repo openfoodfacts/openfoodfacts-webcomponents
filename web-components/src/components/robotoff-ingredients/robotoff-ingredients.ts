@@ -62,7 +62,7 @@ export class RobotoffIngredients extends LitElement {
   productCode = ""
 
   /**
-   * The language code for the product.
+   * The language code for the ingredients spellcheck validation.
    * @type {string}
    */
   @property({ type: String, attribute: "language-code" })
