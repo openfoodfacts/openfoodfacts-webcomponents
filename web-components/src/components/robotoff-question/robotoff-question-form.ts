@@ -41,6 +41,9 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
         display: flex;
         justify-content: center;
       }
+      .expand-button {
+        margin-top: 1rem;
+      }
     `,
   ]
 
@@ -86,8 +89,8 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
     this.emitEventClick(event, value)
   }
 
-  toggleIsImageExpanded() {
-    this.isImageExpanded = !this.isImageExpanded
+  expandImage() {
+    this.isImageExpanded = true
   }
 
   private _renderImage() {
@@ -101,13 +104,17 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
           <zoomable-image
             src=${this.question?.source_image_url}
             .size="${this.imageSize}"
+            @click="${this.expandImage}"
+            ?show-buttons="${this.isImageExpanded}"
           ></zoomable-image>
         </div>
-        <div>
-          <button class="button white-button small" @click="${this.toggleIsImageExpanded}">
-            ${this.isImageExpanded ? msg("Reduce image") : msg("Expand image")}
-          </button>
-        </div>
+        ${this.isImageExpanded
+          ? nothing
+          : html`<div>
+              <button class="expand-button button white-button small" @click="${this.expandImage}">
+                ${msg("Expand image")}
+              </button>
+            </div>`}
       </div>
     `
   }
