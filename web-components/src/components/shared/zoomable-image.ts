@@ -96,7 +96,7 @@ export class ZoomableImage extends LitElement {
   }
   override disconnectedCallback(): void {
     super.disconnectedCallback()
-    this.element.removeEventListener("wheel", this.panzoom.zoomWithWheel)
+    this.element.parentElement!.removeEventListener("wheel", this.panzoom.zoomWithWheel)
     this.panzoom.destroy()
   }
 
@@ -109,7 +109,7 @@ export class ZoomableImage extends LitElement {
       contain: "inside",
     })
 
-    this.element.addEventListener("wheel", panzoom.zoomWithWheel)
+    this.element.parentElement!.addEventListener("wheel", panzoom.zoomWithWheel)
     this.panzoom = panzoom
     this.onImageChange()
   }
