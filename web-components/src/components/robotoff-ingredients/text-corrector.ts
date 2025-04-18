@@ -380,7 +380,7 @@ export class TextCorrector extends LitElement {
   renderAcceptSuggestionButton(item: IndexedGroupedChange) {
     return html` <button
       class="button success-button small"
-      @click="${() => this.updateResult(true, item)}"
+      @click="${() => this.updateResult(true, [item])}"
       title="${this.getAcceptSuggestionMsg(item)}"
     >
       <check-icon></check-icon>
@@ -395,7 +395,7 @@ export class TextCorrector extends LitElement {
     return html`
       <button
         class="button danger-button small"
-        @click="${() => this.updateResult(false, item)}"
+        @click="${() => this.updateResult(false, [item])}"
         title="${this.getRejectSuggestionMsg(item)}"
       >
         <cross-icon></cross-icon>
@@ -551,23 +551,28 @@ export class TextCorrector extends LitElement {
   /**
    * Updates the result based on the validation of a suggestion.
    * @param {boolean} validate - Whether to validate the suggestion.
-   * @param {IndexedGroupedChange} item - The suggestion to update the result for.
+   * @param {IndexedGroupedChange} items - The suggestions to update the result for.
    */
-  updateResult(validate: boolean, item: IndexedGroupedChange) {
-    console.log("Changes allowed", item)
-
+  updateResult(validate: boolean, items: IndexedGroupedChange[]) {
     let value = ""
     let textToCompare = ""
+    let indexedGroupedChangeIndex = 0
     for (const [index, change] of this.diffResult.entries()) {
-      if (item.indexes.includes(index)) {
+      const item = items[indexedGroupedChangeIndex]
+      if (item && item.indexes.includes(index)) {
         let newValue
         if (item.type === ChangeType.REMOVED) {
           newValue = validate ? "" : change.value
+          indexedGroupedChangeIndex += 1
         } else if (item.type === ChangeType.ADDED) {
           newValue = validate ? change.value : ""
+          indexedGroupedChangeIndex += 1
         } else if (item.type === ChangeType.CHANGED) {
           // If the change is a change, we need to check if the index is the first or second index to skip the other one
           if (item.indexes[1] === index) {
+            // only increment the index because we already added the new value at the first index
+            // and we don't want to add it again at the second index
+            indexedGroupedChangeIndex += 1
             continue
           }
           newValue = validate ? item.newValue : item.oldValue
@@ -586,8 +591,8 @@ export class TextCorrector extends LitElement {
 
     this.value = value
     this.textToCompare = textToCompare
-    this.computeWordDiff()
     this.dispatchEvent(new CustomEvent("update", { detail: { result: value } }))
+    this.computeWordDiff()
   }
 
   /**
@@ -595,7 +600,7 @@ export class TextCorrector extends LitElement {
    * @param {boolean} validate - Whether to validate the suggestions.
    */
   updateBatchResult(validate: boolean) {
-    this.groupedChanges.forEach((item) => this.updateResult(validate, item))
+    this.updateResult(validate, this.groupedChanges)
   }
 
   /**
