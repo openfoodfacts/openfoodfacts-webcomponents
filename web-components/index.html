@@ -6,6 +6,15 @@
     <title>Demo</title>
     <script type="module" src="off-webcomponents.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style type="text/css">
+      .box {
+        border-radius: 10px;
+        background-color: #fafafa;
+        border: 1px solid #f0f0f0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+      }
+    </style>
   </head>
   <body style="background: #f2f2f2">
     <h1>List of all available components</h1>
@@ -78,7 +87,7 @@
         <barcode-scanner id="barcode-scanner"></barcode-scanner>
       </div>
 
-      <div style="display: flex; margin-top: 1rem">
+      <div class="box" style="display: flex">
         <robotoff-ingredients id="robotoff-ingredients"></robotoff-ingredients>
       </div>
     </div>

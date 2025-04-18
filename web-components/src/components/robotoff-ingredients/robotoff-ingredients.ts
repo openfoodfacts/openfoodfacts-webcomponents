@@ -43,7 +43,6 @@ export class RobotoffIngredients extends LitElement {
         max-width: 800px;
         margin: 0 auto;
         padding: 1rem;
-        border: 1px solid #eee;
         border-radius: 4px;
       }
     `,
