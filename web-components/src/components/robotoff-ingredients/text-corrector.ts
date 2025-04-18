@@ -55,17 +55,17 @@ export class TextCorrector extends LitElement {
         margin-bottom: 0.5rem;
       }
       .text-content {
-        background-color: ${SAFE_DARKER_WHITE};
-        border: 1px solid ${SAFE_LIGHT_GREY};
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        padding: 1rem;
         border-radius: 4px;
         white-space: pre-wrap;
         line-height: 1.5;
       }
       .deletion {
         background-color: #ffcccc;
-        text-decoration: line-through;
+      }
+      .spellcheck {
+        padding: 2px 5px;
+        border-radius: 15px;
+        cursor: pointer;
       }
       .no-text-decoration {
         text-decoration: none;
@@ -325,15 +325,11 @@ export class TextCorrector extends LitElement {
   renderHighlightedDiff() {
     return html`${this.diffResult.map((part) => {
       if (part.added) {
-        return html`<span
-          class="addition popover-wrapper"
-          @click="${() => this.showSuggestionPopover(part)}"
+        return html`<span class="addition popover-wrapper"
           >${part.value}${this.renderSuggestionPopover(part)}</span
         >`
       } else if (part.removed) {
-        return html`<span
-          class="deletion popover-wrapper"
-          @click="${() => this.showSuggestionPopover(part)}"
+        return html`<span class="deletion line-through popover"
           >${part.value}${this.renderSuggestionPopover(part)}</span
         >`
       } else {
@@ -341,6 +337,35 @@ export class TextCorrector extends LitElement {
       }
     })}`
   }
+
+  renderSpellCheckDiff() {
+    let indexedGroupedChangeIndex = 0
+    const groupedChanges = this.groupedChanges.filter(
+      (change) => change.type === ChangeType.CHANGED
+    )
+
+    return html`${this.diffResult.map((part) => {
+      const indexedGroupedChange = groupedChanges[indexedGroupedChangeIndex]
+      // If the part is part of a grouped change
+      if (indexedGroupedChange && indexedGroupedChange.indexes.includes(part.index)) {
+        const isLastIndex = indexedGroupedChange.indexes[1] === part.index
+        if (isLastIndex) {
+          indexedGroupedChangeIndex++
+          return nothing
+        }
+        return html`<span class="deletion spellcheck"
+          >${indexedGroupedChange.oldValue || " "}</span
+        >`
+      } else if (part.added) {
+        return html`<span class="deletion spellcheck">${" ".repeat(part.value.length)}</span>`
+      } else if (part.removed) {
+        return html`<span class="deletion spellcheck">${part.value}</span>`
+      } else {
+        return html`<span>${part.value}</span>`
+      }
+    })}`
+  }
+
   /**
    * Gets the message to display for accepting a suggestion.
    * @param {IndexedGroupedChange} item - The suggestion to get the message for.
@@ -540,12 +565,7 @@ export class TextCorrector extends LitElement {
     if (this.groupedChanges.length === 0) {
       return nothing
     }
-    return html`
-      <div class="summary">
-        <h2>${msg("Validate proposed changes:")}</h2>
-        ${this.renderSummaryContent()}
-      </div>
-    `
+    return html` <div class="summary">${this.renderSummaryContent()}</div> `
   }
 
   /**
@@ -762,7 +782,7 @@ export class TextCorrector extends LitElement {
           ? this.renderEditTextarea()
           : html`
               <div class="text-section">
-                <p class="text-content">${this.renderHighlightedDiff()}</p>
+                <p class="text-content">${this.renderSpellCheckDiff()}</p>
               </div>
               <div class="text-section">${this.renderSummary()}</div>
             `}
