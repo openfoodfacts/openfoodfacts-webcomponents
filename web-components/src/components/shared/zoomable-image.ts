@@ -26,6 +26,7 @@ export class ZoomableImage extends LitElement {
         position: relative;
         position: relative;
         border: 1px solid black;
+        background-color: white;
       }
       .panzoom {
         position: relative;
@@ -63,7 +64,7 @@ export class ZoomableImage extends LitElement {
   stepSize = 0.1
 
   @property({ type: Number, attribute: "min-zoom" })
-  minZoom = 0
+  minZoom = 0.3
   @property({ type: Number, attribute: "max-zoom" })
   maxZoom = 5
 

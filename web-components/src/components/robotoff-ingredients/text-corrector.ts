@@ -12,7 +12,12 @@ import "../icons/edit"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { TEXTAREA } from "../../styles/form"
 import { POPOVER } from "../../styles/popover"
-import { SAFE_DARKER_WHITE, SAFE_LIGHT_GREY } from "../../utils/colors"
+import {
+  SAFE_LIGHT_BLACK,
+  SAFE_LIGHT_GREEN,
+  SAFE_LIGHT_GREY,
+  SAFE_LIGHT_RED,
+} from "../../utils/colors"
 import { clickOutside } from "../../directives/click-outside"
 import {
   ChangeType,
@@ -45,10 +50,31 @@ export class TextCorrector extends LitElement {
       ButtonType.Success,
       ButtonType.Danger,
       ButtonType.White,
+      ButtonType.LightRed,
+      ButtonType.LightGreen,
     ]),
     css`
-      .text-section {
+      .text-section,
+      .summary {
         margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid ${SAFE_LIGHT_GREY};
+        box-shadow: 0 0.5rem 2px -2px rgba(0, 0, 0, 0.1);
+      }
+      .summary {
+        padding-bottom: 1rem;
+      }
+      .submit-buttons-wrapper {
+        margin-top: 1rem;
+      }
+      .submit-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .submit-buttons button {
+        justify-content: center;
       }
       h2 {
         font-size: 1.2rem;
@@ -60,7 +86,7 @@ export class TextCorrector extends LitElement {
         line-height: 1.5;
       }
       .deletion {
-        background-color: #ffcccc;
+        background-color: ${SAFE_LIGHT_RED};
       }
       .spellcheck {
         padding: 2px 5px;
@@ -74,18 +100,29 @@ export class TextCorrector extends LitElement {
         text-decoration: line-through;
       }
       .addition {
-        background-color: #ccffcc;
+        background-color: ${SAFE_LIGHT_GREEN};
       }
       .no-changes {
         background-color: ${SAFE_LIGHT_GREY};
       }
-
-      .summary-item-content {
+      .summary-item-wrapper {
         display: flex;
-        align-items: center;
-        margin-bottom: 0.5rem;
+        flex-direction: column;
         gap: 1rem;
       }
+      .summary-item {
+        display: grid;
+        width: 100%;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+      }
+      .summary-item :first-child {
+        justify-self: end;
+      }
+      .summary-item :last-child {
+        justify-self: start;
+      }
+
       .summary-item-content.wrappable {
         flex-wrap: wrap;
       }
@@ -98,6 +135,25 @@ export class TextCorrector extends LitElement {
       }
       .popover {
         width: 86px;
+      }
+
+      .suggestion-button {
+        height: 32px;
+        font-weight: 500;
+        border-radius: 30px;
+      }
+      .suggestion-button-title {
+        font-weight: bold;
+        text-align: center;
+      }
+      .suggestion-button,
+      .suggestion-button-title {
+        width: 200px;
+      }
+
+      .batch-buttons {
+        display: none;
+        margin-top: 1rem;
       }
     `,
   ]
@@ -381,21 +437,6 @@ export class TextCorrector extends LitElement {
     }
     return ""
   }
-  /**
-   * Gets the message to display for rejecting a suggestion.
-   * @param {IndexedGroupedChange} item - The suggestion to get the message for.
-   * @returns {string} The message to display.
-   */
-  getRejectSuggestionMsg(item: IndexedGroupedChange) {
-    if (item.type === ChangeType.CHANGED) {
-      return msg("Reject this change")
-    } else if (item.type === ChangeType.ADDED) {
-      return msg("Reject this addition")
-    } else if (item.type === ChangeType.REMOVED) {
-      return msg("Reject this removal")
-    }
-    return ""
-  }
 
   /**
    * Renders the button for accepting a suggestion.
@@ -403,29 +444,59 @@ export class TextCorrector extends LitElement {
    * @returns {TemplateResult} The rendered button.
    */
   renderAcceptSuggestionButton(item: IndexedGroupedChange) {
-    return html` <button
-      class="button success-button small"
-      @click="${() => this.updateResult(true, [item])}"
-      title="${this.getAcceptSuggestionMsg(item)}"
-    >
-      <check-icon></check-icon>
-    </button>`
+    let text
+    switch (item.type) {
+      case ChangeType.CHANGED:
+        text =
+          item.newValue == ""
+            ? msg("Empty")
+            : item.newValue!.replace(/( |\u00A0)/g, "␣").replace("\n", "↩︎")
+        break
+      case ChangeType.ADDED:
+        text = item.value!
+        break
+      case ChangeType.REMOVED:
+        text = html`<i>${msg("Empty")}</i>`
+        break
+    }
+    return html`
+      <button
+        class="suggestion-button button light-green-button small"
+        @click="${() => this.updateResult(true, [item])}"
+      >
+        <span class="pre-wrap">${text}</span>
+      </button>
+    `
   }
+
   /**
    * Renders the button for rejecting a suggestion.
    * @param {IndexedGroupedChange} item - The suggestion to render the button for.
    * @returns {TemplateResult} The rendered button.
    */
   renderRejectSuggestionButton(item: IndexedGroupedChange) {
-    return html`
-      <button
-        class="button danger-button small"
-        @click="${() => this.updateResult(false, [item])}"
-        title="${this.getRejectSuggestionMsg(item)}"
-      >
-        <cross-icon></cross-icon>
-      </button>
-    `
+    let text
+    switch (item.type) {
+      case ChangeType.CHANGED:
+        // replace espace and espace insecable with a visible character
+        text =
+          item.oldValue == ""
+            ? msg("Empty")
+            : item.oldValue!.replace(/( |\u00A0)/g, "␣").replace("\n", "↩︎")
+        break
+      case ChangeType.ADDED:
+        text = html`<i>${msg("Empty")}</i>`
+        break
+      case ChangeType.REMOVED:
+        text = item.value!.replace(/( |\u00A0)/g, "␣").replace("\n", "↩︎")
+        break
+    }
+    return html`<button
+      class="suggestion-button button light-red-button small"
+      @click="${() => this.updateResult(false, [item])}"
+    >
+      <span class="pre-wrap">${text}</span>
+    </button>`
   }
 
   /**
@@ -438,94 +509,35 @@ export class TextCorrector extends LitElement {
    * @param {string} [params.newValueClass] - The class for the new value.
    * @returns {TemplateResult} The rendered summary item.
    * */
-  renderSummaryItemContent({
-    item,
-    oldValue,
-    newValue,
-    oldValueClass,
-    newValueClass,
-  }: {
-    item: IndexedGroupedChange
-    oldValue: string
-    newValue: string
-    oldValueClass?: string
-    newValueClass?: string
-  }) {
+  renderSummaryItemContent(item: IndexedGroupedChange) {
     return html`
-      <div class="summary-item-content">
-        <div class="summary-item-content">
-          <span class="code ${oldValueClass}">${oldValue}</span>
-          <div class="summary-item-content">→</div>
-        </div>
-        <div class="summary-item-content">
-          <span class="code ${newValueClass}">${newValue}</span>
-        </div>
-        <div class="summary-item-actions">
-          ${this.renderAcceptSuggestionButton(item)} ${this.renderRejectSuggestionButton(item)}
-        </div>
+      <div class="summary-item">
+        ${this.renderRejectSuggestionButton(item)} ${this.renderAcceptSuggestionButton(item)}
       </div>
     `
-  }
-
-  /**
-   * Renders the content of a summary item.
-   * @param {IndexedGroupedChange} item - The summary item to render the content for.
-   * @returns {TemplateResult | undefined} The rendered content or undefined if the item type is not recognized.
-   */
-  renderSummaryItemContentPerType(item: IndexedGroupedChange) {
-    switch (item.type) {
-      case ChangeType.CHANGED:
-        const oldValue = item.oldValue!
-        const newValue = item.newValue!
-        return this.renderSummaryItemContent({
-          item,
-          oldValue,
-          newValue,
-          oldValueClass: "deletion",
-          newValueClass: "addition",
-        })
-      case ChangeType.REMOVED:
-        return this.renderSummaryItemContent({
-          item,
-          oldValue: item.value!,
-          newValue: item.value!,
-          oldValueClass: "deletion no-text-decoration",
-          newValueClass: "addition line-through",
-        })
-      case ChangeType.ADDED:
-        return this.renderSummaryItemContent({
-          item,
-          oldValue: "",
-          newValue: item.value!,
-          oldValueClass: "deletion",
-          newValueClass: "addition",
-        })
-      default:
-        return nothing
-    }
   }
 
   /**
    * Renders the content of the summary.
    * @returns {TemplateResult} The rendered summary content.
    */
-  renderSummaryContent() {
+  renderSummary() {
+    if (this.groupedChanges.length === 0) {
+      return nothing
+    }
     return html`<div class="summary">
-      <ul>
+      <div class="summary-item-wrapper">
+        <div class="summary-item">
+          <div class="suggestion-button-title">${msg("Original")}</div>
+          <div class="suggestion-button-title">${msg("Suggested fix")}</div>
+        </div>
+
         ${this.groupedChanges.map((item) => {
-          const content = this.renderSummaryItemContentPerType(item)
-          if (!content) {
-            return nothing
-          }
-          return html`
-            <li class="summary-item">
-              <div class="summary-item-content wrappable">${content}</div>
-            </li>
-          `
+          return this.renderSummaryItemContent(item)
         })}
-      </ul>
+      </div>
       ${this.renderBatchSuggestionsButtons()}
-    </div> `
+    </div>`
   }
 
   /**
@@ -537,7 +549,7 @@ export class TextCorrector extends LitElement {
       return nothing
     }
     return html`
-      <div class="buttons-row" style="margin-left: 40px">
+      <div class="batch-buttons buttons-row">
         <button
           class="button danger-button small with-icon"
           @click="${() => this.updateBatchResult(false)}"
@@ -555,17 +567,6 @@ export class TextCorrector extends LitElement {
         </button>
       </div>
     `
-  }
-
-  /**
-   * Renders the summary of the component.
-   * @returns {TemplateResult | typeof nothing} The rendered summary or nothing if there are no grouped changes.
-   */
-  renderSummary() {
-    if (this.groupedChanges.length === 0) {
-      return nothing
-    }
-    return html` <div class="summary">${this.renderSummaryContent()}</div> `
   }
 
   /**
@@ -720,8 +721,8 @@ export class TextCorrector extends LitElement {
         <h2>${msg("Preview")}</h2>
         <p class="text-content">${this.renderHighlightedDiff()}</p>
       </div>
-      <div class="text-section">
-        <h2>${msg("Edit text")}</h2>
+      <div class="">
+        <h2>${msg("Edit ingredients list")}</h2>
         <textarea
           class="textarea"
           .value=${this.value}
@@ -749,9 +750,9 @@ export class TextCorrector extends LitElement {
     </button>`
     if (this.isEditMode) {
       return html`
-        <div class="buttons-row can-wrap">
+        <div class="submit-buttons buttons-row can-wrap">
           <button class="button cappucino-button with-icon" @click=${this.cancelEditMode}>
-            <span>${msg("Reset edit")}</span><cross-icon></cross-icon>
+            <span>${msg("Cancel")}</span><cross-icon></cross-icon>
           </button>
           ${successButton}
         </div>
@@ -759,16 +760,26 @@ export class TextCorrector extends LitElement {
     }
 
     return html`
-      <div class="buttons-row can-wrap">
-        <button class="button cappucino-button with-icon" @click=${this.enterEditMode}>
-          <span>${msg("Edit")}</span><edit-icon></edit-icon>
-        </button>
-
+      <div class="submit-buttons buttons-row can-wrap">
         <button class="button white-button with-icon" @click=${this.skip}>
           <span>${msg("Skip")}</span><skip-icon></skip-icon>
         </button>
         ${successButton}
       </div>
+    `
+  }
+
+  renderSpellCheck() {
+    return html`
+      <div class="text-section">
+        <p class="text">${this.renderSpellCheckDiff()}</p>
+        <div style="display: flex; justify-content: flex-end;">
+          <button class="button cappucino-button with-icon" @click=${this.enterEditMode}>
+            <span>${msg("Edit")}</span><edit-icon></edit-icon>
+          </button>
+        </div>
+      </div>
+      ${this.renderSummary()}
     `
   }
   /**
@@ -777,17 +788,8 @@ export class TextCorrector extends LitElement {
    */
   override render() {
     return html`
-      <div>
-        ${this.isEditMode
-          ? this.renderEditTextarea()
-          : html`
-              <div class="text-section">
-                <p class="text-content">${this.renderSpellCheckDiff()}</p>
-              </div>
-              <div class="text-section">${this.renderSummary()}</div>
-            `}
-        ${this.renderButtons()}
-      </div>
+      <div>${this.isEditMode ? this.renderEditTextarea() : this.renderSpellCheck()}</div>
+      <div class="submit-buttons-wrapper">${this.renderButtons()}</div>
     `
   }
 }
