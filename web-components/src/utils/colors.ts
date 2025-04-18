@@ -9,6 +9,8 @@ export const GREY = "#ccc"
 export const BLUE = "#0064c8"
 export const SUCCESS = "#8BC34A"
 export const DANGER = "#FF5252"
+export const LIGHT_RED = "#ffcccc"
+export const LIGHT_GREEN = "#ccffcc"
 
 export const SAFE_DARKER_WHITE = unsafeCSS(DARKER_WHITE)
 export const SAFE_LIGHT_BLACK = unsafeCSS(LIGHT_BLACK)
@@ -19,3 +21,5 @@ export const SAFE_GREY = unsafeCSS(GREY)
 export const SAFE_BLUE = unsafeCSS(BLUE)
 export const SAFE_SUCCESS = unsafeCSS(SUCCESS)
 export const SAFE_DANGER = unsafeCSS(DANGER)
+export const SAFE_LIGHT_RED = unsafeCSS(LIGHT_RED)
+export const SAFE_LIGHT_GREEN = unsafeCSS(LIGHT_GREEN)
