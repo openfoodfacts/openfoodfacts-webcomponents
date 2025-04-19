@@ -7,9 +7,9 @@
     <script type="module" src="off-webcomponents.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
-  <body style="background: #f2f2f2">
-    <h1>List of all available components</h1>
-    <h2>Robotoff Question</h2>
+  <body style="background: #f2f2f2; width: 100%; padding: 0; margin: 0">
+    <h1 style="margin: 1.5rem">List of all available components</h1>
+    <h2 style="margin: 1.5rem">Robotoff Question</h2>
 
     <div>
       <off-webcomponents-configuration
@@ -19,6 +19,11 @@
           "apiUrl": "https://robotoff.openfoodfacts.net/api/v1",
           "imgUrl": "https://images.openfoodfacts.net/images/products"
         }'
+        ,
+        folksonomy-configuration='{
+          "apiUrl": "https://api.folksonomy.openfoodfacts.org"
+        }'
+        ,
       />
     </div>
     <div>
@@ -76,6 +81,10 @@
         style="display: flex; margin: 2rem; margin-left: 10px; margin-right: 40px; max-width: 300px"
       >
         <barcode-scanner id="barcode-scanner"></barcode-scanner>
+      </div>
+
+      <div style="display: flex">
+        <folksonomy-editor product-code="6111035000430" page-type="view" />
       </div>
     </div>
   </body>

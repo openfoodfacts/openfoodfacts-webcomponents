@@ -1,13 +1,16 @@
 import { robotoffConfiguration } from "../../signals/robotoff"
+import { folksonomyConfiguration } from "../../signals/folksonomy"
 import {
   DEFAULT_ASSETS_IMAGES_PATH,
   DEFAULT_LANGUAGE_CODE,
   DEFAULT_ROBOTOFF_CONFIGURATION,
+  DEFAULT_FOLKSONOMY_CONFIGURATION,
 } from "../../constants"
 import { LitElement } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { OffWebcomponentConfigurationOptions } from "../../types"
 import { RobotoffConfigurationOptions } from "../../types/robotoff"
+import { FolksonomyConfigurationOptions } from "../../types/folksonomy"
 import { setLocale } from "../../localization"
 import { assetsImagesPath } from "../../signals/app"
 
@@ -47,11 +50,21 @@ const CONFIGURATION_PROPERTIES: Record<
       assetsImagesPath.set(value)
     },
   },
+  "folksonomy-configuration": {
+    propertyName: "folksonomyConfiguration",
+    converter: (value: string) => {
+      const configuration = JSON.parse(value)
+      return { ...DEFAULT_FOLKSONOMY_CONFIGURATION, ...configuration }
+    },
+    fn: (value: FolksonomyConfigurationOptions) => {
+      // Set the folksonomy configuration
+      folksonomyConfiguration.set(value)
+    },
+  },
 }
 
 /**
- * Robotoff configuration element.
- * It is used to configure the robotoff parameters.
+ * It is used to configure the OFF web components parmeters.
  * @element off-webcomponents-configuration
  */
 @customElement("off-webcomponents-configuration")
@@ -78,6 +91,15 @@ export class OffWebcomponentsConfiguration extends LitElement {
    */
   @property({ type: String, attribute: "assets-images-path" })
   assetsImagesPath?: string = DEFAULT_ASSETS_IMAGES_PATH
+
+  /**
+   * The folksonomy configuration object.
+   * @type {FolksonomyConfigurationOptions}
+   */
+  @property({ type: Object, attribute: "folksonomy-configuration" })
+  folksonomyConfiguration: FolksonomyConfigurationOptions = {
+    ...DEFAULT_FOLKSONOMY_CONFIGURATION,
+  }
 
   override attributeChangedCallback(name: string, oldval: string, newval: string) {
     super.attributeChangedCallback(name, oldval, newval)

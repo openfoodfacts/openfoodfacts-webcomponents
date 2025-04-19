@@ -17,6 +17,7 @@ A set of web components for Open Food Facts to help build edition interfaces
 - Donation banner
 - Mobile badges
 - Knowledge Panels
+- Folksonomy Editor
 
 ## Design
 
