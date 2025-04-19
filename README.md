@@ -20,7 +20,7 @@ A set of web components for Open Food Facts to help build edition interfaces
 
 ## Design
 
-- openfoodfacts-webcomo is a set of web components for Open Food Facts to help build interfaces (view and edits). The idea is to reach feature parity on the essential stuff with the main frontend to eventually replace it, with a great responsive UI (80%+ of our traffic is mobile web).
+- openfoodfacts-webcomponents is a set of web components for Open Food Facts to help build interfaces (view and edits). The idea is to reach feature parity on the essential stuff with the main frontend to eventually replace it, with a great responsive UI (80%+ of our traffic is mobile web).
 - We currently don’t have any real visual mockup of it, nor “artistic direction” so for the time being, we're copying key features from the current frontend, improving them whenever we can.
 - [![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?logo=figma&logoColor=white) Design file for the current website](https://www.figma.com/design/Qg9URUyrjHgYmnDHXRsTTB/Current-Website-design?m=auto&t=RokuCr1uXrGFMhTB-6)
 - [![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?logo=figma&logoColor=white) Design file for Web Components](https://www.figma.com/design/X8nBndPdBfikAcevBiBxKo/Web-Components?node-id=0-1&p=f&t=A7yCwKqyW9klqYq8-0)
