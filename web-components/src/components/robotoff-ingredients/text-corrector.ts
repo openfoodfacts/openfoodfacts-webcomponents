@@ -9,14 +9,15 @@ import "../icons/check"
 import "../icons/cross"
 import "../icons/skip"
 import "../icons/edit"
+import "../shared/info-button"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { TEXTAREA } from "../../styles/form"
 import { POPOVER } from "../../styles/popover"
 import {
-  SAFE_LIGHT_BLACK,
   SAFE_LIGHT_GREEN,
   SAFE_LIGHT_GREY,
   SAFE_LIGHT_RED,
+  SAFE_LIGHT_BLACK,
 } from "../../utils/colors"
 import { clickOutside } from "../../directives/click-outside"
 import {
@@ -25,6 +26,7 @@ import {
   IndexedGroupedChange,
   TextCorrectorEventDetail,
 } from "../../types/ingredients"
+import { RELATIVE } from "../../styles/utils"
 
 /**
  * TextCorrector component
@@ -45,6 +47,7 @@ export class TextCorrector extends LitElement {
     BASE,
     TEXTAREA,
     POPOVER,
+    RELATIVE,
     getButtonClasses([
       ButtonType.Cappucino,
       ButtonType.Success,
@@ -133,8 +136,9 @@ export class TextCorrector extends LitElement {
         white-space: pre-wrap;
         font-family: monospace;
       }
-      .popover {
-        width: 86px;
+      .info-popover {
+        z-index: 2;
+        min-width: 200px;
       }
 
       .suggestion-button {
@@ -154,6 +158,17 @@ export class TextCorrector extends LitElement {
       .batch-buttons {
         display: none;
         margin-top: 1rem;
+      }
+
+      .empty-suggestion {
+        color: ${SAFE_LIGHT_BLACK};
+        font-weight: bold;
+      }
+
+      .info-button-wrapper {
+        position: absolute;
+        top: -5px;
+        right: 0;
       }
     `,
   ]
@@ -213,12 +228,8 @@ export class TextCorrector extends LitElement {
   @state()
   isEditMode = false
 
-  /**
-   * The grouped change currently displayed in the popover.
-   * @type {IndexedGroupedChange | undefined}
-   */
   @state()
-  groupedChangesPopover?: IndexedGroupedChange = undefined
+  showInfoPopover: boolean = false
 
   /**
    * Checks if the confirm button should be disabled.
@@ -242,7 +253,6 @@ export class TextCorrector extends LitElement {
   updateValues() {
     this.value = this.original
     this.textToCompare = this.correction
-    this.groupedChangesPopover = undefined
   }
 
   /**
@@ -335,44 +345,6 @@ export class TextCorrector extends LitElement {
     this.computeGroupedChanges()
     return this.diffResult
   }
-  /**
-   * Renders the suggestion popover for a given part of the diff.
-   * @param {IndexedChange} part - The part of the diff to render the popover for.
-   * @returns {TemplateResult | typeof nothing} The rendered popover or nothing if no popover should be shown.
-   */
-  renderSuggestionPopover(part: IndexedChange) {
-    const self = this
-    if (!this.groupedChangesPopover || part.index !== this.groupedChangesPopover.indexes[0])
-      return nothing
-    // Be careful, do not add spaces before and after the popover, it will break parent element's layout
-    return html`<div class="popover" ${clickOutside(() => self.hideSuggestionPopover())}>
-      <div class="popover-content">
-        <div class="buttons-row">
-          ${this.renderRejectSuggestionButton(this.groupedChangesPopover)}
-          ${this.renderAcceptSuggestionButton(this.groupedChangesPopover)}
-        </div>
-      </div>
-    </div>`
-  }
-
-  /**
-   * Hides the suggestion popover.
-   */
-  hideSuggestionPopover() {
-    this.groupedChangesPopover = undefined
-  }
-
-  /**
-   * Shows the suggestion popover for a given part of the diff.
-   * @param {IndexedChange} indexedChange - The part of the diff to show the popover for.
-   */
-  showSuggestionPopover(indexedChange: IndexedChange) {
-    const groupedChange = this.groupedChanges.find((change) =>
-      change.indexes.includes(indexedChange.index)
-    )
-    if (!groupedChange) return
-    this.groupedChangesPopover = groupedChange
-  }
 
   /**
    * Renders the highlighted diff between the original and corrected text.
@@ -381,13 +353,9 @@ export class TextCorrector extends LitElement {
   renderHighlightedDiff() {
     return html`${this.diffResult.map((part) => {
       if (part.added) {
-        return html`<span class="addition popover-wrapper"
-          >${part.value}${this.renderSuggestionPopover(part)}</span
-        >`
+        return html`<span class="addition popover-wrapper">${part.value}</span>`
       } else if (part.removed) {
-        return html`<span class="deletion line-through popover"
-          >${part.value}${this.renderSuggestionPopover(part)}</span
-        >`
+        return html`<span class="deletion line-through popover">${part.value}</span>`
       } else {
         return html`<span>${part.value}</span>`
       }
@@ -438,6 +406,18 @@ export class TextCorrector extends LitElement {
     return ""
   }
 
+  // Renders the empty suggestion when value is empty
+  renderEmptySuggestion() {
+    return nothing
+  }
+
+  cleanSuggestion(suggestion: string) {
+    if (!suggestion) {
+      return this.renderEmptySuggestion()
+    }
+    return suggestion.replace(/( |\u00A0)/g, "␣").replace("\n", "↩︎")
+  }
+
   /**
    * Renders the button for accepting a suggestion.
    * @param {IndexedGroupedChange} item - The suggestion to render the button for.
@@ -447,16 +427,13 @@ export class TextCorrector extends LitElement {
     let text
     switch (item.type) {
       case ChangeType.CHANGED:
-        text =
-          item.newValue == ""
-            ? msg("Empty")
-            : item.newValue!.replace(/( |\u00A0)/g, "␣").replace("\n", "↩︎")
+        text = html`${this.cleanSuggestion(item.newValue!)}`
         break
       case ChangeType.ADDED:
-        text = item.value!
+        text = html`${this.cleanSuggestion(item.value!)}`
         break
       case ChangeType.REMOVED:
-        text = html`<i>${msg("Empty")}</i>`
+        text = this.renderEmptySuggestion()
         break
     }
     return html`
@@ -479,16 +456,13 @@ export class TextCorrector extends LitElement {
     switch (item.type) {
       case ChangeType.CHANGED:
         // replace espace and espace insecable with a visible character
-        text =
-          item.oldValue == ""
-            ? msg("Empty")
-            : item.oldValue!.replace(/( |\u00A0)/g, "␣").replace("\n", "↩︎")
+        text = html`${this.cleanSuggestion(item.oldValue!)}`
         break
       case ChangeType.ADDED:
-        text = html`<i>${msg("Empty")}</i>`
+        text = this.renderEmptySuggestion()
         break
       case ChangeType.REMOVED:
-        text = item.value!.replace(/( |\u00A0)/g, "␣").replace("\n", "↩︎")
+        text = this.cleanSuggestion(item.value!)
         break
     }
     return html`<button
@@ -517,6 +491,14 @@ export class TextCorrector extends LitElement {
     `
   }
 
+  toggleInfoPopover() {
+    this.showInfoPopover = !this.showInfoPopover
+  }
+
+  closeInfoPopover() {
+    this.showInfoPopover = false
+  }
+
   /**
    * Renders the content of the summary.
    * @returns {TemplateResult} The rendered summary content.
@@ -526,6 +508,12 @@ export class TextCorrector extends LitElement {
       return nothing
     }
     return html`<div class="summary">
+      <div class="relative">
+        <div class="info-button-wrapper">
+          <info-button @click=${this.toggleInfoPopover}></info-button>
+          ${this.renderInfoPopover()}
+        </div>
+      </div>
       <div class="summary-item-wrapper">
         <div class="summary-item">
           <div class="suggestion-button-title">${msg("Original")}</div>
@@ -790,6 +778,32 @@ export class TextCorrector extends LitElement {
     return html`
       <div>${this.isEditMode ? this.renderEditTextarea() : this.renderSpellCheck()}</div>
       <div class="submit-buttons-wrapper">${this.renderButtons()}</div>
+    `
+  }
+
+  /**
+   * Renders the info popover.
+   * @returns {TemplateResult} The rendered info popover.
+   */
+  renderInfoPopover() {
+    if (!this.showInfoPopover) {
+      return nothing
+    }
+    return html`
+      <div class="popover popover-left info-popover" ${clickOutside(() => this.closeInfoPopover())}>
+        <div class="popover-content">
+          <p>
+            ${msg(
+              html`This tool allows you to correct the ingredients list. You can add, remove or edit
+                ingredients list.
+                <br />
+                This character <span class="highlight">␣</span> represents a space.
+                <br />
+                This character <span class="highlight">↩︎</span> represents a line break. `
+            )}
+          </p>
+        </div>
+      </div>
     `
   }
 }

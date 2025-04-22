@@ -88,14 +88,24 @@ export const POPOVER = css`
   }
 
   .popover.popover-left {
-    left: 0;
-    transform: none;
+    left: auto;
+    right: 100%;
+    transform: translateY(-50%);
+    top: 50%;
+    bottom: auto;
+    margin-top: 0;
+    margin-right: 1rem;
   }
 
   .popover.popover-left::before,
   .popover.popover-left::after {
-    left: 20px;
-    transform: none;
+    left: 100%;
+    right: auto;
+    transform: translateY(-50%);
+    top: 50%;
+    bottom: auto;
+    border-width: 8px 0 8px 8px;
+    border-color: transparent transparent transparent ${SAFE_GREY};
   }
 
   .popover.popover-right {

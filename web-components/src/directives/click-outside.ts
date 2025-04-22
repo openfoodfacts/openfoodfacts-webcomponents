@@ -11,6 +11,7 @@ import { AsyncDirective } from "lit/async-directive.js"
 class ClickOutsideDirective extends AsyncDirective {
   private element: HTMLElement | null = null
   private callback: (() => void) | null = null
+  private clickIsTriggered: boolean = false
 
   /**
    * Initializes the ClickOutsideDirective.
@@ -20,6 +21,7 @@ class ClickOutsideDirective extends AsyncDirective {
     super(part)
     this.element = part.element as HTMLElement
     this.addEventListener()
+    this.clickIsTriggered = false
   }
 
   /**
@@ -44,6 +46,15 @@ class ClickOutsideDirective extends AsyncDirective {
   }
 
   /**
+   * Catches the event click from the element.
+   * Use this trick because element.contains doesn't work with shadow dom
+   * @returns {void}
+   */
+  catchEventClickFromElement() {
+    this.clickIsTriggered = true
+  }
+
+  /**
    * Cleans up the directive when it is disconnected.
    */
   override disconnected() {
@@ -56,6 +67,7 @@ class ClickOutsideDirective extends AsyncDirective {
   private addEventListener() {
     // Add a small delay to ensure the event listener is added after the initial render
     setTimeout(() => {
+      this.element!.addEventListener("click", () => this.catchEventClickFromElement())
       document.addEventListener("click", this.handleClick)
     }, 0)
   }
@@ -64,6 +76,7 @@ class ClickOutsideDirective extends AsyncDirective {
    * Removes the event listener that detects clicks outside the element.
    */
   private removeEventListener() {
+    this.element!.removeEventListener("click", () => this.catchEventClickFromElement)
     document.removeEventListener("click", this.handleClick)
   }
 
@@ -71,10 +84,13 @@ class ClickOutsideDirective extends AsyncDirective {
    * Handles the click event to detect clicks outside the element.
    * @param {MouseEvent} event - The mouse event.
    */
-  private handleClick = (event: MouseEvent) => {
-    if (this.element && !this.element.contains(event.target as Node)) {
-      this.callback?.()
+  private handleClick = () => {
+    // Use this trick because element.contains doesn't work with shadow dom
+    if (this.clickIsTriggered) {
+      this.clickIsTriggered = false
+      return
     }
+    this.callback?.()
   }
 }
 
