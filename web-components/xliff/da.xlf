@@ -100,19 +100,19 @@
       </trans-unit>
       <trans-unit id="sb3bdd638a58d30f4">
         <source>engage a community of committed citizens,</source>
-        <target state="needs-translation">engage a community of committed citizens,</target>
+        <target state="translated">engagere et fællesskab af engagerede borgere,</target>
       </trans-unit>
       <trans-unit id="s100c4928cc74642a">
         <source>support the advancement of public health research.</source>
-        <target state="needs-translation">support the advancement of public health research.</target>
+        <target state="translated">støtte forskning inden for folkesundhed.</target>
       </trans-unit>
       <trans-unit id="s6d7b6cdedaadfb6e">
         <source>Each donation counts! We appreciate your support in bringing further food transparency in the world.</source>
-        <target state="needs-translation">Each donation counts! We appreciate your support in bringing further food transparency in the world.</target>
+        <target state="translated">Hver donation tæller! Vi sætter pris på din støtte til at bringe yderligere fødevaregennemsigtighed i verden.</target>
       </trans-unit>
       <trans-unit id="s6306a31415aea913">
         <source>I SUPPORT</source>
-        <target state="needs-translation">I SUPPORT</target>
+        <target state="translated">JEG STØTTER</target>
       </trans-unit>
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
