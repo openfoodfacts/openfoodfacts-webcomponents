@@ -123,10 +123,10 @@ export class FolksonomyEditor extends LitElement {
   properties: Array<{ key: string; value: string; version: number }> = []
 
   @state()
-  private sortColumn: 'key' | 'value' = 'key'
+  private sortColumn: "key" | "value" = "key"
 
   @state()
-  private sortDirection: 'asc' | 'desc' = 'asc'
+  private sortDirection: "asc" | "desc" = "asc"
 
   private handleRowDelete(event: CustomEvent) {
     const { key } = event.detail
@@ -151,23 +151,23 @@ export class FolksonomyEditor extends LitElement {
     this.sortProperties()
   }
 
-  private handleSort(column: 'key' | 'value') {
+  private handleSort(column: "key" | "value") {
     if (this.sortColumn === column) {
-      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc'
+      this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc"
     } else {
       this.sortColumn = column
-      this.sortDirection = 'asc'
+      this.sortDirection = "asc"
     }
     this.sortProperties()
   }
 
   private sortProperties() {
     const column = this.sortColumn
-    const direction = this.sortDirection === 'asc' ? 1 : -1
+    const direction = this.sortDirection === "asc" ? 1 : -1
     this.properties = [...this.properties].sort((a, b) => {
       // Use localeCompare for better, locale-aware sorting
-      const valueA = a[column]?.toString().toLowerCase() ?? ''
-      const valueB = b[column]?.toString().toLowerCase() ?? ''
+      const valueA = a[column]?.toString().toLowerCase() ?? ""
+      const valueB = b[column]?.toString().toLowerCase() ?? ""
       return valueA.localeCompare(valueB, undefined, { numeric: true }) * direction
     })
   }
@@ -203,12 +203,23 @@ export class FolksonomyEditor extends LitElement {
     }
   }
 
-  private renderSortIcon(column: 'key' | 'value') {
+  private renderSortIcon(column: "key" | "value") {
     const isActive = this.sortColumn === column
     return html`
       <span class="sort-icon">
-        <svg class="sort-arrow ${isActive && this.sortDirection === 'asc' ? 'active' : ''}" viewBox="0 0 10 6"><polygon points="5,0 10,6 0,6"/></svg>
-        <svg class="sort-arrow ${isActive && this.sortDirection === 'desc' ? 'active' : ''}" viewBox="0 0 10 6" style="transform:rotate(180deg)"><polygon points="5,0 10,6 0,6"/></svg>
+        <svg
+          class="sort-arrow ${isActive && this.sortDirection === "asc" ? "active" : ""}"
+          viewBox="0 0 10 6"
+        >
+          <polygon points="5,0 10,6 0,6" />
+        </svg>
+        <svg
+          class="sort-arrow ${isActive && this.sortDirection === "desc" ? "active" : ""}"
+          viewBox="0 0 10 6"
+          style="transform:rotate(180deg)"
+        >
+          <polygon points="5,0 10,6 0,6" />
+        </svg>
       </span>
     `
   }
@@ -218,23 +229,17 @@ export class FolksonomyEditor extends LitElement {
       <form id="free_properties_form">
         <table>
           <tr>
-            <th 
-              @click=${() => this.handleSort('key')}
-              class=${`sortable ${this.sortColumn === 'key' ? `sort-${this.sortDirection}` : ''}`}
+            <th
+              @click=${() => this.handleSort("key")}
+              class=${`sortable ${this.sortColumn === "key" ? `sort-${this.sortDirection}` : ""}`}
             >
-              <span class="sort-header">
-                ${msg("Property")}
-                ${this.renderSortIcon('key')}
-              </span>
+              <span class="sort-header"> ${msg("Property")} ${this.renderSortIcon("key")} </span>
             </th>
-            <th 
-              @click=${() => this.handleSort('value')}
-              class=${`sortable ${this.sortColumn === 'value' ? `sort-${this.sortDirection}` : ''}`}
+            <th
+              @click=${() => this.handleSort("value")}
+              class=${`sortable ${this.sortColumn === "value" ? `sort-${this.sortDirection}` : ""}`}
             >
-              <span class="sort-header">
-                ${msg("Value")}
-                ${this.renderSortIcon('value')}
-              </span>
+              <span class="sort-header"> ${msg("Value")} ${this.renderSortIcon("value")} </span>
             </th>
             <th>${msg("Actions")}</th>
           </tr>

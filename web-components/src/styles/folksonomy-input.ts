@@ -1,4 +1,4 @@
-import { css } from "lit";
+import { css } from "lit"
 
 export const FOLKSONOMY_INPUT = css`
   input[type="text"] {
@@ -9,7 +9,7 @@ export const FOLKSONOMY_INPUT = css`
     box-sizing: border-box;
     font-size: 0.9rem;
     height: 2.5rem;
-    background-color:rgb(252, 251, 251);
+    background-color: rgb(252, 251, 251);
   }
 
   input[type="text"]:focus {
@@ -17,4 +17,4 @@ export const FOLKSONOMY_INPUT = css`
     border-color: #007bff;
     box-shadow: 0 0 3px rgba(0, 123, 255, 0.5);
   }
-`;
+`

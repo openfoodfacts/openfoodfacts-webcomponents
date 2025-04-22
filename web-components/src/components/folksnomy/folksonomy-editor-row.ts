@@ -14,101 +14,101 @@ import { FOLKSONOMY_INPUT } from "../../styles/folksonomy-input"
  */
 @customElement("folksonomy-editor-row")
 export class FolksonomyEditorRow extends LitElement {
+  @state() private keyInput = ""
+  @state() private valueInput = ""
+  @state() private keySuggestions: string[] = []
+  @state() private valueSuggestions: string[] = []
+  @state() private tempValue = ""
 
-  @state() private keyInput = "";
-  @state() private valueInput = "";
-  @state() private keySuggestions: string[] = [];
-  @state() private valueSuggestions: string[] = [];
-  @state() private tempValue = "";
+  @property({ type: String, attribute: "product-code" }) productCode = ""
+  @property({ type: Number }) version = 1
+  @property({ type: Number, attribute: "row-number" }) rowNumber = 1
+  @property({ type: String }) key = ""
+  @property({ type: String }) value = ""
+  @property({ type: String, attribute: "page-type" }) pageType = "view"
+  @property({ type: Boolean }) empty = false
+  @state() editable = false
 
-  @property({ type: String, attribute: "product-code" }) productCode = "";
-  @property({ type: Number }) version = 1;
-  @property({ type: Number, attribute: "row-number" }) rowNumber = 1;
-  @property({ type: String }) key = "";
-  @property({ type: String }) value = "";
-  @property({ type: String, attribute: "page-type" }) pageType = "view";
-  @property({ type: Boolean }) empty = false;
-  @state() editable = false;
-
-  private originalKeySuggestions: string[] = [];
-  private originalValueSuggestions: string[] = [];
+  private originalKeySuggestions: string[] = []
+  private originalValueSuggestions: string[] = []
 
   override connectedCallback() {
-    super.connectedCallback();
+    super.connectedCallback()
     if (this.pageType === "edit") {
-      this.editable = true;
-      this.tempValue = this.value;
+      this.editable = true
+      this.tempValue = this.value
     }
 
-    folksonomyApi.fetchKeys()
-      .then(keys => {
-        this.originalKeySuggestions = keys.map(key => key.k);
-        this.keySuggestions = [...this.originalKeySuggestions];
+    folksonomyApi
+      .fetchKeys()
+      .then((keys) => {
+        this.originalKeySuggestions = keys.map((key) => key.k)
+        this.keySuggestions = [...this.originalKeySuggestions]
       })
-      .catch(error => console.error("Error fetching keys:", error));
+      .catch((error) => console.error("Error fetching keys:", error))
   }
 
   private async fetchValuesForKey(key: string) {
     try {
-      const values = await folksonomyApi.fetchValues(key);
-      this.originalValueSuggestions = values.map(value => value.v);
-      this.valueSuggestions = [...this.originalValueSuggestions];
+      const values = await folksonomyApi.fetchValues(key)
+      this.originalValueSuggestions = values.map((value) => value.v)
+      this.valueSuggestions = [...this.originalValueSuggestions]
     } catch (error) {
-      console.error("Error fetching values for key:", error);
+      console.error("Error fetching values for key:", error)
     }
   }
 
   private onKeyInput(e: Event) {
-    const value = (e.target as HTMLInputElement).value;
-    this.keyInput = value;
-    this.key = value;
+    const value = (e.target as HTMLInputElement).value
+    this.keyInput = value
+    this.key = value
 
     if (value) {
-      this.keySuggestions = this.originalKeySuggestions.filter(k =>
+      this.keySuggestions = this.originalKeySuggestions.filter((k) =>
         k.toLowerCase().includes(value.toLowerCase())
-      );
+      )
 
       if (this.keySuggestions.length === 1 && this.keySuggestions[0] === value) {
-        this.fetchValuesForKey(value);
+        this.fetchValuesForKey(value)
       }
     } else {
-      this.keySuggestions = [...this.originalKeySuggestions];
+      this.keySuggestions = [...this.originalKeySuggestions]
     }
   }
 
   private onValueInput(e: Event) {
-    const value = (e.target as HTMLInputElement).value;
-    this.valueInput = value;
-    this.value = value;
+    const value = (e.target as HTMLInputElement).value
+    this.valueInput = value
+    this.value = value
 
     if (value) {
-      this.valueSuggestions = this.originalValueSuggestions.filter(v =>
+      this.valueSuggestions = this.originalValueSuggestions.filter((v) =>
         v.toLowerCase().includes(value.toLowerCase())
-      );
+      )
 
       if (this.valueSuggestions.length === 1 && this.valueSuggestions[0] === value) {
-        this.fetchValuesForKey(this.keyInput);
+        this.fetchValuesForKey(this.keyInput)
       }
     } else {
       // Show all values in the dropdown when input is empty
-      this.valueSuggestions = [...this.originalValueSuggestions];
+      this.valueSuggestions = [...this.originalValueSuggestions]
     }
   }
 
   private selectKeySuggestion(suggestion: string) {
-    this.keyInput = suggestion;
-    this.key = suggestion;
-    this.fetchValuesForKey(suggestion);
+    this.keyInput = suggestion
+    this.key = suggestion
+    this.fetchValuesForKey(suggestion)
   }
 
   private selectValueSuggestion(suggestion: string) {
-    this.valueInput = suggestion;
-    this.value = suggestion;
+    this.valueInput = suggestion
+    this.value = suggestion
   }
 
   private handleEdit() {
-    this.editable = true;
-    this.tempValue = this.value;
+    this.editable = true
+    this.tempValue = this.value
   }
 
   private async handleSave() {
@@ -118,8 +118,8 @@ export class FolksonomyEditorRow extends LitElement {
         this.key,
         this.tempValue,
         this.version
-      );
-      this.editable = false;
+      )
+      this.editable = false
 
       this.dispatchEvent(
         new CustomEvent("update-row", {
@@ -131,36 +131,36 @@ export class FolksonomyEditorRow extends LitElement {
           bubbles: true,
           composed: true,
         })
-      );
+      )
     } catch (error) {
-      console.error("Failed to update property", error);
+      console.error("Failed to update property", error)
     }
   }
 
   private handleCancel() {
-    this.editable = false;
-    this.tempValue = this.value;
+    this.editable = false
+    this.tempValue = this.value
   }
 
   private async handleDelete() {
-    const deleteModal = document.createElement("delete-modal");
+    const deleteModal = document.createElement("delete-modal")
     deleteModal.addEventListener("confirm-delete", async () => {
       try {
-        await folksonomyApi.deleteProductProperty(this.productCode, this.key, this.version);
+        await folksonomyApi.deleteProductProperty(this.productCode, this.key, this.version)
         this.dispatchEvent(
           new CustomEvent("delete-row", {
             detail: { key: this.key },
             bubbles: true,
             composed: true,
           })
-        );
+        )
       } catch (error) {
-        console.error("Failed to delete property", error);
+        console.error("Failed to delete property", error)
       } finally {
-        deleteModal.remove();
+        deleteModal.remove()
       }
-    });
-    document.body.appendChild(deleteModal);
+    })
+    document.body.appendChild(deleteModal)
   }
 
   private async addCustomKeyAndValue() {
@@ -171,24 +171,24 @@ export class FolksonomyEditorRow extends LitElement {
           this.keyInput,
           this.valueInput,
           this.version
-        );
+        )
         this.dispatchEvent(
           new CustomEvent("add-row", {
             detail: { key: newProperty.key, value: newProperty.value },
             bubbles: true,
             composed: true,
           })
-        );
-        this.keyInput = "";
-        this.valueInput = "";
+        )
+        this.keyInput = ""
+        this.valueInput = ""
       } catch (error) {
-        console.error("Failed to add custom key and value", error);
+        console.error("Failed to add custom key and value", error)
       }
     }
   }
 
   private handleInputChange(e: Event) {
-    this.tempValue = (e.target as HTMLInputElement).value;
+    this.tempValue = (e.target as HTMLInputElement).value
   }
 
   static override styles = [
@@ -230,7 +230,6 @@ export class FolksonomyEditorRow extends LitElement {
         text-overflow: ellipsis;
         white-space: nowrap;
       }
-
 
       .property-link {
         color: black;
@@ -289,7 +288,7 @@ export class FolksonomyEditorRow extends LitElement {
         }
       }
     `,
-  ];
+  ]
 
   override render() {
     if (this.empty) {
@@ -315,13 +314,17 @@ export class FolksonomyEditorRow extends LitElement {
           </td>
           <td>
             <div class="button-container">
-              <button class="button chocolate-button" @click=${this.addCustomKeyAndValue} id="create-button">
+              <button
+                class="button chocolate-button"
+                @click=${this.addCustomKeyAndValue}
+                id="create-button"
+              >
                 ${msg("Submit")}
               </button>
             </div>
           </td>
         </tr>
-      `;
+      `
     }
 
     return html`
@@ -335,7 +338,12 @@ export class FolksonomyEditorRow extends LitElement {
         </td>
         <td>
           ${this.editable
-            ? html`<input type="text" class="input" .value=${this.tempValue} @input=${this.handleInputChange} />`
+            ? html`<input
+                type="text"
+                class="input"
+                .value=${this.tempValue}
+                @input=${this.handleInputChange}
+              />`
             : this.value}
         </td>
         <td>
@@ -358,12 +366,12 @@ export class FolksonomyEditorRow extends LitElement {
           </div>
         </td>
       </tr>
-    `;
+    `
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "folksonomy-editor-row": FolksonomyEditorRow;
+    "folksonomy-editor-row": FolksonomyEditorRow
   }
 }
