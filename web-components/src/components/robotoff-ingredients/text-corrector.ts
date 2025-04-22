@@ -167,7 +167,7 @@ export class TextCorrector extends LitElement {
 
       .info-button-wrapper {
         position: absolute;
-        top: -5px;
+        top: -12px;
         right: 0;
       }
     `,
