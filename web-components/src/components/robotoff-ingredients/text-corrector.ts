@@ -18,6 +18,7 @@ import {
   SAFE_LIGHT_GREY,
   SAFE_LIGHT_RED,
   SAFE_LIGHT_BLACK,
+  SAFE_GREY,
 } from "../../utils/colors"
 import { clickOutside } from "../../directives/click-outside"
 import {
@@ -27,6 +28,11 @@ import {
   TextCorrectorEventDetail,
 } from "../../types/ingredients"
 import { RELATIVE } from "../../styles/utils"
+import { sanitizeHtml } from "../../utils/html"
+
+// key is the index of the change in the groupedChanges array
+// value is boolean indicating if the change is validated or not
+export type ValidationChangeResult = Record<number, boolean>
 
 /**
  * TextCorrector component
@@ -105,8 +111,8 @@ export class TextCorrector extends LitElement {
       .addition {
         background-color: ${SAFE_LIGHT_GREEN};
       }
-      .no-changes {
-        background-color: ${SAFE_LIGHT_GREY};
+      .answered-change {
+        background-color: ${SAFE_GREY};
       }
       .summary-item-wrapper {
         display: flex;
@@ -193,6 +199,12 @@ export class TextCorrector extends LitElement {
   @state()
   diffResult: IndexedChange[] = []
 
+  @state()
+  validateChangeResult: ValidationChangeResult = {}
+
+  @state()
+  currentAnsweredIndex: number = 0
+
   /**
    * The grouped changes based on the diff result.
    * @type {IndexedGroupedChange[]}
@@ -236,7 +248,10 @@ export class TextCorrector extends LitElement {
    * @returns {boolean} True if the confirm button should be disabled, false otherwise.
    */
   get isConfirmDisabled() {
-    return !this.isEditMode && this.groupedChanges.length !== 0
+    return (
+      !this.isEditMode &&
+      this.groupedChanges.some((_, index) => this.validateChangeResult[index] === undefined)
+    )
   }
 
   /**
@@ -245,6 +260,12 @@ export class TextCorrector extends LitElement {
    */
   get updateTextMsg() {
     return msg("Please fix the errors or modify the text before confirming")
+  }
+
+  get filteredNotAnsweredChanges() {
+    return this.groupedChanges.filter((_, index) => {
+      return this.validateChangeResult[index] === undefined
+    })
   }
 
   /**
@@ -278,6 +299,7 @@ export class TextCorrector extends LitElement {
    */
   computeGroupedChanges(): void {
     this.groupedChanges = []
+    this.validateChangeResult = {}
 
     const changes = this.diffResult
     if (changes.length === 0) {
@@ -292,6 +314,7 @@ export class TextCorrector extends LitElement {
       }
       const nextIndex = i + 1
       const next = nextIndex < changes.length ? changes[nextIndex] : null
+      const position = this.groupedChanges.length
 
       if (current.removed && next && next.added) {
         // This is a "changed" item (something was removed and something else was added)
@@ -300,7 +323,9 @@ export class TextCorrector extends LitElement {
           oldValue: current.value,
           newValue: next.value,
           indexes: [i, nextIndex],
+          position,
         })
+
         i++ // Skip the next item as we've already processed it
       } else if (current.removed) {
         // This is a pure removal
@@ -308,6 +333,7 @@ export class TextCorrector extends LitElement {
           type: ChangeType.REMOVED,
           value: current.value,
           indexes: [i],
+          position,
         })
       } else if (current.added) {
         // This is a pure addition
@@ -315,6 +341,7 @@ export class TextCorrector extends LitElement {
           type: ChangeType.ADDED,
           value: current.value,
           indexes: [i],
+          position,
         })
       }
     }
@@ -362,31 +389,84 @@ export class TextCorrector extends LitElement {
     })}`
   }
 
+  goToSuggestion(index: number) {
+    this.currentAnsweredIndex = index
+    // unanswered the question if it was answered
+    this.unansweredChange(index)
+  }
+
+  unansweredChange(index: number) {
+    delete this.validateChangeResult[index]
+    this.requestUpdate()
+  }
+
+  renderChange(value: string, index: number, className: string) {
+    // Replace newlines with <br/> for HTML rendering
+    let cleanedValue = value.replace(/\n/g, "↩︎<br/>")
+    // for other clean value like the suggestions
+    cleanedValue = this.cleanSuggestion(cleanedValue)
+
+    return html`<span class="${className} spellcheck" @click=${() => this.goToSuggestion(index)}
+      >${sanitizeHtml(cleanedValue)}</span
+    >`
+  }
+
+  renderUnansweredChange(value: string, index: number) {
+    return this.renderChange(value, index, "deletion")
+  }
+
+  renderAnsweredChange(value: string, index: number) {
+    return this.renderChange(value, index, "answered-change")
+  }
+
   renderSpellCheckDiff() {
     let indexedGroupedChangeIndex = 0
-    const groupedChanges = this.groupedChanges.filter(
-      (change) => change.type === ChangeType.CHANGED
-    )
 
     return html`${this.diffResult.map((part) => {
-      const indexedGroupedChange = groupedChanges[indexedGroupedChangeIndex]
-      // If the part is part of a grouped change
-      if (indexedGroupedChange && indexedGroupedChange.indexes.includes(part.index)) {
-        const isLastIndex = indexedGroupedChange.indexes[1] === part.index
-        if (isLastIndex) {
+      const indexedGroupedChange = this.groupedChanges[indexedGroupedChangeIndex]
+
+      // If the part is the second index of a grouped change, we will increment the change index
+      if (indexedGroupedChange?.indexes[1] === part.index) {
+        indexedGroupedChangeIndex++
+        return nothing
+        // If the part is part of a grouped change
+      } else if (indexedGroupedChange?.indexes[0] === part.index) {
+        const currentIndex = indexedGroupedChangeIndex
+        const isValidate = this.validateChangeResult[indexedGroupedChangeIndex]
+        // We will increment change index with the second index of the grouped change
+        if (indexedGroupedChange.type !== ChangeType.CHANGED) {
           indexedGroupedChangeIndex++
-          return nothing
         }
-        return html`<span class="deletion spellcheck"
-          >${indexedGroupedChange.oldValue || " "}</span
-        >`
-      } else if (part.added) {
-        return html`<span class="deletion spellcheck">${" ".repeat(part.value.length)}</span>`
-      } else if (part.removed) {
-        return html`<span class="deletion spellcheck">${part.value}</span>`
-      } else {
-        return html`<span>${part.value}</span>`
+
+        switch (indexedGroupedChange.type) {
+          case ChangeType.ADDED:
+            if (isValidate === undefined) {
+              return this.renderUnansweredChange("", currentIndex)
+            }
+            return this.renderAnsweredChange(
+              isValidate ? indexedGroupedChange.value! : "",
+              currentIndex
+            )
+          case ChangeType.REMOVED:
+            if (isValidate === undefined) {
+              return this.renderUnansweredChange(indexedGroupedChange.value!, currentIndex)
+            }
+            return this.renderAnsweredChange(
+              isValidate ? "" : indexedGroupedChange.value!,
+              currentIndex
+            )
+          case ChangeType.CHANGED:
+            if (isValidate === undefined) {
+              return this.renderUnansweredChange(indexedGroupedChange.oldValue!, currentIndex)
+            }
+            return this.renderAnsweredChange(
+              isValidate ? indexedGroupedChange.newValue! : indexedGroupedChange.oldValue!,
+              currentIndex
+            )
+        }
       }
+      // If the part is not part of a grouped change
+      return html`<span>${part.value}</span>`
     })}`
   }
 
@@ -408,7 +488,7 @@ export class TextCorrector extends LitElement {
 
   // Renders the empty suggestion when value is empty
   renderEmptySuggestion() {
-    return nothing
+    return ""
   }
 
   cleanSuggestion(suggestion: string) {
@@ -504,7 +584,8 @@ export class TextCorrector extends LitElement {
    * @returns {TemplateResult} The rendered summary content.
    */
   renderSummary() {
-    if (this.groupedChanges.length === 0) {
+    const filtedNotAnsweredChanges = this.filteredNotAnsweredChanges
+    if (filtedNotAnsweredChanges.length === 0) {
       return nothing
     }
     return html`<div class="summary">
@@ -520,7 +601,7 @@ export class TextCorrector extends LitElement {
           <div class="suggestion-button-title">${msg("Suggested fix")}</div>
         </div>
 
-        ${this.groupedChanges.map((item) => {
+        ${filtedNotAnsweredChanges.map((item) => {
           return this.renderSummaryItemContent(item)
         })}
       </div>
@@ -563,45 +644,10 @@ export class TextCorrector extends LitElement {
    * @param {IndexedGroupedChange} items - The suggestions to update the result for.
    */
   updateResult(validate: boolean, items: IndexedGroupedChange[]) {
-    let value = ""
-    let textToCompare = ""
-    let indexedGroupedChangeIndex = 0
-    for (const [index, change] of this.diffResult.entries()) {
-      const item = items[indexedGroupedChangeIndex]
-      if (item && item.indexes.includes(index)) {
-        let newValue
-        if (item.type === ChangeType.REMOVED) {
-          newValue = validate ? "" : change.value
-          indexedGroupedChangeIndex += 1
-        } else if (item.type === ChangeType.ADDED) {
-          newValue = validate ? change.value : ""
-          indexedGroupedChangeIndex += 1
-        } else if (item.type === ChangeType.CHANGED) {
-          // If the change is a change, we need to check if the index is the first or second index to skip the other one
-          if (item.indexes[1] === index) {
-            // only increment the index because we already added the new value at the first index
-            // and we don't want to add it again at the second index
-            indexedGroupedChangeIndex += 1
-            continue
-          }
-          newValue = validate ? item.newValue : item.oldValue
-        }
-        value += newValue
-        textToCompare += newValue
-      } else if (change.added) {
-        textToCompare += change.value
-      } else if (change.removed) {
-        value += change.value
-      } else {
-        value += change.value
-        textToCompare += change.value
-      }
-    }
-
-    this.value = value
-    this.textToCompare = textToCompare
-    this.dispatchEvent(new CustomEvent("update", { detail: { result: value } }))
-    this.computeWordDiff()
+    items.forEach((item) => {
+      this.validateChangeResult[item.position] = validate
+    })
+    this.requestUpdate()
   }
 
   /**

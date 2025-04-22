@@ -29,6 +29,7 @@ export type IndexedGroupedChange = {
   oldValue?: string
   newValue?: string
   indexes: number[]
+  position: number
 }
 
 /**
