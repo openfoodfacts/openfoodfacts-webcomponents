@@ -64,7 +64,7 @@
       </trans-unit>
       <trans-unit id="s13d6dffec1a1ec2b">
         <source>Nutrients</source>
-        <target state="needs-translation">Nutrients</target>
+        <target state="translated">Næringsstoffer</target>
       </trans-unit>
       <trans-unit id="s688d3d95ca7c01db">
         <source>Specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
@@ -80,11 +80,11 @@
       </trans-unit>
       <trans-unit id="s475b08749d0706ed">
         <source>Help us inform millions of consumers around the world about what they eat</source>
-        <target state="needs-translation">Help us inform millions of consumers around the world about what they eat</target>
+        <target state="translated">Hjælp os med at informere millioner af forbrugere rundt om i verden om, hvad de spiser</target>
       </trans-unit>
       <trans-unit id="sfc40ea3d5d5aa6f8">
         <source>Your donations fund the day-to-day operations of our non-profit association:</source>
-        <target state="needs-translation">Your donations fund the day-to-day operations of our non-profit association:</target>
+        <target state="translated">Dine donationer finansierer den daglige drift af vores non-profit forening:</target>
       </trans-unit>
       <trans-unit id="s1c5031113de500ce">
         <source>keeping our database open &amp; available to all,</source>
@@ -96,7 +96,7 @@
       </trans-unit>
       <trans-unit id="sd82bc2decefa621b">
         <source>remain independent of the food industry,</source>
-        <target state="needs-translation">remain independent of the food industry,</target>
+        <target state="translated">forblive uafhængig af fødevareindustrien,</target>
       </trans-unit>
       <trans-unit id="sb3bdd638a58d30f4">
         <source>engage a community of committed citizens,</source>
