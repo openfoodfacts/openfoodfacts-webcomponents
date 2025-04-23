@@ -65,8 +65,8 @@ export class RobotoffIngredients extends LitElement {
    * The language code for the ingredients spellcheck validation.
    * @type {string}
    */
-  @property({ type: String, attribute: "language-code" })
-  languageCode = ""
+  @property({ type: Array, attribute: "language-codes", reflect: true })
+  languageCodes: string[] = []
 
   /**
    * The current index of the insight being displayed.
@@ -104,8 +104,8 @@ export class RobotoffIngredients extends LitElement {
    * Gets the language code, defaulting to the locale if not set.
    * @returns {string} The language code.
    */
-  get _languageCode() {
-    return this.languageCode || getLocale()
+  get _languageCodes() {
+    return this.languageCodes || [getLocale()]
   }
 
   /**
@@ -159,7 +159,7 @@ export class RobotoffIngredients extends LitElement {
       return
     }
     const result = await fetchProduct<ImageIngredientsProductType>(insight.barcode, {
-      lc: this._languageCode,
+      lc: insight.data.lang,
       fields: ["image_ingredients_url", "product_name"],
     })
 
@@ -175,18 +175,16 @@ export class RobotoffIngredients extends LitElement {
    */
   private _spellcheckTask = new Task(this, {
     task: async ([productCode]) => {
-      const lang = this._languageCode
       this._insightIds = []
       this._currentIndex = 0
       this.dispatchIngredientsStateEvent({
         state: EventState.LOADING,
       })
       const insights = await fetchSpellcheckInsights(productCode ? productCode : undefined, {
-        language_codes: [lang],
+        language_codes: this._languageCodes,
       })
       this._insightIds = insights
         // Currently we filter by lang here but we should do it in the API when is available
-        .filter((insight) => insight.data.lang === lang)
         .map((insight) => insight.id)
       this.updateValue()
       this.dispatchIngredientsStateEvent({
