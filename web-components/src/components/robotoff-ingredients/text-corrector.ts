@@ -254,13 +254,6 @@ export class TextCorrector extends LitElement {
   value = ""
 
   /**
-   * Keeps track of the value of the input when the user is editing the text.
-   * @type {string}
-   */
-  @state()
-  _value = ""
-
-  /**
    * The text to compare against the current value.
    * @type {string}
    */
@@ -336,7 +329,7 @@ export class TextCorrector extends LitElement {
     super.attributeChangedCallback(name, _old, value)
     if (name === "original" || name === "correction") {
       this.updateValues()
-      this.computeWordDiff()
+      this.computeWordDiff(true)
       this.resetAutoFocus = true
     }
   }
@@ -389,7 +382,6 @@ export class TextCorrector extends LitElement {
    */
   computeGroupedChanges(): void {
     this.groupedChanges = []
-    this.validateChangeResult = {}
     this.currentAnsweredIndex = 0
 
     const changes = this.diffResult
@@ -442,11 +434,11 @@ export class TextCorrector extends LitElement {
    * Computes the word-level diff between the original and corrected text.
    * @returns {IndexedChange[]} The diff result.
    */
-  computeWordDiff() {
+  computeWordDiff(reset: boolean = false) {
     // Use diffWordsWithSpace from the diff library for word-level diffing with preserved whitespace (including new lines)
     let value, textToCompare
     if (this.isEditMode) {
-      value = this._value
+      value = this.value
       textToCompare = this.value
     } else {
       value = this.value
@@ -461,6 +453,9 @@ export class TextCorrector extends LitElement {
       }
     )
 
+    if (reset) {
+      this.validateChangeResult = {}
+    }
     // Group changes to identify "changed" items (adjacent removed and added)
     this.computeGroupedChanges()
     return this.diffResult
@@ -858,7 +853,6 @@ export class TextCorrector extends LitElement {
    */
   enterEditMode() {
     this.isEditMode = true
-    this._value = this.value
     this.computeWordDiff()
     setTimeout(() => {
       this.focusTextArea()
@@ -869,7 +863,7 @@ export class TextCorrector extends LitElement {
    * Cancels edit mode.
    */
   cancelEditMode() {
-    this.value = this._value
+    this.updateValues()
     this.isEditMode = false
     this.computeWordDiff()
     this.filteredNotAnsweredChanges.length ? this.focusFirstButton() : this.focusSaveButton()
