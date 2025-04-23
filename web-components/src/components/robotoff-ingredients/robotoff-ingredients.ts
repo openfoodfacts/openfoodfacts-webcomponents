@@ -66,7 +66,7 @@ export class RobotoffIngredients extends LitElement {
    * @type {string}
    */
   @property({ type: Array, attribute: "language-codes", reflect: true })
-  languageCodes: string[] = []
+  languageCodes?: string[]
 
   /**
    * The current index of the insight being displayed.
