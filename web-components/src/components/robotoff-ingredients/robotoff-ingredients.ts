@@ -69,6 +69,13 @@ export class RobotoffIngredients extends LitElement {
   languageCodes?: string[]
 
   /**
+   * Enables keyboard mode for the component.
+   * @type {boolean}
+   */
+  @property({ type: Boolean, attribute: "enable-keyboard-mode" })
+  enableKeyboardMode = false
+
+  /**
    * The current index of the insight being displayed.
    * @type {number}
    */
@@ -294,6 +301,7 @@ export class RobotoffIngredients extends LitElement {
                   correction=${correction}
                   original=${original}
                   @save=${this.submitAnnotation}
+                  ?enable-keyboard-mode=${this.enableKeyboardMode}
                 ></text-corrector>
               </div>
             </div>

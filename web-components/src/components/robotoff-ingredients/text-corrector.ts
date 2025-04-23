@@ -1,6 +1,6 @@
 import { LitElement, html, css, nothing } from "lit"
 import { diffWordsWithSpace, type Change } from "diff"
-import { customElement, property, state } from "lit/decorators.js"
+import { customElement, property, query, state } from "lit/decorators.js"
 import { BASE } from "../../styles/base"
 import { msg } from "@lit/localize"
 import { EventType } from "../../constants"
@@ -34,6 +34,15 @@ import { Breakpoints } from "../../utils/breakpoints"
 // key is the index of the change in the groupedChanges array
 // value is boolean indicating if the change is validated or not
 export type ValidationChangeResult = Record<number, boolean>
+
+export enum TextCorrectorKeyboardShortcut {
+  ACCEPT_FIRST_SUGGESTION = "f",
+  REJECT_FIRST_SUGGESTION = "o",
+  SKIP_TEXT_CORRECTION = "k",
+  EDIT_TEXT = "e",
+  VALIDATE_CORRECTION = "s",
+  CANCEL_EDITION = "c",
+}
 
 /**
  * TextCorrector component
@@ -211,6 +220,13 @@ export class TextCorrector extends LitElement {
   correction = ""
 
   /**
+   * Enables keyboard mode for the component.
+   * @type {boolean}
+   */
+  @property({ type: Boolean, attribute: "enable-keyboard-mode" })
+  enableKeyboardMode = false
+
+  /**
    * The result of the diff between the original and corrected text.
    * @type {IndexedChange[]}
    */
@@ -261,6 +277,12 @@ export class TextCorrector extends LitElement {
   @state()
   showInfoPopover: boolean = false
 
+  @state()
+  resetAutoFocus: boolean = false
+
+  @query("form")
+  form!: HTMLFormElement
+
   /**
    * Checks if the confirm button should be disabled.
    * @returns {boolean} True if the confirm button should be disabled, false otherwise.
@@ -286,6 +308,16 @@ export class TextCorrector extends LitElement {
     })
   }
 
+  getAcceptSuggestionButtonDataId(index: number) {
+    return `accept-suggestion-${index}`
+  }
+
+  getKeyboardShortcutText(shortcut: TextCorrectorKeyboardShortcut): string {
+    if (!this.enableKeyboardMode) {
+      return ""
+    }
+    return ` (${shortcut.toUpperCase()})`
+  }
   /**
    * Updates the values of the component.
    */
@@ -305,6 +337,46 @@ export class TextCorrector extends LitElement {
     if (name === "original" || name === "correction") {
       this.updateValues()
       this.computeWordDiff()
+      this.resetAutoFocus = true
+    }
+  }
+
+  focusFirstButton() {
+    if (!this.enableKeyboardMode) {
+      return
+    }
+    setTimeout(() => {
+      const button = this.shadowRoot!.querySelector(
+        `[data-id^="${this.getAcceptSuggestionButtonDataId(0)}"]`
+      ) as HTMLButtonElement
+      button.focus()
+    }, 0)
+  }
+
+  focusTextArea() {
+    if (!this.enableKeyboardMode) {
+      return
+    }
+    setTimeout(() => {
+      const textarea = this.shadowRoot!.querySelector("textarea") as HTMLTextAreaElement
+      textarea.focus()
+    }, 0)
+  }
+
+  focusSaveButton() {
+    if (!this.enableKeyboardMode) {
+      return
+    }
+    setTimeout(() => {
+      const button = this.shadowRoot!.querySelector("button[type='submit']") as HTMLButtonElement
+      button.focus()
+    }, 0)
+  }
+  override updated(changedProperties: Map<string, unknown>) {
+    super.updated(changedProperties)
+    if (this.resetAutoFocus) {
+      this.resetAutoFocus = false
+      this.focusFirstButton()
     }
   }
 
@@ -526,10 +598,12 @@ export class TextCorrector extends LitElement {
   /**
    * Renders the button for accepting a suggestion.
    * @param {IndexedGroupedChange} item - The suggestion to render the button for.
+   * @param {number} index - The row index of the suggestion. This parameter is different of index of changes.
    * @returns {TemplateResult} The rendered button.
    */
-  renderAcceptSuggestionButton(item: IndexedGroupedChange) {
+  renderAcceptSuggestionButton(item: IndexedGroupedChange, index: number) {
     let text
+    let supplementaryText
     switch (item.type) {
       case ChangeType.CHANGED:
         text = html`${this.cleanSuggestion(item.newValue!)}`
@@ -541,12 +615,20 @@ export class TextCorrector extends LitElement {
         text = this.renderEmptySuggestion()
         break
     }
+    // Add keyboard shortcut text for the first suggestion
+    if (index === 0) {
+      supplementaryText = this.getKeyboardShortcutText(
+        TextCorrectorKeyboardShortcut.ACCEPT_FIRST_SUGGESTION
+      )
+    }
     return html`
       <button
         class="suggestion-button button light-green-button small"
         @click="${() => this.updateResult(true, [item])}"
+        tabindex="1"
+        data-id="${this.getAcceptSuggestionButtonDataId(index)}"
       >
-        <span class="pre-wrap">${text}</span>
+        <span class="pre-wrap">${text}${supplementaryText}</span>
       </button>
     `
   }
@@ -554,10 +636,12 @@ export class TextCorrector extends LitElement {
   /**
    * Renders the button for rejecting a suggestion.
    * @param {IndexedGroupedChange} item - The suggestion to render the button for.
+   * @param {number} index - The row index of the suggestion. This parameter is different of index of changes.
    * @returns {TemplateResult} The rendered button.
    */
-  renderRejectSuggestionButton(item: IndexedGroupedChange) {
+  renderRejectSuggestionButton(item: IndexedGroupedChange, index: number) {
     let text
+    let supplementaryText
     switch (item.type) {
       case ChangeType.CHANGED:
         // replace espace and espace insecable with a visible character
@@ -570,11 +654,18 @@ export class TextCorrector extends LitElement {
         text = this.cleanSuggestion(item.value!)
         break
     }
+    // Only add keyboard shortcut text for the first suggestion.
+    if (index === 0) {
+      supplementaryText = this.getKeyboardShortcutText(
+        TextCorrectorKeyboardShortcut.REJECT_FIRST_SUGGESTION
+      )
+    }
     return html`<button
       class="suggestion-button button light-red-button small"
       @click="${() => this.updateResult(false, [item])}"
+      tabindex="2"
     >
-      <span class="pre-wrap">${text}</span>
+      <span class="pre-wrap">${text}${supplementaryText}</span>
     </button>`
   }
 
@@ -588,10 +679,11 @@ export class TextCorrector extends LitElement {
    * @param {string} [params.newValueClass] - The class for the new value.
    * @returns {TemplateResult} The rendered summary item.
    * */
-  renderSummaryItemContent(item: IndexedGroupedChange) {
+  renderSummaryItemContent(item: IndexedGroupedChange, index: number) {
     return html`
       <div class="summary-item">
-        ${this.renderRejectSuggestionButton(item)} ${this.renderAcceptSuggestionButton(item)}
+        ${this.renderRejectSuggestionButton(item, index)}
+        ${this.renderAcceptSuggestionButton(item, index)}
       </div>
     `
   }
@@ -636,41 +728,11 @@ export class TextCorrector extends LitElement {
           <div class="suggestion-button-title">${msg("Suggested fix")}</div>
         </div>
 
-        ${notAnsweredChanges.map((item) => {
-          return this.renderSummaryItemContent(item)
+        ${notAnsweredChanges.map((item, index) => {
+          return this.renderSummaryItemContent(item, index)
         })}
       </div>
-      ${this.renderBatchSuggestionsButtons()}
     </div>`
-  }
-
-  /**
-   * Renders the buttons for batch suggestions.
-   * @returns {TemplateResult | typeof nothing} The rendered buttons or nothing if there are no batch suggestions.
-   */
-  renderBatchSuggestionsButtons() {
-    if (this.groupedChanges.length <= 1) {
-      return nothing
-    }
-    return html`
-      <div class="batch-buttons buttons-row">
-        <button
-          class="button danger-button small with-icon"
-          @click="${() => this.updateBatchResult(false)}"
-        >
-          <span>${msg("Reject all corrections")}</span>
-          <cross-icon></cross-icon>
-        </button>
-        <button
-          class="button success-button small with-icon"
-          @click="${() => this.updateBatchResult(true)}"
-        >
-          <span>${msg("Accept all corrections")}</span>
-
-          <check-icon></check-icon>
-        </button>
-      </div>
-    `
   }
 
   /**
@@ -689,6 +751,8 @@ export class TextCorrector extends LitElement {
     // If there are no unanswered changes, we reset the index to 0
     if (filteredNotAnsweredChanges.length === 0) {
       this.currentAnsweredIndex = 0
+      // focus on the save button to allow the user to save the result when all changes are answered
+      this.focusSaveButton()
       return
     }
     // get the next unanswered change after the current one
@@ -709,6 +773,11 @@ export class TextCorrector extends LitElement {
    * @param {IndexedGroupedChange} items - The suggestions to update the result for.
    */
   updateResult(validate: boolean, items: IndexedGroupedChange[]) {
+    // Do this if keyboard shortcut is used but all changes are answered
+    if (this.filteredNotAnsweredChanges.length === 0) {
+      return
+    }
+
     items.forEach((item) => {
       this.validateChangeResult[item.position] = validate
     })
@@ -791,6 +860,9 @@ export class TextCorrector extends LitElement {
     this.isEditMode = true
     this._value = this.value
     this.computeWordDiff()
+    setTimeout(() => {
+      this.focusTextArea()
+    }, 0)
   }
 
   /**
@@ -800,6 +872,7 @@ export class TextCorrector extends LitElement {
     this.value = this._value
     this.isEditMode = false
     this.computeWordDiff()
+    this.filteredNotAnsweredChanges.length ? this.focusFirstButton() : this.focusSaveButton()
   }
 
   /**
@@ -848,13 +921,21 @@ export class TextCorrector extends LitElement {
       title=${confirmTitle}
       type="submit"
     >
-      <span>${msg("Save")}</span><check-icon></check-icon>
+      <span
+        >${msg("Save")}${this.getKeyboardShortcutText(
+          TextCorrectorKeyboardShortcut.VALIDATE_CORRECTION
+        )}</span
+      >
+      <check-icon></check-icon>
     </button>`
     if (this.isEditMode) {
       return html`
         <div class="submit-buttons buttons-row can-wrap">
           <button class="button cappucino-button with-icon" @click=${this.cancelEditMode}>
-            <span>${msg("Cancel")}</span><cross-icon></cross-icon>
+            <span
+              >${msg("Cancel")}
+              ${this.getKeyboardShortcutText(TextCorrectorKeyboardShortcut.CANCEL_EDITION)}</span
+            ><cross-icon></cross-icon>
           </button>
           ${successButton}
         </div>
@@ -864,7 +945,11 @@ export class TextCorrector extends LitElement {
     return html`
       <div class="submit-buttons buttons-row can-wrap">
         <button class="button white-button with-icon" @click=${this.skip}>
-          <span>${msg("Skip")}</span><skip-icon></skip-icon>
+          <span
+            >${msg("Skip")}${this.getKeyboardShortcutText(
+              TextCorrectorKeyboardShortcut.SKIP_TEXT_CORRECTION
+            )}</span
+          ><skip-icon></skip-icon>
         </button>
         ${successButton}
       </div>
@@ -877,7 +962,11 @@ export class TextCorrector extends LitElement {
         <p class="text">${this.renderSpellCheckDiff()}</p>
         <div style="display: flex; justify-content: flex-end;">
           <button class="button cappucino-button with-icon" @click=${this.enterEditMode}>
-            <span>${msg("Edit")}</span><edit-icon></edit-icon>
+            <span
+              >${msg("Edit")}${this.getKeyboardShortcutText(
+                TextCorrectorKeyboardShortcut.EDIT_TEXT
+              )}</span
+            ><edit-icon></edit-icon>
           </button>
         </div>
       </div>
@@ -893,6 +982,42 @@ export class TextCorrector extends LitElement {
       <form @submit=${this.confirmText}>${this.isEditMode ? this.renderEditTextarea() : this.renderSpellCheck()}</div>
       <div class="submit-buttons-wrapper">${this.renderButtons()}</div>
     `
+  }
+
+  override firstUpdated() {
+    if (this.enableKeyboardMode) {
+      this.form!.addEventListener("keydown", this.handleKeyboardShortcut.bind(this))
+    }
+  }
+
+  override disconnectedCallback() {
+    super.disconnectedCallback()
+    if (this.enableKeyboardMode) {
+      this.form!.removeEventListener("keydown", () => this.handleKeyboardShortcut.bind(this))
+    }
+  }
+
+  private handleKeyboardShortcut(event: KeyboardEvent) {
+    switch (event.key) {
+      case TextCorrectorKeyboardShortcut.ACCEPT_FIRST_SUGGESTION:
+        this.updateResult(true, [this.groupedChanges[this.currentAnsweredIndex]])
+        break
+      case TextCorrectorKeyboardShortcut.REJECT_FIRST_SUGGESTION:
+        this.updateResult(false, [this.groupedChanges[this.currentAnsweredIndex]])
+        break
+      case TextCorrectorKeyboardShortcut.SKIP_TEXT_CORRECTION:
+        this.skip()
+        break
+      case TextCorrectorKeyboardShortcut.EDIT_TEXT:
+        this.enterEditMode()
+        break
+      case TextCorrectorKeyboardShortcut.VALIDATE_CORRECTION:
+        this.confirmText(new Event("submit") as SubmitEvent)
+        break
+      case TextCorrectorKeyboardShortcut.CANCEL_EDITION:
+        this.cancelEditMode()
+        break
+    }
   }
 
   /**
