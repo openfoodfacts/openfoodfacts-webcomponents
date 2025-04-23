@@ -42,11 +42,13 @@ export class AutocompleteInput extends LitElement {
     FOLKSONOMY_INPUT,
     css`
       .autocomplete-wrapper {
-        position: relative;
-        width: 100%;
+        width: 30%;
+        position: absolute;
+        margin-top: -23px;
       }
 
       .autocomplete-list {
+        position: absolute;
         background: #fff;
         border: 1px solid #ccc;
         border-top: none;
@@ -57,7 +59,6 @@ export class AutocompleteInput extends LitElement {
         overflow-y: auto;
         z-index: 9999;
         width: 100%;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
       }
 
       .autocomplete-item {

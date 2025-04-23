@@ -8,7 +8,7 @@ export const FOLKSONOMY_INPUT = css`
     border-radius: 5px;
     box-sizing: border-box;
     font-size: 0.9rem;
-    height: 2.5rem;
+    height: 2.2rem;
     background-color: rgb(252, 251, 251);
   }
 
