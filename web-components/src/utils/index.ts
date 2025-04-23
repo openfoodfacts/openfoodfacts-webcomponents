@@ -11,12 +11,14 @@ export const paramToString = (value: any): string => {
     return ""
   }
   if (Array.isArray(value)) {
-    return value.join(",")
+    return value.map((item) => encodeURIComponent(item)).join(",")
   }
   if (typeof value === "object") {
-    return JSON.stringify(value)
+    value = JSON.stringify(value)
+  } else {
+    value = value.toString()
   }
-  return value.toString()
+  return encodeURIComponent(value)
 }
 
 /**
@@ -25,14 +27,14 @@ export const paramToString = (value: any): string => {
  * @returns string - the URLSearchParams string
  */
 export const paramsToUrl = (params: Record<string, any>) => {
-  const paramsToStringRecord = Object.entries(params).reduce(
-    (acc, [key, value]) => {
-      acc[key] = paramToString(value)
-      return acc
-    },
-    {} as Record<string, string>
-  )
-  return new URLSearchParams(paramsToStringRecord).toString()
+  const paramsToStringRecord = Object.entries(params).reduce((acc, [key, value]) => {
+    if (acc) {
+      acc += "&"
+    }
+    acc += `${key}=${paramToString(value)}`
+    return acc
+  }, "")
+  return paramsToStringRecord
 }
 
 /**
