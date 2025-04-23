@@ -4,9 +4,13 @@ import { InsightType, IngredientsInsight, InsightsRequestParams } from "../types
 
 export const ingredientSpellcheckInsights = new SignalMap<IngredientsInsight>({})
 
-export async function fetchSpellcheckInsights(productCode?: string): Promise<IngredientsInsight[]> {
+export async function fetchSpellcheckInsights(
+  productCode?: string,
+  requestParams: InsightsRequestParams = {}
+): Promise<IngredientsInsight[]> {
   let result
   const params: InsightsRequestParams = {
+    ...requestParams,
     insight_types: InsightType.ingredient_spellcheck,
     annotated: false,
   }

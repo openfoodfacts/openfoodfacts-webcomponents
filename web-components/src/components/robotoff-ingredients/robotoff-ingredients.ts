@@ -181,7 +181,9 @@ export class RobotoffIngredients extends LitElement {
       this.dispatchIngredientsStateEvent({
         state: EventState.LOADING,
       })
-      const insights = await fetchSpellcheckInsights(productCode ? productCode : undefined)
+      const insights = await fetchSpellcheckInsights(productCode ? productCode : undefined, {
+        language_codes: [lang],
+      })
       this._insightIds = insights
         // Currently we filter by lang here but we should do it in the API when is available
         .filter((insight) => insight.data.lang === lang)
