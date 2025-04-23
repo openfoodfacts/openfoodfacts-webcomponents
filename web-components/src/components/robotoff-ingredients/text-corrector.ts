@@ -729,7 +729,7 @@ export class TextCorrector extends LitElement {
    * @param {QuestionAnnotationAnswer} detail.type - The type of the event.
    */
   dispatchSubmitEvent(detail: TextCorrectorEventDetail) {
-    this.dispatchEvent(new CustomEvent<TextCorrectorEventDetail>(EventType.SUBMIT, { detail }))
+    this.dispatchEvent(new CustomEvent<TextCorrectorEventDetail>(EventType.SAVE, { detail }))
   }
 
   /**
@@ -750,7 +750,9 @@ export class TextCorrector extends LitElement {
   /**
    * Confirms the text.
    */
-  confirmText() {
+  confirmText(event: SubmitEvent) {
+    event.preventDefault()
+
     this.isEditMode = false
     if (this.correction === this.value) {
       this.acceptText()
@@ -840,9 +842,9 @@ export class TextCorrector extends LitElement {
 
     const successButton = html` <button
       class="button success-button with-icon"
-      @click=${this.confirmText}
       ?disabled=${this.isConfirmDisabled}
       title=${confirmTitle}
+      type="submit"
     >
       <span>${msg("Save")}</span><check-icon></check-icon>
     </button>`
@@ -886,7 +888,7 @@ export class TextCorrector extends LitElement {
    */
   override render() {
     return html`
-      <div>${this.isEditMode ? this.renderEditTextarea() : this.renderSpellCheck()}</div>
+      <form @submit=${this.confirmText}>${this.isEditMode ? this.renderEditTextarea() : this.renderSpellCheck()}</div>
       <div class="submit-buttons-wrapper">${this.renderButtons()}</div>
     `
   }

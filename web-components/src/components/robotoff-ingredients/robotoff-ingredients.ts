@@ -293,7 +293,7 @@ export class RobotoffIngredients extends LitElement {
                 <text-corrector
                   correction=${correction}
                   original=${original}
-                  @submit=${this.submitAnnotation}
+                  @save=${this.submitAnnotation}
                 ></text-corrector>
               </div>
             </div>

@@ -6,6 +6,7 @@ export const DEFAULT_ROBOTOFF_CONFIGURATION = {
 export const PAGE_SIZE = 25
 
 export enum EventType {
+  SAVE = "save",
   SUBMIT = "submit",
   QUESTION_STATE = "question-state",
   NUTRIENT_STATE = "nutrient-state",
