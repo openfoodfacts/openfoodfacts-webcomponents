@@ -106,7 +106,7 @@ async function updateProductProperty(
 
 async function fetchKeys(): Promise<{ k: string; count: number; values: number }[]> {
   try {
-    const response = await fetch(getApiUrl(`/keys`), {
+    const response = await fetch(getApiUrl("/keys"), {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
