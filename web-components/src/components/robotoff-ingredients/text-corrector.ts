@@ -29,6 +29,7 @@ import {
 } from "../../types/ingredients"
 import { RELATIVE } from "../../styles/utils"
 import { sanitizeHtml } from "../../utils/html"
+import { Breakpoints } from "../../utils/breakpoints"
 
 // key is the index of the change in the groupedChanges array
 // value is boolean indicating if the change is validated or not
@@ -63,16 +64,21 @@ export class TextCorrector extends LitElement {
       ButtonType.LightGreen,
     ]),
     css`
+      .text-section {
+        padding-bottom: 0.5rem;
+      }
+      .summary {
+        margin-bottom: 0.5rem;
+        padding-top: 1.5rem;
+        padding-bottom: 0rem;
+      }
+
       .text-section,
       .summary {
-        margin-bottom: 1.5rem;
-        padding-bottom: 0.5rem;
         border-bottom: 1px solid ${SAFE_LIGHT_GREY};
         box-shadow: 0 0.5rem 2px -2px rgba(0, 0, 0, 0.1);
       }
-      .summary {
-        padding-bottom: 1rem;
-      }
+
       .submit-buttons-wrapper {
         margin-top: 1rem;
       }
@@ -94,9 +100,6 @@ export class TextCorrector extends LitElement {
         white-space: pre-wrap;
         line-height: 1.5;
       }
-      .deletion {
-        background-color: ${SAFE_LIGHT_RED};
-      }
       .spellcheck {
         padding: 2px 5px;
         border-radius: 15px;
@@ -108,6 +111,12 @@ export class TextCorrector extends LitElement {
       .line-through {
         text-decoration: line-through;
       }
+      .deletion {
+        background-color: ${SAFE_LIGHT_RED};
+      }
+      .deletion.current {
+        outline: 2px solid red;
+      }
       .addition {
         background-color: ${SAFE_LIGHT_GREEN};
       }
@@ -116,8 +125,17 @@ export class TextCorrector extends LitElement {
       }
       .summary-item-wrapper {
         display: flex;
+        height: 100%;
+        max-height: 180px;
+        overflow: hidden;
         flex-direction: column;
         gap: 1rem;
+        padding-bottom: 1rem;
+
+        @media (min-width: ${Breakpoints.SM}px) {
+          max-height: none;
+          overflow: auto;
+        }
       }
       .summary-item {
         display: grid;
@@ -300,6 +318,7 @@ export class TextCorrector extends LitElement {
   computeGroupedChanges(): void {
     this.groupedChanges = []
     this.validateChangeResult = {}
+    this.currentAnsweredIndex = 0
 
     const changes = this.diffResult
     if (changes.length === 0) {
@@ -406,7 +425,11 @@ export class TextCorrector extends LitElement {
     // for other clean value like the suggestions
     cleanedValue = this.cleanSuggestion(cleanedValue)
 
-    return html`<span class="${className} spellcheck" @click=${() => this.goToSuggestion(index)}
+    const isCurrent = this.currentAnsweredIndex === index
+
+    return html`<span
+      class="${className} spellcheck ${isCurrent ? "current" : ""}"
+      @click=${() => this.goToSuggestion(index)}
       >${sanitizeHtml(cleanedValue)}</span
     >`
   }
@@ -584,10 +607,20 @@ export class TextCorrector extends LitElement {
    * @returns {TemplateResult} The rendered summary content.
    */
   renderSummary() {
-    const filtedNotAnsweredChanges = this.filteredNotAnsweredChanges
-    if (filtedNotAnsweredChanges.length === 0) {
+    let filteredNotAnsweredChanges = this.filteredNotAnsweredChanges
+    if (filteredNotAnsweredChanges.length === 0) {
       return nothing
     }
+
+    let notAnsweredChanges = [
+      // Get next items from currentAnsweredIndex first
+      ...filteredNotAnsweredChanges.filter(
+        (change) => change.position >= this.currentAnsweredIndex
+      ),
+      // Then add items before currentAnsweredIndex
+      ...filteredNotAnsweredChanges.filter((change) => change.position < this.currentAnsweredIndex),
+    ]
+
     return html`<div class="summary">
       <div class="relative">
         <div class="info-button-wrapper">
@@ -601,7 +634,7 @@ export class TextCorrector extends LitElement {
           <div class="suggestion-button-title">${msg("Suggested fix")}</div>
         </div>
 
-        ${filtedNotAnsweredChanges.map((item) => {
+        ${notAnsweredChanges.map((item) => {
           return this.renderSummaryItemContent(item)
         })}
       </div>
@@ -639,6 +672,36 @@ export class TextCorrector extends LitElement {
   }
 
   /**
+   * Updates the index of the next answered change.
+   * If the current change is not answered, it finds the next unanswered change.
+   * If there are no unanswered changes, it resets the index to 0.
+   * @returns {void}
+   */
+  updateNextAnsweredIndex() {
+    // If the current change is not answered, we don't update the index
+    if (this.validateChangeResult[this.currentAnsweredIndex] === undefined) {
+      return
+    }
+
+    const filteredNotAnsweredChanges = this.filteredNotAnsweredChanges
+    // If there are no unanswered changes, we reset the index to 0
+    if (filteredNotAnsweredChanges.length === 0) {
+      this.currentAnsweredIndex = 0
+      return
+    }
+    // get the next unanswered change after the current one
+    const nextFilteredNotAnsweredChanges = filteredNotAnsweredChanges.filter(
+      (change) => change.position > this.currentAnsweredIndex
+    )
+
+    // If there are no unanswered changes after the current one, we take the first one
+    this.currentAnsweredIndex =
+      nextFilteredNotAnsweredChanges.length > 0
+        ? nextFilteredNotAnsweredChanges[0].position
+        : filteredNotAnsweredChanges[0].position
+  }
+
+  /**
    * Updates the result based on the validation of a suggestion.
    * @param {boolean} validate - Whether to validate the suggestion.
    * @param {IndexedGroupedChange} items - The suggestions to update the result for.
@@ -647,6 +710,7 @@ export class TextCorrector extends LitElement {
     items.forEach((item) => {
       this.validateChangeResult[item.position] = validate
     })
+    this.updateNextAnsweredIndex()
     this.requestUpdate()
   }
 
