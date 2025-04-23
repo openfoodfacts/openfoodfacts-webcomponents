@@ -1,5 +1,5 @@
 import { LitElement, html, css, nothing } from "lit"
-import { diffWordsWithSpace } from "diff"
+import { diffWordsWithSpace, type Change } from "diff"
 import { customElement, property, state } from "lit/decorators.js"
 import { BASE } from "../../styles/base"
 import { msg } from "@lit/localize"
@@ -380,12 +380,14 @@ export class TextCorrector extends LitElement {
       value = this.value
       textToCompare = this.textToCompare
     }
-    this.diffResult = diffWordsWithSpace(value, textToCompare).map((part, index) => {
-      return {
-        ...part,
-        index,
+    this.diffResult = diffWordsWithSpace(value, textToCompare).map(
+      (part: Change, index: number) => {
+        return {
+          ...part,
+          index,
+        }
       }
-    })
+    )
 
     // Group changes to identify "changed" items (adjacent removed and added)
     this.computeGroupedChanges()
