@@ -64,7 +64,7 @@
       </trans-unit>
       <trans-unit id="s13d6dffec1a1ec2b">
         <source>Nutrients</source>
-        <target state="needs-translation">Nutrients</target>
+        <target state="translated">Živiny</target>
       </trans-unit>
       <trans-unit id="s688d3d95ca7c01db">
         <source>Specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
