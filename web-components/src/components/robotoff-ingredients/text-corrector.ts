@@ -663,7 +663,7 @@ export class TextCorrector extends LitElement {
       value = value.replace(/( |\u00A0)/g, "␣")
     }
     // Replace newlines with ↩︎
-    return value.replace("\n", "↩︎")
+    return value.replace(/\n/g, "↩︎")
   }
 
   /**
