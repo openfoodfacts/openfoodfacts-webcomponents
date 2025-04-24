@@ -950,10 +950,7 @@ export class TextCorrector extends LitElement {
       return html`
         <div class="submit-buttons buttons-row can-wrap">
           <button class="button cappucino-button with-icon" @click=${this.cancelEditMode}>
-            <span
-              >${msg("Cancel")}
-              ${this.getKeyboardShortcutText(TextCorrectorKeyboardShortcut.CANCEL_EDITION)}</span
-            ><cross-icon></cross-icon>
+            <span>${msg("Cancel")}</span><cross-icon></cross-icon>
           </button>
           ${successButton}
         </div>
