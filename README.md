@@ -16,6 +16,10 @@ A set of web components for Open Food Facts to help build edition interfaces
 - Robotoff Questions
 - Donation banner
 - Mobile badges
+- Robotoff Ingredients
+
+### WIP
+
 - Knowledge Panels
 
 ## Design
