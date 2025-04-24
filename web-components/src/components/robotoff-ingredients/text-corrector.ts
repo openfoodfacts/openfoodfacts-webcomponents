@@ -307,10 +307,68 @@ export class TextCorrector extends LitElement {
     })
   }
 
+  /**
+   * Called when an attribute is changed.
+   * @param {string} name - The name of the attribute.
+   * @param {string | null} _old - The old value of the attribute.
+   * @param {string | null} value - The new value of the attribute.
+   */
+  override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
+    super.attributeChangedCallback(name, _old, value)
+    if (name === "original" || name === "correction") {
+      this.updateValues()
+      this.computeWordDiff(true)
+      this.resetAutoFocus = true
+    }
+  }
+  /**
+   * Called when the component is first updated.
+   * Adds an event listener for the keydown event if keyboard mode is enabled.
+   */
+  override firstUpdated() {
+    if (this.enableKeyboardMode) {
+      this.form!.addEventListener("keydown", this.handleKeyboardShortcut.bind(this))
+    }
+  }
+
+  /**
+   * Called when the component is disconnected from the DOM.
+   * Removes the event listener for the keydown event if keyboard mode is enabled.
+   */
+  override disconnectedCallback() {
+    super.disconnectedCallback()
+    if (this.enableKeyboardMode) {
+      this.form!.removeEventListener("keydown", this.handleKeyboardShortcut.bind(this))
+    }
+  }
+
+  /**
+   * Renders the component.
+   * @returns {TemplateResult} The rendered component.
+   */
+  override render() {
+    return html`
+      <form @submit=${this.confirmText}>
+        <div>${this.isEditMode ? this.renderEditTextarea() : this.renderSpellCheck()}</div>
+        <div class="submit-buttons-wrapper">${this.renderButtons()}</div>
+      </form>
+    `
+  }
+
+  /**
+   * Gets the data-id attribute for the accept suggestion button.
+   * @param {number} index - The index of the suggestion.
+   * @returns {string} The data-id attribute value.
+   */
   getAcceptSuggestionButtonDataId(index: number) {
     return `accept-suggestion-${index}`
   }
 
+  /**
+   * Gets the keyboard shortcut text for a given shortcut.
+   * @param {TextCorrectorKeyboardShortcut} shortcut - The keyboard shortcut.
+   * @returns {string} The keyboard shortcut text.
+   */
   getKeyboardShortcutText(shortcut: TextCorrectorKeyboardShortcut): string {
     if (!this.enableKeyboardMode || this.isEditMode) {
       return ""
@@ -326,20 +384,8 @@ export class TextCorrector extends LitElement {
   }
 
   /**
-   * Called when an attribute is changed.
-   * @param {string} name - The name of the attribute.
-   * @param {string | null} _old - The old value of the attribute.
-   * @param {string | null} value - The new value of the attribute.
+   * Focuses the first button in the component.
    */
-  override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
-    super.attributeChangedCallback(name, _old, value)
-    if (name === "original" || name === "correction") {
-      this.updateValues()
-      this.computeWordDiff(true)
-      this.resetAutoFocus = true
-    }
-  }
-
   focusFirstButton() {
     if (!this.enableKeyboardMode) {
       return
@@ -352,6 +398,9 @@ export class TextCorrector extends LitElement {
     }, 0)
   }
 
+  /**
+   * Focuses the textarea in the component.
+   */
   focusTextArea() {
     if (!this.enableKeyboardMode) {
       return
@@ -362,6 +411,9 @@ export class TextCorrector extends LitElement {
     }, 0)
   }
 
+  /**
+   * Focuses the save button in the component.
+   */
   focusSaveButton() {
     if (!this.enableKeyboardMode) {
       return
@@ -371,6 +423,12 @@ export class TextCorrector extends LitElement {
       button.focus()
     }, 0)
   }
+
+  /**
+   * Lifecycle method called when the component is updated. It allow to focus the first button in the component when the component is updated.
+   * @param changedProperties - The properties that have changed.
+   *
+   */
   override updated(changedProperties: Map<string, unknown>) {
     super.updated(changedProperties)
     if (this.resetAutoFocus) {
@@ -592,6 +650,11 @@ export class TextCorrector extends LitElement {
     return ""
   }
 
+  /**
+   * Cleans the suggestion by replacing spaces and newlines with special characters.
+   * @param {string} suggestion - The suggestion to clean.
+   * @returns {string} The cleaned suggestion.
+   */
   cleanSuggestion(suggestion: string): string {
     if (!suggestion) {
       return this.renderEmptySuggestion()
@@ -700,10 +763,16 @@ export class TextCorrector extends LitElement {
     `
   }
 
+  /**
+   * Toggles the info popover.
+   */
   toggleInfoPopover() {
     this.showInfoPopover = !this.showInfoPopover
   }
 
+  /**
+   * Closes the info popover.
+   */
   closeInfoPopover() {
     this.showInfoPopover = false
   }
@@ -988,32 +1057,11 @@ export class TextCorrector extends LitElement {
       ${this.renderSummary()}
     `
   }
+
   /**
-   * Renders the component.
-   * @returns {TemplateResult} The rendered component.
+   * Handles the keyboard shortcuts.
+   * @param {KeyboardEvent} event - The keyboard event.
    */
-  override render() {
-    return html`
-      <form @submit=${this.confirmText}>
-        <div>${this.isEditMode ? this.renderEditTextarea() : this.renderSpellCheck()}</div>
-        <div class="submit-buttons-wrapper">${this.renderButtons()}</div>
-      </form>
-    `
-  }
-
-  override firstUpdated() {
-    if (this.enableKeyboardMode) {
-      this.form!.addEventListener("keydown", this.handleKeyboardShortcut.bind(this))
-    }
-  }
-
-  override disconnectedCallback() {
-    super.disconnectedCallback()
-    if (this.enableKeyboardMode) {
-      this.form!.removeEventListener("keydown", this.handleKeyboardShortcut.bind(this))
-    }
-  }
-
   private handleKeyboardShortcut(event: KeyboardEvent) {
     if (!this.enableKeyboardMode || this.isEditMode) {
       return
