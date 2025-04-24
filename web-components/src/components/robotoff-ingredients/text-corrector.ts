@@ -180,6 +180,10 @@ export class TextCorrector extends LitElement {
         height: 32px;
         font-weight: 500;
         border-radius: 30px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
       }
       .suggestion-button-title {
         font-weight: bold;
@@ -585,7 +589,7 @@ export class TextCorrector extends LitElement {
     return ""
   }
 
-  cleanSuggestion(suggestion: string) {
+  cleanSuggestion(suggestion: string): string {
     if (!suggestion) {
       return this.renderEmptySuggestion()
     }
@@ -606,13 +610,13 @@ export class TextCorrector extends LitElement {
    */
   renderAcceptSuggestionButton(item: IndexedGroupedChange, index: number) {
     let text
-    let supplementaryText
+    let keyboardShortcutText
     switch (item.type) {
       case ChangeType.CHANGED:
-        text = html`${this.cleanSuggestion(item.newValue!)}`
+        text = `${this.cleanSuggestion(item.newValue!)}`
         break
       case ChangeType.ADDED:
-        text = html`${this.cleanSuggestion(item.value!)}`
+        text = `${this.cleanSuggestion(item.value!)}`
         break
       case ChangeType.REMOVED:
         text = this.renderEmptySuggestion()
@@ -620,7 +624,7 @@ export class TextCorrector extends LitElement {
     }
     // Add keyboard shortcut text for the first suggestion
     if (index === 0) {
-      supplementaryText = this.getKeyboardShortcutText(
+      keyboardShortcutText = this.getKeyboardShortcutText(
         TextCorrectorKeyboardShortcut.ACCEPT_FIRST_SUGGESTION
       )
     }
@@ -630,8 +634,9 @@ export class TextCorrector extends LitElement {
         @click="${() => this.updateResult(true, [item])}"
         tabindex="1"
         data-id="${this.getAcceptSuggestionButtonDataId(index)}"
+        title="${text}"
       >
-        <span class="pre-wrap">${text}${supplementaryText}</span>
+        ${text}${keyboardShortcutText}
       </button>
     `
   }
@@ -644,11 +649,11 @@ export class TextCorrector extends LitElement {
    */
   renderRejectSuggestionButton(item: IndexedGroupedChange, index: number) {
     let text
-    let supplementaryText
+    let keyboardShortcutText
     switch (item.type) {
       case ChangeType.CHANGED:
         // replace espace and espace insecable with a visible character
-        text = html`${this.cleanSuggestion(item.oldValue!)}`
+        text = `${this.cleanSuggestion(item.oldValue!)}`
         break
       case ChangeType.ADDED:
         text = this.renderEmptySuggestion()
@@ -659,7 +664,7 @@ export class TextCorrector extends LitElement {
     }
     // Only add keyboard shortcut text for the first suggestion.
     if (index === 0) {
-      supplementaryText = this.getKeyboardShortcutText(
+      keyboardShortcutText = this.getKeyboardShortcutText(
         TextCorrectorKeyboardShortcut.REJECT_FIRST_SUGGESTION
       )
     }
@@ -667,8 +672,9 @@ export class TextCorrector extends LitElement {
       class="suggestion-button button light-red-button small"
       @click="${() => this.updateResult(false, [item])}"
       tabindex="2"
+      title="${text}"
     >
-      <span class="pre-wrap">${text}${supplementaryText}</span>
+      ${text}${keyboardShortcutText}
     </button>`
   }
 
