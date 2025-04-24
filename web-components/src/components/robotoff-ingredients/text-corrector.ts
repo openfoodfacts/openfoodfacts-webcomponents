@@ -1008,7 +1008,7 @@ export class TextCorrector extends LitElement {
   override disconnectedCallback() {
     super.disconnectedCallback()
     if (this.enableKeyboardMode) {
-      this.form!.removeEventListener("keydown", () => this.handleKeyboardShortcut.bind(this))
+      this.form!.removeEventListener("keydown", this.handleKeyboardShortcut.bind(this))
     }
   }
 
