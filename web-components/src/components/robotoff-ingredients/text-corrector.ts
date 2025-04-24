@@ -41,7 +41,6 @@ export enum TextCorrectorKeyboardShortcut {
   SKIP_TEXT_CORRECTION = "k",
   EDIT_TEXT = "e",
   VALIDATE_CORRECTION = "s",
-  CANCEL_EDITION = "c",
 }
 
 /**
@@ -306,7 +305,7 @@ export class TextCorrector extends LitElement {
   }
 
   getKeyboardShortcutText(shortcut: TextCorrectorKeyboardShortcut): string {
-    if (!this.enableKeyboardMode) {
+    if (!this.enableKeyboardMode || this.isEditMode) {
       return ""
     }
     return ` (${shortcut.toUpperCase()})`
@@ -760,6 +759,9 @@ export class TextCorrector extends LitElement {
       nextFilteredNotAnsweredChanges.length > 0
         ? nextFilteredNotAnsweredChanges[0].position
         : filteredNotAnsweredChanges[0].position
+
+    // focus on the next unanswered change
+    this.focusFirstButton()
   }
 
   /**
@@ -992,6 +994,9 @@ export class TextCorrector extends LitElement {
   }
 
   private handleKeyboardShortcut(event: KeyboardEvent) {
+    if (!this.enableKeyboardMode || this.isEditMode) {
+      return
+    }
     switch (event.key) {
       case TextCorrectorKeyboardShortcut.ACCEPT_FIRST_SUGGESTION:
         this.updateResult(true, [this.groupedChanges[this.currentAnsweredIndex]])
@@ -1007,9 +1012,6 @@ export class TextCorrector extends LitElement {
         break
       case TextCorrectorKeyboardShortcut.VALIDATE_CORRECTION:
         this.confirmText(new Event("submit") as SubmitEvent)
-        break
-      case TextCorrectorKeyboardShortcut.CANCEL_EDITION:
-        this.cancelEditMode()
         break
     }
   }
