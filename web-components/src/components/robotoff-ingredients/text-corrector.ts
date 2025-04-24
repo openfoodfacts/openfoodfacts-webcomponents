@@ -72,6 +72,9 @@ export class TextCorrector extends LitElement {
       ButtonType.LightGreen,
     ]),
     css`
+      .text {
+        line-height: 1.4rem;
+      }
       .text-section {
         padding-bottom: 0.5rem;
       }
@@ -586,7 +589,13 @@ export class TextCorrector extends LitElement {
     if (!suggestion) {
       return this.renderEmptySuggestion()
     }
-    return suggestion.replace(/( |\u00A0)/g, "␣").replace("\n", "↩︎")
+    let value = suggestion
+    // Check if value contains only spaces or newlines
+    if (value.match(/^( |\u00A0|\n)+$/)) {
+      value = value.replace(/( |\u00A0)/g, "␣")
+    }
+    // Replace newlines with ↩︎
+    return value.replace("\n", "↩︎")
   }
 
   /**
@@ -818,8 +827,12 @@ export class TextCorrector extends LitElement {
   /**
    * Confirms the text.
    */
-  confirmText(event: SubmitEvent) {
-    event.preventDefault()
+  confirmText(event?: SubmitEvent) {
+    event?.preventDefault()
+    // If there are answered changes, we don't want to submit the form
+    if (!this.isEditMode && this.filteredNotAnsweredChanges.length) {
+      return
+    }
 
     this.isEditMode = false
     if (this.correction === this.value) {
@@ -1011,7 +1024,7 @@ export class TextCorrector extends LitElement {
         this.enterEditMode()
         break
       case TextCorrectorKeyboardShortcut.VALIDATE_CORRECTION:
-        this.confirmText(new Event("submit") as SubmitEvent)
+        this.confirmText()
         break
     }
   }
