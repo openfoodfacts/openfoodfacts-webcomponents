@@ -522,8 +522,6 @@ export class TextCorrector extends LitElement {
     }
     // Group changes to identify "changed" items (adjacent removed and added)
     this.computeGroupedChanges()
-    console.log("diffResult", this.diffResult)
-    console.log("groupedChanges", this.groupedChanges)
 
     return this.diffResult
   }
@@ -888,6 +886,49 @@ export class TextCorrector extends LitElement {
   }
 
   /**
+   * Gets the value of a grouped change based on the validation result.
+   * If groupedChange is not answered, it returns the original value.
+   * If groupedChange is answered, it returns the value based on the validation result.
+   * @param {IndexedGroupedChange} groupedChange - The grouped change.
+   * @returns {string} The value of the grouped change.
+   */
+  getValueOfGroupedChange(groupedChange: IndexedGroupedChange): string {
+    // get value of grouped change based on the validateChangeResult
+    const result = this.validateChangeResult[groupedChange.position]
+    switch (groupedChange.type) {
+      case ChangeType.ADDED:
+        return result ? groupedChange.value! : ""
+      case ChangeType.REMOVED:
+        return result ? "" : groupedChange.value!
+      case ChangeType.CHANGED:
+        return result ? groupedChange.newValue! : groupedChange.oldValue!
+      default:
+        return ""
+    }
+  }
+
+  buildValueWithAnsweredChanges() {
+    let value = ""
+    let groupedChangesIndex = 0
+    for (let index = 0; index < this.diffResult.length; index++) {
+      const item = this.diffResult[index]
+      const indexedGroupedChange = this.groupedChanges[groupedChangesIndex]
+      if (indexedGroupedChange?.indexes.includes(index)) {
+        value += this.getValueOfGroupedChange(indexedGroupedChange)
+        // Go to next grouped change
+        groupedChangesIndex++
+        if (indexedGroupedChange.type === ChangeType.CHANGED) {
+          // Skip next part of the diff result because changed type is composed of two parts
+          index++
+        }
+      } else {
+        value += item.value
+      }
+    }
+    return value
+  }
+
+  /**
    * Accepts the text with a correction.
    */
   acceptTextWithCorrection() {
@@ -911,8 +952,12 @@ export class TextCorrector extends LitElement {
     if (!this.isEditMode && this.filteredNotAnsweredChanges.length) {
       return
     }
-
+    // Build the value with the answered changes if we are not in edit mode
+    if (!this.isEditMode) {
+      this.value = this.buildValueWithAnsweredChanges()
+    }
     this.isEditMode = false
+
     if (this.correction === this.value) {
       this.acceptText()
     } else if (this.original === this.value) {
@@ -946,6 +991,7 @@ export class TextCorrector extends LitElement {
    */
   enterEditMode() {
     this.isEditMode = true
+    this.value = this.buildValueWithAnsweredChanges()
     this.computeWordDiff()
     setTimeout(() => {
       this.focusTextArea()
