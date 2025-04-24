@@ -444,7 +444,7 @@ export class TextCorrector extends LitElement {
     // Use diffWordsWithSpace from the diff library for word-level diffing with preserved whitespace (including new lines)
     let value, textToCompare
     if (this.isEditMode) {
-      value = this.value
+      value = this.original
       textToCompare = this.value
     } else {
       value = this.value
@@ -464,6 +464,9 @@ export class TextCorrector extends LitElement {
     }
     // Group changes to identify "changed" items (adjacent removed and added)
     this.computeGroupedChanges()
+    console.log("diffResult", this.diffResult)
+    console.log("groupedChanges", this.groupedChanges)
+
     return this.diffResult
   }
 
@@ -474,9 +477,9 @@ export class TextCorrector extends LitElement {
   renderHighlightedDiff() {
     return html`${this.diffResult.map((part) => {
       if (part.added) {
-        return html`<span class="addition popover-wrapper">${part.value}</span>`
+        return html`<span class="addition">${part.value}</span>`
       } else if (part.removed) {
-        return html`<span class="deletion line-through popover">${part.value}</span>`
+        return html`<span class="deletion line-through">${part.value}</span>`
       } else {
         return html`<span>${part.value}</span>`
       }
