@@ -997,7 +997,9 @@ export class TextCorrector extends LitElement {
    */
   override render() {
     return html`
-      <form @submit=${this.confirmText}>${this.isEditMode ? this.renderEditTextarea() : this.renderSpellCheck()}</div>
+      <form @submit=${this.confirmText}>
+        ${this.isEditMode ? this.renderEditTextarea() : this.renderSpellCheck()}
+      </form>
       <div class="submit-buttons-wrapper">${this.renderButtons()}</div>
     `
   }
