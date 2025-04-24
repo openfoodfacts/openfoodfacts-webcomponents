@@ -42,18 +42,34 @@ export class ZoomableImage extends LitElement {
     getButtonClasses([ButtonType.LINK]),
   ]
 
+  /*
+   * Panzoom element
+   */
   @query(".panzoom")
   element!: HTMLElement
 
+  /*
+   * Image element
+   */
   @query("img")
   imageElement!: HTMLImageElement
 
+  /*
+   * Panzoom instance
+   */
   @state()
   panzoom!: any
 
+  /*
+   * Image source url
+   */
   @property({ type: String, attribute: "src" })
   src = ""
 
+  /**
+   * Fallback image source url
+   * If the image fails to load, this image will be displayed instead
+   */
   @property({ type: String, attribute: "fallback-src" })
   fallbackSrc = ""
 
