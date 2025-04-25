@@ -12,11 +12,18 @@ A set of web components for Open Food Facts to help build edition interfaces
 
 ## Currently available webcomponents
 
-- Nutrition editing (with Nutri-Sight integration)
-- Robotoff Questions
-- Donation banner
-- Mobile badges
-- Robotoff Ingredients
+### Available
+
+- [Nutrition editing (with Nutri-Sight integration)](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-nutrients)
+- [Robotoff Questions](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-question)
+- [Robotoff Ingredients](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-ingredients)
+- [Donation Banner](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#donation-banner)
+- [Mobile Badges](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#mobile-badges)
+- [Barcode Scanner](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#barcode-scanner)
+
+### For configuration
+
+- [Off Webcomponents Configuration](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#off-webcomponents-configuration)
 
 ### WIP
 
