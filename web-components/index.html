@@ -17,9 +17,9 @@
       }
     </style>
   </head>
-  <body style="background: #f2f2f2">
-    <h1>List of all available components</h1>
-    <h2>Robotoff Question</h2>
+  <body style="background: #f2f2f2; width: 100%; padding: 0; margin: 0">
+    <h1 style="margin: 1.5rem">List of all available components</h1>
+    <h2 style="margin: 1.5rem">Robotoff Question</h2>
 
     <div>
       <off-webcomponents-configuration
@@ -28,6 +28,9 @@
           "dryRun": true,
           "apiUrl": "https://robotoff.openfoodfacts.net/api/v1",
           "imgUrl": "https://images.openfoodfacts.net/images/products"
+        }'
+        folksonomy-configuration='{
+          "apiUrl": "https://api.folksonomy.openfoodfacts.org"
         }'
       />
     </div>
@@ -94,6 +97,10 @@
           language-codes='["fr", "en"]'
           enable-keyboard-mode
         ></robotoff-ingredients>
+      </div>
+
+      <div style="display: flex">
+        <folksonomy-editor product-code="6111035000430" page-type="view" />
       </div>
     </div>
   </body>

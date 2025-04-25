@@ -3,6 +3,11 @@ export const DEFAULT_ROBOTOFF_CONFIGURATION = {
   dryRun: false,
   imgUrl: "https://images.openfoodfacts.org/images/products",
 }
+
+export const DEFAULT_FOLKSONOMY_CONFIGURATION = {
+  apiUrl: "https://api.folksonomy.openfoodfacts.org",
+}
+
 export const PAGE_SIZE = 25
 
 export enum EventType {
