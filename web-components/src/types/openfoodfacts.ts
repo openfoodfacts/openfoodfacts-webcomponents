@@ -19,3 +19,9 @@ export type ImageIngredientsProductType = {
   image_ingredients_url: string
   product_name: string
 }
+export type NutrimentsData = Record<string, number | string>
+
+export type NutrimentsProductType = {
+  nutriments: NutrimentsData
+  serving_size: string
+}

@@ -4,7 +4,7 @@ import {
   NutrientsInsight,
   NutrientInsightDatum,
   InsightAnnotatationData,
-  InsightAnnotationType,
+  InsightAnnotationSize,
   InsightAnnotationAnswer,
 } from "../../types/robotoff"
 import { localized, msg, str } from "@lit/localize"
@@ -17,9 +17,11 @@ import {
 import { getLocale } from "../../localization"
 import {
   getPossibleUnits,
+  INSIGHTS_ANNOTATION_SIZE,
   NUTRIENT_SERVING_SIZE_KEY,
   NUTRIENT_SUFFIX,
   NUTRIENT_UNIT_NAME_PREFIX,
+  NUTRIENT_UNIT_SUFFIX,
 } from "../../utils/nutrients"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { EventType, SELECT_ICON_FILE_NAME } from "../../constants"
@@ -27,18 +29,34 @@ import { INPUT, SELECT } from "../../styles/form"
 import { FLEX } from "../../styles/utils"
 import { backgroundImage } from "../../directives/background-image"
 import { ALERT } from "../../styles/alert"
+import { NutrimentsProductType } from "../../types/openfoodfacts"
 
 export const ALLOWED_SPECIAL_VALUES = ["", "-", "traces"]
+
+export type FormatedNutrimentData = {
+  value: string
+  unit: string
+}
 
 // A handy data structure for nutrients information
 export type FormatedNutrients = {
   // nutrients per 100g
   "100g": Record<string, NutrientInsightDatum>
   // nutrients per serving
-  serving: Record<string, NutrientInsightDatum>
+  serving: Record<string, FormatedNutrimentData>
   // all nutrients present per 100g or serving
   keys: string[]
-  servingSize?: NutrientInsightDatum
+
+  servingSize?: string
+
+  robotoff: {
+    servingSize?: NutrientInsightDatum
+
+    // nutrients per 100g
+    "100g": Record<string, NutrientInsightDatum>
+    // nutrients per serving
+    serving: Record<string, NutrientInsightDatum>
+  }
 }
 /**
  * Variable store all size of the input to calculate the width of serving size input
@@ -157,6 +175,12 @@ export class RobotoffNutrientsTable extends LitElement {
   ]
 
   /**
+   * Nutriments data
+   */
+  @property({ type: Object, attribute: "nutriments-data" })
+  nutrimentsData?: NutrimentsProductType
+
+  /**
    * The insight to edit
    */
   @property({ type: Object })
@@ -166,7 +190,7 @@ export class RobotoffNutrientsTable extends LitElement {
    * Insight type
    */
   @state()
-  insightAnnotationType: InsightAnnotationType = InsightAnnotationType.CENTGRAMS
+  insightAnnotationSize: InsightAnnotationSize = InsightAnnotationSize.CENTGRAMS
 
   /**
    * Error message by key
@@ -201,11 +225,11 @@ export class RobotoffNutrientsTable extends LitElement {
     // Update the serving size value to dislay
     this._servingSizeValue = this.insight!.data.nutrients.serving_size?.value || ""
     // Update the insight type by checking the nutrient keys
-    this.insightAnnotationType = Object.keys(this.insight!.data.nutrients).filter((key) =>
-      key.endsWith(NUTRIENT_SUFFIX[InsightAnnotationType.SERVING])
+    this.insightAnnotationSize = Object.keys(this.insight!.data.nutrients).filter((key) =>
+      key.endsWith(NUTRIENT_SUFFIX[InsightAnnotationSize.SERVING])
     ).length
-      ? InsightAnnotationType.SERVING
-      : InsightAnnotationType.CENTGRAMS
+      ? InsightAnnotationSize.SERVING
+      : InsightAnnotationSize.CENTGRAMS
   }
 
   /**
@@ -227,31 +251,31 @@ export class RobotoffNutrientsTable extends LitElement {
   }
 
   /**
-   * Update the nutrients in a formated way to manipulate it easily in the template
-   * @returns {FormatedNutrients}
+   * Process robotoff data from insight
+   * @param nutrients - The nutrients object to update
+   * @param insight - The insight data
+   * @returns Set of nutrient keys found
    */
-  updateFormatedNutrients(): FormatedNutrients {
-    const nutrients: FormatedNutrients = {
-      servingSize: undefined,
-      keys: [],
-      "100g": {},
-      serving: {},
-    }
+  private processRobotoffData(
+    nutrients: FormatedNutrients,
+    insight: NutrientsInsight
+  ): Set<string> {
     const keysSet = new Set<string>()
 
-    Object.entries(this.insight!.data.nutrients)
+    Object.entries(insight.data.nutrients)
       // Sort by start position to keep the same order as the image
       .sort((entryA, entryB) => entryA[1].start - entryB[1].start)
       .forEach(([key, value]) => {
         let nutrientKey
-        if (key.endsWith(NUTRIENT_SUFFIX[InsightAnnotationType.CENTGRAMS])) {
-          nutrientKey = key.replace(NUTRIENT_SUFFIX[InsightAnnotationType.CENTGRAMS], "")
-          nutrients[InsightAnnotationType.CENTGRAMS][nutrientKey] = value
-        } else if (key.endsWith(NUTRIENT_SUFFIX[InsightAnnotationType.SERVING])) {
-          nutrientKey = key.replace(NUTRIENT_SUFFIX[InsightAnnotationType.SERVING], "")
-          nutrients[InsightAnnotationType.SERVING][nutrientKey] = value
+        if (key.endsWith(NUTRIENT_SUFFIX[InsightAnnotationSize.CENTGRAMS])) {
+          nutrientKey = key.replace(NUTRIENT_SUFFIX[InsightAnnotationSize.CENTGRAMS], "")
+          nutrients.robotoff[InsightAnnotationSize.CENTGRAMS][nutrientKey] = value
+        } else if (key.endsWith(NUTRIENT_SUFFIX[InsightAnnotationSize.SERVING])) {
+          nutrientKey = key.replace(NUTRIENT_SUFFIX[InsightAnnotationSize.SERVING], "")
+          nutrients.robotoff[InsightAnnotationSize.SERVING][nutrientKey] = value
         } else if (key === NUTRIENT_SERVING_SIZE_KEY) {
-          nutrients.servingSize = value
+          nutrients.robotoff.servingSize = value
+          nutrients.servingSize = value?.value
           return
         } else {
           console.log("Unknown nutrient key", key, value)
@@ -260,19 +284,138 @@ export class RobotoffNutrientsTable extends LitElement {
         keysSet.add(nutrientKey)
       })
 
+    return keysSet
+  }
+
+  /**
+   * Process serving size data from nutrimentsData
+   * @param nutrients - The nutrients object to update
+   * @param nutrimentsData - The nutriments data
+   */
+  private processServingSize(
+    nutrients: FormatedNutrients,
+    nutrimentsData: NutrimentsProductType
+  ): void {
+    // Add serving size data
+    if (nutrimentsData.serving_size) {
+      nutrients.servingSize = nutrimentsData.serving_size
+    }
+  }
+
+  /**
+   * Process nutrient data from nutrimentsData
+   * @param nutrients - The nutrients object to update
+   * @param nutrimentsData - The nutriments data
+   * @returns Set of nutrient keys found
+   */
+  private processNutrimentData(
+    nutrients: FormatedNutrients,
+    nutrimentsData: NutrimentsProductType
+  ): Set<string> {
+    const keySet = new Set<string>()
+    // Process nutrients
+    INSIGHTS_ANNOTATION_SIZE.forEach((size) => {
+      const suffix = NUTRIENT_SUFFIX[size]
+      const keys = Object.entries(nutrimentsData.nutriments).filter(([key]) => key.endsWith(suffix))
+      keys.forEach(([key, value]) => {
+        const nutrientKey = key.replace(suffix, "")
+        const nutrientUnitKey = `${nutrientKey}${NUTRIENT_UNIT_SUFFIX}`
+        nutrients[size][nutrientKey] = {
+          value: value.toString(),
+          unit: nutrimentsData.nutriments[nutrientUnitKey] as string,
+        }
+        keySet.add(nutrientKey)
+      })
+    })
+    return keySet
+  }
+
+  /**
+   * Process manually added nutrient keys
+   * @param keysSet - The existing set of keys
+   * @param addedKeys - Array of manually added keys
+   * @returns Updated set of nutrient keys
+   */
+  private processAddedNutrientKeys(keysSet: Set<string>, addedKeys: string[]): Set<string> {
+    if (addedKeys && addedKeys.length > 0) {
+      for (const key of addedKeys) {
+        if (!keysSet.has(key)) {
+          keysSet.add(key)
+        }
+      }
+    }
+    return keysSet
+  }
+
+  /**
+   * Initialize empty nutrients structure
+   * @returns Empty nutrients structure
+   */
+  private initializeNutrientsStructure(): FormatedNutrients {
+    return {
+      servingSize: undefined,
+      keys: [],
+      "100g": {},
+      serving: {},
+      robotoff: {
+        servingSize: undefined,
+        "100g": {},
+        serving: {},
+      },
+    }
+  }
+
+  /**
+   * Update the nutrients in a formated way to manipulate it easily in the template
+   * @returns {FormatedNutrients}
+   */
+  updateFormatedNutrients(): FormatedNutrients {
+    // Initialize nutrients structure
+    const nutrients = this.initializeNutrientsStructure()
+    let keysSet = new Set<string>()
+
+    // Process robotoff data if available
+    if (this.insight) {
+      keysSet = this.processRobotoffData(nutrients, this.insight)
+    }
+
+    // Process nutriment data if available
+    if (this.nutrimentsData) {
+      // Process serving size
+      this.processServingSize(nutrients, this.nutrimentsData)
+
+      // Process nutrients data and merge keys
+      const nutrimentKeysSet = this.processNutrimentData(nutrients, this.nutrimentsData)
+      nutrimentKeysSet.forEach((key) => keysSet.add(key))
+    }
+
+    // Process manually added nutrient keys
+    keysSet = this.processAddedNutrientKeys(keysSet, this._addedNutrientKey)
+
+    // Convert keys set to array
     nutrients.keys = Array.from(keysSet)
 
     this.nutrients = nutrients
     return this.nutrients
   }
 
-  getInputValueName = (key: string, column: InsightAnnotationType) => `${key}_${column}`
-  getInputUnitName = (key: string, column: InsightAnnotationType) =>
+  getInputValueName = (key: string, column: InsightAnnotationSize) => `${key}_${column}`
+  getInputUnitName = (key: string, column: InsightAnnotationSize) =>
     `${NUTRIENT_UNIT_NAME_PREFIX}${this.getInputValueName(key, column)}`
 
   getServingSizeInputName = () =>
-    this.getInputValueName(NUTRIENT_SERVING_SIZE_KEY, InsightAnnotationType.SERVING)
+    this.getInputValueName(NUTRIENT_SERVING_SIZE_KEY, InsightAnnotationSize.SERVING)
   getServingSizeValue = () => {}
+
+  renderRobotoffSuggestion(key: string, column: InsightAnnotationSize) {
+    const robotoffSuggestion = this.nutrients?.robotoff[column][key]?.value
+    if (!robotoffSuggestion) {
+      return nothing
+    }
+    return html`<div class="alert success">
+      ${robotoffSuggestion} ${this.nutrients?.robotoff[column][key]?.unit}
+    </div>`
+  }
 
   /**
    * Render the inputs for the given nutrient key and column
@@ -290,10 +433,11 @@ export class RobotoffNutrientsTable extends LitElement {
             <div>
               ${this.renderInputs(
                 key,
-                this.insightAnnotationType,
-                nutrients[this.insightAnnotationType][key]
+                this.insightAnnotationSize,
+                nutrients[this.insightAnnotationSize][key]
               )}
             </div>
+            ${this.renderRobotoffSuggestion(key, this.insightAnnotationSize)}
           </td>
         </tr>
       `
@@ -310,7 +454,7 @@ export class RobotoffNutrientsTable extends LitElement {
    */
   renderUnit(
     key: string,
-    column: InsightAnnotationType,
+    column: InsightAnnotationSize,
     nutrient: Pick<NutrientInsightDatum, "unit"> | undefined
   ) {
     const possibleUnits = getPossibleUnits(key, nutrient?.unit)
@@ -346,8 +490,8 @@ export class RobotoffNutrientsTable extends LitElement {
    */
   renderInputs(
     key: string,
-    column: InsightAnnotationType,
-    nutrient: Pick<NutrientInsightDatum, "value" | "unit"> | undefined
+    column: InsightAnnotationSize,
+    nutrient: { value: number | string; unit: string } | undefined
   ) {
     const inputName = this.getInputValueName(key, column)
     const value = nutrient?.value ?? ""
@@ -457,7 +601,7 @@ export class RobotoffNutrientsTable extends LitElement {
    * Submit the form data.
    * It will send the data to the server.
    */
-  submitFormData(formData: FormData, column: InsightAnnotationType) {
+  submitFormData(formData: FormData, column: InsightAnnotationSize) {
     const nutrientAnotationForm: InsightAnnotatationData = {}
     const formValues = formData.entries()
 
@@ -501,10 +645,10 @@ export class RobotoffNutrientsTable extends LitElement {
    * Handle the change event of the annotation type selection.
    * It will update the annotation type.
    */
-  onInsightAnnotationTypeChange(event: Event) {
+  onInsightAnnotationSizeChange(event: Event) {
     const input = event.target as HTMLInputElement
-    const value = input.value as InsightAnnotationType
-    this.insightAnnotationType = value
+    const value = input.value as InsightAnnotationSize
+    this.insightAnnotationSize = value
   }
 
   /**
@@ -531,7 +675,7 @@ export class RobotoffNutrientsTable extends LitElement {
 
   renderServingSizeInput() {
     const inputServingSizeName = this.getServingSizeInputName()
-    const servingSize = this.nutrients!.servingSize?.value ?? ""
+    const servingSize = this.nutrients!.servingSize
     return html`<div class="">
       <label class="serving-size-wrapper flex align-center flex-col">
         <span>${msg("Serving size")}</span>
@@ -550,7 +694,7 @@ export class RobotoffNutrientsTable extends LitElement {
    * Render the annotation type selection.
    * It will render a radio button for each annotation type.
    */
-  renderInsightAnnotationTypeSelection() {
+  renderInsightAnnotationSizeSelection() {
     return html`
       <div class="flex justify-center">
         <fieldset class="fieldset-annotation-type">
@@ -561,9 +705,9 @@ export class RobotoffNutrientsTable extends LitElement {
               <input
                 type="radio"
                 name="${SERVING_SIZE_SELECT_NAME}"
-                value=${InsightAnnotationType.CENTGRAMS}
-                ?checked=${this.insightAnnotationType === InsightAnnotationType.CENTGRAMS}
-                @change=${this.onInsightAnnotationTypeChange}
+                value=${InsightAnnotationSize.CENTGRAMS}
+                ?checked=${this.insightAnnotationSize === InsightAnnotationSize.CENTGRAMS}
+                @change=${this.onInsightAnnotationSizeChange}
               />
             </label>
             <label>
@@ -571,9 +715,9 @@ export class RobotoffNutrientsTable extends LitElement {
               <input
                 type="radio"
                 name="${SERVING_SIZE_SELECT_NAME}"
-                value=${InsightAnnotationType.SERVING}
-                ?checked=${this.insightAnnotationType === InsightAnnotationType.SERVING}
-                @change=${this.onInsightAnnotationTypeChange}
+                value=${InsightAnnotationSize.SERVING}
+                ?checked=${this.insightAnnotationSize === InsightAnnotationSize.SERVING}
+                @change=${this.onInsightAnnotationSizeChange}
               />
             </label>
           </div>
@@ -604,7 +748,7 @@ export class RobotoffNutrientsTable extends LitElement {
     event.preventDefault()
     event.stopPropagation()
     const formData = new FormData(event.target as HTMLFormElement)
-    this.submitFormData(formData, this.insightAnnotationType)
+    this.submitFormData(formData, this.insightAnnotationSize)
   }
 
   /**
@@ -650,8 +794,8 @@ export class RobotoffNutrientsTable extends LitElement {
         <thead>
           <tr>
             <th scope="col">${msg("Nutrients")}</th>
-            ${this.insightAnnotationType === InsightAnnotationType.CENTGRAMS
-              ? html` <th scope="col">100g</th> `
+            ${this.insightAnnotationSize === InsightAnnotationSize.CENTGRAMS
+              ? html` <th scope="col">${msg("100g")}</th> `
               : html`
                   <th scope="col" class="flex flex-col align-center serving-size-wrapper">
                     <span>${msg(str`Specified serving "${this._servingSizeValue}"`)}</span>
@@ -669,10 +813,11 @@ export class RobotoffNutrientsTable extends LitElement {
 
   override render() {
     this.updateFormatedNutrients()
+
     return html`
       <div>
         <div>${this.renderServingSizeInput()}</div>
-        <div>${this.renderInsightAnnotationTypeSelection()}</div>
+        <div>${this.renderInsightAnnotationSizeSelection()}</div>
 
         <form @submit=${this.onSubmit}>
           <div class="flex justify-center">${this.renderTable()}</div>

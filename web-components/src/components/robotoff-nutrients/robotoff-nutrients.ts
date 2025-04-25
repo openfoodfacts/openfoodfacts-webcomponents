@@ -14,6 +14,10 @@ import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { FLEX } from "../../styles/utils"
 import { EventState, EventType } from "../../constants"
 import { BasicStateEventDetail } from "../../types"
+import { NutrimentsData, NutrimentsProductType } from "../../types/openfoodfacts"
+import { fetchProduct } from "../../api/openfoodfacts"
+import { ProductFields } from "../../utils/openfoodfacts"
+import { getLocale } from "../../localization"
 
 /**
  * Robotoff Nutrients component
@@ -65,6 +69,8 @@ export class RobotoffNutrients extends LitElement {
   @state()
   isSubmited = false
 
+  @state()
+  private nutrimentsData?: NutrimentsProductType
   /**
    * Emit the state event
    * @param {EventState} state
@@ -94,7 +100,11 @@ export class RobotoffNutrients extends LitElement {
 
       this.emitNutrientEvent(EventState.LOADING)
 
-      await Promise.all([fetchInsightsByProductCode(productCode), fetchNutrientsTaxonomies()])
+      await Promise.all([
+        fetchInsightsByProductCode(productCode),
+        fetchNutrientsTaxonomies(),
+        this.getProductNutriments(productCode),
+      ])
 
       const value = insight(productCode).get()
       this.emitNutrientEvent(value ? EventState.HAS_DATA : EventState.NO_DATA)
@@ -102,6 +112,21 @@ export class RobotoffNutrients extends LitElement {
     },
     args: () => [this.productCode],
   })
+
+  /**
+   * Get the product nutriments
+   * @param {string} productCode
+   * @returns {Promise<NutrimentsProductType>}
+   */
+  async getProductNutriments(productCode: string) {
+    this.nutrimentsData = undefined
+    const result = await fetchProduct<NutrimentsProductType>(productCode, {
+      fields: [ProductFields.NUTRIMENTS],
+      lc: getLocale(),
+    })
+    this.nutrimentsData = result.product
+    return result.product.nutriments
+  }
 
   /**
    * Annotate the nutrients insights
@@ -145,8 +170,8 @@ export class RobotoffNutrients extends LitElement {
         return html`
           <div class="nutrients" part="nutrients">
             <div part="nutrients-content-wrapper" class="nutrients-content-wrapper">
-              ${this.renderImage(insight as NutrientsInsight)}
               <robotoff-nutrients-table
+                .nutrimentsData="${this.nutrimentsData}"
                 .insight="${insight as NutrientsInsight}"
                 @submit="${this.onSubmit}"
               ></robotoff-nutrients-table>

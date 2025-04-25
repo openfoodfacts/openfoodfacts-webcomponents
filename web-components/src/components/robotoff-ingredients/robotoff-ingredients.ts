@@ -17,7 +17,7 @@ import { RobotoffIngredientsStateEventDetail, TextCorrectorEvent } from "../../t
 import { INPUT } from "../../styles/form"
 import { getValidHeadingLevel } from "../../utils/knowledge-panels/heading-utils"
 import { sanitizeHtml } from "../../utils/html"
-import { getFullImageUrl } from "../../utils/openfoodfacts"
+import { getFullImageUrl, ProductFields } from "../../utils/openfoodfacts"
 import { mobileAndTabletCheck } from "../../utils/breakpoints"
 
 /**
@@ -176,7 +176,7 @@ export class RobotoffIngredients extends LitElement {
     }
     const result = await fetchProduct<ImageIngredientsProductType>(insight.barcode, {
       lc: insight.data.lang,
-      fields: ["image_ingredients_url", "product_name"],
+      fields: [ProductFields.IMAGE_INGREDIENTS_URL, ProductFields.PRODUCT_NAME],
     })
 
     this.productData = {
