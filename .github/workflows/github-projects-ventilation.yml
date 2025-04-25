@@ -66,7 +66,7 @@ jobs:
         with:
           project-url: https://github.com/orgs/openfoodfacts/projects/5 # Add issue to the folksonomy project
           github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
-          labeled: 🏷️ Folksonomy Project
+          labeled: 🏷️ Folksonomy Engine
           label-operator: OR       
       - uses: actions/add-to-project@main
         with:

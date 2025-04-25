@@ -7,6 +7,7 @@ export type OffWebcomponentConfigurationOptions = {
   languageCode: string
   assetsImagesPath: string
   folksonomyConfiguration: FolksonomyConfigurationOptions
+  openfoodfactsApiUrl: string
 }
 
 export type Product = {

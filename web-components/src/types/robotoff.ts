@@ -32,11 +32,18 @@ export type QuestionsResponse = {
   questions: Question[]
 }
 
-export type QuestionAnnotationAnswer = "2" | "1" | "0" | "-1" // https://openfoodfacts.github.io/robotoff/references/api/#tag/Insights/paths/~1insights~1annotate/post
+// https://openfoodfacts.github.io/robotoff/references/api/#tag/Insights/paths/~1insights~1annotate/post
+export enum QuestionAnnotationAnswer {
+  ACCEPT_AND_ADD_DATA = "2",
+  ACCEPT = "1",
+  REFUSE = "0",
+  SKIP = "-1",
+}
 export enum InsightAnnotationType {
   CENTGRAMS = "100g",
   SERVING = "serving",
 }
+
 export type InsightAnnotatationData = Record<string, { value: string; unit: string | null }>
 
 export type InsightAnnotationAnswer = {
@@ -45,7 +52,13 @@ export type InsightAnnotationAnswer = {
   type: InsightAnnotationType
 }
 
+export enum InsightType {
+  ingredient_spellcheck = "ingredient_spellcheck",
+  nutrient_extraction = "nutrient_extraction",
+}
+
 export type InsightsRequestParams = Partial<{
+  language_codes: string[]
   insight_types: string
   barcode: string
   annotated: boolean
@@ -61,7 +74,7 @@ export type InsightsRequestParams = Partial<{
   campaigns: string
 }>
 
-export type InsightDatum = {
+export type NutrientInsightDatum = {
   end: number
   text: string
   unit: string
@@ -74,18 +87,17 @@ export type InsightDatum = {
   char_start: number
 }
 
-export type InsightData = {
+export type NutrientInsightData = {
   entities: {
-    postprocessed: InsightDatum[]
+    postprocessed: NutrientInsightDatum[]
   }
-  nutrients: Record<string, InsightDatum>
+  nutrients: Record<string, NutrientInsightDatum>
 }
 
-export type Insight = {
+export type BaseInsight<DataType> = {
   id: string
   barcode: string
   type: string
-  data: InsightData
   timestamp: string | null
   completed_at: string | null
   annotation: string | null
@@ -107,11 +119,22 @@ export type Insight = {
   campaign: string[]
   confidence: number | null
   bounding_box: string | null
+  data: DataType
 }
-export type InsightsResponse = {
+
+export type NutrientsInsight = BaseInsight<NutrientInsightData>
+
+export type IngredientsInsight = BaseInsight<{
+  lang: string
+  original: string
+  correction: string
+  lang_confidence: number
+}>
+
+export type InsightsResponse<T extends NutrientsInsight | IngredientsInsight> = {
   count: number
   status: string
-  insights: Insight[]
+  insights: T[]
 }
 
 export type NutrientAnotationFormData = {

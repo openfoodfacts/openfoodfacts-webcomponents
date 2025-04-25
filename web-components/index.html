@@ -6,6 +6,16 @@
     <title>Demo</title>
     <script type="module" src="off-webcomponents.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style type="text/css">
+      .box {
+        border-radius: 10px;
+        background-color: #fafafa;
+        border: 1px solid #f0f0f0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        margin-bottom: 10rem;
+      }
+    </style>
   </head>
   <body style="background: #f2f2f2; width: 100%; padding: 0; margin: 0">
     <h1 style="margin: 1.5rem">List of all available components</h1>
@@ -13,17 +23,15 @@
 
     <div>
       <off-webcomponents-configuration
-        language-code="fr"
+        language-code="en"
         robotoff-configuration='{
           "dryRun": true,
           "apiUrl": "https://robotoff.openfoodfacts.net/api/v1",
           "imgUrl": "https://images.openfoodfacts.net/images/products"
         }'
-        ,
         folksonomy-configuration='{
           "apiUrl": "https://api.folksonomy.openfoodfacts.org"
         }'
-        ,
       />
     </div>
     <div>
@@ -83,6 +91,14 @@
         <barcode-scanner id="barcode-scanner"></barcode-scanner>
       </div>
 
+      <div class="box" style="display: flex">
+        <robotoff-ingredients
+          id="robotoff-ingredients"
+          language-codes='["fr", "en"]'
+          enable-keyboard-mode
+        ></robotoff-ingredients>
+      </div>
+
       <div style="display: flex">
         <folksonomy-editor product-code="6111035000430" page-type="view" />
       </div>
@@ -106,10 +122,12 @@
   const productCode = document.getElementById("product-code")
   const insightTypes = document.getElementById("insight-types")
   const barcodeScanner = document.getElementById("barcode-scanner")
+  const robotoffIngredients = document.getElementById("robotoff-ingredients")
 
   const productDebounce = debounce((value) => {
     robotoffQuestion.setAttribute("product-code", value)
     robotoffNutrients.setAttribute("product-code", value)
+    robotoffIngredients.setAttribute("product-code", value)
   })
   productCode.addEventListener("input", (event) => {
     productDebounce(event.target.value)

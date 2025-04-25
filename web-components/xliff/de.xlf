@@ -116,7 +116,7 @@
       </trans-unit>
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
-        <target state="needs-translation">group photo donation <x id="0" equiv-text="${this.currentYear}"/></target>
+        <target state="translated">Gruppenfoto spende <x id="0" equiv-text="${this.currentYear}"/></target>
       </trans-unit>
       <trans-unit id="s43df2e8395f6834e">
         <source>Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</source>
