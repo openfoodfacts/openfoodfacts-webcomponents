@@ -1,8 +1,8 @@
 import { LitElement, css, html, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import {
-  Insight,
-  InsightDatum,
+  NutrientsInsight,
+  NutrientInsightDatum,
   InsightAnnotatationData,
   InsightAnnotationType,
   InsightAnnotationAnswer,
@@ -33,12 +33,12 @@ export const ALLOWED_SPECIAL_VALUES = ["", "-", "traces"]
 // A handy data structure for nutrients information
 export type FormatedNutrients = {
   // nutrients per 100g
-  "100g": Record<string, InsightDatum>
+  "100g": Record<string, NutrientInsightDatum>
   // nutrients per serving
-  serving: Record<string, InsightDatum>
+  serving: Record<string, NutrientInsightDatum>
   // all nutrients present per 100g or serving
   keys: string[]
-  servingSize?: InsightDatum
+  servingSize?: NutrientInsightDatum
 }
 /**
  * Variable store all size of the input to calculate the width of serving size input
@@ -160,7 +160,7 @@ export class RobotoffNutrientsTable extends LitElement {
    * The insight to edit
    */
   @property({ type: Object })
-  insight?: Insight
+  insight?: NutrientsInsight
 
   /**
    * Insight type
@@ -311,7 +311,7 @@ export class RobotoffNutrientsTable extends LitElement {
   renderUnit(
     key: string,
     column: InsightAnnotationType,
-    nutrient: Pick<InsightDatum, "unit"> | undefined
+    nutrient: Pick<NutrientInsightDatum, "unit"> | undefined
   ) {
     const possibleUnits = getPossibleUnits(key, nutrient?.unit)
     const inputName = this.getInputUnitName(key, column)
@@ -347,7 +347,7 @@ export class RobotoffNutrientsTable extends LitElement {
   renderInputs(
     key: string,
     column: InsightAnnotationType,
-    nutrient: Pick<InsightDatum, "value" | "unit"> | undefined
+    nutrient: Pick<NutrientInsightDatum, "value" | "unit"> | undefined
   ) {
     const inputName = this.getInputValueName(key, column)
     const value = nutrient?.value ?? ""

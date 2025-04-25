@@ -1,5 +1,10 @@
 import { css } from "lit"
 
+export const RELATIVE = css`
+  .relative {
+    position: relative;
+  }
+`
 export const FLEX = css`
   .flex {
     display: flex;
