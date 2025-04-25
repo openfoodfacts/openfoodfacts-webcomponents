@@ -132,19 +132,22 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
           <p></p>
           <button
             class="button success-button"
-            @click="${(event: Event) => this._annotateProduct(event, "1")}"
+            @click="${(event: Event) =>
+              this._annotateProduct(event, QuestionAnnotationAnswer.ACCEPT)}"
           >
             Yes
           </button>
           <button
             class="button danger-button"
-            @click="${(event: Event) => this._annotateProduct(event, "0")}"
+            @click="${(event: Event) =>
+              this._annotateProduct(event, QuestionAnnotationAnswer.REFUSE)}"
           >
             No
           </button>
           <button
             class="button cappucino-button"
-            @click="${(event: Event) => this._annotateProduct(event, "-1")}"
+            @click="${(event: Event) =>
+              this._annotateProduct(event, QuestionAnnotationAnswer.SKIP)}"
           >
             Skip
           </button>

@@ -1,8 +1,7 @@
 import { LitElement, html, css, TemplateResult } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { unsafeHTML } from "lit/directives/unsafe-html.js"
-import DOMPurify from "dompurify"
 import { KnowledgePanelElement } from "../../../types/knowledge-panel"
+import { sanitizeHtml } from "../../../utils/html"
 
 /**
  * Text element renderer component
@@ -34,10 +33,10 @@ export class TextElementRenderer extends LitElement {
       ""
 
     // Sanitize the HTML first
-    const sanitizedContent = DOMPurify.sanitize(textContent)
+    const sanitizedContent = sanitizeHtml(textContent)
 
     // Then use it with unsafeHTML
-    return html`<div class="text_element">${unsafeHTML(sanitizedContent)}</div>`
+    return html`<div class="text_element">${sanitizedContent}</div>`
   }
 }
 
