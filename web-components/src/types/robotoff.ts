@@ -39,7 +39,7 @@ export enum QuestionAnnotationAnswer {
   REFUSE = "0",
   SKIP = "-1",
 }
-export enum InsightAnnotationType {
+export enum InsightAnnotationSize {
   CENTGRAMS = "100g",
   SERVING = "serving",
 }
@@ -49,7 +49,7 @@ export type InsightAnnotatationData = Record<string, { value: string; unit: stri
 export type InsightAnnotationAnswer = {
   insightId: string
   data: InsightAnnotatationData
-  type: InsightAnnotationType
+  type: InsightAnnotationSize
 }
 
 export enum InsightType {

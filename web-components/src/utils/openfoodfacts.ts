@@ -3,7 +3,6 @@ export enum ProductFields {
   PRODUCT_NAME = "product_name",
   NUTRIMENTS = "nutriments",
 }
-
 /**
  * Gets the full image URL by replacing the '400.jpg' suffix with 'full.jpg'.
  * @param {string} imageUrl - The original image URL.
