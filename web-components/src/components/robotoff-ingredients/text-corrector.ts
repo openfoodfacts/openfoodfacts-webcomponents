@@ -705,7 +705,7 @@ export class TextCorrector extends LitElement {
    * @param {number} index - The row index of the suggestion. This parameter is different of index of changes.
    * @returns {TemplateResult} The rendered button.
    */
-  renderRejectSuggestionButton(item: IndexedGroupedChange, index: number) {
+  renderRejectSuggestionButton(item: IndexedGroupedChange) {
     let text
     let keyboardShortcutText
     switch (item.type) {
@@ -743,8 +743,7 @@ export class TextCorrector extends LitElement {
   renderSummaryItemContent(item: IndexedGroupedChange, index: number) {
     return html`
       <div class="summary-item">
-        ${this.renderRejectSuggestionButton(item, index)}
-        ${this.renderAcceptSuggestionButton(item, index)}
+        ${this.renderRejectSuggestionButton(item)} ${this.renderAcceptSuggestionButton(item, index)}
       </div>
     `
   }

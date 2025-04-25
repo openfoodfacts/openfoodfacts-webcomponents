@@ -18,6 +18,7 @@ import { INPUT } from "../../styles/form"
 import { getValidHeadingLevel } from "../../utils/knowledge-panels/heading-utils"
 import { sanitizeHtml } from "../../utils/html"
 import { getFullImageUrl } from "../../utils/openfoodfacts"
+import { mobileAndTabletCheck } from "../../utils/breakpoints"
 
 /**
  * RobotoffIngredients component
@@ -131,6 +132,14 @@ export class RobotoffIngredients extends LitElement {
     const id: string | undefined = this._insightIds[this._currentIndex]
     const value = ingredientSpellcheckInsights.getItem(id)
     return value
+  }
+
+  /**
+   * Gets the value of enableKeyboardMode, considering mobile and tablet devices.
+   */
+  get _enable_keyboard_mode() {
+    // Disable keyboard mode on mobile and tablet devices
+    return this.enableKeyboardMode ? !mobileAndTabletCheck() : false
   }
 
   /**
@@ -301,7 +310,7 @@ export class RobotoffIngredients extends LitElement {
                   correction=${correction}
                   original=${original}
                   @save=${this.submitAnnotation}
-                  ?enable-keyboard-mode=${this.enableKeyboardMode}
+                  ?enable-keyboard-mode=${this._enable_keyboard_mode}
                 ></text-corrector>
               </div>
             </div>
