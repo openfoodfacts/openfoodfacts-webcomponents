@@ -686,12 +686,6 @@ export class TextCorrector extends LitElement {
         text = this.renderEmptySuggestion()
         break
     }
-    // Add keyboard shortcut text for the first suggestion
-    if (index === 0) {
-      keyboardShortcutText = this.getKeyboardShortcutText(
-        TextCorrectorKeyboardShortcut.ACCEPT_FIRST_SUGGESTION
-      )
-    }
     return html`
       <button
         class="suggestion-button button light-green-button small"
@@ -725,12 +719,6 @@ export class TextCorrector extends LitElement {
       case ChangeType.REMOVED:
         text = this.cleanSuggestion(item.value!)
         break
-    }
-    // Only add keyboard shortcut text for the first suggestion.
-    if (index === 0) {
-      keyboardShortcutText = this.getKeyboardShortcutText(
-        TextCorrectorKeyboardShortcut.REJECT_FIRST_SUGGESTION
-      )
     }
     return html`<button
       class="suggestion-button button light-red-button small"
@@ -803,8 +791,16 @@ export class TextCorrector extends LitElement {
       </div>
       <div class="summary-item-wrapper">
         <div class="summary-item">
-          <div class="suggestion-button-title">${msg("Original")}</div>
-          <div class="suggestion-button-title">${msg("Suggested fix")}</div>
+          <div class="suggestion-button-title">
+            ${msg("Original")}${this.getKeyboardShortcutText(
+              TextCorrectorKeyboardShortcut.REJECT_FIRST_SUGGESTION
+            )}
+          </div>
+          <div class="suggestion-button-title">
+            ${msg("Suggested fix")}${this.getKeyboardShortcutText(
+              TextCorrectorKeyboardShortcut.ACCEPT_FIRST_SUGGESTION
+            )}
+          </div>
         </div>
 
         ${notAnsweredChanges.map((item, index) => {
