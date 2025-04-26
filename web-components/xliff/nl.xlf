@@ -150,25 +150,25 @@
         <source>Download the OFF app with this QR code</source>
         <target state="final">Download de OFF-app met deze QR-code</target>
       </trans-unit>
-      <trans-unit id="s4bbc7472834a9686">
+      <trans-unit id="s4bbc7472834a9686" approved="yes">
         <source>Your browser does not support barcode scanning.</source>
-        <target state="needs-translation">Your browser does not support barcode scanning.</target>
+        <target state="final">Uw browser ondersteunt het scannen van streepjescodes niet.</target>
       </trans-unit>
       <trans-unit id="s5e8250fb85d64c23" approved="yes">
         <source>Close</source>
         <target state="final">Sluit</target>
       </trans-unit>
-      <trans-unit id="s976dfd19ef58a1e1">
+      <trans-unit id="s976dfd19ef58a1e1" approved="yes">
         <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
-        <target state="needs-translation">Click to scan a barcode and find out its details (health, preferences, etc.)</target>
+        <target state="final">Klik om een streepjescode te scannen en de details ervan te bekijken (gezondheid, voorkeuren, enz.)</target>
       </trans-unit>
       <trans-unit id="s145e6e6c7a7bcf7a" approved="yes">
         <source>Reduce image</source>
         <target state="final">Afbeelding verkleinen</target>
       </trans-unit>
-      <trans-unit id="sc0520e1732a5c568">
+      <trans-unit id="sc0520e1732a5c568" approved="yes">
         <source>Expand image</source>
-        <target state="needs-translation">Expand image</target>
+        <target state="final">Afbeelding uitvouwen</target>
       </trans-unit>
     </body>
   </file>
