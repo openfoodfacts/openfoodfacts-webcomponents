@@ -8,7 +8,7 @@
       </trans-unit>
       <trans-unit id="s95d23d03f9147581">
         <source>Unzoom</source>
-        <target state="needs-translation">Unzoom</target>
+        <target state="translated">Zrušiť priblíženie</target>
       </trans-unit>
       <trans-unit id="s166bd56d19670a72">
         <source>Zoom</source>
@@ -16,15 +16,15 @@
       </trans-unit>
       <trans-unit id="s01d2865e3e1d5501">
         <source>Thank you for your assistance!</source>
-        <target state="needs-translation">Thank you for your assistance!</target>
+        <target state="translated">Ďakujeme za vašu pomoc!</target>
       </trans-unit>
       <trans-unit id="s4e94adf723979402">
         <source>Open Food Facts needs your help with this product.</source>
-        <target state="needs-translation">Open Food Facts needs your help with this product.</target>
+        <target state="translated">Open Food Facts potrebuje vašu pomoc s týmto produktom.</target>
       </trans-unit>
       <trans-unit id="s25e94495991e95ba">
         <source>Thanks for your help! Can you assist with another question?</source>
-        <target state="needs-translation">Thanks for your help! Can you assist with another question?</target>
+        <target state="translated">Ďakujeme za vašu pomoc! Môžete pomôcť s ďalšou otázkou?</target>
       </trans-unit>
       <trans-unit id="s7ce4fd9430e80cea">
         <source>value</source>
@@ -32,15 +32,15 @@
       </trans-unit>
       <trans-unit id="s6498dfe4855bb3a7">
         <source>unit</source>
-        <target state="needs-translation">unit</target>
+        <target state="translated">jednotka</target>
       </trans-unit>
       <trans-unit id="s59df20feee978e5b">
         <source>Error: Invalid value.</source>
-        <target state="needs-translation">Error: Invalid value.</target>
+        <target state="translated">Chyba: Neplatná hodnota.</target>
       </trans-unit>
       <trans-unit id="s090c321cc9301918">
         <source>Error: Value must have only 2 decimal</source>
-        <target state="needs-translation">Error: Value must have only 2 decimal</target>
+        <target state="translated">Chyba: Hodnota musí mať iba 2 desatinné miesta</target>
       </trans-unit>
       <trans-unit id="sbd9a0b2293b3cd3c">
         <source>Serving size</source>
@@ -48,7 +48,7 @@
       </trans-unit>
       <trans-unit id="sbb623d6b18d966a0">
         <source>Nutrition facts are displayed on the packaging:</source>
-        <target state="needs-translation">Nutrition facts are displayed on the packaging:</target>
+        <target state="translated">Výživové údaje sú uvedené na obale:</target>
       </trans-unit>
       <trans-unit id="se206feec7ec57b28">
         <source>per 100g</source>
@@ -56,7 +56,7 @@
       </trans-unit>
       <trans-unit id="sca0c3305aff570b8">
         <source>per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
-        <target state="needs-translation">per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</target>
+        <target state="translated">na uvedenú porciu "<x id="0" equiv-text="${this._servingSizeValue}"/>"</target>
       </trans-unit>
       <trans-unit id="s453188ea728f64da">
         <source>Add a nutrient</source>
@@ -68,15 +68,15 @@
       </trans-unit>
       <trans-unit id="s688d3d95ca7c01db">
         <source>Specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
-        <target state="needs-translation">Specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</target>
+        <target state="translated">Uvedená porcia „<x id="0" equiv-text="${this._servingSizeValue}"/>“</target>
       </trans-unit>
       <trans-unit id="sc5575e3107f87874">
         <source>Rotate image to the left</source>
-        <target state="needs-translation">Rotate image to the left</target>
+        <target state="translated">Otočte obrázok doľava</target>
       </trans-unit>
       <trans-unit id="se773f50d2a16d481">
         <source>Rotate image to the right</source>
-        <target state="needs-translation">Rotate image to the right</target>
+        <target state="translated">Otočte obrázok doprava</target>
       </trans-unit>
       <trans-unit id="s475b08749d0706ed">
         <source>Help us inform millions of consumers around the world about what they eat</source>
@@ -88,11 +88,11 @@
       </trans-unit>
       <trans-unit id="s1c5031113de500ce">
         <source>keeping our database open &amp; available to all,</source>
-        <target state="needs-translation">keeping our database open &amp; available to all,</target>
+        <target state="translated">udržiavanie našej databázy otvorenej &amp; dostupnej pre všetkých,</target>
       </trans-unit>
       <trans-unit id="sebb2c6c830a44574">
         <source>technical infrastructure (website/mobile app) &amp; a small permanent team</source>
-        <target state="needs-translation">technical infrastructure (website/mobile app) &amp; a small permanent team</target>
+        <target state="translated">technická infraštruktúra (webová stránka/mobilná aplikácia) &amp; malý stály tím</target>
       </trans-unit>
       <trans-unit id="sd82bc2decefa621b">
         <source>remain independent of the food industry,</source>
