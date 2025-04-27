@@ -104,6 +104,7 @@ export class RobotoffNutrientsTable extends LitElement {
       .inputs-wrapper {
         display: grid;
         grid-template-columns: 1fr auto;
+        align-items: center;
         gap: ${INPUTS_GAP}rem;
       }
 
