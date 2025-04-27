@@ -1,5 +1,12 @@
 import { css } from "lit"
-import { SAFE_BLUE, SAFE_DARKER_WHITE, SAFE_GREY, SAFE_LIGHT_BLACK } from "../utils/colors"
+import {
+  SAFE_BLUE,
+  SAFE_CAPPUCINO,
+  SAFE_CHOCOLATE,
+  SAFE_DARKER_WHITE,
+  SAFE_GREY,
+  SAFE_LIGHT_BLACK,
+} from "../utils/colors"
 
 export const TEXTAREA = css`
   .textarea {
@@ -28,6 +35,7 @@ export const TEXTAREA = css`
 
 export const SELECT = css`
   .select {
+    position: relative;
     width: 100%;
     appearance: none;
     -webkit-appearance: none !important;
@@ -41,7 +49,13 @@ export const SELECT = css`
     color: ${SAFE_LIGHT_BLACK};
     line-height: normal;
     padding: 0.25rem 0.5rem;
-    border-radius: 0;
+    border-radius: 1rem;
+  }
+  .select.chocolate {
+    background-color: ${SAFE_CHOCOLATE};
+    color: white;
+    font-weight: bold;
+    padding-right: 2rem;
   }
 `
 
@@ -56,9 +70,14 @@ export const INPUT = css`
     color: ${SAFE_LIGHT_BLACK};
     line-height: normal;
     padding: 0.25rem 0.5rem;
-    border-radius: 0;
+    border-radius: 5px;
     appearance: none;
     -webkit-appearance: none !important;
+    box-sizing: border-box;
+  }
+  .input.cappucino {
+    background-color: ${SAFE_CAPPUCINO};
+    color: black;
   }
 
   .input {

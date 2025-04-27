@@ -62,9 +62,8 @@ export type FormatedNutrients = {
  * Variable store all size of the input to calculate the width of serving size input
  */
 const INPUT_VALUE_MAX_SIZE = 4
-const INPUT_UNIT_MAX_SIZE = 4
+const INPUT_UNIT_MAX_SIZE = 5
 const INPUTS_GAP = 0.5
-const SERVING_MAX_SIZE = INPUT_VALUE_MAX_SIZE + INPUT_UNIT_MAX_SIZE + INPUTS_GAP
 
 const SERVING_SIZE_SELECT_NAME = "serving_size_select"
 
@@ -103,7 +102,17 @@ export class RobotoffNutrientsTable extends LitElement {
         padding-right: 0.5rem;
       }
       .inputs-wrapper {
+        display: grid;
+        grid-template-columns: 1fr auto;
         gap: ${INPUTS_GAP}rem;
+      }
+
+      .unit-wrapper select {
+        height: 2.5rem;
+        border-radius: 2.5rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        width: ${INPUT_UNIT_MAX_SIZE}rem;
       }
       .serving-size-wrapper {
         gap: 0.3rem;
@@ -112,21 +121,10 @@ export class RobotoffNutrientsTable extends LitElement {
         font-weight: bold;
       }
       .serving-size-wrapper input {
-        width: ${SERVING_MAX_SIZE}rem;
+        width: 12rem;
         text-align: center;
         box-sizing: border-box;
         margin-bottom: 0.5rem;
-      }
-
-      table .input-nutritional-value {
-        width: ${INPUT_VALUE_MAX_SIZE}rem;
-        box-sizing: border-box;
-      }
-
-      table .unit-select {
-        box-sizing: border-box;
-        height: 100%;
-        width: ${INPUT_UNIT_MAX_SIZE}rem !important;
       }
 
       table .submit-row td {
@@ -140,7 +138,7 @@ export class RobotoffNutrientsTable extends LitElement {
         display: block;
         box-sizing: border-box;
         margin-top: 0.2rem;
-        width: ${SERVING_MAX_SIZE}rem;
+        width: 100%;
         font-size: 0.7rem;
         color: var(--error-color, red);
       }
@@ -157,19 +155,28 @@ export class RobotoffNutrientsTable extends LitElement {
       .fieldset-annotation-type legend {
         font-weight: bold;
       }
-      label,
       legend,
-      tbody th {
-        font-weight: semi-bold;
-        font-size: 0.9rem;
-      }
       .add-nutrient-row select {
         width: 10rem;
+      }
+
+      .input-label {
+        font-weight: bold;
       }
       .info {
         display: block;
         padding: 0;
-        width: ${SERVING_MAX_SIZE}rem;
+        width: 100%;
+      }
+
+      form {
+        width: 20rem;
+      }
+
+      .nutrient-rows {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
       }
     `,
   ]
@@ -425,21 +432,18 @@ export class RobotoffNutrientsTable extends LitElement {
   renderRows() {
     const nutrients = this.nutrients!
     return nutrients.keys.map((key) => {
-      const label = getTaxonomyNameByIdAndLang(key, getLocale())
       return html`
-        <tr>
-          <th scope="row">${label}</th>
-          <td>
-            <div>
-              ${this.renderInputs(
-                key,
-                this.insightAnnotationSize,
-                nutrients[this.insightAnnotationSize][key]
-              )}
-            </div>
-            ${this.renderRobotoffSuggestion(key, this.insightAnnotationSize)}
-          </td>
-        </tr>
+        <div>
+          <div>
+            ${this.renderInputs(
+              key,
+              this.insightAnnotationSize,
+              nutrients[this.insightAnnotationSize][key]
+            )}
+          </div>
+
+          <div>${this.renderRobotoffSuggestion(key, this.insightAnnotationSize)}</div>
+        </div>
       `
     })
   }
@@ -460,7 +464,7 @@ export class RobotoffNutrientsTable extends LitElement {
     const possibleUnits = getPossibleUnits(key, nutrient?.unit)
     const inputName = this.getInputUnitName(key, column)
     const currentUnit = nutrient?.unit ?? getTaxonomyUnitById(key)
-    const selectsClasses = "select unit-select"
+    const selectsClasses = "select chocolate unit-select"
     if (possibleUnits.length > 1) {
       return html`
         <select name=${inputName} class=${selectsClasses}>
@@ -495,18 +499,27 @@ export class RobotoffNutrientsTable extends LitElement {
   ) {
     const inputName = this.getInputValueName(key, column)
     const value = nutrient?.value ?? ""
+    const label = getTaxonomyNameByIdAndLang(key, getLocale())
 
     return html`
-      <span class="flex inputs-wrapper">
-        <input
-          type="text"
-          name="${inputName}"
-          value="${value}"
-          title="${msg("value")}"
-          class="input input-nutritional-value"
-        />
-        <span title=${msg("unit")}> ${this.renderUnit(key, column, nutrient)} </span>
-      </span>
+      <div class="inputs-wrapper">
+        <div>
+          <label class="input-label">
+            <div>${label}</div>
+            <input
+              type="text"
+              name="${inputName}"
+              value="${value}"
+              title="${msg("value")}"
+              class="input input-nutritional-value cappucino"
+            />
+          </label>
+        </div>
+
+        <div title=${msg("unit")} class="unit-wrapper">
+          ${this.renderUnit(key, column, nutrient)}
+        </div>
+      </div>
       ${this.errors[inputName]
         ? html`<span class="input-error-message" role="alert">${this.errors[inputName]}</span>`
         : nothing}
@@ -790,24 +803,11 @@ export class RobotoffNutrientsTable extends LitElement {
   renderTable() {
     const nutrients = this.nutrients!
     return html`
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">${msg("Nutrients")}</th>
-            ${this.insightAnnotationSize === InsightAnnotationSize.CENTGRAMS
-              ? html` <th scope="col">${msg("100g")}</th> `
-              : html`
-                  <th scope="col" class="flex flex-col align-center serving-size-wrapper">
-                    <span>${msg(str`Specified serving "${this._servingSizeValue}"`)}</span>
-                  </th>
-                `}
-          </tr>
-        </thead>
-        <tbody>
-          ${this.renderRows()} ${this.renderAddNutrientRow(nutrients.keys)}
-          ${this.renderSubmitRow()}
-        </tbody>
-      </table>
+      <div>
+        <div class="nutrient-rows">${this.renderRows()}</div>
+        <div>${this.renderAddNutrientRow(nutrients.keys)}</div>
+        <div>${this.renderSubmitRow()}</div>
+      </div>
     `
   }
 
