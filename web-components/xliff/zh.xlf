@@ -124,7 +124,7 @@
       </trans-unit>
       <trans-unit id="s000d98595e959c1e">
         <source>Get It On Google Play</source>
-        <target state="translated">下载应用，请到Google Play</target>
+        <target state="translated">在 Google Play 上获取</target>
       </trans-unit>
       <trans-unit id="s547c12ae169d00bc">
         <source>Available on F-Droid</source>
@@ -132,7 +132,7 @@
       </trans-unit>
       <trans-unit id="s7124dde792a8faa2">
         <source>Android APK</source>
-        <target state="needs-translation">Android APK</target>
+        <target state="translated">Android APK文件</target>
       </trans-unit>
       <trans-unit id="s21e73088de6f26f3">
         <source>Download on the App Store</source>
