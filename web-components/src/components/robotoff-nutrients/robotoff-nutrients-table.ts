@@ -209,12 +209,6 @@ export class RobotoffNutrientsTable extends LitElement {
   private errors: Record<string, string> = {}
 
   /**
-   * Nutrient keys that were added to the table
-   */
-  @state()
-  private _addedNutrientKey: string[] = []
-
-  /**
    * Serving size value to display
    */
   @state()
@@ -343,23 +337,6 @@ export class RobotoffNutrientsTable extends LitElement {
   }
 
   /**
-   * Process manually added nutrient keys
-   * @param keysSet - The existing set of keys
-   * @param addedKeys - Array of manually added keys
-   * @returns Updated set of nutrient keys
-   */
-  private processAddedNutrientKeys(keysSet: Set<string>, addedKeys: string[]): Set<string> {
-    if (addedKeys && addedKeys.length > 0) {
-      for (const key of addedKeys) {
-        if (!keysSet.has(key)) {
-          keysSet.add(key)
-        }
-      }
-    }
-    return keysSet
-  }
-
-  /**
    * Initialize empty nutrients structure
    * @returns Empty nutrients structure
    */
@@ -375,6 +352,16 @@ export class RobotoffNutrientsTable extends LitElement {
         serving: {},
       },
     }
+  }
+
+  /**
+   * Add a key to the nutrients keys set
+   * @param keyToAdd - The key to add
+   */
+  addKeysSet(keyToAdd: string): void {
+    const keysSet = new Set(this.nutrients!.keys)
+    keysSet.add(keyToAdd)
+    this.nutrients!.keys = Array.from(keysSet)
   }
 
   /**
@@ -400,9 +387,6 @@ export class RobotoffNutrientsTable extends LitElement {
       const nutrimentKeysSet = this.processNutrimentData(nutrients, this.nutrimentsData)
       nutrimentKeysSet.forEach((key) => keysSet.add(key))
     }
-
-    // Process manually added nutrient keys
-    keysSet = this.processAddedNutrientKeys(keysSet, this._addedNutrientKey)
 
     // Convert keys set to array
     nutrients.keys = Array.from(keysSet)
@@ -782,7 +766,7 @@ export class RobotoffNutrientsTable extends LitElement {
 
     const selectElement = event.target as HTMLSelectElement
     const nutrientId = selectElement.value
-    this._addedNutrientKey.push(nutrientId)
+    this.addKeysSet(nutrientId)
     selectElement.value = ""
     // Force the component to update to render the new rows
     this.requestUpdate()
