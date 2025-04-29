@@ -50,6 +50,7 @@ export const SELECT = css`
     line-height: normal;
     padding: 0.25rem 0.5rem;
     border-radius: 1rem;
+    cursor: pointer;
   }
   .select.chocolate {
     background-color: ${SAFE_CHOCOLATE};

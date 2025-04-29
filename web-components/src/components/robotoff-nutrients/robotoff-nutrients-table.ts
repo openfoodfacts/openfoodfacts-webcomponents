@@ -131,25 +131,22 @@ export class RobotoffNutrientsTable extends LitElement {
         color: var(--error-color, red);
       }
 
-      .fieldset-annotation-type {
+      .serving-size-selection label {
         display: flex;
-        justify-content: center;
-        border: none;
-        padding: 0;
-        gap: 0.5rem;
-        margin-bottom: 0.5rem;
+        flex-direction: column;
         text-align: center;
       }
-
-      .fieldset-annotation-type legend {
-        font-weight: bold;
+      .serving-size-selection select {
+        margin-top: 0.5rem;
+        padding: 0.5rem 1rem;
       }
       .add-nutrient-row {
         margin-top: 1rem;
         margin-bottom: 1rem;
       }
       .add-nutrient-row select {
-        width: 10rem;
+        padding: 0.5rem 1rem;
+        width: 100%;
       }
 
       .input-label {
@@ -170,7 +167,8 @@ export class RobotoffNutrientsTable extends LitElement {
         flex-direction: column;
         gap: 0.75rem;
       }
-      form {
+      form,
+      .serving-size-selection {
         max-width: 20rem;
         width: 100%;
       }
@@ -178,7 +176,7 @@ export class RobotoffNutrientsTable extends LitElement {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.5rem;
+        gap: 1rem;
       }
       .alert {
         padding: 0.4rem;
@@ -238,10 +236,10 @@ export class RobotoffNutrientsTable extends LitElement {
     this._servingSizeValue = this.insight!.data.nutrients.serving_size?.value || ""
     // Update the insight type by checking the nutrient keys
     this.insightAnnotationSize = Object.keys(this.insight!.data.nutrients).filter((key) =>
-      key.endsWith(NUTRIENT_SUFFIX[InsightAnnotationSize.SERVING])
+      key.endsWith(NUTRIENT_SUFFIX[InsightAnnotationSize.CENTGRAMS])
     ).length
-      ? InsightAnnotationSize.SERVING
-      : InsightAnnotationSize.CENTGRAMS
+      ? InsightAnnotationSize.CENTGRAMS
+      : InsightAnnotationSize.SERVING
 
     // Update the nutrients
     this.updateFormatedNutrients()
@@ -708,13 +706,9 @@ export class RobotoffNutrientsTable extends LitElement {
    */
   renderSubmitRow() {
     return html`
-      <tr class="submit-row">
-        <td colspan="2">
-          <div class="flex justify-center">
-            <button type="submit" class="button chocolate-button">Valider</button>
-          </div>
-        </td>
-      </tr>
+      <div class="submit-row">
+        <button type="submit" class="button chocolate-button">Valider</button>
+      </div>
     `
   }
 
@@ -747,32 +741,28 @@ export class RobotoffNutrientsTable extends LitElement {
    */
   renderInsightAnnotationSizeSelection() {
     return html`
-      <div class="flex justify-center">
-        <fieldset class="fieldset-annotation-type">
-          <legend>${msg("Nutrition facts are displayed on the packaging:")}</legend>
-          <div>
-            <label>
-              <input
-                type="radio"
-                name="${SERVING_SIZE_SELECT_NAME}"
-                value=${InsightAnnotationSize.CENTGRAMS}
-                ?checked=${this.insightAnnotationSize === InsightAnnotationSize.CENTGRAMS}
-                @change=${this.onInsightAnnotationSizeChange}
-              />
-              <span>${msg("per 100g")}</span>
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="${SERVING_SIZE_SELECT_NAME}"
-                value=${InsightAnnotationSize.SERVING}
-                ?checked=${this.insightAnnotationSize === InsightAnnotationSize.SERVING}
-                @change=${this.onInsightAnnotationSizeChange}
-              />
+      <div class="serving-size-selection">
+        <label>
+          <span>${msg("Nutrition facts are displayed on the packaging:")}</span>
+          <select
+            class="select chocolate"
+            name="${SERVING_SIZE_SELECT_NAME}"
+            @change=${this.onInsightAnnotationSizeChange}
+          >
+            <option
+              value="${InsightAnnotationSize.CENTGRAMS}"
+              ?selected=${this.insightAnnotationSize === InsightAnnotationSize.CENTGRAMS}
+            >
+              ${msg("per 100g")}
+            </option>
+            <option
+              value="${InsightAnnotationSize.SERVING}"
+              ?selected=${this.insightAnnotationSize === InsightAnnotationSize.SERVING}
+            >
               <span>${msg(str`per specified serving "${this._servingSizeValue}"`)}</span>
-            </label>
-          </div>
-        </fieldset>
+            </option>
+          </select>
+        </label>
       </div>
     `
   }
