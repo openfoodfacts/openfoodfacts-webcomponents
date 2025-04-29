@@ -30,6 +30,10 @@ import { FLEX } from "../../styles/utils"
 import { backgroundImage } from "../../directives/background-image"
 import { ALERT } from "../../styles/alert"
 import { NutrimentsProductType } from "../../types/openfoodfacts"
+import "../icons/suggestion"
+import "../icons/add"
+import { GREEN } from "../../utils/colors"
+import { deepCopy, setValueAndParentsObjectIfNotExists } from "../../utils"
 
 export const ALLOWED_SPECIAL_VALUES = ["", "-", "traces"]
 
@@ -61,9 +65,7 @@ export type FormatedNutrients = {
 /**
  * Variable store all size of the input to calculate the width of serving size input
  */
-const INPUT_VALUE_MAX_SIZE = 4
 const INPUT_UNIT_MAX_SIZE = 5
-const INPUTS_GAP = 0.5
 
 const SERVING_SIZE_SELECT_NAME = "serving_size_select"
 
@@ -84,28 +86,13 @@ export class RobotoffNutrientsTable extends LitElement {
     css`
       :host {
         font-weight: normal;
-      }
-      table th[scope="col"] {
-        vertical-align: top;
-        font-weight: bold;
-      }
-
-      table th:first-child {
-        max-width: 6rem;
-      }
-      table thead th {
-        padding-bottom: 0.25rem;
-      }
-      table td,
-      table th[scope="row"] {
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
+        font-size: 1rem;
       }
       .inputs-wrapper {
         display: grid;
         grid-template-columns: 1fr auto;
-        align-items: center;
-        gap: ${INPUTS_GAP}rem;
+        align-items: end;
+        gap: 0.75rem;
       }
 
       .unit-wrapper select {
@@ -151,18 +138,26 @@ export class RobotoffNutrientsTable extends LitElement {
         padding: 0;
         gap: 0.5rem;
         margin-bottom: 0.5rem;
+        text-align: center;
       }
 
       .fieldset-annotation-type legend {
         font-weight: bold;
       }
-      legend,
+      .add-nutrient-row {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+      }
       .add-nutrient-row select {
         width: 10rem;
       }
 
       .input-label {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
         font-weight: bold;
+        font-size: 0.9rem;
       }
       .info {
         display: block;
@@ -170,14 +165,23 @@ export class RobotoffNutrientsTable extends LitElement {
         width: 100%;
       }
 
-      form {
-        width: 20rem;
-      }
-
       .nutrient-rows {
         display: flex;
         flex-direction: column;
+        gap: 0.75rem;
+      }
+      form {
+        max-width: 20rem;
+        width: 100%;
+      }
+      .nutrients-table {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         gap: 0.5rem;
+      }
+      .alert {
+        padding: 0.4rem;
       }
     `,
   ]
@@ -238,6 +242,9 @@ export class RobotoffNutrientsTable extends LitElement {
     ).length
       ? InsightAnnotationSize.SERVING
       : InsightAnnotationSize.CENTGRAMS
+
+    // Update the nutrients
+    this.updateFormatedNutrients()
   }
 
   /**
@@ -415,14 +422,44 @@ export class RobotoffNutrientsTable extends LitElement {
     this.getInputValueName(NUTRIENT_SERVING_SIZE_KEY, InsightAnnotationSize.SERVING)
   getServingSizeValue = () => {}
 
+  addRobotoffSuggestion(key: string, column: InsightAnnotationSize) {
+    const robotoffSuggestion = this.nutrients?.robotoff[column][key]
+    if (!robotoffSuggestion?.value) {
+      return
+    }
+
+    setValueAndParentsObjectIfNotExists(
+      this.nutrients!,
+      `${column}.${key}.value`,
+      robotoffSuggestion.value
+    )
+    this.nutrients![column][key].unit = robotoffSuggestion.unit
+    this.shadowRoot!.querySelector<HTMLInputElement>(
+      `input[name="${this.getInputValueName(key, column)}"]`
+    )!.value = robotoffSuggestion.value
+    this.shadowRoot!.querySelector<HTMLInputElement>(
+      `input[name="${this.getInputUnitName(key, column)}"]`
+    )!.value = robotoffSuggestion.unit
+
+    this.requestUpdate()
+  }
   renderRobotoffSuggestion(key: string, column: InsightAnnotationSize) {
-    const robotoffSuggestion = this.nutrients?.robotoff[column][key]?.value
-    if (!robotoffSuggestion) {
+    const robotoffSuggestion = this.nutrients?.robotoff[column][key]
+    const answer = this.nutrients![column][key]
+    if (
+      !robotoffSuggestion?.value ||
+      (robotoffSuggestion.value === answer?.value && robotoffSuggestion.unit === answer?.unit)
+    ) {
       return nothing
     }
-    return html`<div class="alert success">
-      ${robotoffSuggestion} ${this.nutrients?.robotoff[column][key]?.unit}
-    </div>`
+    return html`<button
+      class="alert success with-icons"
+      @click=${() => this.addRobotoffSuggestion(key, column)}
+    >
+      <suggestion-icon size="16px" color=${GREEN}></suggestion-icon>
+      <span>${robotoffSuggestion.value} ${robotoffSuggestion.unit}</span>
+      <add-icon size="16px" color=${GREEN}></add-icon>
+    </button>`
   }
 
   /**
@@ -568,10 +605,10 @@ export class RobotoffNutrientsTable extends LitElement {
         error: msg("Error: Invalid value."),
       }
     }
-    // Check number have maximum of 2 decimal
-    if (valueCleaned.split(".")[1]?.length > 2) {
+    // Check number have maximum of 5 decimal
+    if (valueCleaned.split(".")[1]?.length > 5) {
       return {
-        error: msg("Error: Value must have only 2 decimal"),
+        error: msg("Error: Value must have only 5 decimal"),
       }
     }
 
@@ -694,7 +731,7 @@ export class RobotoffNutrientsTable extends LitElement {
       <label class="serving-size-wrapper flex align-center flex-col">
         <span>${msg("Serving size")}</span>
         <input
-          class="input"
+          class="input cappucino"
           name=${inputServingSizeName}
           type="text"
           value=${servingSize}
@@ -715,7 +752,6 @@ export class RobotoffNutrientsTable extends LitElement {
           <legend>${msg("Nutrition facts are displayed on the packaging:")}</legend>
           <div>
             <label>
-              <span>${msg("per 100g")}</span>
               <input
                 type="radio"
                 name="${SERVING_SIZE_SELECT_NAME}"
@@ -723,9 +759,9 @@ export class RobotoffNutrientsTable extends LitElement {
                 ?checked=${this.insightAnnotationSize === InsightAnnotationSize.CENTGRAMS}
                 @change=${this.onInsightAnnotationSizeChange}
               />
+              <span>${msg("per 100g")}</span>
             </label>
             <label>
-              <span>${msg(str`per specified serving "${this._servingSizeValue}"`)}</span>
               <input
                 type="radio"
                 name="${SERVING_SIZE_SELECT_NAME}"
@@ -733,6 +769,7 @@ export class RobotoffNutrientsTable extends LitElement {
                 ?checked=${this.insightAnnotationSize === InsightAnnotationSize.SERVING}
                 @change=${this.onInsightAnnotationSizeChange}
               />
+              <span>${msg(str`per specified serving "${this._servingSizeValue}"`)}</span>
             </label>
           </div>
         </fieldset>
@@ -779,22 +816,20 @@ export class RobotoffNutrientsTable extends LitElement {
     }
 
     return html`
-      <tr class="add-nutrient-row">
-        <td>
-          <select
-            class="select"
-            @change=${this.onAddNutrient}
-            style=${backgroundImage(SELECT_ICON_FILE_NAME)}
-          >
-            <option>${msg("Add a nutrient")}</option>
-            ${filteredNutrientTaxonomies.map(
-              (taxonomy) => html`
-                <option value=${taxonomy.id}>${getTaxonomyNameByLang(taxonomy, lang)}</option>
-              `
-            )}
-          </select>
-        </td>
-      </tr>
+      <div class="add-nutrient-row">
+        <select
+          class="select"
+          @change=${this.onAddNutrient}
+          style=${backgroundImage(SELECT_ICON_FILE_NAME)}
+        >
+          <option>${msg("Add a nutrient")}</option>
+          ${filteredNutrientTaxonomies.map(
+            (taxonomy) => html`
+              <option value=${taxonomy.id}>${getTaxonomyNameByLang(taxonomy, lang)}</option>
+            `
+          )}
+        </select>
+      </div>
     `
   }
 
@@ -811,12 +846,12 @@ export class RobotoffNutrientsTable extends LitElement {
       </div>
     `
   }
-
+  /**
+   * Render the component.
+   */
   override render() {
-    this.updateFormatedNutrients()
-
     return html`
-      <div>
+      <div class="nutrients-table">
         <div>${this.renderServingSizeInput()}</div>
         <div>${this.renderInsightAnnotationSizeSelection()}</div>
 

@@ -60,3 +60,24 @@ export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
  * @returns boolean - true if the value is null or undefined, false otherwise
  */
 export const isNullOrUndefined = (value: any) => value === null || value === undefined
+
+export const setValueAndParentsObjectIfNotExists = (
+  obj: Record<string, any>,
+  key: string,
+  value: any
+) => {
+  const keys = key.split(".")
+  const lastKey = keys.pop() as string
+  let lastObject: Record<string, any> = {}
+
+  keys.reduce((acc, key) => {
+    if (!acc[key]) {
+      acc[key] = {}
+    }
+    lastObject = acc[key]
+    return acc[key]
+  }, obj)
+
+  lastObject[lastKey] = value
+  return obj
+}
