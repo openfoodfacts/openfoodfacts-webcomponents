@@ -52,6 +52,7 @@ export const SELECT = css`
     border-radius: 1rem;
     cursor: pointer;
   }
+
   .select.chocolate {
     background-color: ${SAFE_CHOCOLATE};
     color: white;

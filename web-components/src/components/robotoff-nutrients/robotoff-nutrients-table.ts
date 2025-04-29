@@ -24,7 +24,7 @@ import {
   NUTRIENT_UNIT_SUFFIX,
 } from "../../utils/nutrients"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
-import { EventType, SELECT_ICON_FILE_NAME } from "../../constants"
+import { EventType, SELECT_ICON_FILE_NAME, WHITE_SELECT_ICON_FILE_NAME } from "../../constants"
 import { INPUT, SELECT } from "../../styles/form"
 import { FLEX } from "../../styles/utils"
 import { backgroundImage } from "../../directives/background-image"
@@ -33,7 +33,7 @@ import { NutrimentsProductType } from "../../types/openfoodfacts"
 import "../icons/suggestion"
 import "../icons/add"
 import { GREEN } from "../../utils/colors"
-import { deepCopy, setValueAndParentsObjectIfNotExists } from "../../utils"
+import { setValueAndParentsObjectIfNotExists } from "../../utils"
 
 export const ALLOWED_SPECIAL_VALUES = ["", "-", "traces"]
 
@@ -112,7 +112,6 @@ export class RobotoffNutrientsTable extends LitElement {
         width: 12rem;
         text-align: center;
         box-sizing: border-box;
-        margin-bottom: 0.5rem;
       }
 
       table .submit-row td {
@@ -137,7 +136,7 @@ export class RobotoffNutrientsTable extends LitElement {
         text-align: center;
       }
       .serving-size-selection select {
-        margin-top: 0.5rem;
+        margin-top: 0.25rem;
         padding: 0.5rem 1rem;
       }
       .add-nutrient-row {
@@ -503,7 +502,11 @@ export class RobotoffNutrientsTable extends LitElement {
     const selectsClasses = "select chocolate unit-select"
     if (possibleUnits.length > 1) {
       return html`
-        <select name=${inputName} class=${selectsClasses}>
+        <select
+          name=${inputName}
+          class=${selectsClasses}
+          style=${backgroundImage(WHITE_SELECT_ICON_FILE_NAME)}
+        >
           ${possibleUnits.map(
             (unit) =>
               html`<option value="${unit}" ?selected=${unit === currentUnit}>${unit}</option>`
@@ -513,7 +516,12 @@ export class RobotoffNutrientsTable extends LitElement {
     } else {
       return possibleUnits[0]
         ? html`<input type="hidden" name="${inputName}" value="${possibleUnits[0]}" />
-            <select name=${inputName} class=${selectsClasses} disabled>
+            <select
+              name=${inputName}
+              class=${selectsClasses}
+              disabled
+              style=${backgroundImage(WHITE_SELECT_ICON_FILE_NAME)}
+            >
               <option value="${possibleUnits[0]!}" selected>${possibleUnits[0]}</option>
             </select>`
         : nothing
@@ -745,9 +753,10 @@ export class RobotoffNutrientsTable extends LitElement {
         <label>
           <span>${msg("Nutrition facts are displayed on the packaging:")}</span>
           <select
-            class="select chocolate"
+            class="select"
             name="${SERVING_SIZE_SELECT_NAME}"
             @change=${this.onInsightAnnotationSizeChange}
+            style=${backgroundImage(SELECT_ICON_FILE_NAME)}
           >
             <option
               value="${InsightAnnotationSize.CENTGRAMS}"
