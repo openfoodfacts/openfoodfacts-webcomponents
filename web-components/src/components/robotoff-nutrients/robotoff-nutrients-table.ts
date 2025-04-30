@@ -34,7 +34,7 @@ import "../icons/suggestion"
 import "../icons/add"
 import { GREEN } from "../../utils/colors"
 import { setValueAndParentsObjectIfNotExists } from "../../utils"
-import { nutrientsOrderByCountryCode } from "../../signals/openfoodfacts"
+import { nutrientsOrderByCountryCode, sortKeysByNutrientsOrder } from "../../signals/openfoodfacts"
 import { countryCode } from "../../signals/app"
 
 export const ALLOWED_SPECIAL_VALUES = ["", "-", "traces"]
@@ -224,8 +224,18 @@ export class RobotoffNutrientsTable extends LitElement {
   @state()
   private nutrients?: FormatedNutrients
 
+  /**
+   * Country code
+   */
+  get countryCode() {
+    return countryCode.get()
+  }
+
+  /**
+   * Nutrients order by country code
+   */
   get nutrientsOrder() {
-    return nutrientsOrderByCountryCode.getItem(countryCode.get())
+    return nutrientsOrderByCountryCode.getItem(this.countryCode)
   }
 
   /**
@@ -380,6 +390,19 @@ export class RobotoffNutrientsTable extends LitElement {
   }
 
   /**
+   * Process the keys set to sort it and remove unwanted keys
+   * @param nutrients - The nutrients to process
+   * @param keysSet - The keys set to process
+   */
+  processKeysSet(nutrients: FormatedNutrients, keysSet: Set<string>): void {
+    // Tranform set to array and sort the keys based on the order defined in nutrientsOrder
+    const keys = sortKeysByNutrientsOrder(this.countryCode, Array.from(keysSet))
+
+    // Remove keys nutrition-score until is not removed from API
+    nutrients!.keys = keys.filter((key) => !/^nutrition-score/.test(key))
+  }
+
+  /**
    * Update the nutrients in a formated way to manipulate it easily in the template
    * @returns {FormatedNutrients}
    */
@@ -403,11 +426,8 @@ export class RobotoffNutrientsTable extends LitElement {
       nutrimentKeysSet.forEach((key) => keysSet.add(key))
     }
 
-    const nutrientsOrder = this.nutrientsOrder
     // Convert keys set to array and sort it based on the nutrients order
-    nutrients.keys = Array.from(keysSet).sort(
-      (a, b) => (nutrientsOrder[a]?.index ?? Infinity) - (nutrientsOrder[b]?.index ?? Infinity)
-    )
+    this.processKeysSet(nutrients, keysSet)
 
     this.nutrients = nutrients
     return this.nutrients
@@ -811,7 +831,17 @@ export class RobotoffNutrientsTable extends LitElement {
     const lang = getLocale()
     const filteredNutrientTaxonomies = nutrientTaxonomies
       .get()
+      // filter out the nutrients that are already added to the table
       .filter((nutrientTaxonomy) => !alreadyAddedNutrients.includes(nutrientTaxonomy.id))
+      // map to the format expected by the select component
+      .map((nutrientTaxonomy) => ({
+        id: nutrientTaxonomy.id,
+        label: getTaxonomyNameByLang(nutrientTaxonomy, lang),
+      }))
+      // sort the nutrients by label
+      .sort((a, b) => a.label.localeCompare(b.label))
+
+    // if there are no nutrients to add, don't render the row
     if (filteredNutrientTaxonomies.length === 0) {
       return nothing
     }
@@ -825,9 +855,7 @@ export class RobotoffNutrientsTable extends LitElement {
         >
           <option>${msg("Add a nutrient")}</option>
           ${filteredNutrientTaxonomies.map(
-            (taxonomy) => html`
-              <option value=${taxonomy.id}>${getTaxonomyNameByLang(taxonomy, lang)}</option>
-            `
+            (taxonomy) => html` <option value=${taxonomy.id}>${taxonomy.label}</option> `
           )}
         </select>
       </div>

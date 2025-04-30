@@ -62,3 +62,16 @@ export const fetchNutrientsOrderByCountryCode = async (countryCode: string) => {
   nutrientsOrderByCountryCode.setItem(countryCode, value)
   return value
 }
+
+export const sortKeysByNutrientsOrder = (countryCode: string, keys: string[]) => {
+  const nutrientsOrder = nutrientsOrderByCountryCode.getItem(countryCode)
+  if (!nutrientsOrder) {
+    return keys
+  }
+  // sort the keys based on the nutrients order, lower index first
+  return keys.sort((a, b) => {
+    const aIndex = nutrientsOrder[a]?.index ?? Infinity
+    const bIndex = nutrientsOrder[b]?.index ?? Infinity
+    return aIndex - bIndex
+  })
+}
