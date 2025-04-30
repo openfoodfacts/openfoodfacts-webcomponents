@@ -1,6 +1,16 @@
 import { openfoodfactsApiUrl } from "../signals/openfoodfacts"
-import { BaseProductResponse, RequestProductParams } from "../types/openfoodfacts"
+import {
+  BaseProductResponse,
+  NutrientsOrderRequest,
+  NutrientsParams,
+  RequestProductParams,
+} from "../types/openfoodfacts"
 import { addParamsToUrl } from "../utils"
+
+enum ApiBaseUrl {
+  CGI = "/cgi",
+  API_V2 = "/api/v2",
+}
 
 /**
  * Get the url for the openfoodfacts api
@@ -23,10 +33,24 @@ const getUrl = (path: string, params?: Record<string, any>) => {
  * @returns The product data
  */
 export async function fetchProduct<T>(productCode: string, params: RequestProductParams) {
-  const url = getUrl(`/product/${productCode}/`, params)
+  const url = getUrl(`${ApiBaseUrl.API_V2}/product/${productCode}/`, params)
   const response = await fetch(url)
   if (!response.ok) {
     throw new Error("Failed to fetch product data")
   }
   return (await response.json()) as BaseProductResponse<T>
+}
+
+/**
+ * Fetch nutrients order from openfoodfacts
+ * @param params The params to add to the url
+ * @returns The nutrients order
+ */
+export async function fetchNutrientsOrder(params: NutrientsParams) {
+  const url = getUrl(`${ApiBaseUrl.CGI}/nutrients.pl`, params)
+  const response = await fetch(url)
+  if (!response.ok) {
+    throw new Error("Failed to fetch nutrients order")
+  }
+  return (await response.json()) as NutrientsOrderRequest
 }

@@ -25,3 +25,20 @@ export type NutrimentsProductType = {
   nutriments: NutrimentsData
   serving_size: string
 }
+
+export type NutrientsParams = {
+  cc: string
+}
+
+export interface NutrientOrderRequest {
+  name: string
+  important: boolean
+  unit: string
+  id: string
+  display_in_edit_form: boolean
+  nutrients?: NutrientOrderRequest[]
+}
+
+export interface NutrientsOrderRequest {
+  nutrients: NutrientOrderRequest[]
+}

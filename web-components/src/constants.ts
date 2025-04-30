@@ -26,6 +26,7 @@ export enum LoadingState {
 }
 
 export const DEFAULT_LANGUAGE_CODE = "en"
+export const DEFAULT_COUNTRY_CODE = "fr"
 
 export enum EventState {
   LOADING = "loading", // loading data

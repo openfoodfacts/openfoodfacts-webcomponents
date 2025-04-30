@@ -18,6 +18,8 @@ import { NutrimentsProductType } from "../../types/openfoodfacts"
 import { fetchProduct } from "../../api/openfoodfacts"
 import { ProductFields } from "../../utils/openfoodfacts"
 import { getLocale } from "../../localization"
+import { fetchNutrientsOrderByCountryCode } from "../../signals/openfoodfacts"
+import { countryCode } from "../../signals/app"
 
 /**
  * Robotoff Nutrients component
@@ -103,6 +105,7 @@ export class RobotoffNutrients extends LitElement {
       await Promise.all([
         fetchInsightsByProductCode(productCode),
         fetchNutrientsTaxonomies(),
+        fetchNutrientsOrderByCountryCode(countryCode.get()),
         this.getProductNutriments(productCode),
       ])
 

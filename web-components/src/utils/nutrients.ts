@@ -54,7 +54,10 @@ export const getPossibleUnits = (key: string, unit?: string | null) => {
   if (isNullOrUndefined(unit)) {
     unit = getTaxonomyUnitById(key)
   }
-  if (!unit || EDITABLE_UNITS.includes(unit as Unit)) {
+  if (!unit) {
+    return []
+  }
+  if (EDITABLE_UNITS.includes(unit as Unit)) {
     return EDITABLE_UNITS
   }
   return [unit]

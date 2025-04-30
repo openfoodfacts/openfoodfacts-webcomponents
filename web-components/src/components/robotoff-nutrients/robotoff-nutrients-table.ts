@@ -34,6 +34,8 @@ import "../icons/suggestion"
 import "../icons/add"
 import { GREEN } from "../../utils/colors"
 import { setValueAndParentsObjectIfNotExists } from "../../utils"
+import { nutrientsOrderByCountryCode } from "../../signals/openfoodfacts"
+import { countryCode } from "../../signals/app"
 
 export const ALLOWED_SPECIAL_VALUES = ["", "-", "traces"]
 
@@ -65,7 +67,6 @@ export type FormatedNutrients = {
 /**
  * Variable store all size of the input to calculate the width of serving size input
  */
-const INPUT_UNIT_MAX_SIZE = 5
 
 const SERVING_SIZE_SELECT_NAME = "serving_size_select"
 
@@ -94,13 +95,15 @@ export class RobotoffNutrientsTable extends LitElement {
         align-items: end;
         gap: 0.75rem;
       }
+      .unit-wrapper {
+        width: 5rem;
+      }
 
       .unit-wrapper select {
         height: 2.5rem;
         border-radius: 2.5rem;
         padding-left: 1rem;
         padding-right: 1rem;
-        width: ${INPUT_UNIT_MAX_SIZE}rem;
       }
       .serving-size-wrapper {
         gap: 0.3rem;
@@ -179,6 +182,7 @@ export class RobotoffNutrientsTable extends LitElement {
       }
       .alert {
         padding: 0.4rem;
+        margin-bottom: 0;
       }
     `,
   ]
@@ -219,6 +223,10 @@ export class RobotoffNutrientsTable extends LitElement {
    */
   @state()
   private nutrients?: FormatedNutrients
+
+  get nutrientsOrder() {
+    return nutrientsOrderByCountryCode.getItem(countryCode.get())
+  }
 
   /**
    * Update properties when the insight is updated
@@ -318,13 +326,20 @@ export class RobotoffNutrientsTable extends LitElement {
     nutrients: FormatedNutrients,
     nutrimentsData: NutrimentsProductType
   ): Set<string> {
+    const nutrientsOrder = this.nutrientsOrder
+    console.log("nutrientsOrder", nutrientsOrder)
     const keySet = new Set<string>()
+
     // Process nutrients
     INSIGHTS_ANNOTATION_SIZE.forEach((size) => {
       const suffix = NUTRIENT_SUFFIX[size]
       const keys = Object.entries(nutrimentsData.nutriments).filter(([key]) => key.endsWith(suffix))
       keys.forEach(([key, value]) => {
         const nutrientKey = key.replace(suffix, "")
+        // Check if we have to show the nutrient in the edit form
+        if (!nutrientsOrder?.[nutrientKey]) {
+          return
+        }
         const nutrientUnitKey = `${nutrientKey}${NUTRIENT_UNIT_SUFFIX}`
         nutrients[size][nutrientKey] = {
           value: value.toString(),
@@ -388,8 +403,11 @@ export class RobotoffNutrientsTable extends LitElement {
       nutrimentKeysSet.forEach((key) => keysSet.add(key))
     }
 
-    // Convert keys set to array
-    nutrients.keys = Array.from(keysSet)
+    const nutrientsOrder = this.nutrientsOrder
+    // Convert keys set to array and sort it based on the nutrients order
+    nutrients.keys = Array.from(keysSet).sort(
+      (a, b) => (nutrientsOrder[a]?.index ?? Infinity) - (nutrientsOrder[b]?.index ?? Infinity)
+    )
 
     this.nutrients = nutrients
     return this.nutrients
