@@ -1,11 +1,10 @@
 import { LitElement, css, html, nothing } from "lit"
-import { customElement, property, state } from "lit/decorators.js"
+import { customElement, property, query, state } from "lit/decorators.js"
 import {
   NutrientsInsight,
   NutrientInsightDatum,
   InsightAnnotatationData,
   InsightAnnotationSize,
-  InsightAnnotationAnswer,
 } from "../../types/robotoff"
 import { localized, msg, str } from "@lit/localize"
 import {
@@ -224,6 +223,9 @@ export class RobotoffNutrientsTable extends LitElement {
   @state()
   private nutrients?: FormatedNutrients
 
+  @query(`input[name='${NUTRIENT_SERVING_SIZE_KEY}']`)
+  private servingSizeInput?: HTMLInputElement
+
   /**
    * Country code
    */
@@ -437,9 +439,18 @@ export class RobotoffNutrientsTable extends LitElement {
   getInputUnitName = (key: string, column: InsightAnnotationSize) =>
     `${NUTRIENT_UNIT_NAME_PREFIX}${this.getInputValueName(key, column)}`
 
-  getServingSizeInputName = () =>
-    this.getInputValueName(NUTRIENT_SERVING_SIZE_KEY, InsightAnnotationSize.SERVING)
-  getServingSizeValue = () => {}
+  addRobotoffSuggestionForServingSize() {
+    const robotoffSuggestion = this.nutrients?.robotoff.servingSize
+    if (!robotoffSuggestion?.value) {
+      return
+    }
+    this.nutrients!.servingSize = robotoffSuggestion.value
+    if (robotoffSuggestion.unit) {
+      this.nutrients!.servingSize += ` ${robotoffSuggestion.unit}`
+    }
+    this.servingSizeInput!.value = this.nutrients!.servingSize
+    this.requestUpdate()
+  }
 
   addRobotoffSuggestion(key: string, column: InsightAnnotationSize) {
     const robotoffSuggestion = this.nutrients?.robotoff[column][key]
@@ -462,19 +473,44 @@ export class RobotoffNutrientsTable extends LitElement {
 
     this.requestUpdate()
   }
-  renderRobotoffSuggestion(key: string, column: InsightAnnotationSize) {
+  renderRobotoffSuggestionForNutrient(key: string, column: InsightAnnotationSize) {
     const robotoffSuggestion = this.nutrients?.robotoff[column][key]
     const answer = this.nutrients![column][key]
+    return this.renderRobotoffSuggestion(
+      () => this.addRobotoffSuggestion(key, column),
+      robotoffSuggestion,
+      answer
+    )
+  }
+
+  renderRobotoffSuggestionForServingSize() {
+    const robotoffSuggestion: { value: string; unit?: string } = this.nutrients!.robotoff
+      .servingSize ?? { value: "" }
+    const robotoffServingSize = robotoffSuggestion.unit
+      ? `${robotoffSuggestion.value} ${robotoffSuggestion.unit!}`
+      : robotoffSuggestion.value
+    const answer = { value: this.nutrients!.servingSize! }
+    return this.renderRobotoffSuggestion(
+      () => this.addRobotoffSuggestionForServingSize(),
+      {
+        value: robotoffServingSize,
+      },
+      answer
+    )
+  }
+
+  renderRobotoffSuggestion(
+    onClick: () => void,
+    robotoffSuggestion?: { value: string; unit?: string },
+    answer?: { value: string; unit?: string }
+  ) {
     if (
       !robotoffSuggestion?.value ||
       (robotoffSuggestion.value === answer?.value && robotoffSuggestion.unit === answer?.unit)
     ) {
       return nothing
     }
-    return html`<button
-      class="alert success with-icons"
-      @click=${() => this.addRobotoffSuggestion(key, column)}
-    >
+    return html`<button class="alert success with-icons" @click=${() => onClick()}>
       <suggestion-icon size="16px" color=${GREEN}></suggestion-icon>
       <span>${robotoffSuggestion.value} ${robotoffSuggestion.unit}</span>
       <add-icon size="16px" color=${GREEN}></add-icon>
@@ -499,7 +535,7 @@ export class RobotoffNutrientsTable extends LitElement {
             )}
           </div>
 
-          <div>${this.renderRobotoffSuggestion(key, this.insightAnnotationSize)}</div>
+          <div>${this.renderRobotoffSuggestionForNutrient(key, this.insightAnnotationSize)}</div>
         </div>
       `
     })
@@ -684,18 +720,19 @@ export class RobotoffNutrientsTable extends LitElement {
     const nutrientAnotationForm: InsightAnnotatationData = {}
     const formValues = formData.entries()
 
-    const servingSizeInputName = this.getServingSizeInputName()
+    const servingSizeInputValue = this.servingSizeInput!.value!
+
+    // Add servingSize
+    nutrientAnotationForm[NUTRIENT_SERVING_SIZE_KEY] = {
+      value: servingSizeInputValue,
+      unit: null,
+    }
 
     for (const [key, value] of formValues) {
       let name = key
       const isUnit = this.isUnitInput(name)
       if (isUnit) {
         name = name.replace(NUTRIENT_UNIT_NAME_PREFIX, "")
-      }
-      // Remove the suffix for serving_size
-      // We add suffix to match the column condition
-      if (key === servingSizeInputName) {
-        name = name.replace(NUTRIENT_SUFFIX[column], "")
       }
 
       if (!nutrientAnotationForm[name]) {
@@ -749,19 +786,19 @@ export class RobotoffNutrientsTable extends LitElement {
   }
 
   renderServingSizeInput() {
-    const inputServingSizeName = this.getServingSizeInputName()
     const servingSize = this.nutrients!.servingSize
     return html`<div class="">
       <label class="serving-size-wrapper flex align-center flex-col">
         <span>${msg("Serving size")}</span>
         <input
           class="input cappucino"
-          name=${inputServingSizeName}
+          name=${NUTRIENT_SERVING_SIZE_KEY}
           type="text"
           value=${servingSize}
           @change=${this.onChangeServingSize}
         />
       </label>
+      ${this.renderRobotoffSuggestionForServingSize()}
     </div> `
   }
 
