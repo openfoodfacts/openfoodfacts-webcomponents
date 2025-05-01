@@ -97,4 +97,11 @@ export const INPUT = css`
     padding: 0.25rem 0.5rem;
     -moz-appearance: textfield !important;
   }
+
+  .input:disabled,
+  .input-number:disabled {
+    background-color: ${SAFE_GREY};
+    color: ${SAFE_LIGHT_BLACK};
+    cursor: not-allowed;
+  }
 `

@@ -574,7 +574,8 @@ export class RobotoffNutrientsTable extends LitElement {
   renderUnit(
     key: string,
     column: InsightAnnotationSize,
-    nutrient: Pick<NutrientInsightDatum, "unit"> | undefined
+    nutrient: Pick<NutrientInsightDatum, "unit"> | undefined,
+    disabled = false
   ) {
     const possibleUnits = getPossibleUnits(key, nutrient?.unit)
     const inputName = this.getInputUnitName(key, column)
@@ -586,6 +587,7 @@ export class RobotoffNutrientsTable extends LitElement {
           name=${inputName}
           class=${selectsClasses}
           style=${backgroundImage(WHITE_SELECT_ICON_FILE_NAME)}
+          ?disabled=${disabled}
         >
           ${possibleUnits.map(
             (unit) =>
@@ -595,7 +597,12 @@ export class RobotoffNutrientsTable extends LitElement {
       `
     } else {
       return possibleUnits[0]
-        ? html`<input type="hidden" name="${inputName}" value="${possibleUnits[0]}" />
+        ? html` <input
+              type="hidden"
+              name="${inputName}"
+              value="${possibleUnits[0]}"
+              ?disabled=${disabled}
+            />
             <select
               name=${inputName}
               class=${selectsClasses}
@@ -624,24 +631,36 @@ export class RobotoffNutrientsTable extends LitElement {
     const inputName = this.getInputValueName(key, column)
     const value = nutrient?.value ?? ""
     const label = getTaxonomyNameByIdAndLang(key, getLocale())
+    const isHidden = this.inputHiddenBySizeAndNutrientKey[column][key]
 
     return html`
       <div class="inputs-wrapper">
         <div>
           <label class="input-label">
             <div>${label}</div>
-            <input
-              type="text"
-              name="${inputName}"
-              value="${value}"
-              title="${msg("value")}"
-              class="input input-nutritional-value cappucino"
-            />
+            ${isHidden
+              ? html`
+                  <input type="hidden" name="${inputName}" value="-" />
+                  <input
+                    type="text"
+                    value="-"
+                    title="${msg("value")}"
+                    class="input input-nutritional-value cappucino"
+                    disabled
+                  />
+                `
+              : html`<input
+                  type="text"
+                  name="${inputName}"
+                  value="${value}"
+                  title="${msg("value")}"
+                  class="input input-nutritional-value cappucino"
+                />`}
           </label>
         </div>
 
         <div title=${msg("unit")} class="unit-wrapper">
-          ${this.renderUnit(key, column, nutrient)}
+          ${this.renderUnit(key, column, nutrient, isHidden)}
         </div>
         ${this.renderToggleNutrientButton(column, key)}
       </div>
