@@ -173,6 +173,7 @@ export class RobotoffNutrients extends LitElement {
         return html`
           <div class="nutrients" part="nutrients">
             <div part="nutrients-content-wrapper" class="nutrients-content-wrapper">
+              ${this.renderImage(insight as NutrientsInsight)}
               <robotoff-nutrients-table
                 .nutrimentsData="${this.nutrimentsData}"
                 .insight="${insight as NutrientsInsight}"
