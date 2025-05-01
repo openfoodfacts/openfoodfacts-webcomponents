@@ -1,5 +1,5 @@
 import { localized, msg } from "@lit/localize"
-import { LitElement, html, css } from "lit"
+import { LitElement, html } from "lit"
 import { customElement, property } from "lit/decorators.js"
 
 @customElement("add-icon")

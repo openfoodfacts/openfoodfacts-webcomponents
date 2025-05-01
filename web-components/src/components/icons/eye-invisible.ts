@@ -1,10 +1,13 @@
 import { html, LitElement } from "lit"
 import { customElement, property } from "lit/decorators.js"
+import { ICON_BASE } from "../../styles/base"
 
-@customElement("eye-close-icon")
-export class EyeCloseIcon extends LitElement {
+@customElement("eye-invisible-icon")
+export class EyeInvisibleIcon extends LitElement {
+  static override styles = [ICON_BASE]
+
   @property({ type: String })
-  color = "#000000"
+  color = "currentColor"
 
   @property({ type: String })
   size = "30px"
@@ -18,6 +21,7 @@ export class EyeCloseIcon extends LitElement {
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
+        fill=${this.color}
       >
         <title>Invisible (eye)</title>
         <g id="Invisible-(eye)" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -35,6 +39,6 @@ export class EyeCloseIcon extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "eye-close-icon": EyeCloseIcon
+    "eye-invisible-icon": EyeInvisibleIcon
   }
 }

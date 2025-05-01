@@ -5,6 +5,7 @@ import {
   NutrientInsightDatum,
   InsightAnnotatationData,
   InsightAnnotationSize,
+  InsightAnnotationAnswer,
 } from "../../types/robotoff"
 import { localized, msg, str } from "@lit/localize"
 import {
@@ -29,13 +30,16 @@ import { FLEX } from "../../styles/utils"
 import { backgroundImage } from "../../directives/background-image"
 import { ALERT } from "../../styles/alert"
 import { NutrimentsProductType } from "../../types/openfoodfacts"
-import "../icons/suggestion"
-import "../icons/add"
 import { GREEN } from "../../utils/colors"
 import { setValueAndParentsObjectIfNotExists } from "../../utils"
 import { nutrientsOrderByCountryCode, sortKeysByNutrientsOrder } from "../../signals/openfoodfacts"
 import { countryCode } from "../../signals/app"
 
+import "../icons/suggestion"
+import "../icons/add"
+import "../icons/eye-visible"
+
+import "../icons/eye-invisible"
 export const ALLOWED_SPECIAL_VALUES = ["", "-", "traces"]
 
 export type FormatedNutrimentData = {
@@ -90,7 +94,7 @@ export class RobotoffNutrientsTable extends LitElement {
       }
       .inputs-wrapper {
         display: grid;
-        grid-template-columns: 1fr auto;
+        grid-template-columns: 1fr auto auto;
         align-items: end;
         gap: 0.75rem;
       }
@@ -183,6 +187,14 @@ export class RobotoffNutrientsTable extends LitElement {
         padding: 0.4rem;
         margin-bottom: 0;
       }
+      .toggle-nutrient-button-wrapper button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+      }
     `,
   ]
 
@@ -222,6 +234,16 @@ export class RobotoffNutrientsTable extends LitElement {
    */
   @state()
   private nutrients?: FormatedNutrients
+
+  /**
+   * Input hidden by nutrient code
+   */
+  @state()
+  private inputHiddenBySizeAndNutrientKey: Record<InsightAnnotationSize, Record<string, boolean>> =
+    {
+      "100g": {},
+      serving: {},
+    }
 
   @query(`input[name='${NUTRIENT_SERVING_SIZE_KEY}']`)
   private servingSizeInput?: HTMLInputElement
@@ -621,7 +643,7 @@ export class RobotoffNutrientsTable extends LitElement {
         <div title=${msg("unit")} class="unit-wrapper">
           ${this.renderUnit(key, column, nutrient)}
         </div>
-        <div>${this.renderToggleNutrientButton()}</div>
+        ${this.renderToggleNutrientButton(column, key)}
       </div>
       ${this.errors[inputName]
         ? html`<span class="input-error-message" role="alert">${this.errors[inputName]}</span>`
@@ -916,19 +938,28 @@ export class RobotoffNutrientsTable extends LitElement {
   /**
    * Toggle the nutrient visibility.
    */
-  toggleNutrient() {
+  toggleNutrient(column: InsightAnnotationSize, nutrientKey: string) {
     // Implement the logic to toggle the nutrient visibility
-    console.log("Nutrient visibility toggled")
+    this.inputHiddenBySizeAndNutrientKey[column][nutrientKey] =
+      !this.inputHiddenBySizeAndNutrientKey[column][nutrientKey]
   }
 
   /**
    * Render the toggle nutrient button.
    */
-  renderToggleNutrientButton() {
+  renderToggleNutrientButton(column: InsightAnnotationSize, nutrientKey: string) {
+    const isHidden = this.inputHiddenBySizeAndNutrientKey[column][nutrientKey]
     return html`
-      <button @click=${this.toggleNutrient}>
-        <eye-icon></eye-icon>
-      </button>
+      <div class="toggle-nutrient-button-wrapper">
+        <button
+          class="button chocolate-button"
+          @click=${() => this.toggleNutrient(column, nutrientKey)}
+        >
+          ${isHidden
+            ? html`<eye-invisible-icon size="18px"></eye-invisible-icon>`
+            : html` <eye-visible-icon size="18px"></eye-visible-icon>`}
+        </button>
+      </div>
     `
   }
 
