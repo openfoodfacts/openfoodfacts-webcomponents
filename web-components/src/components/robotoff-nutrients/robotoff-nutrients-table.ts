@@ -621,6 +621,7 @@ export class RobotoffNutrientsTable extends LitElement {
         <div title=${msg("unit")} class="unit-wrapper">
           ${this.renderUnit(key, column, nutrient)}
         </div>
+        <div>${this.renderToggleNutrientButton()}</div>
       </div>
       ${this.errors[inputName]
         ? html`<span class="input-error-message" role="alert">${this.errors[inputName]}</span>`
@@ -912,6 +913,25 @@ export class RobotoffNutrientsTable extends LitElement {
       </div>
     `
   }
+  /**
+   * Toggle the nutrient visibility.
+   */
+  toggleNutrient() {
+    // Implement the logic to toggle the nutrient visibility
+    console.log("Nutrient visibility toggled")
+  }
+
+  /**
+   * Render the toggle nutrient button.
+   */
+  renderToggleNutrientButton() {
+    return html`
+      <button @click=${this.toggleNutrient}>
+        <eye-icon></eye-icon>
+      </button>
+    `
+  }
+
   /**
    * Render the component.
    */
