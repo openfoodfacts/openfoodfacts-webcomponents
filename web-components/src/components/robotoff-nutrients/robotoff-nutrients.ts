@@ -37,17 +37,28 @@ export class RobotoffNutrients extends LitElement {
 
     css`
       .image-wrapper {
+        position: sticky;
+        z-index: 1;
+        top: 1rem;
         display: flex;
         justify-content: center;
         align-items: center;
         margin-bottom: 1rem;
+        background-color: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        padding-top: 1rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        box-sizing: border-box;
       }
 
       .nutrients-content-wrapper {
+        position: relative;
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
-        align-items: center;
+        align-items: start;
         gap: 0.5rem 5rem;
       }
 
@@ -147,18 +158,16 @@ export class RobotoffNutrients extends LitElement {
     }
     const imgUrl = `${robotoffConfiguration.getItem("imgUrl")}${insight.source_image}`
     return html`
-      <div>
-        <div class="image-wrapper">
-          <zoomable-image
-            src=${imgUrl}
-            .size="${{
-              height: "400px",
-              width: "100%",
-              "max-width": "500px",
-            }}"
-            show-buttons
-          ></zoomable-image>
-        </div>
+      <div class="image-wrapper">
+        <zoomable-image
+          src=${imgUrl}
+          .size="${{
+            height: "400px",
+            width: "100%",
+            "max-width": "500px",
+          }}"
+          show-buttons
+        ></zoomable-image>
       </div>
     `
   }
