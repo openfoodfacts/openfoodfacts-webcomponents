@@ -20,6 +20,7 @@ A set of web components for Open Food Facts to help build edition interfaces
 - [Donation Banner](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#donation-banner)
 - [Mobile Badges](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#mobile-badges)
 - [Barcode Scanner](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#barcode-scanner)
+- [Folksonomy Editor](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#folksonomy-editor)
 
 ### For configuration
 
