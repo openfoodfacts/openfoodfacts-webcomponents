@@ -828,7 +828,7 @@ export class RobotoffNutrientsTable extends LitElement {
   }
 
   renderServingSizeInput() {
-    const servingSize = this.nutrients!.servingSize
+    const servingSize = this.nutrients!.servingSize ?? ""
     return html`<div class="">
       <label class="serving-size-wrapper flex align-center flex-col">
         <span>${msg("Serving size")}</span>
