@@ -11,6 +11,8 @@ export const DEFAULT_FOLKSONOMY_CONFIGURATION = {
 export const PAGE_SIZE = 25
 
 export enum EventType {
+  CLOSE = "close",
+  SUCCESS = "success",
   SAVE = "save",
   SUBMIT = "submit",
   QUESTION_STATE = "question-state",
@@ -41,7 +43,7 @@ export const DEFAULT_ASSETS_IMAGES_PATH = "/assets/images"
 export const SELECT_ICON_FILE_NAME = "carret-bottom.svg"
 export const WHITE_SELECT_ICON_FILE_NAME = "white-carret-bottom.svg"
 
-export enum RobotoffContribution {
+export enum RobotoffContributionType {
   INGREDIENTS = "ingredients",
   NUTRIENTS = "nutrients",
   QUESTIONS = "questions",

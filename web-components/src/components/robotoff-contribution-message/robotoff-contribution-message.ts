@@ -7,8 +7,9 @@ import { fetchNutrientInsightsByProductCode } from "../../signals/nutrients"
 import { fetchQuestionsByProductCode } from "../../signals/questions"
 import { localized, msg } from "@lit/localize"
 import { ButtonType, getButtonClasses } from "../../styles/buttons.js"
-import { RobotoffContribution } from "../../constants.js"
+import { RobotoffContributionType } from "../../constants.js"
 import { CONTAINER } from "../../styles/responsive.js"
+import "../robotoff-modal/robotoff-modal"
 
 @customElement("robotoff-contribution-message")
 @localized()
@@ -40,18 +41,21 @@ export class RobotoffContributionMessage extends LitElement {
     `,
   ]
 
-  @property({ type: String })
+  @property({ type: String, attribute: "product-code" })
   productCode = ""
 
   @state()
   isLoaded = false
 
   @state()
-  showMessages: Record<RobotoffContribution, boolean> = {
+  showMessages: Record<RobotoffContributionType, boolean> = {
     ingredients: false,
     nutrients: false,
     questions: false,
   }
+
+  @state()
+  robotoffContributionType?: RobotoffContributionType
 
   get messagesToShow() {
     if (!this.isLoaded) {
@@ -59,17 +63,17 @@ export class RobotoffContributionMessage extends LitElement {
     }
     const items = [
       {
-        name: RobotoffContribution.QUESTIONS,
+        type: RobotoffContributionType.QUESTIONS,
         show: this.showMessages.questions,
         message: msg("Answer questions about the product."),
       },
       {
-        name: RobotoffContribution.INGREDIENTS,
+        type: RobotoffContributionType.INGREDIENTS,
         show: this.showMessages.ingredients,
         message: msg("Help us correct the spelling of ingredients."),
       },
       {
-        name: RobotoffContribution.NUTRIENTS,
+        type: RobotoffContributionType.NUTRIENTS,
         show: this.showMessages.nutrients,
         message: msg("Help us correct the nutritional information."),
       },
@@ -91,6 +95,10 @@ export class RobotoffContributionMessage extends LitElement {
     this.isLoaded = true
   }
 
+  openModal(type: RobotoffContributionType) {
+    this.robotoffContributionType = type
+  }
+
   override render() {
     const messagesToShow = this.messagesToShow
     if (!messagesToShow.length) {
@@ -98,6 +106,10 @@ export class RobotoffContributionMessage extends LitElement {
     }
     return html`
       <div class="robotoff-contribution-message alert info">
+        <robotoff-modal
+          product-code=${this.productCode}
+          .robotoffContributionType=${this.robotoffContributionType}
+        ></robotoff-modal>
         <div class="container">
           <p>
             ${msg(
@@ -108,12 +120,23 @@ export class RobotoffContributionMessage extends LitElement {
             ${this.messagesToShow.map(
               (item) =>
                 html`<li>
-                  <button class="button white-button small">${item.message}</button>
+                  <button
+                    class="button white-button small"
+                    @click=${() => this.openModal(item.type)}
+                  >
+                    ${item.message}
+                  </button>
                 </li>`
             )}
           </ul>
         </div>
       </div>
     `
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "robotoff-contribution-message": RobotoffContributionMessage
   }
 }
