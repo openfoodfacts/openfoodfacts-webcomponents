@@ -44,7 +44,7 @@ export const isQuestionsFinished = (productCode: string) =>
 export const fetchQuestionsByProductCode = async (
   code: string,
   params: QuestionRequestParams = {}
-) => {
+): Promise<Question[]> => {
   isQuestionsFinishedByProductCode.setItem(code, false)
   currentQuestionIndexByProductCode.setItem(code, 0)
   questionIdsByProductCode.setItem(code, [])
@@ -58,6 +58,8 @@ export const fetchQuestionsByProductCode = async (
   response.questions?.forEach((question: Question) => {
     questionsById.setItem(question.insight_id, question)
   })
+
+  return response.questions ?? []
 }
 
 /**

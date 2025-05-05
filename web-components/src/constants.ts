@@ -40,3 +40,9 @@ export const DEFAULT_ASSETS_IMAGES_PATH = "/assets/images"
 
 export const SELECT_ICON_FILE_NAME = "carret-bottom.svg"
 export const WHITE_SELECT_ICON_FILE_NAME = "white-carret-bottom.svg"
+
+export enum RobotoffContribution {
+  INGREDIENTS = "ingredients",
+  NUTRIENTS = "nutrients",
+  QUESTIONS = "questions",
+}
