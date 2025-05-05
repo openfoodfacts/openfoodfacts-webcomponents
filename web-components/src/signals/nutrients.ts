@@ -32,7 +32,7 @@ export const insight = (productCode: string) => {
  * Fetch the incomplete nutrients insights for a given product code
  * @param productCode
  */
-export const fetchInsightsByProductCode = (productCode: string) => {
+export const fetchNutrientInsightsByProductCode = (productCode: string) => {
   return robotoff
     .insights<NutrientsInsight>({
       barcode: productCode,
