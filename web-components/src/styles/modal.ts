@@ -30,6 +30,7 @@ export const MODAL = css`
     background: rgba(0, 0, 0, 0.6);
     z-index: 999;
     animation: fadeIn 0.3s ease-in-out;
+    cursor: pointer;
   }
 
   h2 {
@@ -42,6 +43,20 @@ export const MODAL = css`
   .modal-buttons {
     display: flex;
     justify-content: space-between;
+  }
+
+  .close-icon {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    cursor: pointer;
+    background: transparent;
   }
 
   @keyframes fadeIn {

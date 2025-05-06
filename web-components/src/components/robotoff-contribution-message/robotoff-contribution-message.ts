@@ -105,6 +105,9 @@ export class RobotoffContributionMessage extends SignalWatcher(LitElement) {
   openModal(type: RobotoffContributionType) {
     this.robotoffContributionType = type
   }
+  closeModal() {
+    this.robotoffContributionType = undefined
+  }
 
   override render() {
     return this._fetchDataTask.render({
@@ -114,30 +117,33 @@ export class RobotoffContributionMessage extends SignalWatcher(LitElement) {
         if (!messagesToShow.length) {
           return nothing
         }
-        return html`<div class="robotoff-contribution-message alert info">
+        return html` <div>
           <robotoff-modal
             product-code=${this.productCode}
             .robotoffContributionType=${this.robotoffContributionType}
+            @close=${this.closeModal}
           ></robotoff-modal>
-          <div class="container">
-            <p>
-              ${msg(
-                "Hey! You can help us improve the product information by answering the following parts:"
-              )}
-            </p>
-            <ul>
-              ${this.messagesToShow.map(
-                (item) =>
-                  html`<li>
-                    <button
-                      class="button white-button small"
-                      @click=${() => this.openModal(item.type)}
-                    >
-                      ${item.message}
-                    </button>
-                  </li>`
-              )}
-            </ul>
+          <div class="robotoff-contribution-message alert info">
+            <div class="container">
+              <p>
+                ${msg(
+                  "Hey! You can help us improve the product information by answering the following parts:"
+                )}
+              </p>
+              <ul>
+                ${this.messagesToShow.map(
+                  (item) =>
+                    html`<li>
+                      <button
+                        class="button white-button small"
+                        @click=${() => this.openModal(item.type)}
+                      >
+                        ${item.message}
+                      </button>
+                    </li>`
+                )}
+              </ul>
+            </div>
           </div>
         </div>`
       },

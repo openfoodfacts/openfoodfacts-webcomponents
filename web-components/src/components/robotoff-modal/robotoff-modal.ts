@@ -22,8 +22,8 @@ export class RobotoffModal extends LitElement {
     return Boolean(this.robotoffContributionType)
   }
 
-  onStateChange(event: BasicStateEventDetail) {
-    switch (event.state) {
+  onStateChange(event: CustomEvent<BasicStateEventDetail>) {
+    switch (event.detail.state) {
       case EventState.ANNOTATED:
         this.dispatchEvent(
           new CustomEvent(EventType.SUCCESS, {
@@ -41,7 +41,6 @@ export class RobotoffModal extends LitElement {
         break
       case EventState.HAS_DATA:
         this.isLoading = false
-        debugger
         break
       case EventState.NO_DATA:
         this.isLoading = false
@@ -71,9 +70,17 @@ export class RobotoffModal extends LitElement {
     return nothing
   }
 
+  closeModal() {
+    this.dispatchEvent(new CustomEvent(EventType.CLOSE))
+  }
+
   override render() {
     return html`
-      <modal-component ?is-open="${this.isOpen}" ?is-loading="${this.isLoading}">
+      <modal-component
+        ?is-open="${this.isOpen}"
+        ?is-loading="${this.isLoading}"
+        @close="${this.closeModal}"
+      >
         ${this.renderModalContent()}
       </modal-component>
     `
