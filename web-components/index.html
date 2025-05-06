@@ -105,7 +105,10 @@
       </div>
 
       <div style="display: flex; margin: 2rem 1rem 1rem 1rem">
-        <robotoff-contribution-message product-code="6111035000430" />
+        <robotoff-contribution-message
+          product-code="5000354922848"
+          id="robotoff-contribution-message"
+        />
       </div>
     </div>
   </body>
@@ -128,11 +131,13 @@
   const insightTypes = document.getElementById("insight-types")
   const barcodeScanner = document.getElementById("barcode-scanner")
   const robotoffIngredients = document.getElementById("robotoff-ingredients")
+  const robotoffContributionMessage = document.getElementById("robotoff-contribution-message")
 
   const productDebounce = debounce((value) => {
     robotoffQuestion.setAttribute("product-code", value)
     robotoffNutrients.setAttribute("product-code", value)
     robotoffIngredients.setAttribute("product-code", value)
+    robotoffContributionMessage.setAttribute("product-code", value)
   })
   productCode.addEventListener("input", (event) => {
     productDebounce(event.target.value)

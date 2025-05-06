@@ -1,5 +1,5 @@
 import { LitElement, html, nothing } from "lit"
-import { customElement, property } from "lit/decorators.js"
+import { customElement, property, state } from "lit/decorators.js"
 import { EventState, EventType, RobotoffContributionType } from "../../constants"
 import { BasicStateEventDetail } from "../../types"
 import "../shared/modal"
@@ -15,22 +15,38 @@ export class RobotoffModal extends LitElement {
   @property({ type: String, attribute: "product-code" })
   productCode?: string
 
+  @state()
+  isLoading = false
+
   get isOpen() {
     return Boolean(this.robotoffContributionType)
   }
 
   onStateChange(event: BasicStateEventDetail) {
-    if (event.state === EventState.ANNOTATED) {
-      this.dispatchEvent(
-        new CustomEvent(EventType.SUCCESS, {
-          bubbles: true,
-          composed: true,
-          detail: {
-            type: this.robotoffContributionType,
-          },
-        })
-      )
-      this.robotoffContributionType = undefined
+    switch (event.state) {
+      case EventState.ANNOTATED:
+        this.dispatchEvent(
+          new CustomEvent(EventType.SUCCESS, {
+            bubbles: true,
+            composed: true,
+            detail: {
+              type: this.robotoffContributionType,
+            },
+          })
+        )
+        this.robotoffContributionType = undefined
+        break
+      case EventState.LOADING:
+        this.isLoading = true
+        break
+      case EventState.HAS_DATA:
+        this.isLoading = false
+        debugger
+        break
+      case EventState.NO_DATA:
+        this.isLoading = false
+        this.robotoffContributionType = undefined
+        break
     }
   }
 
@@ -57,8 +73,8 @@ export class RobotoffModal extends LitElement {
 
   override render() {
     return html`
-      <modal-component ?is-open="${this.isOpen}">
-        ${this.robotoffContributionType} ${this.renderModalContent()}
+      <modal-component ?is-open="${this.isOpen}" ?is-loading="${this.isLoading}">
+        ${this.renderModalContent()}
       </modal-component>
     `
   }

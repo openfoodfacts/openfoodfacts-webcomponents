@@ -1,6 +1,7 @@
 import { LitElement, html, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { MODAL } from "../../styles/modal"
+import "./loader"
 
 @customElement("modal-component")
 class ModalComponent extends LitElement {
@@ -13,12 +14,16 @@ class ModalComponent extends LitElement {
   })
   isOpen = false
 
+  @property({ type: Boolean, attribute: "is-loading" })
+  isLoading = false
+
   override render() {
     if (!this.isOpen) {
       return nothing
     }
     return html`
       <div class="modal">
+        ${this.isLoading ? html`<off-wc-loader></off-wc-loader>` : nothing}
         <slot></slot>
       </div>
     `
