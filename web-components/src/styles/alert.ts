@@ -2,6 +2,9 @@ import { css } from "lit"
 import { SAFE_GREEN, SAFE_LIGHT_GREEN } from "../utils/colors"
 
 export const ALERT = css`
+  .alert {
+    padding: 8px;
+  }
   button.alert {
     display: flex;
     appearance: none;
