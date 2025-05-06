@@ -6,7 +6,7 @@ import { EventType } from "../../constants"
 import { answerQuestion } from "../../signals/questions"
 import "../buttons/zoom-unzoom-button"
 import { SignalWatcher } from "@lit-labs/signals"
-import { msg } from "@lit/localize"
+import { localized, msg } from "@lit/localize"
 /**
  * RobotoffQuestionForm component
  * It displays a form to answer a question about a product.
@@ -14,6 +14,7 @@ import { msg } from "@lit/localize"
  * @fires {EventType.SUBMIT} - When the form is submitted
  */
 @customElement("robotoff-question-form")
+@localized()
 export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
   static override styles = [
     ...getButtonClasses([

@@ -6,8 +6,10 @@ import "../shared/modal"
 import "../robotoff-ingredients/robotoff-ingredients"
 import "../robotoff-nutrients/robotoff-nutrients"
 import "../robotoff-question/robotoff-question"
+import { localized, msg } from "@lit/localize"
 
 @customElement("robotoff-modal")
+@localized()
 export class RobotoffModal extends LitElement {
   @property({ type: Object, attribute: "robotoff-contribution-type" })
   robotoffContributionType?: RobotoffContributionType
@@ -18,23 +20,37 @@ export class RobotoffModal extends LitElement {
   @state()
   isLoading = false
 
+  @state()
+  showSuccessMessage = false
+
   get isOpen() {
     return Boolean(this.robotoffContributionType)
+  }
+
+  sendSuccessEvent() {
+    this.dispatchEvent(
+      new CustomEvent(EventType.SUCCESS, {
+        bubbles: true,
+        composed: true,
+        detail: {
+          type: this.robotoffContributionType,
+        },
+      })
+    )
+  }
+
+  onSuccessEvent() {
+    this.showSuccessMessage = false
+    setTimeout(() => {
+      this.showSuccessMessage = true
+      this.sendSuccessEvent()
+    }, 2000)
   }
 
   onStateChange(event: CustomEvent<BasicStateEventDetail>) {
     switch (event.detail.state) {
       case EventState.ANNOTATED:
-        this.dispatchEvent(
-          new CustomEvent(EventType.SUCCESS, {
-            bubbles: true,
-            composed: true,
-            detail: {
-              type: this.robotoffContributionType,
-            },
-          })
-        )
-        this.robotoffContributionType = undefined
+        this.onSuccessEvent()
         break
       case EventState.LOADING:
         this.isLoading = true
@@ -44,7 +60,8 @@ export class RobotoffModal extends LitElement {
         break
       case EventState.NO_DATA:
         this.isLoading = false
-        this.robotoffContributionType = undefined
+        // Send success event if no data to display because we don't want to show the modal again
+        this.onSuccessEvent()
         break
     }
   }
@@ -73,15 +90,24 @@ export class RobotoffModal extends LitElement {
   closeModal() {
     this.dispatchEvent(new CustomEvent(EventType.CLOSE))
   }
+  renderSuccessMessage() {
+    return html`<slot name="success-message"
+      ><div class="success-message">${msg("Thanks for your contribution!")}</div></slot
+    >`
+  }
 
   override render() {
+    const contentModal = this.showSuccessMessage
+      ? this.renderSuccessMessage()
+      : this.renderModalContent()
+
     return html`
       <modal-component
         ?is-open="${this.isOpen}"
         ?is-loading="${this.isLoading}"
         @close="${this.closeModal}"
       >
-        ${this.renderModalContent()}
+        ${contentModal}
       </modal-component>
     `
   }

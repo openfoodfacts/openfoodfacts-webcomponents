@@ -65,17 +65,17 @@ export class RobotoffContributionMessage extends SignalWatcher(LitElement) {
       {
         type: RobotoffContributionType.QUESTIONS,
         show: this.showMessages.questions,
-        message: msg(str`Answer questions about the product.`),
+        message: msg("Answer questions about the product."),
       },
       {
         type: RobotoffContributionType.INGREDIENTS,
         show: this.showMessages.ingredients,
-        message: msg(str`Help us correct the spelling of ingredients.`),
+        message: msg("Help us correct the spelling of ingredients."),
       },
       {
         type: RobotoffContributionType.NUTRIENTS,
         show: this.showMessages.nutrients,
-        message: msg(str`Help us correct the nutritional information.`),
+        message: msg("Help us correct the nutritional information."),
       },
     ].filter((item) => item.show)
     return items
@@ -108,6 +108,10 @@ export class RobotoffContributionMessage extends SignalWatcher(LitElement) {
   closeModal() {
     this.robotoffContributionType = undefined
   }
+  onSave() {
+    this.showMessages[this.robotoffContributionType!] = false
+    this.closeModal()
+  }
 
   override render() {
     return this._fetchDataTask.render({
@@ -122,6 +126,7 @@ export class RobotoffContributionMessage extends SignalWatcher(LitElement) {
             product-code=${this.productCode}
             .robotoffContributionType=${this.robotoffContributionType}
             @close=${this.closeModal}
+            @success=${this.onSave}
           ></robotoff-modal>
           <div class="robotoff-contribution-message alert info">
             <div class="container">

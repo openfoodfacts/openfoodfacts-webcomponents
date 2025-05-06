@@ -163,4 +163,8 @@
       alert(`Barcode detected: ${event.detail.barcode}`)
     }
   })
+  robotoffContributionMessage.addEventListener("success", (event) => {
+    console.log("success", event.detail)
+    alert(`Success: ${event.detail.type}`)
+  })
 </script>
