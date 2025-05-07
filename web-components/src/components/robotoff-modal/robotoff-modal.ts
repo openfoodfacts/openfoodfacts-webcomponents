@@ -27,23 +27,24 @@ export class RobotoffModal extends LitElement {
     return Boolean(this.robotoffContributionType)
   }
 
-  sendSuccessEvent() {
+  sendSuccessEvent(type: RobotoffContributionType) {
     this.dispatchEvent(
       new CustomEvent(EventType.SUCCESS, {
         bubbles: true,
         composed: true,
         detail: {
-          type: this.robotoffContributionType,
+          type: type,
         },
       })
     )
   }
 
   onSuccessEvent() {
+    const robotoffContributionType = this.robotoffContributionType!
     this.showSuccessMessage = true
     setTimeout(() => {
       this.showSuccessMessage = false
-      this.sendSuccessEvent()
+      this.sendSuccessEvent(robotoffContributionType)
     }, 2000)
   }
 
@@ -61,7 +62,7 @@ export class RobotoffModal extends LitElement {
       case EventState.NO_DATA:
         this.isLoading = false
         // Send success event if no data to display because we don't want to show the modal again
-        this.sendSuccessEvent()
+        this.sendSuccessEvent(this.robotoffContributionType!)
         break
     }
   }

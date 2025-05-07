@@ -167,6 +167,7 @@ export class RobotoffNutrients extends LitElement {
           src=${imgUrl}
           .size="${{
             height: "400px",
+            "max-height": "35vh",
             width: "100%",
             "max-width": "500px",
           }}"
