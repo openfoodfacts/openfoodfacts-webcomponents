@@ -40,9 +40,9 @@ export class RobotoffModal extends LitElement {
   }
 
   onSuccessEvent() {
-    this.showSuccessMessage = false
+    this.showSuccessMessage = true
     setTimeout(() => {
-      this.showSuccessMessage = true
+      this.showSuccessMessage = false
       this.sendSuccessEvent()
     }, 2000)
   }
@@ -61,7 +61,7 @@ export class RobotoffModal extends LitElement {
       case EventState.NO_DATA:
         this.isLoading = false
         // Send success event if no data to display because we don't want to show the modal again
-        this.onSuccessEvent()
+        this.sendSuccessEvent()
         break
     }
   }
