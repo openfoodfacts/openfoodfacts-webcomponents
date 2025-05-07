@@ -84,6 +84,9 @@ export class RobotoffContributionMessage extends SignalWatcher(LitElement) {
 
   /**
    * Returns the messages to be displayed based on the `showMessages` state.
+   *
+   * This correspond to the various type of contribution.
+   * Each one is materialized as a button to the user.
    */
   get messagesToShow() {
     const items: {
@@ -113,6 +116,7 @@ export class RobotoffContributionMessage extends SignalWatcher(LitElement) {
   /**
    * A task that fetches data for the component.
    * It refreshes when the `productCode` property changes.
+   * It computes this.showMessages and returns the fetched insights
    * It fetches from robotoff : spellcheck insights, nutrient insights, and questions for the product.
    */
   private _fetchDataTask = new Task(this, {

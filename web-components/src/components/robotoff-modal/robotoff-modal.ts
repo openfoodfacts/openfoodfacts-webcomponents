@@ -56,7 +56,7 @@ export class RobotoffModal extends LitElement {
   }
 
   /**
-   * Dispatches a success event when a contribution is successfully made.
+   * Dispatches a success event when a contribution is successfully made (or skipped).
    * @param {RobotoffContributionType} type - The type of contribution.
    */
   sendSuccessEvent(type: RobotoffContributionType) {
@@ -72,7 +72,8 @@ export class RobotoffModal extends LitElement {
   }
 
   /**
-   * Handles the success event by showing a success message and dispatching a success event.
+   * Handles the annotated event (meaning all insight have been processed)
+   * by showing a success message and dispatching a success event.
    */
   onSuccessEvent() {
     const robotoffContributionType = this.robotoffContributionType!
