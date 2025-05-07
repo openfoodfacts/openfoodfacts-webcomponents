@@ -13,3 +13,4 @@ export { DownloadAppQrCode } from "./components/download-app-qr-code/download-ap
 export { BarcodeScanner } from "./components/barcode-scanner/barcode-scanner"
 export { DeleteModal } from "./components/folksnomy/delete-modal"
 export { FolksonomyEditor } from "./components/folksnomy/folksonomy-editor"
+export { NewsFeed } from "./components/news-feed/news-feed"
