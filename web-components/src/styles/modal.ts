@@ -58,7 +58,7 @@ export const MODAL = css`
     right: 0.3rem;
     width: 2rem;
     height: 2rem;
-    border: 1 px solid;
+    border: 1px solid;
     border-color: transparent;
     border-radius: 50%;
     cursor: pointer;
