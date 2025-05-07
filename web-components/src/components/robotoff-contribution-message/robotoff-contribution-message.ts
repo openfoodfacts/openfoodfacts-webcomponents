@@ -36,6 +36,11 @@ export class RobotoffContributionMessage extends SignalWatcher(LitElement) {
       }
       .robotoff-contribution-message ul {
         margin-bottom: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding-left: 0;
+        list-style-type: none;
       }
       .robotoff-contribution-message li {
         text-align: left;

@@ -143,9 +143,12 @@ export class TextCorrector extends LitElement {
         gap: 1rem;
         padding-bottom: 1rem;
 
+        margin-top: 1rem;
+
         @media (min-width: ${Breakpoints.SM}px) {
           max-height: none;
           overflow: auto;
+          margin-top: 0;
         }
       }
       .summary-item {
@@ -153,6 +156,9 @@ export class TextCorrector extends LitElement {
         width: 100%;
         grid-template-columns: 1fr 1fr;
         gap: 0.5rem;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+        box-sizing: border-box;
       }
       .summary-item :first-child {
         justify-self: end;
@@ -191,7 +197,7 @@ export class TextCorrector extends LitElement {
       }
       .suggestion-button,
       .suggestion-button-title {
-        width: 200px;
+        width: 100%;
       }
 
       .batch-buttons {

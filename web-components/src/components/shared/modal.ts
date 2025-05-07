@@ -32,11 +32,13 @@ class ModalComponent extends LitElement {
     return html`
       <div class="overlay" @click="${this.closeModal}" aria-hidden="true"></div>
       <div class="modal">
-        ${this.isLoading ? html`<off-wc-loader></off-wc-loader>` : nothing}
-        <button class="close-icon" @click="${this.closeModal}" aria-label=${msg("Close modal")}>
-          <cross-icon></cross-icon>
-        </button>
-        <slot></slot>
+        <div class="modal-content">
+          ${this.isLoading ? html`<off-wc-loader></off-wc-loader>` : nothing}
+          <button class="close-icon" @click="${this.closeModal}" aria-label=${msg("Close modal")}>
+            <cross-icon></cross-icon>
+          </button>
+          <slot></slot>
+        </div>
       </div>
     `
   }

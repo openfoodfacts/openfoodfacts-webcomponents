@@ -16,8 +16,11 @@ export const MODAL = css`
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     border-radius: 12px;
     z-index: 1000;
-    width: 90%;
-    max-width: 300px;
+    max-height: 90%;
+    width: 95%;
+    max-width: 500px;
+    overflow-y: auto;
+    box-sizing: border-box;
     animation: fadeIn 0.3s ease-in-out;
   }
 
