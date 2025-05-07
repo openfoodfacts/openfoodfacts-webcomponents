@@ -2,11 +2,19 @@ import { LitElement, html, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { EventState, EventType, RobotoffContributionType } from "../../constants"
 import { BasicStateEventDetail } from "../../types"
+import { localized, msg } from "@lit/localize"
+import { IS_HIDDEN } from "../../styles/utils"
+import { classMap } from "lit/directives/class-map.js"
+
 import "../shared/modal"
 import "../robotoff-ingredients/robotoff-ingredients"
 import "../robotoff-nutrients/robotoff-nutrients"
 import "../robotoff-question/robotoff-question"
-import { localized, msg } from "@lit/localize"
+
+enum MessageType {
+  SUCCESS = "success",
+  ANNOTATION_SUCCESS = "annotation-success",
+}
 
 /**
  * The `robotoff-modal` component is a web component that displays a modal for contributing to product information.
@@ -14,6 +22,9 @@ import { localized, msg } from "@lit/localize"
  *
  * @fires success - Dispatched when a contribution is successfully made.
  * @fires close - Dispatched when the modal is closed.
+ *
+ * @slot success-message - The slot for the success message.
+ * @slot annotated-message - The slot for the annotated message.
  *
  * @example
  * ```html
@@ -24,6 +35,8 @@ import { localized, msg } from "@lit/localize"
 @customElement("robotoff-modal")
 @localized()
 export class RobotoffModal extends LitElement {
+  static override styles = [IS_HIDDEN]
+
   /**
    * The type of contribution being made.
    */
@@ -46,7 +59,7 @@ export class RobotoffModal extends LitElement {
    * Indicates whether the success message should be shown.
    */
   @state()
-  showSuccessMessage = false
+  showMessage?: MessageType
 
   /**
    * Returns whether the modal is open based on the `robotoffContributionType`.
@@ -75,12 +88,27 @@ export class RobotoffModal extends LitElement {
    * Handles the annotated event (meaning all insight have been processed)
    * by showing a success message and dispatching a success event.
    */
-  onAnnotated() {
+  onFinished() {
     const robotoffContributionType = this.robotoffContributionType!
-    this.showSuccessMessage = true
+    this.showMessage = MessageType.SUCCESS
     setTimeout(() => {
-      this.showSuccessMessage = false
+      if (this.showMessage === MessageType.SUCCESS) {
+        this.showMessage = undefined
+      }
       this.sendSuccessEvent(robotoffContributionType)
+    }, 1000)
+  }
+
+  /**
+   * Handles the annotated event (meaning one insight has been processed)
+   * by showing a success message.
+   */
+  onAnnotated() {
+    this.showMessage = MessageType.ANNOTATION_SUCCESS
+    setTimeout(() => {
+      if (this.showMessage === MessageType.ANNOTATION_SUCCESS) {
+        this.showMessage = undefined
+      }
     }, 1000)
   }
 
@@ -92,6 +120,9 @@ export class RobotoffModal extends LitElement {
     switch (event.detail.state) {
       // When all insight is annotated, we show a success message
       case EventState.FINISHED:
+        this.onFinished()
+        break
+      case EventState.ANNOTATED:
         this.onAnnotated()
         break
       case EventState.LOADING:
@@ -138,27 +169,38 @@ export class RobotoffModal extends LitElement {
   closeModal() {
     this.dispatchEvent(new CustomEvent(EventType.CLOSE))
   }
+
   /**
    * Renders the success message.
    */
-  renderSuccessMessage() {
-    return html`<slot name="success-message"
-      ><div class="success-message">${msg("Thanks for your contribution!")}</div></slot
-    >`
+  renderMessage() {
+    if (!this.showMessage) return nothing
+    switch (this.showMessage) {
+      case MessageType.SUCCESS:
+        return html`<slot name="success-message"
+          ><div class="success-message">${msg("Thanks for your contribution!")}</div></slot
+        >`
+      case MessageType.ANNOTATION_SUCCESS:
+        return html`<slot name="annotated-message"
+          ><div class="annotated-message">
+            ${msg("Saved! Can you help with another one?")}
+          </div></slot
+        >`
+    }
+    return nothing
   }
 
   override render() {
-    const contentModal = this.showSuccessMessage
-      ? this.renderSuccessMessage()
-      : this.renderModalContent()
-
     return html`
       <modal-component
         ?is-open="${this.isOpen}"
         ?is-loading="${this.isLoading}"
         @close="${this.closeModal}"
       >
-        ${contentModal}
+        ${this.renderMessage()}
+        <div class=${classMap({ "is-hidden": Boolean(this.showMessage) })}>
+          ${this.renderModalContent()}
+        </div>
       </modal-component>
     `
   }

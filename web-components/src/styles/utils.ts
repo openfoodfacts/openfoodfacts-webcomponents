@@ -34,3 +34,9 @@ export const FLEX = css`
     gap: 1rem;
   }
 `
+
+export const IS_HIDDEN = css`
+  .is-hidden {
+    display: none;
+  }
+`
