@@ -7,6 +7,7 @@ import { FLEX } from "../../styles/utils"
 import "../icons/rotate-left"
 import "../icons/rotate-right"
 import { localized, msg } from "@lit/localize"
+import { mobileAndTabletCheck } from "../../utils/breakpoints"
 
 /**
  * A simple zoomable image component.
@@ -87,9 +88,6 @@ export class ZoomableImage extends LitElement {
   @property({ type: Boolean, attribute: "show-buttons" })
   showButtons = false
 
-  @state()
-  rotation = 0
-
   @property({ type: Object })
   size: {
     width?: string
@@ -99,6 +97,13 @@ export class ZoomableImage extends LitElement {
   } = {
     width: "100%",
     height: "30vh",
+  }
+
+  @state()
+  rotation = 0
+
+  get canZoom() {
+    return !mobileAndTabletCheck()
   }
 
   override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
@@ -113,7 +118,9 @@ export class ZoomableImage extends LitElement {
   }
   override disconnectedCallback(): void {
     super.disconnectedCallback()
-    this.element.parentElement!.removeEventListener("wheel", this.panzoom.zoomWithWheel)
+    if (this.canZoom) {
+      this.element.parentElement!.removeEventListener("wheel", this.panzoom.zoomWithWheel)
+    }
     this.panzoom.destroy()
   }
 
@@ -126,7 +133,9 @@ export class ZoomableImage extends LitElement {
       contain: "inside",
     })
 
-    this.element.parentElement!.addEventListener("wheel", panzoom.zoomWithWheel)
+    if (this.canZoom) {
+      this.element.parentElement!.addEventListener("wheel", panzoom.zoomWithWheel)
+    }
     this.panzoom = panzoom
     this.onImageChange()
   }
