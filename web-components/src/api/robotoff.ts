@@ -59,10 +59,11 @@ const robotoff = {
   },
   annotateNutrients(annotation: InsightAnnotationAnswer) {
     const servingSize = annotation.data["serving_size"]?.value ?? null
-    // delete serving_size from the nutrients object
-    delete annotation.data["serving_size"]
+    // Clone the nutrients object to avoid mutating the original annotation.data
+    const clonedData = { ...annotation.data }
+    delete clonedData["serving_size"]
     const data: NutrientsAnnotationData = {
-      nutrients: annotation.data,
+      nutrients: clonedData,
       nutrition_data_per: annotation.type,
       serving_size: servingSize,
     }
