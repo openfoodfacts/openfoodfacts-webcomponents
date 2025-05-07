@@ -27,8 +27,8 @@
         language-code="en"
         robotoff-configuration='{
           "dryRun": true,
-          "apiUrl": "https://robotoff.openfoodfacts.org/api/v1",
-          "imgUrl": "https://images.openfoodfacts.org/images/products"
+          "apiUrl": "https://robotoff.openfoodfacts.net/api/v1",
+          "imgUrl": "https://images.openfoodfacts.net/images/products"
         }'
         folksonomy-configuration='{
           "apiUrl": "https://api.folksonomy.openfoodfacts.org"
@@ -166,6 +166,5 @@
   })
   robotoffContributionMessage.addEventListener("success", (event) => {
     console.log("success", event.detail)
-    alert(`Success: ${event.detail.type}`)
   })
 </script>

@@ -4,7 +4,7 @@ import { customElement, property, query, state } from "lit/decorators.js"
 import { BASE } from "../../styles/base"
 import { msg } from "@lit/localize"
 import { EventType } from "../../constants"
-import { QuestionAnnotationAnswer } from "../../types/robotoff"
+import { AnnotationAnswer } from "../../types/robotoff"
 import "../icons/check"
 import "../icons/cross"
 import "../icons/skip"
@@ -880,7 +880,7 @@ export class TextCorrector extends LitElement {
    * Dispatches a submit event with the provided detail.
    * @param {object} detail - The detail of the event.
    * @param {string} [detail.correction] - The correction to include in the event.
-   * @param {QuestionAnnotationAnswer} detail.type - The type of the event.
+   * @param {AnnotationAnswer} detail.type - The type of the event.
    */
   dispatchSubmitEvent(detail: TextCorrectorEventDetail) {
     this.dispatchEvent(new CustomEvent<TextCorrectorEventDetail>(EventType.SAVE, { detail }))
@@ -935,14 +935,14 @@ export class TextCorrector extends LitElement {
   acceptTextWithCorrection() {
     this.dispatchSubmitEvent({
       correction: this.value,
-      annotation: QuestionAnnotationAnswer.ACCEPT_AND_ADD_DATA,
+      annotation: AnnotationAnswer.ACCEPT_AND_ADD_DATA,
     })
   }
   /**
    * Accepts the text.
    */
   acceptText() {
-    this.dispatchSubmitEvent({ annotation: QuestionAnnotationAnswer.ACCEPT })
+    this.dispatchSubmitEvent({ annotation: AnnotationAnswer.ACCEPT })
   }
   /**
    * Confirms the text.
@@ -971,13 +971,13 @@ export class TextCorrector extends LitElement {
    * Rejects the text.
    */
   rejectText() {
-    this.dispatchSubmitEvent({ annotation: QuestionAnnotationAnswer.REFUSE })
+    this.dispatchSubmitEvent({ annotation: AnnotationAnswer.REFUSE })
   }
   /**
    * Skips the text.
    */
   skip() {
-    this.dispatchSubmitEvent({ annotation: QuestionAnnotationAnswer.SKIP })
+    this.dispatchSubmitEvent({ annotation: AnnotationAnswer.SKIP })
   }
 
   /**

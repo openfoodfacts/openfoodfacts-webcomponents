@@ -1,6 +1,6 @@
 import { Computed } from "@lit-labs/signals"
 import robotoff from "../api/robotoff"
-import { Question, QuestionAnnotationAnswer, QuestionRequestParams } from "../types/robotoff"
+import { Question, AnnotationAnswer, QuestionRequestParams } from "../types/robotoff"
 import { SignalMap } from "../utils/signals"
 
 // Store questions by id
@@ -82,7 +82,7 @@ export const checkIfQuestionsFinishedByProductCode = (productCode: string) => {
  * @param insightId - The ID of the insight.
  * @param value - The answer to the question.
  */
-export const answerQuestion = (insightId: string, value: QuestionAnnotationAnswer) => {
+export const answerQuestion = (insightId: string, value: AnnotationAnswer) => {
   robotoff.annotateQuestion(insightId, value)
 }
 
