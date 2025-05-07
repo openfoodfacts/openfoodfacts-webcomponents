@@ -46,7 +46,7 @@ export const fetchNutrientInsightsByProductCode = async (
     return []
   }
   if (response.insights?.length > 1) {
-    alert("More than one insight found")
+    console.warn("More than one insight found")
   }
 
   const insight = response.insights[0]
