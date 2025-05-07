@@ -40,11 +40,11 @@ export class RobotoffIngredients extends LitElement {
     INPUT,
     getButtonClasses([ButtonType.Cappucino, ButtonType.Success, ButtonType.Danger]),
     css`
-      .container {
+      .robotoff-ingredients {
         max-width: 800px;
         margin: 0 auto;
-        padding: 1rem;
         border-radius: 4px;
+        box-sizing: border-box;
       }
     `,
   ]
@@ -255,10 +255,18 @@ export class RobotoffIngredients extends LitElement {
     this.nextInsight()
 
     this.dispatchIngredientsStateEvent({
-      state: this.allInsightsAreAnswered ? EventState.ANNOTATED : EventState.ANSWERED,
+      state: EventState.ANNOTATED,
       insightId: insight.id,
       ...event.detail,
     })
+
+    if (this.allInsightsAreAnswered) {
+      this.dispatchIngredientsStateEvent({
+        state: EventState.FINISHED,
+        insightId: insight.id,
+        ...event.detail,
+      })
+    }
   }
 
   /**
@@ -301,7 +309,7 @@ export class RobotoffIngredients extends LitElement {
         const original = insight.data.original
 
         return html`
-          <div class="container">
+          <div class="robotoff-ingredients">
             ${this.renderHeader()}
             <div>
               ${this.renderImage()}

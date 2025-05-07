@@ -3,12 +3,13 @@ import { getLocaleAfterInit } from "../localization"
 import {
   QuestionRequestParams,
   QuestionsResponse,
-  QuestionAnnotationAnswer,
+  AnnotationAnswer,
   InsightsRequestParams,
   InsightsResponse,
   InsightAnnotationAnswer,
   NutrientsInsight,
   IngredientsInsight,
+  NutrientsAnnotationData,
 } from "../types/robotoff"
 import { robotoffConfiguration } from "../signals/robotoff"
 
@@ -49,7 +50,7 @@ const annotate = (formBody: string) => {
  */
 const robotoff = {
   annotate,
-  annotateQuestion(insightId: string, annotation: QuestionAnnotationAnswer) {
+  annotateQuestion(insightId: string, annotation: AnnotationAnswer) {
     const formBody = new URLSearchParams({
       insight_id: insightId,
       annotation: annotation,
@@ -57,14 +58,20 @@ const robotoff = {
     return annotate(formBody)
   },
   annotateNutrients(annotation: InsightAnnotationAnswer) {
-    console.log("annotateNutrients", annotation)
+    const servingSize = annotation.data["serving_size"]?.value ?? null
+    // Clone the nutrients object to avoid mutating the original annotation.data
+    const clonedData = { ...annotation.data }
+    delete clonedData["serving_size"]
+    const data: NutrientsAnnotationData = {
+      nutrients: clonedData,
+      nutrition_data_per: annotation.type,
+      serving_size: servingSize,
+    }
+
     const formBody = new URLSearchParams({
-      annotation: "2",
+      annotation: AnnotationAnswer.ACCEPT_AND_ADD_DATA,
       insight_id: annotation.insightId,
-      data: JSON.stringify({
-        nutrients: annotation.data,
-      }),
-      type: annotation.type,
+      data: JSON.stringify(data),
     }).toString()
     return annotate(formBody)
   },
@@ -77,11 +84,7 @@ const robotoff = {
    * from the one proposed by the insight or the original one
    * @returns {Promise<Response>}
    */
-  annotateIngredients(
-    insightId: string,
-    annotation: QuestionAnnotationAnswer,
-    correction?: string
-  ) {
+  annotateIngredients(insightId: string, annotation: AnnotationAnswer, correction?: string) {
     const data: Record<string, string> = {
       insight_id: insightId,
       annotation,

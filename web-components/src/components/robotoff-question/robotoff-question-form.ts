@@ -1,12 +1,12 @@
 import { LitElement, html, css, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { Question, QuestionAnnotationAnswer } from "../../types/robotoff"
+import { Question, AnnotationAnswer } from "../../types/robotoff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { EventType } from "../../constants"
 import { answerQuestion } from "../../signals/questions"
 import "../buttons/zoom-unzoom-button"
 import { SignalWatcher } from "@lit-labs/signals"
-import { msg } from "@lit/localize"
+import { localized, msg } from "@lit/localize"
 /**
  * RobotoffQuestionForm component
  * It displays a form to answer a question about a product.
@@ -14,6 +14,7 @@ import { msg } from "@lit/localize"
  * @fires {EventType.SUBMIT} - When the form is submitted
  */
 @customElement("robotoff-question-form")
+@localized()
 export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
   static override styles = [
     ...getButtonClasses([
@@ -84,7 +85,7 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
 
     this.dispatchEvent(click)
   }
-  private _annotateProduct = async (event: Event, value: QuestionAnnotationAnswer) => {
+  private _annotateProduct = async (event: Event, value: AnnotationAnswer) => {
     answerQuestion(this.question?.insight_id!, value)
     this.emitEventClick(event, value)
   }
@@ -132,22 +133,19 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
           <p></p>
           <button
             class="button success-button"
-            @click="${(event: Event) =>
-              this._annotateProduct(event, QuestionAnnotationAnswer.ACCEPT)}"
+            @click="${(event: Event) => this._annotateProduct(event, AnnotationAnswer.ACCEPT)}"
           >
             Yes
           </button>
           <button
             class="button danger-button"
-            @click="${(event: Event) =>
-              this._annotateProduct(event, QuestionAnnotationAnswer.REFUSE)}"
+            @click="${(event: Event) => this._annotateProduct(event, AnnotationAnswer.REFUSE)}"
           >
             No
           </button>
           <button
             class="button cappucino-button"
-            @click="${(event: Event) =>
-              this._annotateProduct(event, QuestionAnnotationAnswer.SKIP)}"
+            @click="${(event: Event) => this._annotateProduct(event, AnnotationAnswer.SKIP)}"
           >
             Skip
           </button>

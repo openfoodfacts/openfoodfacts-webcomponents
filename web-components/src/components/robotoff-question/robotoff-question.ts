@@ -126,9 +126,11 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
     this.hasAnswered = true
     nextQuestionByProductCode(this.productCode)
     this.requestUpdate()
-    this._emitQuestionStateEvent(
-      isQuestionsFinished(this.productCode).get() ? EventState.ANNOTATED : EventState.HAS_DATA
-    )
+    this._emitQuestionStateEvent(EventState.ANNOTATED)
+    // Check if all questions are answered to emit the finished event
+    if (isQuestionsFinished(this.productCode).get()) {
+      this._emitQuestionStateEvent(EventState.FINISHED)
+    }
   }
 
   /**

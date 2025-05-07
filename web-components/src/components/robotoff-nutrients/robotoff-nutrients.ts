@@ -1,7 +1,11 @@
 import { Task } from "@lit/task"
 import { css, html, LitElement, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
-import { annotateNutrients, fetchInsightsByProductCode, insight } from "../../signals/nutrients"
+import {
+  annotateNutrients,
+  fetchNutrientInsightsByProductCode,
+  insight,
+} from "../../signals/nutrients"
 import "./robotoff-nutrients-table"
 import "../shared/zoomable-image"
 import "../shared/loader"
@@ -114,7 +118,7 @@ export class RobotoffNutrients extends LitElement {
       this.emitNutrientEvent(EventState.LOADING)
 
       await Promise.all([
-        fetchInsightsByProductCode(productCode),
+        fetchNutrientInsightsByProductCode(productCode),
         fetchNutrientsTaxonomies(),
         fetchNutrientsOrderByCountryCode(countryCode.get()),
         this.getProductNutriments(productCode),
@@ -150,6 +154,8 @@ export class RobotoffNutrients extends LitElement {
     await annotateNutrients(event.detail)
     this.isSubmited = true
     this.emitNutrientEvent(EventState.ANNOTATED)
+    // TODO : when we handle multiple insights, we need to check if there are more insights to annotate before emitting the FINISHED event
+    this.emitNutrientEvent(EventState.FINISHED)
   }
 
   renderImage(insight: NutrientsInsight) {
@@ -163,6 +169,7 @@ export class RobotoffNutrients extends LitElement {
           src=${imgUrl}
           .size="${{
             height: "400px",
+            "max-height": "35vh",
             width: "100%",
             "max-width": "500px",
           }}"

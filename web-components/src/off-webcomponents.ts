@@ -3,6 +3,7 @@ export { OffWebcomponentsConfiguration as OffWebcomponentConfiguration } from ".
 export { RobotoffQuestion } from "./components/robotoff-question/robotoff-question"
 export { RobotoffNutrients } from "./components/robotoff-nutrients/robotoff-nutrients"
 export { RobotoffIngredients } from "./components/robotoff-ingredients/robotoff-ingredients"
+export { RobotoffContributionMessage } from "./components/robotoff-contribution-message/robotoff-contribution-message"
 
 // Will be added in the future when design is ready
 // export { KnowledgePanelsComponent } from "./components/knowledge-panels/knowledge-panels"

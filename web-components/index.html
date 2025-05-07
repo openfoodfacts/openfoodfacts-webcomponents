@@ -14,6 +14,7 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         padding: 1rem;
         margin-bottom: 10rem;
+        box-sizing: border-box;
       }
     </style>
   </head>
@@ -26,8 +27,8 @@
         language-code="en"
         robotoff-configuration='{
           "dryRun": true,
-          "apiUrl": "https://robotoff.openfoodfacts.org/api/v1",
-          "imgUrl": "https://images.openfoodfacts.org/images/products"
+          "apiUrl": "https://robotoff.openfoodfacts.net/api/v1",
+          "imgUrl": "https://images.openfoodfacts.net/images/products"
         }'
         folksonomy-configuration='{
           "apiUrl": "https://api.folksonomy.openfoodfacts.org"
@@ -103,6 +104,13 @@
       <div style="display: flex">
         <folksonomy-editor product-code="6111035000430" page-type="view" />
       </div>
+
+      <div style="display: flex; margin: 2rem 1rem 1rem 1rem">
+        <robotoff-contribution-message
+          product-code="5000354922848"
+          id="robotoff-contribution-message"
+        />
+      </div>
     </div>
   </body>
 </html>
@@ -124,11 +132,13 @@
   const insightTypes = document.getElementById("insight-types")
   const barcodeScanner = document.getElementById("barcode-scanner")
   const robotoffIngredients = document.getElementById("robotoff-ingredients")
+  const robotoffContributionMessage = document.getElementById("robotoff-contribution-message")
 
   const productDebounce = debounce((value) => {
     robotoffQuestion.setAttribute("product-code", value)
     robotoffNutrients.setAttribute("product-code", value)
     robotoffIngredients.setAttribute("product-code", value)
+    robotoffContributionMessage.setAttribute("product-code", value)
   })
   productCode.addEventListener("input", (event) => {
     productDebounce(event.target.value)
@@ -153,5 +163,8 @@
     if (event.detail.barcode) {
       alert(`Barcode detected: ${event.detail.barcode}`)
     }
+  })
+  robotoffContributionMessage.addEventListener("success", (event) => {
+    console.log("success", event.detail)
   })
 </script>
