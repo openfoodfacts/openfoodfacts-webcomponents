@@ -11,11 +11,11 @@ import { localized, msg } from "@lit/localize"
 @customElement("robotoff-modal")
 @localized()
 export class RobotoffModal extends LitElement {
-  @property({ type: Object, attribute: "robotoff-contribution-type" })
+  @property({ type: String, attribute: "robotoff-contribution-type" })
   robotoffContributionType?: RobotoffContributionType
 
   @property({ type: String, attribute: "product-code" })
-  productCode?: string
+  productCode: string = ""
 
   @state()
   isLoading = false
