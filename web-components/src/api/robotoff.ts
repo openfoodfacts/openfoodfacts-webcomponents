@@ -67,7 +67,7 @@ const robotoff = {
       nutrition_data_per: annotation.type,
       serving_size: servingSize,
     }
-    console.log("annotateNutrients data", data)
+
     const formBody = new URLSearchParams({
       annotation: AnnotationAnswer.ACCEPT_AND_ADD_DATA,
       insight_id: annotation.insightId,
