@@ -47,6 +47,9 @@ const setOrderOfNutrient = (
   return index
 }
 
+/**
+ * Use Open Food Facts API to build an index of nutrients in the right order
+ */
 export const fetchNutrientsOrderByCountryCode = async (countryCode: string) => {
   // check if the nutrients order is already in the cache
   const nutrientsOrderPromise = nutrientsOrderPromises.getItem(countryCode)

@@ -61,6 +61,12 @@ export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
  */
 export const isNullOrUndefined = (value: any) => value === null || value === undefined
 
+/**
+ * Given a key with dot inside representing nested objects,
+ * create inner object and set value on leaf node
+ *
+ * @example: setValueAndParentsObjectIfNotExists({}, "a.b.c", 3) will create {a: {b: {c: 3}}}
+ */
 export const setValueAndParentsObjectIfNotExists = (
   obj: Record<string, any>,
   key: string,
