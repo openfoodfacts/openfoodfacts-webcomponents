@@ -19,6 +19,11 @@ export const openfoodfactsApiUrl = signal(DEFAULT_OPENFOODFACTS_API_URL)
  */
 export const nutrientsOrderByCountryCode = new SignalMap<NutrientsOrder>({})
 
+/**
+ * Insert nutrient at index in NutrientsOrder if it's not already there
+ *
+ * @return {number} the next index
+ */
 const setOrderOfNutrient = (
   obj: NutrientsOrder,
   index: number,
