@@ -1,15 +1,19 @@
 import { robotoffConfiguration } from "../../signals/robotoff"
+import { folksonomyConfiguration } from "../../signals/folksonomy"
 import {
   DEFAULT_ASSETS_IMAGES_PATH,
   DEFAULT_LANGUAGE_CODE,
   DEFAULT_ROBOTOFF_CONFIGURATION,
+  DEFAULT_FOLKSONOMY_CONFIGURATION,
 } from "../../constants"
 import { LitElement } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { OffWebcomponentConfigurationOptions } from "../../types"
 import { RobotoffConfigurationOptions } from "../../types/robotoff"
+import { FolksonomyConfigurationOptions } from "../../types/folksonomy"
 import { setLocale } from "../../localization"
-import { assetsImagesPath } from "../../signals/app"
+import { assetsImagesPath, countryCode } from "../../signals/app"
+import { DEFAULT_OPENFOODFACTS_API_URL, openfoodfactsApiUrl } from "../../signals/openfoodfacts"
 
 /**
  * The configuration properties of the webcomponent configuration element.
@@ -41,17 +45,41 @@ const CONFIGURATION_PROPERTIES: Record<
       setLocale(value)
     },
   },
+  "country-code": {
+    propertyName: "countryCode",
+    fn: (value: string) => {
+      // Set the country code
+      countryCode.set(value)
+    },
+  },
   "assets-images-path": {
     propertyName: "assetsImagesPath",
     fn: (value: string) => {
       assetsImagesPath.set(value)
     },
   },
+  "folksonomy-configuration": {
+    propertyName: "folksonomyConfiguration",
+    converter: (value: string) => {
+      const configuration = JSON.parse(value)
+      return { ...DEFAULT_FOLKSONOMY_CONFIGURATION, ...configuration }
+    },
+    fn: (value: FolksonomyConfigurationOptions) => {
+      // Set the folksonomy configuration
+      folksonomyConfiguration.set(value)
+    },
+  },
+  "openfoodfacts-api-url": {
+    propertyName: "openfoodfactsApiUrl",
+    fn: (value: string) => {
+      // Set the Open Food Facts API URL
+      openfoodfactsApiUrl.set(value)
+    },
+  },
 }
 
 /**
- * Robotoff configuration element.
- * It is used to configure the robotoff parameters.
+ * It is used to configure the OFF web components parmeters.
  * @element off-webcomponents-configuration
  */
 @customElement("off-webcomponents-configuration")
@@ -73,11 +101,34 @@ export class OffWebcomponentsConfiguration extends LitElement {
   languageCode?: string = DEFAULT_LANGUAGE_CODE
 
   /**
+   * The country code we need to use for the app.
+   * @attr country-code
+   */
+  @property({ type: String, attribute: "country-code" })
+  countryCode?: string
+
+  /**
    * The image path we need to use to retrieve the images in assets/images folder.
    * @attr image-path
    */
   @property({ type: String, attribute: "assets-images-path" })
   assetsImagesPath?: string = DEFAULT_ASSETS_IMAGES_PATH
+
+  /**
+   * The folksonomy configuration object.
+   * @type {FolksonomyConfigurationOptions}
+   */
+  @property({ type: Object, attribute: "folksonomy-configuration" })
+  folksonomyConfiguration: FolksonomyConfigurationOptions = {
+    ...DEFAULT_FOLKSONOMY_CONFIGURATION,
+  }
+
+  /**
+   * The Open Food Facts API URL.
+   * @attr openfoodfacts-api-url
+   */
+  @property({ type: String, attribute: "openfoodfacts-api-url" })
+  openfoodfactsApiUrl?: string = DEFAULT_OPENFOODFACTS_API_URL
 
   override attributeChangedCallback(name: string, oldval: string, newval: string) {
     super.attributeChangedCallback(name, oldval, newval)

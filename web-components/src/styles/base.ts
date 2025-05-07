@@ -9,3 +9,9 @@ export const BASE = css`
     font-family: var(--font-family, "Public Sans", Helvetica, Roboto, Arial, sans-serif);
   }
 `
+
+export const ICON_BASE = css`
+  :host {
+    display: inline-flex;
+  }
+`

@@ -1,10 +1,14 @@
 import { EventState } from "../constants"
 import { RobotoffConfigurationOptions } from "./robotoff"
+import { FolksonomyConfigurationOptions } from "./folksonomy"
 
 export type OffWebcomponentConfigurationOptions = {
   robotoffConfiguration: RobotoffConfigurationOptions
   languageCode: string
+  countryCode: string
   assetsImagesPath: string
+  folksonomyConfiguration: FolksonomyConfigurationOptions
+  openfoodfactsApiUrl: string
 }
 
 export type Product = {

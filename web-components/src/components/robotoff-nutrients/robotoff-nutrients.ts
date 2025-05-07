@@ -1,19 +1,29 @@
 import { Task } from "@lit/task"
 import { css, html, LitElement, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
-import { annotateNutrients, fetchInsightsByProductCode, insight } from "../../signals/nutrients"
+import {
+  annotateNutrients,
+  fetchNutrientInsightsByProductCode,
+  insight,
+} from "../../signals/nutrients"
 import "./robotoff-nutrients-table"
 import "../shared/zoomable-image"
 import "../shared/loader"
 
 import { fetchNutrientsTaxonomies } from "../../signals/taxonomies"
-import { Insight, InsightAnnotationAnswer } from "../../types/robotoff"
+import { NutrientsInsight, InsightAnnotationAnswer } from "../../types/robotoff"
 import { BASE } from "../../styles/base"
 import { robotoffConfiguration } from "../../signals/robotoff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { FLEX } from "../../styles/utils"
 import { EventState, EventType } from "../../constants"
 import { BasicStateEventDetail } from "../../types"
+import { NutrimentsProductType } from "../../types/openfoodfacts"
+import { fetchProduct } from "../../api/openfoodfacts"
+import { ProductFields } from "../../utils/openfoodfacts"
+import { getLocale } from "../../localization"
+import { fetchNutrientsOrderByCountryCode } from "../../signals/openfoodfacts"
+import { countryCode } from "../../signals/app"
 
 /**
  * Robotoff Nutrients component
@@ -31,17 +41,28 @@ export class RobotoffNutrients extends LitElement {
 
     css`
       .image-wrapper {
+        position: sticky;
+        z-index: 1;
+        top: 1rem;
         display: flex;
         justify-content: center;
         align-items: center;
         margin-bottom: 1rem;
+        background-color: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        padding-top: 1rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        box-sizing: border-box;
       }
 
       .nutrients-content-wrapper {
+        position: relative;
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
-        align-items: center;
+        align-items: start;
         gap: 0.5rem 5rem;
       }
 
@@ -65,6 +86,8 @@ export class RobotoffNutrients extends LitElement {
   @state()
   isSubmited = false
 
+  @state()
+  private nutrimentsData?: NutrimentsProductType
   /**
    * Emit the state event
    * @param {EventState} state
@@ -94,7 +117,12 @@ export class RobotoffNutrients extends LitElement {
 
       this.emitNutrientEvent(EventState.LOADING)
 
-      await Promise.all([fetchInsightsByProductCode(productCode), fetchNutrientsTaxonomies()])
+      await Promise.all([
+        fetchNutrientInsightsByProductCode(productCode),
+        fetchNutrientsTaxonomies(),
+        fetchNutrientsOrderByCountryCode(countryCode.get()),
+        this.getProductNutriments(productCode),
+      ])
 
       const value = insight(productCode).get()
       this.emitNutrientEvent(value ? EventState.HAS_DATA : EventState.NO_DATA)
@@ -104,6 +132,21 @@ export class RobotoffNutrients extends LitElement {
   })
 
   /**
+   * Get the product nutriments
+   * @param {string} productCode
+   * @returns {Promise<NutrimentsProductType>}
+   */
+  async getProductNutriments(productCode: string) {
+    this.nutrimentsData = undefined
+    const result = await fetchProduct<NutrimentsProductType>(productCode, {
+      fields: [ProductFields.NUTRIMENTS],
+      lc: getLocale(),
+    })
+    this.nutrimentsData = result.product
+    return result.product.nutriments
+  }
+
+  /**
    * Annotate the nutrients insights
    * @returns {Promise<void>}
    */
@@ -111,26 +154,27 @@ export class RobotoffNutrients extends LitElement {
     await annotateNutrients(event.detail)
     this.isSubmited = true
     this.emitNutrientEvent(EventState.ANNOTATED)
+    // TODO : when we handle multiple insights, we need to check if there are more insights to annotate before emitting the FINISHED event
+    this.emitNutrientEvent(EventState.FINISHED)
   }
 
-  renderImage(insight: Insight) {
+  renderImage(insight: NutrientsInsight) {
     if (!insight?.source_image) {
       return nothing
     }
     const imgUrl = `${robotoffConfiguration.getItem("imgUrl")}${insight.source_image}`
     return html`
-      <div>
-        <div class="image-wrapper">
-          <zoomable-image
-            src=${imgUrl}
-            .size="${{
-              height: "400px",
-              width: "100%",
-              "max-width": "500px",
-            }}"
-            show-buttons
-          ></zoomable-image>
-        </div>
+      <div class="image-wrapper">
+        <zoomable-image
+          src=${imgUrl}
+          .size="${{
+            height: "400px",
+            "max-height": "35vh",
+            width: "100%",
+            "max-width": "500px",
+          }}"
+          show-buttons
+        ></zoomable-image>
       </div>
     `
   }
@@ -145,9 +189,10 @@ export class RobotoffNutrients extends LitElement {
         return html`
           <div class="nutrients" part="nutrients">
             <div part="nutrients-content-wrapper" class="nutrients-content-wrapper">
-              ${this.renderImage(insight as Insight)}
+              ${this.renderImage(insight as NutrientsInsight)}
               <robotoff-nutrients-table
-                .insight="${insight as Insight}"
+                .nutrimentsData="${this.nutrimentsData}"
+                .insight="${insight as NutrientsInsight}"
                 @submit="${this.onSubmit}"
               ></robotoff-nutrients-table>
             </div>

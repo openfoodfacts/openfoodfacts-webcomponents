@@ -7,6 +7,7 @@ import { FLEX } from "../../styles/utils"
 import "../icons/rotate-left"
 import "../icons/rotate-right"
 import { localized, msg } from "@lit/localize"
+import { mobileAndTabletCheck } from "../../utils/breakpoints"
 
 /**
  * A simple zoomable image component.
@@ -26,6 +27,7 @@ export class ZoomableImage extends LitElement {
         position: relative;
         position: relative;
         border: 1px solid black;
+        background-color: white;
       }
       .panzoom {
         position: relative;
@@ -41,17 +43,36 @@ export class ZoomableImage extends LitElement {
     getButtonClasses([ButtonType.LINK]),
   ]
 
+  /*
+   * Panzoom element
+   */
   @query(".panzoom")
   element!: HTMLElement
 
+  /*
+   * Image element
+   */
   @query("img")
   imageElement!: HTMLImageElement
 
+  /*
+   * Panzoom instance
+   */
   @state()
   panzoom!: any
 
+  /*
+   * Image source url
+   */
   @property({ type: String, attribute: "src" })
   src = ""
+
+  /**
+   * Fallback image source url
+   * If the image fails to load, this image will be displayed instead
+   */
+  @property({ type: String, attribute: "fallback-src" })
+  fallbackSrc = ""
 
   @property({ type: Number, attribute: "current-zoom" })
   currentZoom = 1
@@ -60,23 +81,29 @@ export class ZoomableImage extends LitElement {
   stepSize = 0.1
 
   @property({ type: Number, attribute: "min-zoom" })
-  minZoom = 0
+  minZoom = 0.3
   @property({ type: Number, attribute: "max-zoom" })
   maxZoom = 5
 
   @property({ type: Boolean, attribute: "show-buttons" })
   showButtons = false
 
-  @state()
-  rotation = 0
-
   @property({ type: Object })
   size: {
     width?: string
     height?: string
+    "max-width"?: string
+    "max-height"?: string
   } = {
     width: "100%",
     height: "30vh",
+  }
+
+  @state()
+  rotation = 0
+
+  get canZoom() {
+    return !mobileAndTabletCheck()
   }
 
   override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
@@ -91,7 +118,9 @@ export class ZoomableImage extends LitElement {
   }
   override disconnectedCallback(): void {
     super.disconnectedCallback()
-    this.element.removeEventListener("wheel", this.panzoom.zoomWithWheel)
+    if (this.canZoom) {
+      this.element.parentElement!.removeEventListener("wheel", this.panzoom.zoomWithWheel)
+    }
     this.panzoom.destroy()
   }
 
@@ -104,7 +133,9 @@ export class ZoomableImage extends LitElement {
       contain: "inside",
     })
 
-    this.element.addEventListener("wheel", panzoom.zoomWithWheel)
+    if (this.canZoom) {
+      this.element.parentElement!.addEventListener("wheel", panzoom.zoomWithWheel)
+    }
     this.panzoom = panzoom
     this.onImageChange()
   }
@@ -178,7 +209,14 @@ export class ZoomableImage extends LitElement {
       <div>
         <div class="panzoom-parent" style=${styleMap(this.size)}>
           <div class="panzoom">
-            <img src=${this.src} @load=${this.initPanzoom} style=${styleMap(imageStyle)} />
+            <img
+              src=${this.src}
+              @error=${() => {
+                this.src = this.fallbackSrc
+              }}
+              @load=${this.initPanzoom}
+              style=${styleMap(imageStyle)}
+            />
           </div>
         </div>
         ${this.renderButtons()}
