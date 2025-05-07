@@ -113,9 +113,10 @@ export class RobotoffContributionMessage extends SignalWatcher(LitElement) {
   closeModal() {
     this.robotoffContributionType = undefined
   }
-  onSave() {
-    this.showMessages[this.robotoffContributionType!] = false
+  onSave(event: CustomEvent<{ type: RobotoffContributionType }>) {
+    this.showMessages[event.detail.type!] = false
     this.closeModal()
+    this.requestUpdate()
   }
 
   override render() {
