@@ -13,6 +13,18 @@ import { CONTAINER } from "../../styles/responsive.js"
 import "../robotoff-modal/robotoff-modal"
 import { SignalWatcher } from "@lit-labs/signals"
 
+/**
+ * The `robotoff-contribution-message` component is a web component that displays messages prompting users to contribute to improving product information.
+ * It fetches data from various signals (ingredients, nutrients, and questions) and displays relevant messages based on the fetched data.
+ *
+ * @fires success - Dispatched when a contribution is successfully made.
+ * @fires close - Dispatched when the modal is closed.
+ *
+ * @example
+ * ```html
+ * <robotoff-contribution-message product-code="123456789"></robotoff-contribution-message>
+ * ```
+ */
 @customElement("robotoff-contribution-message")
 @localized()
 export class RobotoffContributionMessage extends SignalWatcher(LitElement) {
@@ -48,12 +60,21 @@ export class RobotoffContributionMessage extends SignalWatcher(LitElement) {
     `,
   ]
 
+  /**
+   * The product code for which the contribution messages are displayed.
+   */
   @property({ type: String, attribute: "product-code" })
   productCode = ""
 
+  /**
+   * The type of contribution being made.
+   */
   @state()
   robotoffContributionType?: RobotoffContributionType
 
+  /**
+   * A record indicating which messages should be shown.
+   */
   @state()
   showMessages: Record<RobotoffContributionType, boolean> = {
     ingredients: false,
@@ -61,6 +82,9 @@ export class RobotoffContributionMessage extends SignalWatcher(LitElement) {
     questions: false,
   }
 
+  /**
+   * Returns the messages to be displayed based on the `showMessages` state.
+   */
   get messagesToShow() {
     const items: {
       type: RobotoffContributionType
@@ -86,6 +110,11 @@ export class RobotoffContributionMessage extends SignalWatcher(LitElement) {
     return items
   }
 
+  /**
+   * A task that fetches data for the component.
+   * It refreshes when the `productCode` property changes.
+   * It fetches from robotoff : spellcheck insights, nutrient insights, and questions for the product.
+   */
   private _fetchDataTask = new Task(this, {
     task: async ([productCode]) => {
       // Check if it need contributions. If not, don't show the message. If request fails, hide the message but do not crash all requests
@@ -107,18 +136,33 @@ export class RobotoffContributionMessage extends SignalWatcher(LitElement) {
     args: () => [this.productCode],
   })
 
+  /**
+   * Opens the modal for the specified contribution type.
+   * @param {RobotoffContributionType} type - The type of contribution.
+   */
   openModal(type: RobotoffContributionType) {
     this.robotoffContributionType = type
   }
+  /**
+   * Closes the modal.
+   */
   closeModal() {
     this.robotoffContributionType = undefined
   }
+  /**
+   * Handles the save event when a contribution is made.
+   * @param {CustomEvent<{ type: RobotoffContributionType }>} event - The event containing the contribution type.
+   */
   onSave(event: CustomEvent<{ type: RobotoffContributionType }>) {
     this.showMessages[event.detail.type!] = false
     this.closeModal()
     this.requestUpdate()
   }
 
+  /**
+   * Renders the component.
+   * @returns {TemplateResult} The rendered template.
+   */
   override render() {
     return this._fetchDataTask.render({
       complete: () => {
