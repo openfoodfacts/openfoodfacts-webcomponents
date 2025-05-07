@@ -255,10 +255,18 @@ export class RobotoffIngredients extends LitElement {
     this.nextInsight()
 
     this.dispatchIngredientsStateEvent({
-      state: this.allInsightsAreAnswered ? EventState.ANNOTATED : EventState.ANSWERED,
+      state: EventState.ANNOTATED,
       insightId: insight.id,
       ...event.detail,
     })
+
+    if (this.allInsightsAreAnswered) {
+      this.dispatchIngredientsStateEvent({
+        state: EventState.FINISHED,
+        insightId: insight.id,
+        ...event.detail,
+      })
+    }
   }
 
   /**

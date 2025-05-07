@@ -75,7 +75,7 @@ export class RobotoffModal extends LitElement {
    * Handles the annotated event (meaning all insight have been processed)
    * by showing a success message and dispatching a success event.
    */
-  onSuccessEvent() {
+  onAnnotated() {
     const robotoffContributionType = this.robotoffContributionType!
     this.showSuccessMessage = true
     setTimeout(() => {
@@ -90,8 +90,9 @@ export class RobotoffModal extends LitElement {
    */
   onStateChange(event: CustomEvent<BasicStateEventDetail>) {
     switch (event.detail.state) {
-      case EventState.ANNOTATED:
-        this.onSuccessEvent()
+      // When all insight is annotated, we show a success message
+      case EventState.FINISHED:
+        this.onAnnotated()
         break
       case EventState.LOADING:
         this.isLoading = true

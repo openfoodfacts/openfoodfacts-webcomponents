@@ -154,6 +154,8 @@ export class RobotoffNutrients extends LitElement {
     await annotateNutrients(event.detail)
     this.isSubmited = true
     this.emitNutrientEvent(EventState.ANNOTATED)
+    // TODO : when we handle multiple insights, we need to check if there are more insights to annotate before emitting the FINISHED event
+    this.emitNutrientEvent(EventState.FINISHED)
   }
 
   renderImage(insight: NutrientsInsight) {

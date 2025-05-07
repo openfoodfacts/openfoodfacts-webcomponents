@@ -34,8 +34,8 @@ export enum EventState {
   LOADING = "loading", // loading data
   NO_DATA = "no-data", // no data to display
   HAS_DATA = "has-data", // data to display
-  ANSWERED = "answered", // user answered the question
-  ANNOTATED = "annotated", // user answered to all questions
+  ANNOTATED = "annotated", // user do one annotation
+  FINISHED = "FINISHED", // user do all annotations
 }
 
 export const DEFAULT_ASSETS_IMAGES_PATH = "/assets/images"
