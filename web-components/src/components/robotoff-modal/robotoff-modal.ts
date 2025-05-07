@@ -8,25 +8,57 @@ import "../robotoff-nutrients/robotoff-nutrients"
 import "../robotoff-question/robotoff-question"
 import { localized, msg } from "@lit/localize"
 
+/**
+ * The `robotoff-modal` component is a web component that displays a modal for contributing to product information.
+ * It handles different types of contributions (ingredients, nutrients, and questions) and manages the modal's state.
+ *
+ * @fires success - Dispatched when a contribution is successfully made.
+ * @fires close - Dispatched when the modal is closed.
+ *
+ * @example
+ * ```html
+ * <robotoff-modal product-code="123456789" robotoff-contribution-type="ingredients"></robotoff-modal>
+ * ```
+ */
+
 @customElement("robotoff-modal")
 @localized()
 export class RobotoffModal extends LitElement {
+  /**
+   * The type of contribution being made.
+   */
   @property({ type: String, attribute: "robotoff-contribution-type" })
   robotoffContributionType?: RobotoffContributionType
 
+  /**
+   * The product code for which the contribution is being made.
+   */
   @property({ type: String, attribute: "product-code" })
   productCode: string = ""
 
+  /**
+   * Indicates whether the modal is in a loading state.
+   */
   @state()
   isLoading = false
 
+  /**
+   * Indicates whether the success message should be shown.
+   */
   @state()
   showSuccessMessage = false
 
+  /**
+   * Returns whether the modal is open based on the `robotoffContributionType`.
+   */
   get isOpen() {
     return Boolean(this.robotoffContributionType)
   }
 
+  /**
+   * Dispatches a success event when a contribution is successfully made.
+   * @param {RobotoffContributionType} type - The type of contribution.
+   */
   sendSuccessEvent(type: RobotoffContributionType) {
     this.dispatchEvent(
       new CustomEvent(EventType.SUCCESS, {
@@ -39,6 +71,9 @@ export class RobotoffModal extends LitElement {
     )
   }
 
+  /**
+   * Handles the success event by showing a success message and dispatching a success event.
+   */
   onSuccessEvent() {
     const robotoffContributionType = this.robotoffContributionType!
     this.showSuccessMessage = true
@@ -48,6 +83,10 @@ export class RobotoffModal extends LitElement {
     }, 1000)
   }
 
+  /**
+   * Handles state changes from child components.
+   * @param {CustomEvent<BasicStateEventDetail>} event - The state change event.
+   */
   onStateChange(event: CustomEvent<BasicStateEventDetail>) {
     switch (event.detail.state) {
       case EventState.ANNOTATED:
@@ -67,6 +106,9 @@ export class RobotoffModal extends LitElement {
     }
   }
 
+  /**
+   * Renders the modal content based on the `robotoffContributionType`.
+   */
   renderModalContent() {
     switch (this.robotoffContributionType) {
       case RobotoffContributionType.INGREDIENTS:
@@ -88,9 +130,15 @@ export class RobotoffModal extends LitElement {
     return nothing
   }
 
+  /**
+   * Closes the modal and dispatches a close event.
+   */
   closeModal() {
     this.dispatchEvent(new CustomEvent(EventType.CLOSE))
   }
+  /**
+   * Renders the success message.
+   */
   renderSuccessMessage() {
     return html`<slot name="success-message"
       ><div class="success-message">${msg("Thanks for your contribution!")}</div></slot

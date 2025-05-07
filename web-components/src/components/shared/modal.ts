@@ -6,11 +6,28 @@ import { EventType } from "../../constants"
 import "../icons/cross"
 import { localized, msg } from "@lit/localize"
 
+/**
+ * The `modal-component` is a reusable web component that displays a modal dialog.
+ * It can be used to show content in a modal overlay, with options for loading states and close functionality.
+ *
+ * @fires close - Dispatched when the modal is closed.
+ *
+ * @example
+ * ```html
+ * <modal-component is-open="true" is-loading="false">
+ *   <p>This is the content of the modal.</p>
+ * </modal-component>
+ * ```
+ */
+
 @customElement("modal-component")
 @localized()
 class ModalComponent extends LitElement {
   static override styles = [MODAL]
 
+  /**
+   * Indicates whether the modal is open.
+   */
   @property({
     type: Boolean,
     reflect: true,
@@ -18,9 +35,15 @@ class ModalComponent extends LitElement {
   })
   isOpen = false
 
+  /**
+   * Indicates whether the modal is in a loading state.
+   */
   @property({ type: Boolean, attribute: "is-loading" })
   isLoading = false
 
+  /**
+   * Closes the modal and dispatches a close event.
+   */
   closeModal() {
     this.dispatchEvent(new CustomEvent(EventType.CLOSE))
   }
