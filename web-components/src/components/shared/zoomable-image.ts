@@ -89,6 +89,14 @@ export class ZoomableImage extends LitElement {
   @property({ type: String, attribute: "src" })
   src = ""
 
+  @property({ type: Object })
+  boundingBox?: CropperImageBoundingBox = {
+    x: 0,
+    y: 0,
+    width: 100,
+    height: 100,
+  }
+
   /**
    * Fallback image source url
    * If the image fails to load, this image will be displayed instead
@@ -104,6 +112,7 @@ export class ZoomableImage extends LitElement {
 
   @property({ type: Number, attribute: "min-zoom" })
   minZoom = 0.3
+
   @property({ type: Number, attribute: "max-zoom" })
   maxZoom = 5
 
@@ -145,14 +154,6 @@ export class ZoomableImage extends LitElement {
 
   @state()
   private resultBoundingBox?: CropperImageBoundingBox
-
-  @property({ type: Object })
-  boundingBox: CropperImageBoundingBox = {
-    x: 0,
-    y: 0,
-    width: 100,
-    height: 100,
-  }
 
   get canZoom() {
     return !mobileAndTabletCheck()
@@ -386,10 +387,10 @@ export class ZoomableImage extends LitElement {
     const { x: scaleX, y: scaleY } = this.getScale()
 
     return {
-      x: this.boundingBox.x * scaleX + offsetX,
-      y: this.boundingBox.y * scaleY + offsetY,
-      width: this.boundingBox.width * scaleX,
-      height: this.boundingBox.height * scaleY,
+      x: this.boundingBox!.x * scaleX + offsetX,
+      y: this.boundingBox!.y * scaleY + offsetY,
+      width: this.boundingBox!.width * scaleX,
+      height: this.boundingBox!.height * scaleY,
     }
   }
 
