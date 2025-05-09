@@ -40,3 +40,9 @@ export const IS_HIDDEN = css`
     display: none;
   }
 `
+
+export const FULL_WIDTH = css`
+  .full-width {
+    width: 100%;
+  }
+`
