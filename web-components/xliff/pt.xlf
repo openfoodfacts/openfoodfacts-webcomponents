@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file target-language="pt-BR" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+  <file target-language="pt-PT" source-language="en" original="lit-localize-inputs" datatype="plaintext">
     <body>
       <trans-unit id="s49730f3d5751a433">
         <source>Loading...</source>
-        <target state="translated">Carregando...</target>
+        <target state="translated">A carregar...</target>
       </trans-unit>
       <trans-unit id="s95d23d03f9147581">
         <source>Unzoom</source>
@@ -12,7 +12,7 @@
       </trans-unit>
       <trans-unit id="s166bd56d19670a72">
         <source>Zoom</source>
-        <target state="translated">Zoom</target>
+        <target state="translated">Ampliar</target>
       </trans-unit>
       <trans-unit id="s01d2865e3e1d5501">
         <source>Thank you for your assistance!</source>
@@ -68,11 +68,11 @@
       </trans-unit>
       <trans-unit id="s475b08749d0706ed">
         <source>Help us inform millions of consumers around the world about what they eat</source>
-        <target state="translated">Ajude-nos a informar a milhões de consumidores em todo o mundo sobre o que eles comem</target>
+        <target state="translated">Ajude-nos a informar milhões de consumidores em todo o mundo sobre o que comem</target>
       </trans-unit>
       <trans-unit id="sfc40ea3d5d5aa6f8">
         <source>Your donations fund the day-to-day operations of our non-profit association:</source>
-        <target state="translated">Suas doações financiam as operações diárias de nossa associação sem fins lucrativos:</target>
+        <target state="translated">Os seus donativos financiam as operações diárias da nossa associação sem fins lucrativos:</target>
       </trans-unit>
       <trans-unit id="s1c5031113de500ce">
         <source>keeping our database open &amp; available to all,</source>
@@ -84,19 +84,19 @@
       </trans-unit>
       <trans-unit id="sd82bc2decefa621b">
         <source>remain independent of the food industry,</source>
-        <target state="translated">permaneça independente da indústria alimentar,</target>
+        <target state="translated">permanecer independente da indústria alimentar,</target>
       </trans-unit>
       <trans-unit id="sb3bdd638a58d30f4">
         <source>engage a community of committed citizens,</source>
-        <target state="translated">envolva uma comunidade de cidadãos empenhados,</target>
+        <target state="translated">envolver uma comunidade de cidadãos empenhados,</target>
       </trans-unit>
       <trans-unit id="s100c4928cc74642a">
         <source>support the advancement of public health research.</source>
-        <target state="translated">apoio ao avanço da investigação no domínio da saúde pública.</target>
+        <target state="translated">apoiar o avanço da investigação no domínio da saúde pública.</target>
       </trans-unit>
       <trans-unit id="s6d7b6cdedaadfb6e">
         <source>Each donation counts! We appreciate your support in bringing further food transparency in the world.</source>
-        <target state="translated">Cada doação é importante! Nós agradecemos seu apoio em trazer mais transparência alimentar no mundo.</target>
+        <target state="translated">Cada donativo conta! Agradecemos o seu apoio para aumentar a transparência alimentar no mundo.</target>
       </trans-unit>
       <trans-unit id="s6306a31415aea913">
         <source>I SUPPORT</source>
@@ -128,7 +128,7 @@
       </trans-unit>
       <trans-unit id="sc52696641af72b53">
         <source>Install the app!</source>
-        <target state="translated">Instale o app!</target>
+        <target state="translated">Instale a aplicação!</target>
       </trans-unit>
       <trans-unit id="h5d824b4954e56ea5">
         <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
@@ -160,7 +160,7 @@
       </trans-unit>
       <trans-unit id="sf9aee319a006c9b4">
         <source>Add</source>
-        <target state="translated">Adicione</target>
+        <target state="translated">Adicionar</target>
       </trans-unit>
       <trans-unit id="sae2a8d4546d3ba85">
         <source>Error: Value must have only 5 decimal</source>
@@ -172,7 +172,7 @@
       </trans-unit>
       <trans-unit id="s4e48a2bd81627639">
         <source>Accept this change</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Aceite esta mudança</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Aceite esta alteração</target>
       </trans-unit>
       <trans-unit id="se286e1ae25e76775">
         <source>Accept this addition</source>
@@ -208,7 +208,7 @@
       </trans-unit>
       <trans-unit id="s66413c24dcf680e2">
         <source>Skip</source>
-        <target state="translated">Pular</target>
+        <target state="translated">Ignorar</target>
       </trans-unit>
       <trans-unit id="s64ef2a6c2dd1d3d1">
         <source>Edit</source>
@@ -221,7 +221,7 @@
                 This character <x id="1" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>␣<x id="2" equiv-text="&lt;/span&gt;"/> represents a space.
                 <x id="3" equiv-text="&lt;br&gt;"/>
                 This character <x id="4" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>↩︎<x id="5" equiv-text="&lt;/span&gt;"/> represents a line break. </source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Esta ferramenta permite corrigir a lista de ingredientes. Você pode adicionar, remover ou editar a lista de ingredientes
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Esta ferramenta permite corrigir a lista de ingredientes. Pode adicionar, remover ou editar a lista de ingredientes
                 .
                 <x id="0" equiv-text="&lt;br&gt;"/>
                 Este caractere <x id="1" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>␣<x id="2" equiv-text="&lt;/span&gt;"/> representa um espaço.
@@ -234,7 +234,7 @@
       </trans-unit>
       <trans-unit id="sbd6be5cde472f37c">
         <source>All insights have been answered! Thanks for your help!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Todas as respostas foram respondidas! Obrigado pela ajuda!</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Todos os insights foram respondidos! Obrigado pela ajuda!</target>
       </trans-unit>
       <trans-unit id="sa95b4224f685a36a">
         <source>Close modal</source>
@@ -246,7 +246,7 @@
       </trans-unit>
       <trans-unit id="s061eb5af92512c85">
         <source>Saved! Can you help with another one?</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Salvo! Você pode ajudar com outro?</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Salvo! Pode ajudar com outra?</target>
       </trans-unit>
       <trans-unit id="sb125568d43642e6f">
         <source>Answer questions about the product.</source>
@@ -254,15 +254,15 @@
       </trans-unit>
       <trans-unit id="sdc792b75f1edcaba">
         <source>Help us correct the spelling of ingredients.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ajude-nos a corrigir a grafia dos ingredientes.</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ajude-nos a corrigir a ortografia dos ingredientes.</target>
       </trans-unit>
       <trans-unit id="s5c92c0051d44b6de">
         <source>Help us correct the nutritional information.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ajude-nos a corrigir as informações nutricionais.</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ajude-nos a corrigir a informação nutricional.</target>
       </trans-unit>
       <trans-unit id="sd698d21ddecba56b">
         <source>Hey! You can help us improve the product information by answering the following parts:</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Olá! Você pode nos ajudar a melhorar as informações do produto respondendo às seguintes perguntas:</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ei! Pode ajudar-nos a melhorar as informações do produto respondendo às seguintes partes:</target>
       </trans-unit>
       <trans-unit id="s05ec315d9308091a">
         <source>Barcode corners icon</source>
@@ -270,7 +270,7 @@
       </trans-unit>
       <trans-unit id="sb5ceccad457e8cae">
         <source>Are you sure you want to delete this item?</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Tem certeza de que deseja excluir este item?</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Tem a certeza de que pretende eliminar este item?</target>
       </trans-unit>
       <trans-unit id="sdc673e73b5c13aea">
         <source>Delete</source>
@@ -286,7 +286,7 @@
       </trans-unit>
       <trans-unit id="sb3d4f79d9d8b71e5">
         <source>Submit</source>
-        <target state="translated">Envie</target>
+        <target state="translated">Enviar</target>
       </trans-unit>
       <trans-unit id="s0d5b7fee0311db68">
         <source>Property</source>
@@ -306,7 +306,7 @@
       </trans-unit>
       <trans-unit id="s907f7a97c6b29425">
         <source>Be aware the data model might be modified. Use at your own risk.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Esteja ciente de que o modelo de dados pode ser modificado. Use por sua conta e risco.</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Esteja ciente de que o modelo de dados pode ser modificado. Utilize por sua conta e risco.</target>
       </trans-unit>
       <trans-unit id="hdbe45450d1a6419b">
         <source>These properties are created and filed by users for any kind of usages. Feel
@@ -315,18 +315,18 @@
                     <x id="2" equiv-text="&lt;a href=&quot;https://openfoodfacts-explorer.vercel.app/folksonomy&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
                     or explore the
                     <x id="4" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="needs-translation">These properties are created and filed by users for any kind of usages. Feel
-                    free to add your own. The properties and values you create
-                    <x id="0" equiv-text="&lt;strong&gt;"/>must be factual<x id="1" equiv-text="&lt;/strong&gt;"/>. You can dive into
-                    <x id="2" equiv-text="&lt;a href=&quot;https://openfoodfacts-explorer.vercel.app/folksonomy&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
-                    or explore the
-                    <x id="4" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Estas propriedades são criadas e arquivadas pelos utilizadores para qualquer tipo de utilização. Sinta-se
+                    livre para adicionar o seu. As propriedades e os valores que cria
+                    <x id="0" equiv-text="&lt;strong&gt;"/>devem ser reais<x id="1" equiv-text="&lt;/strong&gt;"/>. Pode mergulhar na
+                    <x id="2" equiv-text="&lt;a href=&quot;https://openfoodfacts-explorer.vercel.app/folksonomy&quot;&gt;"/>lista de propriedades já utilizadas pela comunidade<x id="3" equiv-text="&lt;/a&gt;"/>
+                    ou explorar a documentação das
+                    <x id="4" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>propriedades e o seu motor de busca<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
       </trans-unit>
       <trans-unit id="h76766ba4ed1addb3">
         <source>This is brought by the
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't hesitate to participate or give feedback.</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">Isto é trazido pelo projeto
-                    <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine<x id="1" equiv-text="&lt;/a&gt;"/>. Não hesite em participar ou dar seu feedback.</target>
+                    <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine<x id="1" equiv-text="&lt;/a&gt;"/>. Não hesite em participar ou dar feedback.</target>
       </trans-unit>
     </body>
   </file>
