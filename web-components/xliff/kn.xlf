@@ -38,10 +38,6 @@
         <source>Error: Invalid value.</source>
         <target state="needs-translation">Error: Invalid value.</target>
       </trans-unit>
-      <trans-unit id="s090c321cc9301918">
-        <source>Error: Value must have only 2 decimal</source>
-        <target state="needs-translation">Error: Value must have only 2 decimal</target>
-      </trans-unit>
       <trans-unit id="sbd9a0b2293b3cd3c">
         <source>Serving size</source>
         <target state="translated">ವಿತರಣೆಯ ಗಾತ್ರ</target>
@@ -61,14 +57,6 @@
       <trans-unit id="s453188ea728f64da">
         <source>Add a nutrient</source>
         <target state="needs-translation">Add a nutrient</target>
-      </trans-unit>
-      <trans-unit id="s13d6dffec1a1ec2b">
-        <source>Nutrients</source>
-        <target state="needs-translation">Nutrients</target>
-      </trans-unit>
-      <trans-unit id="s688d3d95ca7c01db">
-        <source>Specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
-        <target state="needs-translation">Specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</target>
       </trans-unit>
       <trans-unit id="sc5575e3107f87874">
         <source>Rotate image to the left</source>
@@ -162,13 +150,183 @@
         <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
         <target state="needs-translation">Click to scan a barcode and find out its details (health, preferences, etc.)</target>
       </trans-unit>
-      <trans-unit id="s145e6e6c7a7bcf7a">
-        <source>Reduce image</source>
-        <target state="needs-translation">Reduce image</target>
-      </trans-unit>
       <trans-unit id="sc0520e1732a5c568">
         <source>Expand image</source>
         <target state="needs-translation">Expand image</target>
+      </trans-unit>
+      <trans-unit id="sab56a1d439576fd6">
+        <source>Suggestion icon</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ಸಲಹೆ ಐಕಾನ್</target>
+      </trans-unit>
+      <trans-unit id="sf9aee319a006c9b4">
+        <source>Add</source>
+        <target state="needs-translation">Add</target>
+      </trans-unit>
+      <trans-unit id="sae2a8d4546d3ba85">
+        <source>Error: Value must have only 5 decimal</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ದೋಷ: ಮೌಲ್ಯವು ಕೇವಲ 5 ದಶಮಾಂಶವನ್ನು ಹೊಂದಿರಬೇಕು.</target>
+      </trans-unit>
+      <trans-unit id="s5666afe5cd0166de">
+        <source>Please fix the errors or modify the text before confirming</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ದೃಢೀಕರಿಸುವ ಮೊದಲು ದೋಷಗಳನ್ನು ಸರಿಪಡಿಸಿ ಅಥವಾ ಪಠ್ಯವನ್ನು ಮಾರ್ಪಡಿಸಿ.</target>
+      </trans-unit>
+      <trans-unit id="s4e48a2bd81627639">
+        <source>Accept this change</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ಈ ಬದಲಾವಣೆಯನ್ನು ಸ್ವೀಕರಿಸಿ</target>
+      </trans-unit>
+      <trans-unit id="se286e1ae25e76775">
+        <source>Accept this addition</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ಈ ಸೇರ್ಪಡೆಯನ್ನು ಸ್ವೀಕರಿಸಿ</target>
+      </trans-unit>
+      <trans-unit id="s5ad69bf372513ebb">
+        <source>Accept this removal</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ಈ ತೆಗೆದುಹಾಕುವಿಕೆಯನ್ನು ಸ್ವೀಕರಿಸಿ</target>
+      </trans-unit>
+      <trans-unit id="s06f6c6f99db6b552">
+        <source>Original</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ಮೂಲ</target>
+      </trans-unit>
+      <trans-unit id="sc57b630a7a70c61f">
+        <source>Suggested fix</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ಸೂಚಿಸಲಾದ ಪರಿಹಾರ</target>
+      </trans-unit>
+      <trans-unit id="s417b90913e05bc17">
+        <source>Preview</source>
+        <target state="needs-translation">Preview</target>
+      </trans-unit>
+      <trans-unit id="s5dd6f12783fca34f">
+        <source>Edit ingredients list</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ಪದಾರ್ಥಗಳ ಪಟ್ಟಿಯನ್ನು ಸಂಪಾದಿಸಿ</target>
+      </trans-unit>
+      <trans-unit id="s33f85f24c0f5f008">
+        <source>Save</source>
+        <target state="translated">ಉಳಿಸು</target>
+      </trans-unit>
+      <trans-unit id="s2ceb11be2290bb1b">
+        <source>Cancel</source>
+        <target state="needs-translation">Cancel</target>
+      </trans-unit>
+      <trans-unit id="s66413c24dcf680e2">
+        <source>Skip</source>
+        <target state="needs-translation">Skip</target>
+      </trans-unit>
+      <trans-unit id="s64ef2a6c2dd1d3d1">
+        <source>Edit</source>
+        <target state="translated">ತಿದ್ದು</target>
+      </trans-unit>
+      <trans-unit id="h6bdd1b427aa985a4">
+        <source>This tool allows you to correct the ingredients list. You can add, remove or edit
+                ingredients list.
+                <x id="0" equiv-text="&lt;br&gt;"/>
+                This character <x id="1" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>␣<x id="2" equiv-text="&lt;/span&gt;"/> represents a space.
+                <x id="3" equiv-text="&lt;br&gt;"/>
+                This character <x id="4" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>↩︎<x id="5" equiv-text="&lt;/span&gt;"/> represents a line break. </source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ಈ ಉಪಕರಣವು ಪದಾರ್ಥಗಳ ಪಟ್ಟಿಯನ್ನು ಸರಿಪಡಿಸಲು ನಿಮಗೆ ಅನುಮತಿಸುತ್ತದೆ. ನೀವು
+                ಪದಾರ್ಥಗಳ ಪಟ್ಟಿಯನ್ನು ಸೇರಿಸಬಹುದು, ತೆಗೆದುಹಾಕಬಹುದು ಅಥವಾ ಸಂಪಾದಿಸಬಹುದು.
+                <x id="0" equiv-text="&lt;br&gt;"/>
+                ಈ ಅಕ್ಷರ <x id="1" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>␣<x id="2" equiv-text="&lt;/span&gt;"/> ಒಂದು ಜಾಗವನ್ನು ಪ್ರತಿನಿಧಿಸುತ್ತದೆ.
+                <x id="3" equiv-text="&lt;br&gt;"/>
+                ಈ ಅಕ್ಷರ <x id="4" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>↩︎<x id="5" equiv-text="&lt;/span&gt;"/> ಒಂದು ಸಾಲಿನ ವಿರಾಮವನ್ನು ಪ್ರತಿನಿಧಿಸುತ್ತದೆ. </target>
+      </trans-unit>
+      <trans-unit id="s11a18a69b30b65ed">
+        <source>Help us fix errors in ingredients list</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ಪದಾರ್ಥಗಳ ಪಟ್ಟಿಯಲ್ಲಿರುವ ದೋಷಗಳನ್ನು ಸರಿಪಡಿಸಲು ನಮಗೆ ಸಹಾಯ ಮಾಡಿ.</target>
+      </trans-unit>
+      <trans-unit id="sbd6be5cde472f37c">
+        <source>All insights have been answered! Thanks for your help!</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ಎಲ್ಲಾ ಒಳನೋಟಗಳಿಗೆ ಉತ್ತರಿಸಲಾಗಿದೆ! ನಿಮ್ಮ ಸಹಾಯಕ್ಕಾಗಿ ಧನ್ಯವಾದಗಳು!</target>
+      </trans-unit>
+      <trans-unit id="sa95b4224f685a36a">
+        <source>Close modal</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ಮೋಡಲ್ ಮುಚ್ಚಿ</target>
+      </trans-unit>
+      <trans-unit id="s67ae6594857a4d57">
+        <source>Thanks for your contribution!</source>
+        <target state="needs-translation">Thanks for your contribution!</target>
+      </trans-unit>
+      <trans-unit id="s061eb5af92512c85">
+        <source>Saved! Can you help with another one?</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ಉಳಿಸಲಾಗಿದೆ! ನೀವು ಇನ್ನೊಂದಕ್ಕೆ ಸಹಾಯ ಮಾಡಬಹುದೇ?</target>
+      </trans-unit>
+      <trans-unit id="sb125568d43642e6f">
+        <source>Answer questions about the product.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ಉತ್ಪನ್ನದ ಕುರಿತು ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ.</target>
+      </trans-unit>
+      <trans-unit id="sdc792b75f1edcaba">
+        <source>Help us correct the spelling of ingredients.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ಪದಾರ್ಥಗಳ ಕಾಗುಣಿತವನ್ನು ಸರಿಪಡಿಸಲು ನಮಗೆ ಸಹಾಯ ಮಾಡಿ.</target>
+      </trans-unit>
+      <trans-unit id="s5c92c0051d44b6de">
+        <source>Help us correct the nutritional information.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ಪೌಷ್ಠಿಕಾಂಶದ ಮಾಹಿತಿಯನ್ನು ಸರಿಪಡಿಸಲು ನಮಗೆ ಸಹಾಯ ಮಾಡಿ.</target>
+      </trans-unit>
+      <trans-unit id="sd698d21ddecba56b">
+        <source>Hey! You can help us improve the product information by answering the following parts:</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ಹೇ! ಈ ಕೆಳಗಿನ ಭಾಗಗಳಿಗೆ ಉತ್ತರಿಸುವ ಮೂಲಕ ಉತ್ಪನ್ನ ಮಾಹಿತಿಯನ್ನು ಸುಧಾರಿಸಲು ನೀವು ನಮಗೆ ಸಹಾಯ ಮಾಡಬಹುದು:</target>
+      </trans-unit>
+      <trans-unit id="s05ec315d9308091a">
+        <source>Barcode corners icon</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ಬಾರ್‌ಕೋಡ್ ಮೂಲೆಗಳ ಐಕಾನ್</target>
+      </trans-unit>
+      <trans-unit id="sb5ceccad457e8cae">
+        <source>Are you sure you want to delete this item?</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ನೀವು ಈ ಐಟಂ ಅನ್ನು ಅಳಿಸಲು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?</target>
+      </trans-unit>
+      <trans-unit id="sdc673e73b5c13aea">
+        <source>Delete</source>
+        <target state="translated">ಅಳಿಸಿ</target>
+      </trans-unit>
+      <trans-unit id="s15d64a0a6715285a">
+        <source>New key</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ಹೊಸ ಕೀ</target>
+      </trans-unit>
+      <trans-unit id="scb3b0671d7b7f640">
+        <source>New value</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ಹೊಸ ಮೌಲ್ಯ</target>
+      </trans-unit>
+      <trans-unit id="sb3d4f79d9d8b71e5">
+        <source>Submit</source>
+        <target state="needs-translation">Submit</target>
+      </trans-unit>
+      <trans-unit id="s0d5b7fee0311db68">
+        <source>Property</source>
+        <target state="needs-translation">Property</target>
+      </trans-unit>
+      <trans-unit id="s41f7dca46d3f1b4a">
+        <source>Value</source>
+        <target state="needs-translation">Value</target>
+      </trans-unit>
+      <trans-unit id="s8af61807443f32a4">
+        <source>Actions</source>
+        <target state="needs-translation">Actions</target>
+      </trans-unit>
+      <trans-unit id="seffa8ca49175b5f0">
+        <source>Personalized properties</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ವೈಯಕ್ತಿಕಗೊಳಿಸಿದ ಗುಣಲಕ್ಷಣಗಳು</target>
+      </trans-unit>
+      <trans-unit id="s907f7a97c6b29425">
+        <source>Be aware the data model might be modified. Use at your own risk.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ಡೇಟಾ ಮಾದರಿಯನ್ನು ಮಾರ್ಪಡಿಸಬಹುದು ಎಂಬುದನ್ನು ನೆನಪಿನಲ್ಲಿಡಿ. ನಿಮ್ಮ ಸ್ವಂತ ಅಪಾಯದಲ್ಲಿ ಬಳಸಿ.</target>
+      </trans-unit>
+      <trans-unit id="hdbe45450d1a6419b">
+        <source>These properties are created and filed by users for any kind of usages. Feel
+                    free to add your own. The properties and values you create
+                    <x id="0" equiv-text="&lt;strong&gt;"/>must be factual<x id="1" equiv-text="&lt;/strong&gt;"/>. You can dive into
+                    <x id="2" equiv-text="&lt;a href=&quot;https://openfoodfacts-explorer.vercel.app/folksonomy&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
+                    or explore the
+                    <x id="4" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ಈ ಗುಣಲಕ್ಷಣಗಳನ್ನು ಬಳಕೆದಾರರು ಯಾವುದೇ ರೀತಿಯ ಬಳಕೆಗಾಗಿ ರಚಿಸುತ್ತಾರೆ ಮತ್ತು ಸಲ್ಲಿಸುತ್ತಾರೆ. ನಿಮ್ಮದೇ ಆದದನ್ನು ಸೇರಿಸಲು
+                    ಮುಕ್ತವಾಗಿರಿ. ನೀವು ರಚಿಸುವ ಗುಣಲಕ್ಷಣಗಳು ಮತ್ತು ಮೌಲ್ಯಗಳು
+                    <x id="0" equiv-text="&lt;strong&gt;"/>ವಾಸ್ತವಿಕವಾಗಿರಬೇಕು<x id="1" equiv-text="&lt;/strong&gt;"/>. ನೀವು
+                    <x id="2" equiv-text="&lt;a href=&quot;https://openfoodfacts-explorer.vercel.app/folksonomy&quot;&gt;"/>ಸಮುದಾಯವು ಈಗಾಗಲೇ ಬಳಸಿರುವ ಗುಣಲಕ್ಷಣಗಳ ಪಟ್ಟಿಗೆ ಧುಮುಕಬಹುದು<x id="3" equiv-text="&lt;/a&gt;"/>
+                    ಅಥವಾ
+                    <x id="4" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>ಗುಣಲಕ್ಷಣಗಳ ದಸ್ತಾವೇಜನ್ನು ಮತ್ತು ಅದರ ಹುಡುಕಾಟ ಎಂಜಿನ್<x id="5" equiv-text="&lt;/a&gt;"/>ಅನ್ನು ಅನ್ವೇಷಿಸಬಹುದು.</target>
+      </trans-unit>
+      <trans-unit id="h76766ba4ed1addb3">
+        <source>This is brought by the
+                    <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't hesitate to participate or give feedback.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ಇದನ್ನು
+                    <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>ಫೋಕ್ಸೊನಮಿ ಎಂಜಿನ್ ಯೋಜನೆ<x id="1" equiv-text="&lt;/a&gt;"/>ತಂದಿದೆ. ಭಾಗವಹಿಸಲು ಅಥವಾ ಪ್ರತಿಕ್ರಿಯೆ ನೀಡಲು ಹಿಂಜರಿಯಬೇಡಿ.</target>
       </trans-unit>
     </body>
   </file>
