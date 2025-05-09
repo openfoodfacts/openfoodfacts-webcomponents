@@ -7,6 +7,7 @@ import { answerQuestion } from "../../signals/questions"
 import "../buttons/zoom-unzoom-button"
 import { SignalWatcher } from "@lit-labs/signals"
 import { localized, msg } from "@lit/localize"
+import { FULL_WIDTH } from "../../styles/utils"
 /**
  * RobotoffQuestionForm component
  * It displays a form to answer a question about a product.
@@ -24,6 +25,7 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
       ButtonType.Danger,
       ButtonType.LINK,
     ]),
+    FULL_WIDTH,
     css`
       :host {
         display: block;
@@ -33,6 +35,14 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
         display: flex;
         align-items: center;
         flex-direction: column;
+      }
+
+      .image-wrapper {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
       }
 
       .img-button-wrapper {
@@ -66,8 +76,8 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
     return this.isImageExpanded
       ? { height: "350px", width: "100%", "max-width": "350px" }
       : {
-          height: "100px",
-          width: "100px",
+          height: "200px",
+          width: "200px",
         }
   }
 
@@ -100,15 +110,13 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
     }
 
     return html`
-      <div>
-        <div>
-          <zoomable-image
-            src=${this.question?.source_image_url}
-            .size="${this.imageSize}"
-            @click="${this.expandImage}"
-            ?show-buttons="${this.isImageExpanded}"
-          ></zoomable-image>
-        </div>
+      <div class="image-wrapper">
+        <zoomable-image
+          src=${this.question?.source_image_url}
+          .size=${this.imageSize}
+          @click="${this.expandImage}"
+          ?show-buttons="${this.isImageExpanded}"
+        ></zoomable-image>
         ${this.isImageExpanded
           ? nothing
           : html`<div>
@@ -128,7 +136,7 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
     return html`
       <div class="question-form">
         <p>${this.question.question} <strong> ${this.question.value} </strong></p>
-        <div>${this._renderImage()}</div>
+        ${this._renderImage()}
         <div>
           <p></p>
           <button

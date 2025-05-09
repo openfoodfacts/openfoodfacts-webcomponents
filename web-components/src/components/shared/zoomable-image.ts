@@ -36,9 +36,14 @@ export class ZoomableImage extends LitElement {
     css`
       :host {
         display: block;
+        width: 100%;
+      }
+      .zoomable-image {
+        margin: 0 auto;
       }
       .cropper-parent {
         position: relative;
+        overflow: hidden;
         border: 1px solid black;
         background-color: white;
       }
@@ -108,18 +113,9 @@ export class ZoomableImage extends LitElement {
   @property({ type: String, attribute: "crop-mode" })
   cropMode: string = CropMode.IMAGE_ONLY
 
-  @state()
-  rotation = 0
-
-  @state()
-  private cropResult: string = ""
-
-  @state()
-  private resultBoundingBox?: CropperImageBoundingBox
-
-  @property({ type: Object })
-  size: {
-    width?: string
+  // Use private property with getter/setter to detect changes
+  private _size: {
+    width: string
     height?: string
     "max-width"?: string
     "max-height"?: string
@@ -129,12 +125,26 @@ export class ZoomableImage extends LitElement {
   }
 
   @property({ type: Object })
-  initialImageSize: {
-    width?: string
-    height?: string
-    "max-width"?: string
-    "max-height"?: string
-  } = {}
+  get size() {
+    return this._size
+  }
+
+  set size(value: { width: string; height?: string; "max-width"?: string; "max-height"?: string }) {
+    const oldValue = this._size
+    this._size = value
+    this.requestUpdate("size", oldValue)
+    // Manually trigger the same behavior as attributeChangedCallback
+    this.fitImageToContainer()
+  }
+
+  @state()
+  rotation = 0
+
+  @state()
+  private cropResult: string = ""
+
+  @state()
+  private resultBoundingBox?: CropperImageBoundingBox
 
   @property({ type: Object })
   boundingBox: CropperImageBoundingBox = {
@@ -170,6 +180,27 @@ export class ZoomableImage extends LitElement {
 
   override firstUpdated() {
     this.initCropper()
+  }
+
+  override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
+    super.attributeChangedCallback(name, _old, value)
+    if (name == "src" && value) {
+      this.fitImageToContainer()
+    }
+  }
+
+  /**
+   * Centers the image and fits it within its container.
+   * This ensures the image is properly scaled and positioned to be fully visible.
+   */
+  fitImageToContainer() {
+    setTimeout(() => {
+      if (!this.imageElement) {
+        return
+      }
+
+      this.imageElement.$center("contain")
+    }, 0)
   }
 
   /**
@@ -372,6 +403,7 @@ export class ZoomableImage extends LitElement {
     } else if (this.cropMode === CropMode.CROP_READ) {
       const boundingBox = this.getBoundingBoxDependOnImageSize()
       return html` <cropper-shade></cropper-shade>
+        <cropper-handle action="move" plain></cropper-handle>
         <cropper-selection
           outlined
           @change="${this.onCropperSelectionChange}"
@@ -382,9 +414,8 @@ export class ZoomableImage extends LitElement {
           dynamic
           movable
           resizable
-          zoomable
-          movable
         >
+          <cropper-handle action="move" plain></cropper-handle>
         </cropper-selection>`
     }
     return html` <cropper-shade hidden></cropper-shade>
@@ -441,7 +472,7 @@ export class ZoomableImage extends LitElement {
     if (this.cropMode !== CropMode.CROP) {
       this.imageElement.$ready(() => {
         const boundingBox = this.getBoundingBoxDependOnImageSize()
-        if (boundingBox) {
+        if (boundingBox && this.selectionElement) {
           this.selectionElement.$change(
             boundingBox.x,
             boundingBox.y,
@@ -533,22 +564,7 @@ export class ZoomableImage extends LitElement {
     if (this.cropMode === CropMode.CROP_READ) {
       return html``
     }
-    return html`<div class="flex justify-end">
-      <button
-        class="link-button"
-        @click=${() => this.rotateImage(-90)}
-        title=${msg("Rotate image to the left")}
-      >
-        <rotate-left-icon></rotate-left-icon>
-      </button>
-      <button
-        class="link-button"
-        @click=${() => this.rotateImage(90)}
-        title=${msg("Rotate image to the right")}
-      >
-        <rotate-right-icon></rotate-right-icon>
-      </button>
-    </div>`
+    return this.renderButtons()
   }
 
   /**
@@ -558,15 +574,16 @@ export class ZoomableImage extends LitElement {
   override render() {
     const crossorigin = this.cropMode !== CropMode.IMAGE_ONLY ? "anonymous" : undefined
     return html`
-      <div>
-        <<<<<<< HEAD ${this.renderButtons()} ======= ${this.renderTopPanel()} >>>>>>> 63148a5 (feat:
-        finish integration of crop)
+      <div
+        class="zoomable-image"
+        style=${styleMap({
+          width: this.size.width,
+          "max-width": this.size["max-width"],
+        })}
+      >
+        ${this.renderTopPanel()}
         <div class="cropper-parent">
-          <cropper-canvas
-            background
-            style=${styleMap(this.size)}
-            ?disabled=${this.cropMode === CropMode.CROP_READ}
-          >
+          <cropper-canvas background style=${styleMap(this.size)}>
             <cropper-image
               src=${this.src}
               alt="Picture"
