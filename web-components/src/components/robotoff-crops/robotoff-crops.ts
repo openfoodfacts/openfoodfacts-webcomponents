@@ -225,6 +225,7 @@ export class RobotoffCrops extends LitElement {
             .size="${{ "max-width": "500px", height: "500px", width: "100%" }}"
             crop-mode=${this.cropMode}
             .boundingBox=${boundingBox}
+            show-buttons
             @submit=${this.onCropSave}
           ></zoomable-image>
         </div>
