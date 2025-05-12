@@ -28,6 +28,7 @@ import { countryCode } from "../../signals/app"
 import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin"
 import { ifDefined } from "lit-html/directives/if-defined.js"
 
+const IMAGE_MAX_WIDTH = 500
 /**
  * Robotoff Nutrients component
  * @element robotoff-nutrients
@@ -40,36 +41,31 @@ export class RobotoffNutrients extends LoadingWithTimeoutMixin(LitElement) {
     BASE,
     FLEX,
     ...getButtonClasses([ButtonType.LINK]),
-
     css`
       .image-wrapper {
         position: sticky;
         z-index: 1;
         top: 1rem;
         display: flex;
-        justify-content: center;
         align-items: center;
         margin-bottom: 1rem;
         background-color: white;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         border-radius: 5px;
-        padding-top: 1rem;
         padding-left: 1rem;
         padding-right: 1rem;
+        padding-bottom: 1rem;
         box-sizing: border-box;
+        max-width: ${IMAGE_MAX_WIDTH}px;
+        width: 100%;
       }
 
       .nutrients-content-wrapper {
         position: relative;
         display: flex;
-        justify-content: center;
         flex-wrap: wrap;
         align-items: start;
         gap: 0.5rem 5rem;
-      }
-
-      .nutrients {
-        display: flex;
       }
     `,
   ]
@@ -174,10 +170,9 @@ export class RobotoffNutrients extends LoadingWithTimeoutMixin(LitElement) {
         <zoomable-image
           src=${imgUrl}
           .size="${{
-            height: "400px",
-            "max-height": "35vh",
+            height: "35vh",
             width: "100%",
-            "max-width": "500px",
+            "max-width": `${IMAGE_MAX_WIDTH}px`,
           }}"
           show-buttons
         ></zoomable-image>
