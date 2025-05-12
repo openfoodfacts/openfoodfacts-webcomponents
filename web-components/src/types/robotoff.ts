@@ -33,13 +33,13 @@ export type QuestionsResponse = {
 }
 
 // https://openfoodfacts.github.io/robotoff/references/api/#tag/Insights/paths/~1insights~1annotate/post
-export enum QuestionAnnotationAnswer {
+export enum AnnotationAnswer {
   ACCEPT_AND_ADD_DATA = "2",
   ACCEPT = "1",
   REFUSE = "0",
   SKIP = "-1",
 }
-export enum InsightAnnotationType {
+export enum InsightAnnotationSize {
   CENTGRAMS = "100g",
   SERVING = "serving",
 }
@@ -49,7 +49,7 @@ export type InsightAnnotatationData = Record<string, { value: string; unit: stri
 export type InsightAnnotationAnswer = {
   insightId: string
   data: InsightAnnotatationData
-  type: InsightAnnotationType
+  type: InsightAnnotationSize
 }
 
 export enum InsightType {
@@ -140,4 +140,10 @@ export type InsightsResponse<T extends NutrientsInsight | IngredientsInsight> = 
 export type NutrientAnotationFormData = {
   value: string
   unit: string | null
+}
+
+export type NutrientsAnnotationData = {
+  serving_size: string | null
+  nutrients: Record<string, NutrientAnotationFormData>
+  nutrition_data_per: string
 }

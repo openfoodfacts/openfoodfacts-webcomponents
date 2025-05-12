@@ -11,6 +11,8 @@ export const DEFAULT_FOLKSONOMY_CONFIGURATION = {
 export const PAGE_SIZE = 25
 
 export enum EventType {
+  CLOSE = "close",
+  SUCCESS = "success",
   SAVE = "save",
   SUBMIT = "submit",
   QUESTION_STATE = "question-state",
@@ -26,15 +28,23 @@ export enum LoadingState {
 }
 
 export const DEFAULT_LANGUAGE_CODE = "en"
+export const DEFAULT_COUNTRY_CODE = "fr"
 
 export enum EventState {
   LOADING = "loading", // loading data
   NO_DATA = "no-data", // no data to display
   HAS_DATA = "has-data", // data to display
-  ANSWERED = "answered", // user answered the question
-  ANNOTATED = "annotated", // user answered to all questions
+  ANNOTATED = "annotated", // user do one annotation
+  FINISHED = "FINISHED", // user do all annotations
 }
 
 export const DEFAULT_ASSETS_IMAGES_PATH = "/assets/images"
 
 export const SELECT_ICON_FILE_NAME = "carret-bottom.svg"
+export const WHITE_SELECT_ICON_FILE_NAME = "white-carret-bottom.svg"
+
+export enum RobotoffContributionType {
+  INGREDIENTS = "ingredients",
+  NUTRIENTS = "nutrients",
+  QUESTIONS = "questions",
+}

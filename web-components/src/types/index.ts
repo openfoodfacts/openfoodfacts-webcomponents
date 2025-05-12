@@ -5,6 +5,7 @@ import { FolksonomyConfigurationOptions } from "./folksonomy"
 export type OffWebcomponentConfigurationOptions = {
   robotoffConfiguration: RobotoffConfigurationOptions
   languageCode: string
+  countryCode: string
   assetsImagesPath: string
   folksonomyConfiguration: FolksonomyConfigurationOptions
   openfoodfactsApiUrl: string

@@ -3,6 +3,7 @@ import { html } from "lit-html"
 import { customElement } from "lit/decorators.js"
 import { SAFE_BLUE } from "../../utils/colors"
 import "../icons/info"
+import { Breakpoints } from "../../utils/breakpoints"
 
 /**
  * @element info-button
@@ -10,18 +11,24 @@ import "../icons/info"
 @customElement("info-button")
 export class InfoButton extends LitElement {
   static override styles = css`
-    button {
+    .info-button {
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 8px;
       background-color: ${SAFE_BLUE};
       color: white;
       border: none;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
       cursor: pointer;
+      width: 30px;
+      height: 30px;
+      padding: 5px;
+
+      @media (min-width: ${Breakpoints.SM}px) {
+        width: 40px;
+        height: 40px;
+        padding: 8px;
+      }
     }
     button:hover {
       opacity: 0.8;
@@ -30,7 +37,7 @@ export class InfoButton extends LitElement {
 
   override render() {
     return html`
-      <button>
+      <button class="info-button">
         <info-icon .custom-styles="${{ fill: "white" }}"></info-icon>
       </button>
     `

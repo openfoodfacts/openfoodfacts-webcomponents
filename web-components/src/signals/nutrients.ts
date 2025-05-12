@@ -32,28 +32,28 @@ export const insight = (productCode: string) => {
  * Fetch the incomplete nutrients insights for a given product code
  * @param productCode
  */
-export const fetchInsightsByProductCode = (productCode: string) => {
-  return robotoff
-    .insights<NutrientsInsight>({
-      barcode: productCode,
-      insight_types: InsightType.nutrient_extraction,
-      // Add this to filter out already annotated insights
-      annotated: false,
-    })
-    .then((response) => {
-      if (response.insights?.length === 0) {
-        insightIdByProductCode.setItem(productCode, null)
-        return
-      }
-      if (response.insights?.length > 1) {
-        alert("More than one insight found")
-      }
+export const fetchNutrientInsightsByProductCode = async (
+  productCode: string
+): Promise<NutrientsInsight[]> => {
+  const response = await robotoff.insights<NutrientsInsight>({
+    barcode: productCode,
+    insight_types: InsightType.nutrient_extraction,
+    // Add this to filter out already annotated insights
+    annotated: false,
+  })
+  if (response.insights?.length === 0) {
+    insightIdByProductCode.setItem(productCode, null)
+    return []
+  }
+  if (response.insights?.length > 1) {
+    console.warn("More than one insight found")
+  }
 
-      const insight = response.insights[0]
-      insightById.setItem(insight.id, insight)
+  const insight = response.insights[0]
+  insightById.setItem(insight.id, insight)
 
-      insightIdByProductCode.setItem(productCode, insight.id)
-    })
+  insightIdByProductCode.setItem(productCode, insight.id)
+  return response.insights
 }
 
 /**

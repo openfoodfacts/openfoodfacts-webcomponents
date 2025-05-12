@@ -12,8 +12,8 @@ import { OffWebcomponentConfigurationOptions } from "../../types"
 import { RobotoffConfigurationOptions } from "../../types/robotoff"
 import { FolksonomyConfigurationOptions } from "../../types/folksonomy"
 import { setLocale } from "../../localization"
-import { assetsImagesPath } from "../../signals/app"
-import { openfoodfactsApiUrl } from "../../signals/openfoodfacts"
+import { assetsImagesPath, countryCode } from "../../signals/app"
+import { DEFAULT_OPENFOODFACTS_API_URL, openfoodfactsApiUrl } from "../../signals/openfoodfacts"
 
 /**
  * The configuration properties of the webcomponent configuration element.
@@ -43,6 +43,13 @@ const CONFIGURATION_PROPERTIES: Record<
     fn: (value: string) => {
       // Set the language code
       setLocale(value)
+    },
+  },
+  "country-code": {
+    propertyName: "countryCode",
+    fn: (value: string) => {
+      // Set the country code
+      countryCode.set(value)
     },
   },
   "assets-images-path": {
@@ -94,6 +101,13 @@ export class OffWebcomponentsConfiguration extends LitElement {
   languageCode?: string = DEFAULT_LANGUAGE_CODE
 
   /**
+   * The country code we need to use for the app.
+   * @attr country-code
+   */
+  @property({ type: String, attribute: "country-code" })
+  countryCode?: string
+
+  /**
    * The image path we need to use to retrieve the images in assets/images folder.
    * @attr image-path
    */
@@ -114,7 +128,7 @@ export class OffWebcomponentsConfiguration extends LitElement {
    * @attr openfoodfacts-api-url
    */
   @property({ type: String, attribute: "openfoodfacts-api-url" })
-  openfoodfactsApiUrl?: string
+  openfoodfactsApiUrl?: string = DEFAULT_OPENFOODFACTS_API_URL
 
   override attributeChangedCallback(name: string, oldval: string, newval: string) {
     super.attributeChangedCallback(name, oldval, newval)

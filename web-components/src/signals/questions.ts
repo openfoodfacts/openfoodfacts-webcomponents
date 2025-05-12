@@ -1,6 +1,6 @@
 import { Computed } from "@lit-labs/signals"
 import robotoff from "../api/robotoff"
-import { Question, QuestionAnnotationAnswer, QuestionRequestParams } from "../types/robotoff"
+import { Question, AnnotationAnswer, QuestionRequestParams } from "../types/robotoff"
 import { SignalMap } from "../utils/signals"
 
 // Store questions by id
@@ -44,7 +44,7 @@ export const isQuestionsFinished = (productCode: string) =>
 export const fetchQuestionsByProductCode = async (
   code: string,
   params: QuestionRequestParams = {}
-) => {
+): Promise<Question[]> => {
   isQuestionsFinishedByProductCode.setItem(code, false)
   currentQuestionIndexByProductCode.setItem(code, 0)
   questionIdsByProductCode.setItem(code, [])
@@ -58,6 +58,8 @@ export const fetchQuestionsByProductCode = async (
   response.questions?.forEach((question: Question) => {
     questionsById.setItem(question.insight_id, question)
   })
+
+  return response.questions ?? []
 }
 
 /**
@@ -80,7 +82,7 @@ export const checkIfQuestionsFinishedByProductCode = (productCode: string) => {
  * @param insightId - The ID of the insight.
  * @param value - The answer to the question.
  */
-export const answerQuestion = (insightId: string, value: QuestionAnnotationAnswer) => {
+export const answerQuestion = (insightId: string, value: AnnotationAnswer) => {
   robotoff.annotateQuestion(insightId, value)
 }
 
