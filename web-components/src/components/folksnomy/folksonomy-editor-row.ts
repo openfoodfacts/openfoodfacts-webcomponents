@@ -1,7 +1,7 @@
 import { LitElement, html, css } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import "./delete-modal"
-import "./autocomplete-input"
+import "../shared/autocomplete-input"
 import folksonomyApi from "../../api/folksonomy"
 import { msg } from "@lit/localize"
 import { getButtonClasses, ButtonType } from "../../styles/buttons"
@@ -11,22 +11,81 @@ import { FOLKSONOMY_INPUT } from "../../styles/folksonomy-input"
  * FolksonomyEditorRow Component
  * @element folksonomy-editor-row
  * @description A component for adding and editing product properties in a table row format.
+ * @fires update-row - Fired when a row is updated.
+ * @fires delete-row - Fired when a row is deleted.
+ * @fires add-row - Fired when a new row is added.
  */
 @customElement("folksonomy-editor-row")
 export class FolksonomyEditorRow extends LitElement {
+  /**
+   * Input value for the key field.
+   * @private
+   */
   @state() private keyInput = ""
+
+  /**
+   * Input value for the value field.
+   * @private
+   */
   @state() private valueInput = ""
+
+  /**
+   * Suggestions for the key field.
+   * @private
+   */
   @state() private keySuggestions: string[] = []
+
+  /**
+   * Suggestions for the value field.
+   * @private
+   */
   @state() private valueSuggestions: string[] = []
+
+  /**
+   * Temporary value used during editing.
+   * @private
+   */
   @state() private tempValue = ""
 
+  /**
+   * Product code associated with the row.
+   */
   @property({ type: String, attribute: "product-code" }) productCode = ""
+
+  /**
+   * Version number of the product property.
+   */
   @property({ type: Number }) version = 1
+
+  /**
+   * Row number in the table.
+   */
   @property({ type: Number, attribute: "row-number" }) rowNumber = 1
+
+  /**
+   * Key of the product property.
+   */
   @property({ type: String }) key = ""
+
+  /**
+   * Value of the product property.
+   */
   @property({ type: String }) value = ""
+
+  /**
+   * Page type (e.g., view or edit).
+   */
   @property({ type: String, attribute: "page-type" }) pageType = "view"
+
+  /**
+   * Indicates whether the row is empty.
+   */
   @property({ type: Boolean }) empty = false
+
+  /**
+   * Indicates whether the row is editable.
+   * @private
+   */
   @state() editable = false
 
   private originalKeySuggestions: string[] = []
@@ -48,6 +107,11 @@ export class FolksonomyEditorRow extends LitElement {
       .catch((error) => console.error("Error fetching keys:", error))
   }
 
+  /**
+   * Fetches values for a given key and updates suggestions.
+   * @param key - The key to fetch values for.
+   * @private
+   */
   private async fetchValuesForKey(key: string) {
     try {
       const values = await folksonomyApi.fetchValues(key)
@@ -58,6 +122,11 @@ export class FolksonomyEditorRow extends LitElement {
     }
   }
 
+  /**
+   * Handles input changes for the key field.
+   * @param e - The input event.
+   * @private
+   */
   private onKeyInput(e: Event) {
     const value = (e.target as HTMLInputElement).value
     this.keyInput = value
@@ -76,6 +145,11 @@ export class FolksonomyEditorRow extends LitElement {
     }
   }
 
+  /**
+   * Handles input changes for the value field.
+   * @param e - The input event.
+   * @private
+   */
   private onValueInput(e: Event) {
     const value = (e.target as HTMLInputElement).value
     this.valueInput = value
@@ -95,22 +169,40 @@ export class FolksonomyEditorRow extends LitElement {
     }
   }
 
+  /**
+   * Selects a key suggestion and updates the key field.
+   * @param suggestion - The selected key suggestion.
+   * @private
+   */
   private selectKeySuggestion(suggestion: string) {
     this.keyInput = suggestion
     this.key = suggestion
     this.fetchValuesForKey(suggestion)
   }
 
+  /**
+   * Selects a value suggestion and updates the value field.
+   * @param suggestion - The selected value suggestion.
+   * @private
+   */
   private selectValueSuggestion(suggestion: string) {
     this.valueInput = suggestion
     this.value = suggestion
   }
 
+  /**
+   * Enables editing mode for the row.
+   * @private
+   */
   private handleEdit() {
     this.editable = true
     this.tempValue = this.value
   }
 
+  /**
+   * Saves the edited property and dispatches an update-row event.
+   * @private
+   */
   private async handleSave() {
     try {
       const updatedProperty = await folksonomyApi.updateProductProperty(
@@ -137,11 +229,19 @@ export class FolksonomyEditorRow extends LitElement {
     }
   }
 
+  /**
+   * Cancels editing mode and restores the original value.
+   * @private
+   */
   private handleCancel() {
     this.editable = false
     this.tempValue = this.value
   }
 
+  /**
+   * Deletes the property and dispatches a delete-row event.
+   * @private
+   */
   private async handleDelete() {
     const deleteModal = document.createElement("delete-modal")
     deleteModal.addEventListener("confirm-delete", async () => {
@@ -163,6 +263,10 @@ export class FolksonomyEditorRow extends LitElement {
     document.body.appendChild(deleteModal)
   }
 
+  /**
+   * Adds a custom key and value to the product properties.
+   * @private
+   */
   private async addCustomKeyAndValue() {
     if (this.keyInput && this.valueInput) {
       try {
@@ -187,6 +291,11 @@ export class FolksonomyEditorRow extends LitElement {
     }
   }
 
+  /**
+   * Handles input changes during editing.
+   * @param e - The input event.
+   * @private
+   */
   private handleInputChange(e: Event) {
     this.tempValue = (e.target as HTMLInputElement).value
   }

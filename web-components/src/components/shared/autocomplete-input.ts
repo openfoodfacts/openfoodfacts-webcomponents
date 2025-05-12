@@ -6,14 +6,36 @@ import { FOLKSONOMY_INPUT } from "../../styles/folksonomy-input"
  * AutocompleteInput Component
  * @element autocomplete-input
  * @description A reusable autocomplete input field with suggestions.
+ * @fires input-change - Fired when the input value changes.
+ * @fires suggestion-select - Fired when a suggestion is selected.
  */
 @customElement("autocomplete-input")
 export class AutocompleteInput extends LitElement {
+  /**
+   * Placeholder text for the input field.
+   */
   @property({ type: String }) placeholder = ""
+
+  /**
+   * Current value of the input field.
+   */
   @property({ type: String }) value = ""
+
+  /**
+   * List of suggestions to display in the autocomplete dropdown.
+   */
   @property({ type: Array }) suggestions: string[] = []
+
+  /**
+   * Whether to show the suggestions dropdown.
+   * @private
+   */
   @state() private showSuggestions = false
 
+  /**
+   * Handles input changes and dispatches the "input-change" event.
+   * @param e - The input event.
+   */
   private onInput(e: Event) {
     const inputValue = (e.target as HTMLInputElement).value
     this.value = inputValue
@@ -26,6 +48,10 @@ export class AutocompleteInput extends LitElement {
     )
   }
 
+  /**
+   * Selects a suggestion and dispatches the "suggestion-select" event.
+   * @param suggestion - The selected suggestion.
+   */
   private selectSuggestion(suggestion: string) {
     this.value = suggestion
     this.showSuggestions = false

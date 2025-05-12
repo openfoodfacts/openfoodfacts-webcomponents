@@ -138,7 +138,7 @@ async function fetchValues(key: string): Promise<{ v: string; product_count: num
       throw new Error(`HTTP error! status: ${response.status}`)
     }
 
-    const data: { value: string; count: number }[] = await response.json()
+    const data: { v: string; product_count: number }[] = await response.json()
     return data
   } catch (error) {
     console.error("Error fetching values:", error)
