@@ -104,17 +104,17 @@ export class ZoomableImage extends LitElement {
   @property({ type: String, attribute: "fallback-src" })
   fallbackSrc = ""
 
-  @property({ type: Number, attribute: "current-zoom" })
+  @state()
   currentZoom = 1
 
-  @property({ type: Number, attribute: "step-size" })
-  stepSize = 0.1
+  @property({ type: Number, attribute: "scale-size" })
+  scaleStep = 0.25
+
+  @property({ type: Number, attribute: "max-zoom" })
+  maxZoom = 3
 
   @property({ type: Number, attribute: "min-zoom" })
   minZoom = 0.3
-
-  @property({ type: Number, attribute: "max-zoom" })
-  maxZoom = 5
 
   @property({ type: Boolean, attribute: "show-buttons" })
   showButtons = false
@@ -158,12 +158,18 @@ export class ZoomableImage extends LitElement {
   get canZoom() {
     return !mobileAndTabletCheck()
   }
-  override connectedCallback(): void {
-    super.connectedCallback()
-    this.initCropper()
-  }
+
   override disconnectedCallback(): void {
+    this.canvasElement.removeEventListener("action", (e) => {
+      this.onCropperCanvasAction(e)
+    })
     super.disconnectedCallback()
+  }
+
+  initZoomLimit() {
+    this.canvasElement.addEventListener("action", (e) => {
+      this.onCropperCanvasAction(e)
+    })
   }
 
   /**
@@ -177,6 +183,8 @@ export class ZoomableImage extends LitElement {
     CropperSelection.$define()
     CropperCrosshair.$define()
     CropperShade.$define()
+
+    this.initZoomLimit()
   }
 
   override firstUpdated() {
@@ -372,6 +380,37 @@ export class ZoomableImage extends LitElement {
   }
 
   /**
+   * Calculates the scale of the image relative to the canvas size using current image width.
+   * @returns The scale factor as a number.
+   */
+  getImageScaleRelativeToCanvas(): number {
+    if (!this.imageElement || !this.canvasElement) {
+      return 1
+    }
+
+    const image = this.imageElement.$image
+    const canvas = this.canvasElement
+
+    if (!image || !canvas) {
+      return 1
+    }
+
+    // Get the current width and height of the image as displayed in the canvas
+    const imageRect = this.imageElement.getBoundingClientRect()
+    const imageWidth = imageRect.width
+    const imageHeight = imageRect.height
+    const canvasWidth = canvas.clientWidth
+    const canvasHeight = canvas.clientHeight
+
+    // Calculate the scale factor based on width and height
+    const widthScale = imageWidth / canvasWidth
+    const heightScale = imageHeight / canvasHeight
+
+    // Return the larger scale factor to ensure the image fits within the canvas
+    return Math.max(widthScale, heightScale)
+  }
+
+  /**
    * Gets the bounding box depending on the image size.
    * @returns The bounding box coordinates.
    */
@@ -469,7 +508,7 @@ export class ZoomableImage extends LitElement {
    * Handles the cropper image transform event.
    * @param event - The transform event.
    */
-  onCropperImageTransform(event: CustomEvent) {
+  onCropperImageTransform(event: CustomEvent<{ matrix: number[] }>) {
     if (this.cropMode !== CropMode.CROP) {
       this.imageElement.$ready(() => {
         const boundingBox = this.getBoundingBoxDependOnImageSize()
@@ -491,12 +530,11 @@ export class ZoomableImage extends LitElement {
       return
     }
 
-    const cropperImage = this.imageElement
     const cropperSelection = this.selectionElement
     const cropperCanvasRect = cropperCanvas.getBoundingClientRect()
 
     // 1. Clone the cropper image.
-    const cropperImageClone = cropperImage.cloneNode() as CropperImage
+    const cropperImageClone = this.imageElement.cloneNode() as CropperImage
 
     // 2. Apply the new matrix to the cropper image clone.
     cropperImageClone.style.transform = `matrix(${event.detail.matrix.join(", ")})`
@@ -569,6 +607,38 @@ export class ZoomableImage extends LitElement {
   }
 
   /**
+   * Handles zoom changes to ensure they stay within the specified bounds.
+   * @param zoom - The new zoom level.
+   */
+  allowZoomChange(zoom: number): boolean {
+    if (zoom > this.maxZoom) {
+      return false
+    }
+    if (zoom < this.minZoom) {
+      return false
+    }
+    return true
+  }
+
+  /**
+   * Handles cropper canvas actions.
+   * @param event - The cropper canvas action event.
+   */
+  onCropperCanvasAction(event: CustomEvent<{ action: string; scale: number }>) {
+    const { action, scale } = event.detail
+    console.log("onCropperCanvasAction", event.detail)
+    if (action === "scale") {
+      const isAllowed = this.allowZoomChange(this.getImageScaleRelativeToCanvas())
+      if (!isAllowed) {
+        let newScale = -1 * scale
+
+        // cancel the event
+        this.imageElement.$zoom(newScale)
+      }
+    }
+  }
+
+  /**
    * Renders the component.
    * @returns The component UI.
    */
@@ -584,7 +654,7 @@ export class ZoomableImage extends LitElement {
       >
         ${this.renderTopPanel()}
         <div class="cropper-parent">
-          <cropper-canvas background style=${styleMap(this.size)}>
+          <cropper-canvas background style=${styleMap(this.size)} scale-step=${this.scaleStep}>
             <cropper-image
               src=${this.src}
               alt="Picture"
