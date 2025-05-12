@@ -59,12 +59,22 @@ export class RobotoffNutrients extends LitElement {
         width: 100%;
       }
 
+      .nutrients {
+        container-type: inline-size;
+      }
       .nutrients-content-wrapper {
         position: relative;
         display: flex;
-        flex-wrap: wrap;
         align-items: start;
         gap: 0.5rem 5rem;
+      }
+
+      @container (max-width: ${Breakpoints.MD}px) {
+        .nutrients-content-wrapper {
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        }
       }
     `,
   ]
