@@ -13,7 +13,7 @@ import "../shared/loader"
 import { fetchNutrientsTaxonomies } from "../../signals/taxonomies"
 import { NutrientsInsight, InsightAnnotationAnswer } from "../../types/robotoff"
 import { BASE } from "../../styles/base"
-import { robotoffConfiguration } from "../../signals/robotoff"
+import { getRobotoffImageUrl } from "../../signals/robotoff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { FLEX } from "../../styles/utils"
 import { EventState, EventType } from "../../constants"
@@ -24,7 +24,9 @@ import { ProductFields } from "../../utils/openfoodfacts"
 import { getLocale } from "../../localization"
 import { fetchNutrientsOrderByCountryCode } from "../../signals/openfoodfacts"
 import { countryCode } from "../../signals/app"
+import { Breakpoints } from "../../utils/breakpoints"
 
+const IMAGE_MAX_WIDTH = 500
 /**
  * Robotoff Nutrients component
  * @element robotoff-nutrients
@@ -38,36 +40,41 @@ export class RobotoffNutrients extends LitElement {
     BASE,
     FLEX,
     ...getButtonClasses([ButtonType.LINK]),
-
     css`
       .image-wrapper {
         position: sticky;
         z-index: 1;
         top: 1rem;
         display: flex;
-        justify-content: center;
         align-items: center;
         margin-bottom: 1rem;
         background-color: white;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         border-radius: 5px;
-        padding-top: 1rem;
         padding-left: 1rem;
         padding-right: 1rem;
+        padding-bottom: 1rem;
         box-sizing: border-box;
+        max-width: ${IMAGE_MAX_WIDTH}px;
+        width: 100%;
       }
 
+      .nutrients {
+        container-type: inline-size;
+      }
       .nutrients-content-wrapper {
         position: relative;
         display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
         align-items: start;
         gap: 0.5rem 5rem;
       }
 
-      .nutrients {
-        display: flex;
+      @container (max-width: ${Breakpoints.MD}px) {
+        .nutrients-content-wrapper {
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        }
       }
     `,
   ]
@@ -162,16 +169,15 @@ export class RobotoffNutrients extends LitElement {
     if (!insight?.source_image) {
       return nothing
     }
-    const imgUrl = `${robotoffConfiguration.getItem("imgUrl")}${insight.source_image}`
+    const imgUrl = getRobotoffImageUrl(insight.source_image)
     return html`
       <div class="image-wrapper">
         <zoomable-image
           src=${imgUrl}
           .size="${{
-            height: "400px",
-            "max-height": "35vh",
+            height: "35vh",
             width: "100%",
-            "max-width": "500px",
+            "max-width": `${IMAGE_MAX_WIDTH}px`,
           }}"
           show-buttons
         ></zoomable-image>
@@ -182,7 +188,7 @@ export class RobotoffNutrients extends LitElement {
   override render() {
     return this._insightsTask.render({
       pending: () => html`<off-wc-loader></off-wc-loader>`,
-      complete: (insight) => {
+      complete: (insight?: NutrientsInsight | null) => {
         if (!insight) {
           return html`<slot name="no-insight"></slot>`
         }
@@ -190,11 +196,13 @@ export class RobotoffNutrients extends LitElement {
           <div class="nutrients" part="nutrients">
             <div part="nutrients-content-wrapper" class="nutrients-content-wrapper">
               ${this.renderImage(insight as NutrientsInsight)}
-              <robotoff-nutrients-table
-                .nutrimentsData="${this.nutrimentsData}"
-                .insight="${insight as NutrientsInsight}"
-                @submit="${this.onSubmit}"
-              ></robotoff-nutrients-table>
+              <div class="nutrients-table-wrapper">
+                <robotoff-nutrients-table
+                  .nutrimentsData="${this.nutrimentsData}"
+                  .insight="${insight as NutrientsInsight}"
+                  @submit="${this.onSubmit}"
+                ></robotoff-nutrients-table>
+              </div>
             </div>
           </div>
         `

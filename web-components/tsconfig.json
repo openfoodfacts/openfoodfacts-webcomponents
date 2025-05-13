@@ -28,7 +28,7 @@
         "strict": true
       }
     ],
-    "types": ["jest"]
+    "types": ["jest", "cropperjs"]
   },
   "include": ["src/**/*.ts"],
   "exclude": []

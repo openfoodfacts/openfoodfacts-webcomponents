@@ -46,6 +46,11 @@ export class RobotoffIngredients extends LitElement {
         border-radius: 4px;
         box-sizing: border-box;
       }
+
+      .robotoff-ingredients-title {
+        margin-top: 0;
+        margin-bottom: 1rem;
+      }
     `,
   ]
   /**
@@ -148,7 +153,7 @@ export class RobotoffIngredients extends LitElement {
    */
   renderHeader() {
     const headingLevel = getValidHeadingLevel(this.titleLevel)
-    const title = `<${headingLevel}>${msg("Help us fix errors in ingredients list")}</${headingLevel}>`
+    const title = `<${headingLevel} class="robotoff-ingredients-title">${msg("Help us fix errors in ingredients list")}</${headingLevel}>`
     return html`
       <div>
         <div>${sanitizeHtml(title)}</div>
@@ -283,6 +288,7 @@ export class RobotoffIngredients extends LitElement {
           src=${this.fullImageUrl}
           fallback-src=${this.productData.imageUrl ?? ""}
           .size="${{ width: "100%", height: "30vh" }}"
+          show-buttons
         ></zoomable-image>
       </div>
     `

@@ -12,7 +12,6 @@ export const MODAL = css`
     left: 50%;
     transform: translate(-50%, -50%);
     background: white;
-    padding: 1rem 2rem;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     border-radius: 12px;
     z-index: 1000;
@@ -48,14 +47,21 @@ export const MODAL = css`
     justify-content: space-between;
   }
 
+  .modal-header {
+    position: sticky;
+    top: 0.5rem;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .modal-body {
+    padding: 0rem 2rem 1rem 2rem;
+  }
+
   .close-icon {
-    z-index: 1001;
-    position: absolute;
     display: flex;
     align-items: center;
     justify-content: center;
-    top: 0.3rem;
-    right: 0.3rem;
     width: 2rem;
     height: 2rem;
     border: 1px solid;
