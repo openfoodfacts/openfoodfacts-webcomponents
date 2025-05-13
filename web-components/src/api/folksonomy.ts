@@ -104,9 +104,53 @@ async function updateProductProperty(
   }
 }
 
+async function fetchKeys(): Promise<{ k: string; count: number; values: number }[]> {
+  try {
+    const response = await fetch(getApiUrl("/keys"), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      } as HeadersInit,
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const data: { k: string; count: number; values: number }[] = await response.json()
+    return data
+  } catch (error) {
+    console.error("Error fetching keys:", error)
+    throw error
+  }
+}
+
+async function fetchValues(key: string): Promise<{ v: string; product_count: number }[]> {
+  try {
+    const response = await fetch(getApiUrl(`/values/${key}`), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      } as HeadersInit,
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const data: { v: string; product_count: number }[] = await response.json()
+    return data
+  } catch (error) {
+    console.error("Error fetching values:", error)
+    throw error
+  }
+}
+
 export default {
   fetchProductProperties,
   addProductProperty,
   deleteProductProperty,
   updateProductProperty,
+  fetchKeys,
+  fetchValues,
 }
