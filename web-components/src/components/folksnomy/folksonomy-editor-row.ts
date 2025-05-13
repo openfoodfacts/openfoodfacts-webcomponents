@@ -6,6 +6,7 @@ import folksonomyApi from "../../api/folksonomy"
 import { msg } from "@lit/localize"
 import { getButtonClasses, ButtonType } from "../../styles/buttons"
 import { FOLKSONOMY_INPUT } from "../../styles/folksonomy-input"
+import { AutocompleteSuggestion, AutocompleteInputChangeEvent } from "../../types"
 
 /**
  * FolksonomyEditorRow Component
@@ -33,13 +34,13 @@ export class FolksonomyEditorRow extends LitElement {
    * Suggestions for the key field.
    * @private
    */
-  @state() private keySuggestions: string[] = []
+  @state() private keySuggestions: AutocompleteSuggestion[] = []
 
   /**
    * Suggestions for the value field.
    * @private
    */
-  @state() private valueSuggestions: string[] = []
+  @state() private valueSuggestions: AutocompleteSuggestion[] = []
 
   /**
    * Temporary value used during editing.
@@ -88,9 +89,6 @@ export class FolksonomyEditorRow extends LitElement {
    */
   @state() editable = false
 
-  private originalKeySuggestions: string[] = []
-  private originalValueSuggestions: string[] = []
-
   override connectedCallback() {
     super.connectedCallback()
     if (this.pageType === "edit") {
@@ -101,8 +99,9 @@ export class FolksonomyEditorRow extends LitElement {
     folksonomyApi
       .fetchKeys()
       .then((keys) => {
-        this.originalKeySuggestions = keys.map((key) => key.k)
-        this.keySuggestions = [...this.originalKeySuggestions]
+        this.keySuggestions = keys.map((key) => ({
+          value: key.k,
+        }))
       })
       .catch((error) => console.error("Error fetching keys:", error))
   }
@@ -115,8 +114,9 @@ export class FolksonomyEditorRow extends LitElement {
   private async fetchValuesForKey(key: string) {
     try {
       const values = await folksonomyApi.fetchValues(key)
-      this.originalValueSuggestions = values.map((value) => value.v)
-      this.valueSuggestions = [...this.originalValueSuggestions]
+      this.valueSuggestions = values.map((value) => ({
+        value: value.v,
+      }))
     } catch (error) {
       console.error("Error fetching values for key:", error)
     }
@@ -127,21 +127,13 @@ export class FolksonomyEditorRow extends LitElement {
    * @param e - The input event.
    * @private
    */
-  private onKeyInput(e: Event) {
+  private onKeyInput(e: AutocompleteInputChangeEvent) {
     const value = (e.target as HTMLInputElement).value
     this.keyInput = value
     this.key = value
 
-    if (value) {
-      this.keySuggestions = this.originalKeySuggestions.filter((k) =>
-        k.toLowerCase().includes(value.toLowerCase())
-      )
-
-      if (this.keySuggestions.length === 1 && this.keySuggestions[0] === value) {
-        this.fetchValuesForKey(value)
-      }
-    } else {
-      this.keySuggestions = [...this.originalKeySuggestions]
+    if (e.detail.matching) {
+      this.fetchValuesForKey(value)
     }
   }
 
@@ -150,22 +142,14 @@ export class FolksonomyEditorRow extends LitElement {
    * @param e - The input event.
    * @private
    */
-  private onValueInput(e: Event) {
-    const value = (e.target as HTMLInputElement).value
+  private onValueInput(e: AutocompleteInputChangeEvent) {
+    const value = e.detail.value
     this.valueInput = value
     this.value = value
 
-    if (value) {
-      this.valueSuggestions = this.originalValueSuggestions.filter((v) =>
-        v.toLowerCase().includes(value.toLowerCase())
-      )
-
-      if (this.valueSuggestions.length === 1 && this.valueSuggestions[0] === value) {
-        this.fetchValuesForKey(this.keyInput)
-      }
-    } else {
-      // Show all values in the dropdown when input is empty
-      this.valueSuggestions = [...this.originalValueSuggestions]
+    // In case of input value match exactly with only one suggestion, fetch values for the key
+    if (e.detail.matching) {
+      this.fetchValuesForKey(this.keyInput)
     }
   }
 
@@ -175,8 +159,15 @@ export class FolksonomyEditorRow extends LitElement {
    * @private
    */
   private selectKeySuggestion(suggestion: string) {
+    const hasChanged = this.keyInput !== suggestion
+    // Avoid calling fetchValuesForKey if the key has not changed
+    if (!hasChanged) {
+      return
+    }
     this.keyInput = suggestion
     this.key = suggestion
+    this.valueInput = ""
+    this.value = ""
     this.fetchValuesForKey(suggestion)
   }
 
