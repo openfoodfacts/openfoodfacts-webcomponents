@@ -135,3 +135,5 @@ dist/
 .vscode
 docs/dist/
 custom-elements.json
+
+.clinerules/
