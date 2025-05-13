@@ -19,6 +19,7 @@ import { CropperImageBoundingBox } from "../../types"
 import { EventType } from "../../constants"
 import "../icons/arrows-center"
 import { CropperActionEvent } from "../../types/crops"
+import { CHECKBOX } from "../../styles/form"
 
 export enum CropMode {
   IMAGE_ONLY = "image-only",
@@ -65,9 +66,18 @@ export class ZoomableImage extends LitElement {
       .crop-result-buttons {
         margin-top: 0.5rem;
       }
+
+      .toolbar .checkbox {
+        margin-right: auto;
+      }
+
+      .toolbar .checkbox span {
+        padding-top: 2px;
+      }
     `,
     FLEX,
     getButtonClasses([ButtonType.White, ButtonType.Chocolate, ButtonType.LINK]),
+    CHECKBOX,
   ]
 
   @query("cropper-canvas")
@@ -160,6 +170,17 @@ export class ZoomableImage extends LitElement {
   @state()
   private resultBoundingBox?: CropperImageBoundingBox
 
+  @state()
+  private isCanvasEnabledInMobile = false
+
+  get isMobileOrTablet() {
+    return mobileAndTabletCheck()
+  }
+
+  get isCanvasDisabled() {
+    console.log("isCanvasDisabled", this.isMobileOrTablet && !this.isCanvasEnabledInMobile)
+    return this.isMobileOrTablet && !this.isCanvasEnabledInMobile
+  }
   /**
    * The last transform applied to the image.
    * Used to reset the image to its original position.
@@ -696,6 +717,29 @@ export class ZoomableImage extends LitElement {
   }
 
   /**
+   * Renders the mobile canvas toggle checkbox.
+   * @returns The mobile canvas toggle UI.
+   */
+  renderMobileCanvasToggle() {
+    if (!this.isMobileOrTablet) {
+      return nothing
+    }
+
+    return html`
+      <label class="checkbox">
+        <input
+          type="checkbox"
+          .checked=${this.isCanvasEnabledInMobile}
+          @change=${(e: Event) => {
+            this.isCanvasEnabledInMobile = (e.target as HTMLInputElement).checked
+          }}
+        />
+        <span> ${msg("Move image")} </span>
+      </label>
+    `
+  }
+
+  /**
    * Renders the top panel with proper accessibility attributes.
    * @returns The top panel UI.
    */
@@ -705,8 +749,9 @@ export class ZoomableImage extends LitElement {
     }
 
     return html`
-      <div class="flex justify-end" role="toolbar" aria-label=${msg("Image controls")}>
-        ${this.renderCenterButton()} ${this.renderRotateButtons()}
+      <div class="toolbar flex justify-end" role="toolbar" aria-label=${msg("Image controls")}>
+        ${this.renderMobileCanvasToggle()} ${this.renderCenterButton()}
+        ${this.renderRotateButtons()}
       </div>
     `
   }
@@ -764,6 +809,7 @@ export class ZoomableImage extends LitElement {
             style=${styleMap(this.size)}
             scale-step=${this.scaleStep}
             aria-label=${msg("Image canvas")}
+            ?disabled=${this.isCanvasDisabled}
           >
             <cropper-image
               src=${this.src}
