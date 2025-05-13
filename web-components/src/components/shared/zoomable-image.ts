@@ -203,8 +203,6 @@ export class ZoomableImage extends LitElement {
    * This is used to prevent the user from zooming in or out too much.
    */
   initZoomLimit() {
-    this.updateLastTransform()
-
     this.canvasElement.addEventListener("action", (e) => {
       this.onCropperCanvasAction(e as CropperActionEvent)
     })
@@ -244,6 +242,7 @@ export class ZoomableImage extends LitElement {
       }
 
       this.imageElement.$center("contain")
+      this.updateLastTransform()
     }, 0)
   }
 
