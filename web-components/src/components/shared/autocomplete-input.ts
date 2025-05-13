@@ -74,9 +74,6 @@ export class AutocompleteInput extends LitElement {
    */
   @property({ type: Array }) suggestions: AutocompleteSuggestion[] = []
 
-  @property({ type: String, attribute: "input-name" })
-  inputName = ""
-
   /**
    * Whether to show the suggestions dropdown.
    * @private
@@ -236,7 +233,6 @@ export class AutocompleteInput extends LitElement {
   override render() {
     return html`
       <div class="autocomplete-wrapper">
-        <input type="hidden" name=${this.inputName} .value=${this.value} />
         <div class="autocomplete-input-wrapper">
           <input
             type="text"
