@@ -121,8 +121,11 @@ export class ZoomableImage extends LitElement {
   @property({ type: Boolean, attribute: "show-buttons" })
   showButtons = false
 
+  /**
+   * The crop mode for the image
+   */
   @property({ type: String, attribute: "crop-mode" })
-  cropMode: string = CropMode.IMAGE_ONLY
+  cropMode: CropMode = CropMode.IMAGE_ONLY
 
   // Use private property with getter/setter to detect changes
   private _size: {
@@ -236,43 +239,59 @@ export class ZoomableImage extends LitElement {
    * This ensures the image is properly scaled and positioned to be fully visible.
    */
   fitImageToContainer() {
-    setTimeout(() => {
-      if (!this.imageElement) {
-        return
-      }
+    if (!this.imageElement) {
+      return
+    }
 
-      this.imageElement.$center("contain")
-      this.updateLastTransform()
-    }, 0)
+    // Use requestAnimationFrame instead of setTimeout for better performance
+    requestAnimationFrame(() => {
+      try {
+        this.imageElement.$center("contain")
+        this.updateLastTransform()
+      } catch (error) {
+        console.error("Error fitting image to container:", error)
+      }
+    })
   }
 
   /**
-   * Rotates the image by the specified angle.
+   * Rotates the image by the specified angle with error handling.
    * @param rotation - The angle to rotate the image by.
    */
   rotateImage(rotation: number) {
-    // Reset the selection before rotating the image
-    this.resetSelection()
-    if (!this.imageElement.rotatable) {
-      // Enable rotation if it's not already enabled (bug fix)
-      this.imageElement.rotatable = true
+    try {
+      // Reset the selection before rotating the image
+      this.resetSelection()
+
+      if (!this.imageElement.rotatable) {
+        // Enable rotation if it's not already enabled (bug fix)
+        this.imageElement.rotatable = true
+      }
+
+      this.imageElement.$rotate(`${rotation}deg`)
+    } catch (error) {
+      console.error("Error rotating image:", error)
     }
-    this.imageElement.$rotate(`${rotation}deg`)
   }
   /**
-   * Renders the center button.
+   * Renders the center button with accessibility attributes.
    * @returns The rendered center button.
    */
   renderCenterButton() {
     return html`
-      <button class="link-button" @click=${this.fitImageToContainer} title=${msg("Center image")}>
-        <arrows-center-icon size="20px"></arrows-center-icon>
+      <button
+        class="link-button"
+        @click=${this.fitImageToContainer}
+        title=${msg("Center image")}
+        aria-label=${msg("Center image")}
+      >
+        <arrows-center-icon size="20px" aria-hidden="true"></arrows-center-icon>
       </button>
     `
   }
 
   /**
-   * Renders the rotate buttons.
+   * Renders the rotate buttons with accessibility attributes.
    * @returns The rendered rotate buttons.
    */
   renderRotateButtons() {
@@ -284,15 +303,17 @@ export class ZoomableImage extends LitElement {
         class="link-button"
         @click=${() => this.rotateImage(-90)}
         title=${msg("Rotate image to the left")}
+        aria-label=${msg("Rotate image to the left")}
       >
-        <rotate-left-icon></rotate-left-icon>
+        <rotate-left-icon aria-hidden="true"></rotate-left-icon>
       </button>
       <button
         class="link-button"
         @click=${() => this.rotateImage(90)}
         title=${msg("Rotate image to the right")}
+        aria-label=${msg("Rotate image to the right")}
       >
-        <rotate-right-icon></rotate-right-icon>
+        <rotate-right-icon aria-hidden="true"></rotate-right-icon>
       </button>
     `
   }
@@ -304,13 +325,13 @@ export class ZoomableImage extends LitElement {
   getBoundingBoxFromSelectionElement() {
     const { x: offsetX, y: offsetY } = this.getOffset()
     const { x: scaleX, y: scaleY } = this.getScale()
-    const boundingBox = {
+
+    return {
       x: (this.selectionElement.x - offsetX) / scaleX,
       y: (this.selectionElement.y - offsetY) / scaleY,
       width: this.selectionElement.width / scaleX,
       height: this.selectionElement.height / scaleY,
     }
-    return boundingBox
   }
 
   /**
@@ -359,17 +380,25 @@ export class ZoomableImage extends LitElement {
   }
 
   /**
-   * Renders the crop mode UI.
+   * Renders the crop mode UI with accessibility attributes.
    * @returns The crop mode UI.
    */
   renderCropMode() {
     return html`
       <div>
         <div class="button-container">
-          <button class="button white-button small" @click=${this.resetCrop}>
+          <button
+            class="button white-button small"
+            @click=${this.resetCrop}
+            aria-label=${msg("Reset selection")}
+          >
             ${msg("Reset selection")}
           </button>
-          <button class="button chocolate-button small" @click=${this.showCrop}>
+          <button
+            class="button chocolate-button small"
+            @click=${this.showCrop}
+            aria-label=${msg("Show crop")}
+          >
             ${msg("Show crop")}
           </button>
         </div>
@@ -380,7 +409,7 @@ export class ZoomableImage extends LitElement {
   }
 
   /**
-   * Renders the crop image bounding box.
+   * Renders the crop image bounding box with accessibility attributes.
    * @returns The crop image bounding box UI.
    */
   renderCropImageBoundingBox() {
@@ -391,13 +420,23 @@ export class ZoomableImage extends LitElement {
       <div>
         <div class="crop-result-title">${msg("Crop Result")}</div>
         <div class="flex justify-center">
-          <img src=${this.cropResult} alt="Cropped Image" />
+          <img src=${this.cropResult} alt=${msg("Cropped Image")} />
         </div>
         <div class="crop-result-buttons flex justify-center gap-0_5">
-          <button class="button chocolate-button" @click=${this.submitCrop}>
+          <button
+            class="button chocolate-button"
+            @click=${this.submitCrop}
+            aria-label=${msg("Validate crop")}
+          >
             ${msg("Validate crop")}
           </button>
-          <button class="button white-button" @click=${this.resetCrop}>${msg("Reset crop")}</button>
+          <button
+            class="button white-button"
+            @click=${this.resetCrop}
+            aria-label=${msg("Reset crop")}
+          >
+            ${msg("Reset crop")}
+          </button>
         </div>
       </div>
     `
@@ -483,16 +522,19 @@ export class ZoomableImage extends LitElement {
   }
 
   /**
-   * Renders the cropper controls.
+   * Renders the cropper controls with proper accessibility attributes.
    * @returns The cropper controls UI.
    */
   renderCropperControls() {
     if (this.cropMode === CropMode.IMAGE_ONLY) {
-      return html` <cropper-handle action="move" plain></cropper-handle> `
+      return html`
+        <cropper-handle action="move" plain aria-label=${msg("Move image")}></cropper-handle>
+      `
     } else if (this.cropMode === CropMode.CROP_READ) {
       const boundingBox = this.getBoundingBoxDependOnImageSize()
-      return html` <cropper-shade></cropper-shade>
-        <cropper-handle action="move" plain></cropper-handle>
+      return html`
+        <cropper-shade aria-hidden="true"></cropper-shade>
+        <cropper-handle action="move" plain aria-label=${msg("Move image")}></cropper-handle>
         <cropper-selection
           outlined
           @change="${this.onCropperSelectionChange}"
@@ -503,29 +545,38 @@ export class ZoomableImage extends LitElement {
           dynamic
           movable
           resizable
+          aria-label=${msg("Selection area")}
         >
-          <cropper-handle action="move" plain></cropper-handle>
-        </cropper-selection>`
+          <cropper-handle action="move" plain aria-label=${msg("Move selection")}></cropper-handle>
+        </cropper-selection>
+      `
     }
-    return html` <cropper-shade hidden></cropper-shade>
-      <cropper-handle action="select" plain></cropper-handle>
+
+    return html`
+      <cropper-shade hidden aria-hidden="true"></cropper-shade>
+      <cropper-handle action="select" plain aria-label=${msg("Select area")}></cropper-handle>
       <cropper-selection
         dynamic
         movable
         resizable
         hidden
         @change="${this.onCropperSelectionChange}"
+        aria-label=${msg("Selection area")}
       >
-        <cropper-handle action="move" plain></cropper-handle>
-        <cropper-handle action="n-resize"></cropper-handle>
-        <cropper-handle action="e-resize"></cropper-handle>
-        <cropper-handle action="s-resize"></cropper-handle>
-        <cropper-handle action="w-resize"></cropper-handle>
-        <cropper-handle action="ne-resize"></cropper-handle>
-        <cropper-handle action="nw-resize"></cropper-handle>
-        <cropper-handle action="se-resize"></cropper-handle>
-        <cropper-handle action="sw-resize"></cropper-handle>
-      </cropper-selection>`
+        <cropper-handle action="move" plain aria-label=${msg("Move selection")}></cropper-handle>
+        <cropper-handle action="n-resize" aria-label=${msg("Resize top")}></cropper-handle>
+        <cropper-handle action="e-resize" aria-label=${msg("Resize right")}></cropper-handle>
+        <cropper-handle action="s-resize" aria-label=${msg("Resize bottom")}></cropper-handle>
+        <cropper-handle action="w-resize" aria-label=${msg("Resize left")}></cropper-handle>
+        <cropper-handle action="ne-resize" aria-label=${msg("Resize top right")}></cropper-handle>
+        <cropper-handle action="nw-resize" aria-label=${msg("Resize top left")}></cropper-handle>
+        <cropper-handle
+          action="se-resize"
+          aria-label=${msg("Resize bottom right")}
+        ></cropper-handle>
+        <cropper-handle action="sw-resize" aria-label=${msg("Resize bottom left")}></cropper-handle>
+      </cropper-selection>
+    `
   }
 
   /**
@@ -645,50 +696,53 @@ export class ZoomableImage extends LitElement {
   }
 
   /**
-   * Renders the top panel.
+   * Renders the top panel with proper accessibility attributes.
    * @returns The top panel UI.
    */
   renderTopPanel() {
-    if (!this.showButtons) return nothing
+    if (!this.showButtons) {
+      return nothing
+    }
 
     return html`
-      <div class="flex justify-end">${this.renderCenterButton()} ${this.renderRotateButtons()}</div>
+      <div class="flex justify-end" role="toolbar" aria-label=${msg("Image controls")}>
+        ${this.renderCenterButton()} ${this.renderRotateButtons()}
+      </div>
     `
   }
 
   /**
    * Handles zoom changes to ensure they stay within the specified bounds.
    * @param zoom - The new zoom level.
+   * @returns True if zoom is allowed, false otherwise.
    */
   allowZoomChange(zoom: number): boolean {
-    if (zoom > this.maxZoom) {
-      return false
-    }
-    if (zoom < this.minZoom) {
-      return false
-    }
-    return true
+    return zoom <= this.maxZoom && zoom >= this.minZoom
   }
 
   /**
-   * Handles cropper canvas actions.
+   * Handles cropper canvas actions with error handling.
    * @param event - The cropper canvas action event.
    */
   onCropperCanvasAction(event: CropperActionEvent) {
-    const { action } = event.detail
-    if (action === "scale") {
-      const isAllowed = this.allowZoomChange(this.getImageScaleRelativeToCanvas())
-      if (!isAllowed) {
-        event.preventDefault()
-        // rollback the scale
-        this.imageElement.$setTransform(this.lastTransform)
+    try {
+      const { action } = event.detail
+      if (action === "scale") {
+        const isAllowed = this.allowZoomChange(this.getImageScaleRelativeToCanvas())
+        if (!isAllowed) {
+          event.preventDefault()
+          // rollback the scale
+          this.imageElement.$setTransform(this.lastTransform)
+        }
       }
+      this.updateLastTransform()
+    } catch (error) {
+      console.error("Error in cropper canvas action:", error)
     }
-    this.updateLastTransform()
   }
 
   /**
-   * Renders the component.
+   * Renders the component with accessibility attributes.
    * @returns The component UI.
    */
   override render() {
@@ -700,13 +754,20 @@ export class ZoomableImage extends LitElement {
           width: this.size.width,
           "max-width": this.size["max-width"],
         })}
+        role="region"
+        aria-label=${msg("Zoomable image")}
       >
         ${this.renderTopPanel()}
         <div class="cropper-parent">
-          <cropper-canvas background style=${styleMap(this.size)} scale-step=${this.scaleStep}>
+          <cropper-canvas
+            background
+            style=${styleMap(this.size)}
+            scale-step=${this.scaleStep}
+            aria-label=${msg("Image canvas")}
+          >
             <cropper-image
               src=${this.src}
-              alt="Picture"
+              alt=${msg("Picture")}
               rotable
               scalable
               skewable
