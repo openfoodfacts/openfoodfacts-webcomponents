@@ -22,6 +22,7 @@ A set of web components for Open Food Facts to help build edition interfaces
 - [Barcode Scanner](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#barcode-scanner)
 - [Folksonomy Editor](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#folksonomy-editor)
 - [Robotoff Contribution Message](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-contribution-message)
+- [Autocomplete Input](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#autocomplete-input)
 
 ### For configuration
 
