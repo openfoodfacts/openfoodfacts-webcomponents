@@ -298,6 +298,7 @@ export class RobotoffIngredients extends LoadingWithTimeoutMixin(LitElement) {
           src=${this.fullImageUrl}
           fallback-src=${this.productData.imageUrl ?? ""}
           .size="${{ width: "100%", height: "30vh" }}"
+          show-buttons
         ></zoomable-image>
       </div>
     `
