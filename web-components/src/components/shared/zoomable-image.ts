@@ -17,6 +17,8 @@ import type { Selection } from "@cropper/element-selection"
 import { FLEX } from "../../styles/utils"
 import { CropperImageBoundingBox } from "../../types"
 import { EventType } from "../../constants"
+import "../icons/arrows-center"
+import { CropperActionEvent } from "../../types/crops"
 
 export enum CropMode {
   IMAGE_ONLY = "image-only",
@@ -155,20 +157,56 @@ export class ZoomableImage extends LitElement {
   @state()
   private resultBoundingBox?: CropperImageBoundingBox
 
+  /**
+   * The last transform applied to the image.
+   * Used to reset the image to its original position.
+   */
+  @state()
+  lastTransform: number[] = []
+
   get canZoom() {
     return !mobileAndTabletCheck()
   }
 
+  /**
+   * Called when an attribute is changed.
+   * Allows to fit the image to the container when the src attribute is changed.
+   */
+  override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
+    super.attributeChangedCallback(name, _old, value)
+    if (name == "src" && value) {
+      this.fitImageToContainer()
+    }
+  }
+
+  /**
+   * Called after the component is first updated.
+   * Used to initialize the cropper.
+   */
+  override firstUpdated() {
+    this.initCropper()
+  }
+
+  /**
+   * Called when the component is disconnected from the DOM.
+   * Used to remove the event listener from the cropper canvas.
+   */
   override disconnectedCallback(): void {
-    this.canvasElement.removeEventListener("action", (e) => {
-      this.onCropperCanvasAction(e)
+    this.canvasElement.removeEventListener("actionstart", (e) => {
+      this.onCropperCanvasAction(e as CropperActionEvent)
     })
     super.disconnectedCallback()
   }
 
+  /**
+   * Initializes the zoom limit for the cropper canvas.
+   * This is used to prevent the user from zooming in or out too much.
+   */
   initZoomLimit() {
+    this.updateLastTransform()
+
     this.canvasElement.addEventListener("action", (e) => {
-      this.onCropperCanvasAction(e)
+      this.onCropperCanvasAction(e as CropperActionEvent)
     })
   }
 
@@ -187,15 +225,12 @@ export class ZoomableImage extends LitElement {
     this.initZoomLimit()
   }
 
-  override firstUpdated() {
-    this.initCropper()
-  }
-
-  override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
-    super.attributeChangedCallback(name, _old, value)
-    if (name == "src" && value) {
-      this.fitImageToContainer()
-    }
+  /**
+   * Updates the last transform of the image.
+   * This is used to rollback the image if user zooms out too much.
+   */
+  updateLastTransform() {
+    this.lastTransform = this.imageElement?.$getTransform()
   }
 
   /**
@@ -225,26 +260,41 @@ export class ZoomableImage extends LitElement {
     }
     this.imageElement.$rotate(`${rotation}deg`)
   }
-
-  renderButtons() {
-    if (!this.showButtons) return nothing
+  /**
+   * Renders the center button.
+   * @returns The rendered center button.
+   */
+  renderCenterButton() {
     return html`
-      <div class="flex justify-end">
-        <button
-          class="link-button"
-          @click=${() => this.rotateImage(-90)}
-          title=${msg("Rotate image to the left")}
-        >
-          <rotate-left-icon></rotate-left-icon>
-        </button>
-        <button
-          class="link-button"
-          @click=${() => this.rotateImage(90)}
-          title=${msg("Rotate image to the right")}
-        >
-          <rotate-right-icon></rotate-right-icon>
-        </button>
-      </div>
+      <button class="link-button" @click=${this.fitImageToContainer} title=${msg("Center image")}>
+        <arrows-center-icon size="20px"></arrows-center-icon>
+      </button>
+    `
+  }
+
+  /**
+   * Renders the rotate buttons.
+   * @returns The rendered rotate buttons.
+   */
+  renderRotateButtons() {
+    if (this.cropMode === CropMode.CROP_READ) {
+      return nothing
+    }
+    return html`
+      <button
+        class="link-button"
+        @click=${() => this.rotateImage(-90)}
+        title=${msg("Rotate image to the left")}
+      >
+        <rotate-left-icon></rotate-left-icon>
+      </button>
+      <button
+        class="link-button"
+        @click=${() => this.rotateImage(90)}
+        title=${msg("Rotate image to the right")}
+      >
+        <rotate-right-icon></rotate-right-icon>
+      </button>
     `
   }
 
@@ -600,10 +650,11 @@ export class ZoomableImage extends LitElement {
    * @returns The top panel UI.
    */
   renderTopPanel() {
-    if (this.cropMode === CropMode.CROP_READ) {
-      return html``
-    }
-    return this.renderButtons()
+    if (!this.showButtons) return nothing
+
+    return html`
+      <div class="flex justify-end">${this.renderCenterButton()} ${this.renderRotateButtons()}</div>
+    `
   }
 
   /**
@@ -624,18 +675,17 @@ export class ZoomableImage extends LitElement {
    * Handles cropper canvas actions.
    * @param event - The cropper canvas action event.
    */
-  onCropperCanvasAction(event: CustomEvent<{ action: string; scale: number }>) {
-    const { action, scale } = event.detail
-    console.log("onCropperCanvasAction", event.detail)
+  onCropperCanvasAction(event: CropperActionEvent) {
+    const { action } = event.detail
     if (action === "scale") {
       const isAllowed = this.allowZoomChange(this.getImageScaleRelativeToCanvas())
       if (!isAllowed) {
-        let newScale = -1 * scale
-
-        // cancel the event
-        this.imageElement.$zoom(newScale)
+        event.preventDefault()
+        // rollback the scale
+        this.imageElement.$setTransform(this.lastTransform)
       }
     }
+    this.updateLastTransform()
   }
 
   /**
