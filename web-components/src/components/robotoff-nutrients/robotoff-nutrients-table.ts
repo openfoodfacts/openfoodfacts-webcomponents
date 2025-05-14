@@ -890,7 +890,7 @@ export class RobotoffNutrientsTable extends LitElement {
 
     const nutrientId = event.detail.value
     // Set it to the autocomplete value to force the component to update even if value is the same
-    this.autocompleteValue = event.detail.value
+    this.autocompleteValue = event.detail.label!
 
     this.addKeysSet(nutrientId)
 
