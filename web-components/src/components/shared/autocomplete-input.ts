@@ -24,7 +24,6 @@ export class AutocompleteInput extends LitElement {
       }
 
       .autocomplete-list {
-        z-index: 10;
         position: absolute;
         background: #fff;
         border: 1px solid #ccc;
@@ -153,7 +152,7 @@ export class AutocompleteInput extends LitElement {
    */
   private onInput(e: Event) {
     const inputValue = (e.target as HTMLInputElement).value
-    this._inputValue = inputValue
+    this.value = inputValue
     this.highlightedIndex = -1
     const filteredSuggestions = this.filteredSuggestions
     this.showSuggestions = filteredSuggestions.length > 0
