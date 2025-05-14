@@ -126,6 +126,14 @@ npm run dev
 
 Go to http://localhost:8000 to see the demo.
 
+## Test local changes with npm like Hunger games project
+
+Build the webcomponents with `npm run build` in the `openfoodfacts-webcomponents/web-components` directory.
+
+In `package.json` of the project you want to test the webcomponents with, add the following line to the dependencies section: `@openfoodfacts/openfoodfacts-webcomponents": "file:../openfoodfacts-webcomponents/web-components`
+
+Then run `npm install` to install the local version of the webcomponents.
+
 #### In addition to above steps, please also follow the below steps to generate translations and for tests.
 
 1. Export your component in `webcomponents/src/off-webcomponents.ts`
