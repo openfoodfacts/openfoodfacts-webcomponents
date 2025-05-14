@@ -87,3 +87,9 @@ export const setValueAndParentsObjectIfNotExists = (
   lastObject[lastKey] = value
   return obj
 }
+
+/**
+ * Generates a random ID.
+ * @returns string - a random ID
+ */
+export const randomIdGenerator = () => Math.random().toString(36).substring(2, 15)

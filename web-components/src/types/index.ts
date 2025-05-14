@@ -37,6 +37,8 @@ export type AutocompleteInputChangeEventDetail = {
 
 export type AutocompleteInputChangeEvent = CustomEvent<AutocompleteInputChangeEventDetail>
 
+export type AutocompleteSuggestionSelectEvent = CustomEvent<AutocompleteSuggestion>
+
 export type AutocompleteSuggestion = {
   label?: string
   value: string

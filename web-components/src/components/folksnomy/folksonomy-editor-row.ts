@@ -6,7 +6,11 @@ import folksonomyApi from "../../api/folksonomy"
 import { msg } from "@lit/localize"
 import { getButtonClasses, ButtonType } from "../../styles/buttons"
 import { FOLKSONOMY_INPUT } from "../../styles/folksonomy-input"
-import { AutocompleteSuggestion, AutocompleteInputChangeEvent } from "../../types"
+import {
+  AutocompleteSuggestion,
+  AutocompleteInputChangeEvent,
+  AutocompleteSuggestionSelectEvent,
+} from "../../types"
 
 /**
  * FolksonomyEditorRow Component
@@ -326,6 +330,8 @@ export class FolksonomyEditorRow extends LitElement {
         padding: 0.5rem 1.2rem;
         text-align: left;
         border: none;
+      }
+      tr:not(.empty-row) td {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -393,14 +399,15 @@ export class FolksonomyEditorRow extends LitElement {
   override render() {
     if (this.empty) {
       return html`
-        <tr class="${this.rowNumber % 2 === 0 ? "even-row" : "odd-row"}">
+        <tr class="empty-row ${this.rowNumber % 2 === 0 ? "even-row" : "odd-row"}">
           <td>
             <autocomplete-input
               placeholder=${msg("New key")}
               .value=${this.keyInput}
               .suggestions=${this.keySuggestions}
-              @input-change=${(e: CustomEvent) => this.onKeyInput(e)}
-              @suggestion-select=${(e: CustomEvent) => this.selectKeySuggestion(e.detail.value)}
+              @input-change=${(e: AutocompleteInputChangeEvent) => this.onKeyInput(e)}
+              @suggestion-select=${(e: AutocompleteSuggestionSelectEvent) =>
+                this.selectKeySuggestion(e.detail.value)}
             ></autocomplete-input>
           </td>
           <td>
@@ -408,8 +415,9 @@ export class FolksonomyEditorRow extends LitElement {
               placeholder=${msg("New value")}
               .value=${this.valueInput}
               .suggestions=${this.valueSuggestions}
-              @input-change=${(e: CustomEvent) => this.onValueInput(e)}
-              @suggestion-select=${(e: CustomEvent) => this.selectValueSuggestion(e.detail.value)}
+              @input-change=${(e: AutocompleteInputChangeEvent) => this.onValueInput(e)}
+              @suggestion-select=${(e: AutocompleteSuggestionSelectEvent) =>
+                this.selectValueSuggestion(e.detail.value)}
             ></autocomplete-input>
           </td>
           <td>

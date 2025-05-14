@@ -35,11 +35,13 @@ import { setValueAndParentsObjectIfNotExists } from "../../utils"
 import { nutrientsOrderByCountryCode, sortKeysByNutrientsOrder } from "../../signals/openfoodfacts"
 import { countryCode } from "../../signals/app"
 
+import "../shared/autocomplete-input"
 import "../icons/suggestion"
 import "../icons/add"
 import "../icons/eye-visible"
 
 import "../icons/eye-invisible"
+import { AutocompleteInputChangeEvent, AutocompleteSuggestionSelectEvent } from "../../types"
 export const ALLOWED_SPECIAL_VALUES = ["", "-", "traces"]
 
 export type FormatedNutrimentData = {
@@ -244,6 +246,12 @@ export class RobotoffNutrientsTable extends LitElement {
       "100g": {},
       serving: {},
     }
+
+  /**
+   * Autocomplete value
+   */
+  @state()
+  autocompleteValue: string = ""
 
   @query(`input[name='${NUTRIENT_SERVING_SIZE_KEY}']`)
   private servingSizeInput?: HTMLInputElement
@@ -877,16 +885,19 @@ export class RobotoffNutrientsTable extends LitElement {
     `
   }
 
-  onAddNutrient(event: Event) {
-    event.preventDefault()
-    event.stopPropagation()
+  onAddNutrient(event: AutocompleteSuggestionSelectEvent) {
+    console.log("onAddNutrient", event.detail)
 
-    const selectElement = event.target as HTMLSelectElement
-    const nutrientId = selectElement.value
+    const nutrientId = event.detail.value
+    // Set it to the autocomplete value to force the component to update even if value is the same
+    this.autocompleteValue = event.detail.value
+
     this.addKeysSet(nutrientId)
-    selectElement.value = ""
-    // Force the component to update to render the new rows
-    this.requestUpdate()
+
+    // Reset the autocomplete value after to force the component to update even if
+    requestAnimationFrame(() => {
+      this.autocompleteValue = ""
+    })
   }
 
   /**
@@ -902,6 +913,10 @@ export class RobotoffNutrientsTable extends LitElement {
     this.submitFormData(formData, this.insightAnnotationSize)
   }
 
+  onAutocompleteInput(event: AutocompleteInputChangeEvent) {
+    this.autocompleteValue = event.detail.value
+  }
+
   /**
    * Render the row to add a new nutrient.
    * @param alreadyAddedNutrients
@@ -912,10 +927,11 @@ export class RobotoffNutrientsTable extends LitElement {
       .get()
       // filter out the nutrients that are already added to the table
       .filter((nutrientTaxonomy) => !alreadyAddedNutrients.includes(nutrientTaxonomy.id))
-      // map to the format expected by the select component
+      // map to the format expected by the autocomplete-input component
       .map((nutrientTaxonomy) => ({
         id: nutrientTaxonomy.id,
         label: getTaxonomyNameByLang(nutrientTaxonomy, lang),
+        value: nutrientTaxonomy.id,
       }))
       // sort the nutrients by label
       .sort((a, b) => a.label.localeCompare(b.label))
@@ -927,16 +943,13 @@ export class RobotoffNutrientsTable extends LitElement {
 
     return html`
       <div class="add-nutrient-row">
-        <select
-          class="select"
-          @change=${this.onAddNutrient}
-          style=${backgroundImage(SELECT_ICON_FILE_NAME)}
-        >
-          <option>${msg("Add a nutrient")}</option>
-          ${filteredNutrientTaxonomies.map(
-            (taxonomy) => html` <option value=${taxonomy.id}>${taxonomy.label}</option> `
-          )}
-        </select>
+        <autocomplete-input
+          placeholder="${msg("Add a nutrient")}"
+          .value=${this.autocompleteValue}
+          @input-change=${(event: AutocompleteInputChangeEvent) => this.onAutocompleteInput(event)}
+          .suggestions=${filteredNutrientTaxonomies}
+          @suggestion-select=${this.onAddNutrient}
+        ></autocomplete-input>
       </div>
     `
   }

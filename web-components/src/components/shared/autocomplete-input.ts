@@ -3,6 +3,8 @@ import { customElement, property, state } from "lit/decorators.js"
 import { FOLKSONOMY_INPUT } from "../../styles/folksonomy-input"
 import { classMap } from "lit/directives/class-map.js"
 import { AutocompleteSuggestion, AutocompleteInputChangeEventDetail } from "../../types"
+import { SAFE_BLUE } from "../../utils/colors"
+import { randomIdGenerator } from "../../utils"
 
 /**
  * AutocompleteInput Component
@@ -17,12 +19,12 @@ export class AutocompleteInput extends LitElement {
     FOLKSONOMY_INPUT,
     css`
       .autocomplete-wrapper {
-        width: 30%;
-        position: absolute;
-        margin-top: -23px;
+        width: 100%;
+        position: relative;
       }
 
       .autocomplete-list {
+        z-index: 10;
         position: absolute;
         background: #fff;
         border: 1px solid #ccc;
@@ -50,10 +52,9 @@ export class AutocompleteInput extends LitElement {
         font-weight: bold;
       }
 
-      input[type="text"]:focus {
+      .autocomplete-input:focus {
         outline: none;
-        border-color: #007bff;
-        box-shadow: 0 0 3px rgba(0, 123, 255, 0.5);
+        border-color: ${SAFE_BLUE};
       }
     `,
   ]
@@ -66,7 +67,14 @@ export class AutocompleteInput extends LitElement {
   /**
    * Current value of the input field.
    */
-  @property({ type: String }) value = ""
+  @property({ type: String })
+  get value() {
+    return this._inputValue ?? ""
+  }
+  set value(newValue: string) {
+    this._inputValue = newValue
+    this.requestUpdate()
+  }
 
   /**
    * List of suggestions to display in the autocomplete dropdown.
@@ -87,6 +95,28 @@ export class AutocompleteInput extends LitElement {
   @state() private highlightedIndex = -1
 
   /**
+   * Unique ID for the input field.
+   * @private
+   */
+  @state()
+  private _id: string = ""
+
+  @state()
+  private _inputValue: string = ""
+
+  /**
+   * ID for the suggestions list.
+   * @private
+   */
+  get suggestionId() {
+    return `autocomplete-list-${this._id}`
+  }
+
+  getSuggestionItemId(index: number) {
+    return `autocomplete-item-${this._id}-${index}`
+  }
+
+  /**
    * Filtered suggestions based on the current input value.
    * @private
    */
@@ -94,6 +124,10 @@ export class AutocompleteInput extends LitElement {
     return this.filterSuggestions(this.value)
   }
 
+  override connectedCallback() {
+    super.connectedCallback()
+    this._id = randomIdGenerator()
+  }
   /**
    * Filters suggestions based on the input value.
    * @param inputValue - The current input value.
@@ -119,7 +153,7 @@ export class AutocompleteInput extends LitElement {
    */
   private onInput(e: Event) {
     const inputValue = (e.target as HTMLInputElement).value
-    this.value = inputValue
+    this._inputValue = inputValue
     this.highlightedIndex = -1
     const filteredSuggestions = this.filteredSuggestions
     this.showSuggestions = filteredSuggestions.length > 0
@@ -147,10 +181,10 @@ export class AutocompleteInput extends LitElement {
    * @param suggestion - The selected suggestion.
    */
   private selectSuggestion(suggestion: AutocompleteSuggestion) {
-    this.value = suggestion.value
+    this._inputValue = suggestion.value
     this.showSuggestions = false
     this.dispatchEvent(
-      new CustomEvent("suggestion-select", {
+      new CustomEvent<AutocompleteSuggestion>("suggestion-select", {
         detail: suggestion,
         bubbles: true,
         composed: true,
@@ -233,43 +267,41 @@ export class AutocompleteInput extends LitElement {
   override render() {
     return html`
       <div class="autocomplete-wrapper">
-        <div class="autocomplete-input-wrapper">
-          <input
-            type="text"
-            class="autocomplete-input"
-            .value=${this.value}
-            placeholder=${this.placeholder}
-            @input=${this.onInput}
-            @keydown=${this.onKeyDown}
-            @focus=${() => this.onFocus()}
-            @blur=${() => setTimeout(() => (this.showSuggestions = false), 150)}
-            aria-autocomplete="list"
-            aria-controls="autocomplete-list"
-            aria-expanded=${this.showSuggestions}
-            aria-activedescendant=${this.highlightedIndex >= 0
-              ? `autocomplete-item-${this.highlightedIndex}`
-              : ""}
-          />
-          ${this.showSuggestions
-            ? html`<ul class="autocomplete-list" id="autocomplete-list" role="listbox">
-                ${this.filteredSuggestions.map(
-                  (s, index) =>
-                    html`<li
-                      class="autocomplete-item ${classMap({
-                        highlighted: index === this.highlightedIndex,
-                      })}"
-                      role="option"
-                      id="autocomplete-item-${index}"
-                      @mousedown=${() => this.selectSuggestion(this.filteredSuggestions[index])}
-                      @mouseenter=${() => (this.highlightedIndex = index)}
-                      aria-selected=${index === this.highlightedIndex}
-                    >
-                      ${s.label ?? s.value}
-                    </li>`
-                )}
-              </ul>`
-            : null}
-        </div>
+        <input
+          type="text"
+          class="autocomplete-input"
+          .value=${this.value}
+          placeholder=${this.placeholder}
+          @input=${this.onInput}
+          @keydown=${this.onKeyDown}
+          @focus=${() => this.onFocus()}
+          @blur=${() => setTimeout(() => (this.showSuggestions = false), 150)}
+          aria-autocomplete="list"
+          aria-controls=${this.suggestionId}
+          aria-expanded=${this.showSuggestions}
+          aria-activedescendant=${this.highlightedIndex >= 0
+            ? this.getSuggestionItemId(this.highlightedIndex)
+            : ""}
+        />
+        ${this.showSuggestions
+          ? html`<ul class="autocomplete-list" id=${this.suggestionId} role="listbox">
+              ${this.filteredSuggestions.map(
+                (s, index) =>
+                  html`<li
+                    class="autocomplete-item ${classMap({
+                      highlighted: index === this.highlightedIndex,
+                    })}"
+                    role="option"
+                    id=${this.getSuggestionItemId(index)}
+                    @mousedown=${() => this.selectSuggestion(this.filteredSuggestions[index])}
+                    @mouseenter=${() => (this.highlightedIndex = index)}
+                    aria-selected=${index === this.highlightedIndex}
+                  >
+                    ${s.label ?? s.value}
+                  </li>`
+              )}
+            </ul>`
+          : null}
       </div>
     `
   }
