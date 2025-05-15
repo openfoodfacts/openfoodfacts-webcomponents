@@ -4,7 +4,7 @@ import { Task } from "@lit/task"
 import { ALERT } from "../../styles/alert.js"
 
 import { fetchSpellcheckInsights } from "../../signals/ingredients"
-import { fetchNutrientInsightsByProductCode } from "../../signals/nutrients"
+import { fetchNutrientInsights } from "../../signals/nutrients"
 import { fetchQuestionsByProductCode } from "../../signals/questions"
 import { localized, msg } from "@lit/localize"
 import { ButtonType, getButtonClasses } from "../../styles/buttons.js"
@@ -134,7 +134,7 @@ export class RobotoffContributionMessage extends SignalWatcher(LitElement) {
       const [questions, spellcheckInsights, nutrientInsights] = await Promise.allSettled([
         fetchQuestionsByProductCode(productCode),
         ...(this.isLoggedIn
-          ? [fetchSpellcheckInsights(productCode), fetchNutrientInsightsByProductCode(productCode)]
+          ? [fetchSpellcheckInsights(productCode), fetchNutrientInsights(productCode)]
           : []),
       ])
 

@@ -497,9 +497,13 @@ export class RobotoffNutrientsTable extends LitElement {
     this.shadowRoot!.querySelector<HTMLInputElement>(
       `input[name="${this.getInputValueName(key, column)}"]`
     )!.value = robotoffSuggestion.value
-    this.shadowRoot!.querySelector<HTMLInputElement>(
-      `input[name="${this.getInputUnitName(key, column)}"]`
-    )!.value = robotoffSuggestion.unit
+
+    const selectInputUnit = this.shadowRoot!.querySelector<HTMLInputElement>(
+      `select[name="${this.getInputUnitName(key, column)}"]`
+    )
+    if (selectInputUnit) {
+      selectInputUnit.value = robotoffSuggestion.unit ?? ""
+    }
 
     this.requestUpdate()
   }
@@ -540,7 +544,7 @@ export class RobotoffNutrientsTable extends LitElement {
     ) {
       return nothing
     }
-    return html`<button class="alert success with-icons" @click=${() => onClick()}>
+    return html`<button type="button" class="alert success with-icons" @click=${() => onClick()}>
       <suggestion-icon size="16px" color=${GREEN}></suggestion-icon>
       <span>${robotoffSuggestion.value} ${robotoffSuggestion.unit}</span>
       <add-icon size="16px" color=${GREEN}></add-icon>
@@ -603,23 +607,22 @@ export class RobotoffNutrientsTable extends LitElement {
           )}
         </select>
       `
+    } else if (possibleUnits[0]) {
+      return html`<input
+          type="hidden"
+          name="${inputName}"
+          .value="${possibleUnits[0]}"
+          ?disabled=${disabled}
+        />
+        <select
+          class=${selectsClasses}
+          disabled
+          style=${backgroundImage(WHITE_SELECT_ICON_FILE_NAME)}
+        >
+          <option value="${possibleUnits[0]}" selected>${possibleUnits[0]}</option>
+        </select>`
     } else {
-      return possibleUnits[0]
-        ? html` <input
-              type="hidden"
-              name="${inputName}"
-              value="${possibleUnits[0]}"
-              ?disabled=${disabled}
-            />
-            <select
-              name=${inputName}
-              class=${selectsClasses}
-              disabled
-              style=${backgroundImage(WHITE_SELECT_ICON_FILE_NAME)}
-            >
-              <option value="${possibleUnits[0]!}" selected>${possibleUnits[0]}</option>
-            </select>`
-        : nothing
+      return nothing
     }
   }
 
@@ -844,7 +847,7 @@ export class RobotoffNutrientsTable extends LitElement {
           class="input cappucino"
           name=${NUTRIENT_SERVING_SIZE_KEY}
           type="text"
-          value=${servingSize}
+          .value=${servingSize}
           @change=${this.onChangeServingSize}
         />
       </label>
@@ -982,6 +985,7 @@ export class RobotoffNutrientsTable extends LitElement {
     return html`
       <div class="toggle-nutrient-button-wrapper">
         <button
+          type="button"
           class="button chocolate-button"
           @click=${() => this.toggleNutrient(column, nutrientKey)}
         >
