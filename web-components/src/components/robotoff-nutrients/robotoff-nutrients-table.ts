@@ -84,7 +84,7 @@ const SERVING_SIZE_SELECT_NAME = "serving_size_select"
 @localized()
 export class RobotoffNutrientsTable extends LitElement {
   static override styles = [
-    ...getButtonClasses([ButtonType.Chocolate]),
+    ...getButtonClasses([ButtonType.Success, ButtonType.Danger, ButtonType.White]),
     SELECT,
     INPUT,
     FLEX,
@@ -126,6 +126,10 @@ export class RobotoffNutrientsTable extends LitElement {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 0.5rem;
+      }
+
+      .submit-row .success-button {
+        grid-column: 1 / 3;
       }
       .input-error-message {
         display: block;
@@ -849,6 +853,9 @@ export class RobotoffNutrientsTable extends LitElement {
   onSkip() {
     this.dispatchEvent(new CustomEvent(EventType.SKIP))
   }
+  onRefuse() {
+    this.dispatchEvent(new CustomEvent(EventType.REFUSE))
+  }
 
   /**
    * Render the submit row.
@@ -857,7 +864,10 @@ export class RobotoffNutrientsTable extends LitElement {
   renderSubmitRow() {
     return html`
       <div class="submit-row">
-        <button type="submit" class="button chocolate-button">${msg("Submit")}</button>
+        <button type="submit" class="button success-button">${msg("Submit")}</button>
+        <button type="button" class="button danger-button" @click=${this.onRefuse}>
+          ${msg("Invalidate image")}
+        </button>
         <button type="button" class="button white-button" @click=${this.onSkip}>
           ${msg("Skip")}
         </button>

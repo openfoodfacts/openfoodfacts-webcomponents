@@ -84,9 +84,12 @@ export const annotateNutrientsWithData = async (annotation: InsightAnnotationAns
 }
 
 /**
- * Annotate an insight with a skip answer
+ * Annotate an insight with annotation answer
  * @param insightId
  */
-export const annotateNutrientWithSkipAnswer = async (insightId: string) => {
-  return await robotoff.annotateNutrients(insightId, AnnotationAnswer.SKIP)
+export const annotateNutrientWitoutData = async (
+  insightId: string,
+  annotation: AnnotationAnswer
+) => {
+  return await robotoff.annotateNutrients(insightId, annotation)
 }

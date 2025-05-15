@@ -3,7 +3,7 @@ import { css, html, LitElement, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import {
   annotateNutrientsWithData,
-  annotateNutrientWithSkipAnswer,
+  annotateNutrientWitoutData,
   fetchNutrientInsights,
   insightById,
 } from "../../signals/nutrients"
@@ -12,7 +12,7 @@ import "../shared/zoomable-image"
 import "../shared/loader"
 
 import { fetchNutrientsTaxonomies } from "../../signals/taxonomies"
-import { NutrientsInsight, InsightAnnotationAnswer } from "../../types/robotoff"
+import { NutrientsInsight, InsightAnnotationAnswer, AnnotationAnswer } from "../../types/robotoff"
 import { BASE } from "../../styles/base"
 import { robotoffConfiguration } from "../../signals/robotoff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
@@ -201,8 +201,19 @@ export class RobotoffNutrients extends LitElement {
     `
   }
 
+  /**
+   * Refuse the current insight
+   */
+  async onRefuse() {
+    await annotateNutrientWitoutData(this.currentInsightId, AnnotationAnswer.REFUSE)
+    await this.loadInsight(this.currentInsightIndex + 1)
+  }
+
+  /**
+   * Skip the current insight
+   */
   async onSkip() {
-    await annotateNutrientWithSkipAnswer(this.currentInsightId)
+    await annotateNutrientWitoutData(this.currentInsightId, AnnotationAnswer.SKIP)
     await this.loadInsight(this.currentInsightIndex + 1)
   }
 
@@ -222,6 +233,7 @@ export class RobotoffNutrients extends LitElement {
                 .nutrimentsData="${this.nutrimentsData}"
                 .insight="${insight as NutrientsInsight}"
                 @submit="${this.onSubmit}"
+                @refuse="${this.onRefuse}"
                 @skip="${this.onSkip}"
               ></robotoff-nutrients-table>
             </div>
