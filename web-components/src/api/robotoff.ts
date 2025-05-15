@@ -6,10 +6,10 @@ import {
   AnnotationAnswer,
   InsightsRequestParams,
   InsightsResponse,
-  InsightAnnotationAnswer,
   NutrientsInsight,
   IngredientsInsight,
   NutrientsAnnotationData,
+  AnnotationFormData,
 } from "../types/robotoff"
 import { robotoffConfiguration } from "../signals/robotoff"
 
@@ -51,28 +51,28 @@ const annotate = (formBody: string) => {
 const robotoff = {
   annotate,
   annotateQuestion(insightId: string, annotation: AnnotationAnswer) {
-    const formBody = new URLSearchParams({
+    const formData: AnnotationFormData = {
       insight_id: insightId,
-      annotation: annotation,
-    }).toString()
+      annotation,
+    }
+    const formBody = new URLSearchParams(formData).toString()
     return annotate(formBody)
   },
-  annotateNutrients(annotation: InsightAnnotationAnswer) {
-    const servingSize = annotation.data["serving_size"]?.value ?? null
-    // Clone the nutrients object to avoid mutating the original annotation.data
-    const clonedData = { ...annotation.data }
-    delete clonedData["serving_size"]
-    const data: NutrientsAnnotationData = {
-      nutrients: clonedData,
-      nutrition_data_per: annotation.type,
-      serving_size: servingSize,
+  annotateNutrients(
+    insightId: string,
+    annotation: AnnotationAnswer,
+    data?: NutrientsAnnotationData
+  ) {
+    const formData: AnnotationFormData = {
+      annotation,
+      insight_id: insightId,
+    }
+    // Add data only if it is defined
+    if (data) {
+      formData.data = JSON.stringify(data)
     }
 
-    const formBody = new URLSearchParams({
-      annotation: AnnotationAnswer.ACCEPT_AND_ADD_DATA,
-      insight_id: annotation.insightId,
-      data: JSON.stringify(data),
-    }).toString()
+    const formBody = new URLSearchParams(formData).toString()
     return annotate(formBody)
   },
 

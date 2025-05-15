@@ -15,6 +15,7 @@ export enum EventType {
   SUCCESS = "success",
   SAVE = "save",
   SUBMIT = "submit",
+  SKIP = "skip",
   QUESTION_STATE = "question-state",
   NUTRIENT_STATE = "nutrient-state",
   BARCODE_SCANNER_STATE = "barcode-scanner-state",

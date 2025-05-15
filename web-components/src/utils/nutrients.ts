@@ -42,25 +42,25 @@ export const FORCED_UNITS_BY_NUTRIENTS_KEYS = {
 /**
  * get the possible units for a nutrient key
  * @param key - the nutrient key
- * @param unit - the unit to check if it is forced or not.
+ * @param fallbackUnit - the unit to check if it is forced or not.
  * For example, if the unit is "kj", it will return ["kj"].
  * @returns
  */
-export const getPossibleUnits = (key: string, unit?: string | null) => {
+export const getPossibleUnits = (key: string, fallbackUnit?: string | null) => {
   if (key in FORCED_UNITS_BY_NUTRIENTS_KEYS) {
     const forcedUnit = [FORCED_UNITS_BY_NUTRIENTS_KEYS[key as ForcedNutrientKey]]
     return forcedUnit
   }
-  if (isNullOrUndefined(unit)) {
-    unit = getTaxonomyUnitById(key)
+  if (isNullOrUndefined(fallbackUnit)) {
+    fallbackUnit = getTaxonomyUnitById(key)
   }
-  if (!unit) {
+  if (!fallbackUnit) {
     return []
   }
-  if (EDITABLE_UNITS.includes(unit as Unit)) {
+  if (EDITABLE_UNITS.includes(fallbackUnit as Unit)) {
     return EDITABLE_UNITS
   }
-  return [unit]
+  return [fallbackUnit]
 }
 
 export const NUTRIENT_UNIT_NAME_PREFIX = "unit__"

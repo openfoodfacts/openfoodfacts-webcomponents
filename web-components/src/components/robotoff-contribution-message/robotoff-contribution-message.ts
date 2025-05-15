@@ -4,7 +4,7 @@ import { Task } from "@lit/task"
 import { ALERT } from "../../styles/alert.js"
 
 import { fetchSpellcheckInsights } from "../../signals/ingredients"
-import { fetchNutrientInsightsByProductCode } from "../../signals/nutrients"
+import { fetchNutrientInsights } from "../../signals/nutrients"
 import { fetchQuestionsByProductCode } from "../../signals/questions"
 import { localized, msg } from "@lit/localize"
 import { ButtonType, getButtonClasses } from "../../styles/buttons.js"
@@ -67,6 +67,15 @@ export class RobotoffContributionMessage extends SignalWatcher(LitElement) {
   productCode = ""
 
   /**
+   * Whether the user is logged in.
+   */
+  @property({
+    type: Boolean,
+    attribute: "is-logged-in",
+  })
+  isLoggedIn = false
+
+  /**
    * The type of contribution being made.
    */
   @state()
@@ -122,17 +131,18 @@ export class RobotoffContributionMessage extends SignalWatcher(LitElement) {
   private _fetchDataTask = new Task(this, {
     task: async ([productCode]) => {
       // Check if it need contributions. If not, don't show the message. If request fails, hide the message but do not crash all requests
-      const [spellcheckInsights, nutrientInsights, questions] = await Promise.allSettled([
-        fetchSpellcheckInsights(productCode),
-        fetchNutrientInsightsByProductCode(productCode),
+      const [questions, spellcheckInsights, nutrientInsights] = await Promise.allSettled([
         fetchQuestionsByProductCode(productCode),
+        ...(this.isLoggedIn
+          ? [fetchSpellcheckInsights(productCode), fetchNutrientInsights(productCode)]
+          : []),
       ])
 
       this.showMessages = {
+        questions: questions?.status === "fulfilled" && questions.value.length > 0,
         ingredients:
-          spellcheckInsights.status === "fulfilled" && spellcheckInsights.value.length > 0,
-        nutrients: nutrientInsights.status === "fulfilled" && nutrientInsights.value.length > 0,
-        questions: questions.status === "fulfilled" && questions.value.length > 0,
+          spellcheckInsights?.status === "fulfilled" && spellcheckInsights.value.length > 0,
+        nutrients: nutrientInsights?.status === "fulfilled" && nutrientInsights.value.length > 0,
       }
 
       return { spellcheckInsights, nutrientInsights, questions }
