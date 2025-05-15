@@ -1,7 +1,12 @@
 import { Task } from "@lit/task"
 import { css, html, LitElement, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
-import { annotateNutrients, fetchNutrientInsights, insightById } from "../../signals/nutrients"
+import {
+  annotateNutrientsWithData,
+  annotateNutrientWithSkipAnswer,
+  fetchNutrientInsights,
+  insightById,
+} from "../../signals/nutrients"
 import "./robotoff-nutrients-table"
 import "../shared/zoomable-image"
 import "../shared/loader"
@@ -129,13 +134,21 @@ export class RobotoffNutrients extends LitElement {
       ])
 
       this.insightsIds = insights.map((insight) => insight.id)
+      if (!this.insightsIds.length) {
+        this.emitNutrientEvent(EventState.NO_DATA)
+        return
+      }
+      this.emitNutrientEvent(EventState.HAS_DATA)
       await this.loadInsight(0)
-      this.emitNutrientEvent(this.insightsIds.length ? EventState.HAS_DATA : EventState.NO_DATA)
     },
     args: () => [this.productCode],
   })
 
   async loadInsight(index: number) {
+    if (index >= this.insightsIds.length) {
+      this.emitNutrientEvent(EventState.FINISHED)
+      return
+    }
     this.currentInsightIndex = index
     const insight = this.currentInsight
     await this.getProductNutriments(insight.barcode)
@@ -161,15 +174,10 @@ export class RobotoffNutrients extends LitElement {
    * @returns {Promise<void>}
    */
   async onSubmit(event: CustomEvent<InsightAnnotationAnswer>) {
-    await annotateNutrients(event.detail)
+    await annotateNutrientsWithData(event.detail)
     this.isSubmited = true
     this.emitNutrientEvent(EventState.ANNOTATED)
-    if (this.currentInsightIndex < this.insightsIds.length - 1) {
-      this.loadInsight(this.currentInsightIndex + 1)
-      return
-    } else {
-      this.emitNutrientEvent(EventState.FINISHED)
-    }
+    this.loadInsight(this.currentInsightIndex + 1)
   }
 
   renderImage(insight: NutrientsInsight) {
@@ -193,6 +201,11 @@ export class RobotoffNutrients extends LitElement {
     `
   }
 
+  async onSkip() {
+    await annotateNutrientWithSkipAnswer(this.currentInsightId)
+    await this.loadInsight(this.currentInsightIndex + 1)
+  }
+
   override render() {
     return this._insightsTask.render({
       pending: () => html`<off-wc-loader></off-wc-loader>`,
@@ -209,6 +222,7 @@ export class RobotoffNutrients extends LitElement {
                 .nutrimentsData="${this.nutrimentsData}"
                 .insight="${insight as NutrientsInsight}"
                 @submit="${this.onSubmit}"
+                @skip="${this.onSkip}"
               ></robotoff-nutrients-table>
             </div>
           </div>

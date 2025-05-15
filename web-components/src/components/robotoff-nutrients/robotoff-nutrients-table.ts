@@ -122,12 +122,10 @@ export class RobotoffNutrientsTable extends LitElement {
         box-sizing: border-box;
       }
 
-      table .submit-row td {
-        padding-top: 0.5rem;
-      }
-
-      .submit-row button {
-        width: 100%;
+      .submit-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
       }
       .input-error-message {
         display: block;
@@ -573,9 +571,15 @@ export class RobotoffNutrientsTable extends LitElement {
       return nothing
     }
 
-    return html`<button type="button" class="alert success with-icons" @click=${() => onClick()}>
+    const text = `${robotoffSuggestion.value} ${robotoffSuggestion.unit}`
+    return html`<button
+      type="button"
+      class="alert success with-icons"
+      @click=${() => onClick()}
+      title=${msg(str`Replace current value by ${text}`)}
+    >
       <suggestion-icon size="16px" color=${GREEN}></suggestion-icon>
-      <span>${robotoffSuggestion.value} ${robotoffSuggestion.unit}</span>
+      <span>${text}</span>
       <add-icon size="16px" color=${GREEN}></add-icon>
     </button>`
   }
@@ -669,7 +673,7 @@ export class RobotoffNutrientsTable extends LitElement {
     nutrient: { value: number | string; unit: string } | undefined
   ) {
     const inputName = this.getInputValueName(key, column)
-    const value = nutrient?.value ?? ""
+    const value = nutrient?.value.toString() ?? ""
     const label = getTaxonomyNameByIdAndLang(key, getLocale())
     const isHidden = this.inputHiddenBySizeAndNutrientKey[column][key]
 
@@ -842,6 +846,9 @@ export class RobotoffNutrientsTable extends LitElement {
     const value = input.value as InsightAnnotationSize
     this.insightAnnotationSize = value
   }
+  onSkip() {
+    this.dispatchEvent(new CustomEvent(EventType.SKIP))
+  }
 
   /**
    * Render the submit row.
@@ -850,7 +857,10 @@ export class RobotoffNutrientsTable extends LitElement {
   renderSubmitRow() {
     return html`
       <div class="submit-row">
-        <button type="submit" class="button chocolate-button">Valider</button>
+        <button type="submit" class="button chocolate-button">${msg("Submit")}</button>
+        <button type="button" class="button white-button" @click=${this.onSkip}>
+          ${msg("Skip")}
+        </button>
       </div>
     `
   }

@@ -5,6 +5,8 @@ import {
   InsightAnnotationAnswer,
   InsightType,
   InsightsRequestParams,
+  AnnotationAnswer,
+  NutrientsAnnotationData,
 } from "../types/robotoff"
 import { SignalMap } from "../utils/signals"
 
@@ -61,9 +63,30 @@ export const fetchNutrientInsights = async (
 }
 
 /**
- * Annotate an insight
+ * Annotate an insight with data
  * @param data
  */
-export const annotateNutrients = async (data: InsightAnnotationAnswer) => {
-  return await robotoff.annotateNutrients(data)
+export const annotateNutrientsWithData = async (annotation: InsightAnnotationAnswer) => {
+  const servingSize = annotation.data["serving_size"]?.value ?? null
+  // Clone the nutrients object to avoid mutating the original annotation.data
+  const clonedData = { ...annotation.data }
+  delete clonedData["serving_size"]
+  const data: NutrientsAnnotationData = {
+    nutrients: clonedData,
+    nutrition_data_per: annotation.type,
+    serving_size: servingSize,
+  }
+  return await robotoff.annotateNutrients(
+    annotation.insightId,
+    AnnotationAnswer.ACCEPT_AND_ADD_DATA,
+    data
+  )
+}
+
+/**
+ * Annotate an insight with a skip answer
+ * @param insightId
+ */
+export const annotateNutrientWithSkipAnswer = async (insightId: string) => {
+  return await robotoff.annotateNutrients(insightId, AnnotationAnswer.SKIP)
 }
