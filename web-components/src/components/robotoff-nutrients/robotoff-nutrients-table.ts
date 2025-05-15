@@ -547,15 +547,28 @@ export class RobotoffNutrientsTable extends LitElement {
     )
   }
 
+  /**
+   * Render the robotoff suggestion button.
+   * If the suggestion is already in the answers, return nothing.
+   * If the suggestion is not in the answers, return a button to add the suggestion.
+   * @param onClick - the function to call when the button is clicked
+   * @param robotoffSuggestion - the robotoff suggestion
+   * @param answer - the answer
+   * @returns the robotoff suggestion button
+   * @
+   */
   renderRobotoffSuggestion(
     onClick: () => void,
     robotoffSuggestion?: { value: string; unit?: string },
     answer?: { value: string; unit?: string }
   ) {
     if (
+      // Check if suggestion is already in the answers
+      // Check if the unit is the same or if the suggestion has no unit
+      // Return nothing if the suggestion is already in the answers
       !robotoffSuggestion?.value ||
       (answer?.value === robotoffSuggestion.value &&
-        (robotoffSuggestion.unit === undefined || answer?.unit === robotoffSuggestion.unit))
+        (!robotoffSuggestion.unit || answer?.unit === robotoffSuggestion.unit))
     ) {
       return nothing
     }
