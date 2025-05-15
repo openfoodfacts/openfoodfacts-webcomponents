@@ -122,7 +122,6 @@ export class RobotoffNutrients extends LitElement {
   private _insightsTask = new Task(this, {
     task: async ([productCode], {}) => {
       this.emitNutrientEvent(EventState.LOADING)
-
       const [insights] = await Promise.all([
         fetchNutrientInsights(productCode),
         fetchNutrientsTaxonomies(),
@@ -167,7 +166,6 @@ export class RobotoffNutrients extends LitElement {
     this.emitNutrientEvent(EventState.ANNOTATED)
     if (this.currentInsightIndex < this.insightsIds.length - 1) {
       this.loadInsight(this.currentInsightIndex + 1)
-      this._insightsTask.run()
       return
     } else {
       this.emitNutrientEvent(EventState.FINISHED)

@@ -31,7 +31,7 @@ import { backgroundImage } from "../../directives/background-image"
 import { ALERT } from "../../styles/alert"
 import { NutrimentsProductType } from "../../types/openfoodfacts"
 import { GREEN } from "../../utils/colors"
-import { setValueAndParentsObjectIfNotExists } from "../../utils"
+import { initDebounce, setValueAndParentsObjectIfNotExists } from "../../utils"
 import { nutrientsOrderByCountryCode, sortKeysByNutrientsOrder } from "../../signals/openfoodfacts"
 import { countryCode } from "../../signals/app"
 
@@ -203,13 +203,13 @@ export class RobotoffNutrientsTable extends LitElement {
   /**
    * Nutriments data
    */
-  @property({ type: Object, attribute: "nutriments-data" })
+  @property({ type: Object, attribute: "nutriments-data", reflect: true })
   nutrimentsData?: NutrimentsProductType
 
   /**
    * The insight to edit
    */
-  @property({ type: Object })
+  @property({ type: Object, reflect: true })
   insight?: NutrientsInsight
 
   /**
@@ -246,6 +246,11 @@ export class RobotoffNutrientsTable extends LitElement {
       "100g": {},
       serving: {},
     }
+
+  @state()
+  private debounceUpdatedInsight = initDebounce(() => {
+    this.onUpdateInsight()
+  })
 
   /**
    * Autocomplete value
@@ -286,6 +291,10 @@ export class RobotoffNutrientsTable extends LitElement {
 
     // Update the nutrients
     this.updateFormatedNutrients()
+    this.inputHiddenBySizeAndNutrientKey = {
+      [InsightAnnotationSize.CENTGRAMS]: {},
+      [InsightAnnotationSize.SERVING]: {},
+    }
   }
 
   /**
@@ -301,8 +310,8 @@ export class RobotoffNutrientsTable extends LitElement {
    */
   override attributeChangedCallback(name: string, oldval: string, newval: string) {
     super.attributeChangedCallback(name, oldval, newval)
-    if (name === "insight") {
-      this.onUpdateInsight()
+    if (["insight", "nutriments-data"].includes(name)) {
+      this.debounceUpdatedInsight()
     }
   }
 
@@ -482,6 +491,19 @@ export class RobotoffNutrientsTable extends LitElement {
     this.requestUpdate()
   }
 
+  setUnitInput(key: string, column: InsightAnnotationSize, unit?: string) {
+    const possibleUnits = getPossibleUnits(key)
+    // check if robotoffSuggestion.unit is valid to not override the unit with an unvalid one
+    const isRobotoffSuggestionUnitValid = possibleUnits.includes(unit ?? "")
+    if (isRobotoffSuggestionUnitValid) {
+      const selectInputUnit = this.shadowRoot!.querySelector<HTMLInputElement>(
+        `select[name="${this.getInputUnitName(key, column)}"]`
+      )
+      if (selectInputUnit) {
+        selectInputUnit.value = unit ?? ""
+      }
+    }
+  }
   addRobotoffSuggestion(key: string, column: InsightAnnotationSize) {
     const robotoffSuggestion = this.nutrients?.robotoff[column][key]
     if (!robotoffSuggestion?.value) {
@@ -493,18 +515,10 @@ export class RobotoffNutrientsTable extends LitElement {
       `${column}.${key}.value`,
       robotoffSuggestion.value
     )
-    this.nutrients![column][key].unit = robotoffSuggestion.unit
-    this.shadowRoot!.querySelector<HTMLInputElement>(
-      `input[name="${this.getInputValueName(key, column)}"]`
-    )!.value = robotoffSuggestion.value
-
-    const selectInputUnit = this.shadowRoot!.querySelector<HTMLInputElement>(
-      `select[name="${this.getInputUnitName(key, column)}"]`
-    )
-    if (selectInputUnit) {
-      selectInputUnit.value = robotoffSuggestion.unit ?? ""
+    if (robotoffSuggestion.unit) {
+      this.nutrients![column][key].unit = robotoffSuggestion.unit
     }
-
+    this.setUnitInput(key, column, robotoffSuggestion.unit)
     this.requestUpdate()
   }
   renderRobotoffSuggestionForNutrient(key: string, column: InsightAnnotationSize) {
@@ -540,10 +554,12 @@ export class RobotoffNutrientsTable extends LitElement {
   ) {
     if (
       !robotoffSuggestion?.value ||
-      (robotoffSuggestion.value === answer?.value && robotoffSuggestion.unit === answer?.unit)
+      (answer?.value === robotoffSuggestion.value &&
+        (robotoffSuggestion.unit === undefined || answer?.unit === robotoffSuggestion.unit))
     ) {
       return nothing
     }
+
     return html`<button type="button" class="alert success with-icons" @click=${() => onClick()}>
       <suggestion-icon size="16px" color=${GREEN}></suggestion-icon>
       <span>${robotoffSuggestion.value} ${robotoffSuggestion.unit}</span>
@@ -663,7 +679,7 @@ export class RobotoffNutrientsTable extends LitElement {
               : html`<input
                   type="text"
                   name="${inputName}"
-                  value="${value}"
+                  .value="${value}"
                   title="${msg("value")}"
                   class="input input-nutritional-value cappucino"
                 />`}
@@ -720,12 +736,6 @@ export class RobotoffNutrientsTable extends LitElement {
     if (isNaN(numberValue)) {
       return {
         error: msg("Error: Invalid value."),
-      }
-    }
-    // Check number have maximum of 5 decimal
-    if (valueCleaned.split(".")[1]?.length > 5) {
-      return {
-        error: msg("Error: Value must have only 5 decimal"),
       }
     }
 
@@ -975,6 +985,8 @@ export class RobotoffNutrientsTable extends LitElement {
     // Implement the logic to toggle the nutrient visibility
     this.inputHiddenBySizeAndNutrientKey[column][nutrientKey] =
       !this.inputHiddenBySizeAndNutrientKey[column][nutrientKey]
+
+    this.requestUpdate()
   }
 
   /**
