@@ -162,10 +162,6 @@
         <source>Add</source>
         <target state="translated">إضافة</target>
       </trans-unit>
-      <trans-unit id="sae2a8d4546d3ba85">
-        <source>Error: Value must have only 5 decimal</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">خطأ: يجب أن تحتوي القيمة على 5 أرقام عشرية فقط</target>
-      </trans-unit>
       <trans-unit id="s5666afe5cd0166de">
         <source>Please fix the errors or modify the text before confirming</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">يرجى تصحيح الأخطاء أو تعديل النص قبل التأكيد</target>
@@ -328,6 +324,12 @@
         <target state="needs-review-translation" state-qualifier="leveraged-mt">هذا مُقدّم من مشروع محرك Folksonomy Engine
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/><x id="1" equiv-text="&lt;/a&gt;"/>. لا تترددوا في المشاركة أو إبداء آرائكم.</target>
       </trans-unit>
+<trans-unit id="sf44a6b3b232c28ea">
+  <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
+</trans-unit>
+<trans-unit id="s0fb218abc2e157ed">
+  <source>Invalidate image</source>
+</trans-unit>
     </body>
   </file>
 </xliff>

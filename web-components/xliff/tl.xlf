@@ -162,10 +162,6 @@
         <source>Add</source>
         <target state="translated">Magdagdag</target>
       </trans-unit>
-      <trans-unit id="sae2a8d4546d3ba85">
-        <source>Error: Value must have only 5 decimal</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Error: Dapat ay 5 decimal lang ang value</target>
-      </trans-unit>
       <trans-unit id="s5666afe5cd0166de">
         <source>Please fix the errors or modify the text before confirming</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">Mangyaring ayusin ang mga error o baguhin ang teksto bago kumpirmahin</target>
@@ -328,6 +324,12 @@
         <target state="needs-review-translation" state-qualifier="leveraged-mt">Dala ito ng
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Huwag mag-atubiling lumahok o magbigay ng feedback.</target>
       </trans-unit>
+<trans-unit id="sf44a6b3b232c28ea">
+  <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
+</trans-unit>
+<trans-unit id="s0fb218abc2e157ed">
+  <source>Invalidate image</source>
+</trans-unit>
     </body>
   </file>
 </xliff>

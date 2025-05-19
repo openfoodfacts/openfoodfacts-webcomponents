@@ -162,10 +162,6 @@
         <source>Add</source>
         <target state="translated">추가하기</target>
       </trans-unit>
-      <trans-unit id="sae2a8d4546d3ba85">
-        <source>Error: Value must have only 5 decimal</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">오류: 값은 소수점 5자리만 있어야 합니다.</target>
-      </trans-unit>
       <trans-unit id="s5666afe5cd0166de">
         <source>Please fix the errors or modify the text before confirming</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">확인 전 오류를 수정하거나 텍스트를 수정해 주세요.</target>
@@ -328,6 +324,12 @@
         <target state="needs-review-translation" state-qualifier="leveraged-mt">이 기능은
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine 프로젝트<x id="1" equiv-text="&lt;/a&gt;"/>에서 제공됩니다. 참여하거나 피드백을 주시기 바랍니다.</target>
       </trans-unit>
+<trans-unit id="sf44a6b3b232c28ea">
+  <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
+</trans-unit>
+<trans-unit id="s0fb218abc2e157ed">
+  <source>Invalidate image</source>
+</trans-unit>
     </body>
   </file>
 </xliff>
