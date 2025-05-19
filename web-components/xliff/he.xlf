@@ -326,7 +326,7 @@
       </trans-unit>
       <trans-unit id="sf44a6b3b232c28ea">
         <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">החלף את הערך הנוכחי ב- <x id="0" equiv-text="${text}"/></target>
+        <target state="translated">החלפת הערך הנוכחי בערך <x id="0" equiv-text="${text}"/></target>
       </trans-unit>
       <trans-unit id="s0fb218abc2e157ed">
         <source>Invalidate image</source>
