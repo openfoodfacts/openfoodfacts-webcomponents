@@ -28,3 +28,18 @@ export type QuestionStateEventDetail = {
 } & BasicStateEventDetail
 
 export type QuestionStateEvent = CustomEvent<QuestionStateEventDetail>
+
+export type AutocompleteInputChangeEventDetail = {
+  value: string
+  filteredSuggestions: AutocompleteSuggestion[]
+  matching?: AutocompleteSuggestion
+}
+
+export type AutocompleteInputChangeEvent = CustomEvent<AutocompleteInputChangeEventDetail>
+
+export type AutocompleteSuggestionSelectEvent = CustomEvent<AutocompleteSuggestion>
+
+export type AutocompleteSuggestion = {
+  label?: string
+  value: string
+}

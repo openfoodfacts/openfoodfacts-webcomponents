@@ -147,3 +147,9 @@ export type NutrientsAnnotationData = {
   nutrients: Record<string, NutrientAnotationFormData>
   nutrition_data_per: string
 }
+
+export type AnnotationFormData = {
+  insight_id: string
+  annotation: AnnotationAnswer
+  data?: string
+}

@@ -1,6 +1,13 @@
 import { Computed } from "@lit-labs/signals"
 import robotoff from "../api/robotoff"
-import { NutrientsInsight, InsightAnnotationAnswer, InsightType } from "../types/robotoff"
+import {
+  NutrientsInsight,
+  InsightAnnotationAnswer,
+  InsightType,
+  InsightsRequestParams,
+  AnnotationAnswer,
+  NutrientsAnnotationData,
+} from "../types/robotoff"
 import { SignalMap } from "../utils/signals"
 
 /**
@@ -32,34 +39,57 @@ export const insight = (productCode: string) => {
  * Fetch the incomplete nutrients insights for a given product code
  * @param productCode
  */
-export const fetchNutrientInsightsByProductCode = async (
-  productCode: string
+export const fetchNutrientInsights = async (
+  productCode?: string,
+  requestParams: InsightsRequestParams = {}
 ): Promise<NutrientsInsight[]> => {
-  const response = await robotoff.insights<NutrientsInsight>({
-    barcode: productCode,
+  const params: InsightsRequestParams = {
+    ...requestParams,
     insight_types: InsightType.nutrient_extraction,
-    // Add this to filter out already annotated insights
     annotated: false,
-  })
-  if (response.insights?.length === 0) {
+  }
+  if (productCode) {
+    params["barcode"] = productCode
     insightIdByProductCode.setItem(productCode, null)
-    return []
   }
-  if (response.insights?.length > 1) {
-    console.warn("More than one insight found")
-  }
+  const response = await robotoff.insights<NutrientsInsight>(params)
 
-  const insight = response.insights[0]
-  insightById.setItem(insight.id, insight)
+  response.insights.forEach((insight) => {
+    insightById.setItem(insight.id, insight)
+    insightIdByProductCode.setItem(insight.barcode, insight.id)
+  })
 
-  insightIdByProductCode.setItem(productCode, insight.id)
   return response.insights
 }
 
 /**
- * Annotate an insight
+ * Annotate an insight with data
  * @param data
  */
-export const annotateNutrients = async (data: InsightAnnotationAnswer) => {
-  return await robotoff.annotateNutrients(data)
+export const annotateNutrientsWithData = async (annotation: InsightAnnotationAnswer) => {
+  const servingSize = annotation.data["serving_size"]?.value ?? null
+  // Clone the nutrients object to avoid mutating the original annotation.data
+  const clonedData = { ...annotation.data }
+  delete clonedData["serving_size"]
+  const data: NutrientsAnnotationData = {
+    nutrients: clonedData,
+    nutrition_data_per: annotation.type,
+    serving_size: servingSize,
+  }
+  return await robotoff.annotateNutrients(
+    annotation.insightId,
+    AnnotationAnswer.ACCEPT_AND_ADD_DATA,
+    data
+  )
+}
+
+/**
+ * Annotate an insight with annotation answer
+ * @param insightId
+ */
+export const annotateNutrientWitoutData = async (
+  insightId: string,
+  annotation: AnnotationAnswer
+) => {
+  return await robotoff.annotateNutrients(insightId, annotation)
 }

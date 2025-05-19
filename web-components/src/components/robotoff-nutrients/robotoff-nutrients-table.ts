@@ -31,15 +31,17 @@ import { backgroundImage } from "../../directives/background-image"
 import { ALERT } from "../../styles/alert"
 import { NutrimentsProductType } from "../../types/openfoodfacts"
 import { GREEN } from "../../utils/colors"
-import { setValueAndParentsObjectIfNotExists } from "../../utils"
+import { initDebounce, setValueAndParentsObjectIfNotExists } from "../../utils"
 import { nutrientsOrderByCountryCode, sortKeysByNutrientsOrder } from "../../signals/openfoodfacts"
 import { countryCode } from "../../signals/app"
 
+import "../shared/autocomplete-input"
 import "../icons/suggestion"
 import "../icons/add"
 import "../icons/eye-visible"
 
 import "../icons/eye-invisible"
+import { AutocompleteInputChangeEvent, AutocompleteSuggestionSelectEvent } from "../../types"
 export const ALLOWED_SPECIAL_VALUES = ["", "-", "traces"]
 
 export type FormatedNutrimentData = {
@@ -82,7 +84,7 @@ const SERVING_SIZE_SELECT_NAME = "serving_size_select"
 @localized()
 export class RobotoffNutrientsTable extends LitElement {
   static override styles = [
-    ...getButtonClasses([ButtonType.Chocolate]),
+    ...getButtonClasses([ButtonType.Success, ButtonType.Danger, ButtonType.White]),
     SELECT,
     INPUT,
     FLEX,
@@ -120,12 +122,14 @@ export class RobotoffNutrientsTable extends LitElement {
         box-sizing: border-box;
       }
 
-      table .submit-row td {
-        padding-top: 0.5rem;
+      .submit-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
       }
 
-      .submit-row button {
-        width: 100%;
+      .submit-row .success-button {
+        grid-column: 1 / 3;
       }
       .input-error-message {
         display: block;
@@ -201,13 +205,13 @@ export class RobotoffNutrientsTable extends LitElement {
   /**
    * Nutriments data
    */
-  @property({ type: Object, attribute: "nutriments-data" })
+  @property({ type: Object, attribute: "nutriments-data", reflect: true })
   nutrimentsData?: NutrimentsProductType
 
   /**
    * The insight to edit
    */
-  @property({ type: Object })
+  @property({ type: Object, reflect: true })
   insight?: NutrientsInsight
 
   /**
@@ -245,6 +249,17 @@ export class RobotoffNutrientsTable extends LitElement {
       serving: {},
     }
 
+  @state()
+  private debounceUpdatedInsight = initDebounce(() => {
+    this.onUpdateInsight()
+  })
+
+  /**
+   * Autocomplete value
+   */
+  @state()
+  autocompleteValue: string = ""
+
   @query(`input[name='${NUTRIENT_SERVING_SIZE_KEY}']`)
   private servingSizeInput?: HTMLInputElement
 
@@ -278,6 +293,10 @@ export class RobotoffNutrientsTable extends LitElement {
 
     // Update the nutrients
     this.updateFormatedNutrients()
+    this.inputHiddenBySizeAndNutrientKey = {
+      [InsightAnnotationSize.CENTGRAMS]: {},
+      [InsightAnnotationSize.SERVING]: {},
+    }
   }
 
   /**
@@ -293,8 +312,8 @@ export class RobotoffNutrientsTable extends LitElement {
    */
   override attributeChangedCallback(name: string, oldval: string, newval: string) {
     super.attributeChangedCallback(name, oldval, newval)
-    if (name === "insight") {
-      this.onUpdateInsight()
+    if (["insight", "nutriments-data"].includes(name)) {
+      this.debounceUpdatedInsight()
     }
   }
 
@@ -474,6 +493,19 @@ export class RobotoffNutrientsTable extends LitElement {
     this.requestUpdate()
   }
 
+  setUnitInput(key: string, column: InsightAnnotationSize, unit?: string) {
+    const possibleUnits = getPossibleUnits(key)
+    // check if robotoffSuggestion.unit is valid to not override the unit with an unvalid one
+    const isRobotoffSuggestionUnitValid = possibleUnits.includes(unit ?? "")
+    if (isRobotoffSuggestionUnitValid) {
+      const selectInputUnit = this.shadowRoot!.querySelector<HTMLInputElement>(
+        `select[name="${this.getInputUnitName(key, column)}"]`
+      )
+      if (selectInputUnit) {
+        selectInputUnit.value = unit ?? ""
+      }
+    }
+  }
   addRobotoffSuggestion(key: string, column: InsightAnnotationSize) {
     const robotoffSuggestion = this.nutrients?.robotoff[column][key]
     if (!robotoffSuggestion?.value) {
@@ -485,14 +517,10 @@ export class RobotoffNutrientsTable extends LitElement {
       `${column}.${key}.value`,
       robotoffSuggestion.value
     )
-    this.nutrients![column][key].unit = robotoffSuggestion.unit
-    this.shadowRoot!.querySelector<HTMLInputElement>(
-      `input[name="${this.getInputValueName(key, column)}"]`
-    )!.value = robotoffSuggestion.value
-    this.shadowRoot!.querySelector<HTMLInputElement>(
-      `input[name="${this.getInputUnitName(key, column)}"]`
-    )!.value = robotoffSuggestion.unit
-
+    if (robotoffSuggestion.unit) {
+      this.nutrients![column][key].unit = robotoffSuggestion.unit
+    }
+    this.setUnitInput(key, column, robotoffSuggestion.unit)
     this.requestUpdate()
   }
   renderRobotoffSuggestionForNutrient(key: string, column: InsightAnnotationSize) {
@@ -521,20 +549,41 @@ export class RobotoffNutrientsTable extends LitElement {
     )
   }
 
+  /**
+   * Render the robotoff suggestion button.
+   * If the suggestion is already in the answers, return nothing.
+   * If the suggestion is not in the answers, return a button to add the suggestion.
+   * @param onClick - the function to call when the button is clicked
+   * @param robotoffSuggestion - the robotoff suggestion
+   * @param answer - the answer
+   * @returns the robotoff suggestion button
+   * @
+   */
   renderRobotoffSuggestion(
     onClick: () => void,
     robotoffSuggestion?: { value: string; unit?: string },
     answer?: { value: string; unit?: string }
   ) {
     if (
+      // Check if suggestion is already in the answers
+      // Check if the unit is the same or if the suggestion has no unit
+      // Return nothing if the suggestion is already in the answers
       !robotoffSuggestion?.value ||
-      (robotoffSuggestion.value === answer?.value && robotoffSuggestion.unit === answer?.unit)
+      (answer?.value === robotoffSuggestion.value &&
+        (!robotoffSuggestion.unit || answer?.unit === robotoffSuggestion.unit))
     ) {
       return nothing
     }
-    return html`<button class="alert success with-icons" @click=${() => onClick()}>
+
+    const text = `${robotoffSuggestion.value} ${robotoffSuggestion.unit}`
+    return html`<button
+      type="button"
+      class="alert success with-icons"
+      @click=${() => onClick()}
+      title=${msg(str`Replace current value by ${text}`)}
+    >
       <suggestion-icon size="16px" color=${GREEN}></suggestion-icon>
-      <span>${robotoffSuggestion.value} ${robotoffSuggestion.unit}</span>
+      <span>${text}</span>
       <add-icon size="16px" color=${GREEN}></add-icon>
     </button>`
   }
@@ -595,23 +644,22 @@ export class RobotoffNutrientsTable extends LitElement {
           )}
         </select>
       `
+    } else if (possibleUnits[0]) {
+      return html`<input
+          type="hidden"
+          name="${inputName}"
+          .value="${possibleUnits[0]}"
+          ?disabled=${disabled}
+        />
+        <select
+          class=${selectsClasses}
+          disabled
+          style=${backgroundImage(WHITE_SELECT_ICON_FILE_NAME)}
+        >
+          <option value="${possibleUnits[0]}" selected>${possibleUnits[0]}</option>
+        </select>`
     } else {
-      return possibleUnits[0]
-        ? html` <input
-              type="hidden"
-              name="${inputName}"
-              value="${possibleUnits[0]}"
-              ?disabled=${disabled}
-            />
-            <select
-              name=${inputName}
-              class=${selectsClasses}
-              disabled
-              style=${backgroundImage(WHITE_SELECT_ICON_FILE_NAME)}
-            >
-              <option value="${possibleUnits[0]!}" selected>${possibleUnits[0]}</option>
-            </select>`
-        : nothing
+      return nothing
     }
   }
 
@@ -629,7 +677,7 @@ export class RobotoffNutrientsTable extends LitElement {
     nutrient: { value: number | string; unit: string } | undefined
   ) {
     const inputName = this.getInputValueName(key, column)
-    const value = nutrient?.value ?? ""
+    const value = nutrient?.value.toString() ?? ""
     const label = getTaxonomyNameByIdAndLang(key, getLocale())
     const isHidden = this.inputHiddenBySizeAndNutrientKey[column][key]
 
@@ -652,7 +700,7 @@ export class RobotoffNutrientsTable extends LitElement {
               : html`<input
                   type="text"
                   name="${inputName}"
-                  value="${value}"
+                  .value="${value}"
                   title="${msg("value")}"
                   class="input input-nutritional-value cappucino"
                 />`}
@@ -709,12 +757,6 @@ export class RobotoffNutrientsTable extends LitElement {
     if (isNaN(numberValue)) {
       return {
         error: msg("Error: Invalid value."),
-      }
-    }
-    // Check number have maximum of 5 decimal
-    if (valueCleaned.split(".")[1]?.length > 5) {
-      return {
-        error: msg("Error: Value must have only 5 decimal"),
       }
     }
 
@@ -808,6 +850,12 @@ export class RobotoffNutrientsTable extends LitElement {
     const value = input.value as InsightAnnotationSize
     this.insightAnnotationSize = value
   }
+  onSkip() {
+    this.dispatchEvent(new CustomEvent(EventType.SKIP))
+  }
+  onRefuse() {
+    this.dispatchEvent(new CustomEvent(EventType.REFUSE))
+  }
 
   /**
    * Render the submit row.
@@ -816,7 +864,13 @@ export class RobotoffNutrientsTable extends LitElement {
   renderSubmitRow() {
     return html`
       <div class="submit-row">
-        <button type="submit" class="button chocolate-button">Valider</button>
+        <button type="submit" class="button success-button">${msg("Submit")}</button>
+        <button type="button" class="button danger-button" @click=${this.onRefuse}>
+          ${msg("Invalidate image")}
+        </button>
+        <button type="button" class="button white-button" @click=${this.onSkip}>
+          ${msg("Skip")}
+        </button>
       </div>
     `
   }
@@ -836,7 +890,7 @@ export class RobotoffNutrientsTable extends LitElement {
           class="input cappucino"
           name=${NUTRIENT_SERVING_SIZE_KEY}
           type="text"
-          value=${servingSize}
+          .value=${servingSize}
           @change=${this.onChangeServingSize}
         />
       </label>
@@ -877,16 +931,17 @@ export class RobotoffNutrientsTable extends LitElement {
     `
   }
 
-  onAddNutrient(event: Event) {
-    event.preventDefault()
-    event.stopPropagation()
+  onAddNutrient(event: AutocompleteSuggestionSelectEvent) {
+    const nutrientId = event.detail.value
+    // Set it to the autocomplete value to force the component to update even if value is the same
+    this.autocompleteValue = event.detail.label!
 
-    const selectElement = event.target as HTMLSelectElement
-    const nutrientId = selectElement.value
     this.addKeysSet(nutrientId)
-    selectElement.value = ""
-    // Force the component to update to render the new rows
-    this.requestUpdate()
+
+    // Reset the autocomplete value after to force the component to update even if
+    requestAnimationFrame(() => {
+      this.autocompleteValue = ""
+    })
   }
 
   /**
@@ -902,6 +957,10 @@ export class RobotoffNutrientsTable extends LitElement {
     this.submitFormData(formData, this.insightAnnotationSize)
   }
 
+  onAutocompleteInput(event: AutocompleteInputChangeEvent) {
+    this.autocompleteValue = event.detail.value
+  }
+
   /**
    * Render the row to add a new nutrient.
    * @param alreadyAddedNutrients
@@ -912,10 +971,11 @@ export class RobotoffNutrientsTable extends LitElement {
       .get()
       // filter out the nutrients that are already added to the table
       .filter((nutrientTaxonomy) => !alreadyAddedNutrients.includes(nutrientTaxonomy.id))
-      // map to the format expected by the select component
+      // map to the format expected by the autocomplete-input component
       .map((nutrientTaxonomy) => ({
         id: nutrientTaxonomy.id,
         label: getTaxonomyNameByLang(nutrientTaxonomy, lang),
+        value: nutrientTaxonomy.id,
       }))
       // sort the nutrients by label
       .sort((a, b) => a.label.localeCompare(b.label))
@@ -927,16 +987,13 @@ export class RobotoffNutrientsTable extends LitElement {
 
     return html`
       <div class="add-nutrient-row">
-        <select
-          class="select"
-          @change=${this.onAddNutrient}
-          style=${backgroundImage(SELECT_ICON_FILE_NAME)}
-        >
-          <option>${msg("Add a nutrient")}</option>
-          ${filteredNutrientTaxonomies.map(
-            (taxonomy) => html` <option value=${taxonomy.id}>${taxonomy.label}</option> `
-          )}
-        </select>
+        <autocomplete-input
+          placeholder="${msg("Add a nutrient")}"
+          .value=${this.autocompleteValue}
+          @input-change=${(event: AutocompleteInputChangeEvent) => this.onAutocompleteInput(event)}
+          .suggestions=${filteredNutrientTaxonomies}
+          @suggestion-select=${this.onAddNutrient}
+        ></autocomplete-input>
       </div>
     `
   }
@@ -961,6 +1018,8 @@ export class RobotoffNutrientsTable extends LitElement {
     // Implement the logic to toggle the nutrient visibility
     this.inputHiddenBySizeAndNutrientKey[column][nutrientKey] =
       !this.inputHiddenBySizeAndNutrientKey[column][nutrientKey]
+
+    this.requestUpdate()
   }
 
   /**
@@ -971,6 +1030,7 @@ export class RobotoffNutrientsTable extends LitElement {
     return html`
       <div class="toggle-nutrient-button-wrapper">
         <button
+          type="button"
           class="button chocolate-button"
           @click=${() => this.toggleNutrient(column, nutrientKey)}
         >
