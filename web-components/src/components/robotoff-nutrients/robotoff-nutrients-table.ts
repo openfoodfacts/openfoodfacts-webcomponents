@@ -818,7 +818,6 @@ export class RobotoffNutrientsTable extends LitElement {
       if (isUnit) {
         name = name.replace(NUTRIENT_UNIT_NAME_PREFIX, "")
       }
-      name = name.replace(`_${column}`, "")
 
       if (!nutrientAnotationForm[name]) {
         nutrientAnotationForm[name] = {

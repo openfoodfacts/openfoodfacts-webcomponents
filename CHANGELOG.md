@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.1] - 2025-05-19
+
+### Fixed
+
+- Fix robotoff suggestions to avoid showing `null` unit in `robotoff-nutrients-table`
+
 ## [1.5.0] - 2025-05-19
 
 ### Added
