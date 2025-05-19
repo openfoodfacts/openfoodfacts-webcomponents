@@ -575,7 +575,7 @@ export class RobotoffNutrientsTable extends LitElement {
       return nothing
     }
 
-    const text = `${robotoffSuggestion.value} ${robotoffSuggestion.unit}`
+    const text = `${robotoffSuggestion.value} ${robotoffSuggestion.unit ?? ""}`
     return html`<button
       type="button"
       class="alert success with-icons"
@@ -818,6 +818,7 @@ export class RobotoffNutrientsTable extends LitElement {
       if (isUnit) {
         name = name.replace(NUTRIENT_UNIT_NAME_PREFIX, "")
       }
+      name = name.replace(`_${column}`, "")
 
       if (!nutrientAnotationForm[name]) {
         nutrientAnotationForm[name] = {
@@ -825,7 +826,6 @@ export class RobotoffNutrientsTable extends LitElement {
           unit: null,
         }
       }
-
       nutrientAnotationForm[name][isUnit ? "unit" : "value"] = value as string
     }
 
