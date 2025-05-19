@@ -162,10 +162,6 @@
         <source>Add</source>
         <target state="needs-translation">Add</target>
       </trans-unit>
-      <trans-unit id="sae2a8d4546d3ba85">
-        <source>Error: Value must have only 5 decimal</source>
-        <target state="needs-translation">Error: Value must have only 5 decimal</target>
-      </trans-unit>
       <trans-unit id="s5666afe5cd0166de">
         <source>Please fix the errors or modify the text before confirming</source>
         <target state="needs-translation">Please fix the errors or modify the text before confirming</target>
@@ -315,12 +311,26 @@
                     <x id="2" equiv-text="&lt;a href=&quot;https://openfoodfacts-explorer.vercel.app/folksonomy&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
                     or explore the
                     <x id="4" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</source>
-       </trans-unit>
+        <target state="needs-translation">These properties are created and filed by users for any kind of usages. Feel
+                    free to add your own. The properties and values you create
+                    <x id="0" equiv-text="&lt;strong&gt;"/>must be factual<x id="1" equiv-text="&lt;/strong&gt;"/>. You can dive into
+                    <x id="2" equiv-text="&lt;a href=&quot;https://openfoodfacts-explorer.vercel.app/folksonomy&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
+                    or explore the
+                    <x id="4" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
+      </trans-unit>
       <trans-unit id="h76766ba4ed1addb3">
         <source>This is brought by the
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't hesitate to participate or give feedback.</source>
         <target state="needs-translation">This is brought by the
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't hesitate to participate or give feedback.</target>
+      </trans-unit>
+      <trans-unit id="sf44a6b3b232c28ea">
+        <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
+        <target state="needs-translation">Replace current value by <x id="0" equiv-text="${text}"/></target>
+      </trans-unit>
+      <trans-unit id="s0fb218abc2e157ed">
+        <source>Invalidate image</source>
+        <target state="needs-translation">Invalidate image</target>
       </trans-unit>
     </body>
   </file>
