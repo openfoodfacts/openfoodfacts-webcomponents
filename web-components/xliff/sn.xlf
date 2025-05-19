@@ -154,130 +154,181 @@
         <source>Expand image</source>
         <target state="needs-translation">Expand image</target>
       </trans-unit>
-<trans-unit id="sab56a1d439576fd6">
-  <source>Suggestion icon</source>
-</trans-unit>
-<trans-unit id="sf9aee319a006c9b4">
-  <source>Add</source>
-</trans-unit>
-<trans-unit id="sae2a8d4546d3ba85">
-  <source>Error: Value must have only 5 decimal</source>
-</trans-unit>
-<trans-unit id="s5666afe5cd0166de">
-  <source>Please fix the errors or modify the text before confirming</source>
-</trans-unit>
-<trans-unit id="s4e48a2bd81627639">
-  <source>Accept this change</source>
-</trans-unit>
-<trans-unit id="se286e1ae25e76775">
-  <source>Accept this addition</source>
-</trans-unit>
-<trans-unit id="s5ad69bf372513ebb">
-  <source>Accept this removal</source>
-</trans-unit>
-<trans-unit id="s06f6c6f99db6b552">
-  <source>Original</source>
-</trans-unit>
-<trans-unit id="sc57b630a7a70c61f">
-  <source>Suggested fix</source>
-</trans-unit>
-<trans-unit id="s417b90913e05bc17">
-  <source>Preview</source>
-</trans-unit>
-<trans-unit id="s5dd6f12783fca34f">
-  <source>Edit ingredients list</source>
-</trans-unit>
-<trans-unit id="s33f85f24c0f5f008">
-  <source>Save</source>
-</trans-unit>
-<trans-unit id="s2ceb11be2290bb1b">
-  <source>Cancel</source>
-</trans-unit>
-<trans-unit id="s66413c24dcf680e2">
-  <source>Skip</source>
-</trans-unit>
-<trans-unit id="s64ef2a6c2dd1d3d1">
-  <source>Edit</source>
-</trans-unit>
-<trans-unit id="h6bdd1b427aa985a4">
-  <source>This tool allows you to correct the ingredients list. You can add, remove or edit
+      <trans-unit id="sab56a1d439576fd6">
+        <source>Suggestion icon</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Suggestion icon</target>
+      </trans-unit>
+      <trans-unit id="sf9aee319a006c9b4">
+        <source>Add</source>
+        <target state="needs-translation">Add</target>
+      </trans-unit>
+      <trans-unit id="s5666afe5cd0166de">
+        <source>Please fix the errors or modify the text before confirming</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ndokumbira ugadzirise zvakanganisa kana gadzirisa zvinyorwa usati wasimbisa</target>
+      </trans-unit>
+      <trans-unit id="s4e48a2bd81627639">
+        <source>Accept this change</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Bvuma shanduko iyi</target>
+      </trans-unit>
+      <trans-unit id="se286e1ae25e76775">
+        <source>Accept this addition</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Bvuma kuwedzera uku</target>
+      </trans-unit>
+      <trans-unit id="s5ad69bf372513ebb">
+        <source>Accept this removal</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Bvuma kubviswa uku</target>
+      </trans-unit>
+      <trans-unit id="s06f6c6f99db6b552">
+        <source>Original</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Original</target>
+      </trans-unit>
+      <trans-unit id="sc57b630a7a70c61f">
+        <source>Suggested fix</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Yakakurudzirwa kugadzirisa</target>
+      </trans-unit>
+      <trans-unit id="s417b90913e05bc17">
+        <source>Preview</source>
+        <target state="needs-translation">Preview</target>
+      </trans-unit>
+      <trans-unit id="s5dd6f12783fca34f">
+        <source>Edit ingredients list</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Rongedza zvinyorwa zvinyorwa</target>
+      </trans-unit>
+      <trans-unit id="s33f85f24c0f5f008">
+        <source>Save</source>
+        <target state="needs-translation">Save</target>
+      </trans-unit>
+      <trans-unit id="s2ceb11be2290bb1b">
+        <source>Cancel</source>
+        <target state="needs-translation">Cancel</target>
+      </trans-unit>
+      <trans-unit id="s66413c24dcf680e2">
+        <source>Skip</source>
+        <target state="needs-translation">Skip</target>
+      </trans-unit>
+      <trans-unit id="s64ef2a6c2dd1d3d1">
+        <source>Edit</source>
+        <target state="needs-translation">Edit</target>
+      </trans-unit>
+      <trans-unit id="h6bdd1b427aa985a4">
+        <source>This tool allows you to correct the ingredients list. You can add, remove or edit
                 ingredients list.
                 <x id="0" equiv-text="&lt;br&gt;"/>
                 This character <x id="1" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>␣<x id="2" equiv-text="&lt;/span&gt;"/> represents a space.
                 <x id="3" equiv-text="&lt;br&gt;"/>
                 This character <x id="4" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>↩︎<x id="5" equiv-text="&lt;/span&gt;"/> represents a line break. </source>
-</trans-unit>
-<trans-unit id="s11a18a69b30b65ed">
-  <source>Help us fix errors in ingredients list</source>
-</trans-unit>
-<trans-unit id="sbd6be5cde472f37c">
-  <source>All insights have been answered! Thanks for your help!</source>
-</trans-unit>
-<trans-unit id="sa95b4224f685a36a">
-  <source>Close modal</source>
-</trans-unit>
-<trans-unit id="s67ae6594857a4d57">
-  <source>Thanks for your contribution!</source>
-</trans-unit>
-<trans-unit id="s061eb5af92512c85">
-  <source>Saved! Can you help with another one?</source>
-</trans-unit>
-<trans-unit id="sb125568d43642e6f">
-  <source>Answer questions about the product.</source>
-</trans-unit>
-<trans-unit id="sdc792b75f1edcaba">
-  <source>Help us correct the spelling of ingredients.</source>
-</trans-unit>
-<trans-unit id="s5c92c0051d44b6de">
-  <source>Help us correct the nutritional information.</source>
-</trans-unit>
-<trans-unit id="sd698d21ddecba56b">
-  <source>Hey! You can help us improve the product information by answering the following parts:</source>
-</trans-unit>
-<trans-unit id="s05ec315d9308091a">
-  <source>Barcode corners icon</source>
-</trans-unit>
-<trans-unit id="sb5ceccad457e8cae">
-  <source>Are you sure you want to delete this item?</source>
-</trans-unit>
-<trans-unit id="sdc673e73b5c13aea">
-  <source>Delete</source>
-</trans-unit>
-<trans-unit id="s15d64a0a6715285a">
-  <source>New key</source>
-</trans-unit>
-<trans-unit id="scb3b0671d7b7f640">
-  <source>New value</source>
-</trans-unit>
-<trans-unit id="sb3d4f79d9d8b71e5">
-  <source>Submit</source>
-</trans-unit>
-<trans-unit id="s0d5b7fee0311db68">
-  <source>Property</source>
-</trans-unit>
-<trans-unit id="s41f7dca46d3f1b4a">
-  <source>Value</source>
-</trans-unit>
-<trans-unit id="s8af61807443f32a4">
-  <source>Actions</source>
-</trans-unit>
-<trans-unit id="seffa8ca49175b5f0">
-  <source>Personalized properties</source>
-</trans-unit>
-<trans-unit id="s907f7a97c6b29425">
-  <source>Be aware the data model might be modified. Use at your own risk.</source>
-</trans-unit>
-<trans-unit id="hdbe45450d1a6419b">
-  <source>These properties are created and filed by users for any kind of usages. Feel
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ichi chishandiso chinokubvumira kuti ugadzirise rondedzero yezvinyorwa. Iwe unogona kuwedzera, kubvisa kana kugadzirisa
+                zvinyorwa zvinyorwa.
+                <x id="0" equiv-text="&lt;br&gt;"/>
+                Uyu hunhu <x id="1" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>␣<x id="2" equiv-text="&lt;/span&gt;"/> unomiririra nzvimbo.
+                <x id="3" equiv-text="&lt;br&gt;"/>
+                Uyu hunhu <x id="4" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>↩︎<x id="5" equiv-text="&lt;/span&gt;"/> unomiririra kutyora mutsetse. </target>
+      </trans-unit>
+      <trans-unit id="s11a18a69b30b65ed">
+        <source>Help us fix errors in ingredients list</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Tibatsire kugadzirisa zvikanganiso muzvinyorwa zvinyorwa</target>
+      </trans-unit>
+      <trans-unit id="sbd6be5cde472f37c">
+        <source>All insights have been answered! Thanks for your help!</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Mafungiro ese akapindurwa! Ndatenda nerubatsiro rwenyu!</target>
+      </trans-unit>
+      <trans-unit id="sa95b4224f685a36a">
+        <source>Close modal</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Vhara modal</target>
+      </trans-unit>
+      <trans-unit id="s67ae6594857a4d57">
+        <source>Thanks for your contribution!</source>
+        <target state="needs-translation">Thanks for your contribution!</target>
+      </trans-unit>
+      <trans-unit id="s061eb5af92512c85">
+        <source>Saved! Can you help with another one?</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Saved! Unogona kubatsira neimwe here?</target>
+      </trans-unit>
+      <trans-unit id="sb125568d43642e6f">
+        <source>Answer questions about the product.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Pindura mibvunzo pamusoro pechigadzirwa.</target>
+      </trans-unit>
+      <trans-unit id="sdc792b75f1edcaba">
+        <source>Help us correct the spelling of ingredients.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Tibatsirei kugadzirisa zviperengo zvezvigadzirwa.</target>
+      </trans-unit>
+      <trans-unit id="s5c92c0051d44b6de">
+        <source>Help us correct the nutritional information.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Tibatsire kugadzirisa ruzivo rwezvekudya.</target>
+      </trans-unit>
+      <trans-unit id="sd698d21ddecba56b">
+        <source>Hey! You can help us improve the product information by answering the following parts:</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Hey! Unogona kutibatsira kuvandudza ruzivo rwechigadzirwa nekupindura zvikamu zvinotevera:</target>
+      </trans-unit>
+      <trans-unit id="s05ec315d9308091a">
+        <source>Barcode corners icon</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Barcode makona icon</target>
+      </trans-unit>
+      <trans-unit id="sb5ceccad457e8cae">
+        <source>Are you sure you want to delete this item?</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Une chokwadi chekuti unoda kudzima chinhu ichi?</target>
+      </trans-unit>
+      <trans-unit id="sdc673e73b5c13aea">
+        <source>Delete</source>
+        <target state="needs-translation">Delete</target>
+      </trans-unit>
+      <trans-unit id="s15d64a0a6715285a">
+        <source>New key</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Kiyi itsva</target>
+      </trans-unit>
+      <trans-unit id="scb3b0671d7b7f640">
+        <source>New value</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Kukosha kutsva</target>
+      </trans-unit>
+      <trans-unit id="sb3d4f79d9d8b71e5">
+        <source>Submit</source>
+        <target state="needs-translation">Submit</target>
+      </trans-unit>
+      <trans-unit id="s0d5b7fee0311db68">
+        <source>Property</source>
+        <target state="needs-translation">Property</target>
+      </trans-unit>
+      <trans-unit id="s41f7dca46d3f1b4a">
+        <source>Value</source>
+        <target state="needs-translation">Value</target>
+      </trans-unit>
+      <trans-unit id="s8af61807443f32a4">
+        <source>Actions</source>
+        <target state="needs-translation">Actions</target>
+      </trans-unit>
+      <trans-unit id="seffa8ca49175b5f0">
+        <source>Personalized properties</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Personalized properties</target>
+      </trans-unit>
+      <trans-unit id="s907f7a97c6b29425">
+        <source>Be aware the data model might be modified. Use at your own risk.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ziva kuti data model inogona kuchinjwa. Shandisa panjodzi yako.</target>
+      </trans-unit>
+      <trans-unit id="hdbe45450d1a6419b">
+        <source>These properties are created and filed by users for any kind of usages. Feel
                     free to add your own. The properties and values you create
                     <x id="0" equiv-text="&lt;strong&gt;"/>must be factual<x id="1" equiv-text="&lt;/strong&gt;"/>. You can dive into
                     <x id="2" equiv-text="&lt;a href=&quot;https://openfoodfacts-explorer.vercel.app/folksonomy&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
                     or explore the
                     <x id="4" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</source>
-</trans-unit>
-<trans-unit id="h76766ba4ed1addb3">
-  <source>This is brought by the
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Izvi zvivakwa zvinogadzirwa uye zvinofayerwa nevashandisi kune chero mhando yekushandisa. Inzwa
+                    wakasununguka kuwedzera yako. Zvimiro nehunhu zvaunogadzira
+                    <x id="0" equiv-text="&lt;strong&gt;"/>zvinofanirwa kunge zviri zvechokwadi<x id="1" equiv-text="&lt;/strong&gt;"/>. Unogona kunyura mu
+                    <x id="2" equiv-text="&lt;a href=&quot;https://openfoodfacts-explorer.vercel.app/folksonomy&quot;&gt;"/>rondedzero yezvivakwa zvakatoshandiswa nenharaunda~⌇6⌇<x id="3" equiv-text="&lt;/a&gt;"/>
+                    kana kuongorora
+                    <x id="4" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>zvinyorwa' uye injini yayo yekutsvaga<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
+      </trans-unit>
+      <trans-unit id="h76766ba4ed1addb3">
+        <source>This is brought by the
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't hesitate to participate or give feedback.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Izvi zvinounzwa ne
+                    <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Usazeza kutora chikamu kana kupa mhinduro.</target>
+      </trans-unit>
+<trans-unit id="sf44a6b3b232c28ea">
+  <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
+</trans-unit>
+<trans-unit id="s0fb218abc2e157ed">
+  <source>Invalidate image</source>
 </trans-unit>
     </body>
   </file>
