@@ -326,11 +326,11 @@
       </trans-unit>
       <trans-unit id="sf44a6b3b232c28ea">
         <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ersetze den aktuellen Wert durch <x id="0" equiv-text="${text}"/></target>
+        <target state="translated">Aktuellen Wert durch <x id="0" equiv-text=„${text}“/> ersetzen</target>
       </trans-unit>
       <trans-unit id="s0fb218abc2e157ed">
         <source>Invalidate image</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Bild ungültig machen</target>
+        <target state="translated">Ungültiges Bild</target>
       </trans-unit>
     </body>
   </file>
