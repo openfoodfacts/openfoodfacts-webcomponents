@@ -2,16 +2,17 @@ import { Task } from "@lit/task"
 import { css, html, LitElement, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import {
-  annotateNutrients,
-  fetchNutrientInsightsByProductCode,
-  insight,
+  annotateNutrientsWithData,
+  annotateNutrientWitoutData,
+  fetchNutrientInsights,
+  insightById,
 } from "../../signals/nutrients"
 import "./robotoff-nutrients-table"
 import "../shared/zoomable-image"
 import "../shared/loader"
 
 import { fetchNutrientsTaxonomies } from "../../signals/taxonomies"
-import { NutrientsInsight, InsightAnnotationAnswer } from "../../types/robotoff"
+import { NutrientsInsight, InsightAnnotationAnswer, AnnotationAnswer } from "../../types/robotoff"
 import { BASE } from "../../styles/base"
 import { robotoffConfiguration } from "../../signals/robotoff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
@@ -29,7 +30,6 @@ import { countryCode } from "../../signals/app"
  * Robotoff Nutrients component
  * @element robotoff-nutrients
  * @part nutrients - The nutrients component
- * @part messages-wrapper - The messages wrapper
  * @part nutrients-content-wrapper - The nutrients content wrapper
  */
 @customElement("robotoff-nutrients")
@@ -87,7 +87,22 @@ export class RobotoffNutrients extends LitElement {
   isSubmited = false
 
   @state()
+  insightsIds: string[] = []
+
+  @state()
+  currentInsightIndex: number = 0
+
+  @state()
   private nutrimentsData?: NutrimentsProductType
+
+  get currentInsightId() {
+    return this.insightsIds[this.currentInsightIndex]
+  }
+
+  get currentInsight() {
+    return insightById.getItem(this.currentInsightId)
+  }
+
   /**
    * Emit the state event
    * @param {EventState} state
@@ -111,25 +126,33 @@ export class RobotoffNutrients extends LitElement {
    */
   private _insightsTask = new Task(this, {
     task: async ([productCode], {}) => {
-      if (!productCode) {
-        return undefined
-      }
-
       this.emitNutrientEvent(EventState.LOADING)
-
-      await Promise.all([
-        fetchNutrientInsightsByProductCode(productCode),
+      const [insights] = await Promise.all([
+        fetchNutrientInsights(productCode),
         fetchNutrientsTaxonomies(),
         fetchNutrientsOrderByCountryCode(countryCode.get()),
-        this.getProductNutriments(productCode),
       ])
 
-      const value = insight(productCode).get()
-      this.emitNutrientEvent(value ? EventState.HAS_DATA : EventState.NO_DATA)
-      return value
+      this.insightsIds = insights.map((insight) => insight.id)
+      if (!this.insightsIds.length) {
+        this.emitNutrientEvent(EventState.NO_DATA)
+        return
+      }
+      this.emitNutrientEvent(EventState.HAS_DATA)
+      await this.loadInsight(0)
     },
     args: () => [this.productCode],
   })
+
+  async loadInsight(index: number) {
+    if (index >= this.insightsIds.length) {
+      this.emitNutrientEvent(EventState.FINISHED)
+      return
+    }
+    this.currentInsightIndex = index
+    const insight = this.currentInsight
+    await this.getProductNutriments(insight.barcode)
+  }
 
   /**
    * Get the product nutriments
@@ -151,11 +174,10 @@ export class RobotoffNutrients extends LitElement {
    * @returns {Promise<void>}
    */
   async onSubmit(event: CustomEvent<InsightAnnotationAnswer>) {
-    await annotateNutrients(event.detail)
+    await annotateNutrientsWithData(event.detail)
     this.isSubmited = true
     this.emitNutrientEvent(EventState.ANNOTATED)
-    // TODO : when we handle multiple insights, we need to check if there are more insights to annotate before emitting the FINISHED event
-    this.emitNutrientEvent(EventState.FINISHED)
+    this.loadInsight(this.currentInsightIndex + 1)
   }
 
   renderImage(insight: NutrientsInsight) {
@@ -179,10 +201,27 @@ export class RobotoffNutrients extends LitElement {
     `
   }
 
+  /**
+   * Refuse the current insight
+   */
+  async onRefuse() {
+    await annotateNutrientWitoutData(this.currentInsightId, AnnotationAnswer.REFUSE)
+    await this.loadInsight(this.currentInsightIndex + 1)
+  }
+
+  /**
+   * Skip the current insight
+   */
+  async onSkip() {
+    await annotateNutrientWitoutData(this.currentInsightId, AnnotationAnswer.SKIP)
+    await this.loadInsight(this.currentInsightIndex + 1)
+  }
+
   override render() {
     return this._insightsTask.render({
       pending: () => html`<off-wc-loader></off-wc-loader>`,
-      complete: (insight) => {
+      complete: () => {
+        const insight = this.currentInsight
         if (!insight) {
           return html`<slot name="no-insight"></slot>`
         }
@@ -194,6 +233,8 @@ export class RobotoffNutrients extends LitElement {
                 .nutrimentsData="${this.nutrimentsData}"
                 .insight="${insight as NutrientsInsight}"
                 @submit="${this.onSubmit}"
+                @refuse="${this.onRefuse}"
+                @skip="${this.onSkip}"
               ></robotoff-nutrients-table>
             </div>
           </div>

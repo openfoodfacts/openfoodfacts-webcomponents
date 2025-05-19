@@ -87,3 +87,24 @@ export const setValueAndParentsObjectIfNotExists = (
   lastObject[lastKey] = value
   return obj
 }
+
+/**
+ * Generates a random ID.
+ * @returns string - a random ID
+ */
+export const randomIdGenerator = () => Math.random().toString(36).substring(2, 15)
+
+/**
+ * Initializes a debounce function.
+ * @param callback - the function to debounce
+ * @returns () => void - the debounced function
+ */
+export const initDebounce = (callback: () => any, debounceTime: number = 500) => {
+  let timeout: number | undefined
+  return () => {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      callback()
+    }, debounceTime)
+  }
+}

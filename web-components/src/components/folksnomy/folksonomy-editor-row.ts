@@ -6,6 +6,11 @@ import folksonomyApi from "../../api/folksonomy"
 import { msg } from "@lit/localize"
 import { getButtonClasses, ButtonType } from "../../styles/buttons"
 import { FOLKSONOMY_INPUT } from "../../styles/folksonomy-input"
+import {
+  AutocompleteSuggestion,
+  AutocompleteInputChangeEvent,
+  AutocompleteSuggestionSelectEvent,
+} from "../../types"
 
 /**
  * FolksonomyEditorRow Component
@@ -33,13 +38,13 @@ export class FolksonomyEditorRow extends LitElement {
    * Suggestions for the key field.
    * @private
    */
-  @state() private keySuggestions: string[] = []
+  @state() private keySuggestions: AutocompleteSuggestion[] = []
 
   /**
    * Suggestions for the value field.
    * @private
    */
-  @state() private valueSuggestions: string[] = []
+  @state() private valueSuggestions: AutocompleteSuggestion[] = []
 
   /**
    * Temporary value used during editing.
@@ -88,9 +93,6 @@ export class FolksonomyEditorRow extends LitElement {
    */
   @state() editable = false
 
-  private originalKeySuggestions: string[] = []
-  private originalValueSuggestions: string[] = []
-
   override connectedCallback() {
     super.connectedCallback()
     if (this.pageType === "edit") {
@@ -101,8 +103,9 @@ export class FolksonomyEditorRow extends LitElement {
     folksonomyApi
       .fetchKeys()
       .then((keys) => {
-        this.originalKeySuggestions = keys.map((key) => key.k)
-        this.keySuggestions = [...this.originalKeySuggestions]
+        this.keySuggestions = keys.map((key) => ({
+          value: key.k,
+        }))
       })
       .catch((error) => console.error("Error fetching keys:", error))
   }
@@ -115,8 +118,9 @@ export class FolksonomyEditorRow extends LitElement {
   private async fetchValuesForKey(key: string) {
     try {
       const values = await folksonomyApi.fetchValues(key)
-      this.originalValueSuggestions = values.map((value) => value.v)
-      this.valueSuggestions = [...this.originalValueSuggestions]
+      this.valueSuggestions = values.map((value) => ({
+        value: value.v,
+      }))
     } catch (error) {
       console.error("Error fetching values for key:", error)
     }
@@ -127,21 +131,13 @@ export class FolksonomyEditorRow extends LitElement {
    * @param e - The input event.
    * @private
    */
-  private onKeyInput(e: Event) {
+  private onKeyInput(e: AutocompleteInputChangeEvent) {
     const value = (e.target as HTMLInputElement).value
     this.keyInput = value
     this.key = value
 
-    if (value) {
-      this.keySuggestions = this.originalKeySuggestions.filter((k) =>
-        k.toLowerCase().includes(value.toLowerCase())
-      )
-
-      if (this.keySuggestions.length === 1 && this.keySuggestions[0] === value) {
-        this.fetchValuesForKey(value)
-      }
-    } else {
-      this.keySuggestions = [...this.originalKeySuggestions]
+    if (e.detail.matching) {
+      this.fetchValuesForKey(value)
     }
   }
 
@@ -150,22 +146,14 @@ export class FolksonomyEditorRow extends LitElement {
    * @param e - The input event.
    * @private
    */
-  private onValueInput(e: Event) {
-    const value = (e.target as HTMLInputElement).value
+  private onValueInput(e: AutocompleteInputChangeEvent) {
+    const value = e.detail.value
     this.valueInput = value
     this.value = value
 
-    if (value) {
-      this.valueSuggestions = this.originalValueSuggestions.filter((v) =>
-        v.toLowerCase().includes(value.toLowerCase())
-      )
-
-      if (this.valueSuggestions.length === 1 && this.valueSuggestions[0] === value) {
-        this.fetchValuesForKey(this.keyInput)
-      }
-    } else {
-      // Show all values in the dropdown when input is empty
-      this.valueSuggestions = [...this.originalValueSuggestions]
+    // In case of input value match exactly with only one suggestion, fetch values for the key
+    if (e.detail.matching) {
+      this.fetchValuesForKey(this.keyInput)
     }
   }
 
@@ -175,8 +163,15 @@ export class FolksonomyEditorRow extends LitElement {
    * @private
    */
   private selectKeySuggestion(suggestion: string) {
+    const hasChanged = this.keyInput !== suggestion
+    // Avoid calling fetchValuesForKey if the key has not changed
+    if (!hasChanged) {
+      return
+    }
     this.keyInput = suggestion
     this.key = suggestion
+    this.valueInput = ""
+    this.value = ""
     this.fetchValuesForKey(suggestion)
   }
 
@@ -335,6 +330,8 @@ export class FolksonomyEditorRow extends LitElement {
         padding: 0.5rem 1.2rem;
         text-align: left;
         border: none;
+      }
+      tr:not(.empty-row) td {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -402,14 +399,15 @@ export class FolksonomyEditorRow extends LitElement {
   override render() {
     if (this.empty) {
       return html`
-        <tr class="${this.rowNumber % 2 === 0 ? "even-row" : "odd-row"}">
+        <tr class="empty-row ${this.rowNumber % 2 === 0 ? "even-row" : "odd-row"}">
           <td>
             <autocomplete-input
               placeholder=${msg("New key")}
               .value=${this.keyInput}
               .suggestions=${this.keySuggestions}
-              @input-change=${(e: CustomEvent) => this.onKeyInput(e)}
-              @suggestion-select=${(e: CustomEvent) => this.selectKeySuggestion(e.detail.value)}
+              @input-change=${(e: AutocompleteInputChangeEvent) => this.onKeyInput(e)}
+              @suggestion-select=${(e: AutocompleteSuggestionSelectEvent) =>
+                this.selectKeySuggestion(e.detail.value)}
             ></autocomplete-input>
           </td>
           <td>
@@ -417,8 +415,9 @@ export class FolksonomyEditorRow extends LitElement {
               placeholder=${msg("New value")}
               .value=${this.valueInput}
               .suggestions=${this.valueSuggestions}
-              @input-change=${(e: CustomEvent) => this.onValueInput(e)}
-              @suggestion-select=${(e: CustomEvent) => this.selectValueSuggestion(e.detail.value)}
+              @input-change=${(e: AutocompleteInputChangeEvent) => this.onValueInput(e)}
+              @suggestion-select=${(e: AutocompleteSuggestionSelectEvent) =>
+                this.selectValueSuggestion(e.detail.value)}
             ></autocomplete-input>
           </td>
           <td>
