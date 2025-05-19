@@ -324,12 +324,14 @@
         <target state="needs-review-translation" state-qualifier="leveraged-mt">இது
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>ஃபோக்சோனமி எஞ்சின் திட்டத்தால் கொண்டு வரப்படுகிறது<x id="1" equiv-text="&lt;/a&gt;"/>. பங்கேற்கவோ அல்லது கருத்து தெரிவிக்கவோ தயங்காதீர்கள்.</target>
       </trans-unit>
-<trans-unit id="sf44a6b3b232c28ea">
-  <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
-</trans-unit>
-<trans-unit id="s0fb218abc2e157ed">
-  <source>Invalidate image</source>
-</trans-unit>
+      <trans-unit id="sf44a6b3b232c28ea">
+        <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">தற்போதைய மதிப்பை <x id="0" equiv-text="${text}"/>ஆல் மாற்றவும்.</target>
+      </trans-unit>
+      <trans-unit id="s0fb218abc2e157ed">
+        <source>Invalidate image</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">படத்தை செல்லாததாக்கு</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
