@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file target-language="nl-BE" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+  <file target-language="nl" source-language="en" original="lit-localize-inputs" datatype="plaintext">
     <body>
       <trans-unit id="s49730f3d5751a433" approved="yes">
         <source>Loading...</source>
-        <target state="final">Bezig met laden...</target>
+        <target state="final">Aan het laden...</target>
       </trans-unit>
       <trans-unit id="s95d23d03f9147581" approved="yes">
         <source>Unzoom</source>
@@ -12,7 +12,7 @@
       </trans-unit>
       <trans-unit id="s166bd56d19670a72" approved="yes">
         <source>Zoom</source>
-        <target state="final">Inzoomen</target>
+        <target state="final">Zoom</target>
       </trans-unit>
       <trans-unit id="s01d2865e3e1d5501" approved="yes">
         <source>Thank you for your assistance!</source>
@@ -282,7 +282,7 @@
       </trans-unit>
       <trans-unit id="sb3d4f79d9d8b71e5" approved="yes">
         <source>Submit</source>
-        <target state="final">Bevestigen</target>
+        <target state="final">Verzenden</target>
       </trans-unit>
       <trans-unit id="s0d5b7fee0311db68" approved="yes">
         <source>Property</source>
@@ -324,12 +324,14 @@
         <target state="needs-review-translation" state-qualifier="leveraged-mt">Dit wordt mogelijk gemaakt door het Folksonomy Engine-project
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/><x id="1" equiv-text="&lt;/a&gt;"/>. Aarzel niet om deel te nemen of feedback te geven.</target>
       </trans-unit>
-<trans-unit id="sf44a6b3b232c28ea">
-  <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
-</trans-unit>
-<trans-unit id="s0fb218abc2e157ed">
-  <source>Invalidate image</source>
-</trans-unit>
+      <trans-unit id="sf44a6b3b232c28ea">
+        <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Vervang huidige waarde door <x id="0" equiv-text="${text}"/></target>
+      </trans-unit>
+      <trans-unit id="s0fb218abc2e157ed">
+        <source>Invalidate image</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Afbeelding ongeldig maken</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
