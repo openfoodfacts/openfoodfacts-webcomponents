@@ -162,10 +162,6 @@
         <source>Add</source>
         <target state="needs-translation">Add</target>
       </trans-unit>
-      <trans-unit id="sae2a8d4546d3ba85">
-        <source>Error: Value must have only 5 decimal</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Kesalahan: Nilai kudu mung 5 desimal</target>
-      </trans-unit>
       <trans-unit id="s5666afe5cd0166de">
         <source>Please fix the errors or modify the text before confirming</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">Mangga ndandani kesalahan utawa ngowahi teks sadurunge konfirmasi</target>
@@ -327,6 +323,14 @@
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't hesitate to participate or give feedback.</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">Iki digawa dening proyek
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine<x id="1" equiv-text="&lt;/a&gt;"/>. Aja ragu-ragu kanggo melu utawa menehi saran.</target>
+      </trans-unit>
+      <trans-unit id="sf44a6b3b232c28ea">
+        <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ganti nilai saiki kanthi <x id="0" equiv-text="${text}"/></target>
+      </trans-unit>
+      <trans-unit id="s0fb218abc2e157ed">
+        <source>Invalidate image</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Gambar ora valid</target>
       </trans-unit>
     </body>
   </file>

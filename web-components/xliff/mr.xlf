@@ -162,10 +162,6 @@
         <source>Add</source>
         <target state="translated">जोडा</target>
       </trans-unit>
-      <trans-unit id="sae2a8d4546d3ba85">
-        <source>Error: Value must have only 5 decimal</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">त्रुटी: मूल्य फक्त ५ दशांश असणे आवश्यक आहे.</target>
-      </trans-unit>
       <trans-unit id="s5666afe5cd0166de">
         <source>Please fix the errors or modify the text before confirming</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">पुष्टी करण्यापूर्वी कृपया त्रुटी दुरुस्त करा किंवा मजकूर सुधारित करा.</target>
@@ -327,6 +323,14 @@
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't hesitate to participate or give feedback.</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">हे
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>फोकसोनोमी इंजिन प्रकल्प<x id="1" equiv-text="&lt;/a&gt;"/>द्वारे आणले आहे. सहभागी होण्यास किंवा अभिप्राय देण्यास अजिबात संकोच करू नका.</target>
+      </trans-unit>
+      <trans-unit id="sf44a6b3b232c28ea">
+        <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">सध्याचे मूल्य <x id="0" equiv-text="${text}"/>ने बदला.</target>
+      </trans-unit>
+      <trans-unit id="s0fb218abc2e157ed">
+        <source>Invalidate image</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">प्रतिमा अवैध करा</target>
       </trans-unit>
     </body>
   </file>

@@ -162,10 +162,6 @@
         <source>Add</source>
         <target state="needs-translation">Add</target>
       </trans-unit>
-      <trans-unit id="sae2a8d4546d3ba85">
-        <source>Error: Value must have only 5 decimal</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Mfomso: Ɛsɛ sɛ botae no nya decimal 5 pɛ</target>
-      </trans-unit>
       <trans-unit id="s5666afe5cd0166de">
         <source>Please fix the errors or modify the text before confirming</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">Yɛsrɛ sɛ siesie mfomso ahorow no anaa sesa nkyerɛwee no ansa na woasi so dua</target>
@@ -327,6 +323,14 @@
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't hesitate to participate or give feedback.</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">Eyi yɛ nea
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine adwuma<x id="1" equiv-text="&lt;/a&gt;"/>na ɛde ba. Mma ntwentwɛn wo nan ase sɛ wode wo ho bɛhyɛ mu anaasɛ wode nsɛm bɛma.</target>
+      </trans-unit>
+      <trans-unit id="sf44a6b3b232c28ea">
+        <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Fa <x id="0" equiv-text="${text}"/>si mprempren botae no ananmu</target>
+      </trans-unit>
+      <trans-unit id="s0fb218abc2e157ed">
+        <source>Invalidate image</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Fa mfonini no nyɛ adwuma</target>
       </trans-unit>
     </body>
   </file>
