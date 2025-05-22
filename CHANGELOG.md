@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.2] - 2025-05-22
+
+### Fixed
+
+- Fix robotoff ingredients annotation to send the good data format
+
 ## [1.5.1] - 2025-05-19
 
 ### Fixed
