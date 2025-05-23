@@ -31,7 +31,12 @@ import { backgroundImage } from "../../directives/background-image"
 import { ALERT } from "../../styles/alert"
 import { NutrimentsProductType } from "../../types/openfoodfacts"
 import { GREEN } from "../../utils/colors"
-import { initDebounce, removeUselessZeros, setValueAndParentsObjectIfNotExists } from "../../utils"
+import {
+  initDebounce,
+  removeUselessZeros,
+  setValueAndParentsObjectIfNotExists,
+  triggerSubmit,
+} from "../../utils"
 import { nutrientsOrderByCountryCode, sortKeysByNutrientsOrder } from "../../signals/openfoodfacts"
 import { countryCode } from "../../signals/app"
 
@@ -900,10 +905,6 @@ export class RobotoffNutrientsForm extends LitElement {
     this.dispatchEvent(new CustomEvent(EventType.REFUSE))
   }
 
-  triggerSubmit() {
-    this.form?.requestSubmit()
-  }
-
   /**
    * Render the submit row.
    * It will render a submit button.
@@ -916,15 +917,15 @@ export class RobotoffNutrientsForm extends LitElement {
 
     return html`
       <div class="submit-row">
+        <!-- Trigger the submit event manually because lit component doesn't dispatch the submit event even if button is type submit -->
         <loading-button
           type="submit"
           class="success-loading-button"
           css-classes="button success-button"
           .loading=${isAcceptLoading}
           .disabled=${isLoading}
-          @click=${this.triggerSubmit}
-          >${msg("Submit")}</loading-button
-        >
+          @click=${() => triggerSubmit(this.form!)}
+          >${msg("Submit")}
         </loading-button>
         <loading-button
           .loading=${this.loading === AnnotationAnswer.SKIP}
@@ -933,7 +934,6 @@ export class RobotoffNutrientsForm extends LitElement {
           @click=${this.onSkip}
           >${msg("Skip")}</loading-button
         >
-      </loading-button>
         <loading-button
           css-classes="button danger-button"
           .loading=${this.loading === AnnotationAnswer.REFUSE}
@@ -941,7 +941,6 @@ export class RobotoffNutrientsForm extends LitElement {
           @click=${this.onRefuse}
           >${msg("Invalidate image")}</loading-button
         >
-        </loading-button>
       </div>
     `
   }

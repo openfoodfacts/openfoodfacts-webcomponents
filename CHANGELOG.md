@@ -7,6 +7,7 @@
 - Add `LoadingWithTimeoutMixin` to avoid multiple submit
 - Add it to `robotoff-nutrients`, `robotoff-questions` and `robotoff-ingredients`
 - Add `displayInEditForm` keys by default except `alcohol` if it's not present.
+- Add `loading-button` component to handle loading behavior.
 
 ### Changed
 
