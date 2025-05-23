@@ -458,8 +458,11 @@ export class RobotoffNutrientsTable extends LitElement {
     // Tranform set to array and sort the keys based on the order defined in nutrientsOrder
     const keys = sortKeysByNutrientsOrder(this.countryCode, Array.from(keysSet))
 
-    // Remove keys nutrition-score until is not removed from API
-    nutrients!.keys = keys.filter((key) => !/^nutrition-score/.test(key))
+    nutrients!.keys = keys
+      // Remove keys nutrition-score until is not removed from API
+      .filter((key) => !/^nutrition-score/.test(key))
+      // Remove energy key because it will be computed from energy-kj
+      .filter((key) => key !== "energy")
   }
 
   /**
