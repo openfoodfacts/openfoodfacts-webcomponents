@@ -108,3 +108,7 @@ export const initDebounce = (callback: () => any, debounceTime: number = 500) =>
     }, debounceTime)
   }
 }
+
+export const removeUselessZeros = (value: string) => {
+  return value.replace(/(\.\d*?[1-9])0+$|\.0+$/, "$1")
+}

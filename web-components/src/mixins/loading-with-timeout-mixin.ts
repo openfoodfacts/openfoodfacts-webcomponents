@@ -12,7 +12,7 @@ export interface LoadingMixinInterface {
   hideLoading(): void
 }
 
-const DURATION = 500
+const DURATION = 750
 
 /**
  * Mixin that adds loading functionality to a LitElement.

@@ -31,7 +31,7 @@ import { backgroundImage } from "../../directives/background-image"
 import { ALERT } from "../../styles/alert"
 import { NutrimentsProductType } from "../../types/openfoodfacts"
 import { GREEN } from "../../utils/colors"
-import { initDebounce, setValueAndParentsObjectIfNotExists } from "../../utils"
+import { initDebounce, removeUselessZeros, setValueAndParentsObjectIfNotExists } from "../../utils"
 import { nutrientsOrderByCountryCode, sortKeysByNutrientsOrder } from "../../signals/openfoodfacts"
 import { countryCode } from "../../signals/app"
 
@@ -455,6 +455,14 @@ export class RobotoffNutrientsTable extends LitElement {
    * @param keysSet - The keys set to process
    */
   processKeysSet(nutrients: FormatedNutrients, keysSet: Set<string>): void {
+    const countryKeys = nutrientsOrderByCountryCode.getItem(this.countryCode) ?? {}
+    // Add needed keys from country keys
+    Object.keys(countryKeys)
+      .filter((key) => countryKeys[key].displayInEditForm)
+      // Remove alcohol key because it is weird to display it everytime
+      .filter((key) => key !== "alcohol")
+      .forEach((key) => keysSet.add(key))
+
     // Tranform set to array
     let keys = Array.from(keysSet)
 
@@ -588,18 +596,20 @@ export class RobotoffNutrientsTable extends LitElement {
     robotoffSuggestion?: { value: string; unit?: string },
     answer?: { value: string; unit?: string }
   ) {
+    const suggestionValue = removeUselessZeros(robotoffSuggestion?.value ?? "")
+    const value = removeUselessZeros(answer?.value ?? "")
     if (
       // Check if suggestion is already in the answers
       // Check if the unit is the same or if the suggestion has no unit
       // Return nothing if the suggestion is already in the answers
-      !robotoffSuggestion?.value ||
-      (answer?.value === robotoffSuggestion.value &&
-        (!robotoffSuggestion.unit || answer?.unit === robotoffSuggestion.unit))
+      !suggestionValue ||
+      (value === suggestionValue &&
+        (!robotoffSuggestion!.unit || answer?.unit === robotoffSuggestion!.unit))
     ) {
       return nothing
     }
 
-    const text = `${robotoffSuggestion.value} ${robotoffSuggestion.unit ?? ""}`
+    const text = `${robotoffSuggestion!.value} ${robotoffSuggestion!.unit ?? ""}`
     return html`<button
       type="button"
       class="alert success with-icons"
