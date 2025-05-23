@@ -1,12 +1,14 @@
 import { LitElement, html, css, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { Question, AnnotationAnswer } from "../../types/robotoff"
-import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { EventType } from "../../constants"
 import { answerQuestion } from "../../signals/questions"
 import "../buttons/zoom-unzoom-button"
 import { SignalWatcher } from "@lit-labs/signals"
 import { localized, msg } from "@lit/localize"
+import "../shared/loading-button"
+import { ButtonType, getButtonClasses } from "../../styles/buttons"
+import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin"
 /**
  * RobotoffQuestionForm component
  * It displays a form to answer a question about a product.
@@ -15,15 +17,8 @@ import { localized, msg } from "@lit/localize"
  */
 @customElement("robotoff-question-form")
 @localized()
-export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
+export class RobotoffQuestionForm extends SignalWatcher(LoadingWithTimeoutMixin(LitElement)) {
   static override styles = [
-    ...getButtonClasses([
-      ButtonType.White,
-      ButtonType.Cappucino,
-      ButtonType.Success,
-      ButtonType.Danger,
-      ButtonType.LINK,
-    ]),
     css`
       :host {
         display: block;
@@ -44,8 +39,10 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
       }
       .expand-button {
         margin-top: 1rem;
+        margin-bottom: 1rem;
       }
     `,
+    ...getButtonClasses([ButtonType.White]),
   ]
 
   /**
@@ -86,7 +83,9 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
     this.dispatchEvent(click)
   }
   private _annotateProduct = async (event: Event, value: AnnotationAnswer) => {
-    answerQuestion(this.question?.insight_id!, value)
+    this.showLoading(value)
+    await answerQuestion(this.question?.insight_id!, value)
+    await this.hideLoading()
     this.emitEventClick(event, value)
   }
 
@@ -120,6 +119,38 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
     `
   }
 
+  private renderButtons() {
+    const isLoading = Boolean(this.loading)
+    return html`
+      <div class="buttons-row">
+        <loading-button
+          css-classes="button success-button"
+          .loading=${this.loading === AnnotationAnswer.ACCEPT}
+          .disabled=${isLoading}
+          @click="${(event: Event) => this._annotateProduct(event, AnnotationAnswer.ACCEPT)}"
+        >
+          Yes
+        </loading-button>
+        <loading-button
+          css-classes="button danger-button"
+          .loading=${this.loading === AnnotationAnswer.REFUSE}
+          .disabled=${isLoading}
+          @click="${(event: Event) => this._annotateProduct(event, AnnotationAnswer.REFUSE)}"
+        >
+          No
+        </loading-button>
+        <loading-button
+          css-classes="button cappucino-button"
+          .loading=${this.loading === AnnotationAnswer.SKIP}
+          .disabled=${isLoading}
+          @click="${(event: Event) => this._annotateProduct(event, AnnotationAnswer.SKIP)}"
+        >
+          Skip
+        </loading-button>
+      </div>
+    `
+  }
+
   override render() {
     if (!this.question) {
       return html`<div>No question</div>`
@@ -129,27 +160,7 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
       <div class="question-form">
         <p>${this.question.question} <strong> ${this.question.value} </strong></p>
         <div>${this._renderImage()}</div>
-        <div>
-          <p></p>
-          <button
-            class="button success-button"
-            @click="${(event: Event) => this._annotateProduct(event, AnnotationAnswer.ACCEPT)}"
-          >
-            Yes
-          </button>
-          <button
-            class="button danger-button"
-            @click="${(event: Event) => this._annotateProduct(event, AnnotationAnswer.REFUSE)}"
-          >
-            No
-          </button>
-          <button
-            class="button cappucino-button"
-            @click="${(event: Event) => this._annotateProduct(event, AnnotationAnswer.SKIP)}"
-          >
-            Skip
-          </button>
-        </div>
+        ${this.renderButtons()}
       </div>
     `
   }
