@@ -80,12 +80,12 @@ const SERVING_SIZE_SELECT_NAME = "serving_size_select"
 
 /**
  * Display a table of nutrients for a given product
- * @element robotoff-nutrients-table
+ * @element robotoff-nutrients-form
  * @fires submit - when the user submit the form
  */
-@customElement("robotoff-nutrients-table")
+@customElement("robotoff-nutrients-form")
 @localized()
-export class RobotoffNutrientsTable extends LitElement {
+export class RobotoffNutrientsForm extends LitElement {
   static override styles = [
     ...getButtonClasses([ButtonType.Chocolate]),
     SELECT,
@@ -1132,6 +1132,6 @@ export class RobotoffNutrientsTable extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "robotoff-nutrients-table": RobotoffNutrientsTable
+    "robotoff-nutrients-form": RobotoffNutrientsForm
   }
 }

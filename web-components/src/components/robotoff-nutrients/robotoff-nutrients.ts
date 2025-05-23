@@ -7,7 +7,7 @@ import {
   fetchNutrientInsights,
   insightById,
 } from "../../signals/nutrients"
-import "./robotoff-nutrients-table"
+import "./robotoff-nutrients-form"
 import "../shared/zoomable-image"
 import "../shared/loader"
 
@@ -236,14 +236,14 @@ export class RobotoffNutrients extends LoadingWithTimeoutMixin(LitElement) {
           <div class="nutrients" part="nutrients">
             <div part="nutrients-content-wrapper" class="nutrients-content-wrapper">
               ${this.renderImage(insight as NutrientsInsight)}
-              <robotoff-nutrients-table
+              <robotoff-nutrients-form
                 loading=${this.loading}
                 .nutrimentsData="${this.nutrimentsData}"
                 .insight="${insight as NutrientsInsight}"
                 @submit="${this.onSubmit}"
                 @refuse="${this.onRefuse}"
                 @skip="${this.onSkip}"
-              ></robotoff-nutrients-table>
+              ></robotoff-nutrients-form>
             </div>
           </div>
         `
