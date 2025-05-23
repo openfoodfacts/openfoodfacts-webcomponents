@@ -6,6 +6,7 @@ import {
   InsightAnnotatationData,
   InsightAnnotationSize,
   InsightAnnotationAnswer,
+  AnnotationAnswer,
 } from "../../types/robotoff"
 import { localized, msg, str } from "@lit/localize"
 import {
@@ -23,7 +24,6 @@ import {
   NUTRIENT_UNIT_NAME_PREFIX,
   NUTRIENT_UNIT_SUFFIX,
 } from "../../utils/nutrients"
-import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { EventType, SELECT_ICON_FILE_NAME, WHITE_SELECT_ICON_FILE_NAME } from "../../constants"
 import { INPUT, SELECT } from "../../styles/form"
 import { FLEX } from "../../styles/utils"
@@ -35,6 +35,7 @@ import { initDebounce, setValueAndParentsObjectIfNotExists } from "../../utils"
 import { nutrientsOrderByCountryCode, sortKeysByNutrientsOrder } from "../../signals/openfoodfacts"
 import { countryCode } from "../../signals/app"
 
+import "../shared/loading-button"
 import "../shared/autocomplete-input"
 import "../icons/suggestion"
 import "../icons/add"
@@ -42,6 +43,8 @@ import "../icons/eye-visible"
 
 import "../icons/eye-invisible"
 import { AutocompleteInputChangeEvent, AutocompleteSuggestionSelectEvent } from "../../types"
+import { ButtonType, getButtonClasses } from "../../styles/buttons"
+
 export const ALLOWED_SPECIAL_VALUES = ["", "-", "traces"]
 
 export type FormatedNutrimentData = {
@@ -84,7 +87,7 @@ const SERVING_SIZE_SELECT_NAME = "serving_size_select"
 @localized()
 export class RobotoffNutrientsTable extends LitElement {
   static override styles = [
-    ...getButtonClasses([ButtonType.Success, ButtonType.Danger, ButtonType.White]),
+    ...getButtonClasses([ButtonType.Chocolate]),
     SELECT,
     INPUT,
     FLEX,
@@ -128,7 +131,7 @@ export class RobotoffNutrientsTable extends LitElement {
         gap: 0.5rem;
       }
 
-      .submit-row .success-button {
+      .submit-row .success-loading-button {
         grid-column: 1 / 3;
       }
       .input-error-message {
@@ -228,6 +231,11 @@ export class RobotoffNutrientsTable extends LitElement {
   private errors: Record<string, string> = {}
 
   /**
+   * Loading state for buttons
+   */
+  @property({ type: String, reflect: true })
+  loading?: AnnotationAnswer
+  /**
    * Serving size value to display
    */
   @state()
@@ -260,6 +268,15 @@ export class RobotoffNutrientsTable extends LitElement {
   @state()
   autocompleteValue: string = ""
 
+  /**
+   * Form element
+   */
+  @query("form")
+  private form?: HTMLFormElement
+
+  /**
+   * Serving size input
+   */
   @query(`input[name='${NUTRIENT_SERVING_SIZE_KEY}']`)
   private servingSizeInput?: HTMLInputElement
 
@@ -849,11 +866,25 @@ export class RobotoffNutrientsTable extends LitElement {
     const value = input.value as InsightAnnotationSize
     this.insightAnnotationSize = value
   }
+  /**
+   * Handle the click event of the skip button.
+   *
+   * It will emit a skip event.
+   */
   onSkip() {
     this.dispatchEvent(new CustomEvent(EventType.SKIP))
   }
+  /**
+   * Handle the click event of the refuse button.
+   *
+   * It will emit a refuse event.
+   */
   onRefuse() {
     this.dispatchEvent(new CustomEvent(EventType.REFUSE))
+  }
+
+  triggerSubmit() {
+    this.form?.requestSubmit()
   }
 
   /**
@@ -861,15 +892,39 @@ export class RobotoffNutrientsTable extends LitElement {
    * It will render a submit button.
    */
   renderSubmitRow() {
+    const isLoading = Boolean(this.loading)
+    const isAcceptLoading =
+      isLoading &&
+      [AnnotationAnswer.ACCEPT, AnnotationAnswer.ACCEPT_AND_ADD_DATA].includes(this.loading!)
+
     return html`
       <div class="submit-row">
-        <button type="submit" class="button success-button">${msg("Submit")}</button>
-        <button type="button" class="button danger-button" @click=${this.onRefuse}>
-          ${msg("Invalidate image")}
-        </button>
-        <button type="button" class="button white-button" @click=${this.onSkip}>
-          ${msg("Skip")}
-        </button>
+        <loading-button
+          type="submit"
+          class="success-loading-button"
+          css-classes="button success-button"
+          .loading=${isAcceptLoading}
+          .disabled=${isLoading}
+          @click=${this.triggerSubmit}
+          >${msg("Submit")}</loading-button
+        >
+        </loading-button>
+        <loading-button
+          .loading=${this.loading === AnnotationAnswer.SKIP}
+          .disabled=${isLoading}
+          css-classes="button white-button"
+          @click=${this.onSkip}
+          >${msg("Skip")}</loading-button
+        >
+      </loading-button>
+        <loading-button
+          css-classes="button danger-button"
+          .loading=${this.loading === AnnotationAnswer.REFUSE}
+          .disabled=${isLoading}
+          @click=${this.onRefuse}
+          >${msg("Invalidate image")}</loading-button
+        >
+        </loading-button>
       </div>
     `
   }
