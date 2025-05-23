@@ -59,7 +59,7 @@ export class RobotoffIngredients extends LitElement {
    * The product code for which the ingredients are being corrected.
    * @type {string}
    */
-  @property({ type: String, attribute: "product-code" })
+  @property({ type: String, attribute: "product-code", reflect: true })
   productCode = ""
 
   /**
@@ -207,7 +207,7 @@ export class RobotoffIngredients extends LitElement {
         state: this._insightIds.length ? EventState.HAS_DATA : EventState.NO_DATA,
       })
     },
-    args: () => [this.productCode],
+    args: () => [this.productCode, this._languageCodes],
   })
 
   /**
