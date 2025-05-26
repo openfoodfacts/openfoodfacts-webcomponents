@@ -9,6 +9,7 @@
 ### Changed
 
 - Rename `robotoff-ingredients` to `robotoff-ingredient-spellcheck` to be closer to the API endpoint.
+- Rename `robotoff-nutrients` to `robotoff-nutrient-extraction` to be closer to the API endpoint.
 
 ## [1.6.0] - 2025-05-26
 

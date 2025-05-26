@@ -4,7 +4,7 @@ import { Task } from "@lit/task"
 import { ALERT } from "../../styles/alert.js"
 
 import { fetchSpellcheckInsights } from "../../signals/ingredient-spellcheck.js"
-import { fetchNutrientInsights } from "../../signals/nutrients"
+import { fetchNutrientInsights } from "../../signals/nutrient-extraction.js"
 import { fetchQuestionsByProductCode } from "../../signals/questions"
 import { localized, msg } from "@lit/localize"
 import { ButtonType, getButtonClasses } from "../../styles/buttons.js"
