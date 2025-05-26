@@ -18,6 +18,7 @@
 
 - Fix suggestions in `robotoff-nutrients-form` to avoid showing suggestions with similar values. For exemple : "0.5" and "0.50".
 - Fix refresh `robotoff-ingredients` when `language-codes` change.
+- Fix dependencies versions.
 
 ## [1.5.2] - 2025-05-22
 
