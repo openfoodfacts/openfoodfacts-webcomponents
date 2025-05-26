@@ -90,7 +90,7 @@ export class ZoomableImage extends LitElement {
   selectionElement!: CropperSelection
 
   /*
-   * Panzoom instance
+   * cropperjs instance
    */
   @state()
   image!: HTMLImageElement
