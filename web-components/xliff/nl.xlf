@@ -324,11 +324,19 @@
         <target state="needs-review-translation" state-qualifier="leveraged-mt">Dit wordt mogelijk gemaakt door het Folksonomy Engine-project
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/><x id="1" equiv-text="&lt;/a&gt;"/>. Aarzel niet om deel te nemen of feedback te geven.</target>
       </trans-unit>
-<trans-unit id="sf44a6b3b232c28ea">
-  <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
+      <trans-unit id="sf44a6b3b232c28ea">
+        <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Vervang huidige waarde door <x id="0" equiv-text="${text}"/></target>
+      </trans-unit>
+      <trans-unit id="s0fb218abc2e157ed">
+        <source>Invalidate image</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Afbeelding ongeldig maken</target>
+      </trans-unit>
+<trans-unit id="scb489a1a173ac3f0">
+  <source>Yes</source>
 </trans-unit>
-<trans-unit id="s0fb218abc2e157ed">
-  <source>Invalidate image</source>
+<trans-unit id="s09205907b5b56cda">
+  <source>No</source>
 </trans-unit>
     </body>
   </file>

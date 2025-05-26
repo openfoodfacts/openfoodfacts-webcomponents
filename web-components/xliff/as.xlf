@@ -162,10 +162,6 @@
         <source>Add</source>
         <target state="needs-translation">Add</target>
       </trans-unit>
-      <trans-unit id="sae2a8d4546d3ba85">
-        <source>Error: Value must have only 5 decimal</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">ত্ৰুটি: মানত মাত্ৰ ৫ দশমিক থাকিব লাগিব</target>
-      </trans-unit>
       <trans-unit id="s5666afe5cd0166de">
         <source>Please fix the errors or modify the text before confirming</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">অনুগ্ৰহ কৰি নিশ্চিত কৰাৰ আগতে ভুলসমূহ সমাধান কৰক বা লিখনী পৰিবৰ্তন কৰক</target>
@@ -327,6 +323,14 @@
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't hesitate to participate or give feedback.</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">এইটো
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>লোকসম্বন্ধ ইঞ্জিন প্ৰকল্প<x id="1" equiv-text="&lt;/a&gt;"/>দ্বাৰা আনিছে। অংশগ্ৰহণ বা মতামত দিবলৈ কুণ্ঠাবোধ নকৰিব।</target>
+      </trans-unit>
+      <trans-unit id="sf44a6b3b232c28ea">
+        <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">বৰ্তমান মান <x id="0" equiv-text="${text}"/>দ্বাৰা সলনি কৰক</target>
+      </trans-unit>
+      <trans-unit id="s0fb218abc2e157ed">
+        <source>Invalidate image</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ছবিখন অবৈধ কৰক</target>
       </trans-unit>
     </body>
   </file>

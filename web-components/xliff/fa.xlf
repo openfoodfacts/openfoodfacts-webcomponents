@@ -324,11 +324,19 @@
         <target state="needs-review-translation" state-qualifier="leveraged-mt">این مطلب توسط پروژه
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine<x id="1" equiv-text="&lt;/a&gt;"/>ارائه شده است. از مشارکت یا ارائه بازخورد دریغ نکنید.</target>
       </trans-unit>
-<trans-unit id="sf44a6b3b232c28ea">
-  <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
+      <trans-unit id="sf44a6b3b232c28ea">
+        <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">مقدار فعلی را با <x id="0" equiv-text="${text}"/>جایگزین کنید</target>
+      </trans-unit>
+      <trans-unit id="s0fb218abc2e157ed">
+        <source>Invalidate image</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">تصویر نامعتبر</target>
+      </trans-unit>
+<trans-unit id="scb489a1a173ac3f0">
+  <source>Yes</source>
 </trans-unit>
-<trans-unit id="s0fb218abc2e157ed">
-  <source>Invalidate image</source>
+<trans-unit id="s09205907b5b56cda">
+  <source>No</source>
 </trans-unit>
     </body>
   </file>

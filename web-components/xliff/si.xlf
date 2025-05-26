@@ -324,11 +324,19 @@
         <target state="needs-review-translation" state-qualifier="leveraged-mt">මෙය
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine ව්‍යාපෘතිය<x id="1" equiv-text="&lt;/a&gt;"/>මගින් ගෙන එනු ලැබේ. සහභාගී වීමට හෝ ප්‍රතිපෝෂණ ලබා දීමට පසුබට නොවන්න.</target>
       </trans-unit>
-<trans-unit id="sf44a6b3b232c28ea">
-  <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
+      <trans-unit id="sf44a6b3b232c28ea">
+        <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">වත්මන් අගය <x id="0" equiv-text="${text}"/>මගින් ප්‍රතිස්ථාපනය කරන්න</target>
+      </trans-unit>
+      <trans-unit id="s0fb218abc2e157ed">
+        <source>Invalidate image</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">රූපය අවලංගු කරන්න</target>
+      </trans-unit>
+<trans-unit id="scb489a1a173ac3f0">
+  <source>Yes</source>
 </trans-unit>
-<trans-unit id="s0fb218abc2e157ed">
-  <source>Invalidate image</source>
+<trans-unit id="s09205907b5b56cda">
+  <source>No</source>
 </trans-unit>
     </body>
   </file>

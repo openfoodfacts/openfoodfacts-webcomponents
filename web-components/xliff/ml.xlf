@@ -162,10 +162,6 @@
         <source>Add</source>
         <target state="needs-translation">Add</target>
       </trans-unit>
-      <trans-unit id="sae2a8d4546d3ba85">
-        <source>Error: Value must have only 5 decimal</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">പിശക്: മൂല്യത്തിന് 5 ദശാംശം മാത്രമേ ഉണ്ടാകാവൂ.</target>
-      </trans-unit>
       <trans-unit id="s5666afe5cd0166de">
         <source>Please fix the errors or modify the text before confirming</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">സ്ഥിരീകരിക്കുന്നതിന് മുമ്പ് പിശകുകൾ പരിഹരിക്കുക അല്ലെങ്കിൽ വാചകം പരിഷ്കരിക്കുക.</target>
@@ -327,6 +323,14 @@
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't hesitate to participate or give feedback.</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">ഇത്
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>ഫോക്സോണമി എഞ്ചിൻ പ്രോജക്റ്റ്<x id="1" equiv-text="&lt;/a&gt;"/>ആണ് കൊണ്ടുവരുന്നത്. പങ്കെടുക്കാനോ ഫീഡ്‌ബാക്ക് നൽകാനോ മടിക്കേണ്ട.</target>
+      </trans-unit>
+      <trans-unit id="sf44a6b3b232c28ea">
+        <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">നിലവിലെ മൂല്യം <x id="0" equiv-text="${text}"/>കൊണ്ട് മാറ്റിസ്ഥാപിക്കുക</target>
+      </trans-unit>
+      <trans-unit id="s0fb218abc2e157ed">
+        <source>Invalidate image</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ചിത്രം അസാധുവാക്കുക</target>
       </trans-unit>
     </body>
   </file>
