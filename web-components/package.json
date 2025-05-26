@@ -61,7 +61,7 @@
     "@lit/task": "^1.0.2",
     "@panzoom/panzoom": "^4.6.0",
     "@types/dompurify": "^3.0.5",
-    "diff": "^7.0.0",
+    "diff": "^8.0.1",
     "dompurify": "^3.2.5",
     "lit": "^3.3.0",
     "lit-html": "^3.3.0"
@@ -97,7 +97,7 @@
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-serve": "^3.0.0",
     "rollup-plugin-summary": "^3.0.1",
-    "ts-jest": "^29.3.2",
+    "ts-jest": "^29.3.4",
     "ts-node": "^10.9.2",
     "typescript": "~5.8.3"
   },
