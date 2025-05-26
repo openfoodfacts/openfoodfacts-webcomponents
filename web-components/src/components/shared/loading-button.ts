@@ -19,8 +19,8 @@ export class LoadingButton extends LitElement {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0.5rem;
         width: 100%;
+        gap: 0.5rem;
       }
     `,
     ...getButtonClasses(Object.values(ButtonType)),
@@ -29,7 +29,7 @@ export class LoadingButton extends LitElement {
   /**
    * The text to display on the button
    */
-  @property()
+  @property({ type: String, reflect: true })
   label = ""
 
   /**
@@ -60,12 +60,12 @@ export class LoadingButton extends LitElement {
     return html`
       <button
         type=${this.type}
-        class=${this.cssClasses}
+        class="${this.cssClasses}"
         ?disabled=${this.disabled || this.loading}
         ?loading=${this.loading}
       >
         ${this.loading ? html`<loading-spin size="15px"></loading-spin>` : nothing}
-        <span><slot>${this.label}</slot></span>
+        <slot><span>${this.label}</span></slot>
       </button>
     `
   }

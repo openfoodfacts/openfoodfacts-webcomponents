@@ -1,4 +1,5 @@
 import { LitElement, html, css, nothing } from "lit"
+import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin"
 import { customElement, property, state } from "lit/decorators.js"
 import { BASE } from "../../styles/base"
 import { msg } from "@lit/localize"
@@ -34,7 +35,7 @@ import { mobileAndTabletCheck } from "../../utils/breakpoints"
  * @slot pending - The content to display when the component is pending
  */
 @customElement("robotoff-ingredients")
-export class RobotoffIngredients extends LitElement {
+export class RobotoffIngredients extends LoadingWithTimeoutMixin(LitElement) {
   static override styles = [
     BASE,
     INPUT,
@@ -238,10 +239,25 @@ export class RobotoffIngredients extends LitElement {
   }
 
   /**
+   * After the insight has been annotated
+   * Remove Loading state and emit event annotated
+   * Load the next insight
+   * @returns {Promise<void>}
+   */
+  async afterInsightAnnotation() {
+    await this.hideLoading()
+    this.dispatchIngredientsStateEvent({
+      state: EventState.ANNOTATED,
+    })
+    this.nextInsight()
+  }
+
+  /**
    * Submits an annotation based on the provided event.
    * @param {TextCorrectorEvent} event - The event containing the annotation details.
    */
   async submitAnnotation(event: TextCorrectorEvent) {
+    this.showLoading(event.detail.annotation)
     const insight = this._insight
     if (!insight) {
       console.error("No insight found at index", this._currentIndex)
@@ -251,14 +267,7 @@ export class RobotoffIngredients extends LitElement {
     // Send the annotation to Robotoff API
     await robotoff.annotateIngredients(insight.id, event.detail.annotation, event.detail.correction)
 
-    // Move to next insight or finish
-    this.nextInsight()
-
-    this.dispatchIngredientsStateEvent({
-      state: EventState.ANNOTATED,
-      insightId: insight.id,
-      ...event.detail,
-    })
+    await this.afterInsightAnnotation()
 
     if (this.allInsightsAreAnswered) {
       this.dispatchIngredientsStateEvent({
@@ -315,6 +324,7 @@ export class RobotoffIngredients extends LitElement {
               ${this.renderImage()}
               <div>
                 <text-corrector
+                  loading=${this.loading}
                   correction=${correction}
                   original=${original}
                   @save=${this.submitAnnotation}

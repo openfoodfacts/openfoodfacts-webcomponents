@@ -128,25 +128,22 @@ export class RobotoffQuestionForm extends SignalWatcher(LoadingWithTimeoutMixin(
           .loading=${this.loading === AnnotationAnswer.ACCEPT}
           .disabled=${isLoading}
           @click="${(event: Event) => this._annotateProduct(event, AnnotationAnswer.ACCEPT)}"
-        >
-          Yes
-        </loading-button>
+          label="${msg("Yes")}"
+        ></loading-button>
         <loading-button
           css-classes="button danger-button"
           .loading=${this.loading === AnnotationAnswer.REFUSE}
           .disabled=${isLoading}
           @click="${(event: Event) => this._annotateProduct(event, AnnotationAnswer.REFUSE)}"
-        >
-          No
-        </loading-button>
+          label="${msg("No")}"
+        ></loading-button>
         <loading-button
           css-classes="button cappucino-button"
           .loading=${this.loading === AnnotationAnswer.SKIP}
           .disabled=${isLoading}
           @click="${(event: Event) => this._annotateProduct(event, AnnotationAnswer.SKIP)}"
-        >
-          Skip
-        </loading-button>
+          label="${msg("Skip")}"
+        ></loading-button>
       </div>
     `
   }

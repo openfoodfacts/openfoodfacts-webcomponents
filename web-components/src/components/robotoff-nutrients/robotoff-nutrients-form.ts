@@ -925,22 +925,22 @@ export class RobotoffNutrientsForm extends LitElement {
           .loading=${isAcceptLoading}
           .disabled=${isLoading}
           @click=${() => triggerSubmit(this.form!)}
-          >${msg("Submit")}
-        </loading-button>
+          label="${msg("Submit")}"
+        ></loading-button>
         <loading-button
           .loading=${this.loading === AnnotationAnswer.SKIP}
           .disabled=${isLoading}
           css-classes="button white-button"
           @click=${this.onSkip}
-          >${msg("Skip")}</loading-button
-        >
+          label=${msg("Skip")}
+        ></loading-button>
         <loading-button
           css-classes="button danger-button"
           .loading=${this.loading === AnnotationAnswer.REFUSE}
           .disabled=${isLoading}
           @click=${this.onRefuse}
-          >${msg("Invalidate image")}</loading-button
-        >
+          label=${msg("Invalidate image")}
+        ></loading-button>
       </div>
     `
   }
