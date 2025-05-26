@@ -3,7 +3,7 @@ import { customElement, property, state } from "lit/decorators.js"
 import { Task } from "@lit/task"
 import { ALERT } from "../../styles/alert.js"
 
-import { fetchSpellcheckInsights } from "../../signals/ingredients"
+import { fetchSpellcheckInsights } from "../../signals/ingredient-spellcheck.js"
 import { fetchNutrientInsights } from "../../signals/nutrients"
 import { fetchQuestionsByProductCode } from "../../signals/questions"
 import { localized, msg } from "@lit/localize"

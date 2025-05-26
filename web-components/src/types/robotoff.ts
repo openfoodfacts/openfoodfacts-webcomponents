@@ -43,6 +43,12 @@ export enum InsightAnnotationSize {
   CENTGRAMS = "100g",
   SERVING = "serving",
 }
+export enum QuestionAnnotationAnswer {
+  YES = "1",
+  NO = "0",
+  ANNOTATED = "2",
+  SKIP = "-1",
+} // https://openfoodfacts.github.io/robotoff/references/api/#tag/Insights/paths/~1insights~1annotate/post
 
 export type InsightAnnotatationData = Record<string, { value: string; unit: string | null }>
 
@@ -152,4 +158,72 @@ export type AnnotationFormData = {
   insight_id: string
   annotation: AnnotationAnswer
   data?: string
+}
+
+export type ImagePredictionsRequestParams = {
+  count: number
+  page: number
+  barcode: string
+  model_name: string
+  min_confidence: number
+}
+
+export type IngredientPrediction = {
+  id: string
+  text: string
+  vegan?: string
+  vegetarian?: string
+  in_taxonomy: boolean
+  percent_max: number
+  percent_min: number
+  is_in_taxonomy: number
+  percent_estimate: number
+  ciqual_proxy_food_code?: string
+  ingredients?: IngredientPrediction[]
+}
+export type CropBoundingBox = [number, number, number, number]
+
+export type ImagePrediction = {
+  id: number
+  type: string
+  model_name: string
+  model_version: string
+  data: {
+    entities: {
+      end: number
+      lang: {
+        lang: string
+        confidence: number
+      }
+      text: string
+      score: number
+      start: number
+      raw_end: number
+      ingredients: IngredientPrediction[]
+      bounding_box: CropBoundingBox
+      ingredients_n: number
+      known_ingredients_n: number
+      unknown_ingredients_n: number
+    }[]
+  }
+  timestamp: string
+  image: {
+    id: number
+    barcode: string
+    uploaded_at: string
+    image_id: string
+    source_image: string
+    width: number
+    height: number
+    deleted: boolean
+    server_type: string
+    fingerprint: number
+  }
+  max_confidence: number
+}
+
+export type ImagePredictionsResponse = {
+  count: number
+  image_predictions: ImagePrediction[]
+  status: string
 }

@@ -105,3 +105,44 @@ export const INPUT = css`
     cursor: not-allowed;
   }
 `
+
+export const CHECKBOX = css`
+  .checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .checkbox input[type="checkbox"] {
+    width: 1.2rem;
+    height: 1.2rem;
+    border: 1px solid ${SAFE_GREY};
+    border-radius: 4px;
+    margin-left: 0;
+    margin-right: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .checkbox input[type="checkbox"]:checked {
+    background-color: ${SAFE_BLUE};
+    border-color: ${SAFE_BLUE};
+  }
+
+  .checkbox input[type="checkbox"]:checked::after {
+    content: "✓";
+    position: absolute;
+    color: white;
+    font-size: 0.8rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .checkbox input[type="checkbox"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  }
+`

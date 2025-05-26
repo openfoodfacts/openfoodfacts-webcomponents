@@ -2,7 +2,7 @@ export { setLocale, getLocale } from "./localization"
 export { OffWebcomponentsConfiguration as OffWebcomponentConfiguration } from "./components/shared/off-webcomponents-configuration"
 export { RobotoffQuestion } from "./components/robotoff-question/robotoff-question"
 export { RobotoffNutrients } from "./components/robotoff-nutrients/robotoff-nutrients"
-export { RobotoffIngredients } from "./components/robotoff-ingredients/robotoff-ingredients"
+export { RobotoffIngredientSpellcheck as RobotoffIngredients } from "./components/robotoff-ingredient-spellcheck/robotoff-ingredient-spellcheck"
 export { RobotoffContributionMessage } from "./components/robotoff-contribution-message/robotoff-contribution-message"
 
 // Will be added in the future when design is ready
@@ -15,3 +15,4 @@ export { BarcodeScanner } from "./components/barcode-scanner/barcode-scanner"
 export { DeleteModal } from "./components/folksnomy/delete-modal"
 export { FolksonomyEditor } from "./components/folksnomy/folksonomy-editor"
 export { AutocompleteInput } from "./components/shared/autocomplete-input"
+export { RobotoffIngredientDetection as RobotoffCrops } from "./components/robotoff-ingredient-detection/robotoff-ingredient-detection"
