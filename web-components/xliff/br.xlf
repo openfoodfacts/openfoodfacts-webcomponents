@@ -332,6 +332,14 @@
         <source>Invalidate image</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">Diweredekaat ar skeudenn</target>
       </trans-unit>
+      <trans-unit id="scb489a1a173ac3f0">
+        <source>Yes</source>
+        <target state="translated">Ya</target>
+      </trans-unit>
+      <trans-unit id="s09205907b5b56cda">
+        <source>No</source>
+        <target state="translated">Ket</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
