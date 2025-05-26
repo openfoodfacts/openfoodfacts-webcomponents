@@ -8,7 +8,7 @@ import { classMap } from "lit/directives/class-map.js"
 
 import "../shared/modal"
 import "../robotoff-ingredient-spellcheck/robotoff-ingredient-spellcheck"
-import "../robotoff-nutrients/robotoff-nutrients"
+import "../robotoff-nutrient-extraction/robotoff-nutrient-extraction"
 import "../robotoff-question/robotoff-question"
 
 enum MessageType {
@@ -150,10 +150,10 @@ export class RobotoffModal extends LitElement {
           @ingredients-state="${this.onStateChange}"
         ></robotoff-ingredient-spellcheck>`
       case RobotoffContributionType.NUTRIENTS:
-        return html`<robotoff-nutrients
+        return html`<robotoff-nutrient-extraction
           product-code="${this.productCode}"
           @nutrient-state="${this.onStateChange}"
-        ></robotoff-nutrients>`
+        ></robotoff-nutrient-extraction>`
       case RobotoffContributionType.QUESTIONS:
         return html`<robotoff-question
           product-code="${this.productCode}"

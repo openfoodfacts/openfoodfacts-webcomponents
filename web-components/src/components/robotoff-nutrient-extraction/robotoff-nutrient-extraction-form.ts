@@ -23,7 +23,7 @@ import {
   NUTRIENT_SUFFIX,
   NUTRIENT_UNIT_NAME_PREFIX,
   NUTRIENT_UNIT_SUFFIX,
-} from "../../utils/nutrients"
+} from "../../utils/nutrient-extraction"
 import { EventType, SELECT_ICON_FILE_NAME, WHITE_SELECT_ICON_FILE_NAME } from "../../constants"
 import { INPUT, SELECT } from "../../styles/form"
 import { FLEX } from "../../styles/utils"
@@ -85,12 +85,12 @@ const SERVING_SIZE_SELECT_NAME = "serving_size_select"
 
 /**
  * Display a table of nutrients for a given product
- * @element robotoff-nutrients-form
+ * @element robotoff-nutrient-extraction-form
  * @fires submit - when the user submit the form
  */
-@customElement("robotoff-nutrients-form")
+@customElement("robotoff-nutrient-extraction-form")
 @localized()
-export class RobotoffNutrientsForm extends LitElement {
+export class RobotoffNutrientExtractionForm extends LitElement {
   static override styles = [
     ...getButtonClasses([ButtonType.Chocolate]),
     SELECT,
@@ -1131,6 +1131,6 @@ export class RobotoffNutrientsForm extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "robotoff-nutrients-form": RobotoffNutrientsForm
+    "robotoff-nutrient-extraction-form": RobotoffNutrientExtractionForm
   }
 }

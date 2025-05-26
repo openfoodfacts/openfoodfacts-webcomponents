@@ -6,8 +6,8 @@ import {
   annotateNutrientWithoutData,
   fetchNutrientInsights,
   insightById,
-} from "../../signals/nutrients"
-import "./robotoff-nutrients-form"
+} from "../../signals/nutrient-extraction"
+import "./robotoff-nutrient-extraction-form"
 import "../shared/zoomable-image"
 import "../shared/loader"
 
@@ -32,12 +32,12 @@ import { Breakpoints } from "../../utils/breakpoints"
 const IMAGE_MAX_WIDTH = 500
 /**
  * Robotoff Nutrients component
- * @element robotoff-nutrients
+ * @element robotoff-nutrient-extraction
  * @part nutrients - The nutrients component
  * @part nutrients-content-wrapper - The nutrients content wrapper
  */
-@customElement("robotoff-nutrients")
-export class RobotoffNutrients extends LoadingWithTimeoutMixin(LitElement) {
+@customElement("robotoff-nutrient-extraction")
+export class RobotoffNutrientExtraction extends LoadingWithTimeoutMixin(LitElement) {
   static override styles = [
     BASE,
     FLEX,
@@ -243,14 +243,14 @@ export class RobotoffNutrients extends LoadingWithTimeoutMixin(LitElement) {
           <div class="nutrients" part="nutrients">
             <div part="nutrients-content-wrapper" class="nutrients-content-wrapper">
               ${this.renderImage(insight as NutrientsInsight)}
-              <robotoff-nutrients-form
+              <robotoff-nutrient-extraction-form
                 loading=${ifDefined(this.loading) as AnnotationAnswer}
                 .nutrimentsData="${this.nutrimentsData}"
                 .insight="${insight as NutrientsInsight}"
                 @submit="${this.onSubmit}"
                 @refuse="${this.onRefuse}"
                 @skip="${this.onSkip}"
-              ></robotoff-nutrients-form>
+              ></robotoff-nutrient-extraction-form>
             </div>
           </div>
         `
@@ -262,6 +262,6 @@ export class RobotoffNutrients extends LoadingWithTimeoutMixin(LitElement) {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "robotoff-nutrients": RobotoffNutrients
+    "robotoff-nutrient-extraction": RobotoffNutrientExtraction
   }
 }
