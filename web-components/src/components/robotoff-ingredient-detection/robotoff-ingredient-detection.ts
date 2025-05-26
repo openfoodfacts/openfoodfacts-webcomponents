@@ -5,7 +5,7 @@
  * for the Robotoff application. It integrates with the Robotoff API to fetch image
  * predictions and allows users to crop and annotate images.
  *
- * @element robotoff-crops
+ * @element robotoff-ingredient-detection
  */
 
 import { LitElement, css, html, nothing } from "lit"
@@ -31,9 +31,9 @@ import {
   robotoffBoundingBoxToCropImageBoundingBox,
 } from "../../utils/crop"
 
-@customElement("robotoff-crops")
+@customElement("robotoff-ingredient-detection")
 @localized()
-export class RobotoffCrops extends LitElement {
+export class RobotoffIngredientDetection extends LitElement {
   static override styles = [
     css`
       .question {
@@ -282,6 +282,6 @@ export class RobotoffCrops extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "robotoff-crops": RobotoffCrops
+    "robotoff-ingredient-detection": RobotoffIngredientDetection
   }
 }
