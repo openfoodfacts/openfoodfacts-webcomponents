@@ -326,11 +326,11 @@
       </trans-unit>
       <trans-unit id="sf44a6b3b232c28ea">
         <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Pakeiskite dabartinę reikšmę į <x id="0" equiv-text="${text}"/></target>
+        <target state="translated">Pakeisti esamą vertę į <x id="0" equiv-text="${text}"/></target>
       </trans-unit>
       <trans-unit id="s0fb218abc2e157ed">
         <source>Invalidate image</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Neteisingas vaizdas</target>
+        <target state="translated">Anuliuoti nuotrauką</target>
       </trans-unit>
     </body>
   </file>
