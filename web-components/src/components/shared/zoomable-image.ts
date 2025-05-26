@@ -126,7 +126,7 @@ export class ZoomableImage extends LitElement {
   scaleStep = 0.25
 
   @property({ type: Number, attribute: "max-zoom" })
-  maxZoom = 3
+  maxZoom = 10
 
   @property({ type: Number, attribute: "min-zoom" })
   minZoom = 0.3
