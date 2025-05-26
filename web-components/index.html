@@ -94,11 +94,11 @@
       </div>
 
       <div class="box" style="display: flex">
-        <robotoff-ingredients
-          id="robotoff-ingredients"
+        <robotoff-ingredient-spellcheck
+          id="robotoff-ingredient-spellcheck"
           language-codes='["fr", "en"]'
           enable-keyboard-mode
-        ></robotoff-ingredients>
+        ></robotoff-ingredient-spellcheck>
       </div>
 
       <div style="display: flex">
@@ -137,7 +137,7 @@
   const productCode = document.getElementById("product-code")
   const insightTypes = document.getElementById("insight-types")
   const barcodeScanner = document.getElementById("barcode-scanner")
-  const robotoffIngredients = document.getElementById("robotoff-ingredients")
+  const robotoffIngredients = document.getElementById("robotoff-ingredient-spellcheck")
   const robotoffContributionMessage = document.getElementById("robotoff-contribution-message")
 
   const productDebounce = debounce((value) => {

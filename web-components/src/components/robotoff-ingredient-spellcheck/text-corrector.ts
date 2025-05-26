@@ -26,7 +26,7 @@ import {
   IndexedChange,
   IndexedGroupedChange,
   TextCorrectorEventDetail,
-} from "../../types/ingredients"
+} from "../../types/ingredient-spellcheck"
 import { RELATIVE } from "../../styles/utils"
 import { sanitizeHtml } from "../../utils/html"
 import { Breakpoints } from "../../utils/breakpoints"

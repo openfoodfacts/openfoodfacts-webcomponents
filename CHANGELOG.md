@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.7.0] - 2025-05-26
+
+### Added
+
+- Add `robotoff-ingredient-detection` component.
+
+### Changed
+
+- Rename `robotoff-ingredients` to `robotoff-ingredient-spellcheck` to be closer to the API endpoint.
+
 ## [1.6.0] - 2025-05-26
 
 ### Added

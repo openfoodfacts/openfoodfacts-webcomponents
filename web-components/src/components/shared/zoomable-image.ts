@@ -101,10 +101,10 @@ export class ZoomableImage extends LitElement {
   /*
    * Image source url
    */
-  @property({ type: String, attribute: "src" })
+  @property({ type: String, attribute: "src", reflect: true })
   src = ""
 
-  @property({ type: Object })
+  @property({ type: Object, attribute: "bounding-box", reflect: true })
   boundingBox?: CropperImageBoundingBox = {
     x: 0,
     y: 0,
@@ -116,7 +116,7 @@ export class ZoomableImage extends LitElement {
    * Fallback image source url
    * If the image fails to load, this image will be displayed instead
    */
-  @property({ type: String, attribute: "fallback-src" })
+  @property({ type: String, attribute: "fallback-src", reflect: true })
   fallbackSrc = ""
 
   @state()
@@ -131,7 +131,7 @@ export class ZoomableImage extends LitElement {
   @property({ type: Number, attribute: "min-zoom" })
   minZoom = 0.3
 
-  @property({ type: Boolean, attribute: "show-buttons" })
+  @property({ type: Boolean, attribute: "show-buttons", reflect: true })
   showButtons = false
 
   /**

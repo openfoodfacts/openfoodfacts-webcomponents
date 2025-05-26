@@ -2,7 +2,7 @@ export { setLocale, getLocale } from "./localization"
 export { OffWebcomponentsConfiguration as OffWebcomponentConfiguration } from "./components/shared/off-webcomponents-configuration"
 export { RobotoffQuestion } from "./components/robotoff-question/robotoff-question"
 export { RobotoffNutrients } from "./components/robotoff-nutrients/robotoff-nutrients"
-export { RobotoffIngredients } from "./components/robotoff-ingredients/robotoff-ingredients"
+export { RobotoffIngredientSpellcheck as RobotoffIngredients } from "./components/robotoff-ingredient-spellcheck/robotoff-ingredient-spellcheck"
 export { RobotoffContributionMessage } from "./components/robotoff-contribution-message/robotoff-contribution-message"
 
 // Will be added in the future when design is ready

@@ -4,7 +4,10 @@ import { customElement, property, state } from "lit/decorators.js"
 import { BASE } from "../../styles/base"
 import { msg } from "@lit/localize"
 import { Task } from "@lit/task"
-import { fetchSpellcheckInsights, ingredientSpellcheckInsights } from "../../signals/ingredients"
+import {
+  fetchSpellcheckInsights,
+  ingredientSpellcheckInsights,
+} from "../../signals/ingredient-spellcheck"
 import { AnnotationAnswer, IngredientsInsight } from "../../types/robotoff"
 import { getLocale } from "../../localization"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
@@ -14,7 +17,10 @@ import "./text-corrector"
 import "../shared/zoomable-image"
 import { fetchProduct } from "../../api/openfoodfacts"
 import { ImageIngredientsProductType } from "../../types/openfoodfacts"
-import { RobotoffIngredientsStateEventDetail, TextCorrectorEvent } from "../../types/ingredients"
+import {
+  RobotoffIngredientsStateEventDetail,
+  TextCorrectorEvent,
+} from "../../types/ingredient-spellcheck"
 import { INPUT } from "../../styles/form"
 import { getValidHeadingLevel } from "../../utils/knowledge-panels/heading-utils"
 import { sanitizeHtml } from "../../utils/html"
