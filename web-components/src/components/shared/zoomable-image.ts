@@ -22,8 +22,11 @@ import { CropperActionEvent } from "../../types/crops"
 import { CHECKBOX } from "../../styles/form"
 
 export enum CropMode {
+  // no crop, just display image
   IMAGE_ONLY = "image-only",
+  // show crop
   CROP_READ = "crop-read",
+  // redefining the crop
   CROP = "crop",
 }
 /**
