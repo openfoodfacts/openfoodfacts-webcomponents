@@ -109,10 +109,22 @@ export const initDebounce = (callback: () => any, debounceTime: number = 500) =>
   }
 }
 
+/**
+ * Removes useless zeros from a string.
+ * @param value - the string to remove zeros from
+ * @returns string - the string without useless zeros
+ * @example removeUselessZeros("1.000") => "1"
+ * @example removeUselessZeros("1.001") => "1.001"
+ * @example removeUselessZeros("1.0010") => "1,001"
+ */
 export const removeUselessZeros = (value: string) => {
   return value.replace(/(\.\d*?[1-9])0+$|\.0+$/, "$1")
 }
 
+/**
+ * Triggers a form submit event.
+ * @param form - the form to submit
+ */
 export const triggerSubmit = (form: HTMLFormElement) => {
   form.requestSubmit()
 }
