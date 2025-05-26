@@ -1,16 +1,35 @@
 # Changelog
 
+## [1.6.0] - 2025-05-23
+
+### Added
+
+- Add `LoadingWithTimeoutMixin` to avoid multiple submit.
+- Add it to `robotoff-nutrients`, `robotoff-questions` and `robotoff-ingredients`.
+- Add `displayInEditForm` keys by default except `alcohol` if it's not present.
+- Add `loading-button` component to handle loading behavior.
+
+### Changed
+
+- Rename `robotoff-nutrients-table` to `robotoff-nutrients-form`.
+- Remove `energy` key because it will be compute by Robotoff.
+
+### Fixed
+
+- Fix suggestions in `robotoff-nutrients-form` to avoid showing suggestions with similar values. For exemple : "0.5" and "0.50".
+- Fix refresh `robotoff-ingredients` when `language-codes` change.
+
 ## [1.5.2] - 2025-05-22
 
 ### Fixed
 
-- Fix robotoff ingredients annotation to send the good data format
+- Fix robotoff ingredients annotation to send the good data format.
 
 ## [1.5.1] - 2025-05-19
 
 ### Fixed
 
-- Fix robotoff suggestions to avoid showing `null` unit in `robotoff-nutrients-table`
+- Fix robotoff suggestions to avoid showing `null` unit in `robotoff-nutrients-table`.
 
 ## [1.5.0] - 2025-05-19
 

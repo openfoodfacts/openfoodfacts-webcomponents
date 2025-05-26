@@ -1,10 +1,11 @@
 import { LitElement, html, css, nothing } from "lit"
+import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin"
 import { customElement, property, state } from "lit/decorators.js"
 import { BASE } from "../../styles/base"
 import { msg } from "@lit/localize"
 import { Task } from "@lit/task"
 import { fetchSpellcheckInsights, ingredientSpellcheckInsights } from "../../signals/ingredients"
-import { IngredientsInsight } from "../../types/robotoff"
+import { AnnotationAnswer, IngredientsInsight } from "../../types/robotoff"
 import { getLocale } from "../../localization"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import robotoff from "../../api/robotoff"
@@ -19,6 +20,7 @@ import { getValidHeadingLevel } from "../../utils/knowledge-panels/heading-utils
 import { sanitizeHtml } from "../../utils/html"
 import { getFullImageUrl, ProductFields } from "../../utils/openfoodfacts"
 import { mobileAndTabletCheck } from "../../utils/breakpoints"
+import { ifDefined } from "lit/directives/if-defined.js"
 
 /**
  * RobotoffIngredients component
@@ -34,7 +36,7 @@ import { mobileAndTabletCheck } from "../../utils/breakpoints"
  * @slot pending - The content to display when the component is pending
  */
 @customElement("robotoff-ingredients")
-export class RobotoffIngredients extends LitElement {
+export class RobotoffIngredients extends LoadingWithTimeoutMixin(LitElement) {
   static override styles = [
     BASE,
     INPUT,
@@ -59,7 +61,7 @@ export class RobotoffIngredients extends LitElement {
    * The product code for which the ingredients are being corrected.
    * @type {string}
    */
-  @property({ type: String, attribute: "product-code" })
+  @property({ type: String, attribute: "product-code", reflect: true })
   productCode = ""
 
   /**
@@ -207,7 +209,7 @@ export class RobotoffIngredients extends LitElement {
         state: this._insightIds.length ? EventState.HAS_DATA : EventState.NO_DATA,
       })
     },
-    args: () => [this.productCode],
+    args: () => [this.productCode, this._languageCodes],
   })
 
   /**
@@ -238,10 +240,25 @@ export class RobotoffIngredients extends LitElement {
   }
 
   /**
+   * After the insight has been annotated
+   * Remove Loading state and emit event annotated
+   * Load the next insight
+   * @returns {Promise<void>}
+   */
+  async afterInsightAnnotation() {
+    await this.hideLoading()
+    this.dispatchIngredientsStateEvent({
+      state: EventState.ANNOTATED,
+    })
+    this.nextInsight()
+  }
+
+  /**
    * Submits an annotation based on the provided event.
    * @param {TextCorrectorEvent} event - The event containing the annotation details.
    */
   async submitAnnotation(event: TextCorrectorEvent) {
+    this.showLoading(event.detail.annotation)
     const insight = this._insight
     if (!insight) {
       console.error("No insight found at index", this._currentIndex)
@@ -251,14 +268,7 @@ export class RobotoffIngredients extends LitElement {
     // Send the annotation to Robotoff API
     await robotoff.annotateIngredients(insight.id, event.detail.annotation, event.detail.correction)
 
-    // Move to next insight or finish
-    this.nextInsight()
-
-    this.dispatchIngredientsStateEvent({
-      state: EventState.ANNOTATED,
-      insightId: insight.id,
-      ...event.detail,
-    })
+    await this.afterInsightAnnotation()
 
     if (this.allInsightsAreAnswered) {
       this.dispatchIngredientsStateEvent({
@@ -315,6 +325,7 @@ export class RobotoffIngredients extends LitElement {
               ${this.renderImage()}
               <div>
                 <text-corrector
+                  loading=${ifDefined(this.loading) as AnnotationAnswer}
                   correction=${correction}
                   original=${original}
                   @save=${this.submitAnnotation}
