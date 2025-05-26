@@ -468,7 +468,7 @@ export class RobotoffNutrientsForm extends LitElement {
       .filter((key) => key !== "alcohol")
       .forEach((key) => keysSet.add(key))
 
-    // Tranform set to array
+    // Transform set to array
     let keys = Array.from(keysSet)
 
     // Filter keys
