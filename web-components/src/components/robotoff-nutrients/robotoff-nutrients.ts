@@ -26,6 +26,7 @@ import { getLocale } from "../../localization"
 import { fetchNutrientsOrderByCountryCode } from "../../signals/openfoodfacts"
 import { countryCode } from "../../signals/app"
 import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin"
+import { ifDefined } from "lit-html/directives/if-defined.js"
 
 /**
  * Robotoff Nutrients component
@@ -237,7 +238,7 @@ export class RobotoffNutrients extends LoadingWithTimeoutMixin(LitElement) {
             <div part="nutrients-content-wrapper" class="nutrients-content-wrapper">
               ${this.renderImage(insight as NutrientsInsight)}
               <robotoff-nutrients-form
-                loading=${this.loading}
+                loading=${ifDefined(this.loading) as AnnotationAnswer}
                 .nutrimentsData="${this.nutrimentsData}"
                 .insight="${insight as NutrientsInsight}"
                 @submit="${this.onSubmit}"

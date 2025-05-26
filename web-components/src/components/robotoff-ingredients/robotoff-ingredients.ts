@@ -5,7 +5,7 @@ import { BASE } from "../../styles/base"
 import { msg } from "@lit/localize"
 import { Task } from "@lit/task"
 import { fetchSpellcheckInsights, ingredientSpellcheckInsights } from "../../signals/ingredients"
-import { IngredientsInsight } from "../../types/robotoff"
+import { AnnotationAnswer, IngredientsInsight } from "../../types/robotoff"
 import { getLocale } from "../../localization"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import robotoff from "../../api/robotoff"
@@ -20,6 +20,7 @@ import { getValidHeadingLevel } from "../../utils/knowledge-panels/heading-utils
 import { sanitizeHtml } from "../../utils/html"
 import { getFullImageUrl, ProductFields } from "../../utils/openfoodfacts"
 import { mobileAndTabletCheck } from "../../utils/breakpoints"
+import { ifDefined } from "lit/directives/if-defined.js"
 
 /**
  * RobotoffIngredients component
@@ -324,7 +325,7 @@ export class RobotoffIngredients extends LoadingWithTimeoutMixin(LitElement) {
               ${this.renderImage()}
               <div>
                 <text-corrector
-                  loading=${this.loading}
+                  loading=${ifDefined(this.loading) as AnnotationAnswer}
                   correction=${correction}
                   original=${original}
                   @save=${this.submitAnnotation}
