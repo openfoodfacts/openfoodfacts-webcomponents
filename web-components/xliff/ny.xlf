@@ -244,6 +244,12 @@
 <trans-unit id="s0fb218abc2e157ed">
   <source>Invalidate image</source>
 </trans-unit>
+<trans-unit id="scb489a1a173ac3f0">
+  <source>Yes</source>
+</trans-unit>
+<trans-unit id="s09205907b5b56cda">
+  <source>No</source>
+</trans-unit>
 </body>
 </file>
 </xliff>
