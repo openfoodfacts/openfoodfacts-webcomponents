@@ -27,6 +27,7 @@ import { fetchNutrientsOrderByCountryCode } from "../../signals/openfoodfacts"
 import { countryCode } from "../../signals/app"
 import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin"
 import { ifDefined } from "lit-html/directives/if-defined.js"
+import { Breakpoints } from "../../utils/breakpoints"
 
 const IMAGE_MAX_WIDTH = 500
 /**
