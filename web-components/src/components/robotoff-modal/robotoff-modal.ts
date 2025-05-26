@@ -7,7 +7,7 @@ import { IS_HIDDEN } from "../../styles/utils"
 import { classMap } from "lit/directives/class-map.js"
 
 import "../shared/modal"
-import "../robotoff-ingredients/robotoff-ingredients"
+import "../robotoff-ingredient-spellcheck/robotoff-ingredient-spellcheck"
 import "../robotoff-nutrients/robotoff-nutrients"
 import "../robotoff-question/robotoff-question"
 
@@ -145,10 +145,10 @@ export class RobotoffModal extends LitElement {
   renderModalContent() {
     switch (this.robotoffContributionType) {
       case RobotoffContributionType.INGREDIENTS:
-        return html`<robotoff-ingredients
+        return html`<robotoff-ingredient-spellcheck
           product-code="${this.productCode}"
           @ingredients-state="${this.onStateChange}"
-        ></robotoff-ingredients>`
+        ></robotoff-ingredient-spellcheck>`
       case RobotoffContributionType.NUTRIENTS:
         return html`<robotoff-nutrients
           product-code="${this.productCode}"

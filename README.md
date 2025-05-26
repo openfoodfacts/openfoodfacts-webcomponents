@@ -16,7 +16,7 @@ A set of web components for Open Food Facts to help build edition interfaces
 
 - [Nutrition editing (with Nutri-Sight integration)](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-nutrients)
 - [Robotoff Questions](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-question)
-- [Robotoff Ingredients](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-ingredients)
+- [Robotoff Ingredients](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-ingredient-spellcheck)
 - [Donation Banner](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#donation-banner)
 - [Mobile Badges](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#mobile-badges)
 - [Barcode Scanner](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#barcode-scanner)

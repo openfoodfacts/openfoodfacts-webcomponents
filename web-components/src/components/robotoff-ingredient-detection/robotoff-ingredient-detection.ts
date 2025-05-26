@@ -209,6 +209,9 @@ export class RobotoffIngredientDetection extends LitElement {
    * @returns {TemplateResult}
    */
   private renderImagePrediction(prediction: ImagePrediction) {
+    if (!prediction?.image?.source_image) {
+      return nothing
+    }
     const imgUrl = getRobotoffImageUrl(prediction.image.source_image)
     const boundingBox = prediction.data.entities[0]?.bounding_box
       ? robotoffBoundingBoxToCropImageBoundingBox(prediction.data.entities[0].bounding_box)
