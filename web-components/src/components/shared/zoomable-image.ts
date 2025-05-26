@@ -236,7 +236,8 @@ export class ZoomableImage extends LitElement {
   }
 
   /**
-   * Initializes the cropper components.
+   * Initializes the cropper components, as required by cropperjs.
+   * (add them to the CustomElementRegistry)
    */
   initCropper() {
     CropperCanvas.$define()
