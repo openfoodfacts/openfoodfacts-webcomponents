@@ -3,7 +3,7 @@ import { css, html, LitElement, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import {
   annotateNutrientsWithData,
-  annotateNutrientWitoutData,
+  annotateNutrientWithoutData,
   fetchNutrientInsights,
   insightById,
 } from "../../signals/nutrients"
@@ -212,7 +212,7 @@ export class RobotoffNutrients extends LoadingWithTimeoutMixin(LitElement) {
    */
   async onRefuse() {
     this.showLoading(AnnotationAnswer.REFUSE)
-    await annotateNutrientWitoutData(this.currentInsightId, AnnotationAnswer.REFUSE)
+    await annotateNutrientWithoutData(this.currentInsightId, AnnotationAnswer.REFUSE)
     await this.afterInsightAnnotation()
   }
 
@@ -221,7 +221,7 @@ export class RobotoffNutrients extends LoadingWithTimeoutMixin(LitElement) {
    */
   async onSkip() {
     this.showLoading(AnnotationAnswer.SKIP)
-    await annotateNutrientWitoutData(this.currentInsightId, AnnotationAnswer.SKIP)
+    await annotateNutrientWithoutData(this.currentInsightId, AnnotationAnswer.SKIP)
     await this.afterInsightAnnotation()
   }
 

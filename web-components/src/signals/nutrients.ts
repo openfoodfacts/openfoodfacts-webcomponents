@@ -87,7 +87,7 @@ export const annotateNutrientsWithData = async (annotation: InsightAnnotationAns
  * Annotate an insight with annotation answer
  * @param insightId
  */
-export const annotateNutrientWitoutData = async (
+export const annotateNutrientWithoutData = async (
   insightId: string,
   annotation: AnnotationAnswer
 ) => {

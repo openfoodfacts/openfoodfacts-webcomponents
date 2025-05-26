@@ -16,7 +16,7 @@ const DURATION = 750
 
 /**
  * Mixin that adds loading functionality to a LitElement.
- * It will show the loading state for at least 500ms to avoid flickering.
+ * It will show the loading state for at least 750ms to avoid flickering.
  */
 export const LoadingWithTimeoutMixin = <T extends Constructor<LitElement>>(
   superClass: T
