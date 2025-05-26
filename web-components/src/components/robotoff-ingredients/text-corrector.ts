@@ -31,6 +31,9 @@ import { RELATIVE } from "../../styles/utils"
 import { sanitizeHtml } from "../../utils/html"
 import { Breakpoints } from "../../utils/breakpoints"
 
+import "../shared/loading-button"
+import { triggerSubmit } from "../../utils"
+
 // key is the index of the change in the groupedChanges array
 // value is boolean indicating if the change is validated or not
 export type ValidationChangeResult = Record<number, boolean>
@@ -273,6 +276,12 @@ export class TextCorrector extends LitElement {
   textToCompare = ""
 
   /**
+   * Loading state for buttons
+   */
+  @property({ type: String, reflect: true })
+  loading?: AnnotationAnswer
+
+  /**
    * Indicates whether the component is in edit mode.
    * @type {boolean}
    */
@@ -425,8 +434,13 @@ export class TextCorrector extends LitElement {
       return
     }
     setTimeout(() => {
-      const button = this.shadowRoot!.querySelector("button[type='submit']") as HTMLButtonElement
-      button.focus()
+      const loadingButton = this.shadowRoot!.querySelector(
+        "loading-button[type='submit']"
+      ) as HTMLElement
+      if (loadingButton && loadingButton.shadowRoot) {
+        const button = loadingButton.shadowRoot.querySelector("button") as HTMLButtonElement
+        button?.focus()
+      }
     }, 0)
   }
 
@@ -1049,11 +1063,19 @@ export class TextCorrector extends LitElement {
   renderButtons() {
     const confirmTitle = this.isConfirmDisabled ? this.updateTextMsg : ""
 
-    const successButton = html` <button
-      class="button success-button with-icon"
-      ?disabled=${this.isConfirmDisabled}
-      title=${confirmTitle}
+    const isLoading = Boolean(this.loading)
+    const isSuccessLoading = [
+      AnnotationAnswer.ACCEPT,
+      AnnotationAnswer.ACCEPT_AND_ADD_DATA,
+      AnnotationAnswer.REFUSE,
+    ].includes(this.loading!)
+    const successButton = html` <loading-button
+      ?loading=${isSuccessLoading}
+      ?disabled=${isLoading || this.isConfirmDisabled}
       type="submit"
+      title=${confirmTitle}
+      @click=${() => triggerSubmit(this.form!)}
+      css-classes="button success-button"
     >
       <span
         >${msg("Save")}${this.getKeyboardShortcutText(
@@ -1061,11 +1083,16 @@ export class TextCorrector extends LitElement {
         )}</span
       >
       <check-icon></check-icon>
-    </button>`
+    </loading-button>`
+
     if (this.isEditMode) {
       return html`
         <div class="submit-buttons buttons-row can-wrap">
-          <button class="button cappucino-button with-icon" @click=${this.cancelEditMode}>
+          <button
+            class="button cappucino-button with-icon"
+            @click=${this.cancelEditMode}
+            ?disabled=${isLoading}
+          >
             <span>${msg("Cancel")}</span><cross-icon></cross-icon>
           </button>
           ${successButton}
@@ -1075,24 +1102,34 @@ export class TextCorrector extends LitElement {
 
     return html`
       <div class="submit-buttons buttons-row can-wrap">
-        <button class="button white-button with-icon" @click=${this.skip}>
+        <loading-button
+          ?loading=${this.loading === AnnotationAnswer.SKIP}
+          ?disabled=${isLoading}
+          css-classes="button white-button"
+          @click=${this.skip}
+        >
           <span
             >${msg("Skip")}${this.getKeyboardShortcutText(
               TextCorrectorKeyboardShortcut.SKIP_TEXT_CORRECTION
             )}</span
           ><skip-icon></skip-icon>
-        </button>
+        </loading-button>
         ${successButton}
       </div>
     `
   }
 
   renderSpellCheck() {
+    const isLoading = Boolean(this.loading)
     return html`
       <div class="text-section">
         <p class="text">${this.renderSpellCheckDiff()}</p>
         <div style="display: flex; justify-content: flex-end;">
-          <button class="button cappucino-button with-icon" @click=${this.enterEditMode}>
+          <button
+            class="button cappucino-button with-icon"
+            @click=${this.enterEditMode}
+            ?disabled=${isLoading}
+          >
             <span
               >${msg("Edit")}${this.getKeyboardShortcutText(
                 TextCorrectorKeyboardShortcut.EDIT_TEXT

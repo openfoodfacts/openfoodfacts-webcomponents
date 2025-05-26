@@ -7,7 +7,7 @@ import {
   fetchNutrientInsights,
   insightById,
 } from "../../signals/nutrients"
-import "./robotoff-nutrients-table"
+import "./robotoff-nutrients-form"
 import "../shared/zoomable-image"
 import "../shared/loader"
 
@@ -25,6 +25,8 @@ import { ProductFields } from "../../utils/openfoodfacts"
 import { getLocale } from "../../localization"
 import { fetchNutrientsOrderByCountryCode } from "../../signals/openfoodfacts"
 import { countryCode } from "../../signals/app"
+import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin"
+import { ifDefined } from "lit-html/directives/if-defined.js"
 
 /**
  * Robotoff Nutrients component
@@ -33,7 +35,7 @@ import { countryCode } from "../../signals/app"
  * @part nutrients-content-wrapper - The nutrients content wrapper
  */
 @customElement("robotoff-nutrients")
-export class RobotoffNutrients extends LitElement {
+export class RobotoffNutrients extends LoadingWithTimeoutMixin(LitElement) {
   static override styles = [
     BASE,
     FLEX,
@@ -78,13 +80,6 @@ export class RobotoffNutrients extends LitElement {
    */
   @property({ type: String, attribute: "product-code" })
   productCode = ""
-
-  /**
-   * Is the form submited
-   * @type {boolean}
-   */
-  @state()
-  isSubmited = false
 
   @state()
   insightsIds: string[] = []
@@ -169,17 +164,6 @@ export class RobotoffNutrients extends LitElement {
     return result.product.nutriments
   }
 
-  /**
-   * Annotate the nutrients insights
-   * @returns {Promise<void>}
-   */
-  async onSubmit(event: CustomEvent<InsightAnnotationAnswer>) {
-    await annotateNutrientsWithData(event.detail)
-    this.isSubmited = true
-    this.emitNutrientEvent(EventState.ANNOTATED)
-    this.loadInsight(this.currentInsightIndex + 1)
-  }
-
   renderImage(insight: NutrientsInsight) {
     if (!insight?.source_image) {
       return nothing
@@ -202,19 +186,43 @@ export class RobotoffNutrients extends LitElement {
   }
 
   /**
+   * After the insight has been annotated
+   * Remove Loading state and emit event annotated
+   * Load the next insight
+   * @returns {Promise<void>}
+   */
+  async afterInsightAnnotation() {
+    await this.hideLoading()
+    this.emitNutrientEvent(EventState.ANNOTATED)
+    this.loadInsight(this.currentInsightIndex + 1)
+  }
+
+  /**
+   * Annotate the nutrients insights
+   * @returns {Promise<void>}
+   */
+  async onSubmit(event: CustomEvent<InsightAnnotationAnswer>) {
+    this.showLoading(AnnotationAnswer.ACCEPT_AND_ADD_DATA)
+    await annotateNutrientsWithData(event.detail)
+    await this.afterInsightAnnotation()
+  }
+
+  /**
    * Refuse the current insight
    */
   async onRefuse() {
+    this.showLoading(AnnotationAnswer.REFUSE)
     await annotateNutrientWitoutData(this.currentInsightId, AnnotationAnswer.REFUSE)
-    await this.loadInsight(this.currentInsightIndex + 1)
+    await this.afterInsightAnnotation()
   }
 
   /**
    * Skip the current insight
    */
   async onSkip() {
+    this.showLoading(AnnotationAnswer.SKIP)
     await annotateNutrientWitoutData(this.currentInsightId, AnnotationAnswer.SKIP)
-    await this.loadInsight(this.currentInsightIndex + 1)
+    await this.afterInsightAnnotation()
   }
 
   override render() {
@@ -229,13 +237,14 @@ export class RobotoffNutrients extends LitElement {
           <div class="nutrients" part="nutrients">
             <div part="nutrients-content-wrapper" class="nutrients-content-wrapper">
               ${this.renderImage(insight as NutrientsInsight)}
-              <robotoff-nutrients-table
+              <robotoff-nutrients-form
+                loading=${ifDefined(this.loading) as AnnotationAnswer}
                 .nutrimentsData="${this.nutrimentsData}"
                 .insight="${insight as NutrientsInsight}"
                 @submit="${this.onSubmit}"
                 @refuse="${this.onRefuse}"
                 @skip="${this.onSkip}"
-              ></robotoff-nutrients-table>
+              ></robotoff-nutrients-form>
             </div>
           </div>
         `

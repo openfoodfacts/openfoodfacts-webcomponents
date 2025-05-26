@@ -6,6 +6,7 @@ import {
   InsightAnnotatationData,
   InsightAnnotationSize,
   InsightAnnotationAnswer,
+  AnnotationAnswer,
 } from "../../types/robotoff"
 import { localized, msg, str } from "@lit/localize"
 import {
@@ -23,7 +24,6 @@ import {
   NUTRIENT_UNIT_NAME_PREFIX,
   NUTRIENT_UNIT_SUFFIX,
 } from "../../utils/nutrients"
-import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { EventType, SELECT_ICON_FILE_NAME, WHITE_SELECT_ICON_FILE_NAME } from "../../constants"
 import { INPUT, SELECT } from "../../styles/form"
 import { FLEX } from "../../styles/utils"
@@ -31,10 +31,16 @@ import { backgroundImage } from "../../directives/background-image"
 import { ALERT } from "../../styles/alert"
 import { NutrimentsProductType } from "../../types/openfoodfacts"
 import { GREEN } from "../../utils/colors"
-import { initDebounce, setValueAndParentsObjectIfNotExists } from "../../utils"
+import {
+  initDebounce,
+  removeUselessZeros,
+  setValueAndParentsObjectIfNotExists,
+  triggerSubmit,
+} from "../../utils"
 import { nutrientsOrderByCountryCode, sortKeysByNutrientsOrder } from "../../signals/openfoodfacts"
 import { countryCode } from "../../signals/app"
 
+import "../shared/loading-button"
 import "../shared/autocomplete-input"
 import "../icons/suggestion"
 import "../icons/add"
@@ -42,6 +48,8 @@ import "../icons/eye-visible"
 
 import "../icons/eye-invisible"
 import { AutocompleteInputChangeEvent, AutocompleteSuggestionSelectEvent } from "../../types"
+import { ButtonType, getButtonClasses } from "../../styles/buttons"
+
 export const ALLOWED_SPECIAL_VALUES = ["", "-", "traces"]
 
 export type FormatedNutrimentData = {
@@ -77,14 +85,14 @@ const SERVING_SIZE_SELECT_NAME = "serving_size_select"
 
 /**
  * Display a table of nutrients for a given product
- * @element robotoff-nutrients-table
+ * @element robotoff-nutrients-form
  * @fires submit - when the user submit the form
  */
-@customElement("robotoff-nutrients-table")
+@customElement("robotoff-nutrients-form")
 @localized()
-export class RobotoffNutrientsTable extends LitElement {
+export class RobotoffNutrientsForm extends LitElement {
   static override styles = [
-    ...getButtonClasses([ButtonType.Success, ButtonType.Danger, ButtonType.White]),
+    ...getButtonClasses([ButtonType.Chocolate]),
     SELECT,
     INPUT,
     FLEX,
@@ -128,7 +136,7 @@ export class RobotoffNutrientsTable extends LitElement {
         gap: 0.5rem;
       }
 
-      .submit-row .success-button {
+      .submit-row .success-loading-button {
         grid-column: 1 / 3;
       }
       .input-error-message {
@@ -228,6 +236,11 @@ export class RobotoffNutrientsTable extends LitElement {
   private errors: Record<string, string> = {}
 
   /**
+   * Loading state for buttons
+   */
+  @property({ type: String, reflect: true })
+  loading?: AnnotationAnswer
+  /**
    * Serving size value to display
    */
   @state()
@@ -260,6 +273,15 @@ export class RobotoffNutrientsTable extends LitElement {
   @state()
   autocompleteValue: string = ""
 
+  /**
+   * Form element
+   */
+  @query("form")
+  private form?: HTMLFormElement
+
+  /**
+   * Serving size input
+   */
   @query(`input[name='${NUTRIENT_SERVING_SIZE_KEY}']`)
   private servingSizeInput?: HTMLInputElement
 
@@ -438,11 +460,26 @@ export class RobotoffNutrientsTable extends LitElement {
    * @param keysSet - The keys set to process
    */
   processKeysSet(nutrients: FormatedNutrients, keysSet: Set<string>): void {
-    // Tranform set to array and sort the keys based on the order defined in nutrientsOrder
-    const keys = sortKeysByNutrientsOrder(this.countryCode, Array.from(keysSet))
+    const countryKeys = nutrientsOrderByCountryCode.getItem(this.countryCode) ?? {}
+    // Add needed keys from country keys
+    Object.keys(countryKeys)
+      .filter((key) => countryKeys[key].displayInEditForm)
+      // Remove alcohol key because it is weird to display it everytime
+      .filter((key) => key !== "alcohol")
+      .forEach((key) => keysSet.add(key))
 
-    // Remove keys nutrition-score until is not removed from API
-    nutrients!.keys = keys.filter((key) => !/^nutrition-score/.test(key))
+    // Transform set to array
+    let keys = Array.from(keysSet)
+
+    // Filter keys
+    keys = keys
+      // Remove keys nutrition-score until is not removed from API
+      .filter((key) => !/^nutrition-score/.test(key))
+      // Remove energy key because it will be computed from energy-kj
+      .filter((key) => key !== "energy")
+
+    // Sort keys and set them to nutrients
+    nutrients.keys = sortKeysByNutrientsOrder(this.countryCode, keys)
   }
 
   /**
@@ -564,18 +601,20 @@ export class RobotoffNutrientsTable extends LitElement {
     robotoffSuggestion?: { value: string; unit?: string },
     answer?: { value: string; unit?: string }
   ) {
+    const suggestionValue = removeUselessZeros(robotoffSuggestion?.value ?? "")
+    const value = removeUselessZeros(answer?.value ?? "")
     if (
       // Check if suggestion is already in the answers
       // Check if the unit is the same or if the suggestion has no unit
       // Return nothing if the suggestion is already in the answers
-      !robotoffSuggestion?.value ||
-      (answer?.value === robotoffSuggestion.value &&
-        (!robotoffSuggestion.unit || answer?.unit === robotoffSuggestion.unit))
+      !suggestionValue ||
+      (value === suggestionValue &&
+        (!robotoffSuggestion!.unit || answer?.unit === robotoffSuggestion!.unit))
     ) {
       return nothing
     }
 
-    const text = `${robotoffSuggestion.value} ${robotoffSuggestion.unit}`
+    const text = `${robotoffSuggestion!.value} ${robotoffSuggestion!.unit ?? ""}`
     return html`<button
       type="button"
       class="alert success with-icons"
@@ -825,7 +864,6 @@ export class RobotoffNutrientsTable extends LitElement {
           unit: null,
         }
       }
-
       nutrientAnotationForm[name][isUnit ? "unit" : "value"] = value as string
     }
 
@@ -850,9 +888,19 @@ export class RobotoffNutrientsTable extends LitElement {
     const value = input.value as InsightAnnotationSize
     this.insightAnnotationSize = value
   }
+  /**
+   * Handle the click event of the skip button.
+   *
+   * It will emit a skip event.
+   */
   onSkip() {
     this.dispatchEvent(new CustomEvent(EventType.SKIP))
   }
+  /**
+   * Handle the click event of the refuse button.
+   *
+   * It will emit a refuse event.
+   */
   onRefuse() {
     this.dispatchEvent(new CustomEvent(EventType.REFUSE))
   }
@@ -862,15 +910,37 @@ export class RobotoffNutrientsTable extends LitElement {
    * It will render a submit button.
    */
   renderSubmitRow() {
+    const isLoading = Boolean(this.loading)
+    const isAcceptLoading =
+      isLoading &&
+      [AnnotationAnswer.ACCEPT, AnnotationAnswer.ACCEPT_AND_ADD_DATA].includes(this.loading!)
+
     return html`
       <div class="submit-row">
-        <button type="submit" class="button success-button">${msg("Submit")}</button>
-        <button type="button" class="button danger-button" @click=${this.onRefuse}>
-          ${msg("Invalidate image")}
-        </button>
-        <button type="button" class="button white-button" @click=${this.onSkip}>
-          ${msg("Skip")}
-        </button>
+        <!-- Trigger the submit event manually because lit component doesn't dispatch the submit event even if button is type submit -->
+        <loading-button
+          type="submit"
+          class="success-loading-button"
+          css-classes="button success-button"
+          .loading=${isAcceptLoading}
+          .disabled=${isLoading}
+          @click=${() => triggerSubmit(this.form!)}
+          label="${msg("Submit")}"
+        ></loading-button>
+        <loading-button
+          .loading=${this.loading === AnnotationAnswer.SKIP}
+          .disabled=${isLoading}
+          css-classes="button white-button"
+          @click=${this.onSkip}
+          label=${msg("Skip")}
+        ></loading-button>
+        <loading-button
+          css-classes="button danger-button"
+          .loading=${this.loading === AnnotationAnswer.REFUSE}
+          .disabled=${isLoading}
+          @click=${this.onRefuse}
+          label=${msg("Invalidate image")}
+        ></loading-button>
       </div>
     `
   }
@@ -1061,6 +1131,6 @@ export class RobotoffNutrientsTable extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "robotoff-nutrients-table": RobotoffNutrientsTable
+    "robotoff-nutrients-form": RobotoffNutrientsForm
   }
 }

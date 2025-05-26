@@ -90,7 +90,7 @@ const robotoff = {
       annotation,
     }
     if (correction) {
-      data.data = JSON.stringify({ correction })
+      data.data = JSON.stringify({ annotation: correction })
     }
     const formBody = new URLSearchParams(data).toString()
     return annotate(formBody)
