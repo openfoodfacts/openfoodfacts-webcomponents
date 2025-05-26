@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file target-language="nl-BE" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+  <file target-language="nl" source-language="en" original="lit-localize-inputs" datatype="plaintext">
     <body>
       <trans-unit id="s49730f3d5751a433" approved="yes">
         <source>Loading...</source>
-        <target state="final">Bezig met laden...</target>
+        <target state="final">Aan het laden...</target>
       </trans-unit>
       <trans-unit id="s95d23d03f9147581" approved="yes">
         <source>Unzoom</source>
@@ -12,7 +12,7 @@
       </trans-unit>
       <trans-unit id="s166bd56d19670a72" approved="yes">
         <source>Zoom</source>
-        <target state="final">Inzoomen</target>
+        <target state="final">Zoom</target>
       </trans-unit>
       <trans-unit id="s01d2865e3e1d5501" approved="yes">
         <source>Thank you for your assistance!</source>
@@ -282,7 +282,7 @@
       </trans-unit>
       <trans-unit id="sb3d4f79d9d8b71e5" approved="yes">
         <source>Submit</source>
-        <target state="final">Bevestigen</target>
+        <target state="final">Verzenden</target>
       </trans-unit>
       <trans-unit id="s0d5b7fee0311db68" approved="yes">
         <source>Property</source>
@@ -332,12 +332,14 @@
         <source>Invalidate image</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">Afbeelding ongeldig maken</target>
       </trans-unit>
-<trans-unit id="scb489a1a173ac3f0">
-  <source>Yes</source>
-</trans-unit>
-<trans-unit id="s09205907b5b56cda">
-  <source>No</source>
-</trans-unit>
+      <trans-unit id="scb489a1a173ac3f0" approved="yes">
+        <source>Yes</source>
+        <target state="final">Ja</target>
+      </trans-unit>
+      <trans-unit id="s09205907b5b56cda" approved="yes">
+        <source>No</source>
+        <target state="final">Nee</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
