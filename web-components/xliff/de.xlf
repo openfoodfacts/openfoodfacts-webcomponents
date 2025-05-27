@@ -132,6 +132,7 @@
       </trans-unit>
       <trans-unit id="h5d824b4954e56ea5">
         <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
+        <target state="translated">Scannen Sie <x id="0" equiv-text=„&lt;span class=&quot;everyday&quot;&gt;“/>täglich Ihre<x id="1" equiv-text=„&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;“/>Lebensmittel<x id="2" equiv-text=„&lt;/span&gt;“/></target>
       </trans-unit>
       <trans-unit id="s8a8bfd67f2dd2810">
         <source>Download the OFF app with this QR code</source>
@@ -325,18 +326,20 @@
       </trans-unit>
       <trans-unit id="sf44a6b3b232c28ea">
         <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
-        <target state="translated">Aktuellen Wert durch <x id="0" equiv-text="${text}"/> ersetzen</target>
+        <target state="translated">Aktuellen Wert durch <x id="0" equiv-text=„${text}“/> ersetzen</target>
       </trans-unit>
       <trans-unit id="s0fb218abc2e157ed">
         <source>Invalidate image</source>
         <target state="translated">Ungültiges Bild</target>
       </trans-unit>
-<trans-unit id="scb489a1a173ac3f0">
-  <source>Yes</source>
-</trans-unit>
-<trans-unit id="s09205907b5b56cda">
-  <source>No</source>
-</trans-unit>
+      <trans-unit id="scb489a1a173ac3f0">
+        <source>Yes</source>
+        <target state="translated">Ja</target>
+      </trans-unit>
+      <trans-unit id="s09205907b5b56cda">
+        <source>No</source>
+        <target state="translated">Nein</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
