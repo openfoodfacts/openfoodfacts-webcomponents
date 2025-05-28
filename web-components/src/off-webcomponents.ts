@@ -6,7 +6,7 @@ export { RobotoffIngredients } from "./components/robotoff-ingredients/robotoff-
 export { RobotoffContributionMessage } from "./components/robotoff-contribution-message/robotoff-contribution-message"
 
 // Will be added in the future when design is ready
-// export { KnowledgePanelsComponent } from "./components/knowledge-panels/knowledge-panels"
+export { KnowledgePanelsComponent } from "./components/knowledge-panels/knowledge-panels"
 
 export { DonationBanner } from "./components/donation-banner/donation-banner"
 export { MobileBadges } from "./components/mobile-badges/mobile-badges"

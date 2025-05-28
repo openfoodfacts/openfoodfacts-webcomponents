@@ -70,5 +70,14 @@
       <h2 id="autocomplete-input">Autocomplete Input <a href="#autocomplete-input">#</a></h2>
       <api-viewer src="custom-elements.json" only="autocomplete-input"></api-viewer>
     </div>
+
+    <div style="margin-top: 1rem">
+      <h2 id="knowledge-panels">Knowledge Panels <a href="#knowledge-panels">#</a></h2>
+      <api-viewer src="custom-elements.json" only="knowledge-panels">
+	<template data-element="knowledge-panels" data-target="host">
+	  <knowledge-panels url="http://world.openfoodfacts.localhost/api/v2/product/5601244500087/?fields=knowledge_panels" path="product" headingLevel="h3"></knowledge-panels>
+	</template>
+      </api-viewer>
+    </div>
   </body>
 </html>
