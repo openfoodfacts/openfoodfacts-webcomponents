@@ -195,7 +195,7 @@ export class KnowledgePanelsComponent extends LitElement {
     this.nutritionImages = extractImages(panels)
 
     // Create an array of top-level panels (ones that aren't only referenced by others)
-    const topLevelPanelIds = ["health_card", "product_card", "product_details"]
+    const topLevelPanelIds = ["root"]
     const topLevelPanels = topLevelPanelIds.filter((id) => panels[id]).map((id) => panels[id])
 
     // If no top-level panels found, show all panels
