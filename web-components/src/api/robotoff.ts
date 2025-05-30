@@ -11,7 +11,6 @@ import {
   NutrientsAnnotationData,
   AnnotationFormData,
   IngredientDetectionInsight,
-  RobotoffBoundingBox,
   IngredientDetectionAnnotationData,
 } from "../types/robotoff"
 import { robotoffConfiguration } from "../signals/robotoff"
