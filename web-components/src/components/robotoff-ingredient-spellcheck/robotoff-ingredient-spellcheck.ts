@@ -8,7 +8,7 @@ import {
   fetchSpellcheckInsights,
   ingredientSpellcheckInsights,
 } from "../../signals/ingredient-spellcheck"
-import { AnnotationAnswer, IngredientsInsight } from "../../types/robotoff"
+import { AnnotationAnswer, IngredientSpellcheckInsight } from "../../types/robotoff"
 import { getLocale } from "../../localization"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import robotoff from "../../api/robotoff"
@@ -139,9 +139,9 @@ export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(LitEle
 
   /**
    * Gets the current insight based on the current index.
-   * @returns {IngredientsInsight | undefined} The current insight or undefined if no insight is available.
+   * @returns {IngredientSpellcheckInsight | undefined} The current insight or undefined if no insight is available.
    */
-  get _insight(): IngredientsInsight | undefined {
+  get _insight(): IngredientSpellcheckInsight | undefined {
     const id: string | undefined = this._insightIds[this._currentIndex]
     const value = ingredientSpellcheckInsights.getItem(id)
     return value
@@ -179,9 +179,9 @@ export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(LitEle
 
   /**
    * Updates the ingredients image URL based on the provided insight.
-   * @param {IngredientsInsight | undefined} insight - The insight to use for updating the image URL.
+   * @param {IngredientSpellcheckInsight | undefined} insight - The insight to use for updating the image URL.
    */
-  async updateIngredientsImageUrl(insight?: IngredientsInsight) {
+  async updateIngredientsImageUrl(insight?: IngredientSpellcheckInsight) {
     if (!insight) {
       this.productData.imageUrl = undefined
       this.productData.name = undefined
@@ -277,7 +277,11 @@ export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(LitEle
     }
 
     // Send the annotation to Robotoff API
-    await robotoff.annotateIngredients(insight.id, event.detail.annotation, event.detail.correction)
+    await robotoff.annotateIngredientSpellcheck(
+      insight.id,
+      event.detail.annotation,
+      event.detail.correction
+    )
 
     await this.afterInsightAnnotation()
 

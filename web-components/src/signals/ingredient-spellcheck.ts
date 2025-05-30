@@ -1,13 +1,13 @@
 import { SignalMap } from "../utils/signals"
 import robotoff from "../api/robotoff"
-import { InsightType, IngredientsInsight, InsightsRequestParams } from "../types/robotoff"
+import { InsightType, IngredientSpellcheckInsight, InsightsRequestParams } from "../types/robotoff"
 
-export const ingredientSpellcheckInsights = new SignalMap<IngredientsInsight>({})
+export const ingredientSpellcheckInsights = new SignalMap<IngredientSpellcheckInsight>({})
 
 export async function fetchSpellcheckInsights(
   productCode?: string,
   requestParams: InsightsRequestParams = {}
-): Promise<IngredientsInsight[]> {
+): Promise<IngredientSpellcheckInsight[]> {
   let result
   const params: InsightsRequestParams = {
     ...requestParams,
@@ -18,8 +18,8 @@ export async function fetchSpellcheckInsights(
     params["barcode"] = productCode
   }
   try {
-    result = await robotoff.insights<IngredientsInsight>(params)
-    result.insights.forEach((insight: IngredientsInsight) => {
+    result = await robotoff.insights<IngredientSpellcheckInsight>(params)
+    result.insights.forEach((insight: IngredientSpellcheckInsight) => {
       ingredientSpellcheckInsights.setItem(insight.id, insight)
     })
   } catch (error) {

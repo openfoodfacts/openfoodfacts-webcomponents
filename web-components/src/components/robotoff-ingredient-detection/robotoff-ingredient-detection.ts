@@ -12,12 +12,10 @@ import { LitElement, css, html, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import "../shared/zoomable-image"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
-import robotoff from "../../api/robotoff"
 import {
-  CropBoundingBox,
-  ImagePrediction,
-  ImagePredictionsResponse,
-  QuestionAnnotationAnswer,
+  IngredientDetectionInsight,
+  IngredientDetectionAnnotationData,
+  AnnotationAnswer,
 } from "../../types/robotoff"
 import { Task } from "@lit/task"
 import { getRobotoffImageUrl } from "../../signals/robotoff"
@@ -30,6 +28,11 @@ import {
   cropImageBoundingBoxToRobotoffBoundingBox,
   robotoffBoundingBoxToCropImageBoundingBox,
 } from "../../utils/crop"
+import {
+  fetchIngredientsDetectionInsights,
+  ingredientDetectionInsights,
+} from "../../signals/ingredient-detection"
+import robotoff from "../../api/robotoff"
 
 @customElement("robotoff-ingredient-detection")
 @localized()
@@ -42,7 +45,7 @@ export class RobotoffIngredientDetection extends LitElement {
         text-align: center;
       }
 
-      .button-container {
+      .button-container {datadata
         display: flex;
         justify-content: center;
         gap: 0.5rem;
@@ -71,7 +74,7 @@ export class RobotoffIngredientDetection extends LitElement {
    * @type {number}
    */
   @property({ type: Number })
-  count: number = 5
+  count: number = 100
 
   /**
    * Current page number for pagination
@@ -84,29 +87,22 @@ export class RobotoffIngredientDetection extends LitElement {
    * Barcode of the product
    * @type {string}
    */
-  @property({ type: String })
-  barcode?: string = undefined
+  @property({ type: String, attribute: "product-code", reflect: true })
+  productCode?: string = undefined
 
   /**
-   * Name of the model to use for predictions
-   * @type {string}
-   */
-  @property({ type: String })
-  modelName: string = "ingredient-detection"
-
-  /**
-   * Minimum confidence threshold for predictions
+   * Current index of the insight
    * @type {number}
    */
-  @property({ type: Number })
-  minConfidence: number = 0.8
+  @state()
+  index = 0
 
   /**
-   * Predictions fetched from the Robotoff API
-   * @type {ImagePredictionsResponse | null}
+   * List of insight ids
+   * @type {string[]}
    */
-  @property({ type: Object })
-  predictions: ImagePredictionsResponse | null = null
+  @state()
+  insightIds: string[] = []
 
   /**
    * Current crop mode
@@ -115,22 +111,45 @@ export class RobotoffIngredientDetection extends LitElement {
   @state()
   cropMode: ZoomableImage.CropMode = ZoomableImage.CropMode.CROP_READ
 
-  private _predictionTask = new Task(this, {
-    task: async ([count, page, barcode, modelName, minConfidence], {}) => {
-      if (!barcode) {
-        return
-      }
-      const requestParams = {
+  @state()
+  image?: HTMLImageElement
+
+  get insights() {
+    return this.insightIds.map((id) => ingredientDetectionInsights.getItem(id))
+  }
+
+  get currentInsight() {
+    return this.insights[this.index]
+  }
+
+  private insightsTask = new Task(this, {
+    task: async ([count, page, productCode], {}) => {
+      this.insightIds = []
+
+      const response = await fetchIngredientsDetectionInsights(productCode, {
         count,
         page,
-        barcode,
-        model_name: modelName,
-        min_confidence: minConfidence,
-      }
-      return await robotoff.getImagePredictions(requestParams)
+      })
+      this.insightIds = response.map((insight) => insight.id)
+      this.setIndex(0)
+      return response
     },
-    args: () => [this.count, this.page, this.barcode, this.modelName, this.minConfidence],
+    args: () => [this.count, this.page, this.productCode],
   })
+
+  async setIndex(index: number) {
+    this.image = undefined
+    this.index = index
+    const insight = this.currentInsight
+    if (!insight) {
+      return
+    }
+    this.image = new Image()
+    this.image.onload = () => {
+      this.requestUpdate()
+    }
+    this.image.src = getRobotoffImageUrl(insight.source_image!)
+  }
 
   /**
    * Renders the crop answer buttons
@@ -153,19 +172,22 @@ export class RobotoffIngredientDetection extends LitElement {
         <div class="button-container">
           <button
             class="button cappucino-button"
-            @click="${() => this.answer(QuestionAnnotationAnswer.YES)}"
+            type="button"
+            @click="${() => this.answer(AnnotationAnswer.ACCEPT)}"
           >
             ${msg("Yes")}
           </button>
           <button
+            type="button"
             class="button cappucino-button"
-            @click="${() => this.answer(QuestionAnnotationAnswer.NO)}"
+            @click="${() => this.answer(AnnotationAnswer.REFUSE)}"
           >
             ${msg("No")}
           </button>
           <button
+            type="button"
             class="button white-button"
-            @click="${() => this.answer(QuestionAnnotationAnswer.SKIP)}"
+            @click="${() => this.answer(AnnotationAnswer.SKIP)}"
           >
             ${msg("Skip")}
           </button>
@@ -187,17 +209,16 @@ export class RobotoffIngredientDetection extends LitElement {
    * @returns {TemplateResult}
    */
   override render() {
-    return this._predictionTask.render({
+    return this.insightsTask.render({
       pending: () => html`<off-wc-loading></off-wc-loading>`,
-      complete: (predictions) => {
-        if (!predictions) {
+      complete: () => {
+        const insight = this.currentInsight
+
+        if (!insight) {
           return nothing
         }
 
-        // TODO: handle multiple predictions
-        const imagePrediction = (predictions as ImagePredictionsResponse).image_predictions[0]
-
-        return this.renderImagePrediction(imagePrediction)
+        return this.renderInsight(insight)
       },
       error: (error: unknown) => html`<p>Error: ${String(error)}</p>`,
     })
@@ -208,14 +229,22 @@ export class RobotoffIngredientDetection extends LitElement {
    * @param {ImagePrediction} prediction - The image prediction to render
    * @returns {TemplateResult}
    */
-  private renderImagePrediction(prediction: ImagePrediction) {
-    if (!prediction?.image?.source_image) {
+  private renderInsight(insight: IngredientDetectionInsight) {
+    if (!insight.source_image) {
       return nothing
     }
-    const imgUrl = getRobotoffImageUrl(prediction.image.source_image)
-    const boundingBox = prediction.data.entities[0]?.bounding_box
-      ? robotoffBoundingBoxToCropImageBoundingBox(prediction.data.entities[0].bounding_box)
-      : undefined
+    const imgUrl = getRobotoffImageUrl(insight.source_image)
+    if (this.image) {
+      console.log("image", this.image.naturalWidth, this.image.naturalHeight)
+    }
+    const boundingBox =
+      insight.data.bounding_box && this.image
+        ? robotoffBoundingBoxToCropImageBoundingBox(
+            insight.data.bounding_box,
+            this.image.naturalWidth,
+            this.image.naturalHeight
+          )
+        : { x: 0, y: 0, width: 0, height: 0 }
 
     return html`
       <div>
@@ -252,34 +281,31 @@ export class RobotoffIngredientDetection extends LitElement {
    * @param {CustomEvent<CropResult>} event - The crop save event
    */
   onCropSave(event: CustomEvent<CropResult>) {
-    const oldBoundingBox = event.detail.oldBoundingBox
-      ? cropImageBoundingBoxToRobotoffBoundingBox(event.detail.oldBoundingBox)
-      : null
+    if (!this.image) {
+      return
+    }
     const robotoffBoundingBox = cropImageBoundingBoxToRobotoffBoundingBox(
-      event.detail.newBoundingBox
+      event.detail.newBoundingBox,
+      this.image.width,
+      this.image.height
     )
-    // TODO : integrate logic with robotoff insight api
 
-    alert(
-      "initial bounding box: " +
-        JSON.stringify(oldBoundingBox) +
-        "\n" +
-        "Crop bounding box: " +
-        JSON.stringify(robotoffBoundingBox)
-    )
-    this.answer(QuestionAnnotationAnswer.NO, robotoffBoundingBox)
+    this.answer(AnnotationAnswer.ACCEPT_AND_ADD_DATA, {
+      bounding_box: robotoffBoundingBox,
+      // TODO Change this to the actual annotation text
+      annotation: this.currentInsight.data.text,
+    })
   }
 
   /**
    * Handles the answer event
-   * @param {QuestionAnnotationAnswer} value - The answer value
-   * @param {CropBoundingBox} [boundingBox] - The bounding box for the answer
+   * @param {AnnotationAnswer} value - The answer value
+   * @param {RobotoffBoundingBox} [boundingBox] - The bounding box for the answer
    */
-  answer(value: QuestionAnnotationAnswer, boundingBox?: CropBoundingBox) {
-    // TODO : integrate logic with robotoff insight api
-    alert(
-      "Validate button clicked: " + value + "\n" + "bounding box: " + JSON.stringify(boundingBox)
-    )
+  answer(value: AnnotationAnswer, data?: IngredientDetectionAnnotationData) {
+    const insightId = this.currentInsight.id
+    robotoff.annotateIngredientDetection(insightId, value, data)
+    this.setIndex(this.index + 1)
   }
 }
 
