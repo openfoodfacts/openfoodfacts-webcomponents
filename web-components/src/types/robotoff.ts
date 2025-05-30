@@ -61,6 +61,7 @@ export type InsightAnnotationAnswer = {
 export enum InsightType {
   ingredient_spellcheck = "ingredient_spellcheck",
   nutrient_extraction = "nutrient_extraction",
+  ingredient_detection = "ingredient_detection",
 }
 
 export type InsightsRequestParams = Partial<{
@@ -130,14 +131,57 @@ export type BaseInsight<DataType> = {
 
 export type NutrientsInsight = BaseInsight<NutrientInsightData>
 
-export type IngredientsInsight = BaseInsight<{
+export type IngredientSpellcheckInsight = BaseInsight<{
   lang: string
   original: string
   correction: string
   lang_confidence: number
 }>
 
-export type InsightsResponse<T extends NutrientsInsight | IngredientsInsight> = {
+interface Lang {
+  lang: string
+  confidence: number
+}
+
+interface IngredientDetection {
+  id: string
+  text: string
+  vegan?: string
+  vegetarian?: string
+  in_taxonomy: boolean
+  ingredients?: IngredientDetection[]
+  is_in_taxonomy?: number
+  ciqual_food_code?: string
+  ciqual_proxy_food_code?: string
+  from_palm_oil?: string
+  percent_estimate: number
+  percent_max?: number
+  percent_min?: number
+  ecobalyse_code?: string
+  processing?: string
+  labels?: string
+  bounding_box?: RobotoffBoundingBox
+}
+
+export type IngredientDetectionInsight = BaseInsight<{
+  end: number
+  lang: Lang
+  text: string
+  score: number
+  start: number
+  raw_end: number
+  priority: number
+  ingredients: IngredientDetection[]
+  bounding_box: RobotoffBoundingBox
+  ingredients_n: number
+  known_ingredients_n: number
+  unknown_ingredients_n: number
+  fraction_known_ingredients: number
+}>
+
+export type InsightsResponse<
+  T extends NutrientsInsight | IngredientSpellcheckInsight | IngredientDetectionInsight,
+> = {
   count: number
   status: string
   insights: T[]
@@ -181,49 +225,9 @@ export type IngredientPrediction = {
   ciqual_proxy_food_code?: string
   ingredients?: IngredientPrediction[]
 }
-export type CropBoundingBox = [number, number, number, number]
+export type RobotoffBoundingBox = [number, number, number, number]
 
-export type ImagePrediction = {
-  id: number
-  type: string
-  model_name: string
-  model_version: string
-  data: {
-    entities: {
-      end: number
-      lang: {
-        lang: string
-        confidence: number
-      }
-      text: string
-      score: number
-      start: number
-      raw_end: number
-      ingredients: IngredientPrediction[]
-      bounding_box: CropBoundingBox
-      ingredients_n: number
-      known_ingredients_n: number
-      unknown_ingredients_n: number
-    }[]
-  }
-  timestamp: string
-  image: {
-    id: number
-    barcode: string
-    uploaded_at: string
-    image_id: string
-    source_image: string
-    width: number
-    height: number
-    deleted: boolean
-    server_type: string
-    fingerprint: number
-  }
-  max_confidence: number
-}
-
-export type ImagePredictionsResponse = {
-  count: number
-  image_predictions: ImagePrediction[]
-  status: string
+export type IngredientDetectionAnnotationData = {
+  annotation: string
+  bounding_box: RobotoffBoundingBox
 }

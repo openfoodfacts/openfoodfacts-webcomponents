@@ -140,8 +140,8 @@ export class ZoomableImage extends LitElement {
   @property({ type: String, attribute: "crop-mode" })
   cropMode: CropMode = CropMode.IMAGE_ONLY
 
-  // Use private property with getter/setter to detect changes
-  private _size: {
+  @property({ type: Object, attribute: "size", reflect: true })
+  size: {
     width: string
     height?: string
     "max-width"?: string
@@ -149,19 +149,6 @@ export class ZoomableImage extends LitElement {
   } = {
     width: "100%",
     height: "30vh",
-  }
-
-  @property({ type: Object })
-  get size() {
-    return this._size
-  }
-
-  set size(value: { width: string; height?: string; "max-width"?: string; "max-height"?: string }) {
-    const oldValue = this._size
-    this._size = value
-    this.requestUpdate("size", oldValue)
-    // Manually trigger the same behavior as attributeChangedCallback
-    this.fitImageToContainer()
   }
 
   @state()
@@ -201,7 +188,7 @@ export class ZoomableImage extends LitElement {
    */
   override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
     super.attributeChangedCallback(name, _old, value)
-    if (name == "src" && value) {
+    if (["src", "size"].includes(name) && value) {
       this.fitImageToContainer()
     }
   }

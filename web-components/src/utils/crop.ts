@@ -1,25 +1,24 @@
 import { CropperImageBoundingBox } from "../types"
-import { CropBoundingBox } from "../types/robotoff"
+import { RobotoffBoundingBox } from "../types/robotoff"
 
 /**
  * Converts a bounding box from the robotoff format to the crop image format.
  * @param boundingBox - The bounding box in the robotoff format.
+ * @example [0, 0.407234539089848, 0.872586872586873, 0.998833138856476]
  * @returns The bounding box in the cropperjs image format.
  */
 export const robotoffBoundingBoxToCropImageBoundingBox = (
-  boundingBox: CropBoundingBox
+  boundingBox: RobotoffBoundingBox,
+  imageWidth: number,
+  imageHeight: number
 ): CropperImageBoundingBox => {
-  const [top, left, bottom, right] = boundingBox
-  const x = left
-  const y = top
-  // TODO: verify that the bounding box is valid
-  const width = right - left
-  const height = bottom - top
+  const [xMin, yMin, xMax, yMax] = boundingBox // values is a value between 0 and 1
+
   return {
-    x,
-    y,
-    width,
-    height,
+    x: yMin * imageWidth,
+    y: xMin * imageHeight,
+    width: (yMax - yMin) * imageWidth,
+    height: (xMax - xMin) * imageHeight,
   }
 }
 
@@ -29,12 +28,14 @@ export const robotoffBoundingBoxToCropImageBoundingBox = (
  * @returns The bounding box in the robotoff format.
  */
 export const cropImageBoundingBoxToRobotoffBoundingBox = (
-  boundingBox: CropperImageBoundingBox
-): CropBoundingBox => {
+  boundingBox: CropperImageBoundingBox,
+  imageWidth: number,
+  imageHeight: number
+): RobotoffBoundingBox => {
   const { x, y, width, height } = boundingBox
-  const top = y
-  const left = x
-  const bottom = y + height
-  const right = x + width
-  return [top, left, bottom, right]
+  const xMin = y / imageHeight
+  const yMin = x / imageWidth
+  const xMax = (y + height) / imageHeight
+  const yMax = (x + width) / imageWidth
+  return [xMin, yMin, xMax, yMax]
 }
