@@ -102,9 +102,6 @@ export class RobotoffIngredientDetectionForm extends LitElement {
   }
 
   get boundingBox() {
-    if (this.image) {
-      console.log("image", this.image.naturalWidth, this.image.naturalHeight)
-    }
     const robotoffBoundingBox = this.data?.bounding_box
     const boundingBox =
       robotoffBoundingBox && this.image
