@@ -24,11 +24,11 @@ import { fetchProduct } from "../../api/openfoodfacts"
 import { ProductFields } from "../../utils/openfoodfacts"
 import { getLocale } from "../../localization"
 import { fetchNutrientsOrderByCountryCode } from "../../signals/openfoodfacts"
-import { countryCode } from "../../signals/app"
 import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin"
 import { ifDefined } from "lit-html/directives/if-defined.js"
 import { Breakpoints } from "../../utils/breakpoints"
 import { LanguageCodesMixin } from "../../mixins/language-codes-mixin"
+import { CountryCodeMixin } from "../../mixins/country-codes-mixin"
 
 const IMAGE_MAX_WIDTH = 500
 /**
@@ -39,7 +39,7 @@ const IMAGE_MAX_WIDTH = 500
  */
 @customElement("robotoff-nutrient-extraction")
 export class RobotoffNutrientExtraction extends LanguageCodesMixin(
-  LoadingWithTimeoutMixin(LitElement)
+  CountryCodeMixin(LoadingWithTimeoutMixin(LitElement))
 ) {
   static override styles = [
     BASE,
@@ -137,7 +137,7 @@ export class RobotoffNutrientExtraction extends LanguageCodesMixin(
           lc: languageCodes,
         }),
         fetchNutrientsTaxonomies(),
-        fetchNutrientsOrderByCountryCode(countryCode.get()),
+        fetchNutrientsOrderByCountryCode(this._countryCode),
       ])
 
       this.insightsIds = insights.map((insight) => insight.id)
