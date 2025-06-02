@@ -73,14 +73,26 @@ export class RobotoffIngredientDetection extends LanguageCodesMixin(
   @state()
   insightIds: string[] = []
 
+  /**
+   * Gets all insights by mapping insight IDs to their corresponding insight objects
+   * @returns {IngredientDetectionInsight[]} Array of insight objects
+   */
   get insights() {
     return this.insightIds.map((id) => ingredientDetectionInsights.getItem(id))
   }
 
+  /**
+   * Gets the current insight based on the current index
+   * @returns {IngredientDetectionInsight|undefined} The current insight or undefined if not found
+   */
   get currentInsight() {
     return this.insights[this.index]
   }
 
+  /**
+   * Task for fetching ingredient detection insights
+   * Handles the asynchronous fetching of insights and updates the component state
+   */
   private insightsTask = new Task(this, {
     task: async ([count, page, productCode, languageCodes], {}) => {
       this.insightIds = []
@@ -97,6 +109,10 @@ export class RobotoffIngredientDetection extends LanguageCodesMixin(
     args: () => [this.count, this.page, this.productCode, this.languageCodes],
   })
 
+  /**
+   * Sets the current index and updates the component state
+   * @param {number} index - The index to set
+   */
   async setIndex(index: number) {
     this.index = index
   }

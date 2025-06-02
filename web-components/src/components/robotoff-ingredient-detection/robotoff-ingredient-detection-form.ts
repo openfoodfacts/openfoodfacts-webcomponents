@@ -85,9 +85,17 @@ export class RobotoffIngredientDetectionForm extends LitElement {
   @state()
   cropMode: ZoomableImage.CropMode = ZoomableImage.CropMode.CROP_READ
 
+  /**
+   * The loaded image element
+   * @type {HTMLImageElement|undefined}
+   */
   @state()
   image?: HTMLImageElement
 
+  /**
+   * The annotation data for the current insight
+   * @type {Partial<IngredientDetectionAnnotationData>}
+   */
   @state()
   data: Partial<IngredientDetectionAnnotationData> = {
     annotation: undefined,
@@ -95,13 +103,25 @@ export class RobotoffIngredientDetectionForm extends LitElement {
     rotation: undefined,
   }
 
+  /**
+   * Whether the ingredients are being edited
+   * @type {boolean}
+   */
   @state()
   isEditingIngredients = false
 
+  /**
+   * Determines if the form is in a loading state
+   * @returns {boolean} True if loading, false otherwise
+   */
   get isLoading() {
     return Boolean(this.loading) || this.cropMode === ZoomableImage.CropMode.CROP
   }
 
+  /**
+   * Gets the bounding box for the image crop
+   * @returns {Object} The bounding box coordinates and dimensions
+   */
   get boundingBox() {
     const robotoffBoundingBox = this.data?.bounding_box
     const boundingBox =
@@ -129,6 +149,10 @@ export class RobotoffIngredientDetectionForm extends LitElement {
     }
   }
 
+  /**
+   * Handles changes to the insight property
+   * Loads the image and resets the form data when the insight changes
+   */
   onInsightChange() {
     // Load the image when the insight changes
     this.loadImage()
@@ -141,12 +165,20 @@ export class RobotoffIngredientDetectionForm extends LitElement {
     }
   }
 
+  /**
+   * Lifecycle method called when the component is connected to the DOM
+   * Ensures the image is loaded when the component is connected
+   */
   override connectedCallback() {
     super.connectedCallback()
     // Ensure the image is loaded when the component is connected to the DOM
     this.loadImage()
   }
 
+  /**
+   * Loads the image from the insight's source image URL
+   * Sets up the image element and triggers a re-render when loaded
+   */
   async loadImage() {
     this.image = undefined
     if (!this.insight?.source_image) {
@@ -208,6 +240,11 @@ export class RobotoffIngredientDetectionForm extends LitElement {
     return this.renderInsight(this.insight)
   }
 
+  /**
+   * Handles form submission
+   * Determines the appropriate answer based on whether changes were made
+   * @param {Event} event - The submit event
+   */
   onSubmit(event: Event) {
     event.preventDefault()
     event.stopPropagation()
@@ -229,6 +266,10 @@ export class RobotoffIngredientDetectionForm extends LitElement {
     }
   }
 
+  /**
+   * Renders the crop mode buttons
+   * @returns {TemplateResult} The template for the crop buttons
+   */
   renderCropButtons() {
     if (this.cropMode === ZoomableImage.CropMode.CROP) {
       const isLoading = Boolean(this.loading)
@@ -252,10 +293,18 @@ export class RobotoffIngredientDetectionForm extends LitElement {
     `
   }
 
+  /**
+   * Toggles the ingredients editing mode
+   */
   toggleEditIngredients() {
     this.isEditingIngredients = !this.isEditingIngredients
   }
 
+  /**
+   * Renders the ingredients editing interface
+   * @param {IngredientDetectionInsight} insight - The current insight
+   * @returns {TemplateResult} The template for the ingredients section
+   */
   renderEditIngredients(insight: IngredientDetectionInsight) {
     let content
     if (this.isEditingIngredients) {
@@ -315,7 +364,7 @@ export class RobotoffIngredientDetectionForm extends LitElement {
   }
 
   /**
-   * Toggles the crop mode
+   * Toggles the crop mode between read and edit modes
    */
   toggleCropMode() {
     this.cropMode =
@@ -324,6 +373,10 @@ export class RobotoffIngredientDetectionForm extends LitElement {
         : ZoomableImage.CropMode.CROP
   }
 
+  /**
+   * Updates the annotation data with new values
+   * @param {Partial<IngredientDetectionAnnotationData>} data - The data to update
+   */
   updateData(data: Partial<IngredientDetectionAnnotationData>) {
     this.data = { ...this.data, ...data }
   }
