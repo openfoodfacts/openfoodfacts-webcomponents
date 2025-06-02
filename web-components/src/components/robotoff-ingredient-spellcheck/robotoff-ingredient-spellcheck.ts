@@ -9,7 +9,6 @@ import {
   ingredientSpellcheckInsights,
 } from "../../signals/ingredient-spellcheck"
 import { AnnotationAnswer, IngredientSpellcheckInsight } from "../../types/robotoff"
-import { getLocale } from "../../localization"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import robotoff from "../../api/robotoff"
 import { EventState, EventType } from "../../constants"

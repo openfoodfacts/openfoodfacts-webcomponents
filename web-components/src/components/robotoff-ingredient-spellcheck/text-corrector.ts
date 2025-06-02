@@ -28,7 +28,6 @@ import "../shared/loading-button"
 import "../shared/text-corrector-highlight"
 import { triggerSubmit } from "../../utils"
 import { TextDiffMixin } from "../../mixins/text-diff-mixin"
-import { TextCorrectorHighlightInput } from "../../types"
 
 // key is the index of the change in the groupedChanges array
 // value is boolean indicating if the change is validated or not
