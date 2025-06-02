@@ -222,7 +222,7 @@ export class RobotoffIngredientDetectionForm extends LitElement {
       this.answer(AnnotationAnswer.ACCEPT_AND_ADD_DATA, {
         annotation: this.data.annotation ?? text,
         bounding_box: this.data.bounding_box ?? bounding_box,
-        rotation: this.data.rotation,
+        rotation: this.data.rotation ?? 0,
       })
     } else {
       this.answer(AnnotationAnswer.ACCEPT)
