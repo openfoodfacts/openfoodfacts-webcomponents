@@ -27,28 +27,29 @@ import {
 import { EventType } from "../../constants"
 import "../shared/loading-button"
 import { triggerSubmit } from "../../utils"
+import "../shared/text-corrector-highlight"
 
 @customElement("robotoff-ingredient-detection-form")
 @localized()
 export class RobotoffIngredientDetectionForm extends LitElement {
   static override styles = [
     css`
-      .question {
-        font-weight: bold;
-        margin-bottom: 0.5rem;
-      }
-
       .button-container {
         display: flex;
+        flex-wrap: wrap;
         justify-content: center;
         gap: 0.5rem;
         margin-top: 1.5rem;
         margin-bottom: 0.5rem;
+        width: 100%;
+      }
+      .button-container loading-button {
+        flex-grow: 1;
+        flex-shrink: 0;
       }
 
       .crop-button-container {
         display: flex;
-        justify-content: center;
         margin-top: 0.5rem;
         margin-bottom: 0.5rem;
       }
@@ -88,22 +89,64 @@ export class RobotoffIngredientDetectionForm extends LitElement {
   image?: HTMLImageElement
 
   @state()
-  data?: Partial<IngredientDetectionAnnotationData>
+  data: Partial<IngredientDetectionAnnotationData> = {
+    annotation: undefined,
+    bounding_box: undefined,
+  }
+
+  @state()
+  isEditingIngredients = false
 
   get isLoading() {
     return Boolean(this.loading) || this.cropMode === ZoomableImage.CropMode.CROP
   }
 
-  override connectedCallback() {
-    super.connectedCallback()
-    this.loadImage()
+  get boundingBox() {
+    if (this.image) {
+      console.log("image", this.image.naturalWidth, this.image.naturalHeight)
+    }
+    const robotoffBoundingBox = this.data?.bounding_box
+    const boundingBox =
+      robotoffBoundingBox && this.image
+        ? robotoffBoundingBoxToCropImageBoundingBox(
+            robotoffBoundingBox,
+            this.image.naturalWidth,
+            this.image.naturalHeight
+          )
+        : { x: 0, y: 0, width: 0, height: 0 }
+
+    return boundingBox
   }
 
+  /**
+   * Override the attributeChangedCallback to load the image and data when the insight changes
+   * @param {string} name - The name of the attribute that changed
+   * @param {string} oldval - The old value of the attribute
+   * @param {string} newval - The new value of the attribute
+   */
   override attributeChangedCallback(name: string, oldval: string, newval: string) {
     super.attributeChangedCallback(name, oldval, newval)
     if (name === "insight") {
-      this.loadImage()
+      this.onInsightChange()
     }
+  }
+
+  onInsightChange() {
+    // Load the image when the insight changes
+    this.loadImage()
+
+    this.isEditingIngredients = false
+    // Set the data from the insight
+    this.data = {
+      bounding_box: this.insight?.data.bounding_box,
+      annotation: this.insight?.data.text,
+    }
+  }
+
+  override connectedCallback() {
+    super.connectedCallback()
+    // Ensure the image is loaded when the component is connected to the DOM
+    this.loadImage()
   }
 
   async loadImage() {
@@ -127,19 +170,19 @@ export class RobotoffIngredientDetectionForm extends LitElement {
       <div class="flex flex-col align-center">
         <div class="button-container">
           <loading-button
-            css-classes="button cappucino-button"
+            css-classes="button success-button"
             type="submit"
             .loading=${this.loading === AnnotationAnswer.ACCEPT}
             .disabled=${this.isLoading}
             @click="${() => triggerSubmit(this.form!)}"
-            label="${msg("Yes")}"
+            label="${msg("Validate")}"
           ></loading-button>
           <loading-button
-            css-classes="button cappucino-button"
+            css-classes="button danger-button"
             .loading=${this.loading === AnnotationAnswer.REFUSE}
             .disabled=${this.isLoading}
             @click="${() => this.answer(AnnotationAnswer.REFUSE)}"
-            label="${msg("No")}"
+            label="${msg("Invalidate")}"
           ></loading-button>
           <loading-button
             css-classes="button white-button"
@@ -182,14 +225,14 @@ export class RobotoffIngredientDetectionForm extends LitElement {
     if (this.cropMode === ZoomableImage.CropMode.CROP) {
       const isLoading = Boolean(this.loading)
       return html`
-          <loading-button
-            css-classes="button cappucino-button"
-            .disabled=${isLoading}
-            @click="${this.toggleCropMode}"
-            label="${msg("Cancel crop")}"
-          ></loading-button>
-        </div>
-      `
+            <loading-button
+              css-classes="button cappucino-button"
+              .disabled=${isLoading}
+              @click="${this.toggleCropMode}"
+              label="${msg("Cancel crop")}"
+            ></loading-button>
+          </div>
+        `
     }
     return html`
       <loading-button
@@ -198,6 +241,36 @@ export class RobotoffIngredientDetectionForm extends LitElement {
         @click="${this.toggleCropMode}"
         label="${msg("I'll propose a better crop")}"
       ></loading-button>
+    `
+  }
+
+  toggleEditIngredients() {
+    this.isEditingIngredients = !this.isEditingIngredients
+  }
+
+  renderEditIngredients(insight: IngredientDetectionInsight) {
+    let content
+    if (this.isEditingIngredients) {
+      content = html`<text-corrector-highlight
+        heading-level="h4"
+        original=${insight.data.text}
+        .value=${this.data.annotation}
+      ></text-corrector-highlight>`
+    } else {
+      content = html`
+        <p>${insight.data.text}</p>
+        <loading-button
+          css-classes="button chocolate-button"
+          .disabled=${this.isLoading}
+          @click="${this.toggleEditIngredients}"
+          label="${msg("I'll edit the ingredients")}"
+        ></loading-button>
+      `
+    }
+
+    return html`
+      <h3>${msg("Ingredients :")}</h3>
+      ${content}
     `
   }
 
@@ -211,40 +284,23 @@ export class RobotoffIngredientDetectionForm extends LitElement {
       return nothing
     }
     const imgUrl = getRobotoffImageUrl(insight.source_image)
-    if (this.image) {
-      console.log("image", this.image.naturalWidth, this.image.naturalHeight)
-    }
-    const robotoffBoundingBox = this.data?.bounding_box || insight.data.bounding_box
-    const boundingBox =
-      robotoffBoundingBox && this.image
-        ? robotoffBoundingBoxToCropImageBoundingBox(
-            robotoffBoundingBox,
-            this.image.naturalWidth,
-            this.image.naturalHeight
-          )
-        : { x: 0, y: 0, width: 0, height: 0 }
 
     return html`
       <form @submit=${this.onSubmit}>
         <div>
-          <p class="question">
-            ${msg(
-              "Current crop of the ingredients in the food. You can modify it if you think it's not good."
-            )}
-          </p>
+          <h2>${msg("Help us for ingredients")}</h2>
+          <p>${msg("Help us validate the ingredient list of the product.")}</p>
           <zoomable-image
             src=${imgUrl}
             .size="${{ height: "500px", width: "100%" }}"
             crop-mode=${this.cropMode}
-            .boundingBox=${boundingBox}
+            .boundingBox=${this.boundingBox}
             show-buttons
             @submit=${this.onCropSave}
           ></zoomable-image>
           <div class="crop-button-container">${this.renderCropButtons()}</div>
         </div>
-        <div>
-          <p class="question"></p>
-        </div>
+        <div>${this.renderEditIngredients(insight)}</div>
         ${this.renderCropAnswerButtons()}
       </form>
     `

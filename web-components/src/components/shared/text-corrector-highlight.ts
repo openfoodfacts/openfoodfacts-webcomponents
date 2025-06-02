@@ -15,7 +15,8 @@ import { RELATIVE } from "../../styles/utils"
 import "../shared/loading-button"
 import { TextDiffMixin } from "../../mixins/text-diff-mixin"
 import { LitElement } from "lit"
-import { EventType } from "../../constants"
+import { getValidHeadingLevel } from "../../utils/knowledge-panels/heading-utils"
+import { sanitizeHtml } from "../../utils/html"
 
 /**
  * TextCorrectorHighlight component
@@ -65,6 +66,13 @@ export class TextCorrectorHighlight extends TextDiffMixin(LitElement) {
    */
   @property({ type: String, reflect: true })
   value = ""
+
+  /**
+   * The value of the text input.
+   * @type {string}
+   */
+  @property({ type: String, reflect: true, attribute: "heading-level" })
+  headingLevel = "h2"
 
   /**
    * Focuses on the first updated element when the component is first updated.
@@ -122,13 +130,14 @@ export class TextCorrectorHighlight extends TextDiffMixin(LitElement) {
    * @returns {TemplateResult} The rendered textarea.
    */
   override render() {
+    const headingTag = getValidHeadingLevel(this.headingLevel)
     return html`
       <div class="text-section">
-        <h2>${msg("Preview")}</h2>
+        ${sanitizeHtml(`<${headingTag}>${msg("Preview")}</${headingTag}>`)}
         <p class="text-content">${this.renderHighlightedDiff()}</p>
       </div>
       <div class="">
-        <h2>${msg("Edit ingredients list")}</h2>
+        ${sanitizeHtml(`<${headingTag}>${msg("Edit ingredients list")}</${headingTag}>`)}
         <textarea class="textarea" rows="6" @input=${this.handleTextareaInput}>
 ${this.value}</textarea
         >
