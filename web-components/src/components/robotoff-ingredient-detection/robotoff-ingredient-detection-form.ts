@@ -172,7 +172,9 @@ export class RobotoffIngredientDetectionForm extends LitElement {
           <loading-button
             css-classes="button success-button"
             type="submit"
-            .loading=${this.loading === AnnotationAnswer.ACCEPT}
+            .loading=${[AnnotationAnswer.ACCEPT, AnnotationAnswer.ACCEPT_AND_ADD_DATA].includes(
+              this.loading!
+            )}
             .disabled=${this.isLoading}
             @click="${() => triggerSubmit(this.form!)}"
             label="${msg("Validate")}"
@@ -210,15 +212,24 @@ export class RobotoffIngredientDetectionForm extends LitElement {
 
   onSubmit(event: Event) {
     event.preventDefault()
+    event.stopPropagation()
 
-    const formData = new FormData(event.target as HTMLFormElement)
-    const data = Object.fromEntries(formData.entries())
-    console.log(data)
-    this.answer(
-      AnnotationAnswer.ACCEPT_AND_ADD_DATA,
-      data as unknown as IngredientDetectionAnnotationData
-    )
-    console.log("submit")
+    const originalData = {
+      annotation: this.insight!.data.text,
+      bounding_box: this.insight!.data.bounding_box,
+    }
+
+    const newData = {
+      annotation: this.data.annotation ?? originalData.annotation,
+      bounding_box: this.data.bounding_box ?? originalData.bounding_box,
+    }
+    const annotationtype =
+      newData.annotation === originalData.annotation &&
+      newData.bounding_box === originalData.bounding_box
+        ? AnnotationAnswer.ACCEPT
+        : AnnotationAnswer.ACCEPT_AND_ADD_DATA
+
+    this.answer(annotationtype, newData)
   }
 
   renderCropButtons() {
@@ -329,8 +340,8 @@ export class RobotoffIngredientDetectionForm extends LitElement {
     }
     const robotoffBoundingBox = cropImageBoundingBoxToRobotoffBoundingBox(
       event.detail.newBoundingBox,
-      this.image.width,
-      this.image.height
+      this.image.naturalWidth,
+      this.image.naturalHeight
     )
 
     this.updateData({ bounding_box: robotoffBoundingBox })
