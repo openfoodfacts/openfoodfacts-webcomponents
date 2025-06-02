@@ -21,10 +21,13 @@ import {
 import robotoff from "../../api/robotoff"
 import "./robotoff-ingredient-detection-form"
 import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin"
+import { LanguageCodesMixin } from "../../mixins/language-codes-mixin"
 
 @customElement("robotoff-ingredient-detection")
 @localized()
-export class RobotoffIngredientDetection extends LoadingWithTimeoutMixin(LitElement) {
+export class RobotoffIngredientDetection extends LanguageCodesMixin(
+  LoadingWithTimeoutMixin(LitElement)
+) {
   static override styles = [
     css`
       :host {
@@ -79,18 +82,19 @@ export class RobotoffIngredientDetection extends LoadingWithTimeoutMixin(LitElem
   }
 
   private insightsTask = new Task(this, {
-    task: async ([count, page, productCode], {}) => {
+    task: async ([count, page, productCode, languageCodes], {}) => {
       this.insightIds = []
 
       const response = await fetchIngredientsDetectionInsights(productCode, {
         count,
         page,
+        lc: languageCodes,
       })
       this.insightIds = response.map((insight) => insight.id)
       this.setIndex(0)
       return response
     },
-    args: () => [this.count, this.page, this.productCode],
+    args: () => [this.count, this.page, this.productCode, this.languageCodes],
   })
 
   async setIndex(index: number) {

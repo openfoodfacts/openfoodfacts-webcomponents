@@ -28,6 +28,7 @@ import { countryCode } from "../../signals/app"
 import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin"
 import { ifDefined } from "lit-html/directives/if-defined.js"
 import { Breakpoints } from "../../utils/breakpoints"
+import { LanguageCodesMixin } from "../../mixins/language-codes-mixin"
 
 const IMAGE_MAX_WIDTH = 500
 /**
@@ -37,7 +38,9 @@ const IMAGE_MAX_WIDTH = 500
  * @part nutrients-content-wrapper - The nutrients content wrapper
  */
 @customElement("robotoff-nutrient-extraction")
-export class RobotoffNutrientExtraction extends LoadingWithTimeoutMixin(LitElement) {
+export class RobotoffNutrientExtraction extends LanguageCodesMixin(
+  LoadingWithTimeoutMixin(LitElement)
+) {
   static override styles = [
     BASE,
     FLEX,
@@ -127,10 +130,12 @@ export class RobotoffNutrientExtraction extends LoadingWithTimeoutMixin(LitEleme
    * @type {Task}
    */
   private _insightsTask = new Task(this, {
-    task: async ([productCode], {}) => {
+    task: async ([productCode, languageCodes], {}) => {
       this.emitNutrientEvent(EventState.LOADING)
       const [insights] = await Promise.all([
-        fetchNutrientInsights(productCode),
+        fetchNutrientInsights(productCode, {
+          lc: languageCodes,
+        }),
         fetchNutrientsTaxonomies(),
         fetchNutrientsOrderByCountryCode(countryCode.get()),
       ])
@@ -143,7 +148,7 @@ export class RobotoffNutrientExtraction extends LoadingWithTimeoutMixin(LitEleme
       this.emitNutrientEvent(EventState.HAS_DATA)
       await this.loadInsight(0)
     },
-    args: () => [this.productCode],
+    args: () => [this.productCode, this.languageCodes],
   })
 
   async loadInsight(index: number) {

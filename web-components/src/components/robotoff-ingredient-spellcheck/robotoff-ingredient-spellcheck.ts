@@ -27,6 +27,7 @@ import { sanitizeHtml } from "../../utils/html"
 import { getFullImageUrl, ProductFields } from "../../utils/openfoodfacts"
 import { mobileAndTabletCheck } from "../../utils/breakpoints"
 import { ifDefined } from "lit/directives/if-defined.js"
+import { LanguageCodesMixin } from "../../mixins/language-codes-mixin"
 
 /**
  * RobotoffIngredients component
@@ -42,7 +43,9 @@ import { ifDefined } from "lit/directives/if-defined.js"
  * @slot pending - The content to display when the component is pending
  */
 @customElement("robotoff-ingredient-spellcheck")
-export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(LitElement) {
+export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(
+  LanguageCodesMixin(LitElement)
+) {
   static override styles = [
     BASE,
     INPUT,
@@ -74,13 +77,6 @@ export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(LitEle
    */
   @property({ type: String, attribute: "product-code", reflect: true })
   productCode = ""
-
-  /**
-   * The language code for the ingredients spellcheck validation.
-   * @type {string}
-   */
-  @property({ type: Array, attribute: "language-codes", reflect: true })
-  languageCodes?: string[]
 
   /**
    * Enables keyboard mode for the component.
@@ -119,14 +115,6 @@ export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(LitEle
    */
   get fullImageUrl() {
     return getFullImageUrl(this.productData.imageUrl)
-  }
-
-  /**
-   * Gets the language code, defaulting to the locale if not set.
-   * @returns {string} The language code.
-   */
-  get _languageCodes() {
-    return this.languageCodes || [getLocale()]
   }
 
   /**
@@ -210,7 +198,7 @@ export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(LitEle
         state: EventState.LOADING,
       })
       const insights = await fetchSpellcheckInsights(productCode ? productCode : undefined, {
-        language_codes: this._languageCodes,
+        lc: this._languageCodes,
       })
       this._insightIds = insights
         // Currently we filter by lang here but we should do it in the API when is available
