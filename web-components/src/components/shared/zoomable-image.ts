@@ -397,6 +397,7 @@ export class ZoomableImage extends LitElement {
         },
       })
     )
+    this.resetCrop()
   }
 
   /**
