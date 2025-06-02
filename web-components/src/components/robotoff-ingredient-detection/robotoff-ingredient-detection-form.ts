@@ -212,25 +212,21 @@ export class RobotoffIngredientDetectionForm extends LitElement {
     event.preventDefault()
     event.stopPropagation()
 
-    const originalData = {
-      annotation: this.insight!.data.text,
-      bounding_box: this.insight!.data.bounding_box,
-      rotation: undefined,
-    }
+    const { text, bounding_box } = this.insight!.data
+    const hasChanges =
+      this.data.annotation !== text ||
+      this.data.bounding_box !== bounding_box ||
+      this.data.rotation !== undefined
 
-    const newData = {
-      annotation: this.data.annotation ?? originalData.annotation,
-      bounding_box: this.data.bounding_box ?? originalData.bounding_box,
-      rotation: this.data.rotation,
+    if (hasChanges) {
+      this.answer(AnnotationAnswer.ACCEPT_AND_ADD_DATA, {
+        annotation: this.data.annotation ?? text,
+        bounding_box: this.data.bounding_box ?? bounding_box,
+        rotation: this.data.rotation,
+      })
+    } else {
+      this.answer(AnnotationAnswer.ACCEPT)
     }
-    const annotationtype =
-      newData.annotation === originalData.annotation &&
-      newData.bounding_box === originalData.bounding_box &&
-      newData.rotation === originalData.rotation
-        ? AnnotationAnswer.ACCEPT
-        : AnnotationAnswer.ACCEPT_AND_ADD_DATA
-
-    this.answer(annotationtype, newData)
   }
 
   renderCropButtons() {
