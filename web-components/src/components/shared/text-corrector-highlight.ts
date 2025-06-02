@@ -1,5 +1,5 @@
 import { html, css, PropertyValues } from "lit"
-import { customElement, property, state } from "lit/decorators.js"
+import { customElement, property } from "lit/decorators.js"
 import { BASE } from "../../styles/base"
 import { msg } from "@lit/localize"
 import "../icons/check"
@@ -65,7 +65,7 @@ export class TextCorrectorHighlight extends TextDiffMixin(LitElement) {
    * @type {string}
    */
   @property({ type: String, reflect: true })
-  value = ""
+  value?: string = ""
 
   /**
    * The value of the text input.

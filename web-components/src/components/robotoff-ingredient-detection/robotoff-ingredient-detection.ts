@@ -10,7 +10,7 @@
 
 import { LitElement, css, html, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
-import { IngredientDetectionInsight } from "../../types/robotoff"
+import { AnnotationAnswer, IngredientDetectionInsight } from "../../types/robotoff"
 import { Task } from "@lit/task"
 import { localized } from "@lit/localize"
 import "../shared/loader"
@@ -130,7 +130,7 @@ export class RobotoffIngredientDetection extends LanguageCodesMixin(
     return html`
       <robotoff-ingredient-detection-form
         .insight=${insight}
-        .loading=${this.loading}
+        .loading=${this.loading as AnnotationAnswer | undefined}
         @submit=${this.onFormSubmit}
       ></robotoff-ingredient-detection-form>
     `
