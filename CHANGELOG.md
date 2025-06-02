@@ -10,6 +10,7 @@
 
 - Rename `robotoff-ingredients` to `robotoff-ingredient-spellcheck` to be closer to the API endpoint.
 - Rename `robotoff-nutrients` to `robotoff-nutrient-extraction` to be closer to the API endpoint.
+- Refactor `text-corrector` to create a new component to highlight the differences between the original text and the corrected text. This component is called `text-corrector-highlight`.
 
 ## [1.6.0] - 2025-05-26
 
