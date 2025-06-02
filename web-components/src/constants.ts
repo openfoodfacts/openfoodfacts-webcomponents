@@ -21,6 +21,7 @@ export enum EventType {
   NUTRIENT_STATE = "nutrient-state",
   BARCODE_SCANNER_STATE = "barcode-scanner-state",
   INGREDIENTS_STATE = "ingredients-state",
+  INPUT = "INPUT",
 }
 
 export enum LoadingState {

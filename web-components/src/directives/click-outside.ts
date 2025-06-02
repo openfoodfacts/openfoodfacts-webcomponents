@@ -66,10 +66,10 @@ class ClickOutsideDirective extends AsyncDirective {
    */
   private addEventListener() {
     // Add a small delay to ensure the event listener is added after the initial render
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       this.element!.addEventListener("click", () => this.catchEventClickFromElement())
       document.addEventListener("click", this.handleClick)
-    }, 0)
+    })
   }
 
   /**
