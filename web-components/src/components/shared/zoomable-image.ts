@@ -20,6 +20,7 @@ import { EventType } from "../../constants"
 import "../icons/arrows-center"
 import { CropperActionEvent } from "../../types/crops"
 import { CHECKBOX } from "../../styles/form"
+import { normalizeRotation } from "../../utils"
 
 export enum CropMode {
   // no crop, just display image
@@ -190,6 +191,10 @@ export class ZoomableImage extends LitElement {
     super.attributeChangedCallback(name, _old, value)
     if (["src", "size"].includes(name) && value) {
       this.fitImageToContainer()
+      if (name === "src") {
+        // reset the rotation when the src changes
+        this.rotation = 0
+      }
     }
   }
 
@@ -281,6 +286,8 @@ export class ZoomableImage extends LitElement {
       }
 
       this.imageElement.$rotate(`${rotation}deg`)
+      // Update the rotation property
+      this.rotation = normalizeRotation(this.rotation + rotation)
     } catch (error) {
       console.error("Error rotating image:", error)
     }
@@ -386,6 +393,7 @@ export class ZoomableImage extends LitElement {
         detail: {
           newBoundingBox: this.resultBoundingBox,
           oldBoundingBox: this.boundingBox,
+          rotation: this.rotation,
         },
       })
     )

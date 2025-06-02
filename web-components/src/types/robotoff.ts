@@ -230,4 +230,5 @@ export type RobotoffBoundingBox = [number, number, number, number]
 export type IngredientDetectionAnnotationData = {
   annotation: string
   bounding_box: RobotoffBoundingBox
+  rotation?: number
 }

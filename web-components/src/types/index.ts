@@ -54,6 +54,7 @@ export type CropperImageBoundingBox = {
 export type CropResult = {
   newBoundingBox: CropperImageBoundingBox
   oldBoundingBox?: CropperImageBoundingBox
+  rotation: number
 }
 
 export type TextCorrectorHighlightInput = {
