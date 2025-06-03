@@ -184,7 +184,7 @@
       </trans-unit>
       <trans-unit id="sc57b630a7a70c61f">
         <source>Suggested fix</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Siūlomas pataisymas</target>
+        <target state="translated">Siūlomas pataisa</target>
       </trans-unit>
       <trans-unit id="s417b90913e05bc17">
         <source>Preview</source>
@@ -192,7 +192,7 @@
       </trans-unit>
       <trans-unit id="s5dd6f12783fca34f">
         <source>Edit ingredients list</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Redaguoti ingredientų sąrašą</target>
+        <target state="translated">Redaguoti sudedamųjų dalių sąrašą</target>
       </trans-unit>
       <trans-unit id="s33f85f24c0f5f008">
         <source>Save</source>
@@ -217,16 +217,16 @@
                 This character <x id="1" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>␣<x id="2" equiv-text="&lt;/span&gt;"/> represents a space.
                 <x id="3" equiv-text="&lt;br&gt;"/>
                 This character <x id="4" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>↩︎<x id="5" equiv-text="&lt;/span&gt;"/> represents a line break. </source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Šis įrankis leidžia pataisyti ingredientų sąrašą. Galite pridėti, pašalinti arba redaguoti
+        <target state="translated">Šis įrankis leidžia pataisyti sudedamųjų dalių sąrašą. Galite pridėti, pašalinti arba redaguoti
                 ingredientų sąrašą.
                 <x id="0" equiv-text="&lt;br&gt;"/>
-                Šis simbolis <x id="1" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>␣<x id="2" equiv-text="&lt;/span&gt;"/> žymi tarpą.
+                Šis simbolis <x id="1" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>␣<x id="2" equiv-text="&lt;/span&gt;"/> reiškia tarpą.
                 <x id="3" equiv-text="&lt;br&gt;"/>
-                Šis simbolis <x id="4" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>↩︎<x id="5" equiv-text="&lt;/span&gt;"/> žymi eilutės lūžį. </target>
+                Šis simbolis <x id="4" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>↩︎<x id="5" equiv-text="&lt;/span&gt;"/> reiškia eilutės lūžį. </target>
       </trans-unit>
       <trans-unit id="s11a18a69b30b65ed">
         <source>Help us fix errors in ingredients list</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Padėkite mums ištaisyti klaidas ingredientų sąraše</target>
+        <target state="translated">Padėkite mums ištaisyti sudedamųjų dalių sąrašo klaidas</target>
       </trans-unit>
       <trans-unit id="sbd6be5cde472f37c">
         <source>All insights have been answered! Thanks for your help!</source>
@@ -242,7 +242,7 @@
       </trans-unit>
       <trans-unit id="s061eb5af92512c85">
         <source>Saved! Can you help with another one?</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Išsaugota! Gal galite padėti su kitu?</target>
+        <target state="translated">Išsaugota! Gal galite padėti su kita?</target>
       </trans-unit>
       <trans-unit id="sb125568d43642e6f">
         <source>Answer questions about the product.</source>
@@ -254,11 +254,11 @@
       </trans-unit>
       <trans-unit id="s5c92c0051d44b6de">
         <source>Help us correct the nutritional information.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Padėkite mums ištaisyti maistinę informaciją.</target>
+        <target state="translated">Padėkite mums ištaisyti informaciją apie maistinę vertę.</target>
       </trans-unit>
       <trans-unit id="sd698d21ddecba56b">
         <source>Hey! You can help us improve the product information by answering the following parts:</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Sveiki! Galite padėti mums tobulinti produkto informaciją atsakydami į šiuos klausimus:</target>
+        <target state="translated">Sveiki! Jūs galite padėti mums pagerinti produkto informaciją atsakydami į tolesnius klausimus:</target>
       </trans-unit>
       <trans-unit id="s05ec315d9308091a">
         <source>Barcode corners icon</source>
@@ -302,7 +302,7 @@
       </trans-unit>
       <trans-unit id="s907f7a97c6b29425">
         <source>Be aware the data model might be modified. Use at your own risk.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Atminkite, kad duomenų modelis gali būti modifikuotas. Naudokite savo pačių rizika.</target>
+        <target state="translated">Įsidėmėkite, kad duomenų modelį galima modifikuoti. Naudokite savo pačių rizika.</target>
       </trans-unit>
       <trans-unit id="hdbe45450d1a6419b">
         <source>These properties are created and filed by users for any kind of usages. Feel
@@ -311,9 +311,9 @@
                     <x id="2" equiv-text="&lt;a href=&quot;https://openfoodfacts-explorer.vercel.app/folksonomy&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
                     or explore the
                     <x id="4" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Šias savybes kuria ir pateikia vartotojai bet kokiam naudojimui. Galite
+        <target state="translated">Šias savybes kuria ir pateikia vartotojai bet kokiam naudojimui. Galite
                     pridėti savo. Jūsų sukurtos savybės ir reikšmės
-                    <x id="0" equiv-text="&lt;strong&gt;"/>turi būti faktinės<x id="1" equiv-text="&lt;/strong&gt;"/>. Galite pasinerti į
+                    <x id="0" equiv-text="&lt;strong&gt;"/>turi būti faktinės<x id="1" equiv-text="&lt;/strong&gt;"/>. Galite nerti į
                     <x id="2" equiv-text="&lt;a href=&quot;https://openfoodfacts-explorer.vercel.app/folksonomy&quot;&gt;"/>bendruomenės jau naudojamų savybių sąrašą<x id="3" equiv-text="&lt;/a&gt;"/>
                     arba peržiūrėti savybių
                     <x id="4" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>dokumentaciją ir jos paieškos sistemą<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
