@@ -158,7 +158,6 @@ export class RobotoffNutrientExtraction extends LanguageCodesMixin(
     }
     this.currentInsightIndex = index
     const insight = this.currentInsight
-    debugger
     await this.getProductNutriments(insight.barcode)
   }
 
