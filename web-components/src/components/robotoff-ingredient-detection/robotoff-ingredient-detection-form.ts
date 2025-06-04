@@ -263,9 +263,6 @@ export class RobotoffIngredientDetectionForm extends LitElement {
         bounding_box: this.data.bounding_box ?? bounding_box,
         rotation: this.data.rotation ?? rotation,
       })
-      console.log(this.data.annotation ?? text)
-      console.log(this.data.bounding_box ?? bounding_box)
-      console.log(this.data.rotation ?? rotation)
     } else {
       this.answer(AnnotationAnswer.ACCEPT)
     }
