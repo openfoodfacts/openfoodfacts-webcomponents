@@ -630,6 +630,7 @@ export class ZoomableImage extends LitElement {
    * @param event - The transform event.
    */
   onCropperImageTransform(event: CustomEvent<{ matrix: number[] }>) {
+    // If the crop mode is not CROP and you have a selection, you need to update the selection.
     if (this.cropMode !== CropMode.CROP) {
       this.imageElement.$ready(() => {
         const boundingBox = this.getBoundingBoxDependOnImageSize()
