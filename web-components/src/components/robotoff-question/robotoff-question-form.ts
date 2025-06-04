@@ -55,7 +55,6 @@ export class RobotoffQuestionForm extends SignalWatcher(LoadingWithTimeoutMixin(
         margin-top: 1rem;
       }
     `,
-    ...getButtonClasses([ButtonType.White]),
   ]
 
   /**
