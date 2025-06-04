@@ -27,13 +27,13 @@
         language-code="en"
         robotoff-configuration='{
           "dryRun": true,
-          "apiUrl": "https://robotoff.openfoodfacts.net/api/v1",
-          "imgUrl": "https://images.openfoodfacts.net/images/products"
+          "apiUrl": "https://robotoff.openfoodfacts.org/api/v1",
+          "imgUrl": "https://images.openfoodfacts.org/images/products"
         }'
         folksonomy-configuration='{
-          "apiUrl": "https://api.folksonomy.openfoodfacts.net"
+          "apiUrl": "https://api.folksonomy.openfoodfacts.org"
         }'
-        openfoodfacts-api-url="https://world.openfoodfacts.net"
+        openfoodfacts-api-url="https://world.openfoodfacts.org"
       />
     </div>
     <div>
@@ -56,7 +56,6 @@
       <div margin-top: 3rem" class="box">
         <robotoff-nutrient-extraction
           id="robotoff-nutrient-extraction"
-          product-code="5050854811647"
           show-messages="true"
         >
           <p slot="no-insight" style="text-align: center"><i>No insight</i></p>
@@ -113,7 +112,7 @@
       </div>
 
       <div style="display: flex; margin: 1rem">
-        <robotoff-ingredient-detection id="robotoff-ingredient-detection">
+        <robotoff-ingredient-detection id="robotoff-ingredient-detection" language-codes="['fr']">
           <p slot="no-insight" style="text-align: center"><i>No insight</i></p>
         </robotoff-ingredient-detection>
       </div>

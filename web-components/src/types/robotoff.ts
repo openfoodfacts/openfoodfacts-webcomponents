@@ -177,6 +177,7 @@ export type IngredientDetectionInsight = BaseInsight<{
   known_ingredients_n: number
   unknown_ingredients_n: number
   fraction_known_ingredients: number
+  rotation: number
 }>
 
 export type InsightsResponse<

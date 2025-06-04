@@ -157,8 +157,21 @@ export class ZoomableImage extends MessageDisplayMixinElement {
     height: "30vh",
   }
 
+  // original rotation of the image
+  @property({ type: Number, reflect: true })
+  get rotation() {
+    return this._rotation ?? 0
+  }
+  set rotation(value) {
+    this._rotation = value
+    this.resetRotatation()
+  }
+
   @state()
-  rotation = 0
+  private _rotation = 0
+
+  @state()
+  private currentRotation = 0
 
   @state()
   private cropResult: string = ""
@@ -194,14 +207,17 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    */
   override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
     super.attributeChangedCallback(name, _old, value)
-    if (["src", "size"].includes(name) && value) {
-      this.fitImageToContainer()
-      if (name === "src") {
-        // reset the rotation when the src changes
-        this.rotation = 0
-      }
-    } else if (name === "crop-mode") {
-      this.resetMessage()
+
+    switch (name) {
+      case "src":
+        this.resetRotatation()
+        break
+      case "size":
+        this.fitImageToContainer()
+        break
+      case "crop-mode":
+        this.resetMessage()
+        break
     }
   }
 
@@ -234,6 +250,12 @@ export class ZoomableImage extends MessageDisplayMixinElement {
     })
   }
 
+  resetRotatation() {
+    this.currentRotation = 0
+    this.imageElement?.$resetTransform()
+    this.rotateImage(this.rotation)
+  }
+
   /**
    * Initializes the cropper components, as required by cropperjs.
    * (add them to the CustomElementRegistry)
@@ -248,6 +270,10 @@ export class ZoomableImage extends MessageDisplayMixinElement {
     CropperShade.$define()
 
     this.initZoomLimit()
+    // Reset the rotation when the image is ready to be displayed
+    this.imageElement.$ready(() => {
+      this.resetRotatation()
+    })
   }
 
   /**
@@ -263,7 +289,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    * This ensures the image is properly scaled and positioned to be fully visible.
    */
   fitImageToContainer() {
-    if (!this.imageElement) {
+    if (!this.imageElement && this.src) {
       return
     }
 
@@ -283,6 +309,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    * @param rotation - The angle to rotate the image by.
    */
   rotateImage(rotation: number) {
+    if (!this.imageElement) return
     try {
       // Reset the selection before rotating the image
       this.resetSelection()
@@ -294,7 +321,11 @@ export class ZoomableImage extends MessageDisplayMixinElement {
 
       this.imageElement.$rotate(`${rotation}deg`)
       // Update the rotation property
-      this.rotation = normalizeRotation(this.rotation + rotation)
+      this.currentRotation = normalizeRotation(this.currentRotation + rotation)
+
+      this.dispatchEvent(new CustomEvent("rotate", { detail: { rotation: this.currentRotation } }))
+
+      this.fitImageToContainer()
     } catch (error) {
       console.error("Error rotating image:", error)
     }
@@ -321,9 +352,6 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    * @returns The rendered rotate buttons.
    */
   renderRotateButtons() {
-    if (this.cropMode === CropMode.CROP_READ) {
-      return nothing
-    }
     return html`
       <button
         class="link-button"
@@ -345,19 +373,99 @@ export class ZoomableImage extends MessageDisplayMixinElement {
   }
 
   /**
+   * Transforms coordinates to account for image rotation.
+   * @param x - The x coordinate of the selection
+   * @param y - The y coordinate of the selection
+   * @param width - The width of the selection
+   * @param height - The height of the selection
+   * @param imageWidth - The original image width
+   * @param imageHeight - The original image height
+   * @param rotation - The rotation angle in degrees
+   * @returns The transformed coordinates
+   */
+  transformCoordsForRotation(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    imageWidth: number,
+    imageHeight: number,
+    rotation: number
+  ) {
+    // Normalize rotation to 0, 90, 180, or 270 degrees
+    const normalizedRotation = ((rotation % 360) + 360) % 360
+
+    switch (normalizedRotation) {
+      case 90:
+        // 90° clockwise rotation
+        return {
+          x: y,
+          y: imageWidth - x - width,
+          width: height,
+          height: width,
+        }
+      case 180:
+        // 180° rotation
+        return {
+          x: imageWidth - x - width,
+          y: imageHeight - y - height,
+          width: width,
+          height: height,
+        }
+      case 270:
+        // 270° clockwise rotation (or 90° counter-clockwise)
+        return {
+          x: imageHeight - y - height,
+          y: x,
+          width: height,
+          height: width,
+        }
+      default:
+        // No rotation or 0°
+        return { x, y, width, height }
+    }
+  }
+
+  /**
    * Gets the bounding box from the selection element.
    * @returns The bounding box coordinates.
    */
   getBoundingBoxFromSelectionElement() {
     const { x: offsetX, y: offsetY } = this.getOffset()
-    const { x: scaleX, y: scaleY } = this.getScale()
+    const scale = this.getScale()
 
-    return {
-      x: (this.selectionElement.x - offsetX) / scaleX,
-      y: (this.selectionElement.y - offsetY) / scaleY,
-      width: this.selectionElement.width / scaleX,
-      height: this.selectionElement.height / scaleY,
+    // Get the selection coordinates relative to the image
+    let x = (this.selectionElement.x - offsetX) / scale
+    let y = (this.selectionElement.y - offsetY) / scale
+    let width = this.selectionElement.width / scale
+    let height = this.selectionElement.height / scale
+
+    // Handle rotation if the image is rotated
+    if (this.currentRotation !== 0) {
+      const image = this.imageElement?.$image
+      if (image) {
+        const imageWidth = image.naturalWidth
+        const imageHeight = image.naturalHeight
+
+        // Transform coordinates based on rotation
+        const rotatedCoords = this.transformCoordsForRotation(
+          x,
+          y,
+          width,
+          height,
+          imageWidth,
+          imageHeight,
+          this.currentRotation
+        )
+
+        x = rotatedCoords.x
+        y = rotatedCoords.y
+        width = rotatedCoords.width
+        height = rotatedCoords.height
+      }
     }
+
+    return { x, y, width, height }
   }
 
   /**
@@ -401,7 +509,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
         detail: {
           newBoundingBox: this.resultBoundingBox,
           oldBoundingBox: this.boundingBox,
-          rotation: this.rotation,
+          rotation: this.currentRotation,
         },
       })
     )
@@ -491,12 +599,10 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    */
   getScale() {
     const transformValue = this.imageElement.$getTransform()
-    return {
-      x: transformValue[0],
-      y: transformValue[3],
-    }
-  }
 
+    const index = (this.currentRotation / 90) % 2
+    return Math.abs(transformValue[index])
+  }
   /**
    * Calculates the scale of the image relative to the canvas size using current image width.
    * @returns The scale factor as a number.
@@ -541,13 +647,35 @@ export class ZoomableImage extends MessageDisplayMixinElement {
       return this.boundingBox
     }
     const { x: offsetX, y: offsetY } = this.getOffset()
-    const { x: scaleX, y: scaleY } = this.getScale()
+    const scale = this.getScale()
+
+    let boundingBox = { ...this.boundingBox! }
+
+    // Handle rotation - transform the bounding box coordinates
+    if (this.currentRotation !== 0) {
+      const imageWidth = image.naturalWidth
+      const imageHeight = image.naturalHeight
+
+      // Apply inverse rotation to get the correct position for the rotated image
+      const inverseRotation = (360 - this.currentRotation) % 360
+      const rotatedCoords = this.transformCoordsForRotation(
+        boundingBox.x,
+        boundingBox.y,
+        boundingBox.width,
+        boundingBox.height,
+        imageWidth,
+        imageHeight,
+        inverseRotation
+      )
+
+      boundingBox = rotatedCoords
+    }
 
     return {
-      x: this.boundingBox!.x * scaleX + offsetX,
-      y: this.boundingBox!.y * scaleY + offsetY,
-      width: this.boundingBox!.width * scaleX,
-      height: this.boundingBox!.height * scaleY,
+      x: boundingBox.x * scale + offsetX,
+      y: boundingBox.y * scale + offsetY,
+      width: boundingBox.width * scale,
+      height: boundingBox.height * scale,
     }
   }
 
@@ -641,17 +769,6 @@ export class ZoomableImage extends MessageDisplayMixinElement {
   onCropperImageTransform(event: CustomEvent<{ matrix: number[] }>) {
     // If the crop mode is not CROP and you have a selection, you need to update the selection.
     if (this.cropMode !== CropMode.CROP) {
-      this.imageElement.$ready(() => {
-        const boundingBox = this.getBoundingBoxDependOnImageSize()
-        if (boundingBox && this.selectionElement) {
-          this.selectionElement.$change(
-            boundingBox.x,
-            boundingBox.y,
-            boundingBox.width,
-            boundingBox.height
-          )
-        }
-      })
       return
     }
 

@@ -163,6 +163,7 @@ export class RobotoffIngredientDetectionForm extends LitElement {
     this.data = {
       bounding_box: this.insight?.data.bounding_box,
       annotation: this.insight?.data.text,
+      rotation: this.insight?.data.rotation,
     }
   }
 
@@ -250,17 +251,17 @@ export class RobotoffIngredientDetectionForm extends LitElement {
     event.preventDefault()
     event.stopPropagation()
 
-    const { text, bounding_box } = this.insight!.data
+    const { text, bounding_box, rotation } = this.insight!.data
     const hasChanges =
       this.data.annotation !== text ||
       this.data.bounding_box !== bounding_box ||
-      this.data.rotation !== undefined
+      this.data.rotation !== rotation
 
     if (hasChanges) {
       this.answer(AnnotationAnswer.ACCEPT_AND_ADD_DATA, {
         annotation: this.data.annotation ?? text,
         bounding_box: this.data.bounding_box ?? bounding_box,
-        rotation: this.data.rotation ?? 0,
+        rotation: this.data.rotation ?? rotation,
       })
     } else {
       this.answer(AnnotationAnswer.ACCEPT)
@@ -333,6 +334,15 @@ export class RobotoffIngredientDetectionForm extends LitElement {
   }
 
   /**
+   * Handles the rotate event from the zoomable-image component
+   * @param {CustomEvent<{ rotation: number }>} event - The rotate event
+   * @returns {void}
+   */
+  onRotate(event: CustomEvent<{ rotation: number }>) {
+    this.data.rotation = event.detail.rotation
+  }
+
+  /**
    * Renders an ingredient detection insight
    * @param {IngredientDetectionInsight} insight - The insight to render
    * @returns {TemplateResult}
@@ -342,6 +352,7 @@ export class RobotoffIngredientDetectionForm extends LitElement {
       return nothing
     }
     const imgUrl = getRobotoffImageUrl(insight.source_image)
+    const rotation = this.insight?.data.rotation ?? 0
 
     return html`
       <form @submit=${this.onSubmit}>
@@ -355,6 +366,8 @@ export class RobotoffIngredientDetectionForm extends LitElement {
             .boundingBox=${this.boundingBox}
             show-buttons
             @submit=${this.onCropSave}
+            .rotation=${rotation}
+            @rotate=${this.onRotate}
           ></zoomable-image>
           <div class="crop-button-container">${this.renderCropButtons()}</div>
         </div>

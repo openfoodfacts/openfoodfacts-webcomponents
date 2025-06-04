@@ -130,14 +130,14 @@ export class RobotoffNutrientExtraction extends LanguageCodesMixin(
    * @type {Task}
    */
   private _insightsTask = new Task(this, {
-    task: async ([productCode, languageCodes, countryCode], {}) => {
+    task: async ([productCode], {}) => {
       this.emitNutrientEvent(EventState.LOADING)
       const [insights] = await Promise.all([
         fetchNutrientInsights(productCode, {
-          lc: languageCodes,
+          lc: this._languageCodes,
         }),
         fetchNutrientsTaxonomies(),
-        fetchNutrientsOrderByCountryCode(countryCode),
+        fetchNutrientsOrderByCountryCode(this._countryCode),
       ])
 
       this.insightsIds = insights.map((insight) => insight.id)
@@ -148,7 +148,7 @@ export class RobotoffNutrientExtraction extends LanguageCodesMixin(
       this.emitNutrientEvent(EventState.HAS_DATA)
       await this.loadInsight(0)
     },
-    args: () => [this.productCode, this.languageCodes, this._countryCode],
+    args: () => [this.productCode, this.countryCode, this.languageCodes],
   })
 
   async loadInsight(index: number) {
@@ -158,6 +158,7 @@ export class RobotoffNutrientExtraction extends LanguageCodesMixin(
     }
     this.currentInsightIndex = index
     const insight = this.currentInsight
+    debugger
     await this.getProductNutriments(insight.barcode)
   }
 

@@ -207,7 +207,7 @@ export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(
         state: this._insightIds.length ? EventState.HAS_DATA : EventState.NO_DATA,
       })
     },
-    args: () => [this.productCode, this._languageCodes],
+    args: () => [this.productCode, this.languageCodes],
   })
 
   /**

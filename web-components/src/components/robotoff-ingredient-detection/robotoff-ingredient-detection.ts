@@ -94,18 +94,20 @@ export class RobotoffIngredientDetection extends LanguageCodesMixin(
    * Handles the asynchronous fetching of insights and updates the component state
    */
   private insightsTask = new Task(this, {
-    task: async ([count, page, productCode, languageCodes], {}) => {
+    task: async ([count, page, productCode], {}) => {
       this.insightIds = []
 
       const response = await fetchIngredientsDetectionInsights(productCode, {
         count,
         page,
-        lc: languageCodes,
+        // use _languageCodes instead of languageCodes to get fallback language
+        lc: this._languageCodes,
       })
       this.insightIds = response.map((insight) => insight.id)
       this.setIndex(0)
       return response
     },
+    // use languageCode to avoid fallback language
     args: () => [this.count, this.page, this.productCode, this.languageCodes],
   })
 
