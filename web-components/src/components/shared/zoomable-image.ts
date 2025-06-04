@@ -143,7 +143,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
   /**
    * The crop mode for the image
    */
-  @property({ type: String, attribute: "crop-mode" })
+  @property({ type: String, attribute: "crop-mode", reflect: true })
   cropMode: CropMode = CropMode.IMAGE_ONLY
 
   @property({ type: Object, attribute: "size", reflect: true })
@@ -200,6 +200,8 @@ export class ZoomableImage extends MessageDisplayMixinElement {
         // reset the rotation when the src changes
         this.rotation = 0
       }
+    } else if (name === "crop-mode") {
+      this.resetMessage()
     }
   }
 
