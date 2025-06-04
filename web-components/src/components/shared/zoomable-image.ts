@@ -378,8 +378,8 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    * @param y - The y coordinate of the selection
    * @param width - The width of the selection
    * @param height - The height of the selection
-   * @param imageWidth - The original image width
-   * @param imageHeight - The original image height
+   * @param imageWidth - The image width (considering rotation)
+   * @param imageHeight - The image height (considering rotation)
    * @param rotation - The rotation angle in degrees
    * @returns The transformed coordinates
    */
@@ -397,7 +397,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
 
     switch (normalizedRotation) {
       case 90:
-        // 90° clockwise rotation
+        // 90° clockwise rotation: (x,y) -> (y, imageWidth-x-width)
         return {
           x: y,
           y: imageWidth - x - width,
@@ -405,7 +405,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
           height: width,
         }
       case 180:
-        // 180° rotation
+        // 180° rotation: (x,y) -> (imageWidth-x-width, imageHeight-y-height)
         return {
           x: imageWidth - x - width,
           y: imageHeight - y - height,
@@ -413,7 +413,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
           height: height,
         }
       case 270:
-        // 270° clockwise rotation (or 90° counter-clockwise)
+        // 270° clockwise rotation: (x,y) -> (imageHeight-y-height, x)
         return {
           x: imageHeight - y - height,
           y: x,
@@ -447,21 +447,48 @@ export class ZoomableImage extends MessageDisplayMixinElement {
         const imageWidth = image.naturalWidth
         const imageHeight = image.naturalHeight
 
-        // Transform coordinates based on rotation
-        const rotatedCoords = this.transformCoordsForRotation(
-          x,
-          y,
-          width,
-          height,
-          imageWidth,
-          imageHeight,
-          this.currentRotation
-        )
+        // For 90° and 270° rotations, we need to adjust the coordinates
+        // because the image dimensions are swapped in the display
+        const normalizedRotation = ((this.currentRotation % 360) + 360) % 360
 
-        x = rotatedCoords.x
-        y = rotatedCoords.y
-        width = rotatedCoords.width
-        height = rotatedCoords.height
+        if (normalizedRotation === 90 || normalizedRotation === 270) {
+          // When rotated 90° or 270°, the displayed image has swapped dimensions
+          // We need to account for this when calculating the relative coordinates
+          const displayedImageWidth = imageHeight
+          const displayedImageHeight = imageWidth
+
+          // Transform coordinates based on rotation using the correct dimensions
+          const rotatedCoords = this.transformCoordsForRotation(
+            x,
+            y,
+            width,
+            height,
+            displayedImageWidth,
+            displayedImageHeight,
+            this.currentRotation
+          )
+
+          x = rotatedCoords.x
+          y = rotatedCoords.y
+          width = rotatedCoords.width
+          height = rotatedCoords.height
+        } else {
+          // 180° rotations, use original dimensions
+          const rotatedCoords = this.transformCoordsForRotation(
+            x,
+            y,
+            width,
+            height,
+            imageWidth,
+            imageHeight,
+            this.currentRotation
+          )
+
+          x = rotatedCoords.x
+          y = rotatedCoords.y
+          width = rotatedCoords.width
+          height = rotatedCoords.height
+        }
       }
     }
 
