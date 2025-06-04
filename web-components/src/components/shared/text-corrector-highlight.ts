@@ -121,8 +121,6 @@ export class TextCorrectorHighlight extends TextDiffMixin(LitElement) {
     e.preventDefault()
     const textarea = e.target as HTMLTextAreaElement
     this.value = textarea.value
-
-    // this.currentValue = textarea.value
   }
 
   /**

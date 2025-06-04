@@ -263,6 +263,9 @@ export class RobotoffIngredientDetectionForm extends LitElement {
         bounding_box: this.data.bounding_box ?? bounding_box,
         rotation: this.data.rotation ?? rotation,
       })
+      console.log(this.data.annotation ?? text)
+      console.log(this.data.bounding_box ?? bounding_box)
+      console.log(this.data.rotation ?? rotation)
     } else {
       this.answer(AnnotationAnswer.ACCEPT)
     }
@@ -302,6 +305,11 @@ export class RobotoffIngredientDetectionForm extends LitElement {
     this.isEditingIngredients = !this.isEditingIngredients
   }
 
+  onAnnotationChange(e: InputEvent) {
+    const textarea = e.target as HTMLTextAreaElement
+    this.data.annotation = textarea.value
+    this.requestUpdate()
+  }
   /**
    * Renders the ingredients editing interface
    * @param {IngredientDetectionInsight} insight - The current insight
@@ -314,6 +322,7 @@ export class RobotoffIngredientDetectionForm extends LitElement {
         heading-level="h4"
         original=${insight.data.text}
         .value=${this.data.annotation}
+        @input="${this.onAnnotationChange}"
       ></text-corrector-highlight>`
     } else {
       content = html`

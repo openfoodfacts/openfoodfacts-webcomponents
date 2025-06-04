@@ -718,6 +718,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
         movable
         resizable
         hidden
+        zoomable
         @change="${this.onCropperSelectionChange}"
         aria-label=${msg("Selection area")}
       >
