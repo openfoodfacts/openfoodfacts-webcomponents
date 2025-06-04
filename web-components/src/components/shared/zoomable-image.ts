@@ -21,6 +21,7 @@ import "../icons/arrows-center"
 import { CropperActionEvent } from "../../types/crops"
 import { CHECKBOX } from "../../styles/form"
 import { normalizeRotation } from "../../utils"
+import { MessageDisplayMixin } from "../../mixins/message-display-mixin"
 
 export enum CropMode {
   // no crop, just display image
@@ -30,6 +31,9 @@ export enum CropMode {
   // redefining the crop
   CROP = "crop",
 }
+
+const MessageDisplayMixinElement = MessageDisplayMixin(LitElement)
+
 /**
  * A simple zoomable image component.
  * It allows to display an image that can be zoomed, and rotated, cropped.
@@ -38,8 +42,12 @@ export enum CropMode {
  **/
 @customElement("zoomable-image")
 @localized()
-export class ZoomableImage extends LitElement {
+export class ZoomableImage extends MessageDisplayMixinElement {
   static override styles = [
+    MessageDisplayMixinElement.styles || [],
+    FLEX,
+    getButtonClasses([ButtonType.White, ButtonType.Chocolate, ButtonType.LINK]),
+    CHECKBOX,
     css`
       :host {
         display: block;
@@ -79,9 +87,6 @@ export class ZoomableImage extends LitElement {
         padding-top: 2px;
       }
     `,
-    FLEX,
-    getButtonClasses([ButtonType.White, ButtonType.Chocolate, ButtonType.LINK]),
-    CHECKBOX,
   ]
 
   @query("cropper-canvas")
@@ -357,11 +362,11 @@ export class ZoomableImage extends LitElement {
    * Shows the cropped image.
    */
   async showCrop() {
+    this.resetMessage()
     if (!this.hasSelection()) {
-      alert(msg("Please select a region to crop."))
+      this.setErrorMessage(msg("Please select a region to crop."))
       return
     }
-
     this.resultBoundingBox = this.getBoundingBoxFromSelectionElement()
 
     const result = await this.selectionElement.$toCanvas()
@@ -372,6 +377,7 @@ export class ZoomableImage extends LitElement {
    * Resets the selection.
    */
   resetSelection() {
+    this.resetMessage()
     this.selectionElement?.$clear()
   }
 
@@ -407,6 +413,7 @@ export class ZoomableImage extends LitElement {
   renderCropMode() {
     return html`
       <div>
+        ${this.renderMessage()}
         <div class="button-container">
           <button
             class="button white-button small"
