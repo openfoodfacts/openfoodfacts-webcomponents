@@ -92,7 +92,7 @@ export class TextCorrectorHighlight extends TextDiffMixin(LitElement) {
     super.attributeChangedCallback(name, _old, value)
     if (name === "original" || name === "value") {
       requestAnimationFrame(() => {
-        this.computeDiffResult(this.original, this.value)
+        this.computeDiffResult(this.original, this.value ?? "")
       })
     }
   }
