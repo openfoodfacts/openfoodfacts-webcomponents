@@ -158,6 +158,7 @@ export class RobotoffIngredientDetectionForm extends LitElement {
     this.loadImage()
 
     this.isEditingIngredients = false
+    this.cropMode = ZoomableImage.CropMode.CROP_READ
     // Set the data from the insight
     this.data = {
       bounding_box: this.insight?.data.bounding_box,
