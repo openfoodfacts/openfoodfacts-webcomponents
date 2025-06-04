@@ -40,8 +40,10 @@ export class FolksonomyEditor extends LitElement {
       padding: 1rem;
     }
     .feus h2 {
-      font-size: 1.5rem;
-      color: #007bff;
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: #222;
+      margin-top: 10px;
       margin-bottom: 0.5rem;
     }
     .feus p {
