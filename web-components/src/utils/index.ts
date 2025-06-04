@@ -128,3 +128,12 @@ export const removeUselessZeros = (value: string) => {
 export const triggerSubmit = (form: HTMLFormElement) => {
   form.requestSubmit()
 }
+
+/**
+ * Returns the rotation between 0 and 360.
+ * @param rotation - the rotation to normalize
+ * @returns number - the normalized rotation
+ */
+export const normalizeRotation = (rotation: number) => {
+  return (rotation % 360) + (rotation < 0 ? 360 : 0)
+}

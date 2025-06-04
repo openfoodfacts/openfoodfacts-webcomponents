@@ -43,6 +43,12 @@ export enum InsightAnnotationSize {
   CENTGRAMS = "100g",
   SERVING = "serving",
 }
+export enum QuestionAnnotationAnswer {
+  YES = "1",
+  NO = "0",
+  ANNOTATED = "2",
+  SKIP = "-1",
+} // https://openfoodfacts.github.io/robotoff/references/api/#tag/Insights/paths/~1insights~1annotate/post
 
 export type InsightAnnotatationData = Record<string, { value: string; unit: string | null }>
 
@@ -55,10 +61,11 @@ export type InsightAnnotationAnswer = {
 export enum InsightType {
   ingredient_spellcheck = "ingredient_spellcheck",
   nutrient_extraction = "nutrient_extraction",
+  ingredient_detection = "ingredient_detection",
 }
 
 export type InsightsRequestParams = Partial<{
-  language_codes: string[]
+  lc: string[]
   insight_types: string
   barcode: string
   annotated: boolean
@@ -124,14 +131,58 @@ export type BaseInsight<DataType> = {
 
 export type NutrientsInsight = BaseInsight<NutrientInsightData>
 
-export type IngredientsInsight = BaseInsight<{
+export type IngredientSpellcheckInsight = BaseInsight<{
   lang: string
   original: string
   correction: string
   lang_confidence: number
 }>
 
-export type InsightsResponse<T extends NutrientsInsight | IngredientsInsight> = {
+interface Lang {
+  lang: string
+  confidence: number
+}
+
+interface IngredientDetection {
+  id: string
+  text: string
+  vegan?: string
+  vegetarian?: string
+  in_taxonomy: boolean
+  ingredients?: IngredientDetection[]
+  is_in_taxonomy?: number
+  ciqual_food_code?: string
+  ciqual_proxy_food_code?: string
+  from_palm_oil?: string
+  percent_estimate: number
+  percent_max?: number
+  percent_min?: number
+  ecobalyse_code?: string
+  processing?: string
+  labels?: string
+  bounding_box?: RobotoffBoundingBox
+}
+
+export type IngredientDetectionInsight = BaseInsight<{
+  end: number
+  lang: Lang
+  text: string
+  score: number
+  start: number
+  raw_end: number
+  priority: number
+  ingredients: IngredientDetection[]
+  bounding_box: RobotoffBoundingBox
+  ingredients_n: number
+  known_ingredients_n: number
+  unknown_ingredients_n: number
+  fraction_known_ingredients: number
+  rotation: number
+}>
+
+export type InsightsResponse<
+  T extends NutrientsInsight | IngredientSpellcheckInsight | IngredientDetectionInsight,
+> = {
   count: number
   status: string
   insights: T[]
@@ -152,4 +203,33 @@ export type AnnotationFormData = {
   insight_id: string
   annotation: AnnotationAnswer
   data?: string
+}
+
+export type ImagePredictionsRequestParams = {
+  count: number
+  page: number
+  barcode: string
+  model_name: string
+  min_confidence: number
+}
+
+export type IngredientPrediction = {
+  id: string
+  text: string
+  vegan?: string
+  vegetarian?: string
+  in_taxonomy: boolean
+  percent_max: number
+  percent_min: number
+  is_in_taxonomy: number
+  percent_estimate: number
+  ciqual_proxy_food_code?: string
+  ingredients?: IngredientPrediction[]
+}
+export type RobotoffBoundingBox = [number, number, number, number]
+
+export type IngredientDetectionAnnotationData = {
+  annotation: string
+  bounding_box: RobotoffBoundingBox
+  rotation: number
 }

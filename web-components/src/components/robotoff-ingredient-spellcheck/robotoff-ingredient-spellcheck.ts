@@ -4,9 +4,11 @@ import { customElement, property, state } from "lit/decorators.js"
 import { BASE } from "../../styles/base"
 import { msg } from "@lit/localize"
 import { Task } from "@lit/task"
-import { fetchSpellcheckInsights, ingredientSpellcheckInsights } from "../../signals/ingredients"
-import { AnnotationAnswer, IngredientsInsight } from "../../types/robotoff"
-import { getLocale } from "../../localization"
+import {
+  fetchSpellcheckInsights,
+  ingredientSpellcheckInsights,
+} from "../../signals/ingredient-spellcheck"
+import { AnnotationAnswer, IngredientSpellcheckInsight } from "../../types/robotoff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import robotoff from "../../api/robotoff"
 import { EventState, EventType } from "../../constants"
@@ -14,13 +16,17 @@ import "./text-corrector"
 import "../shared/zoomable-image"
 import { fetchProduct } from "../../api/openfoodfacts"
 import { ImageIngredientsProductType } from "../../types/openfoodfacts"
-import { RobotoffIngredientsStateEventDetail, TextCorrectorEvent } from "../../types/ingredients"
+import {
+  RobotoffIngredientsStateEventDetail,
+  TextCorrectorEvent,
+} from "../../types/ingredient-spellcheck"
 import { INPUT } from "../../styles/form"
 import { getValidHeadingLevel } from "../../utils/knowledge-panels/heading-utils"
 import { sanitizeHtml } from "../../utils/html"
 import { getFullImageUrl, ProductFields } from "../../utils/openfoodfacts"
 import { mobileAndTabletCheck } from "../../utils/breakpoints"
 import { ifDefined } from "lit/directives/if-defined.js"
+import { LanguageCodesMixin } from "../../mixins/language-codes-mixin"
 
 /**
  * RobotoffIngredients component
@@ -29,24 +35,31 @@ import { ifDefined } from "lit/directives/if-defined.js"
  * It handle the data fetching and the state management.
  * It also handle the user interactions and the form submission.
  * It uses the `text-corrector` component to handle the text correction.
- * @element robotoff-ingredients
+ * @element robotoff-ingredient-spellcheck
  * @fires state - when the state of the component changes
  * @fires submit - when the user submits the form
  * @slot complete - The content to display when the component is complete
  * @slot pending - The content to display when the component is pending
  */
-@customElement("robotoff-ingredients")
-export class RobotoffIngredients extends LoadingWithTimeoutMixin(LitElement) {
+@customElement("robotoff-ingredient-spellcheck")
+export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(
+  LanguageCodesMixin(LitElement)
+) {
   static override styles = [
     BASE,
     INPUT,
     getButtonClasses([ButtonType.Cappucino, ButtonType.Success, ButtonType.Danger]),
     css`
-      .robotoff-ingredients {
+      .robotoff-ingredient-spellcheck {
         max-width: 800px;
         margin: 0 auto;
         border-radius: 4px;
         box-sizing: border-box;
+      }
+
+      .robotoff-ingredient-spellcheck-title {
+        margin-top: 0;
+        margin-bottom: 1rem;
       }
     `,
   ]
@@ -63,13 +76,6 @@ export class RobotoffIngredients extends LoadingWithTimeoutMixin(LitElement) {
    */
   @property({ type: String, attribute: "product-code", reflect: true })
   productCode = ""
-
-  /**
-   * The language code for the ingredients spellcheck validation.
-   * @type {string}
-   */
-  @property({ type: Array, attribute: "language-codes", reflect: true })
-  languageCodes?: string[]
 
   /**
    * Enables keyboard mode for the component.
@@ -111,14 +117,6 @@ export class RobotoffIngredients extends LoadingWithTimeoutMixin(LitElement) {
   }
 
   /**
-   * Gets the language code, defaulting to the locale if not set.
-   * @returns {string} The language code.
-   */
-  get _languageCodes() {
-    return this.languageCodes || [getLocale()]
-  }
-
-  /**
    * Checks if all insights have been answered.
    * @returns {boolean} True if all insights are answered, false otherwise.
    */
@@ -128,9 +126,9 @@ export class RobotoffIngredients extends LoadingWithTimeoutMixin(LitElement) {
 
   /**
    * Gets the current insight based on the current index.
-   * @returns {IngredientsInsight | undefined} The current insight or undefined if no insight is available.
+   * @returns {IngredientSpellcheckInsight | undefined} The current insight or undefined if no insight is available.
    */
-  get _insight(): IngredientsInsight | undefined {
+  get _insight(): IngredientSpellcheckInsight | undefined {
     const id: string | undefined = this._insightIds[this._currentIndex]
     const value = ingredientSpellcheckInsights.getItem(id)
     return value
@@ -150,7 +148,7 @@ export class RobotoffIngredients extends LoadingWithTimeoutMixin(LitElement) {
    */
   renderHeader() {
     const headingLevel = getValidHeadingLevel(this.titleLevel)
-    const title = `<${headingLevel}>${msg("Help us fix errors in ingredients list")}</${headingLevel}>`
+    const title = `<${headingLevel} class="robotoff-ingredient-spellcheck-title">${msg("Help us fix errors in ingredients list")}</${headingLevel}>`
     return html`
       <div>
         <div>${sanitizeHtml(title)}</div>
@@ -168,9 +166,9 @@ export class RobotoffIngredients extends LoadingWithTimeoutMixin(LitElement) {
 
   /**
    * Updates the ingredients image URL based on the provided insight.
-   * @param {IngredientsInsight | undefined} insight - The insight to use for updating the image URL.
+   * @param {IngredientSpellcheckInsight | undefined} insight - The insight to use for updating the image URL.
    */
-  async updateIngredientsImageUrl(insight?: IngredientsInsight) {
+  async updateIngredientsImageUrl(insight?: IngredientSpellcheckInsight) {
     if (!insight) {
       this.productData.imageUrl = undefined
       this.productData.name = undefined
@@ -199,7 +197,7 @@ export class RobotoffIngredients extends LoadingWithTimeoutMixin(LitElement) {
         state: EventState.LOADING,
       })
       const insights = await fetchSpellcheckInsights(productCode ? productCode : undefined, {
-        language_codes: this._languageCodes,
+        lc: this._languageCodes,
       })
       this._insightIds = insights
         // Currently we filter by lang here but we should do it in the API when is available
@@ -209,7 +207,7 @@ export class RobotoffIngredients extends LoadingWithTimeoutMixin(LitElement) {
         state: this._insightIds.length ? EventState.HAS_DATA : EventState.NO_DATA,
       })
     },
-    args: () => [this.productCode, this._languageCodes],
+    args: () => [this.productCode, this.languageCodes],
   })
 
   /**
@@ -266,7 +264,11 @@ export class RobotoffIngredients extends LoadingWithTimeoutMixin(LitElement) {
     }
 
     // Send the annotation to Robotoff API
-    await robotoff.annotateIngredients(insight.id, event.detail.annotation, event.detail.correction)
+    await robotoff.annotateIngredientSpellcheck(
+      insight.id,
+      event.detail.annotation,
+      event.detail.correction
+    )
 
     await this.afterInsightAnnotation()
 
@@ -293,6 +295,7 @@ export class RobotoffIngredients extends LoadingWithTimeoutMixin(LitElement) {
           src=${this.fullImageUrl}
           fallback-src=${this.productData.imageUrl ?? ""}
           .size="${{ width: "100%", height: "30vh" }}"
+          show-buttons
         ></zoomable-image>
       </div>
     `
@@ -319,7 +322,7 @@ export class RobotoffIngredients extends LoadingWithTimeoutMixin(LitElement) {
         const original = insight.data.original
 
         return html`
-          <div class="robotoff-ingredients">
+          <div class="robotoff-ingredient-spellcheck">
             ${this.renderHeader()}
             <div>
               ${this.renderImage()}
@@ -342,6 +345,6 @@ export class RobotoffIngredients extends LoadingWithTimeoutMixin(LitElement) {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "robotoff-ingredients": RobotoffIngredients
+    "robotoff-ingredient-spellcheck": RobotoffIngredientSpellcheck
   }
 }
