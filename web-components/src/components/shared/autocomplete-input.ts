@@ -24,7 +24,7 @@ export class AutocompleteInput extends LitElement {
       }
 
       .autocomplete-list {
-        position: absolute;
+        position: relative;
         background: #fff;
         border: 1px solid #ccc;
         border-top: none;
