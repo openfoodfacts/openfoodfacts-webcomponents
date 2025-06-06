@@ -164,7 +164,6 @@ export class DonationBanner extends LitElement {
     .donation-banner-footer__actions-section {
       display: flex;
       justify-content: space-around;
-      width: 100%;
       gap: 15px;
       padding: 0 10px;
     }
