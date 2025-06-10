@@ -118,7 +118,7 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
       },
       {
         type: RobotoffContributionType.INGREDIENT_DETECTION,
-        message: msg("Help use correct the ingredients detection"),
+        message: msg("Help us correct the ingredient detection"),
       },
     ].filter((item) => this.showMessages[item.type])
 
