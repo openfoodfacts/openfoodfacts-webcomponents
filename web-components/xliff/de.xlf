@@ -458,7 +458,7 @@
       </trans-unit>
       <trans-unit id="sd1077c055cf9ba6b">
         <source>Help us validate the ingredient list of the product.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Helfen Sie uns, die Zutatenliste des Produkts zu validieren.</target>
+        <target state="translated">Helfen Sie uns, die Liste der Zutaten des Produkts zu überprüfen.</target>
       </trans-unit>
     </body>
   </file>
