@@ -12,6 +12,7 @@ import {
   AnnotationFormData,
   IngredientDetectionInsight,
   IngredientDetectionAnnotationData,
+  InsightType,
 } from "../types/robotoff"
 import { robotoffConfiguration } from "../signals/robotoff"
 
@@ -157,6 +158,28 @@ const robotoff = {
     const response = await fetch(url)
     const result: InsightsResponse<T> = await response.json()
     return result
+  },
+
+  /**
+   * Get insights for the robotoff contribution message
+   * Reduces the number of calls to the API by fetching multiple insights at once
+   * @param requestParams The request params
+   * @returns {Promise<InsightsResponse>} The insights response, currently only
+   * ingredients and nutrients insights are supported
+   */
+  async fetchRobotoffContributionMessageInsights(requestParams: InsightsRequestParams = {}) {
+    const result = await this.insights<
+      NutrientsInsight | IngredientSpellcheckInsight | IngredientDetectionInsight
+    >({
+      ...requestParams,
+      annotated: false,
+      insight_types: [
+        InsightType.nutrient_extraction,
+        InsightType.ingredient_spellcheck,
+        InsightType.ingredient_detection,
+      ],
+    })
+    return result.insights
   },
 }
 

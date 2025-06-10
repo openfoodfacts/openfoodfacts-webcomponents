@@ -193,7 +193,7 @@ export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(
     task: async ([productCode]) => {
       this._insightIds = []
       this._currentIndex = 0
-      this.dispatchIngredientsStateEvent({
+      this.dispatchIngredientSpellcheckStateEvent({
         state: EventState.LOADING,
       })
       const insights = await fetchSpellcheckInsights(productCode ? productCode : undefined, {
@@ -203,7 +203,7 @@ export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(
         // Currently we filter by lang here but we should do it in the API when is available
         .map((insight) => insight.id)
       this.updateValue()
-      this.dispatchIngredientsStateEvent({
+      this.dispatchIngredientSpellcheckStateEvent({
         state: this._insightIds.length ? EventState.HAS_DATA : EventState.NO_DATA,
       })
     },
@@ -221,12 +221,12 @@ export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(
   }
 
   /**
-   * Dispatches an ingredients state event with the provided detail.
+   * Dispatches an ingredient spellcheck state event with the provided detail.
    * @param {RobotoffIngredientsStateEventDetail} detail - The detail of the event.
    */
-  dispatchIngredientsStateEvent(detail: RobotoffIngredientsStateEventDetail) {
+  dispatchIngredientSpellcheckStateEvent(detail: RobotoffIngredientsStateEventDetail) {
     this.dispatchEvent(
-      new CustomEvent<RobotoffIngredientsStateEventDetail>(EventType.INGREDIENTS_STATE, {
+      new CustomEvent<RobotoffIngredientsStateEventDetail>(EventType.INGREDIENT_SPELLCHECK_STATE, {
         bubbles: true,
         composed: true,
         detail: {
@@ -245,7 +245,7 @@ export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(
    */
   async afterInsightAnnotation() {
     await this.hideLoading()
-    this.dispatchIngredientsStateEvent({
+    this.dispatchIngredientSpellcheckStateEvent({
       state: EventState.ANNOTATED,
     })
     this.nextInsight()
@@ -273,7 +273,7 @@ export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(
     await this.afterInsightAnnotation()
 
     if (this.allInsightsAreAnswered) {
-      this.dispatchIngredientsStateEvent({
+      this.dispatchIngredientSpellcheckStateEvent({
         state: EventState.FINISHED,
         insightId: insight.id,
         ...event.detail,

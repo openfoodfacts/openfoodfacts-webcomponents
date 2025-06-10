@@ -22,6 +22,8 @@ import robotoff from "../../api/robotoff"
 import "./robotoff-ingredient-detection-form"
 import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin"
 import { LanguageCodesMixin } from "../../mixins/language-codes-mixin"
+import { EventType, EventState } from "../../constants"
+import { RobotoffIngredientsStateEventDetail } from "../../types/ingredient-spellcheck"
 
 @customElement("robotoff-ingredient-detection")
 @localized()
@@ -74,6 +76,23 @@ export class RobotoffIngredientDetection extends LanguageCodesMixin(
   insightIds: string[] = []
 
   /**
+   * Dispatches an ingredient detection state event with the provided detail.
+   * @param {RobotoffIngredientsStateEventDetail} detail - The detail of the event.
+   */
+  dispatchIngredientDetectionStateEvent(detail: RobotoffIngredientsStateEventDetail) {
+    this.dispatchEvent(
+      new CustomEvent<RobotoffIngredientsStateEventDetail>(EventType.INGREDIENT_DETECTION_STATE, {
+        bubbles: true,
+        composed: true,
+        detail: {
+          productCode: this.productCode,
+          ...detail,
+        },
+      })
+    )
+  }
+
+  /**
    * Gets all insights by mapping insight IDs to their corresponding insight objects
    * @returns {IngredientDetectionInsight[]} Array of insight objects
    */
@@ -104,6 +123,9 @@ export class RobotoffIngredientDetection extends LanguageCodesMixin(
         lc: this._languageCodes,
       })
       this.insightIds = response.map((insight) => insight.id)
+      this.dispatchIngredientDetectionStateEvent({
+        state: this.insightIds.length ? EventState.HAS_DATA : EventState.NO_DATA,
+      })
       this.setIndex(0)
       return response
     },
@@ -164,7 +186,16 @@ export class RobotoffIngredientDetection extends LanguageCodesMixin(
     this.showLoading(value)
     robotoff.annotateIngredientDetection(insightId, value, data)
     this.hideLoading()
-    this.setIndex(this.index + 1)
+    this.dispatchIngredientDetectionStateEvent({
+      state: EventState.ANNOTATED,
+    })
+    const newIndex = this.index + 1
+    this.setIndex(newIndex)
+    if (newIndex >= this.insights.length) {
+      this.dispatchIngredientDetectionStateEvent({
+        state: EventState.FINISHED,
+      })
+    }
   }
 }
 
