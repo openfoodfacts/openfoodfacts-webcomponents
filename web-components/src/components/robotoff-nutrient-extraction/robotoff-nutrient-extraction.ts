@@ -29,8 +29,10 @@ import { ifDefined } from "lit-html/directives/if-defined.js"
 import { Breakpoints } from "../../utils/breakpoints"
 import { LanguageCodesMixin } from "../../mixins/language-codes-mixin"
 import { CountryCodeMixin } from "../../mixins/country-codes-mixin"
+import { DisplayProductLinkMixin } from "../../mixins/display-product-link-mixin"
+import { localized, msg } from "@lit/localize"
 
-const IMAGE_MAX_WIDTH = 500
+const IMAGE_MAX_WIDTH = 700
 /**
  * Robotoff Nutrients component
  * @element robotoff-nutrient-extraction
@@ -38,8 +40,9 @@ const IMAGE_MAX_WIDTH = 500
  * @part nutrients-content-wrapper - The nutrients content wrapper
  */
 @customElement("robotoff-nutrient-extraction")
-export class RobotoffNutrientExtraction extends LanguageCodesMixin(
-  CountryCodeMixin(LoadingWithTimeoutMixin(LitElement))
+@localized()
+export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
+  LanguageCodesMixin(CountryCodeMixin(LoadingWithTimeoutMixin(LitElement)))
 ) {
   static override styles = [
     BASE,
@@ -80,6 +83,9 @@ export class RobotoffNutrientExtraction extends LanguageCodesMixin(
           justify-content: center;
           align-items: center;
         }
+      }
+      .nutrients product-link-button {
+        margin-bottom: 1rem;
       }
     `,
   ]
@@ -235,6 +241,14 @@ export class RobotoffNutrientExtraction extends LanguageCodesMixin(
     await annotateNutrientWithoutData(this.currentInsightId, AnnotationAnswer.SKIP)
     await this.afterInsightAnnotation()
   }
+  renderHeader(insight: NutrientsInsight) {
+    return html`
+      <div>
+        <h2>${msg("Help us correct the nutritional information")}</h2>
+        ${this.renderProductLink(insight.barcode)}
+      </div>
+    `
+  }
 
   override render() {
     return this._insightsTask.render({
@@ -246,6 +260,7 @@ export class RobotoffNutrientExtraction extends LanguageCodesMixin(
         }
         return html`
           <div class="nutrients" part="nutrients">
+            ${this.renderHeader(insight)}
             <div part="nutrients-content-wrapper" class="nutrients-content-wrapper">
               ${this.renderImage(insight as NutrientsInsight)}
               <robotoff-nutrient-extraction-form
