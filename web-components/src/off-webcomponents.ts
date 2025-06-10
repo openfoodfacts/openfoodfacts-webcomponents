@@ -10,6 +10,7 @@ export { DownloadAppQrCode } from "./components/download-app-qr-code/download-ap
 export { BarcodeScanner } from "./components/barcode-scanner/barcode-scanner"
 export { DeleteModal } from "./components/folksnomy/delete-modal"
 export { FolksonomyEditor } from "./components/folksnomy/folksonomy-editor"
+export { FolksonomyProperties } from "./components/folksnomy/folksonomy-properties"
 export { AutocompleteInput } from "./components/shared/autocomplete-input"
 export { RobotoffIngredientDetection as RobotoffCrops } from "./components/robotoff-ingredient-detection/robotoff-ingredient-detection"
 
