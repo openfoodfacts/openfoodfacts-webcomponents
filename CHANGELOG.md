@@ -8,6 +8,8 @@
 - Group insights in one request to `robotoff-contribution-message` to reduce the number of requests.
 - Add robotoff-ingredient-detection in `robotoff-modal` and `robotoff-contribution-message`.
 - Update `robotoff-ingredient-detection` to fire state event
+- Increase max width of `robotoff-nutrient-extraction` image to 700px.
+- Add view product link to `robotoff-nutrient-extraction`, `robotoff-ingredient-detection` and `robotoff-ingredient-spellcheck`.
 
 ## [1.7.1] - 2025-06-10
 

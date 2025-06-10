@@ -27,6 +27,7 @@ import { getFullImageUrl, ProductFields } from "../../utils/openfoodfacts"
 import { mobileAndTabletCheck } from "../../utils/breakpoints"
 import { ifDefined } from "lit/directives/if-defined.js"
 import { LanguageCodesMixin } from "../../mixins/language-codes-mixin"
+import { DisplayProductLinkMixin } from "../../mixins/display-product-link-mixin"
 
 /**
  * RobotoffIngredients component
@@ -42,8 +43,8 @@ import { LanguageCodesMixin } from "../../mixins/language-codes-mixin"
  * @slot pending - The content to display when the component is pending
  */
 @customElement("robotoff-ingredient-spellcheck")
-export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(
-  LanguageCodesMixin(LitElement)
+export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
+  LoadingWithTimeoutMixin(LanguageCodesMixin(LitElement))
 ) {
   static override styles = [
     BASE,
@@ -325,7 +326,7 @@ export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(
           <div class="robotoff-ingredient-spellcheck">
             ${this.renderHeader()}
             <div>
-              ${this.renderImage()}
+              ${this.renderProductLink(insight.barcode)} ${this.renderImage()}
               <div>
                 <text-corrector
                   loading=${ifDefined(this.loading) as AnnotationAnswer}

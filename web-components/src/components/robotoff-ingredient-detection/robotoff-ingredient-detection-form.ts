@@ -363,8 +363,6 @@ export class RobotoffIngredientDetectionForm extends LitElement {
     return html`
       <form @submit=${this.onSubmit}>
         <div>
-          <h2>${msg("Help us for ingredients")}</h2>
-          <p>${msg("Help us validate the ingredient list of the product.")}</p>
           <zoomable-image
             src=${imgUrl}
             .size="${{ height: "500px", width: "100%" }}"

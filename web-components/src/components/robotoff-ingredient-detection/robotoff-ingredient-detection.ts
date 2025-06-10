@@ -12,7 +12,7 @@ import { LitElement, css, html, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { AnnotationAnswer, IngredientDetectionInsight } from "../../types/robotoff"
 import { Task } from "@lit/task"
-import { localized } from "@lit/localize"
+import { localized, msg } from "@lit/localize"
 import "../shared/loader"
 import {
   fetchIngredientsDetectionInsights,
@@ -24,6 +24,7 @@ import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin
 import { LanguageCodesMixin } from "../../mixins/language-codes-mixin"
 import { EventType, EventState } from "../../constants"
 import { RobotoffIngredientsStateEventDetail } from "../../types/ingredient-spellcheck"
+import { DisplayProductLinkMixin } from "../../mixins/display-product-link-mixin"
 
 /**
  * RobotoffIngredientDetection Component
@@ -37,8 +38,8 @@ import { RobotoffIngredientsStateEventDetail } from "../../types/ingredient-spel
  */
 @customElement("robotoff-ingredient-detection")
 @localized()
-export class RobotoffIngredientDetection extends LanguageCodesMixin(
-  LoadingWithTimeoutMixin(LitElement)
+export class RobotoffIngredientDetection extends DisplayProductLinkMixin(
+  LanguageCodesMixin(LoadingWithTimeoutMixin(LitElement))
 ) {
   static override styles = [
     css`
@@ -178,11 +179,16 @@ export class RobotoffIngredientDetection extends LanguageCodesMixin(
    */
   private renderInsight(insight: IngredientDetectionInsight) {
     return html`
-      <robotoff-ingredient-detection-form
-        .insight=${insight}
-        .loading=${this.loading as AnnotationAnswer | undefined}
-        @submit=${this.onFormSubmit}
-      ></robotoff-ingredient-detection-form>
+      <div>
+        <h2>${msg("Help us for ingredients")}</h2>
+        <p>${msg("Help us validate the ingredient list of the product.")}</p>
+        ${this.renderProductLink(insight.barcode)}
+        <robotoff-ingredient-detection-form
+          .insight=${insight}
+          .loading=${this.loading as AnnotationAnswer | undefined}
+          @submit=${this.onFormSubmit}
+        ></robotoff-ingredient-detection-form>
+      </div>
     `
   }
 
