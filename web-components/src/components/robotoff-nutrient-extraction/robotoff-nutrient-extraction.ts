@@ -94,7 +94,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
    * The product code to get the insights for
    * @type {string}
    */
-  @property({ type: String, attribute: "product-code" })
+  @property({ type: String, attribute: "product-code", reflect: true })
   productCode = ""
 
   @state()

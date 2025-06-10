@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.8.2 - 2025-06-10
+
+### Fixed
+
+- Fix `robotoff-ingredient-spellcheck` refresh when `language-codes` change.
+
 ## 1.8.1 - 2025-06-10
 
 ### Fixed
