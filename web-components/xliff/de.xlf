@@ -330,7 +330,7 @@
       </trans-unit>
       <trans-unit id="s42dd66b2441566fd">
         <source>Center icon</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Symbol „Zentrieren“</target>
+        <target state="translated">Symbol zentrieren</target>
       </trans-unit>
       <trans-unit id="s422bba9636ce2489">
         <source>Center image</source>
@@ -338,7 +338,7 @@
       </trans-unit>
       <trans-unit id="s8038273de2cf8b73">
         <source>Please select a region to crop.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Bitte wählen Sie einen Bereich zum Zuschneiden aus.</target>
+        <target state="translated">Bitte eine Region zum Zuschneiden auswählen.</target>
       </trans-unit>
       <trans-unit id="s39bcf88721a1e8ee">
         <source>Reset selection</source>
@@ -350,7 +350,7 @@
       </trans-unit>
       <trans-unit id="s33f786bb6b4f0cf4">
         <source>Crop Result</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ernteergebnis</target>
+        <target state="translated">Ergebnis des Zuschnitts</target>
       </trans-unit>
       <trans-unit id="s6cee7cad81dfedd1">
         <source>Cropped Image</source>
@@ -358,7 +358,7 @@
       </trans-unit>
       <trans-unit id="s02ce7a2e7c1b020b">
         <source>Validate crop</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Bestätigen des Zuschnitts</target>
+        <target state="translated">Zuschnitt bestätigen</target>
       </trans-unit>
       <trans-unit id="s383ae4449428b61e">
         <source>Reset crop</source>
@@ -414,11 +414,11 @@
       </trans-unit>
       <trans-unit id="s4df2f533c0c1e7d0">
         <source>Image controls</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Bildsteuerungen</target>
+        <target state="translated">Bild-Bedienelemente</target>
       </trans-unit>
       <trans-unit id="sd1022bc1ef9204f7">
         <source>Zoomable image</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Zoombares Bild</target>
+        <target state="translated">Vergrößerbares Bild</target>
       </trans-unit>
       <trans-unit id="s3f4e4b52f230a892">
         <source>Image canvas</source>
@@ -434,7 +434,7 @@
       </trans-unit>
       <trans-unit id="se419a9ab36987490">
         <source>Invalidate</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ungültig machen</target>
+        <target state="translated">Für ungültig erklären</target>
       </trans-unit>
       <trans-unit id="s10db5498186c083b">
         <source>Cancel crop</source>
@@ -442,7 +442,7 @@
       </trans-unit>
       <trans-unit id="sec6377f3c4e9b28c">
         <source>I'll propose a better crop</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ich werde eine bessere Ernte vorschlagen</target>
+        <target state="translated">Ich werde einen besseren Zuschnitt vorschlagen</target>
       </trans-unit>
       <trans-unit id="s03e9c8114521b998">
         <source>I'll edit the ingredients</source>
@@ -450,11 +450,11 @@
       </trans-unit>
       <trans-unit id="s98ff35f2a00dc60d">
         <source>Ingredients :</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Zutaten :</target>
+        <target state="translated">Zutaten:</target>
       </trans-unit>
       <trans-unit id="s013bdc8cf0d3583d">
         <source>Help us for ingredients</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Helfen Sie uns bei der Zutatensuche</target>
+        <target state="translated">Helfen Sie uns bei der Suche nach Zutaten</target>
       </trans-unit>
       <trans-unit id="sd1077c055cf9ba6b">
         <source>Help us validate the ingredient list of the product.</source>
