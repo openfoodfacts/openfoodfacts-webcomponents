@@ -20,7 +20,8 @@ export enum EventType {
   QUESTION_STATE = "question-state",
   NUTRIENT_STATE = "nutrient-state",
   BARCODE_SCANNER_STATE = "barcode-scanner-state",
-  INGREDIENTS_STATE = "ingredients-state",
+  INGREDIENT_SPELLCHECK_STATE = "ingredient-spellcheck-state",
+  INGREDIENT_DETECTION_STATE = "ingredient-detection-state",
   INPUT = "INPUT",
 }
 
@@ -47,7 +48,8 @@ export const SELECT_ICON_FILE_NAME = "carret-bottom.svg"
 export const WHITE_SELECT_ICON_FILE_NAME = "white-carret-bottom.svg"
 
 export enum RobotoffContributionType {
-  INGREDIENTS = "ingredients",
-  NUTRIENTS = "nutrients",
   QUESTIONS = "questions",
+  INGREDIENT_SPELLCHECK = "ingredient_spellcheck",
+  NUTRIENT_EXTRACTION = "nutrient_extraction",
+  INGREDIENT_DETECTION = "ingredient_detection",
 }

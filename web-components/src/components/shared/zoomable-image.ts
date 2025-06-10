@@ -187,7 +187,6 @@ export class ZoomableImage extends MessageDisplayMixinElement {
   }
 
   get isCanvasDisabled() {
-    console.log("isCanvasDisabled", this.isMobileOrTablet && !this.isCanvasEnabledInMobile)
     return this.isMobileOrTablet && !this.isCanvasEnabledInMobile
   }
   /**
