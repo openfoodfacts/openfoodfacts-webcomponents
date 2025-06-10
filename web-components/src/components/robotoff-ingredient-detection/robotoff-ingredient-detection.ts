@@ -25,6 +25,16 @@ import { LanguageCodesMixin } from "../../mixins/language-codes-mixin"
 import { EventType, EventState } from "../../constants"
 import { RobotoffIngredientsStateEventDetail } from "../../types/ingredient-spellcheck"
 
+/**
+ * RobotoffIngredientDetection Component
+ *
+ * This component is responsible for managing ingredient detection insights
+ * for the Robotoff application. It fetches ingredient detection insights
+ * and delegates the form interaction to the robotoff-ingredient-detection-form component.
+ *
+ * @element robotoff-ingredient-detection
+ * @fires robotoff-ingredients-state - Indicates the state of the ingredient detection process.
+ */
 @customElement("robotoff-ingredient-detection")
 @localized()
 export class RobotoffIngredientDetection extends LanguageCodesMixin(
