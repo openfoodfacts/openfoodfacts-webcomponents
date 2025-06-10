@@ -423,6 +423,7 @@ export class RobotoffIngredientDetectionForm extends LitElement {
    * @param {IngredientDetectionAnnotationData} [data] - The annotation data for the answer
    */
   async answer(value: AnnotationAnswer, data?: IngredientDetectionAnnotationData) {
+    this.isEditingIngredients = false
     // Emit the submit event with the answer details
     this.dispatchEvent(
       new CustomEvent(EventType.SUBMIT, {
