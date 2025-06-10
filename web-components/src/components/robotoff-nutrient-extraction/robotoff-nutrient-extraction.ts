@@ -95,7 +95,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
    * @type {string}
    */
   @property({ type: String, attribute: "product-code", reflect: true })
-  productCode = ""
+  productCode?: string = undefined
 
   @state()
   insightsIds: string[] = []

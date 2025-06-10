@@ -89,6 +89,6 @@ publish:
 	
 	@echo ""
 	@echo "✅ Successfully published $(PACKAGE_NAME) version $(VERSION)"
-	@echo "✅ Created and pushed git tag v$(VERSION)"
+	@echo "✅ Created and pushed git tag $(VERSION)"
 	@echo ""
 	@echo "Package published to: https://www.npmjs.com/package/$(PACKAGE_NAME)"
