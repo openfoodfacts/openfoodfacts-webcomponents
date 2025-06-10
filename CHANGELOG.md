@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.8.0 - WIP
+
+### Changed
+
+- Add `language-codes` attribute to `robotoff-contribution-message` to filter insights by language.
+- Group insights in one request to `robotoff-contribution-message` to reduce the number of requests.
+- Add robotoff-ingredient-detection in `robotoff-modal` and `robotoff-contribution-message`.
+- Update `robotoff-ingredient-detection` to fire state event
+
 ## [1.7.1] - 2025-06-10
 
 ### Changed
