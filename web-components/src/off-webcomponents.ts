@@ -12,6 +12,39 @@ export { DeleteModal } from "./components/folksnomy/delete-modal"
 export { FolksonomyEditor } from "./components/folksnomy/folksonomy-editor"
 export { AutocompleteInput } from "./components/shared/autocomplete-input"
 export { RobotoffIngredientDetection as RobotoffCrops } from "./components/robotoff-ingredient-detection/robotoff-ingredient-detection"
+// export { SearchaliciousBar } from "./components/search-a-licious/search-bar"
 
 // Will be added in the future when design is ready
 // export { KnowledgePanelsComponent } from "./components/knowledge-panels/knowledge-panels"
+
+export { SearchaliciousPanelManager } from "./components/search-a-licious/layouts/search-panel-manager"
+export { SearchLayoutPage } from "./components/search-a-licious/layouts/search-layout-page"
+export { SearchaliciousCheckbox } from "./components/search-a-licious/search-checkbox"
+export { SearchaliciousRadio } from "./components/search-a-licious/search-radio"
+export { SearchaliciousToggle } from "./components/search-a-licious/search-toggle"
+export { SearchaliciousBar } from "./components/search-a-licious/search-bar"
+export { SearchaliciousTaxonomySuggester } from "./components/search-a-licious/search-suggester"
+export { SearchaliciousButton } from "./components/search-a-licious/search-button"
+export { SearchaliciousPages } from "./components/search-a-licious/search-pages"
+export { SearchaliciousFacets } from "./components/search-a-licious/search-facets"
+export { SearchaliciousResults } from "./components/search-a-licious/search-results"
+export { SearchCount } from "./components/search-a-licious/search-count"
+export { SearchaliciousSortScript } from "./components/search-a-licious/search-sort-script"
+export {
+  SearchaliciousSort,
+  SearchaliciousSortField,
+} from "./components/search-a-licious/search-sort"
+export { SearchaliciousAutocomplete } from "./components/search-a-licious/search-autocomplete"
+export { SearchaliciousSecondaryButton } from "./components/search-a-licious/secondary-button"
+export { SearchaliciousButtonTransparent } from "./components/search-a-licious/button-transparent"
+export { SearchaliciousIconCross } from "./components/search-a-licious/icons/cross"
+export {
+  SearchaliciousDistributionChart,
+  SearchaliciousScatterChart,
+} from "./components/search-a-licious/search-chart"
+export { SearchaliciousIconSearch } from "./components/search-a-licious/icons/search"
+export { SearchaliciousIconChart } from "./components/search-a-licious/icons/chart"
+export { SearchaliciousSuggestionEntry } from "./components/search-a-licious/search-suggestion-entry"
+export { SearchaliciousToggleCharts } from "./components/search-a-licious/search-toggle-charts"
+export { SearchaliciousResetButton } from "./components/search-a-licious/search-reset-button"
+// export {setLocale, getLocale } from "./components/search-a-licious/localization/main"

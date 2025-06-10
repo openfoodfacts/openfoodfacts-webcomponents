@@ -1,4 +1,9 @@
-import { openfoodfactsApiUrl } from "../signals/openfoodfacts"
+// import { openfoodfactsApiUrl } from "../signals/openfoodfacts"
+import { signal } from "@lit-labs/signals"
+
+export const DEFAULT_OPENFOODFACTS_API_URL = "https://world.openfoodfacts.org"
+export const openfoodfactsApiUrl = signal(DEFAULT_OPENFOODFACTS_API_URL)
+
 import {
   BaseProductResponse,
   NutrientsOrderRequest,

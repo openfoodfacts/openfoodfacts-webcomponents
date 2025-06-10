@@ -37,84 +37,30 @@
       />
     </div>
     <div>
-      <div>
-        <label for="product-code">Product Id :</label>
-        <input type="text" id="product-code" placeholder="Id of a product" />
-      </div>
-      <div>
-        <label for="insight-types">Insight Types :</label>
-        <input type="text" id="insight-types" placeholder="Insight types" />
-      </div>
-      <div style="display: flex; margin-top: 1rem">
-        <robotoff-question
-          product-code="5000354922848"
-          insight-types=""
-          options='{"showMessage": true, "showLoading": true, "showError": true, "showImage": true}'
-          id="robotoff-question"
-        />
-      </div>
-      <div margin-top: 3rem" class="box">
-        <robotoff-nutrient-extraction
-          id="robotoff-nutrient-extraction"
-          show-messages="true"
-        >
-          <p slot="no-insight" style="text-align: center"><i>No insight</i></p>
-        </robotoff-nutrient-extraction>
-      </div>
-
-      <div style="margin-top: 1rem">
-        <div style="display: flex">
-          <knowledge-panels
-            id="knowledge-panels"
-            url="https://world.openfoodfacts.org/api/v2/product/3017620422003/?fields=knowledge_panels&lc=fr"
-            path="product.knowledge_panels"
-            heading-level="h3"
-          >
-          </knowledge-panels>
-        </div>
-      </div>
-
-      <div style="display: flex; justify-content: center; margin:auto">
-        <donation-banner currentYear="2027" />
-      </div>
-
-      <div style="display: flex; margin: 2rem; margin-left: 10px; margin-right: 10px">
-        <mobile-badges style="width: 100%" />
-      </div>
-
-      <div style="display: flex; margin: 2rem; margin-left: 10px; margin-right: 10px">
-        <download-app-qr-code qrCodeUrl="https://example.com/qr-code.png" />
-      </div>
-
-      <div
-        style="display: flex; margin: 2rem; margin-left: 10px; margin-right: 40px; max-width: 300px"
-      >
-        <barcode-scanner id="barcode-scanner"></barcode-scanner>
-      </div>
-
-      <div class="box" style="display: flex">
-        <robotoff-ingredient-spellcheck
-          id="robotoff-ingredient-spellcheck"
-          language-codes='["fr", "en"]'
-          enable-keyboard-mode
-        ></robotoff-ingredient-spellcheck>
-      </div>
-
       <div style="display: flex">
         <folksonomy-editor product-code="6111035000430" page-type="view" />
       </div>
-
-      <div style="display: flex; margin: 2rem 1rem 1rem 1rem">
-        <robotoff-contribution-message
-          product-code="5000354922848"
-          id="robotoff-contribution-message"
-        />
+      <div style="display: flex;">
+        <searchalicious-bar></searchalicious-bar>
+        <searchalicious-button></searchalicious-button>
+        <!-- sorting -->
+        <searchalicious-sort auto-refresh>
+            <searchalicious-sort-field field="nutriscore_grade">Best nutriscore</searchalicious-sort-field>
+            <searchalicious-sort-field field="-nutriscore_grade">Worst nutriscore</searchalicious-sort-field>
+        </searchalicious-sort>
       </div>
-
-      <div style="display: flex; margin: 1rem">
-        <robotoff-ingredient-detection id="robotoff-ingredient-detection" language-codes="['fr']">
-          <p slot="no-insight" style="text-align: center"><i>No insight</i></p>
-        </robotoff-ingredient-detection>
+      <div id="display: flex">
+        <!-- display of results -->
+        <searchalicious-results>
+            <!-- this define a template for results. We can use ${} expression with a result object containing result fields -->
+            <template slot="result">
+            <li><a href="https://world.openfoodfacts.org/${result.code}">${result.product_name}</a> − Nutri-Score: ${result.nutriscore_grade}</li>
+            </template>
+        </searchalicious-results>
+        <!-- a small display of the number of results -->
+        <searchalicious-count></searchalicious-count>
+        <!-- pagination -->
+        <searchalicious-pages></searchalicious-pages>
       </div>
     </div>
   </body>
