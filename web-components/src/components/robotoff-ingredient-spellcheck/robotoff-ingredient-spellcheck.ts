@@ -208,7 +208,7 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
         state: this._insightIds.length ? EventState.HAS_DATA : EventState.NO_DATA,
       })
     },
-    args: () => [this.productCode, this.languageCodes],
+    args: () => [this.productCode, ...this._languageCodes],
   })
 
   /**

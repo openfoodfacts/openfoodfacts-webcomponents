@@ -88,7 +88,7 @@ export class OffWebcomponentsConfiguration extends LitElement {
    * The robotoff configuration object.
    * @type {RobotoffConfigurationOptions}
    */
-  @property({ type: Object, attribute: "robotoff-configuration" })
+  @property({ type: Object, attribute: "robotoff-configuration", reflect: true })
   robotoffConfiguration: RobotoffConfigurationOptions = {
     ...DEFAULT_ROBOTOFF_CONFIGURATION,
   }
@@ -97,28 +97,28 @@ export class OffWebcomponentsConfiguration extends LitElement {
    * The language code we need to use for the app.
    * @attr language-code
    */
-  @property({ type: String, attribute: "language-code" })
+  @property({ type: String, attribute: "language-code", reflect: true })
   languageCode?: string = DEFAULT_LANGUAGE_CODE
 
   /**
    * The country code we need to use for the app.
    * @attr country-code
    */
-  @property({ type: String, attribute: "country-code" })
+  @property({ type: String, attribute: "country-code", reflect: true })
   countryCode?: string
 
   /**
    * The image path we need to use to retrieve the images in assets/images folder.
    * @attr image-path
    */
-  @property({ type: String, attribute: "assets-images-path" })
+  @property({ type: String, attribute: "assets-images-path", reflect: true })
   assetsImagesPath?: string = DEFAULT_ASSETS_IMAGES_PATH
 
   /**
    * The folksonomy configuration object.
    * @type {FolksonomyConfigurationOptions}
    */
-  @property({ type: Object, attribute: "folksonomy-configuration" })
+  @property({ type: Object, attribute: "folksonomy-configuration", reflect: true })
   folksonomyConfiguration: FolksonomyConfigurationOptions = {
     ...DEFAULT_FOLKSONOMY_CONFIGURATION,
   }
@@ -127,7 +127,7 @@ export class OffWebcomponentsConfiguration extends LitElement {
    * The Open Food Facts API URL.
    * @attr openfoodfacts-api-url
    */
-  @property({ type: String, attribute: "openfoodfacts-api-url" })
+  @property({ type: String, attribute: "openfoodfacts-api-url", reflect: true })
   openfoodfactsApiUrl?: string = DEFAULT_OPENFOODFACTS_API_URL
 
   override attributeChangedCallback(name: string, oldval: string, newval: string) {

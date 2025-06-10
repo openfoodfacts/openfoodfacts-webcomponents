@@ -141,7 +141,7 @@ export class RobotoffIngredientDetection extends DisplayProductLinkMixin(
       return response
     },
     // use languageCode to avoid fallback language
-    args: () => [this.count, this.page, this.productCode, this.languageCodes],
+    args: () => [this.count, this.page, this.productCode, ...this._languageCodes],
   })
 
   /**

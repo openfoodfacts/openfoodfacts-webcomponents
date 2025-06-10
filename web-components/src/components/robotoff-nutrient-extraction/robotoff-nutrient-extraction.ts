@@ -154,7 +154,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
       this.emitNutrientEvent(EventState.HAS_DATA)
       await this.loadInsight(0)
     },
-    args: () => [this.productCode, this.countryCode, this.languageCodes],
+    args: () => [this.productCode, this.countryCode, ...this._languageCodes],
   })
 
   async loadInsight(index: number) {
