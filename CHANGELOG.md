@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.8.1 - 2025-06-10
+
+### Fixed
+
+- Fix `robotoff-nutrient-extraction`, `robotoff-ingredient-detection` and `robotoff-ingredient-spellcheck` refresh when `language-codes` change.
+
 ## 1.8.0 - 2025-06-10
 
 ### Changed
