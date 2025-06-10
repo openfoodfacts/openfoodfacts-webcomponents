@@ -13,6 +13,7 @@ help:
 	@echo "Available targets:"
 	@echo "  publish     - Build, publish package to npm and create git tag"
 	@echo "  build       - Build the package"
+	@echo "  dev         - Run dev"
 	@echo "  test        - Run tests"
 	@echo "  clean       - Clean build artifacts"
 	@echo "  version     - Show current version"
