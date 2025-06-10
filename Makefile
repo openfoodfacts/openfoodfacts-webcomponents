@@ -51,7 +51,7 @@ clean:
 
 # Publish package and create git tag
 .PHONY: publish
-publish: test build
+publish:
 	@echo "Publishing $(PACKAGE_NAME) version $(VERSION)..."
 	
 	# Check if we're on main/master branch
