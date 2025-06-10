@@ -110,6 +110,8 @@ export class RobotoffIngredientDetectionForm extends LitElement {
   @state()
   isEditingIngredients = false
 
+  private imageSize = { height: "500px", width: "100%" }
+
   /**
    * Determines if the form is in a loading state
    * @returns {boolean} True if loading, false otherwise
@@ -305,7 +307,6 @@ export class RobotoffIngredientDetectionForm extends LitElement {
   onAnnotationChange(e: InputEvent) {
     const textarea = e.target as HTMLTextAreaElement
     this.data.annotation = textarea.value
-    this.requestUpdate()
   }
   /**
    * Renders the ingredients editing interface
@@ -365,7 +366,7 @@ export class RobotoffIngredientDetectionForm extends LitElement {
         <div>
           <zoomable-image
             src=${imgUrl}
-            .size="${{ height: "500px", width: "100%" }}"
+            .size=${this.imageSize}
             crop-mode=${this.cropMode}
             .boundingBox=${this.boundingBox}
             show-buttons
