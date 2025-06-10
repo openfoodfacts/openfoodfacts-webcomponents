@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.7.1] - 2025-06-10
+
+### Changed
+
+- Update dependencies to be up-to-date with the latest versions.
+- Update translations
+
+### Fixed
+
+- Fix `mobile-badges` to display the correct path for the images.
+- Fix `donation-banner` styling.
+
 ## [1.7.0] - 2025-05-26
 
 ### Added
