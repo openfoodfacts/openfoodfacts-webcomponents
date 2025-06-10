@@ -84,8 +84,8 @@ publish:
 	cd $(PACKAGE_DIR) && npm run publish:package
 	
 	# Create and push git tag
-	git tag -a "v$(VERSION)" -m "Release version $(VERSION)"
-	git push origin "v$(VERSION)"
+	git tag -a "$(VERSION)" -m "Release version $(VERSION)"
+	git push origin "$(VERSION)"
 	
 	@echo ""
 	@echo "✅ Successfully published $(PACKAGE_NAME) version $(VERSION)"
