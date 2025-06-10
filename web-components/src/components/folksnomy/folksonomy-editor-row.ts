@@ -393,6 +393,9 @@ export class FolksonomyEditorRow extends LitElement {
           padding: 0.4rem 0.5rem;
         }
       }
+      autocomplete-input::part(autocomplete-input-list) {
+        position: relative !important;
+      }
     `,
   ]
 

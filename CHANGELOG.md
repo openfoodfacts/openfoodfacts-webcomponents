@@ -11,6 +11,7 @@
 
 - Fix `mobile-badges` to display the correct path for the images.
 - Fix `donation-banner` styling.
+- Fix `folksonomy-editor` to display the autocomplete list correctly.
 
 ## [1.7.0] - 2025-05-26
 
