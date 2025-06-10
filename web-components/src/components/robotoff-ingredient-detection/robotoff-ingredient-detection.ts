@@ -196,12 +196,12 @@ export class RobotoffIngredientDetection extends DisplayProductLinkMixin(
    * Handles the form submit event from the form component
    * @param {CustomEvent} event - The submit event
    */
-  onFormSubmit(event: CustomEvent) {
+  async onFormSubmit(event: CustomEvent) {
     const { insightId, value, data } = event.detail
 
     this.showLoading(value)
-    robotoff.annotateIngredientDetection(insightId, value, data)
-    this.hideLoading()
+    await robotoff.annotateIngredientDetection(insightId, value, data)
+    await this.hideLoading()
     this.dispatchIngredientDetectionStateEvent({
       state: EventState.ANNOTATED,
     })
