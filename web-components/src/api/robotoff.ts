@@ -7,9 +7,11 @@ import {
   InsightsRequestParams,
   InsightsResponse,
   NutrientsInsight,
-  IngredientsInsight,
+  IngredientSpellcheckInsight,
   NutrientsAnnotationData,
   AnnotationFormData,
+  IngredientDetectionInsight,
+  IngredientDetectionAnnotationData,
 } from "../types/robotoff"
 import { robotoffConfiguration } from "../signals/robotoff"
 
@@ -84,7 +86,11 @@ const robotoff = {
    * from the one proposed by the insight or the original one
    * @returns {Promise<Response>}
    */
-  annotateIngredients(insightId: string, annotation: AnnotationAnswer, correction?: string) {
+  annotateIngredientSpellcheck(
+    insightId: string,
+    annotation: AnnotationAnswer,
+    correction?: string
+  ) {
     const data: Record<string, string> = {
       insight_id: insightId,
       annotation,
@@ -93,6 +99,30 @@ const robotoff = {
       data.data = JSON.stringify({ annotation: correction })
     }
     const formBody = new URLSearchParams(data).toString()
+    return annotate(formBody)
+  },
+
+  /**
+   * Annotate an insight
+   * @param insightId The insight id
+   * @param annotation The annotation answer ${QuestionAnnotationAnswer}
+   * @param data The data to send to the API
+   * @returns {Promise<Response>}
+   */
+  annotateIngredientDetection(
+    insightId: string,
+    annotation: AnnotationAnswer,
+    data?: IngredientDetectionAnnotationData
+  ) {
+    const formData: AnnotationFormData = {
+      annotation,
+      insight_id: insightId,
+    }
+    // Add data only if it is defined
+    if (data) {
+      formData.data = JSON.stringify(data)
+    }
+    const formBody = new URLSearchParams(formData).toString()
     return annotate(formBody)
   },
 
@@ -119,9 +149,9 @@ const robotoff = {
    * @returns {Promise<InsightsResponse>} The insights response, currently only
    * ingredients and nutrients insights are supported
    */
-  async insights<T extends NutrientsInsight | IngredientsInsight>(
-    requestParams: InsightsRequestParams = {}
-  ) {
+  async insights<
+    T extends NutrientsInsight | IngredientSpellcheckInsight | IngredientDetectionInsight,
+  >(requestParams: InsightsRequestParams = {}) {
     const apiUrl = getApiUrl("/insights")
     const url = addParamsToUrl(apiUrl, requestParams)
     const response = await fetch(url)

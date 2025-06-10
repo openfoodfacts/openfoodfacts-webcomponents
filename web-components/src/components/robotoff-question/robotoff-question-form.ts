@@ -3,12 +3,13 @@ import { customElement, property } from "lit/decorators.js"
 import { Question, AnnotationAnswer } from "../../types/robotoff"
 import { EventType } from "../../constants"
 import { answerQuestion } from "../../signals/questions"
-import "../buttons/zoom-unzoom-button"
 import { SignalWatcher } from "@lit-labs/signals"
 import { localized, msg } from "@lit/localize"
-import "../shared/loading-button"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin"
+import { FULL_WIDTH } from "../../styles/utils"
+import "../shared/loading-button"
+import "../buttons/zoom-unzoom-button"
 /**
  * RobotoffQuestionForm component
  * It displays a form to answer a question about a product.
@@ -19,6 +20,8 @@ import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin
 @localized()
 export class RobotoffQuestionForm extends SignalWatcher(LoadingWithTimeoutMixin(LitElement)) {
   static override styles = [
+    ...getButtonClasses([ButtonType.White]),
+    FULL_WIDTH,
     css`
       :host {
         display: block;
@@ -30,6 +33,14 @@ export class RobotoffQuestionForm extends SignalWatcher(LoadingWithTimeoutMixin(
         flex-direction: column;
       }
 
+      .image-wrapper {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+      }
+
       .img-button-wrapper {
         position: absolute;
         bottom: 0.5rem;
@@ -39,10 +50,11 @@ export class RobotoffQuestionForm extends SignalWatcher(LoadingWithTimeoutMixin(
       }
       .expand-button {
         margin-top: 1rem;
-        margin-bottom: 1rem;
+      }
+      .buttons-row {
+        margin-top: 1rem;
       }
     `,
-    ...getButtonClasses([ButtonType.White]),
   ]
 
   /**
@@ -63,8 +75,8 @@ export class RobotoffQuestionForm extends SignalWatcher(LoadingWithTimeoutMixin(
     return this.isImageExpanded
       ? { height: "350px", width: "100%", "max-width": "350px" }
       : {
-          height: "100px",
-          width: "100px",
+          height: "200px",
+          width: "200px",
         }
   }
 
@@ -99,15 +111,13 @@ export class RobotoffQuestionForm extends SignalWatcher(LoadingWithTimeoutMixin(
     }
 
     return html`
-      <div>
-        <div>
-          <zoomable-image
-            src=${this.question?.source_image_url}
-            .size="${this.imageSize}"
-            @click="${this.expandImage}"
-            ?show-buttons="${this.isImageExpanded}"
-          ></zoomable-image>
-        </div>
+      <div class="image-wrapper">
+        <zoomable-image
+          src=${this.question?.source_image_url}
+          .size=${this.imageSize}
+          @click="${this.expandImage}"
+          ?show-buttons="${this.isImageExpanded}"
+        ></zoomable-image>
         ${this.isImageExpanded
           ? nothing
           : html`<div>

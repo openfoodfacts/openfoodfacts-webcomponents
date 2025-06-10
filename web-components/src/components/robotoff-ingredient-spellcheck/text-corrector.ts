@@ -1,5 +1,4 @@
 import { LitElement, html, css, nothing } from "lit"
-import { diffWordsWithSpace, type Change } from "diff"
 import { customElement, property, query, state } from "lit/decorators.js"
 import { BASE } from "../../styles/base"
 import { msg } from "@lit/localize"
@@ -13,26 +12,22 @@ import "../shared/info-button"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { TEXTAREA } from "../../styles/form"
 import { POPOVER } from "../../styles/popover"
-import {
-  SAFE_LIGHT_GREEN,
-  SAFE_LIGHT_GREY,
-  SAFE_LIGHT_RED,
-  SAFE_LIGHT_BLACK,
-  SAFE_GREY,
-} from "../../utils/colors"
+import { SAFE_LIGHT_BLACK, SAFE_GREY, SAFE_LIGHT_GREY } from "../../utils/colors"
+import { TEXT_CORRECTOR } from "../../styles/text-corrector"
 import { clickOutside } from "../../directives/click-outside"
 import {
   ChangeType,
-  IndexedChange,
   IndexedGroupedChange,
   TextCorrectorEventDetail,
-} from "../../types/ingredients"
+} from "../../types/ingredient-spellcheck"
 import { RELATIVE } from "../../styles/utils"
 import { sanitizeHtml } from "../../utils/html"
 import { Breakpoints } from "../../utils/breakpoints"
 
 import "../shared/loading-button"
+import "../shared/text-corrector-highlight"
 import { triggerSubmit } from "../../utils"
+import { TextDiffMixin } from "../../mixins/text-diff-mixin"
 
 // key is the index of the change in the groupedChanges array
 // value is boolean indicating if the change is validated or not
@@ -60,35 +55,22 @@ export enum TextCorrectorKeyboardShortcut {
  * @fires skip - when the user skips the question
  */
 @customElement("text-corrector")
-export class TextCorrector extends LitElement {
+export class TextCorrector extends TextDiffMixin(LitElement) {
   static override styles = [
     BASE,
     TEXTAREA,
     POPOVER,
     RELATIVE,
-    getButtonClasses([
-      ButtonType.Cappucino,
-      ButtonType.Success,
-      ButtonType.Danger,
-      ButtonType.White,
-      ButtonType.LightRed,
-      ButtonType.LightGreen,
-    ]),
+    TEXT_CORRECTOR,
+    getButtonClasses([ButtonType.Cappucino, ButtonType.LightRed, ButtonType.LightGreen]),
     css`
       .text {
         line-height: 1.4rem;
-      }
-      .text-section {
-        padding-bottom: 0.5rem;
       }
       .summary {
         margin-bottom: 0.5rem;
         padding-top: 1.5rem;
         padding-bottom: 0rem;
-      }
-
-      .text-section,
-      .summary {
         border-bottom: 1px solid ${SAFE_LIGHT_GREY};
         box-shadow: 0 0.5rem 2px -2px rgba(0, 0, 0, 0.1);
       }
@@ -105,34 +87,14 @@ export class TextCorrector extends LitElement {
       .submit-buttons button {
         justify-content: center;
       }
-      h2 {
-        font-size: 1.2rem;
-        margin-bottom: 0.5rem;
-      }
-      .text-content {
-        border-radius: 4px;
-        white-space: pre-wrap;
-        line-height: 1.5;
-      }
       .spellcheck {
         padding: 2px 5px;
         border-radius: 15px;
         cursor: pointer;
       }
-      .no-text-decoration {
-        text-decoration: none;
-      }
-      .line-through {
-        text-decoration: line-through;
-      }
-      .deletion {
-        background-color: ${SAFE_LIGHT_RED};
-      }
+
       .deletion.current {
         outline: 2px solid red;
-      }
-      .addition {
-        background-color: ${SAFE_LIGHT_GREEN};
       }
       .answered-change {
         background-color: ${SAFE_GREY};
@@ -170,16 +132,6 @@ export class TextCorrector extends LitElement {
         justify-self: start;
       }
 
-      .summary-item-content.wrappable {
-        flex-wrap: wrap;
-      }
-      .summary-label {
-        font-weight: bold;
-      }
-      .code {
-        white-space: pre-wrap;
-        font-family: monospace;
-      }
       .info-popover {
         z-index: 2;
         min-width: 200px;
@@ -201,11 +153,6 @@ export class TextCorrector extends LitElement {
       .suggestion-button,
       .suggestion-button-title {
         width: 100%;
-      }
-
-      .batch-buttons {
-        display: none;
-        margin-top: 1rem;
       }
 
       .empty-suggestion {
@@ -240,13 +187,6 @@ export class TextCorrector extends LitElement {
    */
   @property({ type: Boolean, attribute: "enable-keyboard-mode" })
   enableKeyboardMode = false
-
-  /**
-   * The result of the diff between the original and corrected text.
-   * @type {IndexedChange[]}
-   */
-  @state()
-  diffResult: IndexedChange[] = []
 
   @state()
   validateChangeResult: ValidationChangeResult = {}
@@ -364,7 +304,15 @@ export class TextCorrector extends LitElement {
   override render() {
     return html`
       <form @submit=${this.confirmText}>
-        <div>${this.isEditMode ? this.renderEditTextarea() : this.renderSpellCheck()}</div>
+        <div>
+          ${this.isEditMode
+            ? html`<text-corrector-highlight
+                .value=${this.value}
+                original=${this.original}
+                focus-on-first-updated
+              ></text-corrector-highlight>`
+            : this.renderSpellCheck()}
+        </div>
         <div class="submit-buttons-wrapper">${this.renderButtons()}</div>
       </form>
     `
@@ -405,25 +353,12 @@ export class TextCorrector extends LitElement {
     if (!this.enableKeyboardMode) {
       return
     }
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       const button = this.shadowRoot!.querySelector(
         `[data-id^="${this.getAcceptSuggestionButtonDataId(0)}"]`
       ) as HTMLButtonElement
       button.focus()
-    }, 0)
-  }
-
-  /**
-   * Focuses the textarea in the component.
-   */
-  focusTextArea() {
-    if (!this.enableKeyboardMode) {
-      return
-    }
-    setTimeout(() => {
-      const textarea = this.shadowRoot!.querySelector("textarea") as HTMLTextAreaElement
-      textarea.focus()
-    }, 0)
+    })
   }
 
   /**
@@ -433,7 +368,7 @@ export class TextCorrector extends LitElement {
     if (!this.enableKeyboardMode) {
       return
     }
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       const loadingButton = this.shadowRoot!.querySelector(
         "loading-button[type='submit']"
       ) as HTMLElement
@@ -441,7 +376,7 @@ export class TextCorrector extends LitElement {
         const button = loadingButton.shadowRoot.querySelector("button") as HTMLButtonElement
         button?.focus()
       }
-    }, 0)
+    })
   }
 
   /**
@@ -519,24 +454,8 @@ export class TextCorrector extends LitElement {
    * @returns {IndexedChange[]} The diff result.
    */
   computeWordDiff(reset: boolean = false) {
-    // Use diffWordsWithSpace from the diff library for word-level diffing with preserved whitespace (including new lines)
-    let value, textToCompare
-    if (this.isEditMode) {
-      value = this.original
-      textToCompare = this.value
-    } else {
-      value = this.value
-      textToCompare = this.textToCompare
-    }
-    this.diffResult = diffWordsWithSpace(value, textToCompare).map(
-      (part: Change, index: number) => {
-        return {
-          ...part,
-          index,
-        }
-      }
-    )
-
+    // Compute the diff result
+    this.computeDiffResult(this.value, this.textToCompare)
     if (reset) {
       this.validateChangeResult = {}
     }
@@ -544,22 +463,6 @@ export class TextCorrector extends LitElement {
     this.computeGroupedChanges()
 
     return this.diffResult
-  }
-
-  /**
-   * Renders the highlighted diff between the original and corrected text.
-   * @returns {TemplateResult} The rendered highlighted diff.
-   */
-  renderHighlightedDiff() {
-    return html`${this.diffResult.map((part) => {
-      if (part.added) {
-        return html`<span class="addition">${part.value}</span>`
-      } else if (part.removed) {
-        return html`<span class="deletion line-through">${part.value}</span>`
-      } else {
-        return html`<span>${part.value}</span>`
-      }
-    })}`
   }
 
   goToSuggestion(index: number) {
@@ -645,22 +548,6 @@ export class TextCorrector extends LitElement {
       // If the part is not part of a grouped change
       return html`<span>${part.value}</span>`
     })}`
-  }
-
-  /**
-   * Gets the message to display for accepting a suggestion.
-   * @param {IndexedGroupedChange} item - The suggestion to get the message for.
-   * @returns {string} The message to display.
-   */
-  getAcceptSuggestionMsg(item: IndexedGroupedChange) {
-    if (item.type === ChangeType.CHANGED) {
-      return msg("Accept this change")
-    } else if (item.type === ChangeType.ADDED) {
-      return msg("Accept this addition")
-    } else if (item.type === ChangeType.REMOVED) {
-      return msg("Accept this removal")
-    }
-    return ""
   }
 
   // Renders the empty suggestion when value is empty
@@ -883,14 +770,6 @@ export class TextCorrector extends LitElement {
   }
 
   /**
-   * Updates the result based on the validation of batch suggestions.
-   * @param {boolean} validate - Whether to validate the suggestions.
-   */
-  updateBatchResult(validate: boolean) {
-    this.updateResult(validate, this.groupedChanges)
-  }
-
-  /**
    * Dispatches a submit event with the provided detail.
    * @param {object} detail - The detail of the event.
    * @param {string} [detail.correction] - The correction to include in the event.
@@ -995,22 +874,11 @@ export class TextCorrector extends LitElement {
   }
 
   /**
-   * Gets the result of the diff.
-   * @returns {string} The result of the diff.
-   */
-  getResult() {
-    return this.diffResult.map((change) => change.value).join("")
-  }
-  /**
    * Enters edit mode.
    */
   enterEditMode() {
     this.isEditMode = true
     this.value = this.buildValueWithAnsweredChanges()
-    this.computeWordDiff()
-    setTimeout(() => {
-      this.focusTextArea()
-    }, 0)
   }
 
   /**
@@ -1021,39 +889,6 @@ export class TextCorrector extends LitElement {
     this.isEditMode = false
     this.computeWordDiff()
     this.filteredNotAnsweredChanges.length ? this.focusFirstButton() : this.focusSaveButton()
-  }
-
-  /**
-   * Handles the change event of the textarea.
-   * @param {Event} e - The change event.
-   */
-  handleTextareaChange(e: Event) {
-    const textarea = e.target as HTMLTextAreaElement
-    this.value = textarea.value
-    this.computeWordDiff()
-    this.dispatchEvent(new CustomEvent("update", { detail: { result: this.value } }))
-  }
-
-  /**
-   * Renders the textarea for editing the text.
-   * @returns {TemplateResult} The rendered textarea.
-   */
-  renderEditTextarea() {
-    return html`
-      <div class="text-section">
-        <h2>${msg("Preview")}</h2>
-        <p class="text-content">${this.renderHighlightedDiff()}</p>
-      </div>
-      <div class="">
-        <h2>${msg("Edit ingredients list")}</h2>
-        <textarea
-          class="textarea"
-          .value=${this.value}
-          @input=${this.handleTextareaChange}
-          rows="6"
-        ></textarea>
-      </div>
-    `
   }
 
   /**
@@ -1162,6 +997,7 @@ export class TextCorrector extends LitElement {
         break
       case TextCorrectorKeyboardShortcut.EDIT_TEXT:
         this.enterEditMode()
+        event.preventDefault()
         break
       case TextCorrectorKeyboardShortcut.VALIDATE_CORRECTION:
         this.confirmText()

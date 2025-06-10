@@ -65,6 +65,7 @@ export class DonationBanner extends LitElement {
       border: 10px solid #ff6e78;
       width: 100%;
       background-color: white;
+      box-sizing: border-box;
     }
     @media (max-width: 732px) {
       .donation-banner,
@@ -146,6 +147,9 @@ export class DonationBanner extends LitElement {
       margin: 0.2rem 0rem 0.5rem;
       font-weight: 500;
     }
+    .donation-banner__main-div-wrapper {
+      color: black;
+    }
     @media (max-width: 732px) {
       .donation-banner__main-div-wrapper {
         margin-top: -25px;
@@ -163,7 +167,6 @@ export class DonationBanner extends LitElement {
     .donation-banner-footer__actions-section {
       display: flex;
       justify-content: space-around;
-      width: 100%;
       gap: 15px;
       padding: 0 10px;
     }
