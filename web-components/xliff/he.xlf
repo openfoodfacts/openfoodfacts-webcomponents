@@ -330,15 +330,15 @@
       </trans-unit>
       <trans-unit id="s42dd66b2441566fd">
         <source>Center icon</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">סמל מרכז</target>
+        <target state="translated">מירכוז סמל</target>
       </trans-unit>
       <trans-unit id="s422bba9636ce2489">
         <source>Center image</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">תמונה במרכז</target>
+        <target state="translated">מירכוז תמונה</target>
       </trans-unit>
       <trans-unit id="s8038273de2cf8b73">
         <source>Please select a region to crop.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">אנא בחר אזור לחיתוך.</target>
+        <target state="translated">נא לבחור אזור לחיתוך.</target>
       </trans-unit>
       <trans-unit id="s39bcf88721a1e8ee">
         <source>Reset selection</source>
@@ -346,11 +346,11 @@
       </trans-unit>
       <trans-unit id="sb8178320160f84ea">
         <source>Show crop</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">יבול מופע</target>
+        <target state="translated">הצגת חיתוך</target>
       </trans-unit>
       <trans-unit id="s33f786bb6b4f0cf4">
         <source>Crop Result</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">תוצאת היבול</target>
+        <target state="translated">תוצאת החיתוך</target>
       </trans-unit>
       <trans-unit id="s6cee7cad81dfedd1">
         <source>Cropped Image</source>
@@ -358,7 +358,7 @@
       </trans-unit>
       <trans-unit id="s02ce7a2e7c1b020b">
         <source>Validate crop</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">אימות היבול</target>
+        <target state="translated">אימות החיתוך</target>
       </trans-unit>
       <trans-unit id="s383ae4449428b61e">
         <source>Reset crop</source>
@@ -378,11 +378,11 @@
       </trans-unit>
       <trans-unit id="scfed2f270ef6a3aa">
         <source>Select area</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">בחר אזור</target>
+        <target state="translated">בחירת אזור</target>
       </trans-unit>
       <trans-unit id="sc0cc559e7ede852a">
         <source>Resize top</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">שינוי גודל של החלק העליון</target>
+        <target state="translated">שינוי גודל למעלה</target>
       </trans-unit>
       <trans-unit id="s453ab0dbb9b5c777">
         <source>Resize right</source>
@@ -390,7 +390,7 @@
       </trans-unit>
       <trans-unit id="s8a63be30a129a59c">
         <source>Resize bottom</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">שינוי גודל התחתון</target>
+        <target state="translated">שינוי גודל למטה</target>
       </trans-unit>
       <trans-unit id="s787dd11bed0dc88a">
         <source>Resize left</source>
@@ -402,19 +402,19 @@
       </trans-unit>
       <trans-unit id="sa63907958bd0ec4b">
         <source>Resize top left</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">שינוי גודל של השמאל העליון</target>
+        <target state="translated">שינוי גודל שמאל למעלה</target>
       </trans-unit>
       <trans-unit id="sdca5deead576ceee">
         <source>Resize bottom right</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">שינוי גודל למטה מימין</target>
+        <target state="translated">שינוי גודל מימין למטה</target>
       </trans-unit>
       <trans-unit id="sac47ea2901d04c15">
         <source>Resize bottom left</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">שינוי גודל למטה משמאל</target>
+        <target state="translated">שינוי גודל משמאל למטה</target>
       </trans-unit>
       <trans-unit id="s4df2f533c0c1e7d0">
         <source>Image controls</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">בקרות תמונה</target>
+        <target state="translated">פקדי תמונה</target>
       </trans-unit>
       <trans-unit id="sd1022bc1ef9204f7">
         <source>Zoomable image</source>
@@ -434,7 +434,7 @@
       </trans-unit>
       <trans-unit id="se419a9ab36987490">
         <source>Invalidate</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">לִפְסוֹל</target>
+        <target state="translated">פסילה</target>
       </trans-unit>
       <trans-unit id="s10db5498186c083b">
         <source>Cancel crop</source>
@@ -442,11 +442,11 @@
       </trans-unit>
       <trans-unit id="sec6377f3c4e9b28c">
         <source>I'll propose a better crop</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">אני אציע יבול טוב יותר</target>
+        <target state="translated">אני אציע חיתוך טוב יותר</target>
       </trans-unit>
       <trans-unit id="s03e9c8114521b998">
         <source>I'll edit the ingredients</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">אני אערוך את המרכיבים</target>
+        <target state="translated">אני אערוך את הרכיבים</target>
       </trans-unit>
       <trans-unit id="s98ff35f2a00dc60d">
         <source>Ingredients :</source>
@@ -454,11 +454,11 @@
       </trans-unit>
       <trans-unit id="s013bdc8cf0d3583d">
         <source>Help us for ingredients</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">עזרו לנו עם המצרכים</target>
+        <target state="translated">נשמח לעזרה עם המצרכים</target>
       </trans-unit>
       <trans-unit id="sd1077c055cf9ba6b">
         <source>Help us validate the ingredient list of the product.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">עזרו לנו לאמת את רשימת הרכיבים של המוצר.</target>
+        <target state="translated">נשמח לעזרה באימות רשימת הרכיבים של המוצר.</target>
       </trans-unit>
     </body>
   </file>
