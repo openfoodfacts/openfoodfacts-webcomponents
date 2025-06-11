@@ -167,12 +167,24 @@ export class FolksonomyProperties extends LitElement {
       transition:
         background-color 0.3s,
         color 0.3s;
+      margin-left: 1rem;
     }
 
-    .reset-btn:hover {
-      background-color: rgb(255, 255, 255);
-      color: #341100;
+    .download-btn {
+      background-color: #341100;
+      color: white;
       border: 1px solid #341100;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition:
+        background-color 0.3s,
+        color 0.3s;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 0.5rem;
     }
 
     .status-bar {
@@ -301,6 +313,25 @@ export class FolksonomyProperties extends LitElement {
     this.filteredProperties = [...this.properties]
   }
 
+  private downloadCSV() {
+    const headers = ["Property", "Count", "Values"]
+    const rows = this.filteredProperties.map((item) => [item.k, item.count, item.values])
+
+    const csvContent = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n")
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
+    const link = document.createElement("a")
+    const url = URL.createObjectURL(blob)
+
+    link.setAttribute("href", url)
+    link.setAttribute("download", "folksonomy_properties.csv")
+    link.style.visibility = "hidden"
+
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   private renderTableHeader() {
     return html`
       <thead>
@@ -391,7 +422,10 @@ export class FolksonomyProperties extends LitElement {
         <div class="rows-counter">
           Rows: ${this.filteredProperties.length} / ${this.properties.length}
         </div>
-        <button class="reset-btn" @click="${this.resetFilters}">Reset</button>
+        <div class="button-group">
+          <button class="download-btn" @click="${this.downloadCSV}">Download CSV</button>
+          <button class="reset-btn" @click="${this.resetFilters}">Reset</button>
+        </div>
       </div>
       <table class="properties-table" id="folksonomy-properties-table">
         ${this.renderTableHeader()}
