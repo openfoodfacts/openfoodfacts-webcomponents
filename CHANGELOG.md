@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.8.5 - 2025-06-12
+
+### Fixed
+
+- Fix `robotoff-contribution-message` refresh when `language-codes` change.
+
+### Docs
+
+- Update Readme.md to explain how to copy localization files to your project.
+
 ## 1.8.4 - 2025-06-12
 
 ### Fixed
