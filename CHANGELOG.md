@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.8.4 - 2025-06-12
+
+### Fixed
+
+- Fix `robotoff-nutrient-extraction` when the `fetchProduct` as no `nutriments`.
+
 ## 1.8.3 - 2025-06-10
 
 ### Fixed
