@@ -405,6 +405,11 @@ export class RobotoffNutrientExtractionForm extends LitElement {
     console.log("nutrientsOrder", nutrientsOrder)
     const keySet = new Set<string>()
 
+    // Check if nutriments data is available
+    if (!nutrimentsData.nutriments) {
+      return keySet
+    }
+
     // Process nutrients
     INSIGHTS_ANNOTATION_SIZE.forEach((size) => {
       const suffix = NUTRIENT_SUFFIX[size]
