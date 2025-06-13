@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file target-language="nl-BE" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+  <file target-language="nl" source-language="en" original="lit-localize-inputs" datatype="plaintext">
     <body>
       <trans-unit id="s49730f3d5751a433" approved="yes">
         <source>Loading...</source>
-        <target state="final">Bezig met laden...</target>
+        <target state="final">Aan het laden...</target>
       </trans-unit>
       <trans-unit id="s95d23d03f9147581" approved="yes">
         <source>Unzoom</source>
@@ -12,7 +12,7 @@
       </trans-unit>
       <trans-unit id="s166bd56d19670a72" approved="yes">
         <source>Zoom</source>
-        <target state="final">Inzoomen</target>
+        <target state="final">Zoom</target>
       </trans-unit>
       <trans-unit id="s01d2865e3e1d5501" approved="yes">
         <source>Thank you for your assistance!</source>
@@ -154,33 +154,33 @@
         <source>Expand image</source>
         <target state="final">Afbeelding uitvouwen</target>
       </trans-unit>
-      <trans-unit id="sab56a1d439576fd6">
+      <trans-unit id="sab56a1d439576fd6" approved="yes">
         <source>Suggestion icon</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Suggestiepictogram</target>
+        <target state="final">Suggestiepictogram</target>
       </trans-unit>
       <trans-unit id="sf9aee319a006c9b4" approved="yes">
         <source>Add</source>
         <target state="final">Toevoegen</target>
       </trans-unit>
-      <trans-unit id="s5666afe5cd0166de">
+      <trans-unit id="s5666afe5cd0166de" approved="yes">
         <source>Please fix the errors or modify the text before confirming</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Verbeter de fouten of wijzig de tekst voordat u bevestigt</target>
+        <target state="final">Verbeter de fouten of wijzig de tekst voordat u bevestigt</target>
       </trans-unit>
-      <trans-unit id="s06f6c6f99db6b552">
+      <trans-unit id="s06f6c6f99db6b552" approved="yes">
         <source>Original</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Origineel</target>
+        <target state="final">Origineel</target>
       </trans-unit>
-      <trans-unit id="sc57b630a7a70c61f">
+      <trans-unit id="sc57b630a7a70c61f" approved="yes">
         <source>Suggested fix</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Voorgestelde oplossing</target>
+        <target state="final">Voorgestelde verbetering</target>
       </trans-unit>
       <trans-unit id="s417b90913e05bc17" approved="yes">
         <source>Preview</source>
         <target state="final">Voorbeeld</target>
       </trans-unit>
-      <trans-unit id="s5dd6f12783fca34f">
+      <trans-unit id="s5dd6f12783fca34f" approved="yes">
         <source>Edit ingredients list</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ingrediëntenlijst bewerken</target>
+        <target state="final">Ingrediëntenlijst bewerken</target>
       </trans-unit>
       <trans-unit id="s33f85f24c0f5f008" approved="yes">
         <source>Save</source>
@@ -212,17 +212,17 @@
                 <x id="3" equiv-text="&lt;br&gt;"/>
                 Dit teken <x id="4" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>↩︎<x id="5" equiv-text="&lt;/span&gt;"/> staat voor een regelovergang. </target>
       </trans-unit>
-      <trans-unit id="s11a18a69b30b65ed">
+      <trans-unit id="s11a18a69b30b65ed" approved="yes">
         <source>Help us fix errors in ingredients list</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Help ons fouten in de ingrediëntenlijst te herstellen</target>
+        <target state="final">Help ons fouten in de ingrediëntenlijst op te lossen</target>
       </trans-unit>
-      <trans-unit id="sbd6be5cde472f37c">
+      <trans-unit id="sbd6be5cde472f37c" approved="yes">
         <source>All insights have been answered! Thanks for your help!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Alle inzichten zijn beantwoord! Bedankt voor je hulp!</target>
+        <target state="final">Alle inzichten zijn beantwoord! Bedankt voor je hulp!</target>
       </trans-unit>
       <trans-unit id="sa95b4224f685a36a">
         <source>Close modal</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Sluit modaal</target>
+        <target state="needs-translation">Close modal</target>
       </trans-unit>
       <trans-unit id="s67ae6594857a4d57" approved="yes">
         <source>Thanks for your contribution!</source>
@@ -232,45 +232,45 @@
         <source>Saved! Can you help with another one?</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">Opgeslagen! Kun je helpen met nog een?</target>
       </trans-unit>
-      <trans-unit id="sb125568d43642e6f">
+      <trans-unit id="sb125568d43642e6f" approved="yes">
         <source>Answer questions about the product.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Beantwoord vragen over het product.</target>
+        <target state="final">Beantwoord vragen over het product.</target>
       </trans-unit>
-      <trans-unit id="sdc792b75f1edcaba">
+      <trans-unit id="sdc792b75f1edcaba" approved="yes">
         <source>Help us correct the spelling of ingredients.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Help ons de spelling van ingrediënten te corrigeren.</target>
+        <target state="final">Help ons de spelling van ingrediënten te corrigeren.</target>
       </trans-unit>
-      <trans-unit id="s5c92c0051d44b6de">
+      <trans-unit id="s5c92c0051d44b6de" approved="yes">
         <source>Help us correct the nutritional information.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Help ons de voedingsinformatie te corrigeren.</target>
+        <target state="final">Help ons de voedingsinformatie te corrigeren.</target>
       </trans-unit>
-      <trans-unit id="sd698d21ddecba56b">
+      <trans-unit id="sd698d21ddecba56b" approved="yes">
         <source>Hey! You can help us improve the product information by answering the following parts:</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Hé! Je kunt ons helpen de productinformatie te verbeteren door de volgende vragen te beantwoorden:</target>
+        <target state="final">Hé! Je kunt ons helpen de productinformatie te verbeteren door de volgende vragen te beantwoorden:</target>
       </trans-unit>
       <trans-unit id="s05ec315d9308091a">
         <source>Barcode corners icon</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">Barcodehoekenpictogram</target>
       </trans-unit>
-      <trans-unit id="sb5ceccad457e8cae">
+      <trans-unit id="sb5ceccad457e8cae" approved="yes">
         <source>Are you sure you want to delete this item?</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Weet u zeker dat u dit item wilt verwijderen?</target>
+        <target state="final">Weet u zeker dat u dit item wilt verwijderen?</target>
       </trans-unit>
       <trans-unit id="sdc673e73b5c13aea" approved="yes">
         <source>Delete</source>
         <target state="final">Verwijder</target>
       </trans-unit>
-      <trans-unit id="s15d64a0a6715285a">
+      <trans-unit id="s15d64a0a6715285a" approved="yes">
         <source>New key</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Nieuwe sleutel</target>
+        <target state="final">Nieuwe sleutel</target>
       </trans-unit>
-      <trans-unit id="scb3b0671d7b7f640">
+      <trans-unit id="scb3b0671d7b7f640" approved="yes">
         <source>New value</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Nieuwe waarde</target>
+        <target state="final">Nieuwe waarde</target>
       </trans-unit>
       <trans-unit id="sb3d4f79d9d8b71e5" approved="yes">
         <source>Submit</source>
-        <target state="final">Bevestigen</target>
+        <target state="final">Verzenden</target>
       </trans-unit>
       <trans-unit id="s0d5b7fee0311db68" approved="yes">
         <source>Property</source>
@@ -284,13 +284,13 @@
         <source>Actions</source>
         <target state="final">Acties</target>
       </trans-unit>
-      <trans-unit id="seffa8ca49175b5f0">
+      <trans-unit id="seffa8ca49175b5f0" approved="yes">
         <source>Personalized properties</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Gepersonaliseerde eigenschappen</target>
+        <target state="final">Gepersonaliseerde eigenschappen</target>
       </trans-unit>
-      <trans-unit id="s907f7a97c6b29425">
+      <trans-unit id="s907f7a97c6b29425" approved="yes">
         <source>Be aware the data model might be modified. Use at your own risk.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Houd er rekening mee dat het datamodel kan worden gewijzigd. Gebruik op eigen risico.</target>
+        <target state="final">Houd er rekening mee dat het datamodel kan worden gewijzigd. Gebruik op eigen risico.</target>
       </trans-unit>
       <trans-unit id="hdbe45450d1a6419b">
         <source>These properties are created and filed by users for any kind of usages. Feel
@@ -312,9 +312,9 @@
         <target state="needs-review-translation" state-qualifier="leveraged-mt">Dit wordt mogelijk gemaakt door het Folksonomy Engine-project
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/><x id="1" equiv-text="&lt;/a&gt;"/>. Aarzel niet om deel te nemen of feedback te geven.</target>
       </trans-unit>
-      <trans-unit id="sf44a6b3b232c28ea">
+      <trans-unit id="sf44a6b3b232c28ea" approved="yes">
         <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Vervang huidige waarde door <x id="0" equiv-text="${text}"/></target>
+        <target state="final">Vervang huidige waarde door <x id="0" equiv-text="${text}"/></target>
       </trans-unit>
       <trans-unit id="s0fb218abc2e157ed">
         <source>Invalidate image</source>
@@ -336,49 +336,49 @@
         <source>Center image</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">Centrale afbeelding</target>
       </trans-unit>
-      <trans-unit id="s8038273de2cf8b73">
+      <trans-unit id="s8038273de2cf8b73" approved="yes">
         <source>Please select a region to crop.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Selecteer een regio om bij te snijden.</target>
+        <target state="final">Selecteer een regio om bij te snijden.</target>
       </trans-unit>
-      <trans-unit id="s39bcf88721a1e8ee">
+      <trans-unit id="s39bcf88721a1e8ee" approved="yes">
         <source>Reset selection</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Selectie resetten</target>
+        <target state="final">Selectie resetten</target>
       </trans-unit>
       <trans-unit id="sb8178320160f84ea">
         <source>Show crop</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Gewas weergeven</target>
+        <target state="needs-translation">Show crop</target>
       </trans-unit>
       <trans-unit id="s33f786bb6b4f0cf4">
         <source>Crop Result</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Gewasresultaat</target>
+        <target state="needs-translation">Crop Result</target>
       </trans-unit>
-      <trans-unit id="s6cee7cad81dfedd1">
+      <trans-unit id="s6cee7cad81dfedd1" approved="yes">
         <source>Cropped Image</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Bijgesneden afbeelding</target>
+        <target state="final">Bijgesneden afbeelding</target>
       </trans-unit>
       <trans-unit id="s02ce7a2e7c1b020b">
         <source>Validate crop</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Valideer gewas</target>
+        <target state="needs-translation">Validate crop</target>
       </trans-unit>
       <trans-unit id="s383ae4449428b61e">
         <source>Reset crop</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Gewas resetten</target>
+        <target state="needs-translation">Reset crop</target>
       </trans-unit>
-      <trans-unit id="sc6daf8a31883f8b9">
+      <trans-unit id="sc6daf8a31883f8b9" approved="yes">
         <source>Move image</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Afbeelding verplaatsen</target>
+        <target state="final">Afbeelding verplaatsen</target>
       </trans-unit>
-      <trans-unit id="s19059bf0c4f7c162">
+      <trans-unit id="s19059bf0c4f7c162" approved="yes">
         <source>Selection area</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Selectiegebied</target>
+        <target state="final">Selectiegebied</target>
       </trans-unit>
-      <trans-unit id="s4f4886341969d552">
+      <trans-unit id="s4f4886341969d552" approved="yes">
         <source>Move selection</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Selectie verplaatsen</target>
+        <target state="final">Selectie verplaatsen</target>
       </trans-unit>
-      <trans-unit id="scfed2f270ef6a3aa">
+      <trans-unit id="scfed2f270ef6a3aa" approved="yes">
         <source>Select area</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Selecteer gebied</target>
+        <target state="final">Selecteer gebied</target>
       </trans-unit>
       <trans-unit id="sc0cc559e7ede852a">
         <source>Resize top</source>
@@ -442,23 +442,23 @@
       </trans-unit>
       <trans-unit id="sec6377f3c4e9b28c">
         <source>I'll propose a better crop</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ik zal een betere oogst voorstellen</target>
+        <target state="needs-translation">I'll propose a better crop</target>
       </trans-unit>
-      <trans-unit id="s03e9c8114521b998">
+      <trans-unit id="s03e9c8114521b998" approved="yes">
         <source>I'll edit the ingredients</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ik zal de ingrediënten aanpassen</target>
+        <target state="final">Ik zal de ingrediënten aanpassen</target>
       </trans-unit>
-      <trans-unit id="s98ff35f2a00dc60d">
+      <trans-unit id="s98ff35f2a00dc60d" approved="yes">
         <source>Ingredients :</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ingrediënten:</target>
+        <target state="final">Ingrediënten:</target>
       </trans-unit>
-      <trans-unit id="s013bdc8cf0d3583d">
+      <trans-unit id="s013bdc8cf0d3583d" approved="yes">
         <source>Help us for ingredients</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Help ons met ingrediënten</target>
+        <target state="final">Help ons met ingrediënten</target>
       </trans-unit>
-      <trans-unit id="sd1077c055cf9ba6b">
+      <trans-unit id="sd1077c055cf9ba6b" approved="yes">
         <source>Help us validate the ingredient list of the product.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Help ons de ingrediëntenlijst van het product te valideren.</target>
+        <target state="final">Help ons de ingrediëntenlijst van het product te valideren.</target>
       </trans-unit>
     </body>
   </file>
