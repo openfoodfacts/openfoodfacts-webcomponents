@@ -330,15 +330,15 @@
       </trans-unit>
       <trans-unit id="s42dd66b2441566fd">
         <source>Center icon</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Centrinė piktograma</target>
+        <target state="translated">Centruoti piktogramą</target>
       </trans-unit>
       <trans-unit id="s422bba9636ce2489">
         <source>Center image</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Centruoti vaizdą</target>
+        <target state="translated">Centruoti nuotrauką</target>
       </trans-unit>
       <trans-unit id="s8038273de2cf8b73">
         <source>Please select a region to crop.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Pasirinkite apkirptiną sritį.</target>
+        <target state="translated">Pasirinkite sritį atkirpti.</target>
       </trans-unit>
       <trans-unit id="s39bcf88721a1e8ee">
         <source>Reset selection</source>
