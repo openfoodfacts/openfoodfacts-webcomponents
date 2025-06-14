@@ -258,7 +258,7 @@ export class FolksonomyProperties extends LitElement {
       console.log("Folksonomy properties data:", data)
 
       // Sort by count (descending order)
-      this.properties = data.sort((a, b) => b.count - a.count)
+      this.properties = data.sort((a, b) => a.k.localeCompare(b.k))
       this.filteredProperties = [...this.properties]
     } catch (error) {
       console.error("Error fetching folksonomy properties:", error)
