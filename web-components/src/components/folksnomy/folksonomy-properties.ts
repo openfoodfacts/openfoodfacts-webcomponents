@@ -193,6 +193,161 @@ export class FolksonomyProperties extends LitElement {
       font-style: italic;
     }
 
+    /* Range slider container */
+    .range-filter-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      min-width: 200px;
+    }
+
+    .range-inputs {
+      display: flex;
+      gap: 0.25rem;
+      align-items: center;
+    }
+
+    .range-input {
+      width: 60px;
+      padding: 0.25rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      text-align: center;
+    }
+
+    .range-input:focus {
+      outline: none;
+      border-color: #341100;
+    }
+
+    .range-separator {
+      font-size: 0.75rem;
+      color: #666;
+    }
+
+    /* Custom range slider styles */
+    .range-slider {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #ddd;
+      outline: none;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+      position: relative;
+    }
+
+    .range-slider:hover {
+      opacity: 1;
+    }
+
+    .range-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #341100;
+      cursor: pointer;
+      box-shadow: 0px 0px 0px 3px rgba(52, 17, 0, 0.2);
+    }
+
+    .range-slider::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #341100;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0px 0px 0px 3px rgba(52, 17, 0, 0.2);
+    }
+
+    .range-slider-container {
+      position: relative;
+      margin: 0.25rem 0;
+    }
+
+    .range-slider-track {
+      position: absolute;
+      height: 6px;
+      background: #341100;
+      border-radius: 3px;
+      top: 0;
+    }
+
+    .dual-range-container {
+      position: relative;
+      width: 100%;
+    }
+
+    .dual-range-slider {
+      position: relative;
+      height: 6px;
+      background: #ddd;
+      border-radius: 3px;
+      margin: 0.5rem 0;
+      width: 200px;
+      min-width: 180px;
+    }
+
+    .dual-range-slider input[type="range"] {
+      position: absolute;
+      width: 100%;
+      height: 6px;
+      background: transparent;
+      -webkit-appearance: none;
+      appearance: none;
+      pointer-events: none;
+      outline: none;
+    }
+
+    .dual-range-slider input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      margin-top: -5px;
+      margin-left: -2px;
+      border-radius: 50%;
+      background: #341100;
+      cursor: pointer;
+      pointer-events: all;
+      box-shadow: 0px 0px 0px 3px rgba(52, 17, 0, 0.2);
+      border: none;
+    }
+
+    .dual-range-slider input[type="range"]::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      margin-top: -5px;
+
+      border-radius: 50%;
+      background: #341100;
+      cursor: pointer;
+      pointer-events: all;
+      box-shadow: 0px 0px 0px 3px rgba(52, 17, 0, 0.2);
+      border: none;
+    }
+
+    .dual-range-slider input[type="range"]:first-child::-moz-range-thumb {
+      margin-left: -8px;
+    }
+
+    .dual-range-slider input[type="range"]:last-child::-moz-range-thumb {
+      margin-right: -8px;
+    }
+
+    .dual-range-track {
+      position: absolute;
+      height: 6px;
+      background: #341100;
+      border-radius: 3px;
+      top: 0;
+    }
+
     /* Mobile responsiveness */
     @media (max-width: 768px) {
       .properties-table {
@@ -210,6 +365,15 @@ export class FolksonomyProperties extends LitElement {
 
       .properties-container p {
         font-size: 0.8rem;
+      }
+
+      .range-filter-container {
+        min-width: 180px;
+      }
+
+      .range-input {
+        width: 50px;
+        font-size: 0.7rem;
       }
     }
   `
@@ -229,8 +393,18 @@ export class FolksonomyProperties extends LitElement {
   @state()
   private filters = {
     property: "",
-    count: "",
-    values: "",
+    countMin: 0,
+    countMax: 0,
+    valuesMin: 0,
+    valuesMax: 0,
+  }
+
+  @state()
+  private ranges = {
+    countMin: 0,
+    countMax: 0,
+    valuesMin: 0,
+    valuesMax: 0,
   }
 
   private filterTimeout: number | null = null
@@ -260,6 +434,34 @@ export class FolksonomyProperties extends LitElement {
       // Sort by count (descending order)
       this.properties = data.sort((a, b) => a.k.localeCompare(b.k))
       this.filteredProperties = [...this.properties]
+
+      // Calculate min/max ranges for sliders
+      if (this.properties.length > 0) {
+        const counts = this.properties.map((p) => p.count)
+        const values = this.properties.map((p) => p.values)
+
+        const countMin = Math.min(...counts)
+        const countMax = Math.max(...counts)
+        const valuesMin = Math.min(...values)
+        const valuesMax = Math.max(...values)
+
+        // Ensure minimum range of 1 to prevent overlapping handles
+        this.ranges = {
+          countMin: countMin,
+          countMax: Math.max(countMax, countMin + 1),
+          valuesMin: valuesMin,
+          valuesMax: Math.max(valuesMax, valuesMin + 1),
+        }
+
+        // Initialize filters with full range
+        this.filters = {
+          property: "",
+          countMin: this.ranges.countMin,
+          countMax: this.ranges.countMax,
+          valuesMin: this.ranges.valuesMin,
+          valuesMax: this.ranges.valuesMax,
+        }
+      }
     } catch (error) {
       console.error("Error fetching folksonomy properties:", error)
       this.error = "Failed to load properties. Please try again later."
@@ -277,18 +479,18 @@ export class FolksonomyProperties extends LitElement {
   }
 
   private applyFilters() {
-    const { property, count, values } = this.filters
+    const { property, countMin, countMax, valuesMin, valuesMax } = this.filters
 
     this.filteredProperties = this.properties.filter((item) => {
       const matchesProperty = !property || item.k.toLowerCase().includes(property.toLowerCase())
-      const matchesCount = !count || item.count.toString() === count
-      const matchesValues = !values || item.values.toString() === values
+      const matchesCount = item.count >= countMin && item.count <= countMax
+      const matchesValues = item.values >= valuesMin && item.values <= valuesMax
 
       return matchesProperty && matchesCount && matchesValues
     })
   }
 
-  private handleFilterInput(field: "property" | "count" | "values", value: string) {
+  private handleFilterInput(field: "property", value: string) {
     this.filters = {
       ...this.filters,
       [field]: value,
@@ -304,11 +506,26 @@ export class FolksonomyProperties extends LitElement {
     }, 1100)
   }
 
+  private handleRangeInput(field: keyof typeof this.filters, value: string) {
+    const numValue = parseInt(value, 10)
+    if (isNaN(numValue)) return
+
+    this.filters = {
+      ...this.filters,
+      [field]: numValue,
+    }
+
+    // Immediate filtering for range inputs
+    this.applyFilters()
+  }
+
   private resetFilters() {
     this.filters = {
       property: "",
-      count: "",
-      values: "",
+      countMin: this.ranges.countMin,
+      countMax: this.ranges.countMax,
+      valuesMin: this.ranges.valuesMin,
+      valuesMax: this.ranges.valuesMax,
     }
     this.filteredProperties = [...this.properties]
   }
@@ -330,6 +547,114 @@ export class FolksonomyProperties extends LitElement {
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
+  }
+
+  private renderDualRangeSlider(
+    type: "count" | "values",
+    min: number,
+    max: number,
+    currentMin: number,
+    currentMax: number
+  ) {
+    // If range is too small, show simple inputs instead
+    if (max - min < 2) {
+      return html`
+        <div class="range-filter-container">
+          <div class="range-inputs">
+            <input
+              type="number"
+              class="range-input"
+              .value="${currentMin}"
+              min="${min}"
+              max="${max}"
+              @input="${(e: Event) =>
+                this.handleRangeInput(
+                  type === "count" ? "countMin" : "valuesMin",
+                  (e.target as HTMLInputElement).value
+                )}"
+            />
+            <span class="range-separator">-</span>
+            <input
+              type="number"
+              class="range-input"
+              .value="${currentMax}"
+              min="${min}"
+              max="${max}"
+              @input="${(e: Event) =>
+                this.handleRangeInput(
+                  type === "count" ? "countMax" : "valuesMax",
+                  (e.target as HTMLInputElement).value
+                )}"
+            />
+          </div>
+        </div>
+      `
+    }
+
+    const percent1 = ((currentMin - min) / (max - min)) * 100
+    const percent2 = ((currentMax - min) / (max - min)) * 100
+
+    return html`
+      <div class="range-filter-container">
+        <div class="range-inputs">
+          <input
+            type="number"
+            class="range-input"
+            .value="${currentMin}"
+            min="${min}"
+            max="${max}"
+            @input="${(e: Event) =>
+              this.handleRangeInput(
+                type === "count" ? "countMin" : "valuesMin",
+                (e.target as HTMLInputElement).value
+              )}"
+          />
+          <span class="range-separator">-</span>
+          <input
+            type="number"
+            class="range-input"
+            .value="${currentMax}"
+            min="${min}"
+            max="${max}"
+            @input="${(e: Event) =>
+              this.handleRangeInput(
+                type === "count" ? "countMax" : "valuesMax",
+                (e.target as HTMLInputElement).value
+              )}"
+          />
+        </div>
+        <div class="dual-range-container">
+          <div class="dual-range-slider">
+            <div
+              class="dual-range-track"
+              style="left: ${percent1}%; width: ${percent2 - percent1}%"
+            ></div>
+            <input
+              type="range"
+              min="${min}"
+              max="${max}"
+              .value="${currentMin}"
+              @input="${(e: Event) =>
+                this.handleRangeInput(
+                  type === "count" ? "countMin" : "valuesMin",
+                  (e.target as HTMLInputElement).value
+                )}"
+            />
+            <input
+              type="range"
+              min="${min}"
+              max="${max}"
+              .value="${currentMax}"
+              @input="${(e: Event) =>
+                this.handleRangeInput(
+                  type === "count" ? "countMax" : "valuesMax",
+                  (e.target as HTMLInputElement).value
+                )}"
+            />
+          </div>
+        </div>
+      </div>
+    `
   }
 
   private renderTableHeader() {
@@ -356,24 +681,22 @@ export class FolksonomyProperties extends LitElement {
           </td>
           <td></td>
           <td>
-            <input
-              type="text"
-              class="filter-input"
-              placeholder="Filter count..."
-              .value="${this.filters.count}"
-              @input="${(e: Event) =>
-                this.handleFilterInput("count", (e.target as HTMLInputElement).value)}"
-            />
+            ${this.renderDualRangeSlider(
+              "count",
+              this.ranges.countMin,
+              this.ranges.countMax,
+              this.filters.countMin,
+              this.filters.countMax
+            )}
           </td>
           <td>
-            <input
-              type="text"
-              class="filter-input"
-              placeholder="Filter values..."
-              .value="${this.filters.values}"
-              @input="${(e: Event) =>
-                this.handleFilterInput("values", (e.target as HTMLInputElement).value)}"
-            />
+            ${this.renderDualRangeSlider(
+              "values",
+              this.ranges.valuesMin,
+              this.ranges.valuesMax,
+              this.filters.valuesMin,
+              this.filters.valuesMax
+            )}
           </td>
         </tr>
       </thead>
