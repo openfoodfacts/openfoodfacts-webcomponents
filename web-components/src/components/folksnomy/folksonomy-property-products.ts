@@ -1,6 +1,7 @@
 import { LitElement, html, css } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { localized } from "@lit/localize"
+import folksonomyApi from "../../api/folksonomy"
 
 /**
  * Folksonomy Property Products Viewer
@@ -12,15 +13,11 @@ import { localized } from "@lit/localize"
 export class FolksonomyPropertyProducts extends LitElement {
   static override styles = css`
     :host {
-      display: block;
-      width: 100%;
       font-family: Arial, sans-serif;
       color: #333;
     }
 
     .property-container {
-      width: 100%;
-      max-width: none;
       margin: 0 auto 1rem auto;
       background-color: #fff;
       border: 1px solid #ddd;
@@ -74,11 +71,6 @@ export class FolksonomyPropertyProducts extends LitElement {
 
     .info-box {
       margin-top: 10px;
-      flex-shrink: 0;
-      border: solid black 1px;
-      padding: 0.5rem;
-      background-color: #f9f9f9;
-      border-radius: 4px;
       align-self: flex-start;
     }
 
@@ -127,6 +119,16 @@ export class FolksonomyPropertyProducts extends LitElement {
     .property-value {
       font-weight: 500;
       color: #341100;
+    }
+
+    .count {
+      text-align: right;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .count-header {
+      text-align: right;
     }
 
     .loading {
@@ -228,6 +230,38 @@ export class FolksonomyPropertyProducts extends LitElement {
       gap: 0.5rem;
     }
 
+    .view-mode-toggle {
+      display: flex;
+      background-color: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .view-mode-btn {
+      background-color: transparent;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      font-size: 0.875rem;
+    }
+
+    .view-mode-btn:hover {
+      background-color: #e9ecef;
+    }
+
+    .view-mode-btn.active {
+      background-color: #341100;
+      color: white;
+    }
+
+    .view-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
     /* Mobile responsiveness */
     @media (max-width: 768px) {
       .content-wrapper {
@@ -237,11 +271,6 @@ export class FolksonomyPropertyProducts extends LitElement {
       .header-section {
         flex-direction: column;
         gap: 1rem;
-      }
-
-      .info-box {
-        width: 100%;
-        order: -1;
       }
 
       .products-table {
@@ -260,6 +289,27 @@ export class FolksonomyPropertyProducts extends LitElement {
       .property-container p {
         font-size: 0.8rem;
       }
+
+      .filter-controls {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+      }
+
+      .view-controls {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: center;
+      }
+
+      .view-mode-toggle {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .view-mode-btn {
+        flex: 1;
+      }
     }
   `
 
@@ -269,17 +319,20 @@ export class FolksonomyPropertyProducts extends LitElement {
   @property({ type: String, attribute: "property-name" })
   propertyName = ""
 
-  /**
-   * The optional property value
-   */
-  @property({ type: String, attribute: "property-value" })
-  propertyValue = ""
-
   @state()
   private products: Array<{ product: string; v: string }> = []
 
   @state()
   private filteredProducts: Array<{ product: string; v: string }> = []
+
+  @state()
+  private groupedValues: Array<{ value: string; count: number }> = []
+
+  @state()
+  private filteredValues: Array<{ value: string; count: number }> = []
+
+  @state()
+  private viewMode: "products" | "values" = "products"
 
   @state()
   private loading = false
@@ -298,7 +351,7 @@ export class FolksonomyPropertyProducts extends LitElement {
   override async connectedCallback() {
     super.connectedCallback()
     if (this.propertyName) {
-      await this.fetchProducts()
+      await this.fetchProductsPropertiesMain()
     }
   }
 
@@ -311,32 +364,31 @@ export class FolksonomyPropertyProducts extends LitElement {
     }
   }
 
-  private async fetchProducts() {
+  private async fetchProductsPropertiesMain() {
     this.loading = true
     this.error = null
 
     try {
-      // Construct API URL based on property and optional value
-      let url = `/products?k=${this.propertyName}`
-      if (this.propertyValue) {
-        url += `&v=${this.propertyValue}`
-      }
+      console.log("Fetching products with property:", this.propertyName)
 
-      console.log("Fetching products with property:", url)
-
-      // Note: You may need to update the API call based on your actual API structure
-      // For now, I'm using a placeholder that matches the pattern from the reference code
-      const response = await fetch(`https://api.folksonomy.openfoodfacts.org${url}`)
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-
-      const data = await response.json()
+      const data = await folksonomyApi.fetchProductsProperties(this.propertyName)
       console.log("Property products data:", data)
 
       this.products = data || []
       this.filteredProducts = [...this.products]
+
+      // Also prepare grouped data
+      const valueCountMap = new Map<string, number>()
+      this.products.forEach((product) => {
+        const value = product.v
+        valueCountMap.set(value, (valueCountMap.get(value) || 0) + 1)
+      })
+
+      this.groupedValues = Array.from(valueCountMap.entries())
+        .map(([value, count]) => ({ value, count }))
+        .sort((a, b) => b.count - a.count)
+
+      this.filteredValues = [...this.groupedValues]
     } catch (error) {
       console.error("Error fetching property products:", error)
       this.error = "Failed to load products. Please try again later."
@@ -348,11 +400,17 @@ export class FolksonomyPropertyProducts extends LitElement {
   private applyFilters() {
     const { barcode, value } = this.filters
 
+    // Filter products view
     this.filteredProducts = this.products.filter((item) => {
       const matchesBarcode = !barcode || item.product.toLowerCase().includes(barcode.toLowerCase())
       const matchesValue = !value || item.v.toLowerCase().includes(value.toLowerCase())
-
       return matchesBarcode && matchesValue
+    })
+
+    // Filter values view (only value filter applies)
+    this.filteredValues = this.groupedValues.filter((item) => {
+      const matchesValue = !value || item.value.toLowerCase().includes(value.toLowerCase())
+      return matchesValue
     })
   }
 
@@ -378,12 +436,23 @@ export class FolksonomyPropertyProducts extends LitElement {
       value: "",
     }
     this.filteredProducts = [...this.products]
+    this.filteredValues = [...this.groupedValues]
+  }
+
+  private switchViewMode(mode: "products" | "values") {
+    this.viewMode = mode
   }
 
   private downloadCSV() {
-    // Create CSV content
-    const headers = ["Product Barcode", "Corresponding Value"]
-    const rows = this.filteredProducts.map((item) => [item.product, item.v])
+    // Create CSV content based on current view mode
+    const isProductsView = this.viewMode === "products"
+    const headers = isProductsView
+      ? ["Product Barcode", "Corresponding Value"]
+      : ["Value", "Product Count"]
+
+    const rows = isProductsView
+      ? this.filteredProducts.map((item) => [item.product, item.v])
+      : this.filteredValues.map((item) => [item.value, item.count])
 
     const csvContent = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n")
 
@@ -392,8 +461,12 @@ export class FolksonomyPropertyProducts extends LitElement {
     const link = document.createElement("a")
     const url = URL.createObjectURL(blob)
 
+    const filename = isProductsView
+      ? `folksonomy_property_${this.propertyName}_products.csv`
+      : `folksonomy_property_${this.propertyName}_values.csv`
+
     link.setAttribute("href", url)
-    link.setAttribute("download", `folksonomy_property_${this.propertyName}_products.csv`)
+    link.setAttribute("download", filename)
     link.style.visibility = "hidden"
 
     document.body.appendChild(link)
@@ -461,6 +534,43 @@ export class FolksonomyPropertyProducts extends LitElement {
     `
   }
 
+  private renderValueRow(valueItem: { value: string; count: number }) {
+    return html`
+      <tr>
+        <td class="property-value">
+          <a href="${this.getPropertyValueUrl(valueItem.value)}" class="property-value">
+            ${valueItem.value}
+          </a>
+        </td>
+        <td class="count">${valueItem.count}</td>
+      </tr>
+    `
+  }
+
+  private renderGroupedTableHeader() {
+    return html`
+      <thead>
+        <tr>
+          <th class="value-header">Property Value</th>
+          <th class="count-header">Product Count</th>
+        </tr>
+        <tr class="filter-row">
+          <td>
+            <input
+              type="text"
+              class="filter-input"
+              placeholder="Filter values..."
+              .value="${this.filters.value}"
+              @input="${(e: Event) =>
+                this.handleFilterInput("value", (e.target as HTMLInputElement).value)}"
+            />
+          </td>
+          <td></td>
+        </tr>
+      </thead>
+    `
+  }
+
   private renderContent() {
     if (this.loading) {
       return html`<div class="loading">Loading products...</div>`
@@ -474,11 +584,33 @@ export class FolksonomyPropertyProducts extends LitElement {
       return html`<div class="empty-state">No products found for this property.</div>`
     }
 
+    const isProductsView = this.viewMode === "products"
+    const currentData = isProductsView ? this.filteredProducts : this.filteredValues
+    const totalData = isProductsView ? this.products : this.groupedValues
+
     return html`
       <div class="table-container">
         <div class="filter-controls">
-          <div class="rows-counter">
-            Products: ${this.filteredProducts.length} / ${this.products.length}
+          <div class="view-controls">
+            <div class="view-mode-toggle">
+              <button
+                class="view-mode-btn ${this.viewMode === "products" ? "active" : ""}"
+                @click="${() => this.switchViewMode("products")}"
+              >
+                Individual Products
+              </button>
+              <button
+                class="view-mode-btn ${this.viewMode === "values" ? "active" : ""}"
+                @click="${() => this.switchViewMode("values")}"
+              >
+                Grouped Values
+              </button>
+            </div>
+            <div class="rows-counter">
+              ${isProductsView
+                ? `Products: ${currentData.length} / ${totalData.length}`
+                : `Values: ${currentData.length} / ${totalData.length}`}
+            </div>
           </div>
           <div class="button-group">
             <button class="download-btn" @click="${this.downloadCSV}">Download CSV</button>
@@ -486,9 +618,11 @@ export class FolksonomyPropertyProducts extends LitElement {
           </div>
         </div>
         <table class="products-table" id="products-table">
-          ${this.renderTableHeader()}
+          ${isProductsView ? this.renderTableHeader() : this.renderGroupedTableHeader()}
           <tbody>
-            ${this.filteredProducts.map((product) => this.renderProductRow(product))}
+            ${isProductsView
+              ? this.filteredProducts.map((product) => this.renderProductRow(product))
+              : this.filteredValues.map((valueItem) => this.renderValueRow(valueItem))}
           </tbody>
         </table>
       </div>
@@ -510,10 +644,11 @@ export class FolksonomyPropertyProducts extends LitElement {
           <div class="main-content">
             <div class="header-section">
               <div class="property-title-container">
-                <h2 id="property_title">
-                  Folksonomy property:
-                  ${this.propertyName}${this.propertyValue ? `: ${this.propertyValue}` : ""}
-                </h2>
+                <h2 id="property_title">Folksonomy property: ${this.propertyName}</h2>
+
+                <div id="fe_infobox" class="info-box">
+                  Tip: you can also find the <a href="/properties">list of all properties</a>.
+                </div>
 
                 <p>
                   You should find a
@@ -524,10 +659,6 @@ export class FolksonomyPropertyProducts extends LitElement {
                 </p>
 
                 <p>List of products using this property:</p>
-              </div>
-
-              <div id="fe_infobox" class="info-box">
-                Tip: you can also find the <a href="/properties">list of all properties</a>.
               </div>
             </div>
 
