@@ -125,6 +125,33 @@ async function fetchKeys(): Promise<{ k: string; count: number; values: number }
   }
 }
 
+async function fetchProductsProperties(propertyName: string): Promise<any[]> {
+  try {
+    let url = `/products?k=${propertyName}`
+
+    console.log("Fetching products with property:", url)
+
+    const response = await fetch(getApiUrl(url), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      } as HeadersInit,
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const data = await response.json()
+    console.log("Property products data:", data)
+
+    return data || []
+  } catch (error) {
+    console.error("Error fetching property products:", error)
+    throw error
+  }
+}
+
 async function fetchValues(key: string): Promise<{ v: string; product_count: number }[]> {
   try {
     const response = await fetch(getApiUrl(`/values/${key}`), {
@@ -152,5 +179,6 @@ export default {
   deleteProductProperty,
   updateProductProperty,
   fetchKeys,
+  fetchProductsProperties,
   fetchValues,
 }
