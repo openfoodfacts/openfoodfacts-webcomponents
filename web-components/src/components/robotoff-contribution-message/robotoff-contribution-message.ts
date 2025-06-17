@@ -173,7 +173,7 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
         ...insightValues,
       }
     },
-    args: () => [this.productCode, this.languageCodes],
+    args: () => [this.productCode, ...this._languageCodes],
   })
 
   /**
