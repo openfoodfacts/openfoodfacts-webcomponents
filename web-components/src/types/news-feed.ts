@@ -34,6 +34,10 @@ export interface NewsData {
   }
 }
 
+/**
+ * From the json data we extract all news item as objects
+ * with properties we need to display and filter them.
+ */
 export interface ProcessedNewsItem {
   id: string
   title: string
