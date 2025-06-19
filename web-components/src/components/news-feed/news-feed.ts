@@ -30,6 +30,7 @@ export class NewsFeed extends LitElement {
   // this contains the json we fetched 
   // with all news in all languages and so on
   @state() private _rawData: NewsData | null = null
+  // data ready to be displayed
   @state() private _processedNewsItems: ProcessedNewsItem[] = []
 
   static override styles = css`
