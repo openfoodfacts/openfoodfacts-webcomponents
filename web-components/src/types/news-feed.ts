@@ -1,3 +1,6 @@
+/**
+ * This is the format of the JSON file where data is stored
+ */
 export interface NewsData {
   news: {
     [key: string]: {
