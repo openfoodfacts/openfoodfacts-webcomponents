@@ -1,1 +1,8 @@
-web-components/src/api/folksonomy.ts, web-components/src/components/folksnomy/folksonomy-property-products.ts
+GitHub:
+- changed-files:
+  - any-glob-to-any-file: '.github/**/*'
+
+Folksonomy Engine:
+- changed-files:
+  - any-glob-to-any-file: 'web-components/src/api/folksonomy.ts'
+  - any-glob-to-any-file: 'web-components/src/components/folksnomy/folksonomy-property-products.ts'
