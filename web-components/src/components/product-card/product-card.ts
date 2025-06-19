@@ -1,7 +1,8 @@
 import { LitElement, html, css, nothing } from "lit"
-import { customElement, property } from "lit/decorators.js"
+import { customElement, property, state } from "lit/decorators.js"
 import { classMap } from "lit/directives/class-map.js"
 import { KP_ATTRIBUTE_IMG } from "../../utils/openfoodfacts"
+import { getImageUrl } from "../../signals/app"
 
 interface NavigationState {
   to: {
@@ -9,6 +10,18 @@ interface NavigationState {
       barcode: string
     }
   } | null
+}
+
+interface Product {
+  code: string
+  product_name: string
+  brands: string
+  quantity: string
+  image_front_small_url: string
+  product_type: string
+  nutriscore_grade?: string
+  nova_group?: number
+  greenscore_grade?: string // Assuming this is the name of the ecoscore attribute (need to confirm with actual data, when available)
 }
 
 /**
@@ -218,7 +231,7 @@ export class ProductCard extends LitElement {
    * The product object containing product details
    */
   @property({ type: Object })
-  product: any = {
+  product: Product = {
     code: "",
     product_name: "",
     brands: "",
@@ -227,6 +240,7 @@ export class ProductCard extends LitElement {
     product_type: "",
     nutriscore_grade: undefined,
     nova_group: undefined,
+    greenscore_grade: undefined,
   }
 
   /**
@@ -237,22 +251,13 @@ export class ProductCard extends LitElement {
     to: null,
   }
 
-  /**
-   * URL for the nutriscore image
-   */
-  @property({ type: String })
+  @state()
   nutriscoreSrc = ""
 
-  /**
-   * URL for the nova score image
-   */
-  @property({ type: String })
+  @state()
   novaSrc = ""
 
-  /**
-   * URL for the ecoscore image
-   */
-  @property({ type: String })
+  @state()
   greenscoreSrc = ""
 
   /**
@@ -265,10 +270,10 @@ export class ProductCard extends LitElement {
    * Placeholder image URL for products without an image
    */
   @property({ type: String })
-  placeholderImage = "/Placeholder.svg"
+  placeholderImage = getImageUrl("Placeholder.svg")
 
   /**
-   * Updates score image URLs based on the product's nutrition grades, nova group, and ecoscore
+   * Updates score image URLs based on the product's nutrition grades, nova group, and greenscore
    */
   override updated(changedProperties: Map<string, any>) {
     super.updated(changedProperties)
