@@ -227,7 +227,6 @@ export class ProductCard extends LitElement {
     product_type: "",
     nutriscore_grade: undefined,
     nova_group: undefined,
-    ecoscore_grade: undefined,
   }
 
   /**
