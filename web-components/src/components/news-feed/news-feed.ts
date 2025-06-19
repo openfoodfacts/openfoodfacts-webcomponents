@@ -24,7 +24,7 @@ export class NewsFeed extends LitElement {
   @property({ attribute: "country" }) countryCode?: string
   @property({ attribute: "app-version" }) appVersion?: string
 
-  // Internal state properties using the @state decorator
+  // Internal state properties
   @state() private _isLoading = false
   @state() private _error: string | null = null
   @state() private _rawData: NewsData | null = null
