@@ -27,6 +27,8 @@ export class NewsFeed extends LitElement {
   // Internal state properties
   @state() private _isLoading = false
   @state() private _error: string | null = null
+  // this contains the json we fetched 
+  // with all news in all languages and so on
   @state() private _rawData: NewsData | null = null
   @state() private _processedNewsItems: ProcessedNewsItem[] = []
 
