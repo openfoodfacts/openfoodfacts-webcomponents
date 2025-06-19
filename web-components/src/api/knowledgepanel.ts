@@ -1,5 +1,5 @@
 import { KnowledgePanelsData } from "../types/knowledge-panel"
-import { getLocale } from "../localization"
+import { languageCode } from "../signals/app"
 
 /**
  * Fetches knowledge panels data from specified URL and extracts data at the given path
@@ -16,9 +16,9 @@ export const fetchKnowledgePanels = async (
     const urlObj = new URL(url)
     let finalUrl = url
 
-    // If no 'lc' parameter in the URL, add it using getLocale()
+    // If no 'lc' parameter in the URL, add it
     if (!urlObj.searchParams.has("lc")) {
-      const localeCode = getLocale()
+      const localeCode = languageCode.get()
       urlObj.searchParams.append("lc", localeCode)
       finalUrl = urlObj.toString()
       console.log(`Language code not found in URL. Added locale '${localeCode}': ${finalUrl}`)

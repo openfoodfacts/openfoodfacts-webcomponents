@@ -1,5 +1,4 @@
 import { addParamsToUrl } from "../utils"
-import { getLocaleAfterInit } from "../localization"
 import {
   QuestionRequestParams,
   QuestionsResponse,
@@ -7,11 +6,15 @@ import {
   InsightsRequestParams,
   InsightsResponse,
   NutrientsInsight,
-  IngredientsInsight,
+  IngredientSpellcheckInsight,
   NutrientsAnnotationData,
   AnnotationFormData,
+  IngredientDetectionInsight,
+  IngredientDetectionAnnotationData,
+  InsightType,
 } from "../types/robotoff"
 import { robotoffConfiguration } from "../signals/robotoff"
+import { languageCode } from "../signals/app"
 
 /**
  * Get the API URL for a given path with the current configuration
@@ -84,7 +87,11 @@ const robotoff = {
    * from the one proposed by the insight or the original one
    * @returns {Promise<Response>}
    */
-  annotateIngredients(insightId: string, annotation: AnnotationAnswer, correction?: string) {
+  annotateIngredientSpellcheck(
+    insightId: string,
+    annotation: AnnotationAnswer,
+    correction?: string
+  ) {
     const data: Record<string, string> = {
       insight_id: insightId,
       annotation,
@@ -97,6 +104,30 @@ const robotoff = {
   },
 
   /**
+   * Annotate an insight
+   * @param insightId The insight id
+   * @param annotation The annotation answer ${QuestionAnnotationAnswer}
+   * @param data The data to send to the API
+   * @returns {Promise<Response>}
+   */
+  annotateIngredientDetection(
+    insightId: string,
+    annotation: AnnotationAnswer,
+    data?: IngredientDetectionAnnotationData
+  ) {
+    const formData: AnnotationFormData = {
+      annotation,
+      insight_id: insightId,
+    }
+    // Add data only if it is defined
+    if (data) {
+      formData.data = JSON.stringify(data)
+    }
+    const formBody = new URLSearchParams(formData).toString()
+    return annotate(formBody)
+  },
+
+  /**
    * Get questions by product code
    * @param code The product code
    * @param questionRequestParams The request params
@@ -104,7 +135,7 @@ const robotoff = {
    */
   async questionsByProductCode(code: string, questionRequestParams: QuestionRequestParams = {}) {
     if (!questionRequestParams.lang) {
-      questionRequestParams.lang = await getLocaleAfterInit()
+      questionRequestParams.lang = languageCode.get()
     }
     const apiUrl = getApiUrl(`/questions/${code}`)
     const url = addParamsToUrl(apiUrl, questionRequestParams)
@@ -119,14 +150,36 @@ const robotoff = {
    * @returns {Promise<InsightsResponse>} The insights response, currently only
    * ingredients and nutrients insights are supported
    */
-  async insights<T extends NutrientsInsight | IngredientsInsight>(
-    requestParams: InsightsRequestParams = {}
-  ) {
+  async insights<
+    T extends NutrientsInsight | IngredientSpellcheckInsight | IngredientDetectionInsight,
+  >(requestParams: InsightsRequestParams = {}) {
     const apiUrl = getApiUrl("/insights")
     const url = addParamsToUrl(apiUrl, requestParams)
     const response = await fetch(url)
     const result: InsightsResponse<T> = await response.json()
     return result
+  },
+
+  /**
+   * Get insights for the robotoff contribution message
+   * Reduces the number of calls to the API by fetching multiple insights at once
+   * @param requestParams The request params
+   * @returns {Promise<InsightsResponse>} The insights response, currently only
+   * ingredients and nutrients insights are supported
+   */
+  async fetchRobotoffContributionMessageInsights(requestParams: InsightsRequestParams = {}) {
+    const result = await this.insights<
+      NutrientsInsight | IngredientSpellcheckInsight | IngredientDetectionInsight
+    >({
+      ...requestParams,
+      annotated: false,
+      insight_types: [
+        InsightType.nutrient_extraction,
+        InsightType.ingredient_spellcheck,
+        InsightType.ingredient_detection,
+      ],
+    })
+    return result.insights
   },
 }
 

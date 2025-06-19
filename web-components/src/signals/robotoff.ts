@@ -8,3 +8,6 @@ import { SignalObject } from "../utils/signals"
 export const robotoffConfiguration = new SignalObject<RobotoffConfigurationOptions>({
   ...DEFAULT_ROBOTOFF_CONFIGURATION,
 })
+
+export const getRobotoffImageUrl = (path: string) =>
+  `${robotoffConfiguration.getItem("imgUrl")}${path}`

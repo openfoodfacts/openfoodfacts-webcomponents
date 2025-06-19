@@ -7,8 +7,8 @@ import { IS_HIDDEN } from "../../styles/utils"
 import { classMap } from "lit/directives/class-map.js"
 
 import "../shared/modal"
-import "../robotoff-ingredients/robotoff-ingredients"
-import "../robotoff-nutrients/robotoff-nutrients"
+import "../robotoff-ingredient-spellcheck/robotoff-ingredient-spellcheck"
+import "../robotoff-nutrient-extraction/robotoff-nutrient-extraction"
 import "../robotoff-question/robotoff-question"
 
 enum MessageType {
@@ -144,16 +144,21 @@ export class RobotoffModal extends LitElement {
    */
   renderModalContent() {
     switch (this.robotoffContributionType) {
-      case RobotoffContributionType.INGREDIENTS:
-        return html`<robotoff-ingredients
+      case RobotoffContributionType.INGREDIENT_SPELLCHECK:
+        return html`<robotoff-ingredient-spellcheck
           product-code="${this.productCode}"
           @ingredients-state="${this.onStateChange}"
-        ></robotoff-ingredients>`
-      case RobotoffContributionType.NUTRIENTS:
-        return html`<robotoff-nutrients
+        ></robotoff-ingredient-spellcheck>`
+      case RobotoffContributionType.NUTRIENT_EXTRACTION:
+        return html`<robotoff-nutrient-extraction
           product-code="${this.productCode}"
           @nutrient-state="${this.onStateChange}"
-        ></robotoff-nutrients>`
+        ></robotoff-nutrient-extraction>`
+      case RobotoffContributionType.INGREDIENT_DETECTION:
+        return html`<robotoff-ingredient-detection
+          product-code="${this.productCode}"
+          @ingredient-detection-state="${this.onStateChange}"
+        ></robotoff-ingredient-detection>`
       case RobotoffContributionType.QUESTIONS:
         return html`<robotoff-question
           product-code="${this.productCode}"

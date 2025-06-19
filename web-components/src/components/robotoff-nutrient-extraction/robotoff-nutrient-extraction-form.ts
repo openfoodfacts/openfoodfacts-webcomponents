@@ -15,7 +15,6 @@ import {
   getTaxonomyNameByLang,
   nutrientTaxonomies,
 } from "../../signals/taxonomies"
-import { getLocale } from "../../localization"
 import {
   getPossibleUnits,
   INSIGHTS_ANNOTATION_SIZE,
@@ -23,7 +22,7 @@ import {
   NUTRIENT_SUFFIX,
   NUTRIENT_UNIT_NAME_PREFIX,
   NUTRIENT_UNIT_SUFFIX,
-} from "../../utils/nutrients"
+} from "../../utils/nutrient-extraction"
 import { EventType, SELECT_ICON_FILE_NAME, WHITE_SELECT_ICON_FILE_NAME } from "../../constants"
 import { INPUT, SELECT } from "../../styles/form"
 import { FLEX } from "../../styles/utils"
@@ -38,7 +37,7 @@ import {
   triggerSubmit,
 } from "../../utils"
 import { nutrientsOrderByCountryCode, sortKeysByNutrientsOrder } from "../../signals/openfoodfacts"
-import { countryCode } from "../../signals/app"
+import { countryCode, languageCode } from "../../signals/app"
 
 import "../shared/loading-button"
 import "../shared/autocomplete-input"
@@ -85,12 +84,12 @@ const SERVING_SIZE_SELECT_NAME = "serving_size_select"
 
 /**
  * Display a table of nutrients for a given product
- * @element robotoff-nutrients-form
+ * @element robotoff-nutrient-extraction-form
  * @fires submit - when the user submit the form
  */
-@customElement("robotoff-nutrients-form")
+@customElement("robotoff-nutrient-extraction-form")
 @localized()
-export class RobotoffNutrientsForm extends LitElement {
+export class RobotoffNutrientExtractionForm extends LitElement {
   static override styles = [
     ...getButtonClasses([ButtonType.Chocolate]),
     SELECT,
@@ -405,6 +404,11 @@ export class RobotoffNutrientsForm extends LitElement {
     console.log("nutrientsOrder", nutrientsOrder)
     const keySet = new Set<string>()
 
+    // Check if nutriments data is available
+    if (!nutrimentsData.nutriments) {
+      return keySet
+    }
+
     // Process nutrients
     INSIGHTS_ANNOTATION_SIZE.forEach((size) => {
       const suffix = NUTRIENT_SUFFIX[size]
@@ -717,7 +721,7 @@ export class RobotoffNutrientsForm extends LitElement {
   ) {
     const inputName = this.getInputValueName(key, column)
     const value = nutrient?.value.toString() ?? ""
-    const label = getTaxonomyNameByIdAndLang(key, getLocale())
+    const label = getTaxonomyNameByIdAndLang(key, languageCode.get())
     const isHidden = this.inputHiddenBySizeAndNutrientKey[column][key]
 
     return html`
@@ -1036,7 +1040,7 @@ export class RobotoffNutrientsForm extends LitElement {
    * @param alreadyAddedNutrients
    */
   renderAddNutrientRow(alreadyAddedNutrients: string[]) {
-    const lang = getLocale()
+    const lang = languageCode.get()
     const filteredNutrientTaxonomies = nutrientTaxonomies
       .get()
       // filter out the nutrients that are already added to the table
@@ -1131,6 +1135,6 @@ export class RobotoffNutrientsForm extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "robotoff-nutrients-form": RobotoffNutrientsForm
+    "robotoff-nutrient-extraction-form": RobotoffNutrientExtractionForm
   }
 }

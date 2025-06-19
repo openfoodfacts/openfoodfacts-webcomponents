@@ -6,15 +6,15 @@ import {
   annotateNutrientWithoutData,
   fetchNutrientInsights,
   insightById,
-} from "../../signals/nutrients"
-import "./robotoff-nutrients-form"
+} from "../../signals/nutrient-extraction"
+import "./robotoff-nutrient-extraction-form"
 import "../shared/zoomable-image"
 import "../shared/loader"
 
 import { fetchNutrientsTaxonomies } from "../../signals/taxonomies"
 import { NutrientsInsight, InsightAnnotationAnswer, AnnotationAnswer } from "../../types/robotoff"
 import { BASE } from "../../styles/base"
-import { robotoffConfiguration } from "../../signals/robotoff"
+import { getRobotoffImageUrl } from "../../signals/robotoff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { FLEX } from "../../styles/utils"
 import { EventState, EventType } from "../../constants"
@@ -22,54 +22,70 @@ import { BasicStateEventDetail } from "../../types"
 import { NutrimentsProductType } from "../../types/openfoodfacts"
 import { fetchProduct } from "../../api/openfoodfacts"
 import { ProductFields } from "../../utils/openfoodfacts"
-import { getLocale } from "../../localization"
 import { fetchNutrientsOrderByCountryCode } from "../../signals/openfoodfacts"
-import { countryCode } from "../../signals/app"
 import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin"
 import { ifDefined } from "lit-html/directives/if-defined.js"
+import { Breakpoints } from "../../utils/breakpoints"
+import { LanguageCodesMixin } from "../../mixins/language-codes-mixin"
+import { CountryCodeMixin } from "../../mixins/country-codes-mixin"
+import { DisplayProductLinkMixin } from "../../mixins/display-product-link-mixin"
+import { localized, msg } from "@lit/localize"
+import { languageCode } from "../../signals/app"
 
+const IMAGE_MAX_WIDTH = 700
 /**
  * Robotoff Nutrients component
- * @element robotoff-nutrients
+ * @element robotoff-nutrient-extraction
  * @part nutrients - The nutrients component
  * @part nutrients-content-wrapper - The nutrients content wrapper
  */
-@customElement("robotoff-nutrients")
-export class RobotoffNutrients extends LoadingWithTimeoutMixin(LitElement) {
+@customElement("robotoff-nutrient-extraction")
+@localized()
+export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
+  LanguageCodesMixin(CountryCodeMixin(LoadingWithTimeoutMixin(LitElement)))
+) {
   static override styles = [
     BASE,
     FLEX,
     ...getButtonClasses([ButtonType.LINK]),
-
     css`
       .image-wrapper {
         position: sticky;
         z-index: 1;
         top: 1rem;
         display: flex;
-        justify-content: center;
         align-items: center;
         margin-bottom: 1rem;
         background-color: white;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         border-radius: 5px;
-        padding-top: 1rem;
         padding-left: 1rem;
         padding-right: 1rem;
+        padding-bottom: 1rem;
         box-sizing: border-box;
+        max-width: ${IMAGE_MAX_WIDTH}px;
+        width: 100%;
       }
 
+      .nutrients {
+        container-type: inline-size;
+      }
       .nutrients-content-wrapper {
         position: relative;
         display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
         align-items: start;
         gap: 0.5rem 5rem;
       }
 
-      .nutrients {
-        display: flex;
+      @container (max-width: ${Breakpoints.MD}px) {
+        .nutrients-content-wrapper {
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+      .nutrients product-link-button {
+        margin-bottom: 1rem;
       }
     `,
   ]
@@ -78,8 +94,8 @@ export class RobotoffNutrients extends LoadingWithTimeoutMixin(LitElement) {
    * The product code to get the insights for
    * @type {string}
    */
-  @property({ type: String, attribute: "product-code" })
-  productCode = ""
+  @property({ type: String, attribute: "product-code", reflect: true })
+  productCode?: string = undefined
 
   @state()
   insightsIds: string[] = []
@@ -123,9 +139,11 @@ export class RobotoffNutrients extends LoadingWithTimeoutMixin(LitElement) {
     task: async ([productCode], {}) => {
       this.emitNutrientEvent(EventState.LOADING)
       const [insights] = await Promise.all([
-        fetchNutrientInsights(productCode),
+        fetchNutrientInsights(productCode, {
+          lc: this._languageCodes,
+        }),
         fetchNutrientsTaxonomies(),
-        fetchNutrientsOrderByCountryCode(countryCode.get()),
+        fetchNutrientsOrderByCountryCode(this._countryCode),
       ])
 
       this.insightsIds = insights.map((insight) => insight.id)
@@ -136,7 +154,7 @@ export class RobotoffNutrients extends LoadingWithTimeoutMixin(LitElement) {
       this.emitNutrientEvent(EventState.HAS_DATA)
       await this.loadInsight(0)
     },
-    args: () => [this.productCode],
+    args: () => [this.productCode, this.countryCode, ...this._languageCodes],
   })
 
   async loadInsight(index: number) {
@@ -158,7 +176,7 @@ export class RobotoffNutrients extends LoadingWithTimeoutMixin(LitElement) {
     this.nutrimentsData = undefined
     const result = await fetchProduct<NutrimentsProductType>(productCode, {
       fields: [ProductFields.NUTRIMENTS],
-      lc: getLocale(),
+      lc: languageCode.get(),
     })
     this.nutrimentsData = result.product
     return result.product.nutriments
@@ -168,16 +186,15 @@ export class RobotoffNutrients extends LoadingWithTimeoutMixin(LitElement) {
     if (!insight?.source_image) {
       return nothing
     }
-    const imgUrl = `${robotoffConfiguration.getItem("imgUrl")}${insight.source_image}`
+    const imgUrl = getRobotoffImageUrl(insight.source_image)
     return html`
       <div class="image-wrapper">
         <zoomable-image
           src=${imgUrl}
           .size="${{
-            height: "400px",
-            "max-height": "35vh",
+            height: "35vh",
             width: "100%",
-            "max-width": "500px",
+            "max-width": `${IMAGE_MAX_WIDTH}px`,
           }}"
           show-buttons
         ></zoomable-image>
@@ -224,6 +241,14 @@ export class RobotoffNutrients extends LoadingWithTimeoutMixin(LitElement) {
     await annotateNutrientWithoutData(this.currentInsightId, AnnotationAnswer.SKIP)
     await this.afterInsightAnnotation()
   }
+  renderHeader(insight: NutrientsInsight) {
+    return html`
+      <div>
+        <h2>${msg("Help us correct the nutritional information")}</h2>
+        ${this.renderProductLink(insight.barcode)}
+      </div>
+    `
+  }
 
   override render() {
     return this._insightsTask.render({
@@ -235,16 +260,17 @@ export class RobotoffNutrients extends LoadingWithTimeoutMixin(LitElement) {
         }
         return html`
           <div class="nutrients" part="nutrients">
+            ${this.renderHeader(insight)}
             <div part="nutrients-content-wrapper" class="nutrients-content-wrapper">
               ${this.renderImage(insight as NutrientsInsight)}
-              <robotoff-nutrients-form
+              <robotoff-nutrient-extraction-form
                 loading=${ifDefined(this.loading) as AnnotationAnswer}
                 .nutrimentsData="${this.nutrimentsData}"
                 .insight="${insight as NutrientsInsight}"
                 @submit="${this.onSubmit}"
                 @refuse="${this.onRefuse}"
                 @skip="${this.onSkip}"
-              ></robotoff-nutrients-form>
+              ></robotoff-nutrient-extraction-form>
             </div>
           </div>
         `
@@ -256,6 +282,6 @@ export class RobotoffNutrients extends LoadingWithTimeoutMixin(LitElement) {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "robotoff-nutrients": RobotoffNutrients
+    "robotoff-nutrient-extraction": RobotoffNutrientExtraction
   }
 }

@@ -3,8 +3,6 @@ import { customElement, property, state } from "lit/decorators.js"
 import { Task } from "@lit/task"
 import { ALERT } from "../../styles/alert.js"
 
-import { fetchSpellcheckInsights } from "../../signals/ingredients"
-import { fetchNutrientInsights } from "../../signals/nutrients"
 import { fetchQuestionsByProductCode } from "../../signals/questions"
 import { localized, msg } from "@lit/localize"
 import { ButtonType, getButtonClasses } from "../../styles/buttons.js"
@@ -12,6 +10,9 @@ import { RobotoffContributionType } from "../../constants.js"
 import { CONTAINER } from "../../styles/responsive.js"
 import "../robotoff-modal/robotoff-modal"
 import { SignalWatcher } from "@lit-labs/signals"
+import robotoff from "../../api/robotoff.js"
+import { InsightType } from "../../types/robotoff.js"
+import { LanguageCodesMixin } from "../../mixins/language-codes-mixin.js"
 
 /**
  * The `robotoff-contribution-message` component is a web component that displays messages prompting users to contribute to improving product information.
@@ -27,7 +28,7 @@ import { SignalWatcher } from "@lit-labs/signals"
  */
 @customElement("robotoff-contribution-message")
 @localized()
-export class RobotoffContributionMessage extends SignalWatcher(LitElement) {
+export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatcher(LitElement)) {
   static override styles = [
     ALERT,
     CONTAINER,
@@ -63,7 +64,7 @@ export class RobotoffContributionMessage extends SignalWatcher(LitElement) {
   /**
    * The product code for which the contribution messages are displayed.
    */
-  @property({ type: String, attribute: "product-code" })
+  @property({ type: String, attribute: "product-code", reflect: true })
   productCode = ""
 
   /**
@@ -86,9 +87,10 @@ export class RobotoffContributionMessage extends SignalWatcher(LitElement) {
    */
   @state()
   showMessages: Record<RobotoffContributionType, boolean> = {
-    ingredients: false,
-    nutrients: false,
-    questions: false,
+    [RobotoffContributionType.INGREDIENT_SPELLCHECK]: false,
+    [RobotoffContributionType.NUTRIENT_EXTRACTION]: false,
+    [RobotoffContributionType.INGREDIENT_DETECTION]: false,
+    [RobotoffContributionType.QUESTIONS]: false,
   }
 
   /**
@@ -100,25 +102,26 @@ export class RobotoffContributionMessage extends SignalWatcher(LitElement) {
   get messagesToShow() {
     const items: {
       type: RobotoffContributionType
-      show: boolean
       message: string
     }[] = [
       {
         type: RobotoffContributionType.QUESTIONS,
-        show: this.showMessages.questions,
         message: msg("Answer questions about the product."),
       },
       {
-        type: RobotoffContributionType.INGREDIENTS,
-        show: this.showMessages.ingredients,
+        type: RobotoffContributionType.INGREDIENT_SPELLCHECK,
         message: msg("Help us correct the spelling of ingredients."),
       },
       {
-        type: RobotoffContributionType.NUTRIENTS,
-        show: this.showMessages.nutrients,
+        type: RobotoffContributionType.NUTRIENT_EXTRACTION,
         message: msg("Help us correct the nutritional information."),
       },
-    ].filter((item) => item.show)
+      {
+        type: RobotoffContributionType.INGREDIENT_DETECTION,
+        message: msg("Help us correct the ingredient detection"),
+      },
+    ].filter((item) => this.showMessages[item.type])
+
     return items
   }
 
@@ -130,24 +133,48 @@ export class RobotoffContributionMessage extends SignalWatcher(LitElement) {
    */
   private _fetchDataTask = new Task(this, {
     task: async ([productCode]) => {
+      console.log("Fetching data for product code", productCode, this._languageCodes)
+      this.showMessages = {
+        [RobotoffContributionType.QUESTIONS]: false,
+        [RobotoffContributionType.INGREDIENT_SPELLCHECK]: false,
+        [RobotoffContributionType.NUTRIENT_EXTRACTION]: false,
+        [RobotoffContributionType.INGREDIENT_DETECTION]: false,
+      }
+
       // Check if it need contributions. If not, don't show the message. If request fails, hide the message but do not crash all requests
-      const [questions, spellcheckInsights, nutrientInsights] = await Promise.allSettled([
+      const [questions, insights] = await Promise.allSettled([
         fetchQuestionsByProductCode(productCode),
         ...(this.isLoggedIn
-          ? [fetchSpellcheckInsights(productCode), fetchNutrientInsights(productCode)]
+          ? [
+              robotoff.fetchRobotoffContributionMessageInsights({
+                barcode: productCode,
+                lc: this._languageCodes,
+              }),
+            ]
           : []),
       ])
+      const insightValues = {
+        [InsightType.ingredient_spellcheck]: false,
+        [InsightType.nutrient_extraction]: false,
+        [InsightType.ingredient_detection]: false,
+      }
+
+      if (insights?.status === "fulfilled") {
+        for (const insight of insights.value) {
+          insightValues[insight.type as InsightType] = true
+          // If all insights are true, break the loop
+          if (Object.values(insightValues).every((value) => value)) {
+            break
+          }
+        }
+      }
 
       this.showMessages = {
         questions: questions?.status === "fulfilled" && questions.value.length > 0,
-        ingredients:
-          spellcheckInsights?.status === "fulfilled" && spellcheckInsights.value.length > 0,
-        nutrients: nutrientInsights?.status === "fulfilled" && nutrientInsights.value.length > 0,
+        ...insightValues,
       }
-
-      return { spellcheckInsights, nutrientInsights, questions }
     },
-    args: () => [this.productCode],
+    args: () => [this.productCode, ...this._languageCodes],
   })
 
   /**

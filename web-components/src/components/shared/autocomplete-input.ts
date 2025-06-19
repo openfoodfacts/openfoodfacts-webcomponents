@@ -267,6 +267,7 @@ export class AutocompleteInput extends LitElement {
     return html`
       <div class="autocomplete-wrapper">
         <input
+          id=${this._id}
           type="text"
           class="autocomplete-input"
           .value=${this.value}
@@ -281,9 +282,15 @@ export class AutocompleteInput extends LitElement {
           aria-activedescendant=${this.highlightedIndex >= 0
             ? this.getSuggestionItemId(this.highlightedIndex)
             : ""}
+          part="autocomplete-input"
         />
         ${this.showSuggestions
-          ? html`<ul class="autocomplete-list" id=${this.suggestionId} role="listbox">
+          ? html`<ul
+              class="autocomplete-list"
+              id=${this.suggestionId}
+              role="listbox"
+              part="autocomplete-input-list"
+            >
               ${this.filteredSuggestions.map(
                 (s, index) =>
                   html`<li
