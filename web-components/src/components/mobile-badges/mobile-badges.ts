@@ -163,9 +163,10 @@ export class MobileBadges extends LitElement {
     }
   `
   /**
-   * It helps to set color of the text in other documents
-   */
-  @property({ type: String }) textColor = "#212121";
+ * Enables dark theme styling for the component.
+ * When set to true, text color and other styles adjust for dark backgrounds.
+ */
+  @property({ type: Boolean }) darkTheme = false;
 
 
   /**
@@ -381,7 +382,7 @@ export class MobileBadges extends LitElement {
           alt="The Open Food Facts logo in the cloud"
           style="height:120px"
         />
-        <div id="footer_scan" style="display: block; color: ${this.textColor};">
+        <div id="footer_scan" style="display: block; color: ${this.darkTheme ? '#ffffff' : '#212121'};">
           <div id="footer_install_the_app">${msg("Install the app!")}</div>
           <!-- TODO find fix to add text between span for translations ex for fr : "Scannez vos <span class="foods">aliments</span> de votre <span class="everyday">quotidien</span>" -->
           ${msg(
