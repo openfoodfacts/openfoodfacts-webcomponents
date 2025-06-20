@@ -133,6 +133,7 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
    */
   private _fetchDataTask = new Task(this, {
     task: async ([productCode]) => {
+      console.log("Fetching data for product code", productCode, this._languageCodes)
       this.showMessages = {
         [RobotoffContributionType.QUESTIONS]: false,
         [RobotoffContributionType.INGREDIENT_SPELLCHECK]: false,

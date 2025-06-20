@@ -1,8 +1,7 @@
 import { LitElement, html, css, nothing } from "lit"
 import { customElement, state, property } from "lit/decorators.js"
 import { localized, msg } from "@lit/localize"
-import { getLocale } from "../../localization"
-import { getImageUrl } from "../../signals/app"
+import { getImageUrl, languageCode } from "../../signals/app"
 
 export type Badge = {
   href: string
@@ -317,7 +316,7 @@ export class MobileBadges extends LitElement {
    * @returns The filtered list of badges.
    **/
   getFilteredBadges(): Badge[] {
-    const language = getLocale()
+    const language = languageCode.get()
     const badges: Badge[] = [
       {
         href: this.getAndroidAppLink(language),

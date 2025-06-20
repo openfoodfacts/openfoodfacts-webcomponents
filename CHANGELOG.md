@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.9.0 - 2025-06-19
+
+### Added
+
+- Add `languageCode` signal in app to handle language changes. It avoid delays when changing language.
+
+### Changed
+
+- Use `languageCode` signal instead of `getLocale` to fix delay of language change.
+
 ## 1.8.5 - 2025-06-12
 
 ### Fixed
