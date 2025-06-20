@@ -1,5 +1,4 @@
 import { addParamsToUrl } from "../utils"
-import { getLocaleAfterInit } from "../localization"
 import {
   QuestionRequestParams,
   QuestionsResponse,
@@ -15,6 +14,7 @@ import {
   InsightType,
 } from "../types/robotoff"
 import { robotoffConfiguration } from "../signals/robotoff"
+import { languageCode } from "../signals/app"
 
 /**
  * Get the API URL for a given path with the current configuration
@@ -135,7 +135,7 @@ const robotoff = {
    */
   async questionsByProductCode(code: string, questionRequestParams: QuestionRequestParams = {}) {
     if (!questionRequestParams.lang) {
-      questionRequestParams.lang = await getLocaleAfterInit()
+      questionRequestParams.lang = languageCode.get()
     }
     const apiUrl = getApiUrl(`/questions/${code}`)
     const url = addParamsToUrl(apiUrl, questionRequestParams)
