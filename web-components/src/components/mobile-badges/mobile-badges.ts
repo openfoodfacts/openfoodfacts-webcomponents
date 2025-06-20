@@ -162,6 +162,11 @@ export class MobileBadges extends LitElement {
       flex-wrap: wrap;
     }
   `
+  /**
+   * It helps to set color of the text in other documents
+   */
+  @property({ type: String }) textColor = "#212121";
+
 
   /**
    * Controls visibility of Google Play Store badge
@@ -376,7 +381,7 @@ export class MobileBadges extends LitElement {
           alt="The Open Food Facts logo in the cloud"
           style="height:120px"
         />
-        <div id="footer_scan" style="display:block">
+        <div id="footer_scan" style="display: block; color: ${this.textColor};">
           <div id="footer_install_the_app">${msg("Install the app!")}</div>
           <!-- TODO find fix to add text between span for translations ex for fr : "Scannez vos <span class="foods">aliments</span> de votre <span class="everyday">quotidien</span>" -->
           ${msg(
