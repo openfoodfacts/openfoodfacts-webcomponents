@@ -283,6 +283,9 @@ export class NewsFeed extends LitElement {
     }
   }
 
+  /**
+   * Go from raw data to data that can be displayed
+   */
   _processNewsData(rawData: NewsData): ProcessedNewsItem[] {
     const processedItems = []
     const currentLang = this._getLang() // e.g., 'en'
