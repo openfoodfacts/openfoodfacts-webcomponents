@@ -1,8 +1,7 @@
 import { LitElement, html, css } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { localized, msg, str } from "@lit/localize"
-import { getLocale } from "../../localization"
-import { getImageUrl } from "../../signals/app"
+import { getImageUrl, languageCode } from "../../signals/app"
 
 /**
  * Donation banner
@@ -48,7 +47,7 @@ export class DonationBanner extends LitElement {
   }
 
   get donateLink() {
-    const locale = getLocale()
+    const locale = languageCode.get()
     const link =
       locale in this.links ? this.links[locale as keyof typeof this.links] : this.links.default
     return this.getLinkWithQueryParams(link)

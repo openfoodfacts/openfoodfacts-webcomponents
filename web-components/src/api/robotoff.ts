@@ -1,5 +1,4 @@
 import { addParamsToUrl } from "../utils"
-import { getLocaleAfterInit } from "../localization"
 import {
   QuestionRequestParams,
   QuestionsResponse,
@@ -12,8 +11,10 @@ import {
   AnnotationFormData,
   IngredientDetectionInsight,
   IngredientDetectionAnnotationData,
+  InsightType,
 } from "../types/robotoff"
 import { robotoffConfiguration } from "../signals/robotoff"
+import { languageCode } from "../signals/app"
 
 /**
  * Get the API URL for a given path with the current configuration
@@ -134,7 +135,7 @@ const robotoff = {
    */
   async questionsByProductCode(code: string, questionRequestParams: QuestionRequestParams = {}) {
     if (!questionRequestParams.lang) {
-      questionRequestParams.lang = await getLocaleAfterInit()
+      questionRequestParams.lang = languageCode.get()
     }
     const apiUrl = getApiUrl(`/questions/${code}`)
     const url = addParamsToUrl(apiUrl, questionRequestParams)
@@ -157,6 +158,28 @@ const robotoff = {
     const response = await fetch(url)
     const result: InsightsResponse<T> = await response.json()
     return result
+  },
+
+  /**
+   * Get insights for the robotoff contribution message
+   * Reduces the number of calls to the API by fetching multiple insights at once
+   * @param requestParams The request params
+   * @returns {Promise<InsightsResponse>} The insights response, currently only
+   * ingredients and nutrients insights are supported
+   */
+  async fetchRobotoffContributionMessageInsights(requestParams: InsightsRequestParams = {}) {
+    const result = await this.insights<
+      NutrientsInsight | IngredientSpellcheckInsight | IngredientDetectionInsight
+    >({
+      ...requestParams,
+      annotated: false,
+      insight_types: [
+        InsightType.nutrient_extraction,
+        InsightType.ingredient_spellcheck,
+        InsightType.ingredient_detection,
+      ],
+    })
+    return result.insights
   },
 }
 

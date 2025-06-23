@@ -32,7 +32,6 @@ A set of web components for Open Food Facts to help build edition interfaces
 ### WIP
 
 - Knowledge Panels
-- Folksonomy Editor
 
 ## Design
 

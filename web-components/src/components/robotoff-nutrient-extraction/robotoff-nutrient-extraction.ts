@@ -22,15 +22,17 @@ import { BasicStateEventDetail } from "../../types"
 import { NutrimentsProductType } from "../../types/openfoodfacts"
 import { fetchProduct } from "../../api/openfoodfacts"
 import { ProductFields } from "../../utils/openfoodfacts"
-import { getLocale } from "../../localization"
 import { fetchNutrientsOrderByCountryCode } from "../../signals/openfoodfacts"
 import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin"
 import { ifDefined } from "lit-html/directives/if-defined.js"
 import { Breakpoints } from "../../utils/breakpoints"
 import { LanguageCodesMixin } from "../../mixins/language-codes-mixin"
 import { CountryCodeMixin } from "../../mixins/country-codes-mixin"
+import { DisplayProductLinkMixin } from "../../mixins/display-product-link-mixin"
+import { localized, msg } from "@lit/localize"
+import { languageCode } from "../../signals/app"
 
-const IMAGE_MAX_WIDTH = 500
+const IMAGE_MAX_WIDTH = 700
 /**
  * Robotoff Nutrients component
  * @element robotoff-nutrient-extraction
@@ -38,8 +40,9 @@ const IMAGE_MAX_WIDTH = 500
  * @part nutrients-content-wrapper - The nutrients content wrapper
  */
 @customElement("robotoff-nutrient-extraction")
-export class RobotoffNutrientExtraction extends LanguageCodesMixin(
-  CountryCodeMixin(LoadingWithTimeoutMixin(LitElement))
+@localized()
+export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
+  LanguageCodesMixin(CountryCodeMixin(LoadingWithTimeoutMixin(LitElement)))
 ) {
   static override styles = [
     BASE,
@@ -81,6 +84,9 @@ export class RobotoffNutrientExtraction extends LanguageCodesMixin(
           align-items: center;
         }
       }
+      .nutrients product-link-button {
+        margin-bottom: 1rem;
+      }
     `,
   ]
 
@@ -88,8 +94,8 @@ export class RobotoffNutrientExtraction extends LanguageCodesMixin(
    * The product code to get the insights for
    * @type {string}
    */
-  @property({ type: String, attribute: "product-code" })
-  productCode = ""
+  @property({ type: String, attribute: "product-code", reflect: true })
+  productCode?: string = undefined
 
   @state()
   insightsIds: string[] = []
@@ -148,7 +154,7 @@ export class RobotoffNutrientExtraction extends LanguageCodesMixin(
       this.emitNutrientEvent(EventState.HAS_DATA)
       await this.loadInsight(0)
     },
-    args: () => [this.productCode, this.countryCode, this.languageCodes],
+    args: () => [this.productCode, this.countryCode, ...this._languageCodes],
   })
 
   async loadInsight(index: number) {
@@ -170,7 +176,7 @@ export class RobotoffNutrientExtraction extends LanguageCodesMixin(
     this.nutrimentsData = undefined
     const result = await fetchProduct<NutrimentsProductType>(productCode, {
       fields: [ProductFields.NUTRIMENTS],
-      lc: getLocale(),
+      lc: languageCode.get(),
     })
     this.nutrimentsData = result.product
     return result.product.nutriments
@@ -235,6 +241,14 @@ export class RobotoffNutrientExtraction extends LanguageCodesMixin(
     await annotateNutrientWithoutData(this.currentInsightId, AnnotationAnswer.SKIP)
     await this.afterInsightAnnotation()
   }
+  renderHeader(insight: NutrientsInsight) {
+    return html`
+      <div>
+        <h2>${msg("Help us correct the nutritional information")}</h2>
+        ${this.renderProductLink(insight.barcode)}
+      </div>
+    `
+  }
 
   override render() {
     return this._insightsTask.render({
@@ -246,6 +260,7 @@ export class RobotoffNutrientExtraction extends LanguageCodesMixin(
         }
         return html`
           <div class="nutrients" part="nutrients">
+            ${this.renderHeader(insight)}
             <div part="nutrients-content-wrapper" class="nutrients-content-wrapper">
               ${this.renderImage(insight as NutrientsInsight)}
               <robotoff-nutrient-extraction-form

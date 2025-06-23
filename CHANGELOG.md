@@ -1,5 +1,64 @@
 # Changelog
 
+## 1.9.0 - 2025-06-19
+
+### Added
+
+- Add `languageCode` signal in app to handle language changes. It avoid delays when changing language.
+
+### Changed
+
+- Use `languageCode` signal instead of `getLocale` to fix delay of language change.
+
+## 1.8.5 - 2025-06-12
+
+### Fixed
+
+- Fix `robotoff-contribution-message` refresh when `language-codes` change.
+
+### Docs
+
+- Update Readme.md to explain how to copy localization files to your project.
+
+## 1.8.4 - 2025-06-12
+
+### Fixed
+
+- Fix `robotoff-nutrient-extraction` when the `fetchProduct` as no `nutriments`.
+
+## 1.8.3 - 2025-06-10
+
+### Fixed
+
+- Fix `robotoff-nutrient-extraction` refresh when `language-codes` change.
+
+## 1.8.2 - 2025-06-10
+
+### Fixed
+
+- Fix `robotoff-ingredient-spellcheck` refresh when `language-codes` change.
+
+## 1.8.1 - 2025-06-10
+
+### Fixed
+
+- Fix `robotoff-nutrient-extraction`, `robotoff-ingredient-detection` and `robotoff-ingredient-spellcheck` refresh when `language-codes` change.
+
+## 1.8.0 - 2025-06-10
+
+### Changed
+
+- Add `language-codes` attribute to `robotoff-contribution-message` to filter insights by language.
+- Group insights in one request to `robotoff-contribution-message` to reduce the number of requests.
+- Add robotoff-ingredient-detection in `robotoff-modal` and `robotoff-contribution-message`.
+- Update `robotoff-ingredient-detection` to fire state event
+- Increase max width of `robotoff-nutrient-extraction` image to 700px.
+- Add view product link to `robotoff-nutrient-extraction`, `robotoff-ingredient-detection` and `robotoff-ingredient-spellcheck`.
+
+### Fixed
+
+- Fix the `robotoff-ingredient-detection` issue that resets the image when the crop mode is toggled and the edit mode is enabled.
+
 ## [1.7.1] - 2025-06-10
 
 ### Changed

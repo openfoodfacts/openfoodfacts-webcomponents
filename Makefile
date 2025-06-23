@@ -51,7 +51,7 @@ clean:
 
 # Publish package and create git tag
 .PHONY: publish
-publish: test build
+publish:
 	@echo "Publishing $(PACKAGE_NAME) version $(VERSION)..."
 	
 	# Check if we're on main/master branch
@@ -84,11 +84,11 @@ publish: test build
 	cd $(PACKAGE_DIR) && npm run publish:package
 	
 	# Create and push git tag
-	git tag -a "v$(VERSION)" -m "Release version $(VERSION)"
-	git push origin "v$(VERSION)"
+	git tag -a "$(VERSION)" -m "Release version $(VERSION)"
+	git push origin "$(VERSION)"
 	
 	@echo ""
 	@echo "✅ Successfully published $(PACKAGE_NAME) version $(VERSION)"
-	@echo "✅ Created and pushed git tag v$(VERSION)"
+	@echo "✅ Created and pushed git tag $(VERSION)"
 	@echo ""
 	@echo "Package published to: https://www.npmjs.com/package/$(PACKAGE_NAME)"

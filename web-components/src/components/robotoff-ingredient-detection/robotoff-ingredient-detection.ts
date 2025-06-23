@@ -12,7 +12,7 @@ import { LitElement, css, html, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { AnnotationAnswer, IngredientDetectionInsight } from "../../types/robotoff"
 import { Task } from "@lit/task"
-import { localized } from "@lit/localize"
+import { localized, msg } from "@lit/localize"
 import "../shared/loader"
 import {
   fetchIngredientsDetectionInsights,
@@ -22,11 +22,24 @@ import robotoff from "../../api/robotoff"
 import "./robotoff-ingredient-detection-form"
 import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin"
 import { LanguageCodesMixin } from "../../mixins/language-codes-mixin"
+import { EventType, EventState } from "../../constants"
+import { RobotoffIngredientsStateEventDetail } from "../../types/ingredient-spellcheck"
+import { DisplayProductLinkMixin } from "../../mixins/display-product-link-mixin"
 
+/**
+ * RobotoffIngredientDetection Component
+ *
+ * This component is responsible for managing ingredient detection insights
+ * for the Robotoff application. It fetches ingredient detection insights
+ * and delegates the form interaction to the robotoff-ingredient-detection-form component.
+ *
+ * @element robotoff-ingredient-detection
+ * @fires robotoff-ingredients-state - Indicates the state of the ingredient detection process.
+ */
 @customElement("robotoff-ingredient-detection")
 @localized()
-export class RobotoffIngredientDetection extends LanguageCodesMixin(
-  LoadingWithTimeoutMixin(LitElement)
+export class RobotoffIngredientDetection extends DisplayProductLinkMixin(
+  LanguageCodesMixin(LoadingWithTimeoutMixin(LitElement))
 ) {
   static override styles = [
     css`
@@ -74,6 +87,23 @@ export class RobotoffIngredientDetection extends LanguageCodesMixin(
   insightIds: string[] = []
 
   /**
+   * Dispatches an ingredient detection state event with the provided detail.
+   * @param {RobotoffIngredientsStateEventDetail} detail - The detail of the event.
+   */
+  dispatchIngredientDetectionStateEvent(detail: RobotoffIngredientsStateEventDetail) {
+    this.dispatchEvent(
+      new CustomEvent<RobotoffIngredientsStateEventDetail>(EventType.INGREDIENT_DETECTION_STATE, {
+        bubbles: true,
+        composed: true,
+        detail: {
+          productCode: this.productCode,
+          ...detail,
+        },
+      })
+    )
+  }
+
+  /**
    * Gets all insights by mapping insight IDs to their corresponding insight objects
    * @returns {IngredientDetectionInsight[]} Array of insight objects
    */
@@ -104,11 +134,14 @@ export class RobotoffIngredientDetection extends LanguageCodesMixin(
         lc: this._languageCodes,
       })
       this.insightIds = response.map((insight) => insight.id)
+      this.dispatchIngredientDetectionStateEvent({
+        state: this.insightIds.length ? EventState.HAS_DATA : EventState.NO_DATA,
+      })
       this.setIndex(0)
       return response
     },
     // use languageCode to avoid fallback language
-    args: () => [this.count, this.page, this.productCode, this.languageCodes],
+    args: () => [this.count, this.page, this.productCode, ...this._languageCodes],
   })
 
   /**
@@ -146,11 +179,16 @@ export class RobotoffIngredientDetection extends LanguageCodesMixin(
    */
   private renderInsight(insight: IngredientDetectionInsight) {
     return html`
-      <robotoff-ingredient-detection-form
-        .insight=${insight}
-        .loading=${this.loading as AnnotationAnswer | undefined}
-        @submit=${this.onFormSubmit}
-      ></robotoff-ingredient-detection-form>
+      <div>
+        <h2>${msg("Help us for ingredients")}</h2>
+        <p>${msg("Help us validate the ingredient list of the product.")}</p>
+        ${this.renderProductLink(insight.barcode)}
+        <robotoff-ingredient-detection-form
+          .insight=${insight}
+          .loading=${this.loading as AnnotationAnswer | undefined}
+          @submit=${this.onFormSubmit}
+        ></robotoff-ingredient-detection-form>
+      </div>
     `
   }
 
@@ -158,13 +196,22 @@ export class RobotoffIngredientDetection extends LanguageCodesMixin(
    * Handles the form submit event from the form component
    * @param {CustomEvent} event - The submit event
    */
-  onFormSubmit(event: CustomEvent) {
+  async onFormSubmit(event: CustomEvent) {
     const { insightId, value, data } = event.detail
 
     this.showLoading(value)
-    robotoff.annotateIngredientDetection(insightId, value, data)
-    this.hideLoading()
-    this.setIndex(this.index + 1)
+    await robotoff.annotateIngredientDetection(insightId, value, data)
+    await this.hideLoading()
+    this.dispatchIngredientDetectionStateEvent({
+      state: EventState.ANNOTATED,
+    })
+    const newIndex = this.index + 1
+    this.setIndex(newIndex)
+    if (newIndex >= this.insights.length) {
+      this.dispatchIngredientDetectionStateEvent({
+        state: EventState.FINISHED,
+      })
+    }
   }
 }
 

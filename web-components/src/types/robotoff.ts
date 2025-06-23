@@ -66,7 +66,7 @@ export enum InsightType {
 
 export type InsightsRequestParams = Partial<{
   lc: string[]
-  insight_types: string
+  insight_types: string | string[]
   barcode: string
   annotated: boolean
   annotation: number

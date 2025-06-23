@@ -144,16 +144,21 @@ export class RobotoffModal extends LitElement {
    */
   renderModalContent() {
     switch (this.robotoffContributionType) {
-      case RobotoffContributionType.INGREDIENTS:
+      case RobotoffContributionType.INGREDIENT_SPELLCHECK:
         return html`<robotoff-ingredient-spellcheck
           product-code="${this.productCode}"
           @ingredients-state="${this.onStateChange}"
         ></robotoff-ingredient-spellcheck>`
-      case RobotoffContributionType.NUTRIENTS:
+      case RobotoffContributionType.NUTRIENT_EXTRACTION:
         return html`<robotoff-nutrient-extraction
           product-code="${this.productCode}"
           @nutrient-state="${this.onStateChange}"
         ></robotoff-nutrient-extraction>`
+      case RobotoffContributionType.INGREDIENT_DETECTION:
+        return html`<robotoff-ingredient-detection
+          product-code="${this.productCode}"
+          @ingredient-detection-state="${this.onStateChange}"
+        ></robotoff-ingredient-detection>`
       case RobotoffContributionType.QUESTIONS:
         return html`<robotoff-question
           product-code="${this.productCode}"

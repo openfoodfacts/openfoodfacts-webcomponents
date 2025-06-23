@@ -2,7 +2,7 @@ import { LitElement, html, css, nothing } from "lit"
 import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin"
 import { customElement, property, state } from "lit/decorators.js"
 import { BASE } from "../../styles/base"
-import { msg } from "@lit/localize"
+import { localized, msg } from "@lit/localize"
 import { Task } from "@lit/task"
 import {
   fetchSpellcheckInsights,
@@ -27,6 +27,7 @@ import { getFullImageUrl, ProductFields } from "../../utils/openfoodfacts"
 import { mobileAndTabletCheck } from "../../utils/breakpoints"
 import { ifDefined } from "lit/directives/if-defined.js"
 import { LanguageCodesMixin } from "../../mixins/language-codes-mixin"
+import { DisplayProductLinkMixin } from "../../mixins/display-product-link-mixin"
 
 /**
  * RobotoffIngredients component
@@ -42,8 +43,9 @@ import { LanguageCodesMixin } from "../../mixins/language-codes-mixin"
  * @slot pending - The content to display when the component is pending
  */
 @customElement("robotoff-ingredient-spellcheck")
-export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(
-  LanguageCodesMixin(LitElement)
+@localized()
+export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
+  LoadingWithTimeoutMixin(LanguageCodesMixin(LitElement))
 ) {
   static override styles = [
     BASE,
@@ -75,7 +77,7 @@ export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(
    * @type {string}
    */
   @property({ type: String, attribute: "product-code", reflect: true })
-  productCode = ""
+  productCode?: string = undefined
 
   /**
    * Enables keyboard mode for the component.
@@ -193,7 +195,7 @@ export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(
     task: async ([productCode]) => {
       this._insightIds = []
       this._currentIndex = 0
-      this.dispatchIngredientsStateEvent({
+      this.dispatchIngredientSpellcheckStateEvent({
         state: EventState.LOADING,
       })
       const insights = await fetchSpellcheckInsights(productCode ? productCode : undefined, {
@@ -203,11 +205,11 @@ export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(
         // Currently we filter by lang here but we should do it in the API when is available
         .map((insight) => insight.id)
       this.updateValue()
-      this.dispatchIngredientsStateEvent({
+      this.dispatchIngredientSpellcheckStateEvent({
         state: this._insightIds.length ? EventState.HAS_DATA : EventState.NO_DATA,
       })
     },
-    args: () => [this.productCode, this.languageCodes],
+    args: () => [this.productCode, ...this._languageCodes],
   })
 
   /**
@@ -221,12 +223,12 @@ export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(
   }
 
   /**
-   * Dispatches an ingredients state event with the provided detail.
+   * Dispatches an ingredient spellcheck state event with the provided detail.
    * @param {RobotoffIngredientsStateEventDetail} detail - The detail of the event.
    */
-  dispatchIngredientsStateEvent(detail: RobotoffIngredientsStateEventDetail) {
+  dispatchIngredientSpellcheckStateEvent(detail: RobotoffIngredientsStateEventDetail) {
     this.dispatchEvent(
-      new CustomEvent<RobotoffIngredientsStateEventDetail>(EventType.INGREDIENTS_STATE, {
+      new CustomEvent<RobotoffIngredientsStateEventDetail>(EventType.INGREDIENT_SPELLCHECK_STATE, {
         bubbles: true,
         composed: true,
         detail: {
@@ -245,7 +247,7 @@ export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(
    */
   async afterInsightAnnotation() {
     await this.hideLoading()
-    this.dispatchIngredientsStateEvent({
+    this.dispatchIngredientSpellcheckStateEvent({
       state: EventState.ANNOTATED,
     })
     this.nextInsight()
@@ -273,7 +275,7 @@ export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(
     await this.afterInsightAnnotation()
 
     if (this.allInsightsAreAnswered) {
-      this.dispatchIngredientsStateEvent({
+      this.dispatchIngredientSpellcheckStateEvent({
         state: EventState.FINISHED,
         insightId: insight.id,
         ...event.detail,
@@ -325,7 +327,7 @@ export class RobotoffIngredientSpellcheck extends LoadingWithTimeoutMixin(
           <div class="robotoff-ingredient-spellcheck">
             ${this.renderHeader()}
             <div>
-              ${this.renderImage()}
+              ${this.renderProductLink(insight.barcode)} ${this.renderImage()}
               <div>
                 <text-corrector
                   loading=${ifDefined(this.loading) as AnnotationAnswer}

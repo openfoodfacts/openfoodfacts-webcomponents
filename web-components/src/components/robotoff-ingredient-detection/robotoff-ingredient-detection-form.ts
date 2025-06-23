@@ -110,6 +110,8 @@ export class RobotoffIngredientDetectionForm extends LitElement {
   @state()
   isEditingIngredients = false
 
+  private imageSize = { height: "500px", width: "100%" }
+
   /**
    * Determines if the form is in a loading state
    * @returns {boolean} True if loading, false otherwise
@@ -305,7 +307,6 @@ export class RobotoffIngredientDetectionForm extends LitElement {
   onAnnotationChange(e: InputEvent) {
     const textarea = e.target as HTMLTextAreaElement
     this.data.annotation = textarea.value
-    this.requestUpdate()
   }
   /**
    * Renders the ingredients editing interface
@@ -363,11 +364,9 @@ export class RobotoffIngredientDetectionForm extends LitElement {
     return html`
       <form @submit=${this.onSubmit}>
         <div>
-          <h2>${msg("Help us for ingredients")}</h2>
-          <p>${msg("Help us validate the ingredient list of the product.")}</p>
           <zoomable-image
             src=${imgUrl}
-            .size="${{ height: "500px", width: "100%" }}"
+            .size=${this.imageSize}
             crop-mode=${this.cropMode}
             .boundingBox=${this.boundingBox}
             show-buttons
@@ -424,6 +423,7 @@ export class RobotoffIngredientDetectionForm extends LitElement {
    * @param {IngredientDetectionAnnotationData} [data] - The annotation data for the answer
    */
   async answer(value: AnnotationAnswer, data?: IngredientDetectionAnnotationData) {
+    this.isEditingIngredients = false
     // Emit the submit event with the answer details
     this.dispatchEvent(
       new CustomEvent(EventType.SUBMIT, {
