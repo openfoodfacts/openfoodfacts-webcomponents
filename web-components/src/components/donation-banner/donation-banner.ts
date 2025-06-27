@@ -2,6 +2,7 @@ import { LitElement, html, css } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { localized, msg, str } from "@lit/localize"
 import { getImageUrl, languageCode } from "../../signals/app"
+import { classMap } from "lit/directives/class-map.js"
 
 /**
  * Donation banner
@@ -30,6 +31,12 @@ export class DonationBanner extends LitElement {
    */
   @property({ type: String, reflect: true })
   currentYear: string = this.getDefaultYear()
+
+  /**
+   * Whether to apply dark mode styling
+   */
+  @property({ type: Boolean })
+  darkMode = false
 
   getDefaultYear() {
     return new Date().getFullYear().toString()
@@ -65,6 +72,24 @@ export class DonationBanner extends LitElement {
       width: 100%;
       background-color: white;
       box-sizing: border-box;
+    }
+    .dark-mode .donation-banner,
+    .dark-mode .donation-banner-footer {
+      background-color: #2d2724;
+      color: #f9f7f5;
+      border-color: #ff6e78;
+    }
+    .dark-mode .donation-banner__main-title,
+    .dark-mode .donation-banner-footer__main-title {
+      color: #ff6e78;
+    }
+    .dark-mode .donation-banner__main-div-wrapper {
+      color: #f9f7f5;
+    }
+    .dark-mode .donation-banner__hook-section,
+    .dark-mode .donation-banner-footer__hook-section {
+      background-color: #0050a0;
+      color: #fff;
     }
     @media (max-width: 732px) {
       .donation-banner,
@@ -148,11 +173,6 @@ export class DonationBanner extends LitElement {
     }
     .donation-banner__main-div-wrapper {
       color: black;
-    }
-    @media (max-width: 732px) {
-      .donation-banner__main-div-wrapper {
-        margin-top: -25px;
-      }
     }
     .donation-banner__main-div {
       font-family: "Public Sans", Helvetica, Roboto, Arial, sans-serif;
@@ -242,65 +262,70 @@ export class DonationBanner extends LitElement {
   `
 
   override render() {
-    return html`<section class="donation-banner-footer row">
-      <div class="donation-banner-footer__left-aside">
-        <div class="donation-banner-footer__hook-section">
-          <p>${msg("Help us inform millions of consumers around the world about what they eat")}</p>
-        </div>
-        <img
-          class="group-image"
-          src="${getImageUrl("donation-banner-group-photo.png")}"
-          alt="${msg(str`group photo donation ${this.currentYear}`)}"
-        />
-      </div>
-      <div style="donation-banner__main-div-wrapper">
-        <div class="donation-banner__main-div-wrapper">
-          <div class="donation-banner-footer__main-section">
-            <img
-              width="50"
-              height="50"
-              src="${getImageUrl("CMJN-ICON_WHITE_BG_OFF.svg")}"
-              alt="open food facts logo"
-            />
-            <h3 class="donation-banner-footer__main-title">
-              ${msg(str`Please give to our ${this.currentYear} Fundraiser`)}
-            </h3>
-          </div>
-          <p style="margin: 0 0 20px; font-size: 14px;">
-            ${msg("Your donations fund the day-to-day operations of our non-profit association:")}
-          </p>
-          <ul class="unordered-list">
-            <li>
-              ${msg("keeping our database open & available to all,")}
-              <ul>
-                <li>
-                  ${msg("technical infrastructure (website/mobile app) & a small permanent team")}
-                </li>
-              </ul>
-            </li>
-            <li>
-              <p>${msg("remain independent of the food industry,")}</p>
-            </li>
-            <li>
-              <p>${msg("engage a community of committed citizens,")}</p>
-            </li>
-            <li>
-              <p>${msg("support the advancement of public health research.")}</p>
-            </li>
-          </ul>
-        </div>
-        <div class="donation-banner-footer__actions-section">
-          <div class="donation-banner-footer__actions-section__financial">
-            <p style="margin: 0px; line-height: 1.6">
-              ${msg(
-                "Each donation counts! We appreciate your support in bringing further food transparency in the world."
-              )}
+    const rootClasses = { "dark-mode": this.darkMode }
+    return html`<section class=${classMap(rootClasses)}>
+      <div class="donation-banner-footer row">
+        <div class="donation-banner-footer__left-aside">
+          <div class="donation-banner-footer__hook-section">
+            <p>
+              ${msg("Help us inform millions of consumers around the world about what they eat")}
             </p>
           </div>
-          <div class="donation-banner-footer__actions-section__donate-button">
-            <a href="${this.donateLink}">
-              <button>${msg("I SUPPORT")}</button>
-            </a>
+          <img
+            class="group-image"
+            src="${getImageUrl("donation-banner-group-photo.png")}"
+            alt="${msg(str`group photo donation ${this.currentYear}`)}"
+          />
+        </div>
+        <div class="donation-banner__main-div-wrapper">
+          <div style="padding-left: 16px;">
+            <div class="donation-banner-footer__main-section">
+              <img
+                width="50"
+                height="50"
+                src="${getImageUrl("CMJN-ICON_WHITE_BG_OFF.svg")}"
+                alt="open food facts logo"
+              />
+              <h3 class="donation-banner-footer__main-title">
+                ${msg(str`Please give to our ${this.currentYear} Fundraiser`)}
+              </h3>
+            </div>
+            <p style="margin: 0 0 20px; font-size: 14px;">
+              ${msg("Your donations fund the day-to-day operations of our non-profit association:")}
+            </p>
+            <ul class="unordered-list">
+              <li>
+                ${msg("keeping our database open & available to all,")}
+                <ul>
+                  <li>
+                    ${msg("technical infrastructure (website/mobile app) & a small permanent team")}
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <p>${msg("remain independent of the food industry,")}</p>
+              </li>
+              <li>
+                <p>${msg("engage a community of committed citizens,")}</p>
+              </li>
+              <li>
+                <p>${msg("support the advancement of public health research.")}</p>
+              </li>
+            </ul>
+          </div>
+          <div class="donation-banner-footer__actions-section">
+            <div class="donation-banner-footer__actions-section__financial">
+              <p style="margin: 0px; line-height: 1.6">
+                ${msg(
+                  "Each donation counts! We appreciate your support in bringing further food transparency in the world."
+                )}
+              </p>
+            </div>
+            <div class="donation-banner-footer__actions-section__donate-button">
+              <a href="${this.donateLink}">
+                <button>${msg("I SUPPORT")}</button>
+              </a>
+            </div>
           </div>
         </div>
       </div>
