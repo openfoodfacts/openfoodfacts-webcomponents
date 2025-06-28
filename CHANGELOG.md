@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.10.0 - 2025-06-28
+
+### Added
+
+- Add support for dark mode in `donation-banner` and `mobile-badges`
+
+- Add `product-card` component to display a product card with image, name, brands, quantity, product type, nutriscore, nova group and greenscore.
+
 ## 1.9.0 - 2025-06-19
 
 ### Added
