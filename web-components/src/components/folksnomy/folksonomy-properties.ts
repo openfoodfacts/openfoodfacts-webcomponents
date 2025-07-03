@@ -2,6 +2,7 @@ import { LitElement, html, css } from "lit"
 import { customElement, state } from "lit/decorators.js"
 import { localized } from "@lit/localize"
 import folksonomyApi from "../../api/folksonomy"
+import "../shared/dual-range-slider"
 
 /**
  * Folksonomy Properties Viewer
@@ -193,161 +194,6 @@ export class FolksonomyProperties extends LitElement {
       font-style: italic;
     }
 
-    /* Range slider container */
-    .range-filter-container {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      min-width: 200px;
-    }
-
-    .range-inputs {
-      display: flex;
-      gap: 0.25rem;
-      align-items: center;
-    }
-
-    .range-input {
-      width: 60px;
-      padding: 0.25rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      text-align: center;
-    }
-
-    .range-input:focus {
-      outline: none;
-      border-color: #341100;
-    }
-
-    .range-separator {
-      font-size: 0.75rem;
-      color: #666;
-    }
-
-    /* Custom range slider styles */
-    .range-slider {
-      width: 100%;
-      height: 6px;
-      border-radius: 3px;
-      background: #ddd;
-      outline: none;
-      opacity: 0.7;
-      transition: opacity 0.2s;
-      -webkit-appearance: none;
-      appearance: none;
-      position: relative;
-    }
-
-    .range-slider:hover {
-      opacity: 1;
-    }
-
-    .range-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: #341100;
-      cursor: pointer;
-      box-shadow: 0px 0px 0px 3px rgba(52, 17, 0, 0.2);
-    }
-
-    .range-slider::-moz-range-thumb {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: #341100;
-      cursor: pointer;
-      border: none;
-      box-shadow: 0px 0px 0px 3px rgba(52, 17, 0, 0.2);
-    }
-
-    .range-slider-container {
-      position: relative;
-      margin: 0.25rem 0;
-    }
-
-    .range-slider-track {
-      position: absolute;
-      height: 6px;
-      background: #341100;
-      border-radius: 3px;
-      top: 0;
-    }
-
-    .dual-range-container {
-      position: relative;
-      width: 100%;
-    }
-
-    .dual-range-slider {
-      position: relative;
-      height: 6px;
-      background: #ddd;
-      border-radius: 3px;
-      margin: 0.5rem 0;
-      width: 200px;
-      min-width: 180px;
-    }
-
-    .dual-range-slider input[type="range"] {
-      position: absolute;
-      width: 100%;
-      height: 6px;
-      background: transparent;
-      -webkit-appearance: none;
-      appearance: none;
-      pointer-events: none;
-      outline: none;
-    }
-
-    .dual-range-slider input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 16px;
-      height: 16px;
-      margin-top: -5px;
-      margin-left: -2px;
-      border-radius: 50%;
-      background: #341100;
-      cursor: pointer;
-      pointer-events: all;
-      box-shadow: 0px 0px 0px 3px rgba(52, 17, 0, 0.2);
-      border: none;
-    }
-
-    .dual-range-slider input[type="range"]::-moz-range-thumb {
-      width: 16px;
-      height: 16px;
-      margin-top: -5px;
-
-      border-radius: 50%;
-      background: #341100;
-      cursor: pointer;
-      pointer-events: all;
-      box-shadow: 0px 0px 0px 3px rgba(52, 17, 0, 0.2);
-      border: none;
-    }
-
-    .dual-range-slider input[type="range"]:first-child::-moz-range-thumb {
-      margin-left: -8px;
-    }
-
-    .dual-range-slider input[type="range"]:last-child::-moz-range-thumb {
-      margin-right: -8px;
-    }
-
-    .dual-range-track {
-      position: absolute;
-      height: 6px;
-      background: #341100;
-      border-radius: 3px;
-      top: 0;
-    }
-
     /* Mobile responsiveness */
     @media (max-width: 768px) {
       .properties-table {
@@ -365,15 +211,6 @@ export class FolksonomyProperties extends LitElement {
 
       .properties-container p {
         font-size: 0.8rem;
-      }
-
-      .range-filter-container {
-        min-width: 180px;
-      }
-
-      .range-input {
-        width: 50px;
-        font-size: 0.7rem;
       }
     }
   `
@@ -464,7 +301,7 @@ export class FolksonomyProperties extends LitElement {
       }
     } catch (error) {
       console.error("Error fetching folksonomy properties:", error)
-      this.error = "Failed to load properties. Please try again later."
+      this.error = "error"
     } finally {
       this.loading = false
     }
@@ -506,13 +343,19 @@ export class FolksonomyProperties extends LitElement {
     }, 1100)
   }
 
-  private handleRangeInput(field: keyof typeof this.filters, value: string) {
-    const numValue = parseInt(value, 10)
-    if (isNaN(numValue)) return
+  private handleRangeChange(event: CustomEvent) {
+    const { type, field, value } = event.detail
+
+    let filterField: keyof typeof this.filters
+    if (type === "count") {
+      filterField = field === "min" ? "countMin" : "countMax"
+    } else {
+      filterField = field === "min" ? "valuesMin" : "valuesMax"
+    }
 
     this.filters = {
       ...this.filters,
-      [field]: numValue,
+      [filterField]: value,
     }
 
     // Immediate filtering for range inputs
@@ -549,123 +392,15 @@ export class FolksonomyProperties extends LitElement {
     document.body.removeChild(link)
   }
 
-  private renderDualRangeSlider(
-    type: "count" | "values",
-    min: number,
-    max: number,
-    currentMin: number,
-    currentMax: number
-  ) {
-    // If range is too small, show simple inputs instead
-    if (max - min < 2) {
-      return html`
-        <div class="range-filter-container">
-          <div class="range-inputs">
-            <input
-              type="number"
-              class="range-input"
-              .value="${currentMin}"
-              min="${min}"
-              max="${max}"
-              @input="${(e: Event) =>
-                this.handleRangeInput(
-                  type === "count" ? "countMin" : "valuesMin",
-                  (e.target as HTMLInputElement).value
-                )}"
-            />
-            <span class="range-separator">-</span>
-            <input
-              type="number"
-              class="range-input"
-              .value="${currentMax}"
-              min="${min}"
-              max="${max}"
-              @input="${(e: Event) =>
-                this.handleRangeInput(
-                  type === "count" ? "countMax" : "valuesMax",
-                  (e.target as HTMLInputElement).value
-                )}"
-            />
-          </div>
-        </div>
-      `
-    }
-
-    const percent1 = ((currentMin - min) / (max - min)) * 100
-    const percent2 = ((currentMax - min) / (max - min)) * 100
-
-    return html`
-      <div class="range-filter-container">
-        <div class="range-inputs">
-          <input
-            type="number"
-            class="range-input"
-            .value="${currentMin}"
-            min="${min}"
-            max="${max}"
-            @input="${(e: Event) =>
-              this.handleRangeInput(
-                type === "count" ? "countMin" : "valuesMin",
-                (e.target as HTMLInputElement).value
-              )}"
-          />
-          <span class="range-separator">-</span>
-          <input
-            type="number"
-            class="range-input"
-            .value="${currentMax}"
-            min="${min}"
-            max="${max}"
-            @input="${(e: Event) =>
-              this.handleRangeInput(
-                type === "count" ? "countMax" : "valuesMax",
-                (e.target as HTMLInputElement).value
-              )}"
-          />
-        </div>
-        <div class="dual-range-container">
-          <div class="dual-range-slider">
-            <div
-              class="dual-range-track"
-              style="left: ${percent1}%; width: ${percent2 - percent1}%"
-            ></div>
-            <input
-              type="range"
-              min="${min}"
-              max="${max}"
-              .value="${currentMin}"
-              @input="${(e: Event) =>
-                this.handleRangeInput(
-                  type === "count" ? "countMin" : "valuesMin",
-                  (e.target as HTMLInputElement).value
-                )}"
-            />
-            <input
-              type="range"
-              min="${min}"
-              max="${max}"
-              .value="${currentMax}"
-              @input="${(e: Event) =>
-                this.handleRangeInput(
-                  type === "count" ? "countMax" : "valuesMax",
-                  (e.target as HTMLInputElement).value
-                )}"
-            />
-          </div>
-        </div>
-      </div>
-    `
-  }
-
   private renderTableHeader() {
     return html`
       <thead>
         <tr>
           <th></th>
-          <th class="property-name-header">Property</th>
-          <th class="doc">Documentation</th>
-          <th class="count">Count</th>
-          <th class="values">Values</th>
+          <th class="property-name-header"><slot name="property-header-text"></slot></th>
+          <th class="doc"><slot name="documentation-header-text"></slot></th>
+          <th class="count"><slot name="count-header-text"></slot></th>
+          <th class="values"><slot name="values-header-text"></slot></th>
         </tr>
         <tr class="filter-row">
           <td></td>
@@ -673,7 +408,7 @@ export class FolksonomyProperties extends LitElement {
             <input
               type="text"
               class="filter-input"
-              placeholder="Filter properties..."
+              placeholder="${this.getAttribute("filter-placeholder") || ""}"
               .value="${this.filters.property}"
               @input="${(e: Event) =>
                 this.handleFilterInput("property", (e.target as HTMLInputElement).value)}"
@@ -681,22 +416,24 @@ export class FolksonomyProperties extends LitElement {
           </td>
           <td></td>
           <td>
-            ${this.renderDualRangeSlider(
-              "count",
-              this.ranges.countMin,
-              this.ranges.countMax,
-              this.filters.countMin,
-              this.filters.countMax
-            )}
+            <dual-range-slider
+              type="count"
+              min="${this.ranges.countMin}"
+              max="${this.ranges.countMax}"
+              minValue="${this.filters.countMin}"
+              maxValue="${this.filters.countMax}"
+              @range-change="${this.handleRangeChange}"
+            ></dual-range-slider>
           </td>
           <td>
-            ${this.renderDualRangeSlider(
-              "values",
-              this.ranges.valuesMin,
-              this.ranges.valuesMax,
-              this.filters.valuesMin,
-              this.filters.valuesMax
-            )}
+            <dual-range-slider
+              type="values"
+              min="${this.ranges.valuesMin}"
+              max="${this.ranges.valuesMax}"
+              minValue="${this.filters.valuesMin}"
+              maxValue="${this.filters.valuesMax}"
+              @range-change="${this.handleRangeChange}"
+            ></dual-range-slider>
           </td>
         </tr>
       </thead>
@@ -729,25 +466,31 @@ export class FolksonomyProperties extends LitElement {
 
   private renderContent() {
     if (this.loading) {
-      return html`<div class="loading">Loading properties...</div>`
+      return html`<div class="loading"><slot name="loading-text"></slot></div>`
     }
 
     if (this.error) {
-      return html`<div class="error">${this.error}</div>`
+      return html`<div class="error"><slot name="error-text"></slot></div>`
     }
 
     if (this.properties.length === 0) {
-      return html` <div class="empty-state">No properties found.</div> `
+      return html` <div class="empty-state"><slot name="empty-state-text"></slot></div> `
     }
 
     return html`
       <div class="filter-controls">
         <div class="rows-counter">
-          Rows: ${this.filteredProperties.length} / ${this.properties.length}
+          <slot name="rows-counter-text"
+            >Rows: ${this.filteredProperties.length} / ${this.properties.length}</slot
+          >
         </div>
         <div class="button-group">
-          <button class="download-btn" @click="${this.downloadCSV}">Download CSV</button>
-          <button class="reset-btn" @click="${this.resetFilters}">Reset</button>
+          <button class="download-btn" @click="${this.downloadCSV}">
+            <slot name="download-button-text"></slot>
+          </button>
+          <button class="reset-btn" @click="${this.resetFilters}">
+            <slot name="reset-button-text"></slot>
+          </button>
         </div>
       </div>
       <table class="properties-table" id="folksonomy-properties-table">
@@ -762,15 +505,11 @@ export class FolksonomyProperties extends LitElement {
   override render() {
     return html`
       <div class="properties-container">
-        <h2 id="property_title">Properties</h2>
+        <h2 id="property_title">
+          <slot name="title"></slot>
+        </h2>
         <p>
-          Open Food Facts allows anyone to reuse contributed properties or create new ones (see the
-          <a
-            href="https://wiki.openfoodfacts.org/Folksonomy_Engine"
-            target="_blank"
-            rel="noopener noreferrer"
-            >Folksonomy Engine project</a
-          >). Here's the list of all contributed properties.
+          <slot name="description"></slot>
         </p>
         ${this.renderContent()}
       </div>
