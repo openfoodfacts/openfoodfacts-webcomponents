@@ -3,6 +3,7 @@ import { customElement, state, property } from "lit/decorators.js"
 import { localized, msg } from "@lit/localize"
 import { getImageUrl, languageCode } from "../../signals/app"
 import { classMap } from "lit/directives/class-map.js"
+import { darkModeListener } from "../../utils/dark-mode-listener"
 
 export type Badge = {
   href: string
@@ -31,7 +32,7 @@ export class MobileBadges extends LitElement {
         display: block;
       }
       .dark-mode {
-        background-color: #2d2724;
+        background-color: #201a17;
         color: #f9f7f5;
       }
       #footer_scan {
@@ -234,10 +235,23 @@ export class MobileBadges extends LitElement {
   hideImage = false
 
   /**
-   * Whether to apply dark mode styling
+   * Whether to apply dark mode styling (auto-detected from prefers-color-scheme)
    */
-  @property({ type: Boolean })
-  darkMode = false
+  isDarkMode = darkModeListener.darkMode
+  private _darkModeCb = (isDark: boolean) => {
+    this.isDarkMode = isDark
+    this.requestUpdate()
+  }
+
+  override connectedCallback() {
+    super.connectedCallback()
+    darkModeListener.subscribe(this._darkModeCb)
+  }
+
+  override disconnectedCallback() {
+    darkModeListener.unsubscribe(this._darkModeCb)
+    super.disconnectedCallback()
+  }
 
   /**
    * Link to the F-Droid app page.
@@ -447,7 +461,7 @@ export class MobileBadges extends LitElement {
   }
 
   override render() {
-    const rootClasses = { "dark-mode": this.darkMode }
+    const rootClasses = { "dark-mode": this.isDarkMode }
     return html`
       <div class=${classMap(rootClasses)} id="install_the_app_block">
         ${this.renderImage()} ${this.renderBadges()}
