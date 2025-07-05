@@ -3,6 +3,7 @@ import { customElement, property, state } from "lit/decorators.js"
 import { classMap } from "lit/directives/class-map.js"
 import { KP_ATTRIBUTE_IMG } from "../../utils/openfoodfacts"
 import { getImageUrl } from "../../signals/app"
+import { darkModeListener } from "../../utils/dark-mode-listener"
 
 interface NavigationState {
   to: {
@@ -261,16 +262,29 @@ export class ProductCard extends LitElement {
   greenscoreSrc = ""
 
   /**
-   * Whether to apply dark mode styling
-   */
-  @property({ type: Boolean })
-  darkMode = false
-
-  /**
    * Placeholder image URL for products without an image
    */
   @property({ type: String })
   placeholderImage = getImageUrl("Placeholder.svg")
+
+  /**
+   * Whether to apply dark mode styling (auto-detected from prefers-color-scheme)
+   */
+  isDarkMode = darkModeListener.darkMode
+  private _darkModeCb = (isDark: boolean) => {
+    this.isDarkMode = isDark
+    this.requestUpdate()
+  }
+
+  override connectedCallback() {
+    super.connectedCallback()
+    darkModeListener.subscribe(this._darkModeCb)
+  }
+
+  override disconnectedCallback() {
+    darkModeListener.unsubscribe(this._darkModeCb)
+    super.disconnectedCallback()
+  }
 
   /**
    * Updates score image URLs based on the product's nutrition grades, nova group, and greenscore
@@ -291,7 +305,7 @@ export class ProductCard extends LitElement {
     const hasProductImage = Boolean(this.product.image_front_small_url)
     const cardClasses = {
       "card-container": true,
-      "dark-mode": this.darkMode,
+      "dark-mode": this.isDarkMode,
     }
 
     return html`

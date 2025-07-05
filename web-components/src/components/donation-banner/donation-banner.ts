@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js"
 import { localized, msg, str } from "@lit/localize"
 import { getImageUrl, languageCode } from "../../signals/app"
 import { classMap } from "lit/directives/class-map.js"
+import { darkModeListener } from "../../utils/dark-mode-listener"
 
 /**
  * Donation banner
@@ -33,10 +34,23 @@ export class DonationBanner extends LitElement {
   currentYear: string = this.getDefaultYear()
 
   /**
-   * Whether to apply dark mode styling
+   * Whether to apply dark mode styling (auto-detected from prefers-color-scheme)
    */
-  @property({ type: Boolean })
-  darkMode = false
+  isDarkMode = darkModeListener.darkMode
+  private _darkModeCb = (isDark: boolean) => {
+    this.isDarkMode = isDark
+    this.requestUpdate()
+  }
+
+  override connectedCallback() {
+    super.connectedCallback()
+    darkModeListener.subscribe(this._darkModeCb)
+  }
+
+  override disconnectedCallback() {
+    darkModeListener.unsubscribe(this._darkModeCb)
+    super.disconnectedCallback()
+  }
 
   getDefaultYear() {
     return new Date().getFullYear().toString()
@@ -262,7 +276,7 @@ export class DonationBanner extends LitElement {
   `
 
   override render() {
-    const rootClasses = { "dark-mode": this.darkMode }
+    const rootClasses = { "dark-mode": this.isDarkMode }
     return html`<section class=${classMap(rootClasses)}>
       <div class="donation-banner-footer row">
         <div class="donation-banner-footer__left-aside">
