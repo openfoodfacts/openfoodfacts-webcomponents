@@ -125,11 +125,11 @@ async function fetchKeys(): Promise<{ k: string; count: number; values: number }
   }
 }
 
-async function fetchProductsProperties(propertyName: string): Promise<any[]> {
+async function fetchProductsProperties(
+  propertyName: string
+): Promise<{ k: string; v: string; product: string }[]> {
   try {
     let url = `/products?k=${propertyName}`
-
-    console.log("Fetching products with property:", url)
 
     const response = await fetch(getApiUrl(url), {
       method: "GET",
@@ -143,8 +143,6 @@ async function fetchProductsProperties(propertyName: string): Promise<any[]> {
     }
 
     const data = await response.json()
-    console.log("Property products data:", data)
-
     return data || []
   } catch (error) {
     console.error("Error fetching property products:", error)

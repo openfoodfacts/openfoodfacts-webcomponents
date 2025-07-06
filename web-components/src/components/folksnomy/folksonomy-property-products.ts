@@ -314,7 +314,7 @@ export class FolksonomyPropertyProducts extends LitElement {
   `
 
   /**
-   * The property name
+   * The property name for which we will display barcodes and values
    */
   @property({ type: String, attribute: "property-name" })
   propertyName = ""
@@ -350,6 +350,8 @@ export class FolksonomyPropertyProducts extends LitElement {
 
   override async connectedCallback() {
     super.connectedCallback()
+    // Note: The propertyName is set once and cannot be changed dynamically.
+    // If you need to change it, you must reinitialize the component.
     if (this.propertyName) {
       await this.fetchProductsPropertiesMain()
     }
@@ -369,10 +371,7 @@ export class FolksonomyPropertyProducts extends LitElement {
     this.error = null
 
     try {
-      console.log("Fetching products with property:", this.propertyName)
-
       const data = await folksonomyApi.fetchProductsProperties(this.propertyName)
-      console.log("Property products data:", data)
 
       this.products = data || []
       this.filteredProducts = [...this.products]
@@ -461,9 +460,10 @@ export class FolksonomyPropertyProducts extends LitElement {
     const link = document.createElement("a")
     const url = URL.createObjectURL(blob)
 
+    const today = new Date().toISOString().split("T")[0]
     const filename = isProductsView
-      ? `folksonomy_property_${this.propertyName}_products.csv`
-      : `folksonomy_property_${this.propertyName}_values.csv`
+      ? `folksonomy_property_${today}_${this.propertyName}_products.csv`
+      : `folksonomy_property_${today}_${this.propertyName}_values.csv`
 
     link.setAttribute("href", url)
     link.setAttribute("download", filename)
@@ -490,15 +490,15 @@ export class FolksonomyPropertyProducts extends LitElement {
     return html`
       <thead>
         <tr>
-          <th class="product-code-header">Product barcode</th>
-          <th class="value-header">Corresponding value</th>
+          <th class="product-code-header"><slot name="product-barcode-header"></slot></th>
+          <th class="value-header"><slot name="corresponding-value-header"></slot></th>
         </tr>
         <tr class="filter-row">
           <td>
             <input
               type="text"
               class="filter-input"
-              placeholder="Filter barcodes..."
+              placeholder="${this.getSlotText("filter-barcodes-placeholder")}"
               .value="${this.filters.barcode}"
               @input="${(e: Event) =>
                 this.handleFilterInput("barcode", (e.target as HTMLInputElement).value)}"
@@ -508,7 +508,7 @@ export class FolksonomyPropertyProducts extends LitElement {
             <input
               type="text"
               class="filter-input"
-              placeholder="Filter values..."
+              placeholder="${this.getSlotText("filter-values-placeholder")}"
               .value="${this.filters.value}"
               @input="${(e: Event) =>
                 this.handleFilterInput("value", (e.target as HTMLInputElement).value)}"
@@ -551,15 +551,15 @@ export class FolksonomyPropertyProducts extends LitElement {
     return html`
       <thead>
         <tr>
-          <th class="value-header">Property Value</th>
-          <th class="count-header">Product Count</th>
+          <th class="value-header"><slot name="property-value-header"></slot></th>
+          <th class="count-header"><slot name="product-count-header"></slot></th>
         </tr>
         <tr class="filter-row">
           <td>
             <input
               type="text"
               class="filter-input"
-              placeholder="Filter values..."
+              placeholder="${this.getSlotText("filter-values-placeholder")}"
               .value="${this.filters.value}"
               @input="${(e: Event) =>
                 this.handleFilterInput("value", (e.target as HTMLInputElement).value)}"
@@ -571,9 +571,20 @@ export class FolksonomyPropertyProducts extends LitElement {
     `
   }
 
+  private getSlotText(slotName: string): string {
+    const slot = this.shadowRoot?.querySelector(`slot[name="${slotName}"]`) as HTMLSlotElement
+    if (slot) {
+      const assignedNodes = slot.assignedNodes()
+      if (assignedNodes.length > 0) {
+        return assignedNodes[0].textContent || ""
+      }
+    }
+    return ""
+  }
+
   private renderContent() {
     if (this.loading) {
-      return html`<div class="loading">Loading products...</div>`
+      return html`<div class="loading"><slot name="loading-text"></slot></div>`
     }
 
     if (this.error) {
@@ -581,7 +592,7 @@ export class FolksonomyPropertyProducts extends LitElement {
     }
 
     if (this.products.length === 0) {
-      return html`<div class="empty-state">No products found for this property.</div>`
+      return html`<div class="empty-state"><slot name="no-products-text"></slot></div>`
     }
 
     const isProductsView = this.viewMode === "products"
@@ -597,24 +608,30 @@ export class FolksonomyPropertyProducts extends LitElement {
                 class="view-mode-btn ${this.viewMode === "products" ? "active" : ""}"
                 @click="${() => this.switchViewMode("products")}"
               >
-                Individual Products
+                <slot name="individual-products-text"></slot>
               </button>
               <button
                 class="view-mode-btn ${this.viewMode === "values" ? "active" : ""}"
                 @click="${() => this.switchViewMode("values")}"
               >
-                Grouped Values
+                <slot name="grouped-values-text"></slot>
               </button>
             </div>
             <div class="rows-counter">
               ${isProductsView
-                ? `Products: ${currentData.length} / ${totalData.length}`
-                : `Values: ${currentData.length} / ${totalData.length}`}
+                ? html`<slot name="products-count-text"></slot> ${currentData.length} /
+                    ${totalData.length}`
+                : html`<slot name="values-count-text"></slot> ${currentData.length} /
+                    ${totalData.length}`}
             </div>
           </div>
           <div class="button-group">
-            <button class="download-btn" @click="${this.downloadCSV}">Download CSV</button>
-            <button class="reset-btn" @click="${this.resetFilters}">Reset</button>
+            <button class="download-btn" @click="${this.downloadCSV}">
+              <slot name="download-button-text"></slot>
+            </button>
+            <button class="reset-btn" @click="${this.resetFilters}">
+              <slot name="reset-button-text"></slot>
+            </button>
           </div>
         </div>
         <table class="products-table" id="products-table">
@@ -633,7 +650,7 @@ export class FolksonomyPropertyProducts extends LitElement {
     if (!this.propertyName) {
       return html`
         <div class="property-container">
-          <div class="error">Please provide a property name using the property-name attribute.</div>
+          <div class="error"><slot name="property-name-error"></slot></div>
         </div>
       `
     }
@@ -644,21 +661,24 @@ export class FolksonomyPropertyProducts extends LitElement {
           <div class="main-content">
             <div class="header-section">
               <div class="property-title-container">
-                <h2 id="property_title">Folksonomy property: ${this.propertyName}</h2>
+                <h2 id="property_title">
+                  <slot name="property-title-prefix"></slot> ${this.propertyName}
+                </h2>
 
                 <div id="fe_infobox" class="info-box">
-                  Tip: you can also find the <a href="/properties">list of all properties</a>.
+                  <slot name="tip-text"></slot>
+                  <a href="/properties"><slot name="all-properties-link-text"></slot></a>.
                 </div>
 
                 <p>
-                  You should find a
+                  <slot name="documentation-intro-text"></slot>
                   <a href="${this.getDocumentationUrl()}" target="_blank" rel="noopener noreferrer">
-                    dedicated documentation
+                    <slot name="documentation-link-text"></slot>
                   </a>
-                  about this property on Open Food Facts wiki
+                  <slot name="documentation-outro-text"></slot>
                 </p>
 
-                <p>List of products using this property:</p>
+                <p><slot name="products-list-intro-text"></slot></p>
               </div>
             </div>
 
