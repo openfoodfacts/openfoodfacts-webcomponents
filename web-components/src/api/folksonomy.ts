@@ -7,6 +7,10 @@ import {
 } from "../types/folksonomy"
 import { folksonomyConfiguration } from "../signals/folksonomy"
 
+// Constants for localStorage
+const FOLKSONOMY_BEARER_TOKEN_KEY = "folksonomy-bearer-token"
+const FOLKSONOMY_BEARER_DATE_KEY = "folksonomy-token-date"
+
 /**
  * Get the API URL for a given path with the current configuration
  * @param path
@@ -22,7 +26,7 @@ const getApiUrl = (path: string) => {
  * @returns {string | null}
  */
 function getStoredToken(): string | null {
-  return localStorage.getItem('bearer')
+  return localStorage.getItem(FOLKSONOMY_BEARER_TOKEN_KEY)
 }
 
 /**
@@ -30,16 +34,16 @@ function getStoredToken(): string | null {
  * @param token
  */
 function saveTokenToStorage(token: string) {
-  localStorage.setItem('bearer', token)
-  localStorage.setItem('date', new Date().getTime().toString())
+  localStorage.setItem(FOLKSONOMY_BEARER_TOKEN_KEY, token)
+  localStorage.setItem(FOLKSONOMY_BEARER_DATE_KEY, new Date().getTime().toString())
 }
 
 /**
  * Clear token from localStorage
  */
 function clearStoredToken() {
-  localStorage.removeItem('bearer')
-  localStorage.removeItem('date')
+  localStorage.removeItem(FOLKSONOMY_BEARER_TOKEN_KEY)
+  localStorage.removeItem(FOLKSONOMY_BEARER_DATE_KEY)
 }
 
 /**
