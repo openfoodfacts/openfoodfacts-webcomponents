@@ -38,6 +38,7 @@
           "apiUrl": "https://api.folksonomy.openfoodfacts.org"
         }' openfoodfacts-api-url="https://world.openfoodfacts.net" />
   </div>
+
   <div>
     <div>
       <label for="product-code">Product Id :</label>
@@ -78,7 +79,6 @@
       <input type="text" id="insight-types" placeholder="Insight types" />
     </div>
 
-    <h1>Robotoff Question</h1>
     <div style="display: flex; margin-top: 1rem">
       <robotoff-question product-code="5000354922848" insight-types=""
         options='{"showMessage": true, "showLoading": true, "showError": true, "showImage": true}'
@@ -173,11 +173,14 @@
       </robotoff-ingredient-detection>
     </div>
   </div>
-  
-    <div style="display: flex; margin: 1rem; justify-content: center; flex-wrap: wrap">
-      <product-card product='{"brands":"Deliciously Ella","code":"5060482841565","ecoscore_grade":"b","image_front_small_url":"https://images.openfoodfacts.org/images/products/506/048/284/1565/front_en.38.200.jpg","nova_group":4,"nutriscore_grade":"b","product_name":"Nutty Granola","product_type":"food","quantity":"380g"}'></product-card>
-    </div>
-  </body>
+
+  <h1>Product Card</h1>
+  <div style="display: flex; margin: 1rem; justify-content: center; flex-wrap: wrap">
+    <product-card
+      product='{"brands":"Deliciously Ella","code":"5060482841565","ecoscore_grade":"b","image_front_small_url":"https://images.openfoodfacts.org/images/products/506/048/284/1565/front_en.38.200.jpg","nova_group":4,"nutriscore_grade":"b","product_name":"Nutty Granola","product_type":"food","quantity":"380g"}'></product-card>
+  </div>
+</body>
+
 </html>
 
 <script>
