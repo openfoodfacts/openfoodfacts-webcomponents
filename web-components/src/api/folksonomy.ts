@@ -84,12 +84,9 @@ async function authByCookie(): Promise<AuthByCookieResponse> {
 async function getValidToken(): Promise<string> {
   const storedToken = getStoredToken()
   if (storedToken) {
-    console.log("Using stored token from localStorage")
     return storedToken
   }
   
-  // No stored token, authenticate
-  console.log("No stored token, authenticating...")
   const authResponse = await authByCookie()
   return authResponse.access_token
 }
