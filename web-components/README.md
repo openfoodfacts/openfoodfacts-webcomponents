@@ -30,7 +30,37 @@ More details [here](https://lit.dev/docs/v1/tools/use/).
 
 ```js
 import "@webcomponents/webcomponentsjs/webcomponents-loader.js"
-import * as offWebComponents from "@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.bundled.js"
+import "@openfoodfacts/openfoodfacts-webcomponents"
+```
+
+Then you have to copy the localization files to your project.
+If you use vite you can use the plugin [vite-plugin-static-copy](https://github.com/sapphi-red/vite-plugin-static-copy) to copy the localization files to your project.
+
+```bash
+npm install vite-plugin-static-copy
+```
+
+```javascript
+import copy from "rollup-plugin-copy"
+import path from "path"
+export default defineConfig({
+  // ...
+  plugins: [
+    // ...
+    viteStaticCopy({
+      targets: [
+        {
+          src: path.resolve(
+            __dirname,
+            "node_modules/@openfoodfacts/openfoodfacts-webcomponents/dist/localization/locales/*.js"
+          ),
+          dest: "assets/localization/locales",
+        },
+      ],
+    }),
+  ],
+  // ...
+})
 ```
 
 #### Via script tag
@@ -42,6 +72,8 @@ import * as offWebComponents from "@openfoodfacts/openfoodfacts-webcomponents/di
   src="<path-to-openfoodfacts-webcomponents>/dist/off-webcomponents.bundled.js"
 ></script>
 ```
+
+Be sure to copy all the files in the `dist/localization/locales` folder to your project.
 
 ### Usage
 

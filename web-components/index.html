@@ -52,6 +52,39 @@
         options='{"showMessage": true, "showLoading": true, "showError": true, "showImage": true}'
         id="robotoff-question" />
     </div>
+
+    <h1>Robotoff Nutrient Extraction</h1>
+    <div margin-top: 3rem" class="box">
+      <robotoff-nutrient-extraction id="robotoff-nutrient-extraction" show-messages="true">
+        <p slot="no-insight" style="text-align: center"><i>No insight</i></p>
+      </robotoff-nutrient-extraction>
+    </div>
+
+    <h1>Language Code</h1>
+    <div>
+      <label for="language-code">Language Code :</label>
+      <select id="language-code">
+        <option value="en" selected>English (en)</option>
+        <option value="fr">French (fr)</option>
+        <option value="de">German (de)</option>
+      </select>
+    </div>
+    <div>
+      <label for="product-code">Product Id :</label>
+      <input type="text" id="product-code" placeholder="Id of a product" />
+    </div>
+    <div>
+      <label for="insight-types">Insight Types :</label>
+      <input type="text" id="insight-types" placeholder="Insight types" />
+    </div>
+
+    <h1>Robotoff Question</h1>
+    <div style="display: flex; margin-top: 1rem">
+      <robotoff-question product-code="5000354922848" insight-types=""
+        options='{"showMessage": true, "showLoading": true, "showError": true, "showImage": true}'
+        id="robotoff-question" />
+    </div>
+
     <h1>Robotoff Nutrient Extraction</h1>
     <div margin-top: 3rem" class="box">
       <robotoff-nutrient-extraction id="robotoff-nutrient-extraction" show-messages="true">
@@ -162,7 +195,11 @@
   const barcodeScanner = document.getElementById("barcode-scanner")
   const robotoffIngredients = document.getElementById("robotoff-ingredient-spellcheck")
   const robotoffContributionMessage = document.getElementById("robotoff-contribution-message")
-
+  const languageCode = document.getElementById("language-code")
+  languageCode.addEventListener("change", (event) => {
+    const config = document.querySelector("off-webcomponents-configuration")
+    config.setAttribute("language-code", event.target.value)
+  })
   const productDebounce = debounce((value) => {
     robotoffQuestion.setAttribute("product-code", value)
     robotoffNutrients.setAttribute("product-code", value)
