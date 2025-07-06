@@ -1,0 +1,68 @@
+GitHub:
+- changed-files:
+  - any-glob-to-any-file: '.github/**/*'
+
+🏷️ Folksonomy Engine:
+- changed-files:
+  - any-glob-to-any-file: 'web-components/src/api/folksonomy.ts'
+  - any-glob-to-any-file: 'web-components/src/components/folksnomy/folksonomy-property-products.ts'
+  - any-glob-to-any-file: 'web-components/src/components/folksnomy/**/*'
+
+🤳🥫 Barcode scanner:
+- changed-files:
+    - any-glob-to-any-file: 'web-components/src/components/barcode-scanner/**/*'
+
+Buttons:
+- changed-files:
+    - any-glob-to-any-file: 'web-components/src/components/buttons/**/*'
+
+🎁 donations:
+- changed-files:
+    - any-glob-to-any-file: 'web-components/src/components/donation-banner/**/*'
+
+App download QRcode:
+- changed-files:
+    - any-glob-to-any-file: 'web-components/src/components/download-app-qr-code/**/*'
+    
+Icons:
+- changed-files:
+    - any-glob-to-any-file: 'web-components/src/components/icons/**/*'
+
+📖 Knowledge Panels:
+- changed-files:
+    - any-glob-to-any-file: 'web-components/src/components/knowledge-panels/**/*'
+    - any-glob-to-any-file: 'web-components/src/components/knowledge-panels/knowledge-panels.ts'
+
+Mobile badges:
+- changed-files:
+    - any-glob-to-any-file: 'web-components/src/components/mobile-badges/**/*'
+
+🤖 Robotoff:
+- changed-files:
+    - any-glob-to-any-file: 'web-components/src/components/robotoff-contribution-message/**/*'
+    - any-glob-to-any-file: 'web-components/src/components/robotoff-ingredient-detection/**/*'
+    - any-glob-to-any-file: 'web-components/src/components/robotoff-ingredient-detection/**/*'
+    - any-glob-to-any-file: 'web-components/src/components/robotoff-ingredient-spellcheck/**/*'
+    - any-glob-to-any-file: 'web-components/src/components/robotoff-modal/**/*'
+    - any-glob-to-any-file: 'web-components/src/components/robotoff-nutrient-extraction/**/*'
+    - any-glob-to-any-file: 'web-components/src/components/robotoff-question/**/*'
+
+🛣️ Road to scores:
+- changed-files:
+    - any-glob-to-any-file: 'web-components/src/components/robotoff-contribution-message/**/*'
+
+Ingredients detection:
+- changed-files:
+    - any-glob-to-any-file: 'web-components/src/components/robotoff-ingredient-detection/**/*'
+
+Ingredients spellcheck:
+- changed-files:
+    - any-glob-to-any-file: 'web-components/src/components/robotoff-ingredient-spellcheck/**/*'
+
+Nutrient extraction:
+- changed-files:
+    - any-glob-to-any-file: 'web-components/src/components/robotoff-nutrient-extraction/**/*'
+
+Shared:
+- changed-files:
+    - any-glob-to-any-file: 'web-components/src/components/shared/**/*'

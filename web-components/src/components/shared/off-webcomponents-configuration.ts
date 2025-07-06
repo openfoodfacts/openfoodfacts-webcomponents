@@ -11,7 +11,7 @@ import { customElement, property } from "lit/decorators.js"
 import { OffWebcomponentConfigurationOptions } from "../../types"
 import { RobotoffConfigurationOptions } from "../../types/robotoff"
 import { FolksonomyConfigurationOptions } from "../../types/folksonomy"
-import { setLocale } from "../../localization"
+import { setLanguageCode } from "../../localization"
 import { assetsImagesPath, countryCode } from "../../signals/app"
 import { DEFAULT_OPENFOODFACTS_API_URL, openfoodfactsApiUrl } from "../../signals/openfoodfacts"
 
@@ -42,7 +42,7 @@ const CONFIGURATION_PROPERTIES: Record<
     propertyName: "languageCode",
     fn: (value: string) => {
       // Set the language code
-      setLocale(value)
+      setLanguageCode(value)
     },
   },
   "country-code": {

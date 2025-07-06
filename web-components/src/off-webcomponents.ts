@@ -13,6 +13,7 @@ export { FolksonomyEditor } from "./components/folksnomy/folksonomy-editor"
 export { FolksonomyPropertyProducts } from "./components/folksnomy/folksonomy-property-products"
 export { AutocompleteInput } from "./components/shared/autocomplete-input"
 export { RobotoffIngredientDetection as RobotoffCrops } from "./components/robotoff-ingredient-detection/robotoff-ingredient-detection"
+export { ProductCard } from "./components/product-card/product-card"
 
 // Will be added in the future when design is ready
 // export { KnowledgePanelsComponent } from "./components/knowledge-panels/knowledge-panels"

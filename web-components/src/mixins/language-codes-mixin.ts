@@ -1,7 +1,7 @@
 import { LitElement } from "lit"
 import { Constructor } from "."
-import { getLocale } from "../localization"
 import { property } from "lit/decorators.js"
+import { languageCode } from "../signals/app"
 
 /**
  * Interface for the LanguageCodesMixin.
@@ -32,7 +32,7 @@ export const LanguageCodesMixin = <T extends Constructor<LitElement>>(
      * @returns {string[]} The language codes.
      */
     get _languageCodes() {
-      return this.languageCodes || [getLocale()]
+      return this.languageCodes || [languageCode.get()]
     }
   }
 
