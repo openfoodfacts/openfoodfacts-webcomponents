@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "lit"
 import { customElement, state } from "lit/decorators.js"
-import { localized } from "@lit/localize"
+import { localized, msg } from "@lit/localize"
 import folksonomyApi from "../../api/folksonomy"
 import "../shared/dual-range-slider"
 
@@ -374,7 +374,7 @@ export class FolksonomyProperties extends LitElement {
   }
 
   private downloadCSV() {
-    const headers = ["Property", "Count", "Values"]
+    const headers = [msg("Property"), msg("Count"), msg("Values")]
     const rows = this.filteredProperties.map((item) => [item.k, item.count, item.values])
 
     const csvContent = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n")
@@ -382,9 +382,11 @@ export class FolksonomyProperties extends LitElement {
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
     const link = document.createElement("a")
     const url = URL.createObjectURL(blob)
+    const today = new Date().toISOString().split("T")[0]
+    const filename = `folksonomy_properties_${today}.csv`
 
     link.setAttribute("href", url)
-    link.setAttribute("download", "folksonomy_properties.csv")
+    link.setAttribute("download", filename)
     link.style.visibility = "hidden"
 
     document.body.appendChild(link)
@@ -397,10 +399,10 @@ export class FolksonomyProperties extends LitElement {
       <thead>
         <tr>
           <th></th>
-          <th class="property-name-header"><slot name="property-header-text"></slot></th>
-          <th class="doc"><slot name="documentation-header-text"></slot></th>
-          <th class="count"><slot name="count-header-text"></slot></th>
-          <th class="values"><slot name="values-header-text"></slot></th>
+          <th class="property-name-header">${msg("Property")}</th>
+          <th class="doc">${msg("Documentation")}</th>
+          <th class="count">${msg("Count")}</th>
+          <th class="values">${msg("Values")}</th>
         </tr>
         <tr class="filter-row">
           <td></td>
@@ -408,7 +410,7 @@ export class FolksonomyProperties extends LitElement {
             <input
               type="text"
               class="filter-input"
-              placeholder="${this.getAttribute("filter-placeholder") || ""}"
+              placeholder="${msg("Filter properties...")}"
               .value="${this.filters.property}"
               @input="${(e: Event) =>
                 this.handleFilterInput("property", (e.target as HTMLInputElement).value)}"
@@ -451,7 +453,7 @@ export class FolksonomyProperties extends LitElement {
           <a
             href="${this.getDocumentationUrl(property.k)}"
             class="doc-link"
-            title="Documentation for ${property.k}"
+            title="${msg("Documentation for")} ${property.k}"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -466,31 +468,27 @@ export class FolksonomyProperties extends LitElement {
 
   private renderContent() {
     if (this.loading) {
-      return html`<div class="loading"><slot name="loading-text"></slot></div>`
+      return html`<div class="loading">${msg("Loading properties...")}</div>`
     }
 
     if (this.error) {
-      return html`<div class="error"><slot name="error-text"></slot></div>`
+      return html`<div class="error">
+        ${msg("Failed to load properties. Please try again later.")}
+      </div>`
     }
 
     if (this.properties.length === 0) {
-      return html` <div class="empty-state"><slot name="empty-state-text"></slot></div> `
+      return html` <div class="empty-state">${msg("No properties found.")}</div> `
     }
 
     return html`
       <div class="filter-controls">
         <div class="rows-counter">
-          <slot name="rows-counter-text"
-            >Rows: ${this.filteredProperties.length} / ${this.properties.length}</slot
-          >
+          ${msg("Rows")}: ${this.filteredProperties.length} / ${this.properties.length}
         </div>
         <div class="button-group">
-          <button class="download-btn" @click="${this.downloadCSV}">
-            <slot name="download-button-text"></slot>
-          </button>
-          <button class="reset-btn" @click="${this.resetFilters}">
-            <slot name="reset-button-text"></slot>
-          </button>
+          <button class="download-btn" @click="${this.downloadCSV}">${msg("Download CSV")}</button>
+          <button class="reset-btn" @click="${this.resetFilters}">${msg("Reset")}</button>
         </div>
       </div>
       <table class="properties-table" id="folksonomy-properties-table">
@@ -505,12 +503,14 @@ export class FolksonomyProperties extends LitElement {
   override render() {
     return html`
       <div class="properties-container">
-        <h2 id="property_title">
-          <slot name="title"></slot>
-        </h2>
-        <p>
-          <slot name="description"></slot>
-        </p>
+        <slot name="properties-introduction">
+          <h2 id="property_title">${msg("Folksonomy Properties")}</h2>
+          <p>
+            ${msg(
+              "Explore all contributed properties from the Folksonomy Engine project. These properties provide additional metadata and insights about products in the Open Food Facts database."
+            )}
+          </p>
+        </slot>
         ${this.renderContent()}
       </div>
     `
