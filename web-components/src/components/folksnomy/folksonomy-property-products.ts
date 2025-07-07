@@ -1,12 +1,13 @@
 import { LitElement, html, css } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
-import { localized } from "@lit/localize"
+import { localized, msg } from "@lit/localize"
 import folksonomyApi from "../../api/folksonomy"
 
 /**
  * Folksonomy Property Products Viewer
  * @element folksonomy-property-products
  * This component displays products that use a specific folksonomy property.
+ * Note: The propertyName attribute is initialized once and cannot be modified dynamically, to change it, the component must be reinitialized.
  */
 @customElement("folksonomy-property-products")
 @localized()
@@ -350,8 +351,6 @@ export class FolksonomyPropertyProducts extends LitElement {
 
   override async connectedCallback() {
     super.connectedCallback()
-    // Note: The propertyName is set once and cannot be changed dynamically.
-    // If you need to change it, you must reinitialize the component.
     if (this.propertyName) {
       await this.fetchProductsPropertiesMain()
     }
@@ -446,8 +445,8 @@ export class FolksonomyPropertyProducts extends LitElement {
     // Create CSV content based on current view mode
     const isProductsView = this.viewMode === "products"
     const headers = isProductsView
-      ? ["Product Barcode", "Corresponding Value"]
-      : ["Value", "Product Count"]
+      ? [msg("Product Barcode"), msg("Corresponding Value")]
+      : [msg("Value"), msg("Product Count")]
 
     const rows = isProductsView
       ? this.filteredProducts.map((item) => [item.product, item.v])
@@ -490,15 +489,15 @@ export class FolksonomyPropertyProducts extends LitElement {
     return html`
       <thead>
         <tr>
-          <th class="product-code-header"><slot name="product-barcode-header"></slot></th>
-          <th class="value-header"><slot name="corresponding-value-header"></slot></th>
+          <th class="product-code-header">${msg("Product barcode")}</th>
+          <th class="value-header">${msg("Corresponding value")}</th>
         </tr>
         <tr class="filter-row">
           <td>
             <input
               type="text"
               class="filter-input"
-              placeholder="${this.getSlotText("filter-barcodes-placeholder")}"
+              placeholder="${msg("Filter barcodes...")}"
               .value="${this.filters.barcode}"
               @input="${(e: Event) =>
                 this.handleFilterInput("barcode", (e.target as HTMLInputElement).value)}"
@@ -508,7 +507,7 @@ export class FolksonomyPropertyProducts extends LitElement {
             <input
               type="text"
               class="filter-input"
-              placeholder="${this.getSlotText("filter-values-placeholder")}"
+              placeholder="${msg("Filter values...")}"
               .value="${this.filters.value}"
               @input="${(e: Event) =>
                 this.handleFilterInput("value", (e.target as HTMLInputElement).value)}"
@@ -551,15 +550,15 @@ export class FolksonomyPropertyProducts extends LitElement {
     return html`
       <thead>
         <tr>
-          <th class="value-header"><slot name="property-value-header"></slot></th>
-          <th class="count-header"><slot name="product-count-header"></slot></th>
+          <th class="value-header">${msg("Property Value")}</th>
+          <th class="count-header">${msg("Product Count")}</th>
         </tr>
         <tr class="filter-row">
           <td>
             <input
               type="text"
               class="filter-input"
-              placeholder="${this.getSlotText("filter-values-placeholder")}"
+              placeholder="${msg("Filter values...")}"
               .value="${this.filters.value}"
               @input="${(e: Event) =>
                 this.handleFilterInput("value", (e.target as HTMLInputElement).value)}"
@@ -571,20 +570,9 @@ export class FolksonomyPropertyProducts extends LitElement {
     `
   }
 
-  private getSlotText(slotName: string): string {
-    const slot = this.shadowRoot?.querySelector(`slot[name="${slotName}"]`) as HTMLSlotElement
-    if (slot) {
-      const assignedNodes = slot.assignedNodes()
-      if (assignedNodes.length > 0) {
-        return assignedNodes[0].textContent || ""
-      }
-    }
-    return ""
-  }
-
   private renderContent() {
     if (this.loading) {
-      return html`<div class="loading"><slot name="loading-text"></slot></div>`
+      return html`<div class="loading">${msg("Loading products...")}</div>`
     }
 
     if (this.error) {
@@ -592,7 +580,7 @@ export class FolksonomyPropertyProducts extends LitElement {
     }
 
     if (this.products.length === 0) {
-      return html`<div class="empty-state"><slot name="no-products-text"></slot></div>`
+      return html`<div class="empty-state">${msg("No products found for this property.")}</div>`
     }
 
     const isProductsView = this.viewMode === "products"
@@ -608,30 +596,26 @@ export class FolksonomyPropertyProducts extends LitElement {
                 class="view-mode-btn ${this.viewMode === "products" ? "active" : ""}"
                 @click="${() => this.switchViewMode("products")}"
               >
-                <slot name="individual-products-text"></slot>
+                ${msg("Individual Products")}
               </button>
               <button
                 class="view-mode-btn ${this.viewMode === "values" ? "active" : ""}"
                 @click="${() => this.switchViewMode("values")}"
               >
-                <slot name="grouped-values-text"></slot>
+                ${msg("Grouped Values")}
               </button>
             </div>
             <div class="rows-counter">
               ${isProductsView
-                ? html`<slot name="products-count-text"></slot> ${currentData.length} /
-                    ${totalData.length}`
-                : html`<slot name="values-count-text"></slot> ${currentData.length} /
-                    ${totalData.length}`}
+                ? `${msg("Products")}: ${currentData.length} / ${totalData.length}`
+                : `${msg("Values")}: ${currentData.length} / ${totalData.length}`}
             </div>
           </div>
           <div class="button-group">
             <button class="download-btn" @click="${this.downloadCSV}">
-              <slot name="download-button-text"></slot>
+              ${msg("Download CSV")}
             </button>
-            <button class="reset-btn" @click="${this.resetFilters}">
-              <slot name="reset-button-text"></slot>
-            </button>
+            <button class="reset-btn" @click="${this.resetFilters}">${msg("Reset")}</button>
           </div>
         </div>
         <table class="products-table" id="products-table">
@@ -650,7 +634,9 @@ export class FolksonomyPropertyProducts extends LitElement {
     if (!this.propertyName) {
       return html`
         <div class="property-container">
-          <div class="error"><slot name="property-name-error"></slot></div>
+          <div class="error">
+            ${msg("Please provide a property name using the property-name attribute.")}
+          </div>
         </div>
       `
     }
@@ -661,24 +647,30 @@ export class FolksonomyPropertyProducts extends LitElement {
           <div class="main-content">
             <div class="header-section">
               <div class="property-title-container">
-                <h2 id="property_title">
-                  <slot name="property-title-prefix"></slot> ${this.propertyName}
-                </h2>
+                <h2 id="property_title">${msg("Folksonomy property")}: ${this.propertyName}</h2>
 
                 <div id="fe_infobox" class="info-box">
-                  <slot name="tip-text"></slot>
-                  <a href="/properties"><slot name="all-properties-link-text"></slot></a>.
+                  ${msg("Tip: you can also find the")}
+                  <a href="https://world.openfoodfacts.org/properties" target="_blank"
+                    >${msg("list of all properties")}</a
+                  >.
                 </div>
 
                 <p>
-                  <slot name="documentation-intro-text"></slot>
-                  <a href="${this.getDocumentationUrl()}" target="_blank" rel="noopener noreferrer">
-                    <slot name="documentation-link-text"></slot>
-                  </a>
-                  <slot name="documentation-outro-text"></slot>
+                  <slot name="property-description">
+                    ${msg("You should find a")}
+                    <a
+                      href="${this.getDocumentationUrl()}"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      ${msg("dedicated documentation")}
+                    </a>
+                    ${msg("about this property on Open Food Facts wiki")}
+                  </slot>
                 </p>
 
-                <p><slot name="products-list-intro-text"></slot></p>
+                <p>${msg("List of products using this property")}:</p>
               </div>
             </div>
 
