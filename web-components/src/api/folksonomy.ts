@@ -63,12 +63,12 @@ async function authByCookie(): Promise<AuthByCookieResponse> {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
     const data: AuthByCookieResponse = await response.json()
-    
+
     // Save token to localStorage
     if (data.access_token) {
       saveTokenToStorage(data.access_token)
     }
-    
+
     return data
   } catch (error) {
     console.error("Error authenticating by cookie:", error)
@@ -86,7 +86,7 @@ async function getValidToken(): Promise<string> {
   if (storedToken) {
     return storedToken
   }
-  
+
   const authResponse = await authByCookie()
   return authResponse.access_token
 }
@@ -99,34 +99,34 @@ async function getValidToken(): Promise<string> {
  */
 async function makeAuthenticatedRequest(url: string, options: RequestInit = {}): Promise<Response> {
   const token = await getValidToken()
-  
+
   const requestOptions = {
     ...options,
     headers: {
       ...options.headers,
-      "Authorization": `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   }
-  
+
   const response = await fetch(url, requestOptions)
-  
+
   // If auth fails (401/403), try once more with fresh token
   if (response.status === 401 || response.status === 403) {
     console.error("Auth failed, retrying with fresh token...")
     clearStoredToken()
     const newToken = await getValidToken()
-    
+
     const retryOptions = {
       ...options,
       headers: {
         ...options.headers,
-        "Authorization": `Bearer ${newToken}`,
+        Authorization: `Bearer ${newToken}`,
       },
     }
-    
+
     return fetch(url, retryOptions)
   }
-  
+
   return response
 }
 
@@ -158,7 +158,7 @@ async function addProductProperty(
       } as HeadersInit,
       body: JSON.stringify({ product, ...{ k, v, version } }),
     })
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
@@ -175,13 +175,16 @@ async function deleteProductProperty(
   version: number
 ): Promise<DeleteProductPropertyResponse> {
   try {
-    const response = await makeAuthenticatedRequest(getApiUrl(`/product/${product}/${k}?version=${version}`), {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      } as HeadersInit,
-    })
-    
+    const response = await makeAuthenticatedRequest(
+      getApiUrl(`/product/${product}/${k}?version=${version}`),
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        } as HeadersInit,
+      }
+    )
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
