@@ -2,7 +2,7 @@ import { LitElement, html, css, nothing } from "lit"
 import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin"
 import { customElement, property, state } from "lit/decorators.js"
 import { BASE } from "../../styles/base"
-import { msg } from "@lit/localize"
+import { localized, msg } from "@lit/localize"
 import { Task } from "@lit/task"
 import {
   fetchSpellcheckInsights,
@@ -43,6 +43,7 @@ import { DisplayProductLinkMixin } from "../../mixins/display-product-link-mixin
  * @slot pending - The content to display when the component is pending
  */
 @customElement("robotoff-ingredient-spellcheck")
+@localized()
 export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
   LoadingWithTimeoutMixin(LanguageCodesMixin(LitElement))
 ) {
@@ -76,7 +77,7 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
    * @type {string}
    */
   @property({ type: String, attribute: "product-code", reflect: true })
-  productCode = ""
+  productCode?: string = undefined
 
   /**
    * Enables keyboard mode for the component.
@@ -208,7 +209,7 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
         state: this._insightIds.length ? EventState.HAS_DATA : EventState.NO_DATA,
       })
     },
-    args: () => [this.productCode, this.languageCodes],
+    args: () => [this.productCode, ...this._languageCodes],
   })
 
   /**

@@ -1,5 +1,57 @@
 # Changelog
 
+## 1.10.0 - 2025-06-28
+
+### Added
+
+- Add support for dark mode in `donation-banner` and `mobile-badges`
+
+- Add `product-card` component to display a product card with image, name, brands, quantity, product type, nutriscore, nova group and greenscore.
+
+## 1.9.0 - 2025-06-19
+
+### Added
+
+- Add `languageCode` signal in app to handle language changes. It avoid delays when changing language.
+
+### Changed
+
+- Use `languageCode` signal instead of `getLocale` to fix delay of language change.
+
+## 1.8.5 - 2025-06-12
+
+### Fixed
+
+- Fix `robotoff-contribution-message` refresh when `language-codes` change.
+
+### Docs
+
+- Update Readme.md to explain how to copy localization files to your project.
+
+## 1.8.4 - 2025-06-12
+
+### Fixed
+
+- Fix `robotoff-nutrient-extraction` when the `fetchProduct` as no `nutriments`.
+
+## 1.8.3 - 2025-06-10
+
+### Fixed
+
+- Fix `robotoff-nutrient-extraction` refresh when `language-codes` change.
+
+## 1.8.2 - 2025-06-10
+
+### Fixed
+
+- Fix `robotoff-ingredient-spellcheck` refresh when `language-codes` change.
+
+## 1.8.1 - 2025-06-10
+
+### Fixed
+
+- Fix `robotoff-nutrient-extraction`, `robotoff-ingredient-detection` and `robotoff-ingredient-spellcheck` refresh when `language-codes` change.
+
 ## 1.8.0 - 2025-06-10
 
 ### Changed

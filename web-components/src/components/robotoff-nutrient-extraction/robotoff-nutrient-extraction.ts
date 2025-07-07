@@ -22,7 +22,6 @@ import { BasicStateEventDetail } from "../../types"
 import { NutrimentsProductType } from "../../types/openfoodfacts"
 import { fetchProduct } from "../../api/openfoodfacts"
 import { ProductFields } from "../../utils/openfoodfacts"
-import { getLocale } from "../../localization"
 import { fetchNutrientsOrderByCountryCode } from "../../signals/openfoodfacts"
 import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin"
 import { ifDefined } from "lit-html/directives/if-defined.js"
@@ -31,6 +30,7 @@ import { LanguageCodesMixin } from "../../mixins/language-codes-mixin"
 import { CountryCodeMixin } from "../../mixins/country-codes-mixin"
 import { DisplayProductLinkMixin } from "../../mixins/display-product-link-mixin"
 import { localized, msg } from "@lit/localize"
+import { languageCode } from "../../signals/app"
 
 const IMAGE_MAX_WIDTH = 700
 /**
@@ -94,8 +94,8 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
    * The product code to get the insights for
    * @type {string}
    */
-  @property({ type: String, attribute: "product-code" })
-  productCode = ""
+  @property({ type: String, attribute: "product-code", reflect: true })
+  productCode?: string = undefined
 
   @state()
   insightsIds: string[] = []
@@ -154,7 +154,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
       this.emitNutrientEvent(EventState.HAS_DATA)
       await this.loadInsight(0)
     },
-    args: () => [this.productCode, this.countryCode, this.languageCodes],
+    args: () => [this.productCode, this.countryCode, ...this._languageCodes],
   })
 
   async loadInsight(index: number) {
@@ -176,7 +176,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
     this.nutrimentsData = undefined
     const result = await fetchProduct<NutrimentsProductType>(productCode, {
       fields: [ProductFields.NUTRIMENTS],
-      lc: getLocale(),
+      lc: languageCode.get(),
     })
     this.nutrimentsData = result.product
     return result.product.nutriments

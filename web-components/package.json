@@ -3,7 +3,7 @@
   "author": "Open Food Facts",
   "license": "LGPL-2.1-or-later",
   "private": false,
-  "version": "1.8.0",
+  "version": "1.10.0",
   "description": "Reusable Web Components for Open Food Facts",
   "type": "module",
   "repository": {
