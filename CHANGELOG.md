@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.11.0 - 2025-07-8
+
+### Added
+
+- Adds new componnent for folksonomy propeties products
+
+### Changed
+
+- Enable automatic dark mode detection using a shared listener
+
+### Fixed
+
+- Adds auth_by_cookie logic to store token in localstorage
+
 ## 1.10.0 - 2025-06-28
 
 ### Added
