@@ -104,11 +104,11 @@
       </trans-unit>
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
-        <target state="needs-translation">group photo donation <x id="0" equiv-text="${this.currentYear}"/></target>
+        <target state="translated">grup fotoğrafı bağışı <x id="0" equiv-text="${this.currentYear}"/></target>
       </trans-unit>
       <trans-unit id="s43df2e8395f6834e">
         <source>Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</source>
-        <target state="needs-translation">Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</target>
+        <target state="translated">Lütfen <x id="0" equiv-text="${this.currentYear}"/> Bağış Toplama Kampanyamıza bağışta bulunun</target>
       </trans-unit>
       <trans-unit id="s000d98595e959c1e">
         <source>Get It On Google Play</source>
@@ -132,15 +132,15 @@
       </trans-unit>
       <trans-unit id="h5d824b4954e56ea5">
         <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
-        <target state="needs-translation">Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></target>
+        <target state="translated"><x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>günlük<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>yiyeceklerinizi<x id="2" equiv-text="&lt;/span&gt;"/>tarayın</target>
       </trans-unit>
       <trans-unit id="s8a8bfd67f2dd2810">
         <source>Download the OFF app with this QR code</source>
-        <target state="needs-translation">Download the OFF app with this QR code</target>
+        <target state="translated">Bu QR koduyla OFF uygulamasını indirin</target>
       </trans-unit>
       <trans-unit id="s4bbc7472834a9686">
         <source>Your browser does not support barcode scanning.</source>
-        <target state="needs-translation">Your browser does not support barcode scanning.</target>
+        <target state="translated">Tarayıcınız barkod taramasını desteklemiyor.</target>
       </trans-unit>
       <trans-unit id="s5e8250fb85d64c23">
         <source>Close</source>
@@ -148,11 +148,11 @@
       </trans-unit>
       <trans-unit id="s976dfd19ef58a1e1">
         <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
-        <target state="needs-translation">Click to scan a barcode and find out its details (health, preferences, etc.)</target>
+        <target state="translated">Bir barkodu tarayıp ayrıntılarını (sağlık, tercihler vb.) öğrenmek için tıklayın</target>
       </trans-unit>
       <trans-unit id="sc0520e1732a5c568">
         <source>Expand image</source>
-        <target state="needs-translation">Expand image</target>
+        <target state="translated">Resmi genişlet</target>
       </trans-unit>
       <trans-unit id="sab56a1d439576fd6">
         <source>Suggestion icon</source>
