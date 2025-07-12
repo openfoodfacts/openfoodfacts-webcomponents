@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # Trigger on version tags (e.g., v1.0.0, v1.2.3)
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write  # Required for creating releases
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch full history for changelog generation
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+          cache-dependency-path: "./web-components/package-lock.json"
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./web-components
+
+      - name: Build project
+        run: npm run build
+        working-directory: ./web-components
+
+      - name: Generate changelog
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          output-file: "false"  # Don't write to file, just output
+          release-count: "0"
+          skip-version-file: "true"
+          skip-commit: "true" 
+          skip-on-empty: "false"
+
+      - name: Create release archive
+        run: |
+          cd web-components
+          tar -czf ../openfoodfacts-webcomponents-${{ github.ref_name }}.tar.gz dist/
+          
+      - name: Create GitHub Release
+        uses: ncipollo/create-release@v1
+        with:
+          tag: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          body: ${{ steps.changelog.outputs.clean_changelog }}
+          draft: false
+          prerelease: false
+          artifacts: |
+            openfoodfacts-webcomponents-${{ github.ref_name }}.tar.gz
+            web-components/dist/off-webcomponents.bundled.js
+            web-components/package.json
+            web-components/README.md
+          token: ${{ secrets.GITHUB_TOKEN }}
