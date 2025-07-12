@@ -430,7 +430,7 @@ export class FolksonomyEditorRow extends LitElement {
               .value=${this.keyInput}
               .suggestions=${this.keySuggestions}
               show-not-found-option
-              not-found-text=${msg('Not found? Create new key "{value}"')}
+              not-found-text=${msg("Not found? Create new key {value}")}
               @input-change=${(e: AutocompleteInputChangeEvent) => this.onKeyInput(e)}
               @suggestion-select=${(e: AutocompleteSuggestionSelectEvent) =>
                 this.selectKeySuggestion(e.detail.value)}

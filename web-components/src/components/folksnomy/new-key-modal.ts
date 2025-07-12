@@ -1,5 +1,5 @@
 import { LitElement, html, css } from "lit"
-import { customElement, property } from "lit/decorators.js"
+import { customElement } from "lit/decorators.js"
 import { localized, msg } from "@lit/localize"
 
 /**
@@ -195,7 +195,7 @@ export class NewKeyModal extends LitElement {
                   ${msg("Before creating a new property, discuss it with the community:")}
                 </div>
                 <div class="instruction-description">
-                  ${msg('"I would like to create a property to [describe your use case]..."')}
+                  ${msg("I would like to create a property to [describe your use case]...")}
                 </div>
                 <button class="search-button" @click=${this.handleSlackLink}>
                   ${msg("Join Slack Discussion")}
