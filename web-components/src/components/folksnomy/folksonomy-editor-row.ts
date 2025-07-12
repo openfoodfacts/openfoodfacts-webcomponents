@@ -1,6 +1,7 @@
 import { LitElement, html, css } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import "./delete-modal"
+import "./new-key-modal"
 import "../shared/autocomplete-input"
 import folksonomyApi from "../../api/folksonomy"
 import { msg } from "@lit/localize"
@@ -93,6 +94,12 @@ export class FolksonomyEditorRow extends LitElement {
    */
   @state() editable = false
 
+  /**
+   * Indicates whether the new key modal is open.
+   * @private
+   */
+  @state() showNewKeyModal = false
+
   override connectedCallback() {
     super.connectedCallback()
     if (this.pageType === "edit") {
@@ -163,6 +170,12 @@ export class FolksonomyEditorRow extends LitElement {
    * @private
    */
   private selectKeySuggestion(suggestion: string) {
+    // Check if this is the "not found" option
+    if (suggestion === "__NOT_FOUND__") {
+      this.showNewKeyModal = true
+      return
+    }
+
     const hasChanged = this.keyInput !== suggestion
     // Avoid calling fetchValuesForKey if the key has not changed
     if (!hasChanged) {
@@ -295,6 +308,14 @@ export class FolksonomyEditorRow extends LitElement {
     this.tempValue = (e.target as HTMLInputElement).value
   }
 
+  /**
+   * Handles closing the new key modal.
+   * @private
+   */
+  private handleCloseNewKeyModal() {
+    this.showNewKeyModal = false
+  }
+
   static override styles = [
     FOLKSONOMY_INPUT,
     ...getButtonClasses([ButtonType.Chocolate]),
@@ -408,6 +429,8 @@ export class FolksonomyEditorRow extends LitElement {
               placeholder=${msg("New key")}
               .value=${this.keyInput}
               .suggestions=${this.keySuggestions}
+              show-not-found-option
+              not-found-text=${msg('Not found? Create new key "{value}"')}
               @input-change=${(e: AutocompleteInputChangeEvent) => this.onKeyInput(e)}
               @suggestion-select=${(e: AutocompleteSuggestionSelectEvent) =>
                 this.selectKeySuggestion(e.detail.value)}
@@ -435,6 +458,9 @@ export class FolksonomyEditorRow extends LitElement {
             </div>
           </td>
         </tr>
+        ${this.showNewKeyModal
+          ? html`<new-key-modal @close-modal=${this.handleCloseNewKeyModal}></new-key-modal>`
+          : null}
       `
     }
 
@@ -477,6 +503,9 @@ export class FolksonomyEditorRow extends LitElement {
           </div>
         </td>
       </tr>
+      ${this.showNewKeyModal
+        ? html`<new-key-modal @close-modal=${this.handleCloseNewKeyModal}></new-key-modal>`
+        : null}
     `
   }
 }
