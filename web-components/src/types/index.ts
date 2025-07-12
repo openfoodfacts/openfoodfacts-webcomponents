@@ -42,6 +42,7 @@ export type AutocompleteSuggestionSelectEvent = CustomEvent<AutocompleteSuggesti
 export type AutocompleteSuggestion = {
   label?: string
   value: string
+  isNotFound?: boolean
 }
 
 export type CropperImageBoundingBox = {
