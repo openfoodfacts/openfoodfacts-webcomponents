@@ -80,7 +80,7 @@
       </trans-unit>
       <trans-unit id="sebb2c6c830a44574">
         <source>technical infrastructure (website/mobile app) &amp; a small permanent team</source>
-        <target state="needs-translation">technical infrastructure (website/mobile app) &amp; a small permanent team</target>
+        <target state="translated">infrastructure technique (site web/application mobile) &amp; une petite équipe permanente</target>
       </trans-unit>
       <trans-unit id="sd82bc2decefa621b">
         <source>remain independent of the food industry,</source>
@@ -104,11 +104,11 @@
       </trans-unit>
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
-        <target state="needs-translation">group photo donation <x id="0" equiv-text="${this.currentYear}"/></target>
+        <target state="translated">Don de photo de groupe <x id="0" equiv-text="${this.currentYear}"/></target>
       </trans-unit>
       <trans-unit id="s43df2e8395f6834e">
         <source>Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</source>
-        <target state="needs-translation">Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</target>
+        <target state="translated">Veuillez faire un don à notre collecte de fonds <x id="0" equiv-text="${this.currentYear}"/></target>
       </trans-unit>
       <trans-unit id="s000d98595e959c1e">
         <source>Get It On Google Play</source>
@@ -132,7 +132,7 @@
       </trans-unit>
       <trans-unit id="h5d824b4954e56ea5">
         <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
-        <target state="needs-translation">Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></target>
+        <target state="translated">Scannez vos <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>aliments quotidiens<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/><x id="2" equiv-text="&lt;/span&gt;"/></target>
       </trans-unit>
       <trans-unit id="s8a8bfd67f2dd2810">
         <source>Download the OFF app with this QR code</source>
@@ -148,7 +148,7 @@
       </trans-unit>
       <trans-unit id="s976dfd19ef58a1e1">
         <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
-        <target state="needs-translation">Click to scan a barcode and find out its details (health, preferences, etc.)</target>
+        <target state="translated">Cliquez pour scanner un code-barres et découvrir ses détails (santé, préférences, etc.)</target>
       </trans-unit>
       <trans-unit id="sc0520e1732a5c568">
         <source>Expand image</source>
@@ -299,12 +299,12 @@
                     <x id="2" equiv-text="&lt;a href=&quot;https://openfoodfacts-explorer.vercel.app/folksonomy&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
                     or explore the
                     <x id="4" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="needs-translation">These properties are created and filed by users for any kind of usages. Feel
-                    free to add your own. The properties and values you create
-                    <x id="0" equiv-text="&lt;strong&gt;"/>must be factual<x id="1" equiv-text="&lt;/strong&gt;"/>. You can dive into
-                    <x id="2" equiv-text="&lt;a href=&quot;https://openfoodfacts-explorer.vercel.app/folksonomy&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
-                    or explore the
-                    <x id="4" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="translated">Ces propriétés sont classées par les utilisateurs pour tout type d’utilisation. N’hésitez pas à
+                    ajouter votre propre. Les propriétés et valeurs que vous créez
+                    <x id="0" equiv-text="&lt;strong&gt;"/>doivent être factuel<x id="1" equiv-text="&lt;/strong&gt;"/>. Vous pouvez plonger dans
+                    <x id="2" equiv-text="&lt;a href=&quot;https://openfoodfacts-explorer.vercel.app/folksonomy&quot;&gt;"/>la liste des propriétés déjà utilisées par la communauté<x id="3" equiv-text="&lt;/a&gt;"/>
+                    ou explorer la
+                    <x id="4" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>documentation des propriétés et son moteur de recherche<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
       </trans-unit>
       <trans-unit id="h76766ba4ed1addb3">
         <source>This is brought by the
