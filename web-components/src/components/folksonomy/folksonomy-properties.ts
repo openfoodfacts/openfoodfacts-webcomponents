@@ -2,6 +2,7 @@ import { LitElement, html, css } from "lit"
 import { customElement, state } from "lit/decorators.js"
 import { localized, msg } from "@lit/localize"
 import folksonomyApi from "../../api/folksonomy"
+import { createDebounce, downloadCSV } from "../../utils"
 import "../shared/dual-range-slider"
 
 /**
@@ -244,7 +245,7 @@ export class FolksonomyProperties extends LitElement {
     valuesMax: 0,
   }
 
-  private filterTimeout: number | null = null
+  private filterDebounce = createDebounce(1100)
 
   override async connectedCallback() {
     super.connectedCallback()
@@ -253,11 +254,8 @@ export class FolksonomyProperties extends LitElement {
 
   override disconnectedCallback() {
     super.disconnectedCallback()
-    // Clean up filter timeout
-    if (this.filterTimeout) {
-      clearTimeout(this.filterTimeout)
-      this.filterTimeout = null
-    }
+    // Clean up filter debounce
+    this.filterDebounce.clear()
   }
 
   private async fetchProperties() {
@@ -266,7 +264,6 @@ export class FolksonomyProperties extends LitElement {
 
     try {
       const data = await folksonomyApi.fetchKeys()
-      console.log("Folksonomy properties data:", data)
 
       // Sort by count (descending order)
       this.properties = data.sort((a, b) => a.k.localeCompare(b.k))
@@ -334,13 +331,9 @@ export class FolksonomyProperties extends LitElement {
     }
 
     // Debounce filtering with 1100ms delay (as specified in original config)
-    if (this.filterTimeout) {
-      clearTimeout(this.filterTimeout)
-    }
-
-    this.filterTimeout = window.setTimeout(() => {
+    this.filterDebounce.debounce(() => {
       this.applyFilters()
-    }, 1100)
+    })
   }
 
   private handleRangeChange(event: CustomEvent) {
@@ -373,25 +366,13 @@ export class FolksonomyProperties extends LitElement {
     this.filteredProperties = [...this.properties]
   }
 
-  private downloadCSV() {
+  private handleDownloadCSV() {
     const headers = [msg("Property"), msg("Count"), msg("Values")]
     const rows = this.filteredProperties.map((item) => [item.k, item.count, item.values])
-
-    const csvContent = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n")
-
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
-    const link = document.createElement("a")
-    const url = URL.createObjectURL(blob)
     const today = new Date().toISOString().split("T")[0]
     const filename = `folksonomy_properties_${today}.csv`
 
-    link.setAttribute("href", url)
-    link.setAttribute("download", filename)
-    link.style.visibility = "hidden"
-
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+    downloadCSV(rows, filename, headers)
   }
 
   private renderTableHeader() {
@@ -487,7 +468,9 @@ export class FolksonomyProperties extends LitElement {
           ${msg("Rows")}: ${this.filteredProperties.length} / ${this.properties.length}
         </div>
         <div class="button-group">
-          <button class="download-btn" @click="${this.downloadCSV}">${msg("Download CSV")}</button>
+          <button class="download-btn" @click="${this.handleDownloadCSV}">
+            ${msg("Download CSV")}
+          </button>
           <button class="reset-btn" @click="${this.resetFilters}">${msg("Reset")}</button>
         </div>
       </div>
