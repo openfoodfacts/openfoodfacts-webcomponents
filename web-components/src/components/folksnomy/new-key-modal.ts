@@ -1,6 +1,11 @@
 import { LitElement, html, css } from "lit"
-import { customElement } from "lit/decorators.js"
+import { customElement, state } from "lit/decorators.js"
 import { localized, msg } from "@lit/localize"
+import {
+  OpenFoodFactsSlackLink,
+  FolksnomyEngineDocumentationLink,
+  FolksnomyEnginePropertyLink,
+} from "../../utils"
 
 /**
  * New Key Modal Component
@@ -10,6 +15,8 @@ import { localized, msg } from "@lit/localize"
 @customElement("new-key-modal")
 @localized()
 export class NewKeyModal extends LitElement {
+  @state()
+  private propertyName = ""
   static override styles = css`
     .modal-overlay {
       position: fixed;
@@ -66,22 +73,69 @@ export class NewKeyModal extends LitElement {
       background-color: #f0f0f0;
     }
 
-    .modal-body {
-      color: #333;
-      line-height: 1.6;
+    .property-input-section {
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .property-input-container {
+      align-items: flex-end;
+    }
+
+    .input-group {
+      flex: 1;
+    }
+
+    .input-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .property-input {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    .property-input:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+
+    .create-wiki-button {
+      margin-top: 4px;
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .create-wiki-button:hover:not(:disabled) {
+      background: #0056b3;
+    }
+
+    .create-wiki-button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
     }
 
     .instruction-list {
       margin: 1rem 0;
-      padding-left: 1rem;
+      padding-left: 0;
     }
 
     .instruction-item {
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
       padding: 1rem;
-      background: #f8f9fa;
-      border-radius: 6px;
       border-left: 4px solid #007bff;
+      background: #f8f9fa;
     }
 
     .instruction-title {
@@ -105,48 +159,37 @@ export class NewKeyModal extends LitElement {
       text-decoration: underline;
     }
 
-    .search-button {
-      margin-top: 0.5rem;
-      padding: 0.5rem 1rem;
+    .join-slack-discussion {
+      padding-top: 6px;
+    }
+
+    .instruction-button {
       background: #007bff;
       color: white;
       border: none;
+      padding: 0.5rem 1rem;
       border-radius: 4px;
       cursor: pointer;
-      font-size: 1rem;
+      text-decoration: none;
     }
 
-    .search-button:hover {
+    .instruction-button:hover {
       background: #0056b3;
-    }
-
-    .warning-box {
-      background: #fff3cd;
-      border: 1px solid #ffeaa7;
-      border-radius: 6px;
-      padding: 1rem;
-      margin: 1rem 0;
-    }
-
-    .warning-title {
-      font-weight: 600;
-      color: #856404;
-      margin-bottom: 0.5rem;
-    }
-
-    .warning-text {
-      color: #856404;
     }
 
     @media (max-width: 768px) {
       .modal-content {
-        padding: 1rem;
         width: 95%;
-        max-height: 90vh;
+        padding: 1rem;
       }
 
-      .modal-title {
-        font-size: 1.25rem;
+      .property-input-container {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .create-wiki-button {
+        margin-top: 0.5rem;
       }
     }
   `
@@ -160,9 +203,17 @@ export class NewKeyModal extends LitElement {
     )
   }
 
-  private handleSlackLink() {
-    // You can replace this with the actual Slack link
-    window.open("https://openfoodfacts.slack.com/", "_blank")
+  private handlePropertyNameInput(e: Event) {
+    const input = e.target as HTMLInputElement
+    this.propertyName = input.value.trim()
+  }
+
+  private handleCreateWikiPage() {
+    if (!this.propertyName) return
+
+    const encodedPropertyName = encodeURIComponent(this.propertyName)
+    const wikiUrl = `https://wiki.openfoodfacts.org/Folksonomy/Property/${encodedPropertyName}?action=edit&section=new&nosummary=true&preload=Folksonomy/Property/property_template`
+    window.open(wikiUrl, "_blank")
   }
 
   override render() {
@@ -174,56 +225,70 @@ export class NewKeyModal extends LitElement {
             <button class="close-button" @click=${this.handleClose}>×</button>
           </div>
 
-            <div class="instruction-list">
-              <div class="instruction-item">
-                <div class="instruction-title">1. ${msg("Check if a property already exists")}</div>
-                <div class="instruction-description">
-                  ${msg("Search for your property concept in the existing properties database:")}
-                </div>
-                <a
-                  href="https://wiki.openfoodfacts.org/Folksonomy/Property"
-                  target="_blank"
-                  class="instruction-link"
-                >
-                  ${msg("Browse and search existing properties")}
-                </a>
+          <div class="instruction-list">
+            <div class="instruction-item">
+              <div class="instruction-title">1. ${msg("Check if a property already exists")}</div>
+              <div class="instruction-description">
+                ${msg("Search for your property concept in the existing properties database:")}
               </div>
+              <a href=${FolksnomyEnginePropertyLink} target="_blank" class="instruction-link">
+                ${msg("Browse and search existing properties")}
+              </a>
+            </div>
 
-              <div class="instruction-item">
-                <div class="instruction-title">2. ${msg("Ask the community first")}</div>
-                <div class="instruction-description">
-                  ${msg("Before creating a new property, discuss it with the community:")}
-                </div>
-                <div class="instruction-description">
-                  ${msg("I would like to create a property to [describe your use case]...")}
-                </div>
-                <button class="search-button" @click=${this.handleSlackLink}>
+            <div class="instruction-item">
+              <div class="instruction-title">2. ${msg("Ask the community first")}</div>
+              <div class="instruction-description">
+                ${msg("Before creating a new property, discuss it with the community:")}
+              </div>
+              <div class="instruction-description">
+                ${msg("I would like to create a property to [describe your use case]...")}
+              </div>
+              <div class="join-slack-discussion">
+                <a class="instruction-button" href=${OpenFoodFactsSlackLink} target="_blank">
                   ${msg("Join Slack Discussion")}
-                </button>
-              </div>
-
-              <div class="instruction-item">
-                <div class="instruction-title">3. ${msg("Create the property")}</div>
-                <div class="instruction-description">
-                  ${msg(
-                    "Once you've verified that your property doesn't exist and the community agrees it's useful, you can create it by closing this modal and continuing with your entry."
-                  )}
-                </div>
-              </div>
-
-              <div class="instruction-item">
-                <div class="instruction-title">4. ${msg("Documentation and Guidelines")}</div>
-                <div class="instruction-description">
-                  ${msg("Learn more about property creation and guidelines:")}
-                </div>
-                <a
-                  href="https://wiki.openfoodfacts.org/Folksonomy_Engine"
-                  target="_blank"
-                  class="instruction-link"
-                >
-                  ${msg("Folksonomy Engine Documentation")}
                 </a>
               </div>
+            </div>
+
+            <div class="instruction-item">
+              <div class="instruction-title">3. ${msg("Document the New Property")}</div>
+              <div class="instruction-description">
+                ${msg(
+                  "Once you've verified that your property doesn't exist and the community agrees it's useful, you need to first document it in the wiki."
+                )}
+              </div>
+              <div class="property-input-section">
+                <div class="property-input-container">
+                  <div class="input-group">
+                    <label class="input-label">${msg("Property name:")}</label>
+                    <input
+                      type="text"
+                      class="property-input"
+                      placeholder="${msg("Enter property name...")}"
+                      .value="${this.propertyName}"
+                      @input="${this.handlePropertyNameInput}"
+                    />
+                  </div>
+                  <button
+                    class="create-wiki-button"
+                    @click="${this.handleCreateWikiPage}"
+                    ?disabled="${!this.propertyName}"
+                  >
+                    ${msg("Document the property")}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="instruction-item">
+              <div class="instruction-title">4. ${msg("Documentation and Guidelines")}</div>
+              <div class="instruction-description">
+                ${msg("Learn more about property creation and guidelines:")}
+              </div>
+              <a href=${FolksnomyEngineDocumentationLink} target="_blank" class="instruction-link">
+                ${msg("Folksonomy Engine Documentation")}
+              </a>
             </div>
           </div>
         </div>
