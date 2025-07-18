@@ -1,134 +1,164 @@
 <!doctype html>
 
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Demo</title>
-    <script type="module" src="off-webcomponents.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style type="text/css">
-      .box {
-        border-radius: 10px;
-        background-color: #fafafa;
-        border: 1px solid #f0f0f0;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        padding: 1rem;
-        margin-bottom: 10rem;
-        box-sizing: border-box;
-      }
-    </style>
-  </head>
-  <body style="background: #f2f2f2; width: 100%; padding: 0; margin: 0">
-    <h1 style="margin: 1.5rem">List of all available components</h1>
-    <h2 style="margin: 1.5rem">Robotoff Question</h2>
 
-    <div>
-      <off-webcomponents-configuration
-        language-code="en"
-        robotoff-configuration='{
+<head>
+  <meta charset="utf-8" />
+  <title>Demo</title>
+  <script type="module" src="off-webcomponents.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style type="text/css">
+    .box {
+      border-radius: 10px;
+      background-color: #fafafa;
+      border: 1px solid #f0f0f0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 1rem;
+      margin-bottom: 10rem;
+      box-sizing: border-box;
+    }
+
+    h1,
+    h2 {
+      margin: 1.5rem;
+    }
+  </style>
+</head>
+
+<body style="background: #f2f2f2; width: 100%; padding: 0; margin: 0">
+  <h1>List of all available components</h1>
+  <h2>Robotoff Question</h2>
+
+  <div>
+    <off-webcomponents-configuration language-code="en" robotoff-configuration='{
           "dryRun": true,
           "apiUrl": "https://robotoff.openfoodfacts.net/api/v1",
           "imgUrl": "https://images.openfoodfacts.net/images/products"
-        }'
-        folksonomy-configuration='{
+        }' folksonomy-configuration='{
           "apiUrl": "https://api.folksonomy.openfoodfacts.org"
-        }'
-        openfoodfacts-api-url="https://world.openfoodfacts.net"
-      />
+        }' openfoodfacts-api-url="https://world.openfoodfacts.net" />
+  </div>
+
+  <div>
+    <div>
+      <label for="product-code">Product Id :</label>
+      <input type="text" id="product-code" placeholder="Id of a product" />
     </div>
     <div>
-      <div>
-        <label for="language-code">Language Code :</label>
-        <select id="language-code">
-          <option value="en" selected>English (en)</option>
-          <option value="fr">French (fr)</option>
-          <option value="de">German (de)</option>
-        </select>
-      </div>
-      <div>
-        <label for="product-code">Product Id :</label>
-        <input type="text" id="product-code" placeholder="Id of a product" />
-      </div>
-      <div>
-        <label for="insight-types">Insight Types :</label>
-        <input type="text" id="insight-types" placeholder="Insight types" />
-      </div>
-      <div style="display: flex; margin-top: 1rem">
-        <robotoff-question
-          product-code="5000354922848"
-          insight-types=""
-          options='{"showMessage": true, "showLoading": true, "showError": true, "showImage": true}'
-          id="robotoff-question"
-        />
-      </div>
-      <div margin-top: 3rem" class="box">
-        <robotoff-nutrient-extraction
-          id="robotoff-nutrient-extraction"
-          show-messages="true"
-        >
-          <p slot="no-insight" style="text-align: center"><i>No insight</i></p>
-        </robotoff-nutrient-extraction>
-      </div>
+      <label for="insight-types">Insight Types :</label>
+      <input type="text" id="insight-types" placeholder="Insight types" />
+    </div>
+    <div style="display: flex; margin-top: 1rem">
+      <robotoff-question product-code="5000354922848" insight-types=""
+        options='{"showMessage": true, "showLoading": true, "showError": true, "showImage": true}'
+        id="robotoff-question" />
+    </div>
 
-      <div style="margin-top: 1rem">
-        <div style="display: flex">
-          <knowledge-panels
-            id="knowledge-panels"
-            url="https://world.openfoodfacts.org/api/v2/product/3017620422003/?fields=knowledge_panels&lc=fr"
-            path="product.knowledge_panels"
-            heading-level="h3"
-          >
-          </knowledge-panels>
-        </div>
-      </div>
+    <h1>Robotoff Nutrient Extraction</h1>
+    <div margin-top: 3rem" class="box">
+      <robotoff-nutrient-extraction id="robotoff-nutrient-extraction" show-messages="true">
+        <p slot="no-insight" style="text-align: center"><i>No insight</i></p>
+      </robotoff-nutrient-extraction>
+    </div>
 
-      <div style="display: flex; justify-content: center; margin:auto">
-        <donation-banner darkmode currentYear="2027" />
-      </div>
+    <h1>Language Code</h1>
+    <div>
+      <label for="language-code">Language Code :</label>
+      <select id="language-code">
+        <option value="en" selected>English (en)</option>
+        <option value="fr">French (fr)</option>
+        <option value="de">German (de)</option>
+      </select>
+    </div>
+    <div>
+      <label for="product-code">Product Id :</label>
+      <input type="text" id="product-code" placeholder="Id of a product" />
+    </div>
+    <div>
+      <label for="insight-types">Insight Types :</label>
+      <input type="text" id="insight-types" placeholder="Insight types" />
+    </div>
 
-      <div style="display: flex; margin: 2rem; margin-left: 10px; margin-right: 10px">
-        <mobile-badges darkmode style="width: 100%" />
-      </div>
+    <div style="display: flex; margin-top: 1rem">
+      <robotoff-question product-code="5000354922848" insight-types=""
+        options='{"showMessage": true, "showLoading": true, "showError": true, "showImage": true}'
+        id="robotoff-question" />
+    </div>
 
-      <div style="display: flex; margin: 2rem; margin-left: 10px; margin-right: 10px">
-        <download-app-qr-code qrCodeUrl="https://example.com/qr-code.png" />
-      </div>
+    <h1>Robotoff Nutrient Extraction</h1>
+    <div margin-top: 3rem" class="box">
+      <robotoff-nutrient-extraction id="robotoff-nutrient-extraction" show-messages="true">
+        <p slot="no-insight" style="text-align: center"><i>No insight</i></p>
+      </robotoff-nutrient-extraction>
+    </div>
 
-      <div
-        style="display: flex; margin: 2rem; margin-left: 10px; margin-right: 40px; max-width: 300px"
-      >
-        <barcode-scanner id="barcode-scanner"></barcode-scanner>
-      </div>
-
-      <div class="box" style="display: flex">
-        <robotoff-ingredient-spellcheck
-          id="robotoff-ingredient-spellcheck"
-          language-codes='["fr", "en"]'
-          enable-keyboard-mode
-        ></robotoff-ingredient-spellcheck>
-      </div>
-
+    <h1>Knowledge Panels</h1>
+    <div style="margin-top: 1rem">
       <div style="display: flex">
-        <folksonomy-editor product-code="6111035000430" page-type="view" />
-      </div>
-
-      <div style="display: flex; margin: 2rem 1rem 1rem 1rem">
-        <robotoff-contribution-message
-          product-code="5000354922848"
-          id="robotoff-contribution-message"
-        />
-      </div>
-
-      <div style="display: flex; margin: 1rem">
-        <robotoff-ingredient-detection id="robotoff-ingredient-detection" language-codes="['fr']">
-          <p slot="no-insight" style="text-align: center"><i>No insight</i></p>
-        </robotoff-ingredient-detection>
+        <knowledge-panels id="knowledge-panels"
+          url="https://world.openfoodfacts.org/api/v2/product/3017620422003/?fields=knowledge_panels&lc=fr"
+          path="product.knowledge_panels" heading-level="h3">
+        </knowledge-panels>
       </div>
     </div>
-    <div style="display: flex; margin: 1rem; justify-content: center; flex-wrap: wrap">
-      <product-card product='{"brands":"Deliciously Ella","code":"5060482841565","ecoscore_grade":"b","image_front_small_url":"https://images.openfoodfacts.org/images/products/506/048/284/1565/front_en.38.200.jpg","nova_group":4,"nutriscore_grade":"b","product_name":"Nutty Granola","product_type":"food","quantity":"380g"}' darkmode></product-card>
+
+    <h1>Donation Banner</h1>
+    <div style="display: flex; justify-content: center; margin:auto">
+      <donation-banner currentYear="2027" />
     </div>
-  </body>
+
+    <h1>Mobile Badges</h1>
+    <div style="display: flex; margin: 2rem; margin-left: 10px; margin-right: 10px">
+      <mobile-badges style="width: 100%" />
+    </div>
+
+    <h1>Download App QR Code</h1>
+    <div style="display: flex; margin: 2rem; margin-left: 10px; margin-right: 10px">
+      <download-app-qr-code qrCodeUrl="https://example.com/qr-code.png" />
+    </div>
+
+    <h1>Barcode Scanner</h1>
+    <div style="display: flex; margin: 2rem; margin-left: 10px; margin-right: 40px; max-width: 300px">
+      <barcode-scanner id="barcode-scanner"></barcode-scanner>
+    </div>
+
+    <h1>Robotoff Ingredient Spellcheck</h1>
+    <div class="box" style="display: flex">
+      <robotoff-ingredient-spellcheck id="robotoff-ingredient-spellcheck" language-codes='["fr", "en"]'
+        enable-keyboard-mode></robotoff-ingredient-spellcheck>
+    </div>
+
+    <h1>Folksonomy Editor</h1>
+    <div style="display: flex; margin: 2rem 1rem 1rem 1rem">
+      <folksonomy-editor product-code="6111035000430" page-type="view" />
+    </div>
+
+    <h1>Folksonomy Property Products</h1>
+    <div style="display: flex; margin: 2rem 1rem 1rem 1rem">
+      <folksonomy-property-products property-name="producer_data_issue">
+      </folksonomy-property-products>
+    </div>
+
+    <h1>Robotoff Contribution Message</h1>
+    <div style="display: flex; margin: 2rem 1rem 1rem 1rem">
+      <robotoff-contribution-message product-code="5000354922848" id="robotoff-contribution-message" />
+    </div>
+
+    <h1>Robotoff Ingredient Detection</h1>
+    <div style="display: flex; margin: 1rem">
+      <robotoff-ingredient-detection id="robotoff-ingredient-detection" language-codes="['fr']">
+        <p slot="no-insight" style="text-align: center"><i>No insight</i></p>
+      </robotoff-ingredient-detection>
+    </div>
+  </div>
+
+  <h1>Product Card</h1>
+  <div style="display: flex; margin: 1rem; justify-content: center; flex-wrap: wrap">
+    <product-card
+      product='{"brands":"Deliciously Ella","code":"5060482841565","ecoscore_grade":"b","image_front_small_url":"https://images.openfoodfacts.org/images/products/506/048/284/1565/front_en.38.200.jpg","nova_group":4,"nutriscore_grade":"b","product_name":"Nutty Granola","product_type":"food","quantity":"380g"}'></product-card>
+  </div>
+</body>
+
 </html>
 
 <script>
