@@ -328,105 +328,138 @@
         <source>No</source>
         <target state="translated">না</target>
       </trans-unit>
-<trans-unit id="s42dd66b2441566fd">
-  <source>Center icon</source>
-</trans-unit>
-<trans-unit id="s422bba9636ce2489">
-  <source>Center image</source>
-</trans-unit>
-<trans-unit id="s8038273de2cf8b73">
-  <source>Please select a region to crop.</source>
-</trans-unit>
-<trans-unit id="s39bcf88721a1e8ee">
-  <source>Reset selection</source>
-</trans-unit>
-<trans-unit id="sb8178320160f84ea">
-  <source>Show crop</source>
-</trans-unit>
-<trans-unit id="s33f786bb6b4f0cf4">
-  <source>Crop Result</source>
-</trans-unit>
-<trans-unit id="s6cee7cad81dfedd1">
-  <source>Cropped Image</source>
-</trans-unit>
-<trans-unit id="s02ce7a2e7c1b020b">
-  <source>Validate crop</source>
-</trans-unit>
-<trans-unit id="s383ae4449428b61e">
-  <source>Reset crop</source>
-</trans-unit>
-<trans-unit id="sc6daf8a31883f8b9">
-  <source>Move image</source>
-</trans-unit>
-<trans-unit id="s19059bf0c4f7c162">
-  <source>Selection area</source>
-</trans-unit>
-<trans-unit id="s4f4886341969d552">
-  <source>Move selection</source>
-</trans-unit>
-<trans-unit id="scfed2f270ef6a3aa">
-  <source>Select area</source>
-</trans-unit>
-<trans-unit id="sc0cc559e7ede852a">
-  <source>Resize top</source>
-</trans-unit>
-<trans-unit id="s453ab0dbb9b5c777">
-  <source>Resize right</source>
-</trans-unit>
-<trans-unit id="s8a63be30a129a59c">
-  <source>Resize bottom</source>
-</trans-unit>
-<trans-unit id="s787dd11bed0dc88a">
-  <source>Resize left</source>
-</trans-unit>
-<trans-unit id="s8b33c244759d7bd4">
-  <source>Resize top right</source>
-</trans-unit>
-<trans-unit id="sa63907958bd0ec4b">
-  <source>Resize top left</source>
-</trans-unit>
-<trans-unit id="sdca5deead576ceee">
-  <source>Resize bottom right</source>
-</trans-unit>
-<trans-unit id="sac47ea2901d04c15">
-  <source>Resize bottom left</source>
-</trans-unit>
-<trans-unit id="s4df2f533c0c1e7d0">
-  <source>Image controls</source>
-</trans-unit>
-<trans-unit id="sd1022bc1ef9204f7">
-  <source>Zoomable image</source>
-</trans-unit>
-<trans-unit id="s3f4e4b52f230a892">
-  <source>Image canvas</source>
-</trans-unit>
-<trans-unit id="s5ed03bb1f3a15949">
-  <source>Picture</source>
-</trans-unit>
-<trans-unit id="sbad7d2734149470b">
-  <source>Validate</source>
-</trans-unit>
-<trans-unit id="se419a9ab36987490">
-  <source>Invalidate</source>
-</trans-unit>
-<trans-unit id="s10db5498186c083b">
-  <source>Cancel crop</source>
-</trans-unit>
-<trans-unit id="sec6377f3c4e9b28c">
-  <source>I'll propose a better crop</source>
-</trans-unit>
-<trans-unit id="s03e9c8114521b998">
-  <source>I'll edit the ingredients</source>
-</trans-unit>
-<trans-unit id="s98ff35f2a00dc60d">
-  <source>Ingredients :</source>
-</trans-unit>
-<trans-unit id="s013bdc8cf0d3583d">
-  <source>Help us for ingredients</source>
-</trans-unit>
-<trans-unit id="sd1077c055cf9ba6b">
-  <source>Help us validate the ingredient list of the product.</source>
-</trans-unit>
+      <trans-unit id="s42dd66b2441566fd">
+        <source>Center icon</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">কেন্দ্র আইকন</target>
+      </trans-unit>
+      <trans-unit id="s422bba9636ce2489">
+        <source>Center image</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ছবি কেন্দ্রে রাখুন</target>
+      </trans-unit>
+      <trans-unit id="s8038273de2cf8b73">
+        <source>Please select a region to crop.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ক্রপ করার জন্য একটি অঞ্চল নির্বাচন করুন।</target>
+      </trans-unit>
+      <trans-unit id="s39bcf88721a1e8ee">
+        <source>Reset selection</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">নির্বাচন রিসেট করুন</target>
+      </trans-unit>
+      <trans-unit id="sb8178320160f84ea">
+        <source>Show crop</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ক্রপ দেখান</target>
+      </trans-unit>
+      <trans-unit id="s33f786bb6b4f0cf4">
+        <source>Crop Result</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ফসলের ফলাফল</target>
+      </trans-unit>
+      <trans-unit id="s6cee7cad81dfedd1">
+        <source>Cropped Image</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ছাঁটা ছবি</target>
+      </trans-unit>
+      <trans-unit id="s02ce7a2e7c1b020b">
+        <source>Validate crop</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ক্রপ যাচাই করুন</target>
+      </trans-unit>
+      <trans-unit id="s383ae4449428b61e">
+        <source>Reset crop</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ক্রপ রিসেট করুন</target>
+      </trans-unit>
+      <trans-unit id="sc6daf8a31883f8b9">
+        <source>Move image</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ছবি সরান</target>
+      </trans-unit>
+      <trans-unit id="s19059bf0c4f7c162">
+        <source>Selection area</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">নির্বাচন এলাকা</target>
+      </trans-unit>
+      <trans-unit id="s4f4886341969d552">
+        <source>Move selection</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">নির্বাচন সরান</target>
+      </trans-unit>
+      <trans-unit id="scfed2f270ef6a3aa">
+        <source>Select area</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">এলাকা নির্বাচন করুন</target>
+      </trans-unit>
+      <trans-unit id="sc0cc559e7ede852a">
+        <source>Resize top</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">উপরের অংশের আকার পরিবর্তন করুন</target>
+      </trans-unit>
+      <trans-unit id="s453ab0dbb9b5c777">
+        <source>Resize right</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ডানদিকে আকার পরিবর্তন করুন</target>
+      </trans-unit>
+      <trans-unit id="s8a63be30a129a59c">
+        <source>Resize bottom</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">নীচের আকার পরিবর্তন করুন</target>
+      </trans-unit>
+      <trans-unit id="s787dd11bed0dc88a">
+        <source>Resize left</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">বাম দিকের আকার পরিবর্তন করুন</target>
+      </trans-unit>
+      <trans-unit id="s8b33c244759d7bd4">
+        <source>Resize top right</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">উপরে ডানদিকে আকার পরিবর্তন করুন</target>
+      </trans-unit>
+      <trans-unit id="sa63907958bd0ec4b">
+        <source>Resize top left</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">উপরের বাম দিকে আকার পরিবর্তন করুন</target>
+      </trans-unit>
+      <trans-unit id="sdca5deead576ceee">
+        <source>Resize bottom right</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">নীচের ডানদিকে আকার পরিবর্তন করুন</target>
+      </trans-unit>
+      <trans-unit id="sac47ea2901d04c15">
+        <source>Resize bottom left</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">নীচে বাম দিকের আকার পরিবর্তন করুন</target>
+      </trans-unit>
+      <trans-unit id="s4df2f533c0c1e7d0">
+        <source>Image controls</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">চিত্র নিয়ন্ত্রণ</target>
+      </trans-unit>
+      <trans-unit id="sd1022bc1ef9204f7">
+        <source>Zoomable image</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">জুমযোগ্য ছবি</target>
+      </trans-unit>
+      <trans-unit id="s3f4e4b52f230a892">
+        <source>Image canvas</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ছবির ক্যানভাস</target>
+      </trans-unit>
+      <trans-unit id="s5ed03bb1f3a15949">
+        <source>Picture</source>
+        <target state="needs-translation">Picture</target>
+      </trans-unit>
+      <trans-unit id="sbad7d2734149470b">
+        <source>Validate</source>
+        <target state="needs-translation">Validate</target>
+      </trans-unit>
+      <trans-unit id="se419a9ab36987490">
+        <source>Invalidate</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">বাতিল করুন</target>
+      </trans-unit>
+      <trans-unit id="s10db5498186c083b">
+        <source>Cancel crop</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ক্রপ বাতিল করুন</target>
+      </trans-unit>
+      <trans-unit id="sec6377f3c4e9b28c">
+        <source>I'll propose a better crop</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">আমি আরও ভালো ফসলের প্রস্তাব দেব।</target>
+      </trans-unit>
+      <trans-unit id="s03e9c8114521b998">
+        <source>I'll edit the ingredients</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">আমি উপকরণগুলো সম্পাদনা করব।</target>
+      </trans-unit>
+      <trans-unit id="s98ff35f2a00dc60d">
+        <source>Ingredients :</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">উপকরণ :</target>
+      </trans-unit>
+      <trans-unit id="s013bdc8cf0d3583d">
+        <source>Help us for ingredients</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">উপকরণের জন্য আমাদের সাহায্য করুন</target>
+      </trans-unit>
+      <trans-unit id="sd1077c055cf9ba6b">
+        <source>Help us validate the ingredient list of the product.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">পণ্যের উপাদান তালিকা যাচাই করতে আমাদের সাহায্য করুন।</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
