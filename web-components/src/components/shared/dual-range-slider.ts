@@ -243,7 +243,7 @@ export class DualRangeSlider extends LitElement {
             <input
               type="number"
               class="range-input"
-              .value="${this.minValue}"
+              .value="${this.minValue.toString()}"
               min="${this.min}"
               max="${this.maxValue}"
               @input="${(e: Event) => this.handleMinInput((e.target as HTMLInputElement).value)}"
@@ -252,7 +252,7 @@ export class DualRangeSlider extends LitElement {
             <input
               type="number"
               class="range-input"
-              .value="${this.maxValue}"
+              .value="${this.maxValue.toString()}"
               min="${this.minValue}"
               max="${this.max}"
               @input="${(e: Event) => this.handleMaxInput((e.target as HTMLInputElement).value)}"
@@ -271,7 +271,7 @@ export class DualRangeSlider extends LitElement {
           <input
             type="number"
             class="range-input"
-            .value="${this.minValue}"
+            .value="${this.minValue.toString()}"
             min="${this.min}"
             max="${this.maxValue}"
             @input="${(e: Event) => this.handleMinInput((e.target as HTMLInputElement).value)}"
@@ -280,7 +280,7 @@ export class DualRangeSlider extends LitElement {
           <input
             type="number"
             class="range-input"
-            .value="${this.maxValue}"
+            .value="${this.maxValue.toString()}"
             min="${this.minValue}"
             max="${this.max}"
             @input="${(e: Event) => this.handleMaxInput((e.target as HTMLInputElement).value)}"
@@ -296,14 +296,14 @@ export class DualRangeSlider extends LitElement {
               type="range"
               min="${this.min}"
               max="${this.max}"
-              .value="${this.minValue}"
+              .value="${this.minValue.toString()}"
               @input="${(e: Event) => this.handleMinInput((e.target as HTMLInputElement).value)}"
             />
             <input
               type="range"
               min="${this.min}"
               max="${this.max}"
-              .value="${this.maxValue}"
+              .value="${this.maxValue.toString()}"
               @input="${(e: Event) => this.handleMaxInput((e.target as HTMLInputElement).value)}"
             />
           </div>
