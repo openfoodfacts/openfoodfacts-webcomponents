@@ -1,5 +1,6 @@
 import { LitElement, html, css } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
+import { downloadCSV } from "../../utils"
 import { localized, msg } from "@lit/localize"
 import folksonomyApi from "../../api/folksonomy"
 
@@ -441,7 +442,7 @@ export class FolksonomyPropertyProducts extends LitElement {
     this.viewMode = mode
   }
 
-  private downloadCSV() {
+  private handleDownloadCSV() {
     // Create CSV content based on current view mode
     const isProductsView = this.viewMode === "products"
     const headers = isProductsView
@@ -452,25 +453,12 @@ export class FolksonomyPropertyProducts extends LitElement {
       ? this.filteredProducts.map((item) => [item.product, item.v])
       : this.filteredValues.map((item) => [item.value, item.count])
 
-    const csvContent = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n")
-
-    // Create blob and download
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
-    const link = document.createElement("a")
-    const url = URL.createObjectURL(blob)
-
     const today = new Date().toISOString().split("T")[0]
     const filename = isProductsView
       ? `folksonomy_property_${today}_${this.propertyName}_products.csv`
       : `folksonomy_property_${today}_${this.propertyName}_values.csv`
 
-    link.setAttribute("href", url)
-    link.setAttribute("download", filename)
-    link.style.visibility = "hidden"
-
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+    downloadCSV(rows, filename, headers)
   }
 
   private getProductUrl(productCode: string) {
@@ -612,7 +600,7 @@ export class FolksonomyPropertyProducts extends LitElement {
             </div>
           </div>
           <div class="button-group">
-            <button class="download-btn" @click="${this.downloadCSV}">
+            <button class="download-btn" @click="${this.handleDownloadCSV}">
               ${msg("Download CSV")}
             </button>
             <button class="reset-btn" @click="${this.resetFilters}">${msg("Reset")}</button>
