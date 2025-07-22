@@ -51,6 +51,23 @@ export class AutocompleteInput extends LitElement {
         font-weight: bold;
       }
 
+      .autocomplete-item.not-found {
+        background-color: #f8f9fa;
+        border-top: 1px solid #ddd;
+        color: #007bff;
+        font-style: italic;
+        padding: 12px 10px;
+      }
+
+      .autocomplete-item.not-found:hover {
+        background-color: #e7f3ff;
+      }
+
+      .autocomplete-item.not-found.highlighted {
+        background-color: #d4ebff;
+        font-weight: normal;
+      }
+
       .autocomplete-input:focus {
         outline: none;
         border-color: ${SAFE_BLUE};
@@ -80,6 +97,16 @@ export class AutocompleteInput extends LitElement {
    * Each suggestion can be a string or an object with label and value properties.
    */
   @property({ type: Array }) suggestions: AutocompleteSuggestion[] = []
+
+  /**
+   * Whether to show a "not found" option when no suggestions match.
+   */
+  @property({ type: Boolean, attribute: "show-not-found-option" }) showNotFoundOption = false
+
+  /**
+   * Text to display for the "not found" option.
+   */
+  @property({ type: String, attribute: "not-found-text" }) notFoundText = "Not found"
 
   /**
    * Whether to show the suggestions dropdown.
@@ -123,6 +150,24 @@ export class AutocompleteInput extends LitElement {
     return this.filterSuggestions(this.value)
   }
 
+  /**
+   * Get suggestions including a "not found" option if no matches are found
+   * @private
+   */
+  get suggestionsWithNotFound() {
+    const filtered = this.filteredSuggestions
+    if (this.showNotFoundOption && filtered.length === 0 && this.value.trim().length > 0) {
+      return [
+        {
+          value: "__NOT_FOUND__",
+          label: this.notFoundText.replace("{value}", this.value),
+          isNotFound: true,
+        },
+      ]
+    }
+    return filtered
+  }
+
   override connectedCallback() {
     super.connectedCallback()
     this._id = randomIdGenerator()
@@ -155,7 +200,8 @@ export class AutocompleteInput extends LitElement {
     this.value = inputValue
     this.highlightedIndex = -1
     const filteredSuggestions = this.filteredSuggestions
-    this.showSuggestions = filteredSuggestions.length > 0
+    const suggestionsToShow = this.suggestionsWithNotFound
+    this.showSuggestions = suggestionsToShow.length > 0
     // If there is only one suggestion and it matches the input value, consider it a notable match
     const matching =
       filteredSuggestions.length === 1 &&
@@ -180,7 +226,10 @@ export class AutocompleteInput extends LitElement {
    * @param suggestion - The selected suggestion.
    */
   private selectSuggestion(suggestion: AutocompleteSuggestion) {
-    this._inputValue = suggestion.value
+    // Don't change the input value for the "not found" special case
+    if (suggestion.value !== "__NOT_FOUND__") {
+      this._inputValue = suggestion.value
+    }
     this.showSuggestions = false
     this.dispatchEvent(
       new CustomEvent<AutocompleteSuggestion>("suggestion-select", {
@@ -210,7 +259,8 @@ export class AutocompleteInput extends LitElement {
    * @param e - The keyboard event.
    */
   private onKeyDown(e: KeyboardEvent) {
-    if (this.filteredSuggestions.length === 0) return
+    const suggestionsToShow = this.suggestionsWithNotFound
+    if (suggestionsToShow.length === 0) return
 
     // Do it before check if we show suggestions because we want to be able to
     if (!this.showSuggestions) {
@@ -225,10 +275,7 @@ export class AutocompleteInput extends LitElement {
     switch (e.key) {
       case "ArrowDown":
         e.preventDefault()
-        this.highlightedIndex = Math.min(
-          this.highlightedIndex + 1,
-          this.filteredSuggestions.length - 1
-        )
+        this.highlightedIndex = Math.min(this.highlightedIndex + 1, suggestionsToShow.length - 1)
         break
       case "ArrowUp":
         e.preventDefault()
@@ -239,7 +286,7 @@ export class AutocompleteInput extends LitElement {
 
         // If a suggestion is highlighted, select it
         if (this.highlightedIndex >= 0) {
-          this.selectSuggestion(this.filteredSuggestions[this.highlightedIndex])
+          this.selectSuggestion(suggestionsToShow[this.highlightedIndex])
           // If no suggestion is highlighted, check if the input match exactly with one suggestion
         } else {
           this.selectMatchingSuggestion()
@@ -252,7 +299,7 @@ export class AutocompleteInput extends LitElement {
       case "Tab":
         if (this.highlightedIndex >= 0) {
           e.preventDefault()
-          this.selectSuggestion(this.filteredSuggestions[this.highlightedIndex])
+          this.selectSuggestion(suggestionsToShow[this.highlightedIndex])
         }
         break
     }
@@ -291,15 +338,16 @@ export class AutocompleteInput extends LitElement {
               role="listbox"
               part="autocomplete-input-list"
             >
-              ${this.filteredSuggestions.map(
+              ${this.suggestionsWithNotFound.map(
                 (s, index) =>
                   html`<li
                     class="autocomplete-item ${classMap({
                       highlighted: index === this.highlightedIndex,
+                      "not-found": s.isNotFound === true,
                     })}"
                     role="option"
                     id=${this.getSuggestionItemId(index)}
-                    @mousedown=${() => this.selectSuggestion(this.filteredSuggestions[index])}
+                    @mousedown=${() => this.selectSuggestion(this.suggestionsWithNotFound[index])}
                     @mouseenter=${() => (this.highlightedIndex = index)}
                     aria-selected=${index === this.highlightedIndex}
                   >
