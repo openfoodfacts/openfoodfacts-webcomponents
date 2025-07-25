@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file target-language="nl-BE" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+  <file target-language="nl" source-language="en" original="lit-localize-inputs" datatype="plaintext">
     <body>
       <trans-unit id="s49730f3d5751a433" approved="yes">
         <source>Loading...</source>
-        <target state="final">Bezig met laden...</target>
+        <target state="final">Aan het laden...</target>
       </trans-unit>
       <trans-unit id="s95d23d03f9147581" approved="yes">
         <source>Unzoom</source>
@@ -12,7 +12,7 @@
       </trans-unit>
       <trans-unit id="s166bd56d19670a72" approved="yes">
         <source>Zoom</source>
-        <target state="final">Inzoomen</target>
+        <target state="final">Zoom</target>
       </trans-unit>
       <trans-unit id="s01d2865e3e1d5501" approved="yes">
         <source>Thank you for your assistance!</source>
@@ -230,7 +230,7 @@
       </trans-unit>
       <trans-unit id="s061eb5af92512c85" approved="yes">
         <source>Saved! Can you help with another one?</source>
-        <target state="final">Opgeslagen! Kun je ons helpen met nog een vraag?</target>
+        <target state="final">Opgeslagen! Kun je helpen met een andere vraag?</target>
       </trans-unit>
       <trans-unit id="sb125568d43642e6f" approved="yes">
         <source>Answer questions about the product.</source>
@@ -248,9 +248,9 @@
         <source>Hey! You can help us improve the product information by answering the following parts:</source>
         <target state="final">Hé! Je kunt ons helpen de productinformatie te verbeteren door de volgende vragen te beantwoorden:</target>
       </trans-unit>
-      <trans-unit id="s05ec315d9308091a" approved="yes">
+      <trans-unit id="s05ec315d9308091a">
         <source>Barcode corners icon</source>
-        <target state="final">Barcodehoekenpictogram</target>
+        <target state="translated">Barcodehoekenpictogram</target>
       </trans-unit>
       <trans-unit id="sb5ceccad457e8cae" approved="yes">
         <source>Are you sure you want to delete this item?</source>
@@ -270,7 +270,7 @@
       </trans-unit>
       <trans-unit id="sb3d4f79d9d8b71e5" approved="yes">
         <source>Submit</source>
-        <target state="final">Bevestigen</target>
+        <target state="final">Verzenden</target>
       </trans-unit>
       <trans-unit id="s0d5b7fee0311db68" approved="yes">
         <source>Property</source>
@@ -330,7 +330,7 @@
       </trans-unit>
       <trans-unit id="s42dd66b2441566fd">
         <source>Center icon</source>
-        <target state="needs-translation">Center icon</target>
+        <target state="translated">Centrumpictogram</target>
       </trans-unit>
       <trans-unit id="s422bba9636ce2489" approved="yes">
         <source>Center image</source>
@@ -422,7 +422,7 @@
       </trans-unit>
       <trans-unit id="s3f4e4b52f230a892">
         <source>Image canvas</source>
-        <target state="needs-translation">Image canvas</target>
+        <target state="translated">Afbeeldingcanvas</target>
       </trans-unit>
       <trans-unit id="s5ed03bb1f3a15949" approved="yes">
         <source>Picture</source>
