@@ -248,9 +248,9 @@
         <source>Hey! You can help us improve the product information by answering the following parts:</source>
         <target state="final">Hé! Je kunt ons helpen de productinformatie te verbeteren door de volgende vragen te beantwoorden:</target>
       </trans-unit>
-      <trans-unit id="s05ec315d9308091a">
+      <trans-unit id="s05ec315d9308091a" approved="yes">
         <source>Barcode corners icon</source>
-        <target state="translated">Barcodehoekenpictogram</target>
+        <target state="final">Barcodehoekenpictogram</target>
       </trans-unit>
       <trans-unit id="sb5ceccad457e8cae" approved="yes">
         <source>Are you sure you want to delete this item?</source>
@@ -328,9 +328,9 @@
         <source>No</source>
         <target state="final">Nee</target>
       </trans-unit>
-      <trans-unit id="s42dd66b2441566fd">
+      <trans-unit id="s42dd66b2441566fd" approved="yes">
         <source>Center icon</source>
-        <target state="translated">Centrumpictogram</target>
+        <target state="final">Centrumpictogram</target>
       </trans-unit>
       <trans-unit id="s422bba9636ce2489" approved="yes">
         <source>Center image</source>
@@ -380,49 +380,49 @@
         <source>Select area</source>
         <target state="final">Selecteer gebied</target>
       </trans-unit>
-      <trans-unit id="sc0cc559e7ede852a">
+      <trans-unit id="sc0cc559e7ede852a" approved="yes">
         <source>Resize top</source>
-        <target state="needs-translation">Resize top</target>
+        <target state="final">Formaat wijzigen van de bovenkant</target>
       </trans-unit>
-      <trans-unit id="s453ab0dbb9b5c777">
+      <trans-unit id="s453ab0dbb9b5c777" approved="yes">
         <source>Resize right</source>
-        <target state="needs-translation">Resize right</target>
+        <target state="final">Formaat wijzigen van de rechterkant</target>
       </trans-unit>
-      <trans-unit id="s8a63be30a129a59c">
+      <trans-unit id="s8a63be30a129a59c" approved="yes">
         <source>Resize bottom</source>
-        <target state="needs-translation">Resize bottom</target>
+        <target state="final">Formaat wijzigen van de onderkant</target>
       </trans-unit>
-      <trans-unit id="s787dd11bed0dc88a">
+      <trans-unit id="s787dd11bed0dc88a" approved="yes">
         <source>Resize left</source>
-        <target state="needs-translation">Resize left</target>
+        <target state="final">Formaat wijzigen van de linkerkant</target>
       </trans-unit>
-      <trans-unit id="s8b33c244759d7bd4">
+      <trans-unit id="s8b33c244759d7bd4" approved="yes">
         <source>Resize top right</source>
-        <target state="needs-translation">Resize top right</target>
+        <target state="final">Formaat wijzigen van de rechter bovenhoek</target>
       </trans-unit>
-      <trans-unit id="sa63907958bd0ec4b">
+      <trans-unit id="sa63907958bd0ec4b" approved="yes">
         <source>Resize top left</source>
-        <target state="needs-translation">Resize top left</target>
+        <target state="final">Formaat wijzigen van de linker bovenhoek</target>
       </trans-unit>
-      <trans-unit id="sdca5deead576ceee">
+      <trans-unit id="sdca5deead576ceee" approved="yes">
         <source>Resize bottom right</source>
-        <target state="needs-translation">Resize bottom right</target>
+        <target state="final">Formaat wijzigen van de rechter onderhoek</target>
       </trans-unit>
-      <trans-unit id="sac47ea2901d04c15">
+      <trans-unit id="sac47ea2901d04c15" approved="yes">
         <source>Resize bottom left</source>
-        <target state="needs-translation">Resize bottom left</target>
+        <target state="final">Formaat wijzigen van de linker onderhoek</target>
       </trans-unit>
-      <trans-unit id="s4df2f533c0c1e7d0">
+      <trans-unit id="s4df2f533c0c1e7d0" approved="yes">
         <source>Image controls</source>
-        <target state="needs-translation">Image controls</target>
+        <target state="final">Beeldbedienelementen</target>
       </trans-unit>
       <trans-unit id="sd1022bc1ef9204f7" approved="yes">
         <source>Zoomable image</source>
         <target state="final">Inzoombare afbeelding</target>
       </trans-unit>
-      <trans-unit id="s3f4e4b52f230a892">
+      <trans-unit id="s3f4e4b52f230a892" approved="yes">
         <source>Image canvas</source>
-        <target state="translated">Afbeeldingcanvas</target>
+        <target state="final">Afbeeldingcanvas</target>
       </trans-unit>
       <trans-unit id="s5ed03bb1f3a15949" approved="yes">
         <source>Picture</source>
