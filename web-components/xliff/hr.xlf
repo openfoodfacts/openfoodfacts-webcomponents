@@ -28,7 +28,7 @@
       </trans-unit>
       <trans-unit id="s7ce4fd9430e80cea">
         <source>value</source>
-        <target state="needs-translation">value</target>
+        <target state="translated">vrijednost</target>
       </trans-unit>
       <trans-unit id="s6498dfe4855bb3a7">
         <source>unit</source>
@@ -192,11 +192,11 @@
       </trans-unit>
       <trans-unit id="s66413c24dcf680e2">
         <source>Skip</source>
-        <target state="needs-translation">Skip</target>
+        <target state="translated">Preskočiti</target>
       </trans-unit>
       <trans-unit id="s64ef2a6c2dd1d3d1">
         <source>Edit</source>
-        <target state="needs-translation">Edit</target>
+        <target state="translated">Urediti</target>
       </trans-unit>
       <trans-unit id="h6bdd1b427aa985a4">
         <source>This tool allows you to correct the ingredients list. You can add, remove or edit
