@@ -8,7 +8,7 @@
       </trans-unit>
       <trans-unit id="s95d23d03f9147581">
         <source>Unzoom</source>
-        <target state="needs-translation">Unzoom</target>
+        <target state="translated">Zooma ut</target>
       </trans-unit>
       <trans-unit id="s166bd56d19670a72">
         <source>Zoom</source>
@@ -100,7 +100,7 @@
       </trans-unit>
       <trans-unit id="s6306a31415aea913">
         <source>I SUPPORT</source>
-        <target state="needs-translation">I SUPPORT</target>
+        <target state="translated">JAG STÖDJER</target>
       </trans-unit>
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
@@ -116,7 +116,7 @@
       </trans-unit>
       <trans-unit id="s547c12ae169d00bc">
         <source>Available on F-Droid</source>
-        <target state="needs-translation">Available on F-Droid</target>
+        <target state="translated">Tillgänglig på F-Droid</target>
       </trans-unit>
       <trans-unit id="s7124dde792a8faa2">
         <source>Android APK</source>
@@ -128,7 +128,7 @@
       </trans-unit>
       <trans-unit id="sc52696641af72b53">
         <source>Install the app!</source>
-        <target state="needs-translation">Install the app!</target>
+        <target state="translated">Installera appen!</target>
       </trans-unit>
       <trans-unit id="h5d824b4954e56ea5">
         <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
@@ -274,7 +274,7 @@
       </trans-unit>
       <trans-unit id="s0d5b7fee0311db68">
         <source>Property</source>
-        <target state="needs-translation">Property</target>
+        <target state="translated">Egenskap</target>
       </trans-unit>
       <trans-unit id="s41f7dca46d3f1b4a">
         <source>Value</source>
@@ -282,7 +282,7 @@
       </trans-unit>
       <trans-unit id="s8af61807443f32a4">
         <source>Actions</source>
-        <target state="needs-translation">Actions</target>
+        <target state="translated">Åtgärder</target>
       </trans-unit>
       <trans-unit id="seffa8ca49175b5f0">
         <source>Personalized properties</source>
