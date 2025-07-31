@@ -195,3 +195,7 @@ export const triggerSubmit = (form: HTMLFormElement) => {
 export const normalizeRotation = (rotation: number) => {
   return (rotation % 360) + (rotation < 0 ? 360 : 0)
 }
+
+export const OpenFoodFactsSlackLink = "https://openfoodfacts.slack.com"
+export const FolksnomyEngineDocumentationLink = "https://wiki.openfoodfacts.org/Folksonomy_Engine"
+export const FolksnomyEnginePropertyLink = "https://wiki.openfoodfacts.org/Folksonomy/Property"
