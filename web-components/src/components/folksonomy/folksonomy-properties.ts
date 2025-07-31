@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "lit"
 import { customElement, state } from "lit/decorators.js"
-import { localized, msg } from "@lit/localize"
+import { localized, msg, str } from "@lit/localize"
 import folksonomyApi from "../../api/folksonomy"
 import { createDebounce, downloadCSV } from "../../utils"
 import "../shared/dual-range-slider"
@@ -434,7 +434,7 @@ export class FolksonomyProperties extends LitElement {
           <a
             href="${this.getDocumentationUrl(property.k)}"
             class="doc-link"
-            title="${msg("Documentation for")} ${property.k}"
+            title="${msg(str`Documentation for ${property.k}`)}"
             target="_blank"
             rel="noopener noreferrer"
           >
