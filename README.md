@@ -163,6 +163,30 @@ You can find the documentation [here](https://openfoodfacts.github.io/openfoodfa
 
 To work on documentation let see [this](web-components/docs/README.md)
 
+## Releases
+
+This repository uses automated releases via GitHub Actions. When a version tag is pushed, the workflow automatically:
+
+- Builds the project
+- Generates release notes using conventional commits
+- Creates a GitHub release with build artifacts
+
+### Creating a Release
+
+1. Update the version in `web-components/package.json`
+2. Push a version tag:
+   ```bash
+   git tag v1.2.0
+   git push origin v1.2.0
+   ```
+
+The workflow supports both `v1.2.0` and `1.2.0` tag formats and will automatically attach the following artifacts:
+- Complete build archive (`openfoodfacts-webcomponents-{version}.tar.gz`)
+- Main JavaScript bundle (`off-webcomponents.bundled.js`)
+- Package metadata and documentation
+
+For best results with automatic changelog generation, use [conventional commit](https://www.conventionalcommits.org/) format in your commit messages.
+
 ## Rules
 
 Each component has to follow this rules :
