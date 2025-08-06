@@ -53,16 +53,6 @@ export class KnowledgePanelsComponent extends LitElement {
         text-align: left;
         overflow-x: hidden; /* Prevent horizontal scrolling */
       }
-
-      .knowledge-panels-section-title {
-        width: 100%;
-        text-align: left;
-        margin-bottom: 1.25rem;
-        word-wrap: break-word;
-        font-weight: 600;
-        font-size: 1.3rem;
-      }
-
       .info {
         padding: 0.75rem;
         margin-bottom: 1rem;
@@ -194,25 +184,11 @@ export class KnowledgePanelsComponent extends LitElement {
     // Extract all nutrition-related images
     this.nutritionImages = extractImages(panels)
 
-    // Create an array of top-level panels (ones that aren't only referenced by others)
-    const topLevelPanelIds = ["root"]
-    const topLevelPanels = topLevelPanelIds.filter((id) => panels[id]).map((id) => panels[id])
-
-    // If no top-level panels found, show all panels
-    const panelsToRender = topLevelPanels.length > 0 ? topLevelPanels : Object.values(panels)
-    console.log("Panels to render:", panelsToRender)
-
-    // Add a section title for the overall panels
-    const sectionTitle = "Knowledge Panels"
+    const mainPanel = panels["main"]
+    const panelsToRender = mainPanel ? [mainPanel] : Object.values(panels)
 
     return html`
       <div class="knowledge-panels-container">
-        <heading-renderer
-          text="${sectionTitle}"
-          class-name="knowledge-panels-section-title"
-          heading-level="${this.headingLevel}"
-        >
-        </heading-renderer>
         ${panelsToRender.map((panel: KnowledgePanel) =>
           panel
             ? html` <panel-renderer
