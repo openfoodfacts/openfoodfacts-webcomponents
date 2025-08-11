@@ -21,6 +21,8 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+      issues: write
+      labels: write
     steps:
     - uses: actions/labeler@v5
       with:
