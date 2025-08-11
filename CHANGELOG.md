@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.12.0 - (can add date whenever we merge)
+
+### Added
+
+- Adds new component for folksonomy properties
+- Adds property generation wizard for folksonomy-editor before creating a property
+
+### Fixed
+
+- fix: add cursor pointer style to product card
+
 ## 1.11.0 - 2025-07-8
 
 ### Added
