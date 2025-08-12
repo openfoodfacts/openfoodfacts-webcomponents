@@ -319,7 +319,7 @@ export class FolksonomyPropertyProducts extends LitElement {
    * The property name for which we will display barcodes and values
    */
   @property({ type: String, attribute: "property-name" })
-  propertyName = ""
+  propertyName = "barcode_conflict"
 
   @state()
   private products: Array<{ product: string; v: string }> = []

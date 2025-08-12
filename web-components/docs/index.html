@@ -1,89 +1,100 @@
 <!doctype html>
 <html>
-  <head>
-    <script type="module" src="https://jspm.dev/api-viewer-element"></script>
-    <script type="module" src="https://jspm.dev/@api-viewer/docs"></script>
-    <script type="module" src="off-webcomponents.bundled.js"></script>
-  </head>
 
-  <body>
-    <!-- Configuration for the demo -->
-    <off-webcomponents-configuration
-      robotoff-configuration='{"dryRun": true}'
-      assets-images-path="./assets/images"
-    ></off-webcomponents-configuration>
+<head>
+  <script type="module" src="https://jspm.dev/api-viewer-element"></script>
+  <script type="module" src="https://jspm.dev/@api-viewer/docs"></script>
+  <script type="module" src="off-webcomponents.bundled.js"></script>
+</head>
 
-    <h1>Open Food Facts Web Components</h1>
-    <div style="margin-top: 2rem">
-      <h2 id="off-webcomponents-configuration">
-        Off Webcomponents Configuration <a href="#off-webcomponents-configuration">#</a>
-      </h2>
-      <api-docs src="custom-elements.json" only="off-webcomponents-configuration"></api-docs>
-    </div>
+<body>
+  <!-- Configuration for the demo -->
+  <off-webcomponents-configuration robotoff-configuration='{"dryRun": true}'
+    assets-images-path="./assets/images"></off-webcomponents-configuration>
 
-    <div style="margin-top: 1rem">
-      <h2 id="robotoff-question">Robotoff Question <a href="#robotoff-question">#</a></h2>
-      <api-viewer src="custom-elements.json" only="robotoff-question"></api-viewer>
-    </div>
-    <div style="margin-top: 1rem">
-      <h2 id="robotoff-nutrient-extraction">
-        Robotoff Nutrient Extraction <a href="#robotoff-nutrient-extraction">#</a>
-      </h2>
-      <api-viewer src="custom-elements.json" only="robotoff-nutrient-extraction"></api-viewer>
-    </div>
+  <h1>Open Food Facts Web Components</h1>
+  <div style="margin-top: 2rem">
+    <h2 id="off-webcomponents-configuration">
+      Off Webcomponents Configuration <a href="#off-webcomponents-configuration">#</a>
+    </h2>
+    <api-docs src="custom-elements.json" only="off-webcomponents-configuration"></api-docs>
+  </div>
 
-    <div style="margin-top: 1rem">
-      <h2 id="robotoff-ingredient-spellcheck">
-        Robotoff Ingredient Spellcheck <a href="#robotoff-ingredient-spellcheck">#</a>
-      </h2>
-      <api-viewer src="custom-elements.json" only="robotoff-ingredient-spellcheck"></api-viewer>
-    </div>
+  <div style="margin-top: 1rem">
+    <h2 id="robotoff-question">Robotoff Question <a href="#robotoff-question">#</a></h2>
+    <api-viewer src="custom-elements.json" only="robotoff-question"></api-viewer>
+  </div>
+  <div style="margin-top: 1rem">
+    <h2 id="robotoff-nutrient-extraction">
+      Robotoff Nutrient Extraction <a href="#robotoff-nutrient-extraction">#</a>
+    </h2>
+    <api-viewer src="custom-elements.json" only="robotoff-nutrient-extraction"></api-viewer>
+  </div>
 
-    <div style="margin-top: 1rem">
-      <h2 id="robotoff-ingredient-detection">
-        Robotoff Ingredient Detection <a href="#robotoff-ingredient-detection">#</a>
-      </h2>
-      <api-viewer src="custom-elements.json" only="robotoff-ingredient-detection"></api-viewer>
-    </div>
+  <div style="margin-top: 1rem">
+    <h2 id="robotoff-ingredient-spellcheck">
+      Robotoff Ingredient Spellcheck <a href="#robotoff-ingredient-spellcheck">#</a>
+    </h2>
+    <api-viewer src="custom-elements.json" only="robotoff-ingredient-spellcheck"></api-viewer>
+  </div>
 
-    <div style="margin-top: 1rem">
-      <h2 id="donation-banner">Donation Banner <a href="#donation-banner">#</a></h2>
-      <api-viewer src="custom-elements.json" only="donation-banner"></api-viewer>
-    </div>
+  <div style="margin-top: 1rem">
+    <h2 id="robotoff-ingredient-detection">
+      Robotoff Ingredient Detection <a href="#robotoff-ingredient-detection">#</a>
+    </h2>
+    <api-viewer src="custom-elements.json" only="robotoff-ingredient-detection"></api-viewer>
+  </div>
 
-    <div style="margin-top: 1rem">
-      <h2 id="mobile-badges">Mobile Badges <a href="#mobile-badges">#</a></h2>
-      <api-viewer src="custom-elements.json" only="mobile-badges"></api-viewer>
-    </div>
+  <div style="margin-top: 1rem">
+    <h2 id="donation-banner">Donation Banner <a href="#donation-banner">#</a></h2>
+    <api-viewer src="custom-elements.json" only="donation-banner"></api-viewer>
+  </div>
 
-    <div style="margin-top: 1rem">
-      <h2 id="download-app-qr-code">Download App QR Code <a href="#download-app-qr-code">#</a></h2>
-      <api-viewer src="custom-elements.json" only="download-app-qr-code"></api-viewer>
-    </div>
+  <div style="margin-top: 1rem">
+    <h2 id="mobile-badges">Mobile Badges <a href="#mobile-badges">#</a></h2>
+    <api-viewer src="custom-elements.json" only="mobile-badges"></api-viewer>
+  </div>
 
-    <div style="margin-top: 1rem">
-      <h2 id="barcode-scanner">Barcode Scanner <a href="#barcode-scanner">#</a></h2>
-      <api-viewer src="custom-elements.json" only="barcode-scanner"></api-viewer>
-    </div>
+  <div style="margin-top: 1rem">
+    <h2 id="download-app-qr-code">Download App QR Code <a href="#download-app-qr-code">#</a></h2>
+    <api-viewer src="custom-elements.json" only="download-app-qr-code"></api-viewer>
+  </div>
 
-    <div style="margin-top: 1rem">
-      <h2 id="folksonomy-editor">Foksonomy Editor <a href="#folksonomy-editor">#</a></h2>
-      <api-viewer src="custom-elements.json" only="folksonomy-editor"></api-viewer>
-    </div>
+  <div style="margin-top: 1rem">
+    <h2 id="barcode-scanner">Barcode Scanner <a href="#barcode-scanner">#</a></h2>
+    <api-viewer src="custom-elements.json" only="barcode-scanner"></api-viewer>
+  </div>
 
-    <div style="margin-top: 1rem">
-      <h2 id="robotoff-contribution-message">
-        Robotoff Contribution Message <a href="#robotoff-contribution-message">#</a>
-      </h2>
-      <api-viewer src="custom-elements.json" only="robotoff-contribution-message"></api-viewer>
-    </div>
-    <div style="margin-top: 1rem">
-      <h2 id="autocomplete-input">Autocomplete Input <a href="#autocomplete-input">#</a></h2>
-      <api-viewer src="custom-elements.json" only="autocomplete-input"></api-viewer>
-    </div>
-    <div style="margin-top: 1rem">
-      <h2 id="product-card">Product Card <a href="#product-card">#</a></h2>
-      <api-viewer src="custom-elements.json" only="product-card"></api-viewer>
-    </div>
-  </body>
+  <div style="margin-top: 1rem">
+    <h2 id="folksonomy-editor">Folksonomy Editor <a href="#folksonomy-editor">#</a></h2>
+    <api-viewer src="custom-elements.json" only="folksonomy-editor"></api-viewer>
+  </div>
+
+  <div style="margin-top: 1rem">
+    <h2 id="folksonomy-properties">Folksonomy Properties <a href="#folksonomy-properties">#</a></h2>
+    <api-viewer src="custom-elements.json" only="folksonomy-properties"></api-viewer>
+  </div>
+
+  <div style="margin-top: 1rem; width: 100%; overflow-x: auto;">
+    <h2 id="folksonomy-property-products">Folksonomy Property Products <a href="#folksonomy-property-products">#</a>
+    </h2>
+    <api-viewer src="custom-elements.json" only="folksonomy-property-products"></api-viewer>
+  </div>
+
+  <div style="margin-top: 1rem">
+    <h2 id="robotoff-contribution-message">
+      Robotoff Contribution Message <a href="#robotoff-contribution-message">#</a>
+    </h2>
+    <api-viewer src="custom-elements.json" only="robotoff-contribution-message"></api-viewer>
+  </div>
+  <div style="margin-top: 1rem">
+    <h2 id="autocomplete-input">Autocomplete Input <a href="#autocomplete-input">#</a></h2>
+    <api-viewer src="custom-elements.json" only="autocomplete-input"></api-viewer>
+  </div>
+  <div style="margin-top: 1rem">
+    <h2 id="product-card">Product Card <a href="#product-card">#</a></h2>
+    <api-viewer src="custom-elements.json" only="product-card"></api-viewer>
+  </div>
+</body>
+
 </html>

@@ -216,6 +216,18 @@ export class FolksonomyProperties extends LitElement {
     }
   `
 
+  /**
+   * Fetches all folksonomy properties from the API.
+   *
+   * @returns A promise that resolves to an array of property objects.
+   *
+   * @example
+   * const properties = await FolksonomyProperties.fetchAllProperties();
+   */
+  public static fetchAllProperties = async () => {
+    return await folksonomyApi.fetchKeys()
+  }
+
   @state()
   private properties: Array<{ k: string; count: number; values: number }> = []
 
