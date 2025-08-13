@@ -22,5 +22,4 @@ jobs:
           release-type: node
           target-branch: main
           # our package.json is the one in webcomponents directory
-          extra-files:
-            - webcomponents/package.json
+          path: "webcomponents"

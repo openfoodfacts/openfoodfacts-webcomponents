@@ -23,6 +23,8 @@ jobs:
           node-version: "24.x"
           registry-url: 'https://npm.pkg.github.com'
           cache: 'webcomponents-npm-github'
-      - run: npm publish on github registry
+      - run: |
+          cd webcomponents
+          npm publish:package
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
