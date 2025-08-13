@@ -14,7 +14,7 @@ jobs:
           registry-url: "https://registry.npmjs.org"
           cache: 'webcomponents-npm-npmjs'
       - run: |
-          cd webcomponents
+          cd webc-omponents
           npm publish:package
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -24,7 +24,7 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
           cache: 'webcomponents-npm-github'
       - run: |
-          cd webcomponents
+          cd web-components
           npm publish:package
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

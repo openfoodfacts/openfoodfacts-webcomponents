@@ -22,4 +22,4 @@ jobs:
           release-type: node
           target-branch: main
           # our package.json is the one in webcomponents directory
-          path: "webcomponents"
+          path: "web-components"
