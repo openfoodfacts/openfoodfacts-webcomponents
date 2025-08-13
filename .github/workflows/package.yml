@@ -17,7 +17,7 @@ jobs:
           registry-url: "https://registry.npmjs.org"
       - run: |
           cd web-components
-          npm publish:package
+          npm run publish:package
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - uses: actions/setup-node@v4.4.0
@@ -26,6 +26,6 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
       - run: |
           cd web-components
-          npm publish:package
+          npm run publish:package
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
