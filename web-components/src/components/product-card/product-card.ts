@@ -31,8 +31,6 @@ interface Product {
   nutriscore_grade?: string
   nova_group?: number
   greenscore_grade?: string // Assuming this is the name of the ecoscore attribute (need to confirm with actual data, when available)
-  match_score?: number
-  scoreData?: ScoreData
 }
 
 /**
@@ -302,9 +300,13 @@ export class ProductCard extends LitElement {
     nutriscore_grade: undefined,
     nova_group: undefined,
     greenscore_grade: undefined,
-    match_score: undefined,
-    scoreData: undefined,
   }
+
+  /**
+   * The score data object containing match scoring information
+   */
+  @property({ type: Object })
+  scoreData: ScoreData | undefined = undefined
 
   /**
    * Whether to show the match score tag on the product card
@@ -372,8 +374,8 @@ export class ProductCard extends LitElement {
    * Gets match tag information based on scoreData from product
    */
   private getMatchTagInfo(): { text: string; cssClass: string } {
-    if (this.product.scoreData) {
-      const { score, matchStatus } = this.product.scoreData
+    if (this.scoreData) {
+      const { score, matchStatus } = this.scoreData
       switch (matchStatus) {
         case "very_good_match":
           return {
