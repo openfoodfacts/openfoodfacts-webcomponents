@@ -14,6 +14,13 @@ interface NavigationState {
   } | null
 }
 
+interface ScoreData {
+  score: number
+  matchStatus: string
+  totalWeights: number
+  totalWeightedScore: number
+}
+
 interface Product {
   code: string
   product_name: string
@@ -25,6 +32,7 @@ interface Product {
   nova_group?: number
   greenscore_grade?: string // Assuming this is the name of the ecoscore attribute (need to confirm with actual data, when available)
   match_score?: number
+  scoreData?: ScoreData
 }
 
 /**
@@ -255,20 +263,28 @@ export class ProductCard extends LitElement {
     }
 
     /* Match score color variants */
-    .match-tag-very-good {
+    .match-tag-very-good-match {
       background-color: #10b981; /* Dark green */
     }
 
-    .match-tag-good {
+    .match-tag-good-match {
       background-color: #34d399; /* Light green */
     }
 
-    .match-tag-poor {
+    .match-tag-poor-match {
       background-color: #f59e0b; /* Yellow/Orange */
     }
 
-    .match-tag-no-match {
+    .match-tag-does-not-match {
       background-color: #ef4444; /* Red */
+    }
+
+    .match-tag-may-not-match {
+      background-color: #f97316; /* Orange */
+    }
+
+    .match-tag-unknown-match {
+      background-color: #6b7280; /* Gray */
     }
   `
 
@@ -287,6 +303,7 @@ export class ProductCard extends LitElement {
     nova_group: undefined,
     greenscore_grade: undefined,
     match_score: undefined,
+    scoreData: undefined,
   }
 
   /**
@@ -352,30 +369,53 @@ export class ProductCard extends LitElement {
   }
 
   /**
-   * Gets match tag information based on score percentage from product
+   * Gets match tag information based on scoreData from product
    */
   private getMatchTagInfo(): { text: string; cssClass: string } {
-    const matchScore = this.product.match_score ?? -1
-    if (matchScore >= 75) {
-      return {
-        text: msg(`Very Good Match ${matchScore}%`),
-        cssClass: "match-tag-very-good",
+    if (this.product.scoreData) {
+      const { score, matchStatus } = this.product.scoreData
+      switch (matchStatus) {
+        case "very_good_match":
+          return {
+            text: msg(`Very Good Match ${score}%`),
+            cssClass: "match-tag-very-good-match",
+          }
+        case "good_match":
+          return {
+            text: msg(`Good Match ${score}%`),
+            cssClass: "match-tag-good-match",
+          }
+        case "poor_match":
+          return {
+            text: msg(`Poor Match ${score}%`),
+            cssClass: "match-tag-poor-match",
+          }
+        case "does_not_match":
+          return {
+            text: msg("Does Not Match"),
+            cssClass: "match-tag-does-not-match",
+          }
+        case "may_not_match":
+          return {
+            text: msg("May Not Match"),
+            cssClass: "match-tag-may-not-match",
+          }
+        case "unknown_match":
+          return {
+            text: msg("Unknown Match"),
+            cssClass: "match-tag-unknown-match",
+          }
+        default:
+          return {
+            text: msg("Unknown Match"),
+            cssClass: "match-tag-unknown-match",
+          }
       }
-    } else if (matchScore >= 50) {
-      return {
-        text: msg(`Good Match ${matchScore}%`),
-        cssClass: "match-tag-good",
-      }
-    } else if (matchScore > 0) {
-      return {
-        text: msg(`Poor Match ${matchScore}%`),
-        cssClass: "match-tag-poor",
-      }
-    } else {
-      return {
-        text: msg("Does Not Match"),
-        cssClass: "match-tag-no-match",
-      }
+    }
+    // Return default if no scoreData available
+    return {
+      text: msg("No Score Available"),
+      cssClass: "match-tag-unknown-match",
     }
   }
 
