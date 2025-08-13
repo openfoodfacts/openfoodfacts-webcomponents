@@ -16,7 +16,7 @@ jobs:
           node-version: "24.x"
           registry-url: "https://registry.npmjs.org"
       - run: |
-          cd webc-omponents
+          cd web-components
           npm publish:package
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
