@@ -1,6 +1,7 @@
 import { LitElement, html, css, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { classMap } from "lit/directives/class-map.js"
+import { localized, msg } from "@lit/localize"
 import { KP_ATTRIBUTE_IMG } from "../../utils/openfoodfacts"
 import { getImageUrl } from "../../signals/app"
 import { darkModeListener } from "../../utils/dark-mode-listener"
@@ -23,6 +24,7 @@ interface Product {
   nutriscore_grade?: string
   nova_group?: number
   greenscore_grade?: string // Assuming this is the name of the ecoscore attribute (need to confirm with actual data, when available)
+  match_score?: number
 }
 
 /**
@@ -30,6 +32,7 @@ interface Product {
  * @element product-card
  */
 @customElement("product-card")
+@localized()
 export class ProductCard extends LitElement {
   static override styles = css`
     :host {
@@ -39,7 +42,9 @@ export class ProductCard extends LitElement {
 
     .card-container {
       display: flex;
-      height: 10rem;
+      flex-direction: column;
+      height: auto;
+      min-height: 10rem;
       width: 100%;
       max-width: 100%;
       border-radius: 1rem;
@@ -47,6 +52,16 @@ export class ProductCard extends LitElement {
         0 4px 6px -1px rgba(0, 0, 0, 0.1),
         0 2px 4px -1px rgba(0, 0, 0, 0.06);
       cursor: pointer;
+      position: relative;
+      background-color: white;
+      overflow: hidden;
+    }
+
+    .card-content {
+      display: flex;
+      flex: 1;
+      height: 10rem;
+      border-radius: 1rem;
     }
 
     .dark-mode {
@@ -116,9 +131,9 @@ export class ProductCard extends LitElement {
       height: 100%;
       width: 100%;
       overflow: hidden;
+      object-fit: cover;
       border-top-left-radius: 1rem;
       border-bottom-left-radius: 1rem;
-      object-fit: cover;
     }
 
     .placeholder-container {
@@ -227,6 +242,34 @@ export class ProductCard extends LitElement {
         max-height: 2.5rem;
       }
     }
+
+    .match-tag {
+      color: white;
+      padding: 0.2rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-align: center;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      flex-shrink: 0;
+    }
+
+    /* Match score color variants */
+    .match-tag-very-good {
+      background-color: #10b981; /* Dark green */
+    }
+
+    .match-tag-good {
+      background-color: #34d399; /* Light green */
+    }
+
+    .match-tag-poor {
+      background-color: #f59e0b; /* Yellow/Orange */
+    }
+
+    .match-tag-no-match {
+      background-color: #ef4444; /* Red */
+    }
   `
 
   /**
@@ -243,7 +286,14 @@ export class ProductCard extends LitElement {
     nutriscore_grade: undefined,
     nova_group: undefined,
     greenscore_grade: undefined,
+    match_score: undefined,
   }
+
+  /**
+   * Whether to show the match score tag on the product card
+   */
+  @property({ type: Boolean })
+  showMatchTag: boolean = false
 
   /**
    * Indicates if we're currently navigating to this product
@@ -301,9 +351,38 @@ export class ProductCard extends LitElement {
     )
   }
 
+  /**
+   * Gets match tag information based on score percentage from product
+   */
+  private getMatchTagInfo(): { text: string; cssClass: string } {
+    const matchScore = this.product.match_score ?? -1
+    if (matchScore >= 75) {
+      return {
+        text: msg(`Very Good Match ${matchScore}%`),
+        cssClass: "match-tag-very-good",
+      }
+    } else if (matchScore >= 50) {
+      return {
+        text: msg(`Good Match ${matchScore}%`),
+        cssClass: "match-tag-good",
+      }
+    } else if (matchScore > 0) {
+      return {
+        text: msg(`Poor Match ${matchScore}%`),
+        cssClass: "match-tag-poor",
+      }
+    } else {
+      return {
+        text: msg("Does Not Match"),
+        cssClass: "match-tag-no-match",
+      }
+    }
+  }
+
   override render() {
     const isNavigatingToProduct = this.navigating.to?.params?.barcode === this.product.code
     const hasProductImage = Boolean(this.product.image_front_small_url)
+    const matchTagInfo = this.getMatchTagInfo()
     const cardClasses = {
       "card-container": true,
       "dark-mode": this.isDarkMode,
@@ -311,62 +390,67 @@ export class ProductCard extends LitElement {
 
     return html`
       <div class=${classMap(cardClasses)}>
-        <div class="image-container">
-          ${isNavigatingToProduct
-            ? html`
-                <div class="loading-container">
-                  <span class="loading-ring"></span>
-                </div>
-              `
-            : hasProductImage
+        ${this.showMatchTag
+          ? html`<div class="match-tag ${matchTagInfo.cssClass}">${matchTagInfo.text}</div>`
+          : nothing}
+        <div class="card-content">
+          <div class="image-container">
+            ${isNavigatingToProduct
               ? html`
                   <div class="loading-container">
-                    <img
-                      src=${this.product.image_front_small_url}
-                      class="product-image"
-                      alt="Product front"
-                    />
+                    <span class="loading-ring"></span>
                   </div>
                 `
-              : html`
-                  <div class="placeholder-container">
-                    <img
-                      src=${this.placeholderImage}
-                      class="placeholder-image"
-                      alt="Product front"
-                    />
-                  </div>
-                `}
-        </div>
-        <div class="content-container">
-          <div
-            class="title"
-            title=${this.product.product_name ? this.product.product_name : this.product.code}
-          >
-            ${this.product.product_name ? this.product.product_name : this.product.code}
+              : hasProductImage
+                ? html`
+                    <div class="loading-container">
+                      <img
+                        src=${this.product.image_front_small_url}
+                        class="product-image"
+                        alt="Product front"
+                      />
+                    </div>
+                  `
+                : html`
+                    <div class="placeholder-container">
+                      <img
+                        src=${this.placeholderImage}
+                        class="placeholder-image"
+                        alt="Product front"
+                      />
+                    </div>
+                  `}
           </div>
+          <div class="content-container">
+            <div
+              class="title"
+              title=${this.product.product_name ? this.product.product_name : this.product.code}
+            >
+              ${this.product.product_name ? this.product.product_name : this.product.code}
+            </div>
 
-          <div class="brand-quantity">
-            <p title="${this.product.brands} - ${this.product.quantity}">
-              ${this.product.brands} - ${this.product.quantity}
-            </p>
+            <div class="brand-quantity">
+              <p title="${this.product.brands} - ${this.product.quantity}">
+                ${this.product.brands} - ${this.product.quantity}
+              </p>
+            </div>
+
+            ${this.product.product_type === "food"
+              ? html`
+                  <div class="scores-container">
+                    <div class="score-item">
+                      <img src=${this.nutriscoreSrc} alt="nutriscore" class="score-image" />
+                    </div>
+                    <div class="score-item">
+                      <img src=${this.novaSrc} alt="nova" class="score-image" />
+                    </div>
+                    <div class="score-item">
+                      <img src=${this.greenscoreSrc} alt="greenscore" class="score-image" />
+                    </div>
+                  </div>
+                `
+              : nothing}
           </div>
-
-          ${this.product.product_type === "food"
-            ? html`
-                <div class="scores-container">
-                  <div class="score-item">
-                    <img src=${this.nutriscoreSrc} alt="nutriscore" class="score-image" />
-                  </div>
-                  <div class="score-item">
-                    <img src=${this.novaSrc} alt="nova" class="score-image" />
-                  </div>
-                  <div class="score-item">
-                    <img src=${this.greenscoreSrc} alt="greenscore" class="score-image" />
-                  </div>
-                </div>
-              `
-            : nothing}
         </div>
       </div>
     `
