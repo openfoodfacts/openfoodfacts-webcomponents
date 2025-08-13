@@ -23,6 +23,7 @@ interface Product {
   nutriscore_grade?: string
   nova_group?: number
   greenscore_grade?: string // Assuming this is the name of the ecoscore attribute (need to confirm with actual data, when available)
+  match_score?: number
 }
 
 /**
@@ -298,13 +299,8 @@ export class ProductCard extends LitElement {
     nutriscore_grade: undefined,
     nova_group: undefined,
     greenscore_grade: undefined,
+    match_score: undefined,
   }
-
-  /**
-   * Match score percentage (0-100) to determine tag color and text
-   */
-  @property({ type: Number })
-  matchScore: number = -1
 
   /**
    * Whether to show the match score tag on the product card
@@ -369,22 +365,23 @@ export class ProductCard extends LitElement {
   }
 
   /**
-   * Gets match tag information based on score percentage
+   * Gets match tag information based on score percentage from product
    */
   private getMatchTagInfo(): { text: string; cssClass: string } {
-    if (this.matchScore >= 75) {
+    const matchScore = this.product.match_score ?? -1
+    if (matchScore >= 75) {
       return {
-        text: `Very Good Match ${this.matchScore}%`,
+        text: `Very Good Match ${matchScore}%`,
         cssClass: "match-tag-very-good",
       }
-    } else if (this.matchScore >= 50) {
+    } else if (matchScore >= 50) {
       return {
-        text: `Good Match ${this.matchScore}%`,
+        text: `Good Match ${matchScore}%`,
         cssClass: "match-tag-good",
       }
-    } else if (this.matchScore > 0) {
+    } else if (matchScore > 0) {
       return {
-        text: `Poor Match ${this.matchScore}%`,
+        text: `Poor Match ${matchScore}%`,
         cssClass: "match-tag-poor",
       }
     } else {
