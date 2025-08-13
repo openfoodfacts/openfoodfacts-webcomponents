@@ -61,16 +61,6 @@ export class ProductCard extends LitElement {
       display: flex;
       flex: 1;
       height: 10rem;
-    }
-
-    /* When match tag is present, remove top border radius from card content */
-    .has-match-tag .card-content {
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-    }
-
-    /* When no match tag, preserve original border radius */
-    .card-container:not(.has-match-tag) .card-content {
       border-radius: 1rem;
     }
 
@@ -144,11 +134,6 @@ export class ProductCard extends LitElement {
       object-fit: cover;
       border-top-left-radius: 1rem;
       border-bottom-left-radius: 1rem;
-    }
-
-    /* When match tag is present, remove top-left radius */
-    .has-match-tag .product-image {
-      border-top-left-radius: 0;
     }
 
     .placeholder-container {
@@ -401,7 +386,6 @@ export class ProductCard extends LitElement {
     const cardClasses = {
       "card-container": true,
       "dark-mode": this.isDarkMode,
-      "has-match-tag": this.showMatchTag,
     }
 
     return html`
