@@ -12,19 +12,19 @@ jobs:
         with:
           node-version: "24.x"
           registry-url: "https://registry.npmjs.org"
-          cache: 'webcomponents-npm-npmjs'
       - run: |
-          cd webc-omponents
-          npm publish:package
+          cd web-components
+          npm install
+          npm run publish:package
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - uses: actions/setup-node@v4.4.0
         with:
           node-version: "24.x"
           registry-url: 'https://npm.pkg.github.com'
-          cache: 'webcomponents-npm-github'
       - run: |
           cd web-components
-          npm publish:package
+          npm install
+          npm run publish:package
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
