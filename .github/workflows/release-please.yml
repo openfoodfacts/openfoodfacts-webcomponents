@@ -15,6 +15,12 @@ jobs:
     steps:
       - uses: googleapis/release-please-action@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          # We can't use GITHUB_TOKEN here because, github actions can't trigger actions
+          # see: https://docs.github.com/en/actions/security-guides/automatic-token-authentication#using-the-github_token-in-a-workflow
+          # So this is a personal access token
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           release-type: node
           target-branch: main
+          # our package.json is the one in webcomponents directory
+          extra-files:
+            - webcomponents/package.json

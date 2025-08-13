@@ -1,4 +1,4 @@
-name: WebComponents Package
+name: WebComponents Package publication
 on:
   release:
     types: [created]
@@ -8,11 +8,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       # Setup .npmrc file to publish to npm
-      - uses: actions/setup-node@v4.1.0
+      - uses: actions/setup-node@v4.4.0
         with:
-          node-version: "20.x"
+          node-version: "24.x"
           registry-url: "https://registry.npmjs.org"
-      - run: npm install
-      - run: npm publish
+          cache: 'webcomponents-npm-npmjs'
+      - run: |
+          cd webcomponents
+          npm publish:package
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: "24.x"
+          registry-url: 'https://npm.pkg.github.com'
+          cache: 'webcomponents-npm-github'
+      - run: npm publish on github registry
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
