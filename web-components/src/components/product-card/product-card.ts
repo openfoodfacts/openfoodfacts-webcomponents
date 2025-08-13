@@ -1,6 +1,7 @@
 import { LitElement, html, css, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { classMap } from "lit/directives/class-map.js"
+import { localized, msg } from "@lit/localize"
 import { KP_ATTRIBUTE_IMG } from "../../utils/openfoodfacts"
 import { getImageUrl } from "../../signals/app"
 import { darkModeListener } from "../../utils/dark-mode-listener"
@@ -31,6 +32,7 @@ interface Product {
  * @element product-card
  */
 @customElement("product-card")
+@localized()
 export class ProductCard extends LitElement {
   static override styles = css`
     :host {
@@ -371,22 +373,22 @@ export class ProductCard extends LitElement {
     const matchScore = this.product.match_score ?? -1
     if (matchScore >= 75) {
       return {
-        text: `Very Good Match ${matchScore}%`,
+        text: msg(`Very Good Match ${matchScore}%`),
         cssClass: "match-tag-very-good",
       }
     } else if (matchScore >= 50) {
       return {
-        text: `Good Match ${matchScore}%`,
+        text: msg(`Good Match ${matchScore}%`),
         cssClass: "match-tag-good",
       }
     } else if (matchScore > 0) {
       return {
-        text: `Poor Match ${matchScore}%`,
+        text: msg(`Poor Match ${matchScore}%`),
         cssClass: "match-tag-poor",
       }
     } else {
       return {
-        text: "Does Not Match",
+        text: msg("Does Not Match"),
         cssClass: "match-tag-no-match",
       }
     }
