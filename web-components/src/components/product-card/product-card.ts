@@ -16,7 +16,13 @@ interface NavigationState {
 
 interface ScoreData {
   score: number
-  matchStatus: string
+  matchStatus:
+    | "very_good_match"
+    | "good_match"
+    | "poor_match"
+    | "does_not_match"
+    | "may_not_match"
+    | "unknown_match"
   totalWeights: number
   totalWeightedScore: number
 }
