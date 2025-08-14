@@ -1,7 +1,9 @@
+import { localized, msg } from "@lit/localize"
 import { LitElement, html, css } from "lit"
 import { customElement } from "lit/decorators.js"
 
 @customElement("barcode-icon")
+@localized()
 export class BarcodeIcon extends LitElement {
   static override styles = css`
     :host {
@@ -25,7 +27,7 @@ export class BarcodeIcon extends LitElement {
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
       >
-        <title>Barcode corners</title>
+        <title>${msg("Barcode corners icon")}</title>
         <g id="Barcode-corners" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
           <g id="icons8-barcode" transform="translate(0, 2)" fill="#FFFFFF" fill-rule="nonzero">
             <path
@@ -36,5 +38,11 @@ export class BarcodeIcon extends LitElement {
         </g>
       </svg>
     `
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "barcode-icon": BarcodeIcon
   }
 }

@@ -1,4 +1,4 @@
-import { InsightAnnotationType } from "../types/robotoff"
+import { InsightAnnotationSize } from "../types/robotoff"
 import { isNullOrUndefined } from "."
 import { getTaxonomyUnitById } from "../signals/taxonomies"
 
@@ -13,13 +13,19 @@ export enum Unit {
 
 export const EDITABLE_UNITS = [Unit.GRAMS, Unit.MILIGRAMS, Unit.MICROGRAMS]
 
-export type NutrientSuffix = "_100g" | "_serving"
-
-export const NUTRIENT_SERVING_SIZE_KEY = "serving_size"
-export const NUTRIENT_SUFFIX: Record<InsightAnnotationType, NutrientSuffix> = {
-  [InsightAnnotationType.CENTGRAMS]: "_100g",
-  [InsightAnnotationType.SERVING]: "_serving",
+export enum NutrientSuffix {
+  PER_100G = "_100g",
+  PER_SERVING = "_serving",
 }
+export const NUTRIENT_SERVING_SIZE_KEY = "serving_size"
+
+export const INSIGHTS_ANNOTATION_SIZE = Object.values(InsightAnnotationSize)
+export const NUTRIENT_SUFFIX: Record<InsightAnnotationSize, NutrientSuffix> = {
+  [InsightAnnotationSize.CENTGRAMS]: NutrientSuffix.PER_100G,
+  [InsightAnnotationSize.SERVING]: NutrientSuffix.PER_SERVING,
+}
+
+export const NUTRIENT_UNIT_SUFFIX = "_unit"
 
 export enum ForcedNutrientKey {
   ENERGY_KJ = "energy-kj",
@@ -36,22 +42,25 @@ export const FORCED_UNITS_BY_NUTRIENTS_KEYS = {
 /**
  * get the possible units for a nutrient key
  * @param key - the nutrient key
- * @param unit - the unit to check if it is forced or not.
+ * @param fallbackUnit - the unit to check if it is forced or not.
  * For example, if the unit is "kj", it will return ["kj"].
  * @returns
  */
-export const getPossibleUnits = (key: string, unit?: string | null) => {
+export const getPossibleUnits = (key: string, fallbackUnit?: string | null) => {
   if (key in FORCED_UNITS_BY_NUTRIENTS_KEYS) {
     const forcedUnit = [FORCED_UNITS_BY_NUTRIENTS_KEYS[key as ForcedNutrientKey]]
     return forcedUnit
   }
-  if (isNullOrUndefined(unit)) {
-    unit = getTaxonomyUnitById(key)
+  if (isNullOrUndefined(fallbackUnit)) {
+    fallbackUnit = getTaxonomyUnitById(key)
   }
-  if (!unit || EDITABLE_UNITS.includes(unit as Unit)) {
+  if (!fallbackUnit) {
+    return []
+  }
+  if (EDITABLE_UNITS.includes(fallbackUnit as Unit)) {
     return EDITABLE_UNITS
   }
-  return [unit]
+  return [fallbackUnit]
 }
 
 export const NUTRIENT_UNIT_NAME_PREFIX = "unit__"

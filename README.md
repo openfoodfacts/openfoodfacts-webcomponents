@@ -14,14 +14,18 @@ A set of web components for Open Food Facts to help build edition interfaces
 
 ### Available
 
-- [Nutrition editing (with Nutri-Sight integration)](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-nutrients)
+- [Nutrition editing (with Nutri-Sight integration)](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-nutrient-extraction)
 - [Robotoff Questions](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-question)
-- [Robotoff Ingredients](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-ingredients)
+- [Robotoff Ingredients Spellcheck](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-ingredient-spellcheck)
+- [Robotoff Ingredients Detection](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-ingredient-detection)
 - [Donation Banner](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#donation-banner)
 - [Mobile Badges](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#mobile-badges)
 - [Barcode Scanner](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#barcode-scanner)
 - [Folksonomy Editor](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#folksonomy-editor)
 - [News Feed](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#news-feed)
+- [Robotoff Contribution Message](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-contribution-message)
+- [Autocomplete Input](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#autocomplete-input)
+- [Product Card](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#product-card)
 
 ### For configuration
 
@@ -30,7 +34,6 @@ A set of web components for Open Food Facts to help build edition interfaces
 ### WIP
 
 - Knowledge Panels
-- Folksonomy Editor
 
 ## Design
 
@@ -124,6 +127,14 @@ npm run dev
 ```
 
 Go to http://localhost:8000 to see the demo.
+
+## Test local changes with npm like Hunger games project
+
+Build the webcomponents with `npm run build` in the `openfoodfacts-webcomponents/web-components` directory.
+
+In `package.json` of the project you want to test the webcomponents with, add the following line to the dependencies section: `@openfoodfacts/openfoodfacts-webcomponents": "file:../openfoodfacts-webcomponents/web-components`
+
+Then run `npm install` to install the local version of the webcomponents.
 
 #### In addition to above steps, please also follow the below steps to generate translations and for tests.
 

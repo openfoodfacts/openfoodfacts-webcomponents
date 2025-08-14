@@ -2,6 +2,11 @@ export type FolksonomyConfigurationOptions = {
   apiUrl: string
 }
 
+export interface AuthByCookieResponse {
+  access_token: string
+  token_type: string
+}
+
 export interface ProductProperty {
   k: string
   v: string

@@ -1,5 +1,12 @@
 import { css } from "lit"
-import { SAFE_BLUE, SAFE_DARKER_WHITE, SAFE_GREY, SAFE_LIGHT_BLACK } from "../utils/colors"
+import {
+  SAFE_BLUE,
+  SAFE_CAPPUCINO,
+  SAFE_CHOCOLATE,
+  SAFE_DARKER_WHITE,
+  SAFE_GREY,
+  SAFE_LIGHT_BLACK,
+} from "../utils/colors"
 
 export const TEXTAREA = css`
   .textarea {
@@ -28,6 +35,7 @@ export const TEXTAREA = css`
 
 export const SELECT = css`
   .select {
+    position: relative;
     width: 100%;
     appearance: none;
     -webkit-appearance: none !important;
@@ -41,7 +49,15 @@ export const SELECT = css`
     color: ${SAFE_LIGHT_BLACK};
     line-height: normal;
     padding: 0.25rem 0.5rem;
-    border-radius: 0;
+    border-radius: 1rem;
+    cursor: pointer;
+  }
+
+  .select.chocolate {
+    background-color: ${SAFE_CHOCOLATE};
+    color: white;
+    font-weight: bold;
+    padding-right: 2rem;
   }
 `
 
@@ -56,9 +72,14 @@ export const INPUT = css`
     color: ${SAFE_LIGHT_BLACK};
     line-height: normal;
     padding: 0.25rem 0.5rem;
-    border-radius: 0;
+    border-radius: 5px;
     appearance: none;
     -webkit-appearance: none !important;
+    box-sizing: border-box;
+  }
+  .input.cappucino {
+    background-color: ${SAFE_CAPPUCINO};
+    color: black;
   }
 
   .input {
@@ -75,5 +96,53 @@ export const INPUT = css`
   .input-number {
     padding: 0.25rem 0.5rem;
     -moz-appearance: textfield !important;
+  }
+
+  .input:disabled,
+  .input-number:disabled {
+    background-color: ${SAFE_GREY};
+    color: ${SAFE_LIGHT_BLACK};
+    cursor: not-allowed;
+  }
+`
+
+export const CHECKBOX = css`
+  .checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .checkbox input[type="checkbox"] {
+    width: 1.2rem;
+    height: 1.2rem;
+    border: 1px solid ${SAFE_GREY};
+    border-radius: 4px;
+    margin-left: 0;
+    margin-right: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .checkbox input[type="checkbox"]:checked {
+    background-color: ${SAFE_BLUE};
+    border-color: ${SAFE_BLUE};
+  }
+
+  .checkbox input[type="checkbox"]:checked::after {
+    content: "✓";
+    position: absolute;
+    color: white;
+    font-size: 0.8rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .checkbox input[type="checkbox"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
   }
 `

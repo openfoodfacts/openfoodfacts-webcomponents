@@ -11,9 +11,9 @@ import { customElement, property } from "lit/decorators.js"
 import { OffWebcomponentConfigurationOptions } from "../../types"
 import { RobotoffConfigurationOptions } from "../../types/robotoff"
 import { FolksonomyConfigurationOptions } from "../../types/folksonomy"
-import { setLocale } from "../../localization"
-import { assetsImagesPath } from "../../signals/app"
-import { openfoodfactsApiUrl } from "../../signals/openfoodfacts"
+import { setLanguageCode } from "../../localization"
+import { assetsImagesPath, countryCode } from "../../signals/app"
+import { DEFAULT_OPENFOODFACTS_API_URL, openfoodfactsApiUrl } from "../../signals/openfoodfacts"
 
 /**
  * The configuration properties of the webcomponent configuration element.
@@ -42,7 +42,14 @@ const CONFIGURATION_PROPERTIES: Record<
     propertyName: "languageCode",
     fn: (value: string) => {
       // Set the language code
-      setLocale(value)
+      setLanguageCode(value)
+    },
+  },
+  "country-code": {
+    propertyName: "countryCode",
+    fn: (value: string) => {
+      // Set the country code
+      countryCode.set(value)
     },
   },
   "assets-images-path": {
@@ -81,7 +88,7 @@ export class OffWebcomponentsConfiguration extends LitElement {
    * The robotoff configuration object.
    * @type {RobotoffConfigurationOptions}
    */
-  @property({ type: Object, attribute: "robotoff-configuration" })
+  @property({ type: Object, attribute: "robotoff-configuration", reflect: true })
   robotoffConfiguration: RobotoffConfigurationOptions = {
     ...DEFAULT_ROBOTOFF_CONFIGURATION,
   }
@@ -90,21 +97,28 @@ export class OffWebcomponentsConfiguration extends LitElement {
    * The language code we need to use for the app.
    * @attr language-code
    */
-  @property({ type: String, attribute: "language-code" })
+  @property({ type: String, attribute: "language-code", reflect: true })
   languageCode?: string = DEFAULT_LANGUAGE_CODE
+
+  /**
+   * The country code we need to use for the app.
+   * @attr country-code
+   */
+  @property({ type: String, attribute: "country-code", reflect: true })
+  countryCode?: string
 
   /**
    * The image path we need to use to retrieve the images in assets/images folder.
    * @attr image-path
    */
-  @property({ type: String, attribute: "assets-images-path" })
+  @property({ type: String, attribute: "assets-images-path", reflect: true })
   assetsImagesPath?: string = DEFAULT_ASSETS_IMAGES_PATH
 
   /**
    * The folksonomy configuration object.
    * @type {FolksonomyConfigurationOptions}
    */
-  @property({ type: Object, attribute: "folksonomy-configuration" })
+  @property({ type: Object, attribute: "folksonomy-configuration", reflect: true })
   folksonomyConfiguration: FolksonomyConfigurationOptions = {
     ...DEFAULT_FOLKSONOMY_CONFIGURATION,
   }
@@ -113,8 +127,8 @@ export class OffWebcomponentsConfiguration extends LitElement {
    * The Open Food Facts API URL.
    * @attr openfoodfacts-api-url
    */
-  @property({ type: String, attribute: "openfoodfacts-api-url" })
-  openfoodfactsApiUrl?: string
+  @property({ type: String, attribute: "openfoodfacts-api-url", reflect: true })
+  openfoodfactsApiUrl?: string = DEFAULT_OPENFOODFACTS_API_URL
 
   override attributeChangedCallback(name: string, oldval: string, newval: string) {
     super.attributeChangedCallback(name, oldval, newval)

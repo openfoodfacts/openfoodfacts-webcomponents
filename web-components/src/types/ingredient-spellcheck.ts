@@ -1,5 +1,5 @@
 import { Change } from "diff"
-import { QuestionAnnotationAnswer } from "./robotoff"
+import { AnnotationAnswer } from "./robotoff"
 import { EventState } from "../constants"
 
 /**
@@ -37,7 +37,7 @@ export type IndexedGroupedChange = {
  */
 export type TextCorrectorEventDetail = {
   correction?: string
-  annotation: QuestionAnnotationAnswer
+  annotation: AnnotationAnswer
 }
 
 /**

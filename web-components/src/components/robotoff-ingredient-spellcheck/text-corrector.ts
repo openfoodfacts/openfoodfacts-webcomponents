@@ -1,10 +1,9 @@
 import { LitElement, html, css, nothing } from "lit"
-import { diffWordsWithSpace, type Change } from "diff"
 import { customElement, property, query, state } from "lit/decorators.js"
 import { BASE } from "../../styles/base"
 import { msg } from "@lit/localize"
 import { EventType } from "../../constants"
-import { QuestionAnnotationAnswer } from "../../types/robotoff"
+import { AnnotationAnswer } from "../../types/robotoff"
 import "../icons/check"
 import "../icons/cross"
 import "../icons/skip"
@@ -13,23 +12,22 @@ import "../shared/info-button"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { TEXTAREA } from "../../styles/form"
 import { POPOVER } from "../../styles/popover"
-import {
-  SAFE_LIGHT_GREEN,
-  SAFE_LIGHT_GREY,
-  SAFE_LIGHT_RED,
-  SAFE_LIGHT_BLACK,
-  SAFE_GREY,
-} from "../../utils/colors"
+import { SAFE_LIGHT_BLACK, SAFE_GREY, SAFE_LIGHT_GREY } from "../../utils/colors"
+import { TEXT_CORRECTOR } from "../../styles/text-corrector"
 import { clickOutside } from "../../directives/click-outside"
 import {
   ChangeType,
-  IndexedChange,
   IndexedGroupedChange,
   TextCorrectorEventDetail,
-} from "../../types/ingredients"
+} from "../../types/ingredient-spellcheck"
 import { RELATIVE } from "../../styles/utils"
 import { sanitizeHtml } from "../../utils/html"
 import { Breakpoints } from "../../utils/breakpoints"
+
+import "../shared/loading-button"
+import "../shared/text-corrector-highlight"
+import { triggerSubmit } from "../../utils"
+import { TextDiffMixin } from "../../mixins/text-diff-mixin"
 
 // key is the index of the change in the groupedChanges array
 // value is boolean indicating if the change is validated or not
@@ -57,35 +55,22 @@ export enum TextCorrectorKeyboardShortcut {
  * @fires skip - when the user skips the question
  */
 @customElement("text-corrector")
-export class TextCorrector extends LitElement {
+export class TextCorrector extends TextDiffMixin(LitElement) {
   static override styles = [
     BASE,
     TEXTAREA,
     POPOVER,
     RELATIVE,
-    getButtonClasses([
-      ButtonType.Cappucino,
-      ButtonType.Success,
-      ButtonType.Danger,
-      ButtonType.White,
-      ButtonType.LightRed,
-      ButtonType.LightGreen,
-    ]),
+    TEXT_CORRECTOR,
+    getButtonClasses([ButtonType.Cappucino, ButtonType.LightRed, ButtonType.LightGreen]),
     css`
       .text {
         line-height: 1.4rem;
-      }
-      .text-section {
-        padding-bottom: 0.5rem;
       }
       .summary {
         margin-bottom: 0.5rem;
         padding-top: 1.5rem;
         padding-bottom: 0rem;
-      }
-
-      .text-section,
-      .summary {
         border-bottom: 1px solid ${SAFE_LIGHT_GREY};
         box-shadow: 0 0.5rem 2px -2px rgba(0, 0, 0, 0.1);
       }
@@ -102,34 +87,14 @@ export class TextCorrector extends LitElement {
       .submit-buttons button {
         justify-content: center;
       }
-      h2 {
-        font-size: 1.2rem;
-        margin-bottom: 0.5rem;
-      }
-      .text-content {
-        border-radius: 4px;
-        white-space: pre-wrap;
-        line-height: 1.5;
-      }
       .spellcheck {
         padding: 2px 5px;
         border-radius: 15px;
         cursor: pointer;
       }
-      .no-text-decoration {
-        text-decoration: none;
-      }
-      .line-through {
-        text-decoration: line-through;
-      }
-      .deletion {
-        background-color: ${SAFE_LIGHT_RED};
-      }
+
       .deletion.current {
         outline: 2px solid red;
-      }
-      .addition {
-        background-color: ${SAFE_LIGHT_GREEN};
       }
       .answered-change {
         background-color: ${SAFE_GREY};
@@ -143,9 +108,12 @@ export class TextCorrector extends LitElement {
         gap: 1rem;
         padding-bottom: 1rem;
 
+        margin-top: 1rem;
+
         @media (min-width: ${Breakpoints.SM}px) {
           max-height: none;
           overflow: auto;
+          margin-top: 0;
         }
       }
       .summary-item {
@@ -153,6 +121,9 @@ export class TextCorrector extends LitElement {
         width: 100%;
         grid-template-columns: 1fr 1fr;
         gap: 0.5rem;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+        box-sizing: border-box;
       }
       .summary-item :first-child {
         justify-self: end;
@@ -161,16 +132,6 @@ export class TextCorrector extends LitElement {
         justify-self: start;
       }
 
-      .summary-item-content.wrappable {
-        flex-wrap: wrap;
-      }
-      .summary-label {
-        font-weight: bold;
-      }
-      .code {
-        white-space: pre-wrap;
-        font-family: monospace;
-      }
       .info-popover {
         z-index: 2;
         min-width: 200px;
@@ -191,12 +152,7 @@ export class TextCorrector extends LitElement {
       }
       .suggestion-button,
       .suggestion-button-title {
-        width: 200px;
-      }
-
-      .batch-buttons {
-        display: none;
-        margin-top: 1rem;
+        width: 100%;
       }
 
       .empty-suggestion {
@@ -232,13 +188,6 @@ export class TextCorrector extends LitElement {
   @property({ type: Boolean, attribute: "enable-keyboard-mode" })
   enableKeyboardMode = false
 
-  /**
-   * The result of the diff between the original and corrected text.
-   * @type {IndexedChange[]}
-   */
-  @state()
-  diffResult: IndexedChange[] = []
-
   @state()
   validateChangeResult: ValidationChangeResult = {}
 
@@ -265,6 +214,12 @@ export class TextCorrector extends LitElement {
    */
   @state()
   textToCompare = ""
+
+  /**
+   * Loading state for buttons
+   */
+  @property({ type: String, reflect: true })
+  loading?: AnnotationAnswer
 
   /**
    * Indicates whether the component is in edit mode.
@@ -349,7 +304,15 @@ export class TextCorrector extends LitElement {
   override render() {
     return html`
       <form @submit=${this.confirmText}>
-        <div>${this.isEditMode ? this.renderEditTextarea() : this.renderSpellCheck()}</div>
+        <div>
+          ${this.isEditMode
+            ? html`<text-corrector-highlight
+                .value=${this.value}
+                original=${this.original}
+                focus-on-first-updated
+              ></text-corrector-highlight>`
+            : this.renderSpellCheck()}
+        </div>
         <div class="submit-buttons-wrapper">${this.renderButtons()}</div>
       </form>
     `
@@ -390,25 +353,12 @@ export class TextCorrector extends LitElement {
     if (!this.enableKeyboardMode) {
       return
     }
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       const button = this.shadowRoot!.querySelector(
         `[data-id^="${this.getAcceptSuggestionButtonDataId(0)}"]`
       ) as HTMLButtonElement
       button.focus()
-    }, 0)
-  }
-
-  /**
-   * Focuses the textarea in the component.
-   */
-  focusTextArea() {
-    if (!this.enableKeyboardMode) {
-      return
-    }
-    setTimeout(() => {
-      const textarea = this.shadowRoot!.querySelector("textarea") as HTMLTextAreaElement
-      textarea.focus()
-    }, 0)
+    })
   }
 
   /**
@@ -418,10 +368,15 @@ export class TextCorrector extends LitElement {
     if (!this.enableKeyboardMode) {
       return
     }
-    setTimeout(() => {
-      const button = this.shadowRoot!.querySelector("button[type='submit']") as HTMLButtonElement
-      button.focus()
-    }, 0)
+    requestAnimationFrame(() => {
+      const loadingButton = this.shadowRoot!.querySelector(
+        "loading-button[type='submit']"
+      ) as HTMLElement
+      if (loadingButton && loadingButton.shadowRoot) {
+        const button = loadingButton.shadowRoot.querySelector("button") as HTMLButtonElement
+        button?.focus()
+      }
+    })
   }
 
   /**
@@ -499,24 +454,8 @@ export class TextCorrector extends LitElement {
    * @returns {IndexedChange[]} The diff result.
    */
   computeWordDiff(reset: boolean = false) {
-    // Use diffWordsWithSpace from the diff library for word-level diffing with preserved whitespace (including new lines)
-    let value, textToCompare
-    if (this.isEditMode) {
-      value = this.original
-      textToCompare = this.value
-    } else {
-      value = this.value
-      textToCompare = this.textToCompare
-    }
-    this.diffResult = diffWordsWithSpace(value, textToCompare).map(
-      (part: Change, index: number) => {
-        return {
-          ...part,
-          index,
-        }
-      }
-    )
-
+    // Compute the diff result
+    this.computeDiffResult(this.value, this.textToCompare)
     if (reset) {
       this.validateChangeResult = {}
     }
@@ -524,22 +463,6 @@ export class TextCorrector extends LitElement {
     this.computeGroupedChanges()
 
     return this.diffResult
-  }
-
-  /**
-   * Renders the highlighted diff between the original and corrected text.
-   * @returns {TemplateResult} The rendered highlighted diff.
-   */
-  renderHighlightedDiff() {
-    return html`${this.diffResult.map((part) => {
-      if (part.added) {
-        return html`<span class="addition">${part.value}</span>`
-      } else if (part.removed) {
-        return html`<span class="deletion line-through">${part.value}</span>`
-      } else {
-        return html`<span>${part.value}</span>`
-      }
-    })}`
   }
 
   goToSuggestion(index: number) {
@@ -625,22 +548,6 @@ export class TextCorrector extends LitElement {
       // If the part is not part of a grouped change
       return html`<span>${part.value}</span>`
     })}`
-  }
-
-  /**
-   * Gets the message to display for accepting a suggestion.
-   * @param {IndexedGroupedChange} item - The suggestion to get the message for.
-   * @returns {string} The message to display.
-   */
-  getAcceptSuggestionMsg(item: IndexedGroupedChange) {
-    if (item.type === ChangeType.CHANGED) {
-      return msg("Accept this change")
-    } else if (item.type === ChangeType.ADDED) {
-      return msg("Accept this addition")
-    } else if (item.type === ChangeType.REMOVED) {
-      return msg("Accept this removal")
-    }
-    return ""
   }
 
   // Renders the empty suggestion when value is empty
@@ -863,18 +770,10 @@ export class TextCorrector extends LitElement {
   }
 
   /**
-   * Updates the result based on the validation of batch suggestions.
-   * @param {boolean} validate - Whether to validate the suggestions.
-   */
-  updateBatchResult(validate: boolean) {
-    this.updateResult(validate, this.groupedChanges)
-  }
-
-  /**
    * Dispatches a submit event with the provided detail.
    * @param {object} detail - The detail of the event.
    * @param {string} [detail.correction] - The correction to include in the event.
-   * @param {QuestionAnnotationAnswer} detail.type - The type of the event.
+   * @param {AnnotationAnswer} detail.type - The type of the event.
    */
   dispatchSubmitEvent(detail: TextCorrectorEventDetail) {
     this.dispatchEvent(new CustomEvent<TextCorrectorEventDetail>(EventType.SAVE, { detail }))
@@ -929,14 +828,14 @@ export class TextCorrector extends LitElement {
   acceptTextWithCorrection() {
     this.dispatchSubmitEvent({
       correction: this.value,
-      annotation: QuestionAnnotationAnswer.ACCEPT_AND_ADD_DATA,
+      annotation: AnnotationAnswer.ACCEPT_AND_ADD_DATA,
     })
   }
   /**
    * Accepts the text.
    */
   acceptText() {
-    this.dispatchSubmitEvent({ annotation: QuestionAnnotationAnswer.ACCEPT })
+    this.dispatchSubmitEvent({ annotation: AnnotationAnswer.ACCEPT })
   }
   /**
    * Confirms the text.
@@ -965,32 +864,21 @@ export class TextCorrector extends LitElement {
    * Rejects the text.
    */
   rejectText() {
-    this.dispatchSubmitEvent({ annotation: QuestionAnnotationAnswer.REFUSE })
+    this.dispatchSubmitEvent({ annotation: AnnotationAnswer.REFUSE })
   }
   /**
    * Skips the text.
    */
   skip() {
-    this.dispatchSubmitEvent({ annotation: QuestionAnnotationAnswer.SKIP })
+    this.dispatchSubmitEvent({ annotation: AnnotationAnswer.SKIP })
   }
 
-  /**
-   * Gets the result of the diff.
-   * @returns {string} The result of the diff.
-   */
-  getResult() {
-    return this.diffResult.map((change) => change.value).join("")
-  }
   /**
    * Enters edit mode.
    */
   enterEditMode() {
     this.isEditMode = true
     this.value = this.buildValueWithAnsweredChanges()
-    this.computeWordDiff()
-    setTimeout(() => {
-      this.focusTextArea()
-    }, 0)
   }
 
   /**
@@ -1004,50 +892,25 @@ export class TextCorrector extends LitElement {
   }
 
   /**
-   * Handles the change event of the textarea.
-   * @param {Event} e - The change event.
-   */
-  handleTextareaChange(e: Event) {
-    const textarea = e.target as HTMLTextAreaElement
-    this.value = textarea.value
-    this.computeWordDiff()
-    this.dispatchEvent(new CustomEvent("update", { detail: { result: this.value } }))
-  }
-
-  /**
-   * Renders the textarea for editing the text.
-   * @returns {TemplateResult} The rendered textarea.
-   */
-  renderEditTextarea() {
-    return html`
-      <div class="text-section">
-        <h2>${msg("Preview")}</h2>
-        <p class="text-content">${this.renderHighlightedDiff()}</p>
-      </div>
-      <div class="">
-        <h2>${msg("Edit ingredients list")}</h2>
-        <textarea
-          class="textarea"
-          .value=${this.value}
-          @input=${this.handleTextareaChange}
-          rows="6"
-        ></textarea>
-      </div>
-    `
-  }
-
-  /**
    * Renders the buttons of the component.
    * @returns {TemplateResult} The rendered buttons.
    */
   renderButtons() {
     const confirmTitle = this.isConfirmDisabled ? this.updateTextMsg : ""
 
-    const successButton = html` <button
-      class="button success-button with-icon"
-      ?disabled=${this.isConfirmDisabled}
-      title=${confirmTitle}
+    const isLoading = Boolean(this.loading)
+    const isSuccessLoading = [
+      AnnotationAnswer.ACCEPT,
+      AnnotationAnswer.ACCEPT_AND_ADD_DATA,
+      AnnotationAnswer.REFUSE,
+    ].includes(this.loading!)
+    const successButton = html` <loading-button
+      ?loading=${isSuccessLoading}
+      ?disabled=${isLoading || this.isConfirmDisabled}
       type="submit"
+      title=${confirmTitle}
+      @click=${() => triggerSubmit(this.form!)}
+      css-classes="button success-button"
     >
       <span
         >${msg("Save")}${this.getKeyboardShortcutText(
@@ -1055,11 +918,16 @@ export class TextCorrector extends LitElement {
         )}</span
       >
       <check-icon></check-icon>
-    </button>`
+    </loading-button>`
+
     if (this.isEditMode) {
       return html`
         <div class="submit-buttons buttons-row can-wrap">
-          <button class="button cappucino-button with-icon" @click=${this.cancelEditMode}>
+          <button
+            class="button cappucino-button with-icon"
+            @click=${this.cancelEditMode}
+            ?disabled=${isLoading}
+          >
             <span>${msg("Cancel")}</span><cross-icon></cross-icon>
           </button>
           ${successButton}
@@ -1069,24 +937,34 @@ export class TextCorrector extends LitElement {
 
     return html`
       <div class="submit-buttons buttons-row can-wrap">
-        <button class="button white-button with-icon" @click=${this.skip}>
+        <loading-button
+          ?loading=${this.loading === AnnotationAnswer.SKIP}
+          ?disabled=${isLoading}
+          css-classes="button white-button"
+          @click=${this.skip}
+        >
           <span
             >${msg("Skip")}${this.getKeyboardShortcutText(
               TextCorrectorKeyboardShortcut.SKIP_TEXT_CORRECTION
             )}</span
           ><skip-icon></skip-icon>
-        </button>
+        </loading-button>
         ${successButton}
       </div>
     `
   }
 
   renderSpellCheck() {
+    const isLoading = Boolean(this.loading)
     return html`
       <div class="text-section">
         <p class="text">${this.renderSpellCheckDiff()}</p>
         <div style="display: flex; justify-content: flex-end;">
-          <button class="button cappucino-button with-icon" @click=${this.enterEditMode}>
+          <button
+            class="button cappucino-button with-icon"
+            @click=${this.enterEditMode}
+            ?disabled=${isLoading}
+          >
             <span
               >${msg("Edit")}${this.getKeyboardShortcutText(
                 TextCorrectorKeyboardShortcut.EDIT_TEXT
@@ -1119,6 +997,7 @@ export class TextCorrector extends LitElement {
         break
       case TextCorrectorKeyboardShortcut.EDIT_TEXT:
         this.enterEditMode()
+        event.preventDefault()
         break
       case TextCorrectorKeyboardShortcut.VALIDATE_CORRECTION:
         this.confirmText()

@@ -1,12 +1,15 @@
 import { LitElement, html, css, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { Question, QuestionAnnotationAnswer } from "../../types/robotoff"
-import { ButtonType, getButtonClasses } from "../../styles/buttons"
+import { Question, AnnotationAnswer } from "../../types/robotoff"
 import { EventType } from "../../constants"
 import { answerQuestion } from "../../signals/questions"
-import "../buttons/zoom-unzoom-button"
 import { SignalWatcher } from "@lit-labs/signals"
-import { msg } from "@lit/localize"
+import { localized, msg } from "@lit/localize"
+import { ButtonType, getButtonClasses } from "../../styles/buttons"
+import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin"
+import { FULL_WIDTH } from "../../styles/utils"
+import "../shared/loading-button"
+import "../buttons/zoom-unzoom-button"
 /**
  * RobotoffQuestionForm component
  * It displays a form to answer a question about a product.
@@ -14,15 +17,11 @@ import { msg } from "@lit/localize"
  * @fires {EventType.SUBMIT} - When the form is submitted
  */
 @customElement("robotoff-question-form")
-export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
+@localized()
+export class RobotoffQuestionForm extends SignalWatcher(LoadingWithTimeoutMixin(LitElement)) {
   static override styles = [
-    ...getButtonClasses([
-      ButtonType.White,
-      ButtonType.Cappucino,
-      ButtonType.Success,
-      ButtonType.Danger,
-      ButtonType.LINK,
-    ]),
+    ...getButtonClasses([ButtonType.White]),
+    FULL_WIDTH,
     css`
       :host {
         display: block;
@@ -34,6 +33,14 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
         flex-direction: column;
       }
 
+      .image-wrapper {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+      }
+
       .img-button-wrapper {
         position: absolute;
         bottom: 0.5rem;
@@ -42,6 +49,9 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
         justify-content: center;
       }
       .expand-button {
+        margin-top: 1rem;
+      }
+      .buttons-row {
         margin-top: 1rem;
       }
     `,
@@ -65,8 +75,8 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
     return this.isImageExpanded
       ? { height: "350px", width: "100%", "max-width": "350px" }
       : {
-          height: "100px",
-          width: "100px",
+          height: "200px",
+          width: "200px",
         }
   }
 
@@ -84,8 +94,10 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
 
     this.dispatchEvent(click)
   }
-  private _annotateProduct = async (event: Event, value: QuestionAnnotationAnswer) => {
-    answerQuestion(this.question?.insight_id!, value)
+  private _annotateProduct = async (event: Event, value: AnnotationAnswer) => {
+    this.showLoading(value)
+    await answerQuestion(this.question?.insight_id!, value)
+    await this.hideLoading()
     this.emitEventClick(event, value)
   }
 
@@ -99,15 +111,13 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
     }
 
     return html`
-      <div>
-        <div>
-          <zoomable-image
-            src=${this.question?.source_image_url}
-            .size="${this.imageSize}"
-            @click="${this.expandImage}"
-            ?show-buttons="${this.isImageExpanded}"
-          ></zoomable-image>
-        </div>
+      <div class="image-wrapper">
+        <zoomable-image
+          src=${this.question?.source_image_url}
+          .size=${this.imageSize}
+          @click="${this.expandImage}"
+          ?show-buttons="${this.isImageExpanded}"
+        ></zoomable-image>
         ${this.isImageExpanded
           ? nothing
           : html`<div>
@@ -115,6 +125,35 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
                 ${msg("Expand image")}
               </button>
             </div>`}
+      </div>
+    `
+  }
+
+  private renderButtons() {
+    const isLoading = Boolean(this.loading)
+    return html`
+      <div class="buttons-row">
+        <loading-button
+          css-classes="button success-button"
+          .loading=${this.loading === AnnotationAnswer.ACCEPT}
+          .disabled=${isLoading}
+          @click="${(event: Event) => this._annotateProduct(event, AnnotationAnswer.ACCEPT)}"
+          label="${msg("Yes")}"
+        ></loading-button>
+        <loading-button
+          css-classes="button danger-button"
+          .loading=${this.loading === AnnotationAnswer.REFUSE}
+          .disabled=${isLoading}
+          @click="${(event: Event) => this._annotateProduct(event, AnnotationAnswer.REFUSE)}"
+          label="${msg("No")}"
+        ></loading-button>
+        <loading-button
+          css-classes="button cappucino-button"
+          .loading=${this.loading === AnnotationAnswer.SKIP}
+          .disabled=${isLoading}
+          @click="${(event: Event) => this._annotateProduct(event, AnnotationAnswer.SKIP)}"
+          label="${msg("Skip")}"
+        ></loading-button>
       </div>
     `
   }
@@ -128,30 +167,7 @@ export class RobotoffQuestionForm extends SignalWatcher(LitElement) {
       <div class="question-form">
         <p>${this.question.question} <strong> ${this.question.value} </strong></p>
         <div>${this._renderImage()}</div>
-        <div>
-          <p></p>
-          <button
-            class="button success-button"
-            @click="${(event: Event) =>
-              this._annotateProduct(event, QuestionAnnotationAnswer.ACCEPT)}"
-          >
-            Yes
-          </button>
-          <button
-            class="button danger-button"
-            @click="${(event: Event) =>
-              this._annotateProduct(event, QuestionAnnotationAnswer.REFUSE)}"
-          >
-            No
-          </button>
-          <button
-            class="button cappucino-button"
-            @click="${(event: Event) =>
-              this._annotateProduct(event, QuestionAnnotationAnswer.SKIP)}"
-          >
-            Skip
-          </button>
-        </div>
+        ${this.renderButtons()}
       </div>
     `
   }
