@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.12.0...v1.12.1) (2025-08-15)
+
+
+### Bug Fixes
+
+* score value type in product card prop ([#235](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/235)) ([eefbcee](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/eefbcee1c866a1c14464880fcac3d92c1a941330))
+
 ## [1.12.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.11.0...v1.12.0) (2025-08-13)
 
 ### Added
