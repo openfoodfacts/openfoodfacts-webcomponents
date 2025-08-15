@@ -14,6 +14,19 @@ interface NavigationState {
   } | null
 }
 
+interface PersonalScore {
+  score: number
+  matchStatus:
+    | "very_good_match"
+    | "good_match"
+    | "poor_match"
+    | "does_not_match"
+    | "may_not_match"
+    | "unknown_match"
+  totalWeights: number
+  totalWeightedScore: number
+}
+
 interface Product {
   code: string
   product_name: string
@@ -24,7 +37,6 @@ interface Product {
   nutriscore_grade?: string
   nova_group?: number
   greenscore_grade?: string // Assuming this is the name of the ecoscore attribute (need to confirm with actual data, when available)
-  match_score?: number
 }
 
 /**
@@ -255,20 +267,28 @@ export class ProductCard extends LitElement {
     }
 
     /* Match score color variants */
-    .match-tag-very-good {
+    .match-tag-very-good-match {
       background-color: #10b981; /* Dark green */
     }
 
-    .match-tag-good {
+    .match-tag-good-match {
       background-color: #34d399; /* Light green */
     }
 
-    .match-tag-poor {
+    .match-tag-poor-match {
       background-color: #f59e0b; /* Yellow/Orange */
     }
 
-    .match-tag-no-match {
+    .match-tag-does-not-match {
       background-color: #ef4444; /* Red */
+    }
+
+    .match-tag-may-not-match {
+      background-color: #f97316; /* Orange */
+    }
+
+    .match-tag-unknown-match {
+      background-color: #6b7280; /* Gray */
     }
   `
 
@@ -286,8 +306,13 @@ export class ProductCard extends LitElement {
     nutriscore_grade: undefined,
     nova_group: undefined,
     greenscore_grade: undefined,
-    match_score: undefined,
   }
+
+  /**
+   * The personal score object containing match scoring information
+   */
+  @property({ type: Object })
+  personalScore: PersonalScore | undefined = undefined
 
   /**
    * Whether to show the match score tag on the product card
@@ -352,30 +377,54 @@ export class ProductCard extends LitElement {
   }
 
   /**
-   * Gets match tag information based on score percentage from product
+   * Gets match tag information based on personalScore from product
    */
   private getMatchTagInfo(): { text: string; cssClass: string } {
-    const matchScore = this.product.match_score ?? -1
-    if (matchScore >= 75) {
-      return {
-        text: msg(`Very Good Match ${matchScore}%`),
-        cssClass: "match-tag-very-good",
+    if (this.personalScore) {
+      const { score, matchStatus } = this.personalScore
+      switch (matchStatus) {
+        case "very_good_match":
+          return {
+            text: msg(`Very Good Match ${score}%`),
+            cssClass: "match-tag-very-good-match",
+          }
+        case "good_match":
+          return {
+            text: msg(`Good Match ${score}%`),
+            cssClass: "match-tag-good-match",
+          }
+        case "poor_match":
+          return {
+            text: msg(`Poor Match ${score}%`),
+            cssClass: "match-tag-poor-match",
+          }
+        case "does_not_match":
+          return {
+            text: msg("Does Not Match"),
+            cssClass: "match-tag-does-not-match",
+          }
+        case "may_not_match":
+          return {
+            text: msg("May Not Match"),
+            cssClass: "match-tag-may-not-match",
+          }
+        case "unknown_match":
+          return {
+            text: msg("Unknown Match"),
+            cssClass: "match-tag-unknown-match",
+          }
+        default:
+          return {
+            text: msg("Unknown Match"),
+            cssClass: "match-tag-unknown-match",
+          }
       }
-    } else if (matchScore >= 50) {
-      return {
-        text: msg(`Good Match ${matchScore}%`),
-        cssClass: "match-tag-good",
-      }
-    } else if (matchScore > 0) {
-      return {
-        text: msg(`Poor Match ${matchScore}%`),
-        cssClass: "match-tag-poor",
-      }
-    } else {
-      return {
-        text: msg("Does Not Match"),
-        cssClass: "match-tag-no-match",
-      }
+    }
+
+    // Return default if no personalScore available
+    return {
+      text: msg("No Score Available"),
+      cssClass: "match-tag-unknown-match",
     }
   }
 
