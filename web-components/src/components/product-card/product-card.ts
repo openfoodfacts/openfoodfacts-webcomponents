@@ -14,7 +14,7 @@ interface NavigationState {
   } | null
 }
 
-interface ScoreData {
+interface PersonalScore {
   score: number
   matchStatus:
     | "very_good_match"
@@ -309,10 +309,10 @@ export class ProductCard extends LitElement {
   }
 
   /**
-   * The score data object containing match scoring information
+   * The personal score object containing match scoring information
    */
   @property({ type: Object })
-  scoreData: ScoreData | undefined = undefined
+  personalScore: PersonalScore | undefined = undefined
 
   /**
    * Whether to show the match score tag on the product card
@@ -377,11 +377,11 @@ export class ProductCard extends LitElement {
   }
 
   /**
-   * Gets match tag information based on scoreData from product
+   * Gets match tag information based on personalScore from product
    */
   private getMatchTagInfo(): { text: string; cssClass: string } {
-    if (this.scoreData) {
-      const { score, matchStatus } = this.scoreData
+    if (this.personalScore) {
+      const { score, matchStatus } = this.personalScore
       switch (matchStatus) {
         case "very_good_match":
           return {
@@ -420,7 +420,8 @@ export class ProductCard extends LitElement {
           }
       }
     }
-    // Return default if no scoreData available
+
+    // Return default if no personalScore available
     return {
       text: msg("No Score Available"),
       cssClass: "match-tag-unknown-match",
