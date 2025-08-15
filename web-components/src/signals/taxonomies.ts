@@ -33,10 +33,10 @@ export const getTaxonomyNameByLang = (taxonomy: NutrientTaxonomy, lang: string) 
   if (!taxonomy) {
     return ""
   }
-  if (lang in taxonomy.name) {
+  if (lang in taxonomy.name && taxonomy.name[lang]) {
     return taxonomy.name[lang]
   }
-  return taxonomy.name["en"]
+  return taxonomy.name["en"] || ""
 }
 
 /**

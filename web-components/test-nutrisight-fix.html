@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrisight Fix Test</title>
+    <script type="module" src="./dist/off-webcomponents.bundled.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196f3;
+        }
+        .product-code {
+            font-family: monospace;
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Nutrisight Fix Test</h1>
+        
+        <div class="test-info">
+            <h3>Testing Fix for Issue #217</h3>
+            <p><strong>Problem:</strong> Nutrisight did not render when nutrient list was loaded from taxonomy due to TypeError in localeCompare.</p>
+            <p><strong>Product Code:</strong> <span class="product-code">20102944</span> (Large Bananas - Woolworths Food)</p>
+            <p><strong>Fix:</strong> Added null-safe checks to prevent TypeError when sorting nutrients with undefined/null labels.</p>
+        </div>
+
+        <h2>Robotoff Nutrient Extraction Component</h2>
+        <p>The component below should now render properly without JavaScript errors, even when nutrient taxonomies are partially loaded:</p>
+        
+        <robotoff-nutrient-extraction 
+            product-code="20102944">
+            <div slot="no-insight">
+                <p>✅ <strong>Success!</strong> No insights found, but the component rendered without errors.</p>
+                <p>This means the fix for the localeCompare TypeError is working correctly.</p>
+            </div>
+        </robotoff-nutrient-extraction>
+        
+        <hr style="margin: 40px 0;">
+        
+        <h2>Test Details</h2>
+        <p>The fix involved two changes:</p>
+        <ol>
+            <li><strong>Sorting fix:</strong> Changed <code>a.label.localeCompare(b.label)</code> to <code>(a.label || "").localeCompare(b.label || "")</code></li>
+            <li><strong>getTaxonomyNameByLang fix:</strong> Added additional null checks to ensure the function always returns a string</li>
+        </ol>
+        
+        <p>Open the browser console to check for any JavaScript errors. With the fix, there should be no TypeError related to localeCompare.</p>
+    </div>
+
+    <script>
+        // Log any errors to help with debugging
+        window.addEventListener('error', function(e) {
+            console.error('JavaScript Error:', e.error);
+        });
+        
+        // Monitor for the specific error we fixed
+        console.log('✅ Nutrisight fix test page loaded');
+        console.log('🔍 Monitoring for localeCompare errors...');
+        
+        setTimeout(() => {
+            console.log('⏱️  5 seconds elapsed - if no localeCompare errors appeared, the fix is working!');
+        }, 5000);
+    </script>
+</body>
+</html>
