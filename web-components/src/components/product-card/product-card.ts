@@ -55,8 +55,7 @@ export class ProductCard extends LitElement {
     .card-container {
       display: flex;
       flex-direction: column;
-      height: auto;
-      min-height: 10rem;
+      height: 10rem;
       width: 100%;
       max-width: 100%;
       border-radius: 1rem;
@@ -72,7 +71,6 @@ export class ProductCard extends LitElement {
     .card-content {
       display: flex;
       flex: 1;
-      height: 10rem;
       border-radius: 1rem;
     }
 
@@ -82,7 +80,7 @@ export class ProductCard extends LitElement {
     }
 
     .image-container {
-      height: 100%;
+      height: 10rem;
       width: 40%;
       text-align: center;
       font-size: 0.875rem;
