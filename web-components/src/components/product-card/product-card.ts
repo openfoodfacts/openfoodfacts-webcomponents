@@ -55,8 +55,7 @@ export class ProductCard extends LitElement {
     .card-container {
       display: flex;
       flex-direction: column;
-      height: auto;
-      min-height: 10rem;
+      height: 100%;
       width: 100%;
       max-width: 100%;
       border-radius: 1rem;
@@ -72,8 +71,8 @@ export class ProductCard extends LitElement {
     .card-content {
       display: flex;
       flex: 1;
-      height: 10rem;
       border-radius: 1rem;
+      height: 100%;
     }
 
     .dark-mode {
@@ -159,11 +158,13 @@ export class ProductCard extends LitElement {
     }
 
     .placeholder-image {
-      height: 4rem;
+      height: 100%;
+      width: 100%;
       border-radius: 0.5rem;
       background-color: transparent;
       object-fit: cover;
       opacity: 0.7;
+      overflow: hidden;
     }
 
     .dark-mode .placeholder-image {
@@ -179,6 +180,7 @@ export class ProductCard extends LitElement {
       padding: 0.5rem;
       padding-left: 0.75rem;
       font-weight: 600;
+      padding-top: 1rem;
     }
 
     @media (min-width: 640px) {
@@ -256,14 +258,20 @@ export class ProductCard extends LitElement {
     }
 
     .match-tag {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
       color: white;
-      padding: 0.2rem;
+      padding: 0.25rem 0.5rem;
       font-size: 0.75rem;
       font-weight: 600;
       text-align: center;
       border-top-left-radius: 1rem;
       border-top-right-radius: 1rem;
-      flex-shrink: 0;
+      z-index: 10;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     /* Match score color variants */
