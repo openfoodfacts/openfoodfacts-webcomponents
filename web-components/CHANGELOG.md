@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.2](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.12.1...v1.12.2) (2025-08-17)
+
+
+### Bug Fixes
+
+* Product card height  inconsistency fixed ([#241](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/241)) ([822ad73](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/822ad73911b10537df8c93b2dd65fd616a550bd0))
+
 ## [1.12.1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.12.0...v1.12.1) (2025-08-15)
 
 
