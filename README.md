@@ -22,6 +22,7 @@ A set of web components for Open Food Facts to help build edition interfaces
 - [Mobile Badges](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#mobile-badges)
 - [Barcode Scanner](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#barcode-scanner)
 - [Folksonomy Editor](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#folksonomy-editor)
+- [News Feed](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#news-feed)
 - [Robotoff Contribution Message](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-contribution-message)
 - [Autocomplete Input](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#autocomplete-input)
 - [Product Card](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#product-card)
