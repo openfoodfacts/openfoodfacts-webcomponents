@@ -8,7 +8,7 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openfoodfacts/openfoodfacts-webcomponents"
+    "url": "https://github.com/openfoodfacts/openfoodfacts-webcomponents.git"
   },
   "exports": {
     ".": {
