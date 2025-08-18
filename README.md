@@ -14,34 +14,40 @@ A set of web components for Open Food Facts to help build edition interfaces
 
 ### Available
 
+#### 🤖 Robotoff
 - [Nutrition editing (with Nutri-Sight integration)](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-nutrient-extraction)
 - [Robotoff Questions](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-question)
 - [Robotoff Ingredients Spellcheck](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-ingredient-spellcheck)
 - [Robotoff Ingredients Detection](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-ingredient-detection)
+- [Robotoff Contribution Message](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-contribution-message)
+
+#### Display elements
 - [Donation Banner](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#donation-banner)
 - [Mobile Badges](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#mobile-badges)
 - [Barcode Scanner](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#barcode-scanner)
-- [Folksonomy Editor](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#folksonomy-editor)
-- [Robotoff Contribution Message](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-contribution-message)
 - [Autocomplete Input](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#autocomplete-input)
 - [Product Card](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#product-card)
 
-### For configuration
+#### 🔖 Folksonomy Engine
+- [Folksonomy Editor](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#folksonomy-editor)
+- Folksonomy property listings
 
-- [Off Webcomponents Configuration](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#off-webcomponents-configuration)
+### ⚙️ For configuration
 
-### WIP
+- [Off WebComponents configuration](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#off-webcomponents-configuration)
+
+### 🚧 Work in progress
 
 - Knowledge Panels
 
-## Design
+## 🎨 Design
 
 - openfoodfacts-webcomponents is a set of web components for Open Food Facts to help build interfaces (view and edits). The idea is to reach feature parity on the essential stuff with the main frontend to eventually replace it, with a great responsive UI (80%+ of our traffic is mobile web).
 - We currently don’t have any real visual mockup of it, nor “artistic direction” so for the time being, we're copying key features from the current frontend, improving them whenever we can.
 - [![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?logo=figma&logoColor=white) Design file for the current website](https://www.figma.com/design/Qg9URUyrjHgYmnDHXRsTTB/Current-Website-design?m=auto&t=RokuCr1uXrGFMhTB-6)
 - [![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?logo=figma&logoColor=white) Design file for Web Components](https://www.figma.com/design/X8nBndPdBfikAcevBiBxKo/Web-Components?node-id=0-1&p=f&t=A7yCwKqyW9klqYq8-0)
 
-## Weekly meetings
+## 📆 Weekly meetings
 
 - We e-meet Wednesdays · 11:00 – 11:25am - Time zone: Europe/Paris
 - ![Google Meet](https://meet.google.com/uep-fhvf-gto) Video call link: https://meet.google.com/uep-fhvf-gto
@@ -54,9 +60,14 @@ A set of web components for Open Food Facts to help build edition interfaces
 
 ## NPM Package
 
-The components are now published on NPM here: https://www.npmjs.com/package/@openfoodfacts/openfoodfacts-webcomponents
+The components are now published automatically on NPM here when we create a release: https://www.npmjs.com/package/@openfoodfacts/openfoodfacts-webcomponents
 
 ### Publishing
+
+#### Automatically
+- Creating a release by merging the release please PR
+
+#### Manually
 
 To publish a new version, you need to be a member of the Open Food Facts organization on npm.
 
@@ -157,7 +168,7 @@ To have it, you need to follow these steps:
 
 ### To use it like a library check the [web-components/README.md](web-components/README.md) file
 
-## Documentation
+## 📚 Documentation
 
 You can find the documentation [here](https://openfoodfacts.github.io/openfoodfacts-webcomponents)
 
