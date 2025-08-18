@@ -1051,8 +1051,8 @@ export class RobotoffNutrientExtractionForm extends LitElement {
         label: getTaxonomyNameByLang(nutrientTaxonomy, lang),
         value: nutrientTaxonomy.id,
       }))
-      // sort the nutrients by label
-      .sort((a, b) => a.label.localeCompare(b.label))
+      // sort the nutrients by label, handle cases where label might be undefined/null
+      .sort((a, b) => (a.label || "").localeCompare(b.label || ""))
 
     // if there are no nutrients to add, don't render the row
     if (filteredNutrientTaxonomies.length === 0) {
