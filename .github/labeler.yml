@@ -66,3 +66,7 @@ Nutrient extraction:
 Shared:
 - changed-files:
     - any-glob-to-any-file: 'web-components/src/components/shared/**/*'
+
+Product card:
+- changed-files:
+    - any-glob-to-any-file: 'web-components/src/components/product-card/**/*'

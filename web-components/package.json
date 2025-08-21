@@ -3,12 +3,12 @@
   "author": "Open Food Facts",
   "license": "LGPL-2.1-or-later",
   "private": false,
-  "version": "1.11.0",
+  "version": "1.12.3",
   "description": "Reusable Web Components for Open Food Facts",
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openfoodfacts/openfoodfacts-webcomponents"
+    "url": "https://github.com/openfoodfacts/openfoodfacts-webcomponents.git"
   },
   "exports": {
     ".": {

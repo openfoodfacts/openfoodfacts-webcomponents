@@ -1,0 +1,38 @@
+name: WebComponents Package publication
+on:
+  release:
+    types: ["created"]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      # Setup .npmrc file to publish to npm
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: "24.x"
+          registry-url: "https://registry.npmjs.org"
+      - run: |
+          cd web-components
+          npm install
+          npm run publish:package
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        continue-on-error: true
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: "24.x"
+          registry-url: 'https://npm.pkg.github.com'
+          scope: @openfoodfacts
+      - run: |
+          cd web-components
+          npm install
+          npm run publish:package
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          continue-on-error: true

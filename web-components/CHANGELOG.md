@@ -1,0 +1,266 @@
+# Changelog
+
+## [1.12.3](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.12.2...v1.12.3) (2025-08-18)
+
+
+### Bug Fixes
+
+* improve taxonomy name retrieval with better error handling ([#249](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/249)) ([8e24499](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/8e2449911bdfb49e7d9d25158a4990d6b00c481c)), closes [#217](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/217)
+
+## [1.12.2](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.12.1...v1.12.2) (2025-08-17)
+
+
+### Bug Fixes
+
+* Product card height  inconsistency fixed ([#241](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/241)) ([822ad73](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/822ad73911b10537df8c93b2dd65fd616a550bd0))
+
+## [1.12.1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.12.0...v1.12.1) (2025-08-15)
+
+
+### Bug Fixes
+
+* score value type in product card prop ([#235](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/235)) ([eefbcee](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/eefbcee1c866a1c14464880fcac3d92c1a941330))
+
+## [1.12.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.11.0...v1.12.0) (2025-08-13)
+
+### Added
+
+- Adds new component for folksonomy properties
+- Adds property generation wizard for folksonomy-editor before creating a property
+
+### Fixed
+
+- fix: add cursor pointer style to product card
+
+## 1.11.0 - 2025-07-8
+
+### Added
+
+- Adds new componnent for folksonomy propeties products
+
+### Changed
+
+- Enable automatic dark mode detection using a shared listener
+
+### Fixed
+
+- Adds auth_by_cookie logic to store token in localstorage
+
+## 1.10.0 - 2025-06-28
+
+### Added
+
+- Add support for dark mode in `donation-banner` and `mobile-badges`
+
+- Add `product-card` component to display a product card with image, name, brands, quantity, product type, nutriscore, nova group and greenscore.
+
+## 1.9.0 - 2025-06-19
+
+### Added
+
+- Add `languageCode` signal in app to handle language changes. It avoid delays when changing language.
+
+### Changed
+
+- Use `languageCode` signal instead of `getLocale` to fix delay of language change.
+
+## 1.8.5 - 2025-06-12
+
+### Fixed
+
+- Fix `robotoff-contribution-message` refresh when `language-codes` change.
+
+### Docs
+
+- Update Readme.md to explain how to copy localization files to your project.
+
+## 1.8.4 - 2025-06-12
+
+### Fixed
+
+- Fix `robotoff-nutrient-extraction` when the `fetchProduct` as no `nutriments`.
+
+## 1.8.3 - 2025-06-10
+
+### Fixed
+
+- Fix `robotoff-nutrient-extraction` refresh when `language-codes` change.
+
+## 1.8.2 - 2025-06-10
+
+### Fixed
+
+- Fix `robotoff-ingredient-spellcheck` refresh when `language-codes` change.
+
+## 1.8.1 - 2025-06-10
+
+### Fixed
+
+- Fix `robotoff-nutrient-extraction`, `robotoff-ingredient-detection` and `robotoff-ingredient-spellcheck` refresh when `language-codes` change.
+
+## 1.8.0 - 2025-06-10
+
+### Changed
+
+- Add `language-codes` attribute to `robotoff-contribution-message` to filter insights by language.
+- Group insights in one request to `robotoff-contribution-message` to reduce the number of requests.
+- Add robotoff-ingredient-detection in `robotoff-modal` and `robotoff-contribution-message`.
+- Update `robotoff-ingredient-detection` to fire state event
+- Increase max width of `robotoff-nutrient-extraction` image to 700px.
+- Add view product link to `robotoff-nutrient-extraction`, `robotoff-ingredient-detection` and `robotoff-ingredient-spellcheck`.
+
+### Fixed
+
+- Fix the `robotoff-ingredient-detection` issue that resets the image when the crop mode is toggled and the edit mode is enabled.
+
+## [1.7.1] - 2025-06-10
+
+### Changed
+
+- Update dependencies to be up-to-date with the latest versions.
+- Update translations
+
+### Fixed
+
+- Fix `mobile-badges` to display the correct path for the images.
+- Fix `donation-banner` styling.
+- Fix `folksonomy-editor` to display the autocomplete list correctly.
+
+## [1.7.0] - 2025-05-26
+
+### Added
+
+- Add `robotoff-ingredient-detection` component.
+
+### Changed
+
+- Rename `robotoff-ingredients` to `robotoff-ingredient-spellcheck` to be closer to the API endpoint.
+- Rename `robotoff-nutrients` to `robotoff-nutrient-extraction` to be closer to the API endpoint.
+- Refactor `text-corrector` to create a new component to highlight the differences between the original text and the corrected text. This component is called `text-corrector-highlight`.
+
+## [1.6.0] - 2025-05-26
+
+### Added
+
+- Add `LoadingWithTimeoutMixin` to avoid multiple submit.
+- Add it to `robotoff-nutrients`, `robotoff-questions` and `robotoff-ingredients`.
+- Add `displayInEditForm` keys by default except `alcohol` if it's not present.
+- Add `loading-button` component to handle loading behavior.
+
+### Changed
+
+- Rename `robotoff-nutrients-table` to `robotoff-nutrients-form`.
+- Remove `energy` key because it will be compute by Robotoff.
+
+### Fixed
+
+- Fix suggestions in `robotoff-nutrients-form` to avoid showing suggestions with similar values. For exemple : "0.5" and "0.50".
+- Fix refresh `robotoff-ingredients` when `language-codes` change.
+- Fix dependencies versions.
+
+## [1.5.2] - 2025-05-22
+
+### Fixed
+
+- Fix robotoff ingredients annotation to send the good data format.
+
+## [1.5.1] - 2025-05-19
+
+### Fixed
+
+- Fix robotoff suggestions to avoid showing `null` unit in `robotoff-nutrients-table`.
+
+## [1.5.0] - 2025-05-19
+
+### Added
+
+- Add `autocomplete-input` web component for enhanced input fields with suggestion capabilities
+- Add Folksonomy Editor Advanced Features for improved taxonomy management
+- Add new translations for French and Spanish languages
+- Add `contribution-message` web component for displaying user contribution messages
+
+### Changed
+
+- Improve autocomplete functionality with better suggestion handling
+- Update Robotoff components (nutrients, contribution message) for better performance
+- Update API interactions and type definitions for better integration
+
+### Fixed
+
+- Various bug fixes and performance improvements
+
+## [1.4.2] - 2025-04-08
+
+### Fixed
+
+- Fix `runScanner` property to be kebab-case : `run-scanner`.
+- Fix `runScanner` property to detect update, and start the scanner when it is set to `true` if the scanner has code reader available.
+
+## [1.4.1] - 2025-04-08
+
+### Fixed
+
+- Fix `BarcodeScannerState` enum to be string instead of number.
+
+## [1.4.0] - 2025-04-07
+
+### Added
+
+- Add `barcode-scanner` web component to scan a barcode and find out its details (health, preferences, etc.).
+- Add `download-app-qr-code` web component to show the QR code to download the app.
+- Add some translations for the web components.
+
+### Changed
+
+- Use kebab-case for each property of the web components to be more consistent.
+- Fix boolean properties to be `false` by default.
+- Update `robotoff-question` and `robotoff-nutrients` web components to be more easier to use in openfoodfacts website.
+
+## [1.2.2] - 2025-03-26
+
+### Added
+
+- Add `donation-banner` web component to show the donation banner in the web components.
+- Add parameter `assets-images-path` to `off-web-components-configuration` to allow to change the path of the assets images.
+- Add `mobile-badges` web component to show the mobile badges in the web components.
+- Update `donation-banner` web component to automatically update the year in the donation banner. And allow to change the year with the `year` property.
+
+## [1.2.1] - 2025-03-18
+
+### Changed
+
+- Update event to simplify this behavior to simplify the code and make it more easier to integrate in openfoodfacts-server.
+- Add `annotated: false` to insights api call to get only the nutrients without the annotations.
+
+## [1.2.0] - 2025-03-05
+
+### Changed
+
+- Remove max-width from `robotoff-question` to allow it to be used in a flex container.
+- Add `showImage` in `options` property of `robotoff-question` to allow to hide or show the image.
+
+## [1.1.1] - 2025-03-05
+
+### Fixed
+
+- Fix the property `robotoff-configuration` in `off-web-components-configuration` to be correctly set has a property of the web component.
+
+## [1.1.0] - 2025-03-05
+
+### Changed
+
+- Change the `robotoff-configuration` to `off-web-components-configuration` to add all possible configuration for the web components, in this case `language-code`
+- Build language files with rollup for the web components to fix the issue wit html from lit.
+
+## [1.0.0] - 2025-02-04
+
+### Added
+
+- Configure rollup to build the web components.
+- Implementation of `robotoff-question` web component.
+- Implementation of `robotoff-configuration` that allow to configure the interraction with the Robotoff API with :
+  - `dryRun` : to simulate the API call without actually sending the data.
+  - `apiUrl` : to configure the API URL.
+  - `imgUrl` : to configure the image URL.
+- Implementation of `robotoff-nutrients` web component.
+- Add docs for the web components on `web-components/docs`
