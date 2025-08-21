@@ -26,6 +26,13 @@ export class FolksonomyEditor extends LitElement {
   @property({ type: String, attribute: "page-type" })
   pageType = "view"
 
+  /**
+   * The base URL for properties listing (e.g., "https://world.openfoodfacts.org/properties")
+   * @type {string}
+   */
+  @property({ type: String, attribute: "properties-base-url" })
+  propertiesBaseUrl = "https://world.openfoodfacts.org/properties"
+
   static override styles = css`
     :host {
       font-family: Arial, sans-serif;
@@ -290,7 +297,7 @@ export class FolksonomyEditor extends LitElement {
                   html`These properties are created and filed by users for any kind of usages. Feel
                     free to add your own. The properties and values you create
                     <strong>must be factual</strong>. You can dive into
-                    <a href="https://world.openfoodfacts.org/properties"
+                    <a href="${this.propertiesBaseUrl}"
                       >the list of properties already used by the community</a
                     >
                     or explore the
