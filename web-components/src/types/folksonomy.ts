@@ -45,3 +45,10 @@ export interface ErrorDetail {
 export interface ErrorResponse {
   detail: ErrorDetail[]
 }
+
+export interface UserInfoResponse {
+  user_id: string
+  admin: boolean
+  moderator: boolean
+  user: boolean
+}

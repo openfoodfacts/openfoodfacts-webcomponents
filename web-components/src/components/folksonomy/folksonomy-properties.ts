@@ -4,6 +4,7 @@ import { localized, msg, str } from "@lit/localize"
 import folksonomyApi from "../../api/folksonomy"
 import { createDebounce, downloadCSV } from "../../utils"
 import "../shared/dual-range-slider"
+import type { UserInfoResponse } from "../../types/folksonomy"
 
 /**
  * Folksonomy Properties Viewer
@@ -195,6 +196,23 @@ export class FolksonomyProperties extends LitElement {
       font-style: italic;
     }
 
+    .actions {
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    .icon-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0.25rem 0.35rem;
+      font-size: 1.05rem;
+    }
+
+    .icon-btn:hover {
+      opacity: 0.75;
+    }
+
     /* Mobile responsiveness */
     @media (max-width: 768px) {
       .properties-table {
@@ -229,6 +247,9 @@ export class FolksonomyProperties extends LitElement {
   private error: string | null = null
 
   @state()
+  private currentUser: UserInfoResponse | null = null
+
+  @state()
   private filters = {
     property: "",
     countMin: 0,
@@ -249,7 +270,7 @@ export class FolksonomyProperties extends LitElement {
 
   override async connectedCallback() {
     super.connectedCallback()
-    await this.fetchProperties()
+    await Promise.all([this.fetchCurrentUser(), this.fetchProperties()])
   }
 
   override disconnectedCallback() {
@@ -310,6 +331,10 @@ export class FolksonomyProperties extends LitElement {
 
   private getDocumentationUrl(propertyName: string) {
     return `https://wiki.openfoodfacts.org/Folksonomy/Property/${propertyName}`
+  }
+
+  private get isAdminOrModerator() {
+    return !!(this.currentUser && (this.currentUser.admin || this.currentUser.moderator))
   }
 
   private applyFilters() {
@@ -375,6 +400,14 @@ export class FolksonomyProperties extends LitElement {
     downloadCSV(rows, filename, headers)
   }
 
+  private async fetchCurrentUser() {
+    try {
+      this.currentUser = await folksonomyApi.getCurrentUser()
+    } catch (e) {
+      this.currentUser = null
+    }
+  }
+
   private renderTableHeader() {
     return html`
       <thead>
@@ -384,6 +417,7 @@ export class FolksonomyProperties extends LitElement {
           <th class="doc">${msg("Documentation")}</th>
           <th class="count">${msg("Count")}</th>
           <th class="values">${msg("Values")}</th>
+          ${this.isAdminOrModerator ? html`<th class="actions">${msg("Actions")}</th>` : null}
         </tr>
         <tr class="filter-row">
           <td></td>
@@ -418,6 +452,7 @@ export class FolksonomyProperties extends LitElement {
               @range-change="${this.handleRangeChange}"
             ></dual-range-slider>
           </td>
+          ${this.isAdminOrModerator ? html`<td></td>` : null}
         </tr>
       </thead>
     `
@@ -443,6 +478,24 @@ export class FolksonomyProperties extends LitElement {
         </td>
         <td class="count">${property.count}</td>
         <td class="values">${property.values}</td>
+        ${this.isAdminOrModerator
+          ? html`<td class="actions">
+              <button
+                class="icon-btn"
+                title="${msg("Rename value")}"
+                @click="${() => this.onRenameValue(property.k)}"
+              >
+                ✏️
+              </button>
+              <button
+                class="icon-btn"
+                title="${msg("Delete value")}"
+                @click="${() => this.onDeleteValue(property.k)}"
+              >
+                🗑️
+              </button>
+            </td>`
+          : null}
       </tr>
     `
   }
@@ -497,6 +550,39 @@ export class FolksonomyProperties extends LitElement {
         ${this.renderContent()}
       </div>
     `
+  }
+
+  private async onRenameValue(propertyKey: string) {
+    const oldValue = window.prompt(msg(str`Enter the current value for ${propertyKey}`))
+    if (!oldValue) return
+    const newValue = window.prompt(msg(str`Enter the new value for ${propertyKey}`))
+    if (!newValue) return
+    try {
+      await folksonomyApi.renameValue(propertyKey, oldValue, newValue)
+      // Refresh data to reflect any counts/values changes
+      await this.fetchProperties()
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e)
+      this.error = "error"
+    }
+  }
+
+  private async onDeleteValue(propertyKey: string) {
+    const value = window.prompt(msg(str`Enter the value to delete for ${propertyKey}`))
+    if (!value) return
+    const confirmed = window.confirm(
+      msg(str`Are you sure you want to delete '${value}' for ${propertyKey}?`)
+    )
+    if (!confirmed) return
+    try {
+      await folksonomyApi.deleteValue(propertyKey, value)
+      await this.fetchProperties()
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e)
+      this.error = "error"
+    }
   }
 }
 

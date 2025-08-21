@@ -4,8 +4,8 @@ import {
   DeleteProductPropertyResponse,
   UpdateProductPropertyResponse,
   AuthByCookieResponse,
+  UserInfoResponse,
 } from "../types/folksonomy"
-import { folksonomyConfiguration } from "../signals/folksonomy"
 
 // Constants for localStorage
 const FOLKSONOMY_BEARER_TOKEN_KEY = "folksonomy-bearer-token"
@@ -18,7 +18,7 @@ const FOLKSONOMY_BEARER_DATE_KEY = "folksonomy-token-date"
  */
 
 const getApiUrl = (path: string) => {
-  return `${folksonomyConfiguration.getItem("apiUrl")}${path}`
+  return `http://localhost:8000${path}`
 }
 
 /**
@@ -128,6 +128,72 @@ async function makeAuthenticatedRequest(url: string, options: RequestInit = {}):
   }
 
   return response
+}
+
+async function getCurrentUser(): Promise<UserInfoResponse> {
+  try {
+    const response = await makeAuthenticatedRequest(getApiUrl("/user/me"), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      } as HeadersInit,
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    const data: UserInfoResponse = await response.json()
+    return data
+  } catch (error) {
+    console.error("Error fetching current user info:", error)
+    throw error
+  }
+}
+
+async function renameValue(
+  property: string,
+  oldValue: string,
+  newValue: string
+): Promise<{ success: true }> {
+  try {
+    const response = await makeAuthenticatedRequest(getApiUrl("/admin/value/rename"), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      } as HeadersInit,
+      body: JSON.stringify({ property, old_value: oldValue, new_value: newValue }),
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    return { success: true }
+  } catch (error) {
+    console.error("Error renaming value:", error)
+    throw error
+  }
+}
+
+async function deleteValue(property: string, value: string): Promise<{ success: true }> {
+  try {
+    const response = await makeAuthenticatedRequest(getApiUrl("/admin/value"), {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      } as HeadersInit,
+      body: JSON.stringify({ property, value }),
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    return { success: true }
+  } catch (error) {
+    console.error("Error deleting value:", error)
+    throw error
+  }
 }
 
 async function fetchProductProperties(product: string): Promise<FetchProductPropertiesResponse> {
@@ -296,4 +362,7 @@ export default {
   fetchProductsProperties,
   fetchValues,
   authByCookie,
+  getCurrentUser,
+  renameValue,
+  deleteValue,
 }
