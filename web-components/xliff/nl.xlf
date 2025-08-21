@@ -154,33 +154,33 @@
         <source>Expand image</source>
         <target state="final">Afbeelding uitvouwen</target>
       </trans-unit>
-      <trans-unit id="sab56a1d439576fd6">
+      <trans-unit id="sab56a1d439576fd6" approved="yes">
         <source>Suggestion icon</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Suggestiepictogram</target>
+        <target state="final">Suggestiepictogram</target>
       </trans-unit>
       <trans-unit id="sf9aee319a006c9b4" approved="yes">
         <source>Add</source>
         <target state="final">Toevoegen</target>
       </trans-unit>
-      <trans-unit id="s5666afe5cd0166de">
+      <trans-unit id="s5666afe5cd0166de" approved="yes">
         <source>Please fix the errors or modify the text before confirming</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Verbeter de fouten of wijzig de tekst voordat u bevestigt</target>
+        <target state="final">Verbeter de fouten of wijzig de tekst voordat u bevestigt</target>
       </trans-unit>
-      <trans-unit id="s06f6c6f99db6b552">
+      <trans-unit id="s06f6c6f99db6b552" approved="yes">
         <source>Original</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Origineel</target>
+        <target state="final">Origineel</target>
       </trans-unit>
-      <trans-unit id="sc57b630a7a70c61f">
+      <trans-unit id="sc57b630a7a70c61f" approved="yes">
         <source>Suggested fix</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Voorgestelde oplossing</target>
+        <target state="final">Voorgestelde verbetering</target>
       </trans-unit>
       <trans-unit id="s417b90913e05bc17" approved="yes">
         <source>Preview</source>
         <target state="final">Voorbeeld</target>
       </trans-unit>
-      <trans-unit id="s5dd6f12783fca34f">
+      <trans-unit id="s5dd6f12783fca34f" approved="yes">
         <source>Edit ingredients list</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ingrediëntenlijst bewerken</target>
+        <target state="final">Ingrediëntenlijst bewerken</target>
       </trans-unit>
       <trans-unit id="s33f85f24c0f5f008" approved="yes">
         <source>Save</source>
@@ -198,75 +198,75 @@
         <source>Edit</source>
         <target state="final">Bewerken</target>
       </trans-unit>
-      <trans-unit id="h6bdd1b427aa985a4">
+      <trans-unit id="h6bdd1b427aa985a4" approved="yes">
         <source>This tool allows you to correct the ingredients list. You can add, remove or edit
                 ingredients list.
                 <x id="0" equiv-text="&lt;br&gt;"/>
                 This character <x id="1" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>␣<x id="2" equiv-text="&lt;/span&gt;"/> represents a space.
                 <x id="3" equiv-text="&lt;br&gt;"/>
                 This character <x id="4" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>↩︎<x id="5" equiv-text="&lt;/span&gt;"/> represents a line break. </source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Met deze tool kunt u de ingrediëntenlijst corrigeren. U kunt
-                ingrediëntenlijst toevoegen, verwijderen of bewerken.
+        <target state="final">Met deze tool kunt u de ingrediëntenlijst corrigeren. U kunt
+                ingrediëntenlijsten toevoegen, verwijderen of bewerken.
                 <x id="0" equiv-text="&lt;br&gt;"/>
                 Dit teken <x id="1" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>␣<x id="2" equiv-text="&lt;/span&gt;"/> staat voor een spatie.
                 <x id="3" equiv-text="&lt;br&gt;"/>
                 Dit teken <x id="4" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>↩︎<x id="5" equiv-text="&lt;/span&gt;"/> staat voor een regelovergang. </target>
       </trans-unit>
-      <trans-unit id="s11a18a69b30b65ed">
+      <trans-unit id="s11a18a69b30b65ed" approved="yes">
         <source>Help us fix errors in ingredients list</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Help ons fouten in de ingrediëntenlijst te herstellen</target>
+        <target state="final">Help ons fouten in de ingrediëntenlijst op te lossen</target>
       </trans-unit>
-      <trans-unit id="sbd6be5cde472f37c">
+      <trans-unit id="sbd6be5cde472f37c" approved="yes">
         <source>All insights have been answered! Thanks for your help!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Alle inzichten zijn beantwoord! Bedankt voor je hulp!</target>
+        <target state="final">Alle inzichten zijn beantwoord! Bedankt voor je hulp!</target>
       </trans-unit>
-      <trans-unit id="sa95b4224f685a36a">
+      <trans-unit id="sa95b4224f685a36a" approved="yes">
         <source>Close modal</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Sluit modaal</target>
+        <target state="final">Sluit venster</target>
       </trans-unit>
       <trans-unit id="s67ae6594857a4d57" approved="yes">
         <source>Thanks for your contribution!</source>
         <target state="final">Bedankt voor uw bijdrage!</target>
       </trans-unit>
-      <trans-unit id="s061eb5af92512c85">
+      <trans-unit id="s061eb5af92512c85" approved="yes">
         <source>Saved! Can you help with another one?</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Opgeslagen! Kun je helpen met nog een?</target>
+        <target state="final">Opgeslagen! Kun je ons helpen met nog een vraag?</target>
       </trans-unit>
-      <trans-unit id="sb125568d43642e6f">
+      <trans-unit id="sb125568d43642e6f" approved="yes">
         <source>Answer questions about the product.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Beantwoord vragen over het product.</target>
+        <target state="final">Beantwoord vragen over het product.</target>
       </trans-unit>
-      <trans-unit id="sdc792b75f1edcaba">
+      <trans-unit id="sdc792b75f1edcaba" approved="yes">
         <source>Help us correct the spelling of ingredients.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Help ons de spelling van ingrediënten te corrigeren.</target>
+        <target state="final">Help ons de spelling van ingrediënten te corrigeren.</target>
       </trans-unit>
-      <trans-unit id="s5c92c0051d44b6de">
+      <trans-unit id="s5c92c0051d44b6de" approved="yes">
         <source>Help us correct the nutritional information.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Help ons de voedingsinformatie te corrigeren.</target>
+        <target state="final">Help ons de voedingsinformatie te corrigeren.</target>
       </trans-unit>
-      <trans-unit id="sd698d21ddecba56b">
+      <trans-unit id="sd698d21ddecba56b" approved="yes">
         <source>Hey! You can help us improve the product information by answering the following parts:</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Hé! Je kunt ons helpen de productinformatie te verbeteren door de volgende vragen te beantwoorden:</target>
+        <target state="final">Hé! Je kunt ons helpen de productinformatie te verbeteren door de volgende vragen te beantwoorden:</target>
       </trans-unit>
-      <trans-unit id="s05ec315d9308091a">
+      <trans-unit id="s05ec315d9308091a" approved="yes">
         <source>Barcode corners icon</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Barcodehoekenpictogram</target>
+        <target state="final">Barcodehoekenpictogram</target>
       </trans-unit>
-      <trans-unit id="sb5ceccad457e8cae">
+      <trans-unit id="sb5ceccad457e8cae" approved="yes">
         <source>Are you sure you want to delete this item?</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Weet u zeker dat u dit item wilt verwijderen?</target>
+        <target state="final">Weet u zeker dat u dit item wilt verwijderen?</target>
       </trans-unit>
       <trans-unit id="sdc673e73b5c13aea" approved="yes">
         <source>Delete</source>
         <target state="final">Verwijder</target>
       </trans-unit>
-      <trans-unit id="s15d64a0a6715285a">
+      <trans-unit id="s15d64a0a6715285a" approved="yes">
         <source>New key</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Nieuwe sleutel</target>
+        <target state="final">Nieuwe sleutel</target>
       </trans-unit>
-      <trans-unit id="scb3b0671d7b7f640">
+      <trans-unit id="scb3b0671d7b7f640" approved="yes">
         <source>New value</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Nieuwe waarde</target>
+        <target state="final">Nieuwe waarde</target>
       </trans-unit>
       <trans-unit id="sb3d4f79d9d8b71e5" approved="yes">
         <source>Submit</source>
@@ -284,41 +284,41 @@
         <source>Actions</source>
         <target state="final">Acties</target>
       </trans-unit>
-      <trans-unit id="seffa8ca49175b5f0">
+      <trans-unit id="seffa8ca49175b5f0" approved="yes">
         <source>Personalized properties</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Gepersonaliseerde eigenschappen</target>
+        <target state="final">Gepersonaliseerde eigenschappen</target>
       </trans-unit>
-      <trans-unit id="s907f7a97c6b29425">
+      <trans-unit id="s907f7a97c6b29425" approved="yes">
         <source>Be aware the data model might be modified. Use at your own risk.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Houd er rekening mee dat het datamodel kan worden gewijzigd. Gebruik op eigen risico.</target>
+        <target state="final">Houd er rekening mee dat het datamodel kan worden gewijzigd. Gebruik op eigen risico.</target>
       </trans-unit>
-      <trans-unit id="hdbe45450d1a6419b">
+      <trans-unit id="hdbe45450d1a6419b" approved="yes">
         <source>These properties are created and filed by users for any kind of usages. Feel
                     free to add your own. The properties and values you create
                     <x id="0" equiv-text="&lt;strong&gt;"/>must be factual<x id="1" equiv-text="&lt;/strong&gt;"/>. You can dive into
                     <x id="2" equiv-text="&lt;a href=&quot;https://openfoodfacts-explorer.vercel.app/folksonomy&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
                     or explore the
                     <x id="4" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="needs-translation">These properties are created and filed by users for any kind of usages. Feel
-                    free to add your own. The properties and values you create
-                    <x id="0" equiv-text="&lt;strong&gt;"/>must be factual<x id="1" equiv-text="&lt;/strong&gt;"/>. You can dive into
-                    <x id="2" equiv-text="&lt;a href=&quot;https://openfoodfacts-explorer.vercel.app/folksonomy&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
-                    or explore the
-                    <x id="4" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="final">Deze eigenschappen zijn gemaakt en opgeslagen door gebruikers voor allerlei soorten gebruik. Voel
+ vrij om je eigen eigenschappen toe te voegen. De eigenschappen en waarden die je aanmaakt
+ <x id="0" equiv-text="<strong>"/&gt;moeten daadwerkelijk bestaan<x id="1" equiv-text="</strong>"/&gt;. Je kunt je verdiepen in
+ <x id="2" equiv-text="<a href="https://openfoodfacts-explorer.vercel.app/folksonomy">"/&gt;, de lijst met eigenschappen die al door de gemeenschap worden gebruikt<x id="3" equiv-text="</a>
+ "/&gt; of verken de
+ <x id="4" equiv-text="<a href="https://wiki. openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>documentatie van de eigenschappen en de zoekmachine<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
       </trans-unit>
-      <trans-unit id="h76766ba4ed1addb3">
+      <trans-unit id="h76766ba4ed1addb3" approved="yes">
         <source>This is brought by the
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't hesitate to participate or give feedback.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Dit wordt mogelijk gemaakt door het Folksonomy Engine-project
+        <target state="final">Dit wordt mogelijk gemaakt door het Folksonomy Engine-project
                     <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/><x id="1" equiv-text="&lt;/a&gt;"/>. Aarzel niet om deel te nemen of feedback te geven.</target>
       </trans-unit>
-      <trans-unit id="sf44a6b3b232c28ea">
+      <trans-unit id="sf44a6b3b232c28ea" approved="yes">
         <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Vervang huidige waarde door <x id="0" equiv-text="${text}"/></target>
+        <target state="final">Vervang huidige waarde door <x id="0" equiv-text="${text}"/></target>
       </trans-unit>
-      <trans-unit id="s0fb218abc2e157ed">
+      <trans-unit id="s0fb218abc2e157ed" approved="yes">
         <source>Invalidate image</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Afbeelding ongeldig maken</target>
+        <target state="final">Afbeelding ongeldig maken</target>
       </trans-unit>
       <trans-unit id="scb489a1a173ac3f0" approved="yes">
         <source>Yes</source>
@@ -328,105 +328,138 @@
         <source>No</source>
         <target state="final">Nee</target>
       </trans-unit>
-<trans-unit id="s42dd66b2441566fd">
-  <source>Center icon</source>
-</trans-unit>
-<trans-unit id="s422bba9636ce2489">
-  <source>Center image</source>
-</trans-unit>
-<trans-unit id="s8038273de2cf8b73">
-  <source>Please select a region to crop.</source>
-</trans-unit>
-<trans-unit id="s39bcf88721a1e8ee">
-  <source>Reset selection</source>
-</trans-unit>
-<trans-unit id="sb8178320160f84ea">
-  <source>Show crop</source>
-</trans-unit>
-<trans-unit id="s33f786bb6b4f0cf4">
-  <source>Crop Result</source>
-</trans-unit>
-<trans-unit id="s6cee7cad81dfedd1">
-  <source>Cropped Image</source>
-</trans-unit>
-<trans-unit id="s02ce7a2e7c1b020b">
-  <source>Validate crop</source>
-</trans-unit>
-<trans-unit id="s383ae4449428b61e">
-  <source>Reset crop</source>
-</trans-unit>
-<trans-unit id="sc6daf8a31883f8b9">
-  <source>Move image</source>
-</trans-unit>
-<trans-unit id="s19059bf0c4f7c162">
-  <source>Selection area</source>
-</trans-unit>
-<trans-unit id="s4f4886341969d552">
-  <source>Move selection</source>
-</trans-unit>
-<trans-unit id="scfed2f270ef6a3aa">
-  <source>Select area</source>
-</trans-unit>
-<trans-unit id="sc0cc559e7ede852a">
-  <source>Resize top</source>
-</trans-unit>
-<trans-unit id="s453ab0dbb9b5c777">
-  <source>Resize right</source>
-</trans-unit>
-<trans-unit id="s8a63be30a129a59c">
-  <source>Resize bottom</source>
-</trans-unit>
-<trans-unit id="s787dd11bed0dc88a">
-  <source>Resize left</source>
-</trans-unit>
-<trans-unit id="s8b33c244759d7bd4">
-  <source>Resize top right</source>
-</trans-unit>
-<trans-unit id="sa63907958bd0ec4b">
-  <source>Resize top left</source>
-</trans-unit>
-<trans-unit id="sdca5deead576ceee">
-  <source>Resize bottom right</source>
-</trans-unit>
-<trans-unit id="sac47ea2901d04c15">
-  <source>Resize bottom left</source>
-</trans-unit>
-<trans-unit id="s4df2f533c0c1e7d0">
-  <source>Image controls</source>
-</trans-unit>
-<trans-unit id="sd1022bc1ef9204f7">
-  <source>Zoomable image</source>
-</trans-unit>
-<trans-unit id="s3f4e4b52f230a892">
-  <source>Image canvas</source>
-</trans-unit>
-<trans-unit id="s5ed03bb1f3a15949">
-  <source>Picture</source>
-</trans-unit>
-<trans-unit id="sbad7d2734149470b">
-  <source>Validate</source>
-</trans-unit>
-<trans-unit id="se419a9ab36987490">
-  <source>Invalidate</source>
-</trans-unit>
-<trans-unit id="s10db5498186c083b">
-  <source>Cancel crop</source>
-</trans-unit>
-<trans-unit id="sec6377f3c4e9b28c">
-  <source>I'll propose a better crop</source>
-</trans-unit>
-<trans-unit id="s03e9c8114521b998">
-  <source>I'll edit the ingredients</source>
-</trans-unit>
-<trans-unit id="s98ff35f2a00dc60d">
-  <source>Ingredients :</source>
-</trans-unit>
-<trans-unit id="s013bdc8cf0d3583d">
-  <source>Help us for ingredients</source>
-</trans-unit>
-<trans-unit id="sd1077c055cf9ba6b">
-  <source>Help us validate the ingredient list of the product.</source>
-</trans-unit>
+      <trans-unit id="s42dd66b2441566fd" approved="yes">
+        <source>Center icon</source>
+        <target state="final">Centrumpictogram</target>
+      </trans-unit>
+      <trans-unit id="s422bba9636ce2489" approved="yes">
+        <source>Center image</source>
+        <target state="final">Afbeelding centreren</target>
+      </trans-unit>
+      <trans-unit id="s8038273de2cf8b73" approved="yes">
+        <source>Please select a region to crop.</source>
+        <target state="final">Selecteer een regio om bij te snijden.</target>
+      </trans-unit>
+      <trans-unit id="s39bcf88721a1e8ee" approved="yes">
+        <source>Reset selection</source>
+        <target state="final">Selectie resetten</target>
+      </trans-unit>
+      <trans-unit id="sb8178320160f84ea" approved="yes">
+        <source>Show crop</source>
+        <target state="final">Toon bijgesneden afbeelding</target>
+      </trans-unit>
+      <trans-unit id="s33f786bb6b4f0cf4" approved="yes">
+        <source>Crop Result</source>
+        <target state="final">Resultaat van het bijsnijden</target>
+      </trans-unit>
+      <trans-unit id="s6cee7cad81dfedd1" approved="yes">
+        <source>Cropped Image</source>
+        <target state="final">Bijgesneden afbeelding</target>
+      </trans-unit>
+      <trans-unit id="s02ce7a2e7c1b020b" approved="yes">
+        <source>Validate crop</source>
+        <target state="final">Valideer de bijgesneden afbeelding</target>
+      </trans-unit>
+      <trans-unit id="s383ae4449428b61e" approved="yes">
+        <source>Reset crop</source>
+        <target state="final">Bijgesneden afbeelding resetten</target>
+      </trans-unit>
+      <trans-unit id="sc6daf8a31883f8b9" approved="yes">
+        <source>Move image</source>
+        <target state="final">Afbeelding verplaatsen</target>
+      </trans-unit>
+      <trans-unit id="s19059bf0c4f7c162" approved="yes">
+        <source>Selection area</source>
+        <target state="final">Selectiegebied</target>
+      </trans-unit>
+      <trans-unit id="s4f4886341969d552" approved="yes">
+        <source>Move selection</source>
+        <target state="final">Selectie verplaatsen</target>
+      </trans-unit>
+      <trans-unit id="scfed2f270ef6a3aa" approved="yes">
+        <source>Select area</source>
+        <target state="final">Selecteer gebied</target>
+      </trans-unit>
+      <trans-unit id="sc0cc559e7ede852a" approved="yes">
+        <source>Resize top</source>
+        <target state="final">Formaat wijzigen van de bovenkant</target>
+      </trans-unit>
+      <trans-unit id="s453ab0dbb9b5c777" approved="yes">
+        <source>Resize right</source>
+        <target state="final">Formaat wijzigen van de rechterkant</target>
+      </trans-unit>
+      <trans-unit id="s8a63be30a129a59c" approved="yes">
+        <source>Resize bottom</source>
+        <target state="final">Formaat wijzigen van de onderkant</target>
+      </trans-unit>
+      <trans-unit id="s787dd11bed0dc88a" approved="yes">
+        <source>Resize left</source>
+        <target state="final">Formaat wijzigen van de linkerkant</target>
+      </trans-unit>
+      <trans-unit id="s8b33c244759d7bd4" approved="yes">
+        <source>Resize top right</source>
+        <target state="final">Formaat wijzigen van de rechter bovenhoek</target>
+      </trans-unit>
+      <trans-unit id="sa63907958bd0ec4b" approved="yes">
+        <source>Resize top left</source>
+        <target state="final">Formaat wijzigen van de linker bovenhoek</target>
+      </trans-unit>
+      <trans-unit id="sdca5deead576ceee" approved="yes">
+        <source>Resize bottom right</source>
+        <target state="final">Formaat wijzigen van de rechter onderhoek</target>
+      </trans-unit>
+      <trans-unit id="sac47ea2901d04c15" approved="yes">
+        <source>Resize bottom left</source>
+        <target state="final">Formaat wijzigen van de linker onderhoek</target>
+      </trans-unit>
+      <trans-unit id="s4df2f533c0c1e7d0" approved="yes">
+        <source>Image controls</source>
+        <target state="final">Beeldbedienelementen</target>
+      </trans-unit>
+      <trans-unit id="sd1022bc1ef9204f7" approved="yes">
+        <source>Zoomable image</source>
+        <target state="final">Inzoombare afbeelding</target>
+      </trans-unit>
+      <trans-unit id="s3f4e4b52f230a892" approved="yes">
+        <source>Image canvas</source>
+        <target state="final">Afbeeldingcanvas</target>
+      </trans-unit>
+      <trans-unit id="s5ed03bb1f3a15949" approved="yes">
+        <source>Picture</source>
+        <target state="final">Afbeelding</target>
+      </trans-unit>
+      <trans-unit id="sbad7d2734149470b" approved="yes">
+        <source>Validate</source>
+        <target state="final">Bevestigen</target>
+      </trans-unit>
+      <trans-unit id="se419a9ab36987490" approved="yes">
+        <source>Invalidate</source>
+        <target state="final">Ongeldig maken</target>
+      </trans-unit>
+      <trans-unit id="s10db5498186c083b" approved="yes">
+        <source>Cancel crop</source>
+        <target state="final">Bijsnijden annuleren</target>
+      </trans-unit>
+      <trans-unit id="sec6377f3c4e9b28c" approved="yes">
+        <source>I'll propose a better crop</source>
+        <target state="final">Ik zal een betere bijgesneden afbeelding voorstellen</target>
+      </trans-unit>
+      <trans-unit id="s03e9c8114521b998" approved="yes">
+        <source>I'll edit the ingredients</source>
+        <target state="final">Ik zal de ingrediënten aanpassen</target>
+      </trans-unit>
+      <trans-unit id="s98ff35f2a00dc60d" approved="yes">
+        <source>Ingredients :</source>
+        <target state="final">Ingrediënten:</target>
+      </trans-unit>
+      <trans-unit id="s013bdc8cf0d3583d" approved="yes">
+        <source>Help us for ingredients</source>
+        <target state="final">Help ons met ingrediënten</target>
+      </trans-unit>
+      <trans-unit id="sd1077c055cf9ba6b" approved="yes">
+        <source>Help us validate the ingredient list of the product.</source>
+        <target state="final">Help ons de ingrediëntenlijst van het product te valideren.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
