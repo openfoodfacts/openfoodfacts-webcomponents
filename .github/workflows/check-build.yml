@@ -1,12 +1,10 @@
-name: Check build works
+name: WebComponents CI
 
 on:
   push:
-    branches:
-      - main
   pull_request:
-    paths:
-      - "web-components/**"
+    branches: [main]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,9 +21,14 @@ jobs:
           cache-dependency-path: "./web-components/package-lock.json"
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
         working-directory: ./web-components
 
       - name: Build
         run: npm run build
+        working-directory: ./web-components
+
+      - name: Run Linter
+        if: failure() || success()
+        run: npm run lint
         working-directory: ./web-components
