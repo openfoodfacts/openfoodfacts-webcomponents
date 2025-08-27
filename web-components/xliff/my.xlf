@@ -252,10 +252,6 @@
         <source>Barcode corners icon</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">ဘားကုဒ်ထောင့် သင်္ကေတ</target>
       </trans-unit>
-      <trans-unit id="sb5ceccad457e8cae">
-        <source>Are you sure you want to delete this item?</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">ဤအရာကို ဖျက်လိုသည်မှာ သေချာပါသလား။</target>
-      </trans-unit>
       <trans-unit id="sdc673e73b5c13aea">
         <source>Delete</source>
         <target state="translated">ဖ်က္မည္</target>
@@ -291,26 +287,6 @@
       <trans-unit id="s907f7a97c6b29425">
         <source>Be aware the data model might be modified. Use at your own risk.</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">ဒေတာမော်ဒယ်ကို ပြုပြင်နိုင်သည်ကို သတိထားပါ။ သင့်ကိုယ်ပိုင်စွန့်စားမှုကို အသုံးပြုပါ။</target>
-      </trans-unit>
-      <trans-unit id="hdbe45450d1a6419b">
-        <source>These properties are created and filed by users for any kind of usages. Feel
-                    free to add your own. The properties and values you create
-                    <x id="0" equiv-text="&lt;strong&gt;"/>must be factual<x id="1" equiv-text="&lt;/strong&gt;"/>. You can dive into
-                    <x id="2" equiv-text="&lt;a href=&quot;https://openfoodfacts-explorer.vercel.app/folksonomy&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
-                    or explore the
-                    <x id="4" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">ဤဂုဏ်သတ္တိများကို မည်သည့်အသုံးပြုမှုမျိုးအတွက်မဆို အသုံးပြုသူများက ဖန်တီးပြီး တင်ပြပါသည်။ သင့်ကိုယ်ပိုင်ထည့်ရန်
-                    အခမဲ့ခံစားပါ။ သင်ဖန်တီးသည့် ဂုဏ်သတ္တိများနှင့် တန်ဖိုးများသည်
-                    <x id="0" equiv-text="&lt;strong&gt;"/>အဖြစ်မှန်ဖြစ်ရမည်<x id="1" equiv-text="&lt;/strong&gt;"/>။
-                    <x id="2" equiv-text="&lt;a href=&quot;https://openfoodfacts-explorer.vercel.app/folksonomy&quot;&gt;"/>အသိုင်းအဝိုင်းမှ အသုံးပြုပြီးသော ဂုဏ်သတ္တိများစာရင်း<x id="3" equiv-text="&lt;/a&gt;"/>
-                    သို့မဟုတ်
-                    <x id="4" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>ဂုဏ်သတ္တိများ စာရွက်စာတမ်းများနှင့် ၎င်း၏ ရှာဖွေရေးအင်ဂျင်<x id="5" equiv-text="&lt;/a&gt;"/>ကို ရှာဖွေနိုင်ပါသည်။</target>
-      </trans-unit>
-      <trans-unit id="h76766ba4ed1addb3">
-        <source>This is brought by the
-                    <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't hesitate to participate or give feedback.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">၎င်းကို
-                    <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine ပရောဂျက်<x id="1" equiv-text="&lt;/a&gt;"/>မှ ယူဆောင်လာခြင်းဖြစ်သည်။ ပါဝင်ရန် သို့မဟုတ် အကြံပြုချက်ပေးရန် မတွန့်ဆုတ်ပါနှင့်။</target>
       </trans-unit>
       <trans-unit id="sf44a6b3b232c28ea">
         <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
@@ -459,6 +435,288 @@
       <trans-unit id="sd1077c055cf9ba6b">
         <source>Help us validate the ingredient list of the product.</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">ထုတ်ကုန်၏ ပါဝင်ပစ္စည်းစာရင်းကို အတည်ပြုရန် ကျွန်ုပ်တို့ကို ကူညီပေးပါ။</target>
+      </trans-unit>
+      <trans-unit id="s8f839a03997a16d7">
+        <source>View Product</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ထုတ်ကုန်ကိုကြည့်ပါ။</target>
+      </trans-unit>
+      <trans-unit id="s1dc4daf989c71284">
+        <source>Help us correct the nutritional information</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">အာဟာရဆိုင်ရာ အချက်အလက်များကို ပြုပြင်ရန် ကျွန်ုပ်တို့ကို ကူညီပေးပါ။</target>
+      </trans-unit>
+      <trans-unit id="sf57a61152168cc81">
+        <source>Help us correct the ingredient detection</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ပါဝင်ပစ္စည်းရှာဖွေတွေ့ရှိမှုကို ပြုပြင်ရန် ကျွန်ုပ်တို့ကို ကူညီပေးပါ။</target>
+      </trans-unit>
+      <trans-unit id="scf23a05631f93732">
+        <source>Confirm Delete</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ဖျက်ရန် အတည်ပြုပါ။</target>
+      </trans-unit>
+      <trans-unit id="sdcc2555c5dde524f">
+        <source>Are you sure you want to delete this item? This action cannot be undone.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ဤအရာကို ဖျက်လိုသည်မှာ သေချာပါသလား။ ဤလုပ်ဆောင်ချက်ကို ပြန်ပြင်၍မရပါ။</target>
+      </trans-unit>
+      <trans-unit id="s901ae1e236ac45d3">
+        <source>Cancel deletion</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ပယ်ဖျက်ခြင်းအား ပယ်ဖျက်ပါ။</target>
+      </trans-unit>
+      <trans-unit id="sc681b137e8f604f7">
+        <source>Confirm deletion</source>
+        <target state="needs-translation">Confirm deletion</target>
+      </trans-unit>
+      <trans-unit id="s4f751fb9b3ed766c">
+        <source>Creating a New Property</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">အိမ်ခြံမြေအသစ်ဖန်တီးခြင်း။</target>
+      </trans-unit>
+      <trans-unit id="sdb97e5976482606e">
+        <source>Check if a property already exists</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ပစ္စည်းတစ်ခု ရှိနှင့်ပြီးပြီလား၊ စစ်ဆေးပါ။</target>
+      </trans-unit>
+      <trans-unit id="sb125227d436c2925">
+        <source>Search for your property concept in the existing properties database:</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ရှိပြီးသား ဂုဏ်သတ္တိများဒေတာဘေ့စ်တွင် သင့်ပိုင်ဆိုင်မှုအယူအဆကို ရှာဖွေပါ-</target>
+      </trans-unit>
+      <trans-unit id="s86197dcf3e96af64">
+        <source>Browse and search existing properties</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ရှိပြီးသားဂုဏ်သတ္တိများကို ရှာဖွေကြည့်ရှုပါ။</target>
+      </trans-unit>
+      <trans-unit id="s34be4af4e8fec4ae">
+        <source>Ask the community first</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">အသိုင်းအဝိုင်းကို အရင်မေးပါ။</target>
+      </trans-unit>
+      <trans-unit id="s36d86adc823cbfa6">
+        <source>Before creating a new property, discuss it with the community:</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ပစ္စည်းအသစ်မဖန်တီးမီ ၎င်းကို အသိုင်းအဝိုင်းနှင့် ဆွေးနွေးပါ-</target>
+      </trans-unit>
+      <trans-unit id="s06847c221c4c0bc1">
+        <source>I would like to create a property to [describe your use case]...</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">[သင့်အသုံးပြုမှုကိစ္စဖော်ပြရန်] ပိုင်ဆိုင်မှုတစ်ခုဖန်တီးချင်ပါတယ်...</target>
+      </trans-unit>
+      <trans-unit id="scd21019c3cd618f3">
+        <source>Join Slack Discussion</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Slack Discussion တွင် ပါဝင်ပါ။</target>
+      </trans-unit>
+      <trans-unit id="s8db84aa4bc949af2">
+        <source>Document the New Property</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ပစ္စည်းအသစ်ကို မှတ်တမ်းတင်ပါ။</target>
+      </trans-unit>
+      <trans-unit id="sb3cbcc1bd0fff140">
+        <source>Once you've verified that your property doesn't exist and the community agrees it's useful, you need to first document it in the wiki.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">သင့်ပိုင်ဆိုင်မှုမရှိကြောင်း အတည်ပြုပြီး ၎င်းသည် အသုံးဝင်ကြောင်း အသိုင်းအဝိုင်းက သဘောတူပြီးသည်နှင့် ၎င်းကို ဝီကီတွင် ဦးစွာမှတ်တမ်းတင်ရန် လိုအပ်သည်။</target>
+      </trans-unit>
+      <trans-unit id="sfacbbe968fa7d773">
+        <source>Property name:</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">အိမ်ခြံမြေ အမည်-</target>
+      </trans-unit>
+      <trans-unit id="s5560fb119e40923d">
+        <source>Enter property name...</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ပစ္စည်းအမည်ထည့်ပါ...</target>
+      </trans-unit>
+      <trans-unit id="s2db7b654c0a9bde0">
+        <source>Document the property</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ပိုင်ဆိုင်မှုစာရွက်စာတမ်း</target>
+      </trans-unit>
+      <trans-unit id="s39e14e14300694c7">
+        <source>Documentation and Guidelines</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">စာရွက်စာတမ်းနှင့် လမ်းညွှန်ချက်များ</target>
+      </trans-unit>
+      <trans-unit id="s801a05fa8e881f37">
+        <source>Learn more about property creation and guidelines:</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">အိမ်ခြံမြေဖန်တီးမှုနှင့် လမ်းညွှန်ချက်များအကြောင်း ပိုမိုလေ့လာရန်-</target>
+      </trans-unit>
+      <trans-unit id="s3781d25aa51a736c">
+        <source>Folksonomy Engine Documentation</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Folksonomy Engine Documentation</target>
+      </trans-unit>
+      <trans-unit id="s9b87abd68fb9df45">
+        <source>Not found? Create new key {value}</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">မတွေ့ဘူးလား။ သော့အသစ် {value}ဖန်တီးပါ။</target>
+      </trans-unit>
+      <trans-unit id="hb28f1f2ec1744ee9">
+        <source>These properties are created and filed by users for any kind of usages. Feel
+                    free to add your own. The properties and values you create
+                    <x id="0" equiv-text="&lt;strong&gt;"/>must be factual<x id="1" equiv-text="&lt;/strong&gt;"/>. You can dive into
+                    <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
+                    or explore the
+                    <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ဤဂုဏ်သတ္တိများကို မည်သည့်အသုံးပြုမှုမျိုးအတွက်မဆို အသုံးပြုသူများက ဖန်တီးပြီး တင်ပြပါသည်။ သင့်ကိုယ်ပိုင်ထည့်ရန်
+                    အခမဲ့ခံစားပါ။ သင်ဖန်တီးသည့် ဂုဏ်သတ္တိများနှင့် တန်ဖိုးများသည်
+                    <x id="0" equiv-text="&lt;strong&gt;"/>အဖြစ်မှန်ဖြစ်ရမည်<x id="1" equiv-text="&lt;/strong&gt;"/>။
+                    <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>အသိုင်းအဝိုင်းမှ အသုံးပြုပြီးသော ဂုဏ်သတ္တိများစာရင်း<x id="3" equiv-text="&lt;/a&gt;"/>
+                    သို့မဟုတ်
+                    <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>ဂုဏ်သတ္တိများ စာရွက်စာတမ်းများနှင့် ၎င်း၏ ရှာဖွေရေးအင်ဂျင်<x id="5" equiv-text="&lt;/a&gt;"/>ကို ရှာဖွေနိုင်ပါသည်။</target>
+      </trans-unit>
+      <trans-unit id="h1fbdfea3ad6d664e">
+        <source>This is brought by the
+                    <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't
+                    hesitate to participate or give feedback</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">၎င်းကို
+                    <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>Folksonomy Engine ပရောဂျက်<x id="1" equiv-text="&lt;/a&gt;"/>မှ ယူဆောင်လာခြင်းဖြစ်သည်။
+                    ပါဝင်ရန် သို့မဟုတ် အကြံပြုချက်ပေးရန် မတွန့်ဆုတ်ပါနှင့်</target>
+      </trans-unit>
+      <trans-unit id="s71a5c9f4b68ef4d4">
+        <source>Count</source>
+        <target state="needs-translation">Count</target>
+      </trans-unit>
+      <trans-unit id="s57472465a23b41db">
+        <source>Values</source>
+        <target state="needs-translation">Values</target>
+      </trans-unit>
+      <trans-unit id="s74cb3d66f6a668e1">
+        <source>Documentation</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">စာတမ်းပြုစုခြင်း။</target>
+      </trans-unit>
+      <trans-unit id="s565867d84c04aea2">
+        <source>Filter properties...</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">စစ်ထုတ်ခြင်းဆိုင်ရာ ဂုဏ်သတ္တိများ...</target>
+      </trans-unit>
+      <trans-unit id="s3b430cfa5c1fe7f4">
+        <source>Documentation for <x id="0" equiv-text="${property.k}"/></source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt"><x id="0" equiv-text="${property.k}"/>အတွက် စာရွက်စာတမ်း</target>
+      </trans-unit>
+      <trans-unit id="s000a5b76bd3a01c2">
+        <source>Loading properties...</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ဂုဏ်သတ္တိများကို ဖွင့်နေသည်...</target>
+      </trans-unit>
+      <trans-unit id="s9a7f60fce090ecaf">
+        <source>Failed to load properties. Please try again later.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ဂုဏ်သတ္တိများကို တင်ရန် မအောင်မြင်ပါ။ နောက်မှ ထပ်စမ်းကြည့်ပါ။</target>
+      </trans-unit>
+      <trans-unit id="scdb6cad0b92721bf">
+        <source>No properties found.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ပိုင်ဆိုင်မှု မတွေ့ပါ။</target>
+      </trans-unit>
+      <trans-unit id="scace072bef961918">
+        <source>Rows</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">အတန်းလိုက်</target>
+      </trans-unit>
+      <trans-unit id="s0bb2d48532acc455">
+        <source>Download CSV</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">CSV ကိုဒေါင်းလုဒ်လုပ်ပါ။</target>
+      </trans-unit>
+      <trans-unit id="s255857544a9d5ec0">
+        <source>Reset</source>
+        <target state="needs-translation">Reset</target>
+      </trans-unit>
+      <trans-unit id="sefaba4adc4ec9219">
+        <source>Folksonomy Properties</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Folksonomy ဂုဏ်သတ္တိများ</target>
+      </trans-unit>
+      <trans-unit id="sa548778b24054030">
+        <source>Explore all contributed properties from the Folksonomy Engine project. These properties provide additional metadata and insights about products in the Open Food Facts database.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Folksonomy Engine ပရောဂျက်မှ ပံ့ပိုးပေးထားသော ဂုဏ်သတ္တိများအားလုံးကို စူးစမ်းပါ။ ဤဂုဏ်သတ္တိများသည် Open Food Facts ဒေတာဘေ့စ်ရှိ ထုတ်ကုန်များအကြောင်း နောက်ထပ် မက်တာဒေတာနှင့် ထိုးထွင်းအမြင်များကို ပေးဆောင်ပါသည်။</target>
+      </trans-unit>
+      <trans-unit id="sf4cd86a2f5ef2588">
+        <source>Product Barcode</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ထုတ်ကုန်ဘားကုဒ်</target>
+      </trans-unit>
+      <trans-unit id="sbe472dc3c2685985">
+        <source>Corresponding Value</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">သက်ဆိုင်သောတန်ဖိုး</target>
+      </trans-unit>
+      <trans-unit id="s4d42cc7e00076a3b">
+        <source>Product Count</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ထုတ်ကုန်အရေအတွက်</target>
+      </trans-unit>
+      <trans-unit id="s1a52515ec8ddade8">
+        <source>Product barcode</source>
+        <target state="needs-translation">Product barcode</target>
+      </trans-unit>
+      <trans-unit id="sfe87465d50530725">
+        <source>Corresponding value</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">သက်ဆိုင်သောတန်ဖိုး</target>
+      </trans-unit>
+      <trans-unit id="s839cc2908a5387f2">
+        <source>Filter barcodes...</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ဘားကုဒ်များကို စစ်ထုတ်ပါ...</target>
+      </trans-unit>
+      <trans-unit id="sb7f72e4c8a2d3357">
+        <source>Filter values...</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">စစ်ထုတ်မှုတန်ဖိုးများ...</target>
+      </trans-unit>
+      <trans-unit id="s1205d5f6fccf8e69">
+        <source>Property Value</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">အိမ်ခြံမြေတန်ဖိုး</target>
+      </trans-unit>
+      <trans-unit id="s58e1eeea7a60ae51">
+        <source>Loading products...</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ထုတ်ကုန်များကို တင်နေသည်...</target>
+      </trans-unit>
+      <trans-unit id="sb560fa37a7bfb6c2">
+        <source>No products found for this property.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ဤပိုင်ဆိုင်မှုအတွက် ထုတ်ကုန်မတွေ့ပါ။</target>
+      </trans-unit>
+      <trans-unit id="seea3800e27baa686">
+        <source>Individual Products</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">တစ်ဦးချင်း ထုတ်ကုန်များ</target>
+      </trans-unit>
+      <trans-unit id="s081e2ad82db71e1d">
+        <source>Grouped Values</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">အုပ်စုဖွဲ့တန်ဖိုးများ</target>
+      </trans-unit>
+      <trans-unit id="s9fc41f789c63b40d">
+        <source>Products</source>
+        <target state="needs-translation">Products</target>
+      </trans-unit>
+      <trans-unit id="s1e00019dc454872d">
+        <source>Please provide a property name using the property-name attribute.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ကျေးဇူးပြု၍ ပိုင်ဆိုင်မှုအမည် ရည်ညွှန်းချက်ဖြင့် ပိုင်ဆိုင်မှုအမည်တစ်ခု ပေးပါ။</target>
+      </trans-unit>
+      <trans-unit id="sc895972c88d38ca5">
+        <source>Folksonomy property</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Folksonomy ပစ္စည်းဥစ္စာ</target>
+      </trans-unit>
+      <trans-unit id="se5127cf0f92e7e48">
+        <source>Tip: you can also find the</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">အကြံပြုချက်- သင်လည်း ရှာတွေ့နိုင်ပါသည်။</target>
+      </trans-unit>
+      <trans-unit id="sb28639570ff3b852">
+        <source>list of all properties</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ပိုင်ဆိုင်မှုအားလုံး၏စာရင်း</target>
+      </trans-unit>
+      <trans-unit id="sdbf806fefc584115">
+        <source>You should find a</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">တစ်ခုရှာသင့်တယ်။</target>
+      </trans-unit>
+      <trans-unit id="s0b4235aae602a950">
+        <source>dedicated documentation</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">သီးသန့်စာရွက်စာတမ်း</target>
+      </trans-unit>
+      <trans-unit id="s55d7249883a98ca1">
+        <source>about this property on Open Food Facts wiki</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Open Food Facts wiki တွင် ဤပိုင်ဆိုင်မှုအကြောင်း</target>
+      </trans-unit>
+      <trans-unit id="s1e49126af0935a5b">
+        <source>List of products using this property</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ဤပိုင်ဆိုင်မှုကို အသုံးပြုထားသော ထုတ်ကုန်များစာရင်း</target>
+      </trans-unit>
+      <trans-unit id="sb1c538e038f9b214">
+        <source>Very Good Match <x id="0" equiv-text="${score}"/>%</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">အရမ်းကောင်းတဲ့ပွဲ <x id="0" equiv-text="${score}"/>%</target>
+      </trans-unit>
+      <trans-unit id="s718dea04853f80ae">
+        <source>Good Match <x id="0" equiv-text="${score}"/>%</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ပွဲကောင်း <x id="0" equiv-text="${score}"/>%</target>
+      </trans-unit>
+      <trans-unit id="s300b3a6ee4e1252d">
+        <source>Poor Match <x id="0" equiv-text="${score}"/>%</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ညံ့ဖျင်းသောပွဲစဉ် <x id="0" equiv-text="${score}"/>%</target>
+      </trans-unit>
+      <trans-unit id="sc1c08d0cbcc3bd24">
+        <source>Does Not Match</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">မကိုက်ညီပါ။</target>
+      </trans-unit>
+      <trans-unit id="s9c0f52425fd2f07e">
+        <source>May Not Match</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">မယှဉ်နိုင်ပါ။</target>
+      </trans-unit>
+      <trans-unit id="sf88b90b8ba23871c">
+        <source>Unknown Match</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">အမည်မသိပွဲစဉ်</target>
+      </trans-unit>
+      <trans-unit id="sa1fa766e0d5634d7">
+        <source>No Score Available</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">အမှတ်မရနိုင်ပါ။</target>
       </trans-unit>
     </body>
   </file>
