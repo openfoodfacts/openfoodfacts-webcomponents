@@ -1,7 +1,7 @@
 import { LitElement, html, css, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { classMap } from "lit/directives/class-map.js"
-import { localized, msg } from "@lit/localize"
+import { localized, msg, str } from "@lit/localize"
 import { KP_ATTRIBUTE_IMG } from "../../utils/openfoodfacts"
 import { getImageUrl } from "../../signals/app"
 import { darkModeListener } from "../../utils/dark-mode-listener"
@@ -393,17 +393,17 @@ export class ProductCard extends LitElement {
       switch (matchStatus) {
         case "very_good_match":
           return {
-            text: msg(`Very Good Match ${score}%`),
+            text: msg(str`Very Good Match ${score}%`),
             cssClass: "match-tag-very-good-match",
           }
         case "good_match":
           return {
-            text: msg(`Good Match ${score}%`),
+            text: msg(str`Good Match ${score}%`),
             cssClass: "match-tag-good-match",
           }
         case "poor_match":
           return {
-            text: msg(`Poor Match ${score}%`),
+            text: msg(str`Poor Match ${score}%`),
             cssClass: "match-tag-poor-match",
           }
         case "does_not_match":
