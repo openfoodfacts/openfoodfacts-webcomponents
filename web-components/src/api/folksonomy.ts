@@ -4,6 +4,9 @@ import {
   DeleteProductPropertyResponse,
   UpdateProductPropertyResponse,
   AuthByCookieResponse,
+  ValueRenameRequest,
+  ValueDeleteRequest,
+  UserInfo,
 } from "../types/folksonomy"
 import { folksonomyConfiguration } from "../signals/folksonomy"
 
@@ -287,6 +290,69 @@ async function fetchValues(key: string): Promise<{ v: string; product_count: num
   }
 }
 
+async function getUserInfo(): Promise<UserInfo> {
+  try {
+    const response = await makeAuthenticatedRequest(getApiUrl("/user/me"), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      } as HeadersInit,
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const data: UserInfo = await response.json()
+    return data
+  } catch (error) {
+    console.error("Error fetching user info:", error)
+    throw error
+  }
+}
+
+async function replaceValue(request: ValueRenameRequest): Promise<{ success: boolean }> {
+  try {
+    const response = await makeAuthenticatedRequest(getApiUrl("/admin/value/replace"), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      } as HeadersInit,
+      body: JSON.stringify(request),
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    return { success: true }
+  } catch (error) {
+    console.error("Error replacing value:", error)
+    throw error
+  }
+}
+
+async function deleteValue(request: ValueDeleteRequest): Promise<{ success: boolean }> {
+  try {
+    const response = await makeAuthenticatedRequest(getApiUrl("/admin/value"), {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      } as HeadersInit,
+      body: JSON.stringify(request),
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    return { success: true }
+  } catch (error) {
+    console.error("Error deleting value:", error)
+    throw error
+  }
+}
+
 export default {
   fetchProductProperties,
   addProductProperty,
@@ -296,4 +362,7 @@ export default {
   fetchProductsProperties,
   fetchValues,
   authByCookie,
+  getUserInfo,
+  replaceValue,
+  deleteValue,
 }

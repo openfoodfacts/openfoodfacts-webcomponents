@@ -45,3 +45,21 @@ export interface ErrorDetail {
 export interface ErrorResponse {
   detail: ErrorDetail[]
 }
+
+export interface ValueRenameRequest {
+  property: string
+  old_value: string
+  new_value: string
+}
+
+export interface ValueDeleteRequest {
+  property: string
+  value: string
+}
+
+export interface UserInfo {
+  user_id: string
+  admin: boolean
+  moderator: boolean
+  user: boolean
+}
