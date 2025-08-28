@@ -7,6 +7,9 @@ import {
   ValueRenameRequest,
   ValueDeleteRequest,
   UserInfo,
+  PropertyRenameRequest,
+  PropertyDeleteRequest,
+  PropertyClashCheck,
 } from "../types/folksonomy"
 import { folksonomyConfiguration } from "../signals/folksonomy"
 
@@ -353,6 +356,70 @@ async function deleteValue(request: ValueDeleteRequest): Promise<{ success: bool
   }
 }
 
+async function checkPropertyClash(request: PropertyRenameRequest): Promise<PropertyClashCheck> {
+  try {
+    const response = await makeAuthenticatedRequest(getApiUrl("/admin/property/check-clash"), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      } as HeadersInit,
+      body: JSON.stringify(request),
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const data: PropertyClashCheck = await response.json()
+    return data
+  } catch (error) {
+    console.error("Error checking property clash:", error)
+    throw error
+  }
+}
+
+async function renameProperty(request: PropertyRenameRequest): Promise<{ success: boolean }> {
+  try {
+    const response = await makeAuthenticatedRequest(getApiUrl("/admin/property/rename"), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      } as HeadersInit,
+      body: JSON.stringify(request),
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    return { success: true }
+  } catch (error) {
+    console.error("Error renaming property:", error)
+    throw error
+  }
+}
+
+async function deleteProperty(request: PropertyDeleteRequest): Promise<{ success: boolean }> {
+  try {
+    const response = await makeAuthenticatedRequest(getApiUrl("/admin/property"), {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      } as HeadersInit,
+      body: JSON.stringify(request),
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    return { success: true }
+  } catch (error) {
+    console.error("Error deleting property:", error)
+    throw error
+  }
+}
+
 export default {
   fetchProductProperties,
   addProductProperty,
@@ -365,4 +432,7 @@ export default {
   getUserInfo,
   replaceValue,
   deleteValue,
+  checkPropertyClash,
+  renameProperty,
+  deleteProperty,
 }

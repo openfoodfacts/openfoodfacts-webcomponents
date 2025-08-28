@@ -659,11 +659,7 @@ export class FolksonomyPropertyProducts extends LitElement {
   }
 
   private get canModerateValues(): boolean {
-    return (
-      this.userInfo?.admin === true ||
-      this.userInfo?.moderator === true ||
-      this.userInfo?.user === true
-    )
+    return this.userInfo?.admin === true || this.userInfo?.moderator === true
   }
 
   private openReplaceModal(value: string) {
@@ -1121,9 +1117,7 @@ export class FolksonomyPropertyProducts extends LitElement {
           <div class="main-content">
             <div class="header-section">
               <div class="property-title-container">
-                <h2 id="property_title">
-                  ${msg("Folksonomy property test 22")}: ${this.propertyName}
-                </h2>
+                <h2 id="property_title">${msg("Folksonomy property")}: ${this.propertyName}</h2>
 
                 <div id="fe_infobox" class="info-box">
                   ${msg("Tip: you can also find the")}
