@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file target-language="nl-BE" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+  <file target-language="nl" source-language="en" original="lit-localize-inputs" datatype="plaintext">
     <body>
       <trans-unit id="s49730f3d5751a433" approved="yes">
         <source>Loading...</source>
-        <target state="final">Bezig met laden...</target>
+        <target state="final">Aan het laden...</target>
       </trans-unit>
       <trans-unit id="s95d23d03f9147581" approved="yes">
         <source>Unzoom</source>
@@ -12,7 +12,7 @@
       </trans-unit>
       <trans-unit id="s166bd56d19670a72" approved="yes">
         <source>Zoom</source>
-        <target state="final">Inzoomen</target>
+        <target state="final">Zoom</target>
       </trans-unit>
       <trans-unit id="s01d2865e3e1d5501" approved="yes">
         <source>Thank you for your assistance!</source>
@@ -230,7 +230,7 @@
       </trans-unit>
       <trans-unit id="s061eb5af92512c85" approved="yes">
         <source>Saved! Can you help with another one?</source>
-        <target state="final">Opgeslagen! Kun je ons helpen met nog een vraag?</target>
+        <target state="final">Opgeslagen! Kun je helpen met een andere vraag?</target>
       </trans-unit>
       <trans-unit id="sb125568d43642e6f" approved="yes">
         <source>Answer questions about the product.</source>
@@ -266,7 +266,7 @@
       </trans-unit>
       <trans-unit id="sb3d4f79d9d8b71e5" approved="yes">
         <source>Submit</source>
-        <target state="final">Bevestigen</target>
+        <target state="final">Verzenden</target>
       </trans-unit>
       <trans-unit id="s0d5b7fee0311db68" approved="yes">
         <source>Property</source>
@@ -436,101 +436,101 @@
         <source>Help us validate the ingredient list of the product.</source>
         <target state="final">Help ons de ingrediëntenlijst van het product te valideren.</target>
       </trans-unit>
-      <trans-unit id="s8f839a03997a16d7">
+      <trans-unit id="s8f839a03997a16d7" approved="yes">
         <source>View Product</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Bekijk product</target>
+        <target state="final">Bekijk product</target>
       </trans-unit>
-      <trans-unit id="s1dc4daf989c71284">
+      <trans-unit id="s1dc4daf989c71284" approved="yes">
         <source>Help us correct the nutritional information</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Help ons de voedingsinformatie te corrigeren</target>
+        <target state="final">Help ons de voedingswaarden te corrigeren</target>
       </trans-unit>
-      <trans-unit id="sf57a61152168cc81">
+      <trans-unit id="sf57a61152168cc81" approved="yes">
         <source>Help us correct the ingredient detection</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Help ons de ingrediëntdetectie te corrigeren</target>
+        <target state="final">Help ons de ingrediëntdetectie te corrigeren</target>
       </trans-unit>
-      <trans-unit id="scf23a05631f93732">
+      <trans-unit id="scf23a05631f93732" approved="yes">
         <source>Confirm Delete</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Bevestig Verwijderen</target>
+        <target state="final">Bevestig Verwijderen</target>
       </trans-unit>
-      <trans-unit id="sdcc2555c5dde524f">
+      <trans-unit id="sdcc2555c5dde524f" approved="yes">
         <source>Are you sure you want to delete this item? This action cannot be undone.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Weet u zeker dat u dit item wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
+        <target state="final">Weet u zeker dat u dit item wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
       </trans-unit>
-      <trans-unit id="s901ae1e236ac45d3">
+      <trans-unit id="s901ae1e236ac45d3" approved="yes">
         <source>Cancel deletion</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Verwijdering annuleren</target>
+        <target state="final">Verwijdering annuleren</target>
       </trans-unit>
       <trans-unit id="sc681b137e8f604f7" approved="yes">
         <source>Confirm deletion</source>
-        <target state="final">Bevestig verwijderen</target>
+        <target state="final">Verwijdering bevestigen</target>
       </trans-unit>
-      <trans-unit id="s4f751fb9b3ed766c">
+      <trans-unit id="s4f751fb9b3ed766c" approved="yes">
         <source>Creating a New Property</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Een nieuw pand creëren</target>
+        <target state="final">Een nieuwe eigenschap maken</target>
       </trans-unit>
-      <trans-unit id="sdb97e5976482606e">
+      <trans-unit id="sdb97e5976482606e" approved="yes">
         <source>Check if a property already exists</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Controleren of een woning al bestaat</target>
+        <target state="final">Controleer of een eigenschap al bestaat</target>
       </trans-unit>
-      <trans-unit id="sb125227d436c2925">
+      <trans-unit id="sb125227d436c2925" approved="yes">
         <source>Search for your property concept in the existing properties database:</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Zoek uw vastgoedconcept in de bestaande vastgoeddatabase:</target>
+        <target state="final">Zoek naar het concept van uw eigenschap in de bestaande eigenschappendatabase:</target>
       </trans-unit>
-      <trans-unit id="s86197dcf3e96af64">
+      <trans-unit id="s86197dcf3e96af64" approved="yes">
         <source>Browse and search existing properties</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Blader en zoek naar bestaande eigendommen</target>
+        <target state="final">Bekijk en doorzoek bestaande eigenschappen</target>
       </trans-unit>
-      <trans-unit id="s34be4af4e8fec4ae">
+      <trans-unit id="s34be4af4e8fec4ae" approved="yes">
         <source>Ask the community first</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Vraag eerst de community</target>
+        <target state="final">Vraag het eerst aan de gemeenschap</target>
       </trans-unit>
-      <trans-unit id="s36d86adc823cbfa6">
+      <trans-unit id="s36d86adc823cbfa6" approved="yes">
         <source>Before creating a new property, discuss it with the community:</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Bespreek een nieuwe eigenschap met de community voordat u deze aanmaakt:</target>
+        <target state="final">Bespreek de nieuwe eigenschap met de gemeenschap voordat u deze aanmaakt:</target>
       </trans-unit>
-      <trans-unit id="s06847c221c4c0bc1">
+      <trans-unit id="s06847c221c4c0bc1" approved="yes">
         <source>I would like to create a property to [describe your use case]...</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ik wil een eigenschap aanmaken om [beschrijf uw use case]...</target>
+        <target state="final">Ik zou een eigenschap willen maken om [beschrijf uw gebruiksdoel]...</target>
       </trans-unit>
-      <trans-unit id="scd21019c3cd618f3">
+      <trans-unit id="scd21019c3cd618f3" approved="yes">
         <source>Join Slack Discussion</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Doe mee aan Slack-discussie</target>
+        <target state="final">Doe mee aan de Slack-discussie</target>
       </trans-unit>
-      <trans-unit id="s8db84aa4bc949af2">
+      <trans-unit id="s8db84aa4bc949af2" approved="yes">
         <source>Document the New Property</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Documenteer de nieuwe eigenschap</target>
+        <target state="final">Documenteer de nieuwe eigenschap</target>
       </trans-unit>
-      <trans-unit id="sb3cbcc1bd0fff140">
+      <trans-unit id="sb3cbcc1bd0fff140" approved="yes">
         <source>Once you've verified that your property doesn't exist and the community agrees it's useful, you need to first document it in the wiki.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Zodra je hebt geverifieerd dat je property niet bestaat en de community het ermee eens is dat deze nuttig is, moet je deze eerst in de wiki documenteren.</target>
+        <target state="final">Zodra je hebt geverifieerd dat je eigenschap nog niet bestaat en de gemeenschap het ermee eens is dat deze nuttig is, moet je deze eerst in de wiki documenteren.</target>
       </trans-unit>
-      <trans-unit id="sfacbbe968fa7d773">
+      <trans-unit id="sfacbbe968fa7d773" approved="yes">
         <source>Property name:</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Eigenschapsnaam:</target>
+        <target state="final">Eigenschapsnaam:</target>
       </trans-unit>
-      <trans-unit id="s5560fb119e40923d">
+      <trans-unit id="s5560fb119e40923d" approved="yes">
         <source>Enter property name...</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Voer een eigenschapsnaam in...</target>
+        <target state="final">Voer een eigenschapsnaam in...</target>
       </trans-unit>
-      <trans-unit id="s2db7b654c0a9bde0">
+      <trans-unit id="s2db7b654c0a9bde0" approved="yes">
         <source>Document the property</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Documenteer de eigenschap</target>
+        <target state="final">Documenteer de eigenschap</target>
       </trans-unit>
-      <trans-unit id="s39e14e14300694c7">
+      <trans-unit id="s39e14e14300694c7" approved="yes">
         <source>Documentation and Guidelines</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Documentatie en richtlijnen</target>
+        <target state="final">Documentatie en richtlijnen</target>
       </trans-unit>
-      <trans-unit id="s801a05fa8e881f37">
+      <trans-unit id="s801a05fa8e881f37" approved="yes">
         <source>Learn more about property creation and guidelines:</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Meer informatie over het creëren van eigendommen en richtlijnen:</target>
+        <target state="final">Meer informatie over het aanmaken van eigenschappen en richtlijnen:</target>
       </trans-unit>
-      <trans-unit id="s3781d25aa51a736c">
+      <trans-unit id="s3781d25aa51a736c" approved="yes">
         <source>Folksonomy Engine Documentation</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Folksonomy Engine-documentatie</target>
+        <target state="final">Folksonomy Engine-documentatie</target>
       </trans-unit>
-      <trans-unit id="s9b87abd68fb9df45">
+      <trans-unit id="s9b87abd68fb9df45" approved="yes">
         <source>Not found? Create new key {value}</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Niet gevonden? Maak een nieuwe sleutel {value}</target>
+        <target state="final">Niet gevonden? Maak nieuwe sleutel aan {value}</target>
       </trans-unit>
       <trans-unit id="hb28f1f2ec1744ee9">
         <source>These properties are created and filed by users for any kind of usages. Feel
@@ -562,13 +562,13 @@
         <source>Values</source>
         <target state="final">Waarden</target>
       </trans-unit>
-      <trans-unit id="s74cb3d66f6a668e1">
+      <trans-unit id="s74cb3d66f6a668e1" approved="yes">
         <source>Documentation</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Documentatie</target>
+        <target state="final">Documentatie</target>
       </trans-unit>
-      <trans-unit id="s565867d84c04aea2">
+      <trans-unit id="s565867d84c04aea2" approved="yes">
         <source>Filter properties...</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Eigenschappen filteren...</target>
+        <target state="final">Eigenschappen filteren...</target>
       </trans-unit>
       <trans-unit id="s3b430cfa5c1fe7f4">
         <source>Documentation for <x id="0" equiv-text="${property.k}"/></source>
