@@ -532,27 +532,23 @@
         <source>Not found? Create new key {value}</source>
         <target state="final">Niet gevonden? Maak nieuwe sleutel aan {value}</target>
       </trans-unit>
-      <trans-unit id="hb28f1f2ec1744ee9">
+      <trans-unit id="hb28f1f2ec1744ee9" approved="yes">
         <source>These properties are created and filed by users for any kind of usages. Feel
                     free to add your own. The properties and values you create
                     <x id="0" equiv-text="&lt;strong&gt;"/>must be factual<x id="1" equiv-text="&lt;/strong&gt;"/>. You can dive into
                     <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
                     or explore the
                     <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="needs-translation">These properties are created and filed by users for any kind of usages. Feel
-                    free to add your own. The properties and values you create
-                    <x id="0" equiv-text="&lt;strong&gt;"/>must be factual<x id="1" equiv-text="&lt;/strong&gt;"/>. You can dive into
-                    <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
-                    or explore the
-                    <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="final">Deze eigenschappen worden door gebruikers aangemaakt en opgeslagen voor allerlei doeleinden. Voeg gerust                     uw eigen eigenschappen toe. De eigenschappen en waarden die u aanmaakt                     <x id="0" equiv-text=“&lt;strong&gt;”/>moeten waarheidsgetrouw zijn                     <x id="1" equiv-text=“&lt;/strong&gt;”/>.                     U kunt een kijkje nemen in                     &lt;X id="2" equiv-text=“&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;”/&gt;de lijst met eigenschappen die al door de gemeenschap worden gebruikt
+                    of de                     <x id="4" equiv-text=“&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;”/>documentatie van de eigenschappen en de zoekmachine bekijken<x id="5" equiv-text=“&lt;/a&gt;”/>.</target>
       </trans-unit>
-      <trans-unit id="h1fbdfea3ad6d664e">
+      <trans-unit id="h1fbdfea3ad6d664e" approved="yes">
         <source>This is brought by the
                     <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't
                     hesitate to participate or give feedback</source>
-        <target state="needs-translation">This is brought by the
-                    <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't
-                    hesitate to participate or give feedback</target>
+        <target state="final">Dit wordt aangeboden door het
+                    <x id="0" equiv-text=“&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;”/>Folksonomy Engine-project<x id="1" equiv-text=“&lt;/a&gt;”/>. Aarzel niet
+                    om deel te nemen of feedback te geven</target>
       </trans-unit>
       <trans-unit id="s71a5c9f4b68ef4d4" approved="yes">
         <source>Count</source>
@@ -570,153 +566,153 @@
         <source>Filter properties...</source>
         <target state="final">Eigenschappen filteren...</target>
       </trans-unit>
-      <trans-unit id="s3b430cfa5c1fe7f4">
+      <trans-unit id="s3b430cfa5c1fe7f4" approved="yes">
         <source>Documentation for <x id="0" equiv-text="${property.k}"/></source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Documentatie voor <x id="0" equiv-text="${property.k}"/></target>
+        <target state="final">Documentatie voor <x id="0" equiv-text="${property.k}"/></target>
       </trans-unit>
-      <trans-unit id="s000a5b76bd3a01c2">
+      <trans-unit id="s000a5b76bd3a01c2" approved="yes">
         <source>Loading properties...</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Eigenschappen laden...</target>
+        <target state="final">Eigenschappen laden...</target>
       </trans-unit>
-      <trans-unit id="s9a7f60fce090ecaf">
+      <trans-unit id="s9a7f60fce090ecaf" approved="yes">
         <source>Failed to load properties. Please try again later.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Eigenschappen laden mislukt. Probeer het later opnieuw.</target>
+        <target state="final">Eigenschappen laden mislukt. Probeer het later opnieuw.</target>
       </trans-unit>
-      <trans-unit id="scdb6cad0b92721bf">
+      <trans-unit id="scdb6cad0b92721bf" approved="yes">
         <source>No properties found.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Geen eigendommen gevonden.</target>
+        <target state="final">Geen eigenschappen gevonden.</target>
       </trans-unit>
-      <trans-unit id="scace072bef961918">
+      <trans-unit id="scace072bef961918" approved="yes">
         <source>Rows</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Rijen</target>
+        <target state="final">Rijen</target>
       </trans-unit>
-      <trans-unit id="s0bb2d48532acc455">
+      <trans-unit id="s0bb2d48532acc455" approved="yes">
         <source>Download CSV</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">CSV downloaden</target>
+        <target state="final">CSV downloaden</target>
       </trans-unit>
       <trans-unit id="s255857544a9d5ec0" approved="yes">
         <source>Reset</source>
         <target state="final">Herstellen</target>
       </trans-unit>
-      <trans-unit id="sefaba4adc4ec9219">
+      <trans-unit id="sefaba4adc4ec9219" approved="yes">
         <source>Folksonomy Properties</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Folksonomy-eigenschappen</target>
+        <target state="final">Folksonomy-eigenschappen</target>
       </trans-unit>
-      <trans-unit id="sa548778b24054030">
+      <trans-unit id="sa548778b24054030" approved="yes">
         <source>Explore all contributed properties from the Folksonomy Engine project. These properties provide additional metadata and insights about products in the Open Food Facts database.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Verken alle bijgedragen eigenschappen van het Folksonomy Engine-project. Deze eigenschappen bieden aanvullende metadata en inzichten over producten in de Open Food Facts-database.</target>
+        <target state="final">Verken alle bijgedragen eigenschappen van het Folksonomy Engine-project. Deze eigenschappen bieden aanvullende metadata en inzichten over producten in de Open Food Facts-database.</target>
       </trans-unit>
-      <trans-unit id="sf4cd86a2f5ef2588">
+      <trans-unit id="sf4cd86a2f5ef2588" approved="yes">
         <source>Product Barcode</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Productbarcode</target>
+        <target state="final">Productbarcode</target>
       </trans-unit>
-      <trans-unit id="sbe472dc3c2685985">
+      <trans-unit id="sbe472dc3c2685985" approved="yes">
         <source>Corresponding Value</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Overeenkomstige waarde</target>
+        <target state="final">Overeenkomstige waarde</target>
       </trans-unit>
-      <trans-unit id="s4d42cc7e00076a3b">
+      <trans-unit id="s4d42cc7e00076a3b" approved="yes">
         <source>Product Count</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Product aantal</target>
+        <target state="final">Aantal Producten</target>
       </trans-unit>
       <trans-unit id="s1a52515ec8ddade8" approved="yes">
         <source>Product barcode</source>
         <target state="final">Streepjescode van product</target>
       </trans-unit>
-      <trans-unit id="sfe87465d50530725">
+      <trans-unit id="sfe87465d50530725" approved="yes">
         <source>Corresponding value</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Overeenkomstige waarde</target>
+        <target state="final">Overeenkomstige waarde</target>
       </trans-unit>
-      <trans-unit id="s839cc2908a5387f2">
+      <trans-unit id="s839cc2908a5387f2" approved="yes">
         <source>Filter barcodes...</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Barcodes filteren...</target>
+        <target state="final">Barcodes filteren...</target>
       </trans-unit>
-      <trans-unit id="sb7f72e4c8a2d3357">
+      <trans-unit id="sb7f72e4c8a2d3357" approved="yes">
         <source>Filter values...</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Waarden filteren...</target>
+        <target state="final">Waarden filteren...</target>
       </trans-unit>
-      <trans-unit id="s1205d5f6fccf8e69">
+      <trans-unit id="s1205d5f6fccf8e69" approved="yes">
         <source>Property Value</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Eigendomswaarde</target>
+        <target state="final">Eigenschapswaarde</target>
       </trans-unit>
-      <trans-unit id="s58e1eeea7a60ae51">
+      <trans-unit id="s58e1eeea7a60ae51" approved="yes">
         <source>Loading products...</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Producten laden...</target>
+        <target state="final">Producten laden...</target>
       </trans-unit>
-      <trans-unit id="sb560fa37a7bfb6c2">
+      <trans-unit id="sb560fa37a7bfb6c2" approved="yes">
         <source>No products found for this property.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Er zijn geen producten gevonden voor deze woning.</target>
+        <target state="final">Er zijn geen producten gevonden voor deze eigenschap.</target>
       </trans-unit>
-      <trans-unit id="seea3800e27baa686">
+      <trans-unit id="seea3800e27baa686" approved="yes">
         <source>Individual Products</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Individuele producten</target>
+        <target state="final">Individuele producten</target>
       </trans-unit>
-      <trans-unit id="s081e2ad82db71e1d">
+      <trans-unit id="s081e2ad82db71e1d" approved="yes">
         <source>Grouped Values</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Gegroepeerde waarden</target>
+        <target state="final">Gegroepeerde waarden</target>
       </trans-unit>
       <trans-unit id="s9fc41f789c63b40d" approved="yes">
         <source>Products</source>
         <target state="final">Producten</target>
       </trans-unit>
-      <trans-unit id="s1e00019dc454872d">
+      <trans-unit id="s1e00019dc454872d" approved="yes">
         <source>Please provide a property name using the property-name attribute.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Geef een eigenschapsnaam op met behulp van het kenmerk property-name.</target>
+        <target state="final">Geef een eigenschapsnaam op met behulp van het kenmerk property-name.</target>
       </trans-unit>
-      <trans-unit id="sc895972c88d38ca5">
+      <trans-unit id="sc895972c88d38ca5" approved="yes">
         <source>Folksonomy property</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Folksonomy-eigendom</target>
+        <target state="final">Folksonomy-eigenschap</target>
       </trans-unit>
-      <trans-unit id="se5127cf0f92e7e48">
+      <trans-unit id="se5127cf0f92e7e48" approved="yes">
         <source>Tip: you can also find the</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Tip: je kunt ook de</target>
+        <target state="final">Tip: je kunt ook de</target>
       </trans-unit>
-      <trans-unit id="sb28639570ff3b852">
+      <trans-unit id="sb28639570ff3b852" approved="yes">
         <source>list of all properties</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">lijst van alle eigendommen</target>
+        <target state="final">lijst van alle eigenschappen</target>
       </trans-unit>
-      <trans-unit id="sdbf806fefc584115">
+      <trans-unit id="sdbf806fefc584115" approved="yes">
         <source>You should find a</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Je zou een moeten vinden</target>
+        <target state="final">Je zou een</target>
       </trans-unit>
-      <trans-unit id="s0b4235aae602a950">
+      <trans-unit id="s0b4235aae602a950" approved="yes">
         <source>dedicated documentation</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">speciale documentatie</target>
+        <target state="final">speciale documentatie</target>
       </trans-unit>
-      <trans-unit id="s55d7249883a98ca1">
+      <trans-unit id="s55d7249883a98ca1" approved="yes">
         <source>about this property on Open Food Facts wiki</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">over deze eigenschap op Open Food Facts wiki</target>
+        <target state="final">over deze eigenschap op Open Food Facts wiki moeten terugvinden</target>
       </trans-unit>
-      <trans-unit id="s1e49126af0935a5b">
+      <trans-unit id="s1e49126af0935a5b" approved="yes">
         <source>List of products using this property</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Lijst met producten die deze eigenschap gebruiken</target>
+        <target state="final">Lijst met producten die deze eigenschap gebruiken</target>
       </trans-unit>
-      <trans-unit id="sb1c538e038f9b214">
+      <trans-unit id="sb1c538e038f9b214" approved="yes">
         <source>Very Good Match <x id="0" equiv-text="${score}"/>%</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Zeer goede match <x id="0" equiv-text="${score}"/>%</target>
+        <target state="final">Zeer goede match <x id="0" equiv-text="${score}"/>%</target>
       </trans-unit>
-      <trans-unit id="s718dea04853f80ae">
+      <trans-unit id="s718dea04853f80ae" approved="yes">
         <source>Good Match <x id="0" equiv-text="${score}"/>%</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Goede match <x id="0" equiv-text="${score}"/>%</target>
+        <target state="final">Goede match <x id="0" equiv-text="${score}"/>%</target>
       </trans-unit>
-      <trans-unit id="s300b3a6ee4e1252d">
+      <trans-unit id="s300b3a6ee4e1252d" approved="yes">
         <source>Poor Match <x id="0" equiv-text="${score}"/>%</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Slechte match <x id="0" equiv-text="${score}"/>%</target>
+        <target state="final">Slechte match <x id="0" equiv-text="${score}"/>%</target>
       </trans-unit>
-      <trans-unit id="sc1c08d0cbcc3bd24">
+      <trans-unit id="sc1c08d0cbcc3bd24" approved="yes">
         <source>Does Not Match</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Komt niet overeen</target>
+        <target state="final">Geen match</target>
       </trans-unit>
-      <trans-unit id="s9c0f52425fd2f07e">
+      <trans-unit id="s9c0f52425fd2f07e" approved="yes">
         <source>May Not Match</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Komt mogelijk niet overeen</target>
+        <target state="final">Mogelijks geen match</target>
       </trans-unit>
-      <trans-unit id="sf88b90b8ba23871c">
+      <trans-unit id="sf88b90b8ba23871c" approved="yes">
         <source>Unknown Match</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Onbekende match</target>
+        <target state="final">Onbekende match</target>
       </trans-unit>
-      <trans-unit id="sa1fa766e0d5634d7">
+      <trans-unit id="sa1fa766e0d5634d7" approved="yes">
         <source>No Score Available</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Geen score beschikbaar</target>
+        <target state="final">Geen score beschikbaar</target>
       </trans-unit>
     </body>
   </file>
