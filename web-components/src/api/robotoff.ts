@@ -139,7 +139,8 @@ const robotoff = {
     }
     const apiUrl = getApiUrl(`/questions/${code}`)
     const url = addParamsToUrl(apiUrl, questionRequestParams)
-    const response = await fetch(url)
+    # Note: we need credentials to be sure to have all questions
+    const response = await fetch(url, {credentials: "include"})
     const result: QuestionsResponse = await response.json()
     return result
   },
@@ -155,7 +156,8 @@ const robotoff = {
   >(requestParams: InsightsRequestParams = {}) {
     const apiUrl = getApiUrl("/insights")
     const url = addParamsToUrl(apiUrl, requestParams)
-    const response = await fetch(url)
+    # Note: we need credentials to be sure to have all insights
+    const response = await fetch(url, {credentials: "include"})
     const result: InsightsResponse<T> = await response.json()
     return result
   },
