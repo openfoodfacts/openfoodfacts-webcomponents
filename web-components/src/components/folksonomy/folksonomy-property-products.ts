@@ -1,9 +1,10 @@
 import { LitElement, html, css } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { downloadCSV } from "../../utils"
-import { localized, msg } from "@lit/localize"
+import { localized, msg, str } from "@lit/localize"
+import { SignalWatcher } from "@lit-labs/signals"
 import folksonomyApi from "../../api/folksonomy"
-import type { UserInfo } from "../../types/folksonomy"
+import { userInfo, fetchUserInfo } from "../../signals/folksonomy"
 
 /**
  * Folksonomy Property Products Viewer
@@ -13,7 +14,7 @@ import type { UserInfo } from "../../types/folksonomy"
  */
 @customElement("folksonomy-property-products")
 @localized()
-export class FolksonomyPropertyProducts extends LitElement {
+export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
   static override styles = css`
     :host {
       font-family: Arial, sans-serif;
@@ -570,9 +571,6 @@ export class FolksonomyPropertyProducts extends LitElement {
   }
 
   @state()
-  private userInfo: UserInfo | null = null
-
-  @state()
   private showReplaceModal = false
 
   @state()
@@ -604,7 +602,7 @@ export class FolksonomyPropertyProducts extends LitElement {
     if (this.propertyName) {
       await this.fetchProductsPropertiesMain()
     }
-    await this.fetchUserInfo()
+    await fetchUserInfo()
   }
 
   override disconnectedCallback() {
@@ -646,20 +644,9 @@ export class FolksonomyPropertyProducts extends LitElement {
     }
   }
 
-  private async fetchUserInfo() {
-    try {
-      const userInfo = await folksonomyApi.getUserInfo()
-      this.userInfo = userInfo
-    } catch (error) {
-      console.error("Error fetching user info:", error)
-      // User might not be authenticated, which is fine
-      this.userInfo = null
-    } finally {
-    }
-  }
-
   private get canModerateValues(): boolean {
-    return this.userInfo?.admin === true || this.userInfo?.moderator === true
+    const currentUserInfo = userInfo.get()
+    return currentUserInfo?.admin === true || currentUserInfo?.moderator === true
   }
 
   private openReplaceModal(value: string) {
@@ -752,9 +739,8 @@ export class FolksonomyPropertyProducts extends LitElement {
           </div>
           <div class="modal-body">
             <div class="modal-text">
-              ${msg("Replace all instances of '${value}' with a new value:").replace(
-                "${value}",
-                this.replaceModalData.value
+              ${msg(
+                str`Replace all instances of '${this.replaceModalData.value}' with a new value:`
               )}
             </div>
             <label for="new-value">${msg("New value:")}</label>
@@ -810,8 +796,8 @@ export class FolksonomyPropertyProducts extends LitElement {
           <div class="modal-body">
             <div class="modal-text">
               ${msg(
-                "Are you sure you want to delete all instances of the value '${value}'?"
-              ).replace("${value}", this.deleteModalValue)}
+                str`Are you sure you want to delete all instances of the value '${this.deleteModalValue}'?`
+              )}
             </div>
             <div class="modal-text">
               <strong>${msg("This action cannot be undone.")}</strong>

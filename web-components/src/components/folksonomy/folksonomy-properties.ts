@@ -1,10 +1,12 @@
 import { LitElement, html, css } from "lit"
 import { customElement, state } from "lit/decorators.js"
 import { localized, msg, str } from "@lit/localize"
+import { SignalWatcher } from "@lit-labs/signals"
 import folksonomyApi from "../../api/folksonomy"
 import { createDebounce, downloadCSV } from "../../utils"
 import "../shared/dual-range-slider"
-import type { UserInfo, PropertyClashCheck } from "../../types/folksonomy"
+import type { PropertyClashCheck } from "../../types/folksonomy"
+import { userInfo, fetchUserInfo } from "../../signals/folksonomy"
 
 /**
  * Folksonomy Properties Viewer
@@ -13,7 +15,7 @@ import type { UserInfo, PropertyClashCheck } from "../../types/folksonomy"
  */
 @customElement("folksonomy-properties")
 @localized()
-export class FolksonomyProperties extends LitElement {
+export class FolksonomyProperties extends SignalWatcher(LitElement) {
   static override styles = css`
     :host {
       display: block;
@@ -486,9 +488,6 @@ export class FolksonomyProperties extends LitElement {
   }
 
   @state()
-  private userInfo: UserInfo | null = null
-
-  @state()
   private showRenameModal = false
 
   @state()
@@ -524,7 +523,7 @@ export class FolksonomyProperties extends LitElement {
   override async connectedCallback() {
     super.connectedCallback()
     await this.fetchProperties()
-    await this.fetchUserInfo()
+    await fetchUserInfo()
   }
 
   override disconnectedCallback() {
@@ -579,19 +578,9 @@ export class FolksonomyProperties extends LitElement {
     }
   }
 
-  private async fetchUserInfo() {
-    try {
-      const userInfo = await folksonomyApi.getUserInfo()
-      this.userInfo = userInfo
-    } catch (error) {
-      console.error("Error fetching user info:", error)
-      // User might not be authenticated, which is fine
-      this.userInfo = null
-    }
-  }
-
   private get canModerateProperties(): boolean {
-    return this.userInfo?.admin === true || this.userInfo?.moderator === true
+    const currentUserInfo = userInfo.get()
+    return currentUserInfo?.admin === true || currentUserInfo?.moderator === true
   }
 
   private getPropertyUrl(propertyName: string) {
@@ -817,10 +806,7 @@ export class FolksonomyProperties extends LitElement {
           </div>
           <div class="modal-body">
             <div class="modal-text">
-              ${msg("Rename property '${property}' to:").replace(
-                "${property}",
-                this.renameModalData.property
-              )}
+              ${msg(str`Rename property '${this.renameModalData.property}' to:`)}
             </div>
             <label for="new-property">${msg("New property name:")}</label>
             <input
@@ -874,9 +860,9 @@ export class FolksonomyProperties extends LitElement {
           </div>
           <div class="modal-body">
             <div class="modal-text">
-              ${msg("Renaming '${oldProperty}' to '${newProperty}' will affect:")
-                .replace("${oldProperty}", this.renameModalData.property)
-                .replace("${newProperty}", this.renameModalData.newProperty)}
+              ${msg(
+                str`Renaming '${this.renameModalData.property}' to '${this.renameModalData.newProperty}' will affect:`
+              )}
             </div>
             <div class="clash-info">
               <div class="clash-stat">
@@ -920,9 +906,8 @@ export class FolksonomyProperties extends LitElement {
           </div>
           <div class="modal-body">
             <div class="modal-text">
-              ${msg("Are you sure you want to delete the property '${property}'?").replace(
-                "${property}",
-                this.deleteModalProperty
+              ${msg(
+                str`Are you sure you want to delete the property '${this.deleteModalProperty}'?`
               )}
             </div>
             <div class="modal-text">
