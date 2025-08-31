@@ -2,21 +2,24 @@
 
 ## [1.12.3](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.12.2...v1.12.3) (2025-08-18)
 
+
 ### Bug Fixes
 
-- improve taxonomy name retrieval with better error handling ([#249](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/249)) ([8e24499](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/8e2449911bdfb49e7d9d25158a4990d6b00c481c)), closes [#217](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/217)
+* improve taxonomy name retrieval with better error handling ([#249](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/249)) ([8e24499](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/8e2449911bdfb49e7d9d25158a4990d6b00c481c)), closes [#217](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/217)
 
 ## [1.12.2](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.12.1...v1.12.2) (2025-08-17)
 
+
 ### Bug Fixes
 
-- Product card height inconsistency fixed ([#241](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/241)) ([822ad73](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/822ad73911b10537df8c93b2dd65fd616a550bd0))
+* Product card height  inconsistency fixed ([#241](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/241)) ([822ad73](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/822ad73911b10537df8c93b2dd65fd616a550bd0))
 
 ## [1.12.1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.12.0...v1.12.1) (2025-08-15)
 
+
 ### Bug Fixes
 
-- score value type in product card prop ([#235](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/235)) ([eefbcee](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/eefbcee1c866a1c14464880fcac3d92c1a941330))
+* score value type in product card prop ([#235](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/235)) ([eefbcee](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/eefbcee1c866a1c14464880fcac3d92c1a941330))
 
 ## [1.12.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.11.0...v1.12.0) (2025-08-13)
 
