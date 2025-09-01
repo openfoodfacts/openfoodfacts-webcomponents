@@ -4,7 +4,7 @@ import { customElement, property } from "lit/decorators.js"
 import { NewsData, ProcessedNewsItem } from "../../types/news-feed"
 import { Task } from "@lit/task"
 import { sanitizeHtml } from "../../utils/html"
-import dayjs from "dayjs"
+import dayjs from "dayjs/esm"
 
 /**
  * `news-feed` - A web component that displays news items from a JSON feed.
@@ -171,21 +171,13 @@ export class NewsFeed extends LitElement {
     const newsDetailsMap = rawData.news || {}
     const feedIds = rawData.tagline_feed?.default?.news || [] // Safely access nested properties
 
-    console.log(`[NewsFeed] Processing for language: ${currentLang} (Full: ${currentFullLang})`)
-    console.log(
-      "[NewsFeed] Feed IDs to process:",
-      feedIds.map((item) => item.id)
-    )
-
     if (!rawData.news) {
       console.warn("[NewsFeed] 'news' object missing in raw data.")
-      return [] // Return empty if essential data is missing
+      return []
     }
 
     if (!rawData.tagline_feed?.default?.news) {
       console.warn("[NewsFeed] 'tagline_feed.default.news' array missing in raw data.")
-      // Decide if you want to process *all* news items if feed is missing
-      // For now, let's stick to the feed definition.
       return []
     }
 
@@ -204,14 +196,10 @@ export class NewsFeed extends LitElement {
       const fullLangKey = currentFullLang.replace("-", "_") // e.g., en-US -> en_US
       if (details.translations && details.translations[fullLangKey]) {
         translation = details.translations[fullLangKey]
-        console.log(`[NewsFeed] Using translation for full language: ${fullLangKey}`)
       }
       // Else, check for primary language match (e.g., fr)
       else if (details.translations && details.translations[currentLang]) {
         translation = details.translations[currentLang]
-        console.log(`[NewsFeed] Using translation for primary language: ${currentLang}`)
-      } else {
-        console.log(`[NewsFeed] Using default translation for ID: ${id}`)
       }
 
       // --- Create Processed Item ---
@@ -433,7 +421,6 @@ export class NewsFeed extends LitElement {
       pending: () => html`<div class="loading-container">Loading news...</div>`,
       error: (e) => html`<div class="error-container">${e}</div>`,
       complete: (news) => {
-        console.debug("News feed loaded:", news)
         return html`
           <div class="news-container">
             ${news.length > 0
