@@ -158,7 +158,7 @@ export class RobotoffIngredientDetection extends DisplayProductLinkMixin(
    */
   override render() {
     return this.insightsTask.render({
-      pending: () => html`<off-wc-loading></off-wc-loading>`,
+      pending: () => html`<off-wc-loader></off-wc-loader>`,
       complete: () => {
         const insight = this.currentInsight
 
