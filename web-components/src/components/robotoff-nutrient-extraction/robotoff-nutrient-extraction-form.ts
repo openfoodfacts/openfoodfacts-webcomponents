@@ -237,7 +237,7 @@ export class RobotoffNutrientExtractionForm extends LitElement {
   /**
    * Loading state for buttons
    */
-  @property({ type: String, reflect: true })
+  @property({ type: Number, reflect: true })
   loading?: AnnotationAnswer
   /**
    * Serving size value to display

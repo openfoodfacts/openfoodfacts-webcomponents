@@ -173,7 +173,7 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
               ? nothing
               : html`
                   <robotoff-question-form
-                    .is-image-expanded=${this.options.isImageExpanded}
+                    .isImageExpanded=${this.options.isImageExpanded ?? false}
                     .question=${question}
                     @submit=${this.onQuestionAnswered}
                   ></robotoff-question-form>

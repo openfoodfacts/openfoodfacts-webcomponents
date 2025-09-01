@@ -20,7 +20,9 @@ import "../shared/zoomable-image"
  */
 @customElement("robotoff-question-form")
 @localized()
-export class RobotoffQuestionForm extends SignalWatcher(LoadingWithTimeoutMixin(LitElement)) {
+export class RobotoffQuestionForm extends SignalWatcher(
+  LoadingWithTimeoutMixin(LitElement, undefined as AnnotationAnswer | undefined)
+) {
   static override styles = [
     ...getButtonClasses([ButtonType.White]),
     FULL_WIDTH,
@@ -86,7 +88,7 @@ export class RobotoffQuestionForm extends SignalWatcher(LoadingWithTimeoutMixin(
    * Emit an event submit when the user clicks on a button.
    * It stops the propagation of the event to avoid the click event on the parent.
    */
-  private emitEventClick = (event: Event, value: string) => {
+  private emitEventClick = (event: Event, value: AnnotationAnswer) => {
     event.stopPropagation()
     const click = new CustomEvent(EventType.SUBMIT, {
       detail: { value },
@@ -96,6 +98,7 @@ export class RobotoffQuestionForm extends SignalWatcher(LoadingWithTimeoutMixin(
 
     this.dispatchEvent(click)
   }
+
   private _annotateProduct = async (event: Event, value: AnnotationAnswer) => {
     this.showLoading(value)
     await answerQuestion(this.question?.insight_id!, value)
