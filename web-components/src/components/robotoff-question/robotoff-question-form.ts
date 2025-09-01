@@ -10,6 +10,8 @@ import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin
 import { FULL_WIDTH } from "../../styles/utils"
 import "../shared/loading-button"
 import "../buttons/zoom-unzoom-button"
+import "../shared/zoomable-image"
+
 /**
  * RobotoffQuestionForm component
  * It displays a form to answer a question about a product.
