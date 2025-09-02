@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.13.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.12.3...v1.13.0) (2025-09-02)
+
+
+### Features
+
+* add news-feed web component ([#268](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/268)) ([24c80cd](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/24c80cd89d416991a4e4f67cd0db7c4f787bf5b1))
+* adds delete and replace for values and properties ([#264](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/264)) ([3bceb87](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/3bceb871be3aa02a7439eec2f6902847e61dfc9d))
+* Integrate @openfoodfacts/openfoodfacts-nodejs ([#266](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/266)) ([7052f3b](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/7052f3ba3677c1c8393b988bfa79d631521bf968))
+
+
+### Bug Fixes
+
+* fixes the link for properties exploration ([#213](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/213)) ([6385338](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/6385338de1a11a97de8e3b48cac18b121ef80742))
+* Include credentials in robotoff read requests ([#265](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/265)) ([cb52e90](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/cb52e901d5b33bec3d9da750840ca09958512528))
+
 ## [1.12.3](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.12.2...v1.12.3) (2025-08-18)
 
 
