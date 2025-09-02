@@ -39,7 +39,7 @@ import { DisplayProductLinkMixin } from "../../mixins/display-product-link-mixin
 @customElement("robotoff-ingredient-detection")
 @localized()
 export class RobotoffIngredientDetection extends DisplayProductLinkMixin(
-  LanguageCodesMixin(LoadingWithTimeoutMixin(LitElement))
+  LanguageCodesMixin(LoadingWithTimeoutMixin(LitElement, undefined as AnnotationAnswer | undefined))
 ) {
   static override styles = [
     css`
@@ -158,7 +158,7 @@ export class RobotoffIngredientDetection extends DisplayProductLinkMixin(
    */
   override render() {
     return this.insightsTask.render({
-      pending: () => html`<off-wc-loading></off-wc-loading>`,
+      pending: () => html`<off-wc-loader></off-wc-loader>`,
       complete: () => {
         const insight = this.currentInsight
 
@@ -185,7 +185,7 @@ export class RobotoffIngredientDetection extends DisplayProductLinkMixin(
         ${this.renderProductLink(insight.barcode)}
         <robotoff-ingredient-detection-form
           .insight=${insight}
-          .loading=${this.loading as AnnotationAnswer | undefined}
+          .loading=${this.loading}
           @submit=${this.onFormSubmit}
         ></robotoff-ingredient-detection-form>
       </div>

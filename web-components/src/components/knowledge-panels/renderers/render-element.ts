@@ -2,6 +2,14 @@ import { LitElement, html, TemplateResult } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { KnowledgePanelElement, KnowledgePanelsData } from "../../../types/knowledge-panel"
 
+import "../renderers/render-text"
+import "../renderers/render-table"
+import "../renderers/render-titled-text"
+import "../renderers/render-panel"
+import "../renderers/render-panel-element"
+import "../renderers/render-action"
+import "../renderers/render-panel-group"
+
 /**
  * Element renderer dispatcher component
  *

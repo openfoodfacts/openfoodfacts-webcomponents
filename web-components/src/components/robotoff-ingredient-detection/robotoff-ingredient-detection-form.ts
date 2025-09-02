@@ -65,10 +65,10 @@ export class RobotoffIngredientDetectionForm extends LitElement {
   form?: HTMLFormElement
 
   /**
-   * Whether the form is loading
-   * @type {boolean}
+   * Indicates which annotation answer is currently being sent by the form, if any.
+   * @type {AnnotationAnswer}
    */
-  @property({ type: String, reflect: true })
+  @property({ type: Number, reflect: true })
   loading?: AnnotationAnswer
 
   /**
@@ -206,9 +206,8 @@ export class RobotoffIngredientDetectionForm extends LitElement {
           <loading-button
             css-classes="button success-button"
             type="submit"
-            .loading=${[AnnotationAnswer.ACCEPT, AnnotationAnswer.ACCEPT_AND_ADD_DATA].includes(
-              this.loading!
-            )}
+            .loading=${this.loading === AnnotationAnswer.ACCEPT ||
+            this.loading === AnnotationAnswer.ACCEPT_AND_ADD_DATA}
             .disabled=${this.isLoading}
             @click="${() => triggerSubmit(this.form!)}"
             label="${msg("Validate")}"

@@ -9,6 +9,7 @@ import { classMap } from "lit/directives/class-map.js"
 import "../shared/modal"
 import "../robotoff-ingredient-spellcheck/robotoff-ingredient-spellcheck"
 import "../robotoff-nutrient-extraction/robotoff-nutrient-extraction"
+import "../robotoff-ingredient-detection/robotoff-ingredient-detection"
 import "../robotoff-question/robotoff-question"
 
 enum MessageType {

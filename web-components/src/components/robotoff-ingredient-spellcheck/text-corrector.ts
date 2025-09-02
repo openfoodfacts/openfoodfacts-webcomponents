@@ -218,7 +218,7 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
   /**
    * Loading state for buttons
    */
-  @property({ type: String, reflect: true })
+  @property({ type: Number, reflect: true })
   loading?: AnnotationAnswer
 
   /**

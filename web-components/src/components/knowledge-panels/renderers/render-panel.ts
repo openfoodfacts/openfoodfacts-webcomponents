@@ -5,8 +5,14 @@ import {
   KnowledgePanelElement,
   KnowledgePanelsData,
 } from "../../../types/knowledge-panel"
+
 import "../../../utils/knowledge-panels/heading-utils"
 import "../../../utils/knowledge-panels/extract-images"
+
+import "./render-panel-header"
+import "./render-element"
+import "./render-image"
+
 /**
  * Panel renderer component
  *
