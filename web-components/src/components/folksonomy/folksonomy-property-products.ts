@@ -1,8 +1,10 @@
 import { LitElement, html, css } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { downloadCSV } from "../../utils"
-import { localized, msg } from "@lit/localize"
+import { localized, msg, str } from "@lit/localize"
+import { SignalWatcher } from "@lit-labs/signals"
 import folksonomyApi from "../../api/folksonomy"
+import { userInfo } from "../../signals/folksonomy"
 
 /**
  * Folksonomy Property Products Viewer
@@ -12,7 +14,7 @@ import folksonomyApi from "../../api/folksonomy"
  */
 @customElement("folksonomy-property-products")
 @localized()
-export class FolksonomyPropertyProducts extends LitElement {
+export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
   static override styles = css`
     :host {
       font-family: Arial, sans-serif;
@@ -313,6 +315,226 @@ export class FolksonomyPropertyProducts extends LitElement {
         flex: 1;
       }
     }
+
+    .actions-column {
+      text-align: center;
+      width: 120px;
+    }
+
+    .actions-buttons {
+      display: flex;
+      gap: 0.25rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      background-color: transparent;
+      border: 1px solid #341100;
+      color: #341100;
+      padding: 0.25rem 0.5rem;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      transition: all 0.2s;
+      min-width: 50px;
+    }
+
+    .action-btn:hover {
+      background-color: #341100;
+      color: white;
+    }
+
+    .action-btn.delete {
+      border-color: #dc3545;
+      color: #dc3545;
+    }
+
+    .action-btn.delete:hover {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .action-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .action-btn:disabled:hover {
+      background-color: transparent;
+      color: #341100;
+    }
+
+    .action-btn.delete:disabled:hover {
+      background-color: transparent;
+      color: #dc3545;
+    }
+
+    @media (max-width: 768px) {
+      .actions-column {
+        width: 100px;
+      }
+
+      .actions-buttons {
+        flex-direction: column;
+        gap: 0.125rem;
+      }
+
+      .action-btn {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.4rem;
+        min-width: 40px;
+      }
+    }
+
+    /* Modal styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideIn 0.2s ease-out;
+    }
+
+    .modal-header {
+      padding: 1.5rem 1.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #333;
+      margin: 0 0 1rem 0;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .modal-footer {
+      padding: 0 1.5rem 1.5rem;
+      display: flex;
+      gap: 0.75rem;
+      justify-content: flex-end;
+    }
+
+    .modal-input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .modal-input:focus {
+      outline: none;
+      border-color: #341100;
+      box-shadow: 0 0 0 2px rgba(52, 17, 0, 0.1);
+    }
+
+    .modal-text {
+      color: #555;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+
+    .modal-btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-width: 80px;
+    }
+
+    .modal-btn-primary {
+      background-color: #341100;
+      color: white;
+    }
+
+    .modal-btn-primary:hover {
+      background-color: #2a0e00;
+    }
+
+    .modal-btn-danger {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .modal-btn-danger:hover {
+      background-color: #c82333;
+    }
+
+    .modal-btn-secondary {
+      background-color: #f8f9fa;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+
+    .modal-btn-secondary:hover {
+      background-color: #e9ecef;
+    }
+
+    .modal-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .modal {
+        width: 95%;
+        margin: 1rem;
+      }
+
+      .modal-footer {
+        flex-direction: column;
+      }
+
+      .modal-btn {
+        width: 100%;
+      }
+    }
   `
 
   /**
@@ -320,6 +542,13 @@ export class FolksonomyPropertyProducts extends LitElement {
    */
   @property({ type: String, attribute: "property-name" })
   propertyName = ""
+
+  /**
+   * The base URL for properties listing (e.g., "https://world.openfoodfacts.org/properties")
+   * @type {string}
+   */
+  @property({ type: String, attribute: "properties-url" })
+  propertiesUrl = "/properties"
 
   @state()
   private products: Array<{ product: string; v: string }> = []
@@ -348,6 +577,31 @@ export class FolksonomyPropertyProducts extends LitElement {
     value: "",
   }
 
+  @state()
+  private showReplaceModal = false
+
+  @state()
+  private showDeleteModal = false
+
+  @state()
+  private showMessageModal = false
+
+  @state()
+  private replaceModalData = {
+    value: "",
+    newValue: "",
+  }
+
+  @state()
+  private deleteModalValue = ""
+
+  @state()
+  private messageModalData = {
+    title: "",
+    message: "",
+    type: "success" as "success" | "error",
+  }
+
   private filterTimeout: number | null = null
 
   override async connectedCallback() {
@@ -355,6 +609,7 @@ export class FolksonomyPropertyProducts extends LitElement {
     if (this.propertyName) {
       await this.fetchProductsPropertiesMain()
     }
+    await folksonomyApi.fetchUserInfo()
   }
 
   override disconnectedCallback() {
@@ -394,6 +649,223 @@ export class FolksonomyPropertyProducts extends LitElement {
     } finally {
       this.loading = false
     }
+  }
+
+  private get canModerateValues(): boolean {
+    const currentUserInfo = userInfo.get()
+    return currentUserInfo?.admin === true || currentUserInfo?.moderator === true
+  }
+
+  private openReplaceModal(value: string) {
+    this.replaceModalData = {
+      value,
+      newValue: "",
+    }
+    this.showReplaceModal = true
+  }
+
+  private closeReplaceModal() {
+    this.showReplaceModal = false
+    this.replaceModalData = {
+      value: "",
+      newValue: "",
+    }
+  }
+
+  private async handleReplaceValue() {
+    const { value, newValue } = this.replaceModalData
+
+    if (!newValue.trim() || newValue.trim() === value) {
+      return
+    }
+
+    try {
+      await folksonomyApi.replaceValue({
+        property: this.propertyName,
+        old_value: value,
+        new_value: newValue.trim(),
+      })
+
+      this.closeReplaceModal()
+      await this.fetchProductsPropertiesMain()
+      this.showMessage("success", msg("Success"), msg("Value replaced successfully!"))
+    } catch (error) {
+      console.error("Error replacing value:", error)
+      this.showMessage("error", msg("Error"), msg("Failed to replace value. Please try again."))
+    }
+  }
+
+  private openDeleteModal(value: string) {
+    this.deleteModalValue = value
+    this.showDeleteModal = true
+  }
+
+  private closeDeleteModal() {
+    this.showDeleteModal = false
+    this.deleteModalValue = ""
+  }
+
+  private async handleDeleteValue() {
+    try {
+      await folksonomyApi.deleteValue({
+        property: this.propertyName,
+        value: this.deleteModalValue,
+      })
+
+      this.closeDeleteModal()
+      await this.fetchProductsPropertiesMain()
+      this.showMessage("success", msg("Success"), msg("Value deleted successfully!"))
+    } catch (error) {
+      console.error("Error deleting value:", error)
+      this.showMessage("error", msg("Error"), msg("Failed to delete value. Please try again."))
+    }
+  }
+
+  private showMessage(type: "success" | "error", title: string, message: string) {
+    this.messageModalData = { type, title, message }
+    this.showMessageModal = true
+  }
+
+  private closeMessageModal() {
+    this.showMessageModal = false
+    this.messageModalData = {
+      title: "",
+      message: "",
+      type: "success",
+    }
+  }
+
+  private renderReplaceModal() {
+    if (!this.showReplaceModal) return ""
+
+    return html`
+      <div class="modal-overlay" @click="${this.closeReplaceModal}">
+        <div class="modal" @click="${(e: Event) => e.stopPropagation()}">
+          <div class="modal-header">
+            <h3 class="modal-title">${msg("Replace Value")}</h3>
+          </div>
+          <div class="modal-body">
+            <div class="modal-text">
+              ${msg(
+                str`Replace all instances of '${this.replaceModalData.value}' with a new value:`
+              )}
+            </div>
+            <label for="new-value">${msg("New value:")}</label>
+            <input
+              id="new-value"
+              type="text"
+              class="modal-input"
+              .value="${this.replaceModalData.newValue}"
+              @input="${(e: Event) => {
+                this.replaceModalData = {
+                  ...this.replaceModalData,
+                  newValue: (e.target as HTMLInputElement).value,
+                }
+              }}"
+              @keydown="${(e: KeyboardEvent) => {
+                if (e.key === "Enter") {
+                  this.handleReplaceValue()
+                } else if (e.key === "Escape") {
+                  this.closeReplaceModal()
+                }
+              }}"
+              placeholder="${msg("Enter new value...")}"
+              autofocus
+            />
+          </div>
+          <div class="modal-footer">
+            <button class="modal-btn modal-btn-secondary" @click="${this.closeReplaceModal}">
+              ${msg("Cancel")}
+            </button>
+            <button
+              class="modal-btn modal-btn-primary"
+              @click="${this.handleReplaceValue}"
+              ?disabled="${!this.replaceModalData.newValue.trim() ||
+              this.replaceModalData.newValue.trim() === this.replaceModalData.value}"
+            >
+              ${msg("Replace")}
+            </button>
+          </div>
+        </div>
+      </div>
+    `
+  }
+
+  private renderDeleteModal() {
+    if (!this.showDeleteModal) return ""
+
+    return html`
+      <div class="modal-overlay" @click="${this.closeDeleteModal}">
+        <div class="modal" @click="${(e: Event) => e.stopPropagation()}">
+          <div class="modal-header">
+            <h3 class="modal-title">${msg("Delete Value")}</h3>
+          </div>
+          <div class="modal-body">
+            <div class="modal-text">
+              ${msg(
+                str`Are you sure you want to delete all instances of the value '${this.deleteModalValue}'?`
+              )}
+            </div>
+            <div class="modal-text">
+              <strong>${msg("This action cannot be undone.")}</strong>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="modal-btn modal-btn-secondary" @click="${this.closeDeleteModal}">
+              ${msg("Cancel")}
+            </button>
+            <button class="modal-btn modal-btn-danger" @click="${this.handleDeleteValue}">
+              ${msg("Delete")}
+            </button>
+          </div>
+        </div>
+      </div>
+    `
+  }
+
+  private renderMessageModal() {
+    if (!this.showMessageModal) return ""
+
+    return html`
+      <div class="modal-overlay" @click="${this.closeMessageModal}">
+        <div class="modal" @click="${(e: Event) => e.stopPropagation()}">
+          <div class="modal-header">
+            <h3 class="modal-title">${this.messageModalData.title}</h3>
+          </div>
+          <div class="modal-body">
+            <div class="modal-text">${this.messageModalData.message}</div>
+          </div>
+          <div class="modal-footer">
+            <button class="modal-btn modal-btn-primary" @click="${this.closeMessageModal}">
+              ${msg("OK")}
+            </button>
+          </div>
+        </div>
+      </div>
+    `
+  }
+
+  private renderValueActions(valueItem: { value: string; count: number }) {
+    return html`
+      <td class="actions-column">
+        <div class="actions-buttons">
+          <button
+            class="action-btn"
+            @click="${() => this.openReplaceModal(valueItem.value)}"
+            title="${msg("Replace this value across all products")}"
+          >
+            ${msg("Replace")}
+          </button>
+          <button
+            class="action-btn delete"
+            @click="${() => this.openDeleteModal(valueItem.value)}"
+            title="${msg("Delete this value from all products")}"
+          >
+            ${msg("Delete")}
+          </button>
+        </div>
+      </td>
+    `
   }
 
   private applyFilters() {
@@ -530,6 +1002,7 @@ export class FolksonomyPropertyProducts extends LitElement {
           </a>
         </td>
         <td class="count">${valueItem.count}</td>
+        ${this.canModerateValues ? this.renderValueActions(valueItem) : ""}
       </tr>
     `
   }
@@ -540,6 +1013,7 @@ export class FolksonomyPropertyProducts extends LitElement {
         <tr>
           <th class="value-header">${msg("Property Value")}</th>
           <th class="count-header">${msg("Product Count")}</th>
+          ${this.canModerateValues ? html`<th class="actions-column">${msg("Actions")}</th>` : ""}
         </tr>
         <tr class="filter-row">
           <td>
@@ -553,6 +1027,7 @@ export class FolksonomyPropertyProducts extends LitElement {
             />
           </td>
           <td></td>
+          ${this.canModerateValues ? html`<td></td>` : ""}
         </tr>
       </thead>
     `
@@ -639,7 +1114,7 @@ export class FolksonomyPropertyProducts extends LitElement {
 
                 <div id="fe_infobox" class="info-box">
                   ${msg("Tip: you can also find the")}
-                  <a href="https://world.openfoodfacts.org/properties" target="_blank"
+                  <a href="${this.propertiesUrl}" target="_blank"
                     >${msg("list of all properties")}</a
                   >.
                 </div>
@@ -666,6 +1141,8 @@ export class FolksonomyPropertyProducts extends LitElement {
           </div>
         </div>
       </div>
+
+      ${this.renderReplaceModal()} ${this.renderDeleteModal()} ${this.renderMessageModal()}
     `
   }
 }

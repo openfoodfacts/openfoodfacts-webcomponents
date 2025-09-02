@@ -31,7 +31,7 @@ export class FolksonomyEditor extends LitElement {
    * @type {string}
    */
   @property({ type: String, attribute: "properties-base-url" })
-  propertiesBaseUrl = "https://world.openfoodfacts.org/properties"
+  propertiesBaseUrl = "/properties"
 
   /**
    * The URL for properties documentation (e.g., "https://wiki.openfoodfacts.org/Folksonomy/Property")
