@@ -3,6 +3,10 @@ import tsparser from "@typescript-eslint/parser"
 import prettierPlugin from "eslint-plugin-prettier"
 
 export default [
+  // global ignores
+  {
+    ignores: ["node_modules/**", "docs/**/dist/**", "dist/**", "src/**/dist/**"]
+  },
   {
     languageOptions: {
       ecmaVersion: 2021,
@@ -17,7 +21,6 @@ export default [
       },
     },
     files: ["**/*.ts", "**/*.tsx"],
-    ignores: ["node_modules/**", "dist/**", "src/**/dist/**"],
     plugins: {
       "@typescript-eslint": tseslint,
       prettier: prettierPlugin,
@@ -30,4 +33,4 @@ export default [
       "prettier/prettier": ["error"],
     },
   },
-]
+];
