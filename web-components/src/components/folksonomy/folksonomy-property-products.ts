@@ -4,7 +4,7 @@ import { downloadCSV } from "../../utils"
 import { localized, msg, str } from "@lit/localize"
 import { SignalWatcher } from "@lit-labs/signals"
 import folksonomyApi from "../../api/folksonomy"
-import { userInfo, fetchUserInfo } from "../../signals/folksonomy"
+import { userInfo } from "../../signals/folksonomy"
 
 /**
  * Folksonomy Property Products Viewer
@@ -543,6 +543,13 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
   @property({ type: String, attribute: "property-name" })
   propertyName = ""
 
+  /**
+   * The base URL for properties listing (e.g., "https://world.openfoodfacts.org/properties")
+   * @type {string}
+   */
+  @property({ type: String, attribute: "properties-url" })
+  propertiesUrl = "/properties"
+
   @state()
   private products: Array<{ product: string; v: string }> = []
 
@@ -602,7 +609,7 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
     if (this.propertyName) {
       await this.fetchProductsPropertiesMain()
     }
-    await fetchUserInfo()
+    await folksonomyApi.fetchUserInfo()
   }
 
   override disconnectedCallback() {
@@ -1107,7 +1114,7 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
 
                 <div id="fe_infobox" class="info-box">
                   ${msg("Tip: you can also find the")}
-                  <a href="https://world.openfoodfacts.org/properties" target="_blank"
+                  <a href="${this.propertiesUrl}" target="_blank"
                     >${msg("list of all properties")}</a
                   >.
                 </div>

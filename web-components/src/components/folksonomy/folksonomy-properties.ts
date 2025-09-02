@@ -1,12 +1,12 @@
 import { LitElement, html, css } from "lit"
-import { customElement, state } from "lit/decorators.js"
+import { customElement, property, state } from "lit/decorators.js"
 import { localized, msg, str } from "@lit/localize"
 import { SignalWatcher } from "@lit-labs/signals"
 import folksonomyApi from "../../api/folksonomy"
 import { createDebounce, downloadCSV } from "../../utils"
 import "../shared/dual-range-slider"
 import type { PropertyClashCheck } from "../../types/folksonomy"
-import { userInfo, fetchUserInfo } from "../../signals/folksonomy"
+import { userInfo } from "../../signals/folksonomy"
 
 /**
  * Folksonomy Properties Viewer
@@ -458,6 +458,13 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
     }
   `
 
+  /**
+   * Path to single property, the property name is appended to the end.
+   * It can be a full URL, a relative or absolute path
+   */
+  @property({ attribute: "property-base-path" })
+  propertyBasePath = "/property/"
+
   @state()
   private properties: Array<{ k: string; count: number; values: number }> = []
 
@@ -523,7 +530,7 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
   override async connectedCallback() {
     super.connectedCallback()
     await this.fetchProperties()
-    await fetchUserInfo()
+    await folksonomyApi.fetchUserInfo()
   }
 
   override disconnectedCallback() {
@@ -584,7 +591,7 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
   }
 
   private getPropertyUrl(propertyName: string) {
-    return `https://world.openfoodfacts.org/property/${propertyName}`
+    return `${this.propertyBasePath}${propertyName}`
   }
 
   private getDocumentationUrl(propertyName: string) {
