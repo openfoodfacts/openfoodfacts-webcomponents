@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: "24.x"
           registry-url: 'https://npm.pkg.github.com'
-          scope: @openfoodfacts
+          scope: "@openfoodfacts"
       - run: |
           cd web-components
           npm install
