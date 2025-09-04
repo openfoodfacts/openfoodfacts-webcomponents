@@ -8,7 +8,7 @@ import { languageCode } from "../signals/app"
 export const { getLocale, setLocale } = configureLocalization({
   sourceLocale,
   targetLocales,
-  loadLocale: (locale: string) => import(`./localization/locales/${locale}.js`),
+  loadLocale: (locale: string) => import("./dist/locales/" + locale + ".ts"),
 })
 
 export const setLanguageCode = (newLanguageCode: string) => {
