@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-// import { OffWebcomponents } from "../off-webcomponents.bundled.js";
+// import { OffWebcomponents } from "../off-webcomponents.js";
 //
 // import { fixture, assert } from "@open-wc/testing";
 // import { html } from "lit/static-html.js";

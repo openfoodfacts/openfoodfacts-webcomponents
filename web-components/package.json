@@ -12,8 +12,8 @@
   },
   "exports": {
     ".": {
-      "import": "./dist/off-webcomponents.bundled.js",
-      "require": "./dist/off-webcomponents.bundled.cjs"
+      "import": "./dist/off-webcomponents.js",
+      "require": "./dist/off-webcomponents.cjs"
     }
   },
   "types": "dist/types/off-webcomponents.d.ts",
@@ -25,8 +25,8 @@
     "build:watch": "npm run translations:build && MODE=dev rollup -c -w",
     "build:doc": "rm -rf docs/dist && npm run analyze && npm run build && cp -r dist docs && cp -f docs/index.html docs/dist/index.html",
     "clean": "rimraf dist && rimraf my-element.{d.ts,d.ts.map,js,js.map} test/my-element.{d.ts,d.ts.map,js,js.map} test/my-element_test.{d.ts,d.ts.map,js,js.map}",
-    "lint": "npm run lit-analyzer && npm run lint:eslint",
     "lit-analyzer": "lit-analyzer",
+    "lint": "npm run lit-analyzer && npm run lint:eslint",
     "lint:eslint": "eslint --config eslint.config.js",
     "lint:eslint:fix": "eslint --config eslint.config.js --fix",
     "translations:update-language-codes": "NODE_PATH=. node scripts/update-language-codes.js",
@@ -39,15 +39,15 @@
     "analyze": "cem analyze --litelement --globs \"src/**/*.ts\" --outdir docs/dist",
     "analyze:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
     "serve": "wds --watch",
-    "dev": "concurrently \"npm run build:watch\" \"npm run serve\"",
     "serve:doc": "npm run build:doc && wds --watch --config web-doc-server.config.js",
-    "test": "jest",
     "serve:prod": "MODE=prod npm run serve",
+    "dev": "concurrently \"npm run build:watch\" \"npm run serve\"",
+    "test": "jest",
     "test:dev": "wtr",
     "test:watch": "wtr --watch",
     "test:prod": "MODE=prod wtr",
     "test:prod:watch": "MODE=prod wtr --watch",
-    "checksize": "rollup -c ; cat off-webcomponents.bundled.js | gzip -9 | wc -c ; rm off-webcomponents.bundled.js"
+    "checksize": "rollup -c ; cat off-webcomponents.js | gzip -9 | wc -c ; rm off-webcomponents.js"
   },
   "keywords": [
     "web-components",
