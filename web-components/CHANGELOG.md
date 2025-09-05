@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.13.0...v1.13.1) (2025-09-05)
+
+
+### Bug Fixes
+
+* fix library publication ([3691141](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/369114137f5ffa7acc68565569463ed92c8e1d4b))
+
 ## [1.13.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.12.3...v1.13.0) (2025-09-02)
 
 
