@@ -46,7 +46,18 @@ export default {
       sourcemap: true,
       entryFileNames: "[name].min.js",
       chunkFileNames: "[name]-[hash].min.js",
-      plugins: [terser()],
+      plugins: [
+        terser({
+          ecma: 2021,
+          module: true,
+          warnings: true,
+          mangle: {
+            properties: {
+              regex: /^__/,
+            },
+          },
+        }),
+      ],
     },
   ],
   onwarn(warning) {
