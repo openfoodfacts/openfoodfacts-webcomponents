@@ -46,7 +46,9 @@ const IMAGE_MAX_WIDTH = 700
 @customElement("robotoff-nutrient-extraction")
 @localized()
 export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
-  LanguageCodesMixin(CountryCodeMixin(LoadingWithTimeoutMixin(LitElement)))
+  LanguageCodesMixin(
+    CountryCodeMixin(LoadingWithTimeoutMixin(LitElement, undefined as AnnotationAnswer | undefined))
+  )
 ) {
   static override styles = [
     BASE,
@@ -74,6 +76,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
       .nutrients {
         container-type: inline-size;
       }
+
       .nutrients-content-wrapper {
         position: relative;
         display: flex;

@@ -14,7 +14,7 @@ import folksonomyApi from "../../api/folksonomy"
 export class FolksonomyEditor extends LitElement {
   /**
    * The product ID for which the properties are being added
-   * @type {boolean}
+   * @type {string}
    */
   @property({ type: String, attribute: "product-code" })
   productCode = ""

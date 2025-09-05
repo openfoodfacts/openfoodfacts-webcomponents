@@ -25,10 +25,7 @@ function createRobotoff(fetch: typeof window.fetch) {
 
 /**
  * Get the API URL for a given path with the current configuration
- * @param path
- * @returns {string}
  */
-
 const getApiUrl = (path: string) => {
   return `${robotoffConfiguration.getItem("apiUrl")}${path}`
 }
@@ -38,7 +35,6 @@ const getApiUrl = (path: string) => {
  * @param formBody
  * @returns {Promise<Response>}
  */
-
 const annotate = (formBody: string) => {
   const apiUrl = getApiUrl("/insights/annotate")
   if (robotoffConfiguration.getItem("dryRun")) {
