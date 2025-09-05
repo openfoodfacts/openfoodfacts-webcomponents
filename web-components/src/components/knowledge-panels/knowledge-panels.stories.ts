@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/web-components-vite"
 import "./knowledge-panels"
 
 const meta: Meta = {
+  title: "Components/Knowledge Panels",
   component: "knowledge-panels",
 }
 export default meta
