@@ -1,7 +1,7 @@
 import { LitElement, html, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { EventState, EventType, RobotoffContributionType } from "../../constants"
-import { BasicStateEventDetail } from "../../types"
+import type { BasicStateEventDetail } from "../../types"
 import { localized, msg } from "@lit/localize"
 import { IS_HIDDEN } from "../../styles/utils"
 import { classMap } from "lit/directives/class-map.js"

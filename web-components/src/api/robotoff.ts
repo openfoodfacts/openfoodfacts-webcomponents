@@ -1,15 +1,15 @@
 import { addParamsToUrl } from "../utils"
 import {
-  QuestionRequestParams,
-  QuestionsResponse,
+  type QuestionRequestParams,
+  type QuestionsResponse,
   AnnotationAnswer,
-  InsightsRequestParams,
-  InsightsResponse,
-  NutrientsInsight,
-  IngredientSpellcheckInsight,
-  NutrientsAnnotationData,
-  IngredientDetectionInsight,
-  IngredientDetectionAnnotationData,
+  type InsightsRequestParams,
+  type InsightsResponse,
+  type NutrientsInsight,
+  type IngredientSpellcheckInsight,
+  type NutrientsAnnotationData,
+  type IngredientDetectionInsight,
+  type IngredientDetectionAnnotationData,
   InsightType,
 } from "../types/robotoff"
 import { robotoffConfiguration } from "../signals/robotoff"

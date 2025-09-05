@@ -1,8 +1,8 @@
 import { LitElement } from "lit"
 import { diffWordsWithSpace, type Change } from "diff"
 import { state } from "lit/decorators.js"
-import { IndexedChange } from "../types/ingredient-spellcheck"
-import { Constructor } from "."
+import type { IndexedChange } from "../types/ingredient-spellcheck"
+import type { Constructor } from "."
 /**
  * Interface for the TextCorrectorMixin.
  */

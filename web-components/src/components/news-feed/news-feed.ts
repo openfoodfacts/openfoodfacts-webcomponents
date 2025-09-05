@@ -1,7 +1,7 @@
 import { marked } from "marked"
 import { LitElement, html, css } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { NewsData, ProcessedNewsItem } from "../../types/news-feed"
+import type { NewsData, ProcessedNewsItem } from "../../types/news-feed"
 import { Task } from "@lit/task"
 import { sanitizeHtml } from "../../utils/html"
 import dayjs from "dayjs/esm"

@@ -1,4 +1,4 @@
-import { LitElement, html, css, nothing } from "lit"
+import { LitElement, html, css, nothing, type TemplateResult } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import {
   currentQuestionIndex,
@@ -12,7 +12,7 @@ import {
 import { Task } from "@lit/task"
 import { localized, msg } from "@lit/localize"
 import { EventState, EventType } from "../../constants"
-import { QuestionStateEventDetail } from "../../types"
+import type { QuestionStateEventDetail } from "../../types"
 import { SignalWatcher } from "@lit-labs/signals"
 import "../shared/loader"
 import "./robotoff-question-form"

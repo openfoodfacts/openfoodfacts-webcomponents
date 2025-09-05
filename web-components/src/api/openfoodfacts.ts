@@ -1,5 +1,5 @@
 import { openfoodfactsApiUrl } from "../signals/openfoodfacts"
-import {
+import type {
   BaseProductResponse,
   NutrientsOrderRequest,
   NutrientsParams,

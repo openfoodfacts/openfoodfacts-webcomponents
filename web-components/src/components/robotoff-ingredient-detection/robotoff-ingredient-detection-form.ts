@@ -11,14 +11,14 @@ import { LitElement, css, html, nothing } from "lit"
 import { customElement, property, query, state } from "lit/decorators.js"
 import "../shared/zoomable-image"
 import {
-  IngredientDetectionInsight,
-  IngredientDetectionAnnotationData,
+  type IngredientDetectionInsight,
+  type IngredientDetectionAnnotationData,
   AnnotationAnswer,
 } from "../../types/robotoff"
 import { getRobotoffImageUrl } from "../../signals/robotoff"
 import { localized, msg } from "@lit/localize"
 import { FLEX } from "../../styles/utils"
-import { CropResult } from "../../types"
+import type { CropResult } from "../../types"
 import * as ZoomableImage from "../shared/zoomable-image"
 import {
   cropImageBoundingBoxToRobotoffBoundingBox,
