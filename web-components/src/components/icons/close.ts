@@ -7,7 +7,6 @@ export class CloseIcon extends LitElement {
 
   override render() {
     return html`
-      <?xml version="1.0" encoding="UTF-8"?>
       <svg
         width="12px"
         height="12px"

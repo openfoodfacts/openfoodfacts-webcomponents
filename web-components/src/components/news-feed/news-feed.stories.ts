@@ -15,7 +15,7 @@ export const Android: Story = {
   },
 }
 
-export const iOS: Story = {
+export const IOS: Story = {
   name: "iOS",
   args: {
     url: "https://raw.githubusercontent.com/openfoodfacts/smooth-app_assets/refs/heads/main/prod/tagline/ios/main.json",
