@@ -13,8 +13,5 @@ export default meta
 type Story = StoryObj
 
 export const Basic: Story = {
-  args: {
-  },
+  args: {},
 }
-
-

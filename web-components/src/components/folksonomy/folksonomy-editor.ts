@@ -277,14 +277,14 @@ export class FolksonomyEditor extends LitElement {
                 version=${item.version}
                 row-number=${index + 1}
                 page-type=${this.pageType}
-              />`
+              ></folksonomy-editor-row>`
           )}
           ${html`<folksonomy-editor-row
             product-code=${this.productCode}
             page-type=${this.pageType}
             row-number=${this.properties.length + 1}
             empty
-          />`}
+          ></folksonomy-editor-row>`}
         </table>
       </form>
     `
