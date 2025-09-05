@@ -45,7 +45,7 @@ import { DisplayProductLinkMixin } from "../../mixins/display-product-link-mixin
 @customElement("robotoff-ingredient-spellcheck")
 @localized()
 export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
-  LoadingWithTimeoutMixin(LanguageCodesMixin(LitElement))
+  LoadingWithTimeoutMixin(LanguageCodesMixin(LitElement), undefined as AnnotationAnswer | undefined)
 ) {
   static override styles = [
     BASE,

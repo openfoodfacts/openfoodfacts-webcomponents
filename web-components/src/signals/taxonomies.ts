@@ -62,7 +62,7 @@ export const getTaxonomyUnitById = (id: string): string | undefined => {
   if (!taxonomy) {
     return
   }
-  return taxonomy.unit.en
+  return taxonomy?.unit?.en
 }
 
 /**
