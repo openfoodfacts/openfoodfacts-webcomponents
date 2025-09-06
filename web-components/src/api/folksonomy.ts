@@ -1,4 +1,4 @@
-import {
+import type {
   FetchProductPropertiesResponse,
   AddProductPropertyResponse,
   DeleteProductPropertyResponse,
@@ -11,6 +11,7 @@ import {
   PropertyDeleteRequest,
   PropertyClashCheck,
 } from "../types/folksonomy"
+
 import { folksonomyConfiguration, userInfo, userInfoLoading } from "../signals/folksonomy"
 
 // Constants for localStorage

@@ -1,5 +1,5 @@
 import { LitElement } from "lit"
-import { Constructor } from "."
+import type { Constructor } from "."
 import { property } from "lit/decorators.js"
 import { countryCode } from "../signals/app"
 

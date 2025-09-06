@@ -14,7 +14,7 @@ import folksonomyApi from "../../api/folksonomy"
 export class FolksonomyEditor extends LitElement {
   /**
    * The product ID for which the properties are being added
-   * @type {boolean}
+   * @type {string}
    */
   @property({ type: String, attribute: "product-code" })
   productCode = ""
@@ -277,14 +277,14 @@ export class FolksonomyEditor extends LitElement {
                 version=${item.version}
                 row-number=${index + 1}
                 page-type=${this.pageType}
-              />`
+              ></folksonomy-editor-row>`
           )}
           ${html`<folksonomy-editor-row
             product-code=${this.productCode}
             page-type=${this.pageType}
             row-number=${this.properties.length + 1}
             empty
-          />`}
+          ></folksonomy-editor-row>`}
         </table>
       </form>
     `

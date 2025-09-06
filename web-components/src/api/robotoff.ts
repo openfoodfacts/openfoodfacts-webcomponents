@@ -1,15 +1,15 @@
 import { addParamsToUrl } from "../utils"
 import {
-  QuestionRequestParams,
-  QuestionsResponse,
+  type QuestionRequestParams,
+  type QuestionsResponse,
   AnnotationAnswer,
-  InsightsRequestParams,
-  InsightsResponse,
-  NutrientsInsight,
-  IngredientSpellcheckInsight,
-  NutrientsAnnotationData,
-  IngredientDetectionInsight,
-  IngredientDetectionAnnotationData,
+  type InsightsRequestParams,
+  type InsightsResponse,
+  type NutrientsInsight,
+  type IngredientSpellcheckInsight,
+  type NutrientsAnnotationData,
+  type IngredientDetectionInsight,
+  type IngredientDetectionAnnotationData,
   InsightType,
 } from "../types/robotoff"
 import { robotoffConfiguration } from "../signals/robotoff"
@@ -18,16 +18,13 @@ import { languageCode } from "../signals/app"
 import { Robotoff } from "@openfoodfacts/openfoodfacts-nodejs"
 
 const createRobotoff = () =>
-  new Robotoff({
-    apiUrl: robotoffConfiguration.getItem("apiUrl"),
+  new Robotoff(fetch, {
+    baseUrl: robotoffConfiguration.getItem("apiUrl") as string,
   })
 
 /**
  * Get the API URL for a given path with the current configuration
- * @param path
- * @returns {string}
  */
-
 const getApiUrl = (path: string) => {
   return `${robotoffConfiguration.getItem("apiUrl")}${path}`
 }
@@ -37,7 +34,6 @@ const getApiUrl = (path: string) => {
  * @param formBody
  * @returns {Promise<Response>}
  */
-
 const annotate = (formBody: string) => {
   const apiUrl = getApiUrl("/insights/annotate")
   if (robotoffConfiguration.getItem("dryRun")) {

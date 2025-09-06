@@ -1,5 +1,9 @@
 import robotoff from "../api/robotoff"
-import { IngredientDetectionInsight, InsightsRequestParams, InsightType } from "../types/robotoff"
+import {
+  type IngredientDetectionInsight,
+  type InsightsRequestParams,
+  InsightType,
+} from "../types/robotoff"
 import { SignalMap } from "../utils/signals"
 
 export const ingredientDetectionInsights = new SignalMap<IngredientDetectionInsight>({})

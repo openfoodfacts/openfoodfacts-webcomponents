@@ -12,14 +12,18 @@ import "../shared/zoomable-image"
 import "../shared/loader"
 
 import { fetchNutrientsTaxonomies } from "../../signals/taxonomies"
-import { NutrientsInsight, InsightAnnotationAnswer, AnnotationAnswer } from "../../types/robotoff"
+import {
+  type NutrientsInsight,
+  type InsightAnnotationAnswer,
+  AnnotationAnswer,
+} from "../../types/robotoff"
 import { BASE } from "../../styles/base"
 import { getRobotoffImageUrl } from "../../signals/robotoff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { FLEX } from "../../styles/utils"
 import { EventState, EventType } from "../../constants"
-import { BasicStateEventDetail } from "../../types"
-import { NutrimentsProductType } from "../../types/openfoodfacts"
+import type { BasicStateEventDetail } from "../../types"
+import type { NutrimentsProductType } from "../../types/openfoodfacts"
 import { fetchProduct } from "../../api/openfoodfacts"
 import { ProductFields } from "../../utils/openfoodfacts"
 import { fetchNutrientsOrderByCountryCode } from "../../signals/openfoodfacts"
@@ -42,7 +46,9 @@ const IMAGE_MAX_WIDTH = 700
 @customElement("robotoff-nutrient-extraction")
 @localized()
 export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
-  LanguageCodesMixin(CountryCodeMixin(LoadingWithTimeoutMixin(LitElement)))
+  LanguageCodesMixin(
+    CountryCodeMixin(LoadingWithTimeoutMixin(LitElement, undefined as AnnotationAnswer | undefined))
+  )
 ) {
   static override styles = [
     BASE,
@@ -70,6 +76,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
       .nutrients {
         container-type: inline-size;
       }
+
       .nutrients-content-wrapper {
         position: relative;
         display: flex;

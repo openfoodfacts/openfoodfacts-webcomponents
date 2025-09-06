@@ -1,6 +1,6 @@
 import { Computed } from "@lit-labs/signals"
 import robotoff from "../api/robotoff"
-import { Question, AnnotationAnswer, QuestionRequestParams } from "../types/robotoff"
+import { type Question, AnnotationAnswer, type QuestionRequestParams } from "../types/robotoff"
 import { SignalMap } from "../utils/signals"
 
 // Store questions by id
