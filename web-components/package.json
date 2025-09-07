@@ -35,6 +35,7 @@
     "doc:package": "cp README.md dist/README.md && cp ../LICENSE dist/LICENSE",
     "prepare:package": "rm -rf ./dist && npm run build",
     "publish:package": "npm run prepare:package && npm run doc:package && npm publish --access=public",
+    "prepack": "npm run build",
     "analyze": "cem analyze --litelement --globs \"src/**/*.ts\"",
     "analyze:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
     "dev": "concurrently 'npm run storybook' 'npm run analyze:watch'",
