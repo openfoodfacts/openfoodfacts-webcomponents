@@ -1,4 +1,4 @@
-import { html, css, PropertyValues } from "lit"
+import { html, css, type PropertyValues } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { BASE } from "../../styles/base"
 import { msg } from "@lit/localize"

@@ -1,4 +1,4 @@
-import { KnowledgePanelsData } from "../types/knowledge-panel"
+import type { KnowledgePanelsData } from "../types/knowledge-panel"
 import { languageCode } from "../signals/app"
 
 /**

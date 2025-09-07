@@ -137,3 +137,6 @@ docs/dist/
 custom-elements.json
 
 .clinerules/
+
+*storybook.log
+storybook-static

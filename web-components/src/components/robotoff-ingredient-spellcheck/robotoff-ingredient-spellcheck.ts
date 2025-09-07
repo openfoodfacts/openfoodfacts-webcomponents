@@ -8,15 +8,15 @@ import {
   fetchSpellcheckInsights,
   ingredientSpellcheckInsights,
 } from "../../signals/ingredient-spellcheck"
-import { AnnotationAnswer, IngredientSpellcheckInsight } from "../../types/robotoff"
+import { AnnotationAnswer, type IngredientSpellcheckInsight } from "../../types/robotoff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import robotoff from "../../api/robotoff"
 import { EventState, EventType } from "../../constants"
 import "./text-corrector"
 import "../shared/zoomable-image"
 import { fetchProduct } from "../../api/openfoodfacts"
-import { ImageIngredientsProductType } from "../../types/openfoodfacts"
-import {
+import type { ImageIngredientsProductType } from "../../types/openfoodfacts"
+import type {
   RobotoffIngredientsStateEventDetail,
   TextCorrectorEvent,
 } from "../../types/ingredient-spellcheck"
@@ -45,7 +45,7 @@ import { DisplayProductLinkMixin } from "../../mixins/display-product-link-mixin
 @customElement("robotoff-ingredient-spellcheck")
 @localized()
 export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
-  LoadingWithTimeoutMixin(LanguageCodesMixin(LitElement))
+  LoadingWithTimeoutMixin(LanguageCodesMixin(LitElement), undefined as AnnotationAnswer | undefined)
 ) {
   static override styles = [
     BASE,

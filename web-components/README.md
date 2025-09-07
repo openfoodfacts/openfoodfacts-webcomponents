@@ -15,12 +15,12 @@ You will see the list of available components and how to use them.
 
 ### With CDN
 
-Link : [https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.bundled.js](https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.bundled.js)
+Link : [https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.js](https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.js)
 
 ### Import it in your project
 
 You can use the components via ES6 modules or via script tag. To be sure webcomponents are handled correctly, you have to inport the polyfill.
-More details [here](https://lit.dev/docs/v1/tools/use/).
+More details can be found in the [Lit web components polyfill documentation](https://lit.dev/docs/v1/tools/use/).
 
 #### Download polyfill
 
@@ -69,7 +69,7 @@ export default defineConfig({
 <script src="<path-to-webcomponentsjs>/webcomponents-loader.js"></script>
 <script
   type="module"
-  src="<path-to-openfoodfacts-webcomponents>/dist/off-webcomponents.bundled.js"
+  src="<path-to-openfoodfacts-webcomponents>/dist/off-webcomponents.js"
 ></script>
 ```
 

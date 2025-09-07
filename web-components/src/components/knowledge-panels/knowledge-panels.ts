@@ -1,4 +1,4 @@
-import { LitElement, html, css, TemplateResult } from "lit"
+import { LitElement, html, css, type TemplateResult } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { fetchKnowledgePanels } from "../../api/knowledgepanel"
 import { Task } from "@lit/task"
@@ -7,7 +7,7 @@ import { BASE } from "../../styles/base"
 import { ALERT } from "../../styles/alert"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 
-import { KnowledgePanel, KnowledgePanelsData } from "../../types/knowledge-panel"
+import type { KnowledgePanel, KnowledgePanelsData } from "../../types/knowledge-panel"
 
 // Import all renderer components
 import "./renderers"

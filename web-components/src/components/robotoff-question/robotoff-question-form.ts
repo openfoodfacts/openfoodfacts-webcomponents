@@ -1,6 +1,6 @@
 import { LitElement, html, css, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { Question, AnnotationAnswer } from "../../types/robotoff"
+import { type Question, AnnotationAnswer } from "../../types/robotoff"
 import { EventType } from "../../constants"
 import { answerQuestion } from "../../signals/questions"
 import { SignalWatcher } from "@lit-labs/signals"

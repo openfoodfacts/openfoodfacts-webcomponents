@@ -17,8 +17,8 @@ import { TEXT_CORRECTOR } from "../../styles/text-corrector"
 import { clickOutside } from "../../directives/click-outside"
 import {
   ChangeType,
-  IndexedGroupedChange,
-  TextCorrectorEventDetail,
+  type IndexedGroupedChange,
+  type TextCorrectorEventDetail,
 } from "../../types/ingredient-spellcheck"
 import { RELATIVE } from "../../styles/utils"
 import { sanitizeHtml } from "../../utils/html"

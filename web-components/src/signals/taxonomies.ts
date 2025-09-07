@@ -1,4 +1,4 @@
-import { NutrientTaxonomy } from "../types/taxonomies"
+import type { NutrientTaxonomy } from "../types/taxonomies"
 import { SignalMap } from "../utils/signals"
 import { LoadingState } from "../constants"
 import taxonomies from "../api/taxonomies"

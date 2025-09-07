@@ -1,6 +1,6 @@
-import { LitElement, html, css, TemplateResult } from "lit"
+import { LitElement, html, css, type TemplateResult } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { KnowledgePanelElement, KnowledgePanelsData } from "../../../types/knowledge-panel"
+import type { KnowledgePanelElement, KnowledgePanelsData } from "../../../types/knowledge-panel"
 import "../../../utils/knowledge-panels/heading-utils" // Import heading renderer component
 
 /**

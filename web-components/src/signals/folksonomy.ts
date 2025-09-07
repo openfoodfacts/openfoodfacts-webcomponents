@@ -1,5 +1,5 @@
 import { DEFAULT_FOLKSONOMY_CONFIGURATION } from "../constants"
-import { FolksonomyConfigurationOptions, UserInfo } from "../types/folksonomy"
+import type { FolksonomyConfigurationOptions, UserInfo } from "../types/folksonomy"
 import { SignalObject } from "../utils/signals"
 import { State } from "@lit-labs/signals"
 
