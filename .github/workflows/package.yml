@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       # Setup .npmrc file to publish to npm
-      - uses: actions/setup-node@v4.4.0
+      - uses: actions/setup-node@v5
         with:
           node-version: "24.x"
           registry-url: "https://registry.npmjs.org"
@@ -24,7 +24,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         continue-on-error: true
-      - uses: actions/setup-node@v4.4.0
+      - uses: actions/setup-node@v5
         with:
           node-version: "24.x"
           registry-url: 'https://npm.pkg.github.com'
