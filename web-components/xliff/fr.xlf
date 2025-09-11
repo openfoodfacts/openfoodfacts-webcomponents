@@ -550,9 +550,7 @@
         <source>This is brought by the
                     <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't
                     hesitate to participate or give feedback</source>
-        <target state="needs-translation">This is brought by the
-                    <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't
-                    hesitate to participate or give feedback</target>
+        <target state="translated">Ceci est apporté par <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/> projet Folksonomy Engine <x id="1" equiv-text="&lt;/a&gt;"/> N’hésitez                     pas à participer ou à donner votre avis</target>
       </trans-unit>
       <trans-unit id="s71a5c9f4b68ef4d4">
         <source>Count</source>
