@@ -60,11 +60,11 @@
       </trans-unit>
       <trans-unit id="sc5575e3107f87874">
         <source>Rotate image to the left</source>
-        <target state="needs-translation">Rotate image to the left</target>
+        <target state="translated">Kierrä kuvaa vasemmalle</target>
       </trans-unit>
       <trans-unit id="se773f50d2a16d481">
         <source>Rotate image to the right</source>
-        <target state="needs-translation">Rotate image to the right</target>
+        <target state="translated">Kierrä kuvaa oikealle</target>
       </trans-unit>
       <trans-unit id="s475b08749d0706ed">
         <source>Help us inform millions of consumers around the world about what they eat</source>
