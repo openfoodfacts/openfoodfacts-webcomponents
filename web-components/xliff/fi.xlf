@@ -44,7 +44,7 @@
       </trans-unit>
       <trans-unit id="sbb623d6b18d966a0">
         <source>Nutrition facts are displayed on the packaging:</source>
-        <target state="needs-translation">Nutrition facts are displayed on the packaging:</target>
+        <target state="translated">Ravintosisältö on ilmoitettu pakkauksessa:</target>
       </trans-unit>
       <trans-unit id="se206feec7ec57b28">
         <source>per 100g</source>
@@ -52,7 +52,7 @@
       </trans-unit>
       <trans-unit id="sca0c3305aff570b8">
         <source>per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
-        <target state="needs-translation">per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</target>
+        <target state="translated">määriteltyä annosta kohden "<x id="0" equiv-text="${this._servingSizeValue}"/>"</target>
       </trans-unit>
       <trans-unit id="s453188ea728f64da">
         <source>Add a nutrient</source>
@@ -76,11 +76,11 @@
       </trans-unit>
       <trans-unit id="s1c5031113de500ce">
         <source>keeping our database open &amp; available to all,</source>
-        <target state="needs-translation">keeping our database open &amp; available to all,</target>
+        <target state="translated">pitäen tietokantamme avoimena &amp; kaikkien saatavilla,</target>
       </trans-unit>
       <trans-unit id="sebb2c6c830a44574">
         <source>technical infrastructure (website/mobile app) &amp; a small permanent team</source>
-        <target state="needs-translation">technical infrastructure (website/mobile app) &amp; a small permanent team</target>
+        <target state="translated">tekninen infrastruktuuri (verkkosivusto/mobiilisovellus) &amp; pieni vakituinen tiimi</target>
       </trans-unit>
       <trans-unit id="sd82bc2decefa621b">
         <source>remain independent of the food industry,</source>
