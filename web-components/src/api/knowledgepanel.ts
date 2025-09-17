@@ -1,5 +1,4 @@
 import type { KnowledgePanelsData } from "../types/knowledge-panel"
-import { languageCode } from "../signals/app"
 
 /**
  * Fetches knowledge panels data from specified URL and extracts data at the given path
@@ -12,7 +11,6 @@ export const fetchKnowledgePanels = async (
   path: string
 ): Promise<KnowledgePanelsData> => {
   try {
-
     const response = await fetch(url)
 
     if (!response.ok) {
