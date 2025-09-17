@@ -1,4 +1,6 @@
 name: Ventilate issues to the right GitHub projects
+permissions:
+  contents: read
 
 on:
   issues:
