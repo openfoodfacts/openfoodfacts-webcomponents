@@ -79,6 +79,9 @@ export class KnowledgePanelsComponent extends LitElement {
   })
   headingLevel = "h3" // Set a default value
 
+  @property({ type: String, attribute: "top-panels" })
+  topPanels: string[] = ["root"]
+
   @property({ type: String })
   url = ""
 
@@ -184,8 +187,9 @@ export class KnowledgePanelsComponent extends LitElement {
     // Extract all nutrition-related images
     this.nutritionImages = extractImages(panels)
 
-    const mainPanel = panels["main"]
-    const panelsToRender = mainPanel ? [mainPanel] : Object.values(panels)
+    const panelsToRender = Object.entries(panels)
+      .filter(([key]) => this.topPanels.includes(key))
+      .map(([, panel]) => panel)
 
     return html`
       <div class="knowledge-panels-container">

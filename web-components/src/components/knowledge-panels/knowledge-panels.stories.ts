@@ -13,5 +13,6 @@ export const Basic: Story = {
   args: {
     url: "https://world.openfoodfacts.org/api/v3/product/737628064502.json?fields=knowledge_panels",
     path: "product.knowledge_panels",
+    topPanels: ["root"],
   },
 }
