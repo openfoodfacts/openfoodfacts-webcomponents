@@ -1,11 +1,19 @@
 import tseslint from "@typescript-eslint/eslint-plugin"
 import tsparser from "@typescript-eslint/parser"
 import prettierPlugin from "eslint-plugin-prettier"
+import storybook from "eslint-plugin-storybook"
+import lit from "eslint-plugin-lit"
 
 export default [
   // global ignores
   {
-    ignores: ["node_modules/**", "docs/**/dist/**", "dist/**", "src/**/dist/**"]
+    ignores: [
+      "node_modules/**",
+      "docs/**/dist/**",
+      "dist/**",
+      "src/**/dist/**",
+      "storybook-static/**",
+    ],
   },
   {
     languageOptions: {
@@ -33,4 +41,6 @@ export default [
       "prettier/prettier": ["error"],
     },
   },
-];
+  lit.configs["flat/recommended"],
+  ...storybook.configs["flat/recommended"],
+]

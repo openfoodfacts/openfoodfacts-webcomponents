@@ -7,7 +7,7 @@ import folksonomyApi from "../../api/folksonomy"
 import { msg } from "@lit/localize"
 import { getButtonClasses, ButtonType } from "../../styles/buttons"
 import { FOLKSONOMY_INPUT } from "../../styles/folksonomy-input"
-import {
+import type {
   AutocompleteSuggestion,
   AutocompleteInputChangeEvent,
   AutocompleteSuggestionSelectEvent,

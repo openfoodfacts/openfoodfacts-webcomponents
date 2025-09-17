@@ -10,7 +10,7 @@
 
 import { LitElement, css, html, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
-import { AnnotationAnswer, IngredientDetectionInsight } from "../../types/robotoff"
+import { AnnotationAnswer, type IngredientDetectionInsight } from "../../types/robotoff"
 import { Task } from "@lit/task"
 import { localized, msg } from "@lit/localize"
 import "../shared/loader"
@@ -23,7 +23,7 @@ import "./robotoff-ingredient-detection-form"
 import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin"
 import { LanguageCodesMixin } from "../../mixins/language-codes-mixin"
 import { EventType, EventState } from "../../constants"
-import { RobotoffIngredientsStateEventDetail } from "../../types/ingredient-spellcheck"
+import type { RobotoffIngredientsStateEventDetail } from "../../types/ingredient-spellcheck"
 import { DisplayProductLinkMixin } from "../../mixins/display-product-link-mixin"
 
 /**
