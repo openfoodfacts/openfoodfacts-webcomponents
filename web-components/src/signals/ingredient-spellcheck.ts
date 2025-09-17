@@ -1,6 +1,10 @@
 import { SignalMap } from "../utils/signals"
 import robotoff from "../api/robotoff"
-import { InsightType, IngredientSpellcheckInsight, InsightsRequestParams } from "../types/robotoff"
+import {
+  InsightType,
+  type IngredientSpellcheckInsight,
+  type InsightsRequestParams,
+} from "../types/robotoff"
 
 export const ingredientSpellcheckInsights = new SignalMap<IngredientSpellcheckInsight>({})
 

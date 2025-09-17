@@ -1,5 +1,5 @@
 import { DEFAULT_ROBOTOFF_CONFIGURATION } from "../constants"
-import { RobotoffConfigurationOptions } from "../types/robotoff"
+import type { RobotoffConfigurationOptions } from "../types/robotoff"
 import { SignalObject } from "../utils/signals"
 
 /**

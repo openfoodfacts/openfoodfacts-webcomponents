@@ -1,5 +1,5 @@
+import type { Constructor } from "."
 import { LitElement } from "lit"
-import { Constructor } from "."
 import { state } from "lit/decorators.js"
 
 /**

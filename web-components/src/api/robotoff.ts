@@ -1,15 +1,15 @@
 import { addParamsToUrl } from "../utils"
 import {
-  QuestionRequestParams,
-  QuestionsResponse,
+  type QuestionRequestParams,
+  type QuestionsResponse,
   AnnotationAnswer,
-  InsightsRequestParams,
-  InsightsResponse,
-  NutrientsInsight,
-  IngredientSpellcheckInsight,
-  NutrientsAnnotationData,
-  IngredientDetectionInsight,
-  IngredientDetectionAnnotationData,
+  type InsightsRequestParams,
+  type InsightsResponse,
+  type NutrientsInsight,
+  type IngredientSpellcheckInsight,
+  type NutrientsAnnotationData,
+  type IngredientDetectionInsight,
+  type IngredientDetectionAnnotationData,
   InsightType,
 } from "../types/robotoff"
 import { robotoffConfiguration } from "../signals/robotoff"
@@ -17,17 +17,15 @@ import { languageCode } from "../signals/app"
 
 import { Robotoff } from "@openfoodfacts/openfoodfacts-nodejs"
 
-const createRobotoff = () =>
-  new Robotoff({
-    apiUrl: robotoffConfiguration.getItem("apiUrl"),
+function createRobotoff(fetch: typeof window.fetch) {
+  return new Robotoff(fetch, {
+    baseUrl: robotoffConfiguration.getItem("apiUrl") as string,
   })
+}
 
 /**
  * Get the API URL for a given path with the current configuration
- * @param path
- * @returns {string}
  */
-
 const getApiUrl = (path: string) => {
   return `${robotoffConfiguration.getItem("apiUrl")}${path}`
 }
@@ -37,7 +35,6 @@ const getApiUrl = (path: string) => {
  * @param formBody
  * @returns {Promise<Response>}
  */
-
 const annotate = (formBody: string) => {
   const apiUrl = getApiUrl("/insights/annotate")
   if (robotoffConfiguration.getItem("dryRun")) {
@@ -61,7 +58,7 @@ const annotate = (formBody: string) => {
 const robotoff = {
   annotate,
   annotateQuestion(insightId: string, annotation: AnnotationAnswer) {
-    const robotoff = createRobotoff()
+    const robotoff = createRobotoff(fetch)
     return robotoff.annotate({ insight_id: insightId, annotation: annotation })
   },
   annotateNutrients(
@@ -69,7 +66,7 @@ const robotoff = {
     annotation: AnnotationAnswer,
     data?: NutrientsAnnotationData
   ) {
-    const newLocal = createRobotoff()
+    const newLocal = createRobotoff(fetch)
     return newLocal.annotate({ insight_id: insightId, annotation: annotation, data: data })
   },
 
@@ -85,7 +82,7 @@ const robotoff = {
     annotation: AnnotationAnswer,
     correction?: string
   ) {
-    return createRobotoff().annotate({
+    return createRobotoff(fetch).annotate({
       insight_id: insightId,
       annotation: annotation,
       data: { annotation: correction },
@@ -103,7 +100,7 @@ const robotoff = {
     annotation: AnnotationAnswer,
     data?: IngredientDetectionAnnotationData
   ) {
-    return createRobotoff().annotate({
+    return createRobotoff(fetch).annotate({
       insight_id: insightId,
       annotation: annotation,
       data: data,

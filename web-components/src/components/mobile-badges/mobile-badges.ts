@@ -201,38 +201,33 @@ export class MobileBadges extends LitElement {
 
   /**
    * Controls visibility of Google Play Store badge
-   * @type {boolean}
    */
   @property({ type: Boolean, attribute: "hide-play-store" })
-  hidePlayStore = false
+  hidePlayStore: boolean = false
 
   /**
    * Controls visibility of F-Droid badge
-   * @type {boolean}
    */
   @property({ type: Boolean, attribute: "hide-f-droid" })
-  hideFDroid = false
+  hideFDroid: boolean = false
 
   /**
    * Controls visibility of APK download badge
-   * @type {boolean}
    */
   @property({ type: Boolean, attribute: "hide-apk" })
-  hideApk = false
+  hideApk: boolean = false
 
   /**
    * Controls visibility of App Store badge
-   * @type {boolean}
    */
   @property({ type: Boolean, attribute: "hide-app-store" })
-  hideAppStore = false
+  hideAppStore: boolean = false
 
   /**
    * Controls visibility of App Store badge
-   * @type {boolean}
    */
   @property({ type: Boolean, attribute: "hide-image" })
-  hideImage = false
+  hideImage: boolean = false
 
   /**
    * Whether to apply dark mode styling (auto-detected from prefers-color-scheme)

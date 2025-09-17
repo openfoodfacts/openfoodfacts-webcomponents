@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.2](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.13.1...v1.13.2) (2025-09-11)
+
+
+### Bug Fixes
+
+* Robotoff instance creation in robotoff.ts ([#282](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/282)) ([2d8580c](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/2d8580c6358126a9deede0c3b6c1c8a4d6424762)), closes [#281](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/281)
+
 ## [1.13.1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.13.0...v1.13.1) (2025-09-05)
 
 
