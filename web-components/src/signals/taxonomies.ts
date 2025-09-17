@@ -29,17 +29,17 @@ export const nutrientTaxonomies = new Computed(() => {
  * Load the taxonomies if they are not already loaded.
  * @returns
  */
-export const getTaxonomyNameByLang = (taxonomy: NutrientTaxonomy, lang: string) => {
-  if (!taxonomy) {
-    console.warn("getTaxonomyNameByLang called with undefined taxonomy", { taxonomy })
+export const getTaxonomyNameByLang = (node: NutrientTaxonomy, lang: string) => {
+  if (!node) {
+    console.warn("getTaxonomyNameByLang called with undefined taxonomy", { taxonomy: node })
     return ""
   }
 
   return (
-    taxonomy.name[lang] ||
-    taxonomy.name["en"] ||
-    taxonomy.name["xx"] ||
-    (console.warn("No name found for taxonomy", { taxonomy, lang }), "")
+    node.name[lang] ||
+    node.name["en"] ||
+    node.name["xx"] ||
+    (console.warn("No name found for taxonomy", { taxonomy: node, lang }), "")
   )
 }
 
