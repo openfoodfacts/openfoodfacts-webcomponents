@@ -1,6 +1,6 @@
 import { EventState } from "../constants"
-import { RobotoffConfigurationOptions } from "./robotoff"
-import { FolksonomyConfigurationOptions } from "./folksonomy"
+import type { RobotoffConfigurationOptions } from "./robotoff"
+import type { FolksonomyConfigurationOptions } from "./folksonomy"
 
 export type OffWebcomponentConfigurationOptions = {
   robotoffConfiguration: RobotoffConfigurationOptions
@@ -42,6 +42,7 @@ export type AutocompleteSuggestionSelectEvent = CustomEvent<AutocompleteSuggesti
 export type AutocompleteSuggestion = {
   label?: string
   value: string
+  isNotFound?: boolean
 }
 
 export type CropperImageBoundingBox = {

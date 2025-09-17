@@ -110,6 +110,64 @@ export const initDebounce = (callback: () => any, debounceTime: number = 500) =>
 }
 
 /**
+ * Creates a debounce utility that can be used with class methods
+ * @param debounceTime - the delay in milliseconds
+ * @returns object with debounce method and clear method
+ */
+export const createDebounce = (debounceTime: number = 500) => {
+  let timeout: number | null = null
+
+  return {
+    debounce: (callback: () => void) => {
+      if (timeout) {
+        clearTimeout(timeout)
+      }
+      timeout = window.setTimeout(() => {
+        callback()
+        timeout = null
+      }, debounceTime)
+    },
+    clear: () => {
+      if (timeout) {
+        clearTimeout(timeout)
+        timeout = null
+      }
+    },
+  }
+}
+
+/**
+ * Downloads data as a CSV file
+ * @param rows - array of arrays representing the CSV rows
+ * @param filename - the filename for the download (without extension)
+ * @param headers - array of header strings
+ */
+export const downloadCSV = (rows: Array<Array<any>>, filename: string, headers: Array<string>) => {
+  if (rows.length === 0) {
+    return
+  }
+
+  const csvContent = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n")
+
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
+  const link = document.createElement("a")
+  const url = URL.createObjectURL(blob)
+  const today = new Date().toISOString().split("T")[0]
+  const finalFilename = `${filename}_${today}.csv`
+
+  link.setAttribute("href", url)
+  link.setAttribute("download", finalFilename)
+  link.style.visibility = "hidden"
+
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+
+  // Clean up the URL object
+  URL.revokeObjectURL(url)
+}
+
+/**
  * Removes useless zeros from a string.
  * @param value - the string to remove zeros from
  * @returns string - the string without useless zeros
@@ -137,3 +195,7 @@ export const triggerSubmit = (form: HTMLFormElement) => {
 export const normalizeRotation = (rotation: number) => {
   return (rotation % 360) + (rotation < 0 ? 360 : 0)
 }
+
+export const OpenFoodFactsSlackLink = "https://openfoodfacts.slack.com"
+export const FolksnomyEngineDocumentationLink = "https://wiki.openfoodfacts.org/Folksonomy_Engine"
+export const FolksnomyEnginePropertyLink = "https://wiki.openfoodfacts.org/Folksonomy/Property"

@@ -252,10 +252,6 @@
         <source>Barcode corners icon</source>
         <target state="needs-translation">Barcode corners icon</target>
       </trans-unit>
-      <trans-unit id="sb5ceccad457e8cae">
-        <source>Are you sure you want to delete this item?</source>
-        <target state="needs-translation">Are you sure you want to delete this item?</target>
-      </trans-unit>
       <trans-unit id="sdc673e73b5c13aea">
         <source>Delete</source>
         <target state="translated">删除</target>
@@ -292,26 +288,6 @@
         <source>Be aware the data model might be modified. Use at your own risk.</source>
         <target state="needs-translation">Be aware the data model might be modified. Use at your own risk.</target>
       </trans-unit>
-      <trans-unit id="hdbe45450d1a6419b">
-        <source>These properties are created and filed by users for any kind of usages. Feel
-                    free to add your own. The properties and values you create
-                    <x id="0" equiv-text="&lt;strong&gt;"/>must be factual<x id="1" equiv-text="&lt;/strong&gt;"/>. You can dive into
-                    <x id="2" equiv-text="&lt;a href=&quot;https://openfoodfacts-explorer.vercel.app/folksonomy&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
-                    or explore the
-                    <x id="4" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="needs-translation">These properties are created and filed by users for any kind of usages. Feel
-                    free to add your own. The properties and values you create
-                    <x id="0" equiv-text="&lt;strong&gt;"/>must be factual<x id="1" equiv-text="&lt;/strong&gt;"/>. You can dive into
-                    <x id="2" equiv-text="&lt;a href=&quot;https://openfoodfacts-explorer.vercel.app/folksonomy&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
-                    or explore the
-                    <x id="4" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
-      </trans-unit>
-      <trans-unit id="h76766ba4ed1addb3">
-        <source>This is brought by the
-                    <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't hesitate to participate or give feedback.</source>
-        <target state="needs-translation">This is brought by the
-                    <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't hesitate to participate or give feedback.</target>
-      </trans-unit>
       <trans-unit id="sf44a6b3b232c28ea">
         <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
         <target state="needs-translation">Replace current value by <x id="0" equiv-text="${text}"/></target>
@@ -328,104 +304,345 @@
         <source>No</source>
         <target state="translated">否</target>
       </trans-unit>
-<trans-unit id="s42dd66b2441566fd">
-  <source>Center icon</source>
+      <trans-unit id="s42dd66b2441566fd">
+        <source>Center icon</source>
+        <target state="needs-translation">Center icon</target>
+      </trans-unit>
+      <trans-unit id="s422bba9636ce2489">
+        <source>Center image</source>
+        <target state="needs-translation">Center image</target>
+      </trans-unit>
+      <trans-unit id="s8038273de2cf8b73">
+        <source>Please select a region to crop.</source>
+        <target state="needs-translation">Please select a region to crop.</target>
+      </trans-unit>
+      <trans-unit id="s39bcf88721a1e8ee">
+        <source>Reset selection</source>
+        <target state="needs-translation">Reset selection</target>
+      </trans-unit>
+      <trans-unit id="sb8178320160f84ea">
+        <source>Show crop</source>
+        <target state="needs-translation">Show crop</target>
+      </trans-unit>
+      <trans-unit id="s33f786bb6b4f0cf4">
+        <source>Crop Result</source>
+        <target state="needs-translation">Crop Result</target>
+      </trans-unit>
+      <trans-unit id="s6cee7cad81dfedd1">
+        <source>Cropped Image</source>
+        <target state="needs-translation">Cropped Image</target>
+      </trans-unit>
+      <trans-unit id="s02ce7a2e7c1b020b">
+        <source>Validate crop</source>
+        <target state="needs-translation">Validate crop</target>
+      </trans-unit>
+      <trans-unit id="s383ae4449428b61e">
+        <source>Reset crop</source>
+        <target state="needs-translation">Reset crop</target>
+      </trans-unit>
+      <trans-unit id="sc6daf8a31883f8b9">
+        <source>Move image</source>
+        <target state="needs-translation">Move image</target>
+      </trans-unit>
+      <trans-unit id="s19059bf0c4f7c162">
+        <source>Selection area</source>
+        <target state="needs-translation">Selection area</target>
+      </trans-unit>
+      <trans-unit id="s4f4886341969d552">
+        <source>Move selection</source>
+        <target state="needs-translation">Move selection</target>
+      </trans-unit>
+      <trans-unit id="scfed2f270ef6a3aa">
+        <source>Select area</source>
+        <target state="needs-translation">Select area</target>
+      </trans-unit>
+      <trans-unit id="sc0cc559e7ede852a">
+        <source>Resize top</source>
+        <target state="needs-translation">Resize top</target>
+      </trans-unit>
+      <trans-unit id="s453ab0dbb9b5c777">
+        <source>Resize right</source>
+        <target state="needs-translation">Resize right</target>
+      </trans-unit>
+      <trans-unit id="s8a63be30a129a59c">
+        <source>Resize bottom</source>
+        <target state="needs-translation">Resize bottom</target>
+      </trans-unit>
+      <trans-unit id="s787dd11bed0dc88a">
+        <source>Resize left</source>
+        <target state="needs-translation">Resize left</target>
+      </trans-unit>
+      <trans-unit id="s8b33c244759d7bd4">
+        <source>Resize top right</source>
+        <target state="needs-translation">Resize top right</target>
+      </trans-unit>
+      <trans-unit id="sa63907958bd0ec4b">
+        <source>Resize top left</source>
+        <target state="needs-translation">Resize top left</target>
+      </trans-unit>
+      <trans-unit id="sdca5deead576ceee">
+        <source>Resize bottom right</source>
+        <target state="needs-translation">Resize bottom right</target>
+      </trans-unit>
+      <trans-unit id="sac47ea2901d04c15">
+        <source>Resize bottom left</source>
+        <target state="needs-translation">Resize bottom left</target>
+      </trans-unit>
+      <trans-unit id="s4df2f533c0c1e7d0">
+        <source>Image controls</source>
+        <target state="needs-translation">Image controls</target>
+      </trans-unit>
+      <trans-unit id="sd1022bc1ef9204f7">
+        <source>Zoomable image</source>
+        <target state="needs-translation">Zoomable image</target>
+      </trans-unit>
+      <trans-unit id="s3f4e4b52f230a892">
+        <source>Image canvas</source>
+        <target state="needs-translation">Image canvas</target>
+      </trans-unit>
+      <trans-unit id="s5ed03bb1f3a15949">
+        <source>Picture</source>
+        <target state="needs-translation">Picture</target>
+      </trans-unit>
+      <trans-unit id="sbad7d2734149470b">
+        <source>Validate</source>
+        <target state="translated">驗證</target>
+      </trans-unit>
+      <trans-unit id="se419a9ab36987490">
+        <source>Invalidate</source>
+        <target state="needs-translation">Invalidate</target>
+      </trans-unit>
+      <trans-unit id="s10db5498186c083b">
+        <source>Cancel crop</source>
+        <target state="needs-translation">Cancel crop</target>
+      </trans-unit>
+      <trans-unit id="sec6377f3c4e9b28c">
+        <source>I'll propose a better crop</source>
+        <target state="needs-translation">I'll propose a better crop</target>
+      </trans-unit>
+      <trans-unit id="s03e9c8114521b998">
+        <source>I'll edit the ingredients</source>
+        <target state="needs-translation">I'll edit the ingredients</target>
+      </trans-unit>
+      <trans-unit id="s98ff35f2a00dc60d">
+        <source>Ingredients :</source>
+        <target state="needs-translation">Ingredients :</target>
+      </trans-unit>
+      <trans-unit id="s013bdc8cf0d3583d">
+        <source>Help us for ingredients</source>
+        <target state="needs-translation">Help us for ingredients</target>
+      </trans-unit>
+      <trans-unit id="sd1077c055cf9ba6b">
+        <source>Help us validate the ingredient list of the product.</source>
+        <target state="needs-translation">Help us validate the ingredient list of the product.</target>
+      </trans-unit>
+<trans-unit id="s8f839a03997a16d7">
+  <source>View Product</source>
 </trans-unit>
-<trans-unit id="s422bba9636ce2489">
-  <source>Center image</source>
+<trans-unit id="s1dc4daf989c71284">
+  <source>Help us correct the nutritional information</source>
 </trans-unit>
-<trans-unit id="s8038273de2cf8b73">
-  <source>Please select a region to crop.</source>
+<trans-unit id="sf57a61152168cc81">
+  <source>Help us correct the ingredient detection</source>
 </trans-unit>
-<trans-unit id="s39bcf88721a1e8ee">
-  <source>Reset selection</source>
+<trans-unit id="scf23a05631f93732">
+  <source>Confirm Delete</source>
 </trans-unit>
-<trans-unit id="sb8178320160f84ea">
-  <source>Show crop</source>
+<trans-unit id="sdcc2555c5dde524f">
+  <source>Are you sure you want to delete this item? This action cannot be undone.</source>
 </trans-unit>
-<trans-unit id="s33f786bb6b4f0cf4">
-  <source>Crop Result</source>
+<trans-unit id="s901ae1e236ac45d3">
+  <source>Cancel deletion</source>
 </trans-unit>
-<trans-unit id="s6cee7cad81dfedd1">
-  <source>Cropped Image</source>
+<trans-unit id="sc681b137e8f604f7">
+  <source>Confirm deletion</source>
 </trans-unit>
-<trans-unit id="s02ce7a2e7c1b020b">
-  <source>Validate crop</source>
+<trans-unit id="s4f751fb9b3ed766c">
+  <source>Creating a New Property</source>
 </trans-unit>
-<trans-unit id="s383ae4449428b61e">
-  <source>Reset crop</source>
+<trans-unit id="sdb97e5976482606e">
+  <source>Check if a property already exists</source>
 </trans-unit>
-<trans-unit id="sc6daf8a31883f8b9">
-  <source>Move image</source>
+<trans-unit id="sb125227d436c2925">
+  <source>Search for your property concept in the existing properties database:</source>
 </trans-unit>
-<trans-unit id="s19059bf0c4f7c162">
-  <source>Selection area</source>
+<trans-unit id="s86197dcf3e96af64">
+  <source>Browse and search existing properties</source>
 </trans-unit>
-<trans-unit id="s4f4886341969d552">
-  <source>Move selection</source>
+<trans-unit id="s34be4af4e8fec4ae">
+  <source>Ask the community first</source>
 </trans-unit>
-<trans-unit id="scfed2f270ef6a3aa">
-  <source>Select area</source>
+<trans-unit id="s36d86adc823cbfa6">
+  <source>Before creating a new property, discuss it with the community:</source>
 </trans-unit>
-<trans-unit id="sc0cc559e7ede852a">
-  <source>Resize top</source>
+<trans-unit id="s06847c221c4c0bc1">
+  <source>I would like to create a property to [describe your use case]...</source>
 </trans-unit>
-<trans-unit id="s453ab0dbb9b5c777">
-  <source>Resize right</source>
+<trans-unit id="scd21019c3cd618f3">
+  <source>Join Slack Discussion</source>
 </trans-unit>
-<trans-unit id="s8a63be30a129a59c">
-  <source>Resize bottom</source>
+<trans-unit id="s8db84aa4bc949af2">
+  <source>Document the New Property</source>
 </trans-unit>
-<trans-unit id="s787dd11bed0dc88a">
-  <source>Resize left</source>
+<trans-unit id="sb3cbcc1bd0fff140">
+  <source>Once you've verified that your property doesn't exist and the community agrees it's useful, you need to first document it in the wiki.</source>
 </trans-unit>
-<trans-unit id="s8b33c244759d7bd4">
-  <source>Resize top right</source>
+<trans-unit id="sfacbbe968fa7d773">
+  <source>Property name:</source>
 </trans-unit>
-<trans-unit id="sa63907958bd0ec4b">
-  <source>Resize top left</source>
+<trans-unit id="s5560fb119e40923d">
+  <source>Enter property name...</source>
 </trans-unit>
-<trans-unit id="sdca5deead576ceee">
-  <source>Resize bottom right</source>
+<trans-unit id="s2db7b654c0a9bde0">
+  <source>Document the property</source>
 </trans-unit>
-<trans-unit id="sac47ea2901d04c15">
-  <source>Resize bottom left</source>
+<trans-unit id="s39e14e14300694c7">
+  <source>Documentation and Guidelines</source>
 </trans-unit>
-<trans-unit id="s4df2f533c0c1e7d0">
-  <source>Image controls</source>
+<trans-unit id="s801a05fa8e881f37">
+  <source>Learn more about property creation and guidelines:</source>
 </trans-unit>
-<trans-unit id="sd1022bc1ef9204f7">
-  <source>Zoomable image</source>
+<trans-unit id="s3781d25aa51a736c">
+  <source>Folksonomy Engine Documentation</source>
 </trans-unit>
-<trans-unit id="s3f4e4b52f230a892">
-  <source>Image canvas</source>
+<trans-unit id="s9b87abd68fb9df45">
+  <source>Not found? Create new key {value}</source>
 </trans-unit>
-<trans-unit id="s5ed03bb1f3a15949">
-  <source>Picture</source>
+<trans-unit id="hb28f1f2ec1744ee9">
+  <source>These properties are created and filed by users for any kind of usages. Feel
+                    free to add your own. The properties and values you create
+                    <x id="0" equiv-text="&lt;strong&gt;"/>must be factual<x id="1" equiv-text="&lt;/strong&gt;"/>. You can dive into
+                    <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
+                    or explore the
+                    <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</source>
 </trans-unit>
-<trans-unit id="sbad7d2734149470b">
-  <source>Validate</source>
+<trans-unit id="h1fbdfea3ad6d664e">
+  <source>This is brought by the
+                    <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't
+                    hesitate to participate or give feedback</source>
 </trans-unit>
-<trans-unit id="se419a9ab36987490">
-  <source>Invalidate</source>
+<trans-unit id="s71a5c9f4b68ef4d4">
+  <source>Count</source>
 </trans-unit>
-<trans-unit id="s10db5498186c083b">
-  <source>Cancel crop</source>
+<trans-unit id="s57472465a23b41db">
+  <source>Values</source>
 </trans-unit>
-<trans-unit id="sec6377f3c4e9b28c">
-  <source>I'll propose a better crop</source>
+<trans-unit id="s74cb3d66f6a668e1">
+  <source>Documentation</source>
 </trans-unit>
-<trans-unit id="s03e9c8114521b998">
-  <source>I'll edit the ingredients</source>
+<trans-unit id="s565867d84c04aea2">
+  <source>Filter properties...</source>
 </trans-unit>
-<trans-unit id="s98ff35f2a00dc60d">
-  <source>Ingredients :</source>
+<trans-unit id="s3b430cfa5c1fe7f4">
+  <source>Documentation for <x id="0" equiv-text="${property.k}"/></source>
 </trans-unit>
-<trans-unit id="s013bdc8cf0d3583d">
-  <source>Help us for ingredients</source>
+<trans-unit id="s000a5b76bd3a01c2">
+  <source>Loading properties...</source>
 </trans-unit>
-<trans-unit id="sd1077c055cf9ba6b">
-  <source>Help us validate the ingredient list of the product.</source>
+<trans-unit id="s9a7f60fce090ecaf">
+  <source>Failed to load properties. Please try again later.</source>
+</trans-unit>
+<trans-unit id="scdb6cad0b92721bf">
+  <source>No properties found.</source>
+</trans-unit>
+<trans-unit id="scace072bef961918">
+  <source>Rows</source>
+</trans-unit>
+<trans-unit id="s0bb2d48532acc455">
+  <source>Download CSV</source>
+</trans-unit>
+<trans-unit id="s255857544a9d5ec0">
+  <source>Reset</source>
+</trans-unit>
+<trans-unit id="sefaba4adc4ec9219">
+  <source>Folksonomy Properties</source>
+</trans-unit>
+<trans-unit id="sa548778b24054030">
+  <source>Explore all contributed properties from the Folksonomy Engine project. These properties provide additional metadata and insights about products in the Open Food Facts database.</source>
+</trans-unit>
+<trans-unit id="sf4cd86a2f5ef2588">
+  <source>Product Barcode</source>
+</trans-unit>
+<trans-unit id="sbe472dc3c2685985">
+  <source>Corresponding Value</source>
+</trans-unit>
+<trans-unit id="s4d42cc7e00076a3b">
+  <source>Product Count</source>
+</trans-unit>
+<trans-unit id="s1a52515ec8ddade8">
+  <source>Product barcode</source>
+</trans-unit>
+<trans-unit id="sfe87465d50530725">
+  <source>Corresponding value</source>
+</trans-unit>
+<trans-unit id="s839cc2908a5387f2">
+  <source>Filter barcodes...</source>
+</trans-unit>
+<trans-unit id="sb7f72e4c8a2d3357">
+  <source>Filter values...</source>
+</trans-unit>
+<trans-unit id="s1205d5f6fccf8e69">
+  <source>Property Value</source>
+</trans-unit>
+<trans-unit id="s58e1eeea7a60ae51">
+  <source>Loading products...</source>
+</trans-unit>
+<trans-unit id="sb560fa37a7bfb6c2">
+  <source>No products found for this property.</source>
+</trans-unit>
+<trans-unit id="seea3800e27baa686">
+  <source>Individual Products</source>
+</trans-unit>
+<trans-unit id="s081e2ad82db71e1d">
+  <source>Grouped Values</source>
+</trans-unit>
+<trans-unit id="s9fc41f789c63b40d">
+  <source>Products</source>
+</trans-unit>
+<trans-unit id="s1e00019dc454872d">
+  <source>Please provide a property name using the property-name attribute.</source>
+</trans-unit>
+<trans-unit id="sc895972c88d38ca5">
+  <source>Folksonomy property</source>
+</trans-unit>
+<trans-unit id="se5127cf0f92e7e48">
+  <source>Tip: you can also find the</source>
+</trans-unit>
+<trans-unit id="sb28639570ff3b852">
+  <source>list of all properties</source>
+</trans-unit>
+<trans-unit id="sdbf806fefc584115">
+  <source>You should find a</source>
+</trans-unit>
+<trans-unit id="s0b4235aae602a950">
+  <source>dedicated documentation</source>
+</trans-unit>
+<trans-unit id="s55d7249883a98ca1">
+  <source>about this property on Open Food Facts wiki</source>
+</trans-unit>
+<trans-unit id="s1e49126af0935a5b">
+  <source>List of products using this property</source>
+</trans-unit>
+<trans-unit id="sb1c538e038f9b214">
+  <source>Very Good Match <x id="0" equiv-text="${score}"/>%</source>
+</trans-unit>
+<trans-unit id="s718dea04853f80ae">
+  <source>Good Match <x id="0" equiv-text="${score}"/>%</source>
+</trans-unit>
+<trans-unit id="s300b3a6ee4e1252d">
+  <source>Poor Match <x id="0" equiv-text="${score}"/>%</source>
+</trans-unit>
+<trans-unit id="sc1c08d0cbcc3bd24">
+  <source>Does Not Match</source>
+</trans-unit>
+<trans-unit id="s9c0f52425fd2f07e">
+  <source>May Not Match</source>
+</trans-unit>
+<trans-unit id="sf88b90b8ba23871c">
+  <source>Unknown Match</source>
+</trans-unit>
+<trans-unit id="sa1fa766e0d5634d7">
+  <source>No Score Available</source>
 </trans-unit>
     </body>
   </file>

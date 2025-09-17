@@ -5,15 +5,18 @@ on:
     branches: [ crowdin-trigger ]
 jobs:
   synchronize-with-crowdin:
+    permissions:
+      contents: write
+      pull-requests: write
     runs-on: ubuntu-latest
 
     steps:
 
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: crowdin action
-      uses: crowdin/github-action@v2.7.1
+      uses: crowdin/github-action@v2.11.0
       continue-on-error: true
       with:
         # Upload sources to Crowdin

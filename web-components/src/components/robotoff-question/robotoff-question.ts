@@ -1,4 +1,4 @@
-import { LitElement, html, css, nothing } from "lit"
+import { LitElement, html, css, nothing, type TemplateResult } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import {
   currentQuestionIndex,
@@ -12,11 +12,12 @@ import {
 import { Task } from "@lit/task"
 import { localized, msg } from "@lit/localize"
 import { EventState, EventType } from "../../constants"
-import { QuestionStateEventDetail } from "../../types"
+import type { QuestionStateEventDetail } from "../../types"
 import { SignalWatcher } from "@lit-labs/signals"
 import "../shared/loader"
 import "./robotoff-question-form"
 import { BASE } from "../../styles/base"
+import type { Question } from "@openfoodfacts/openfoodfacts-nodejs"
 
 /**
  * Robotoff question component
@@ -46,7 +47,6 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
   ]
   /**
    * Options for the component
-   * @type {Object}
    */
   @property({ type: Object, reflect: true })
   options: {
@@ -60,31 +60,27 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
 
   /**
    * The product code to fetch questions for
-   * @type {string}
    */
   @property({ type: String, attribute: "product-code" })
-  productCode = ""
+  productCode: string = ""
 
   /**
    * The insight types to filter questions separate by comma
-   * @type {string}
    */
   @property({ type: String, attribute: "insight-types" })
-  insightTypes = ""
+  insightTypes: string = ""
 
   /**
    * Whether the user has answered the question
-   * @type {boolean}
    */
   @state()
-  private hasAnswered = false
+  private hasAnswered: boolean = false
 
   /**
    * Task to fetch questions for the given product code
-   * @type {Task}
    * @private
    */
-  private _questionsTask = new Task(this, {
+  private _questionsTask: Task<[string, string], Question[]> = new Task(this, {
     task: async ([productCode, insightTypes], {}) => {
       this.hasAnswered = false
       if (!productCode) {
@@ -105,7 +101,7 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
    * Emit a custom event when the question state changes to know current state outside the component
    * @returns {void}
    */
-  private _emitQuestionStateEvent = (state: EventState) => {
+  private _emitQuestionStateEvent = (state: EventState): void => {
     const detail: QuestionStateEventDetail =
       state === EventState.LOADING
         ? { state }
@@ -135,10 +131,8 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
 
   /**
    * Render the message to display to the user
-   * @returns {TemplateResult}
-   * @private
    **/
-  private renderMessage() {
+  private renderMessage(): TemplateResult | typeof nothing {
     const getMessageWrapper = (message: string) => html`<div class="message">${message}</div>`
 
     if (isQuestionsFinished(this.productCode).get()) {
@@ -173,7 +167,7 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
               ? nothing
               : html`
                   <robotoff-question-form
-                    .is-image-expanded=${this.options.isImageExpanded}
+                    .isImageExpanded=${this.options.isImageExpanded ?? false}
                     .question=${question}
                     @submit=${this.onQuestionAnswered}
                   ></robotoff-question-form>

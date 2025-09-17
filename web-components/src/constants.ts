@@ -53,3 +53,5 @@ export enum RobotoffContributionType {
   NUTRIENT_EXTRACTION = "nutrient_extraction",
   INGREDIENT_DETECTION = "ingredient_detection",
 }
+
+export const STATIC_HOST = "https://static.openfoodfacts.org"

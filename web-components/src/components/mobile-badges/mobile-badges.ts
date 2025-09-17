@@ -2,6 +2,8 @@ import { LitElement, html, css, nothing } from "lit"
 import { customElement, state, property } from "lit/decorators.js"
 import { localized, msg } from "@lit/localize"
 import { getImageUrl, languageCode } from "../../signals/app"
+import { classMap } from "lit/directives/class-map.js"
+import { darkModeListener } from "../../utils/dark-mode-listener"
 
 export type Badge = {
   href: string
@@ -24,178 +26,227 @@ export class MobileBadges extends LitElement {
   /**
    * Styles for the component.
    */
-  static override styles = css`
-    #install_the_app_block {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 2rem;
-    }
-    #footer_install_the_app {
-      font-family: "Public Sans", Helvetica, Roboto, Arial, sans-serif;
-      font-weight: 550;
-      font-size: 26px;
-      line-height: 30px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    #footer_scan {
-      font-family: "Public Sans", Helvetica, Roboto, Arial, sans-serif;
-      font-style: normal;
-      font-weight: 550;
-      font-size: 22px;
-      line-height: 28px;
-      display: flex;
-      align-items: center;
-      text-align: center;
-      color: #000;
-      max-width: 420px;
-    }
-    @media (max-width: 480px) {
-      #footer_install_the_app {
-        font-size: 20px;
-        line-height: 24px;
+  static override styles = [
+    css`
+      :host {
+        display: block;
+      }
+      .dark-mode {
+        background-color: #201a17;
+        color: #f9f7f5;
       }
       #footer_scan {
-        font-size: 18px;
-        line-height: 22px;
+        color: #000;
       }
-    }
-    @media (min-width: 768px) {
-      #footer_install_the_app {
-        font-size: 28px;
-        line-height: 32px;
+      .dark-mode #footer_scan {
+        color: #f9f7f5;
       }
-      #footer_scan {
-        font-size: 24px;
-        line-height: 30px;
+      .everyday {
+        background-color: #0064c8;
+        border-inline: 5px solid #0064c8;
+        color: #fff;
       }
-    }
-    @media (min-width: 1024px) {
-      #footer_install_the_app {
-        font-size: 30px;
-        line-height: 34px;
+      .dark-mode .everyday {
+        background-color: #0050a0;
+        border-inline: 5px solid #0050a0;
+        color: #fff;
       }
-      #footer_scan {
-        font-size: 26px;
-        line-height: 32px;
+      .foods {
+        background-color: #ff8714;
+        border-inline: 5px solid #ff8714;
+        color: #fff;
       }
-    }
-    .everyday {
-      transform: rotate(2.5deg);
-      background-color: #0064c8;
-      border-inline: 5px solid #0064c8;
-      line-height: 130%;
-      font-weight: 550;
-      color: #fff;
-      border-radius: 5px;
-      text-transform: uppercase;
-      display: inline-block;
-    }
-    .foods {
-      transform: rotate(-3deg);
-      background-color: #ff8714;
-      border-inline: 5px solid #ff8714;
-      line-height: 130%;
-      font-weight: 550;
-      color: #fff;
-      border-radius: 5px;
-      text-transform: uppercase;
-      display: inline-block;
-    }
-    .no-text-decoration {
-      text-decoration: none;
-    }
-    .badge-container {
-      display: grid;
-      gap: 0.2rem; /* Reduced horizontal gap */
-      grid-template-columns: repeat(2, 1fr);
-    }
-    @media (min-width: 768px) {
-      .badge-container {
-        grid-template-columns: repeat(4, 1fr);
+      .dark-mode .foods {
+        background-color: #cc6c10;
+        border-inline: 5px solid #cc6c10;
+        color: #fff;
       }
-    }
-    .responsive-container {
-      flex-direction: column;
-      text-align: center;
-    }
-    @media (min-width: 768px) {
-      .badge-container {
+      #install_the_app_block {
         display: flex;
+        align-items: center;
         justify-content: center;
+        flex-wrap: wrap;
+        gap: 2rem;
       }
-    }
-    @media (max-width: 480px) {
+      #footer_install_the_app {
+        font-family: "Public Sans", Helvetica, Roboto, Arial, sans-serif;
+        font-weight: 550;
+        font-size: 26px;
+        line-height: 30px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+      #footer_scan {
+        font-family: "Public Sans", Helvetica, Roboto, Arial, sans-serif;
+        font-style: normal;
+        font-weight: 550;
+        font-size: 22px;
+        line-height: 28px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        color: #000;
+        max-width: 420px;
+      }
+      @media (max-width: 480px) {
+        #footer_install_the_app {
+          font-size: 20px;
+          line-height: 24px;
+        }
+        #footer_scan {
+          font-size: 18px;
+          line-height: 22px;
+        }
+      }
+      @media (min-width: 768px) {
+        #footer_install_the_app {
+          font-size: 28px;
+          line-height: 32px;
+        }
+        #footer_scan {
+          font-size: 24px;
+          line-height: 30px;
+        }
+      }
+      @media (min-width: 1024px) {
+        #footer_install_the_app {
+          font-size: 30px;
+          line-height: 34px;
+        }
+        #footer_scan {
+          font-size: 26px;
+          line-height: 32px;
+        }
+      }
+      .everyday {
+        transform: rotate(2.5deg);
+        background-color: #0064c8;
+        border-inline: 5px solid #0064c8;
+        line-height: 130%;
+        font-weight: 550;
+        color: #fff;
+        border-radius: 5px;
+        text-transform: uppercase;
+        display: inline-block;
+      }
+      .foods {
+        transform: rotate(-3deg);
+        background-color: #ff8714;
+        border-inline: 5px solid #ff8714;
+        line-height: 130%;
+        font-weight: 550;
+        color: #fff;
+        border-radius: 5px;
+        text-transform: uppercase;
+        display: inline-block;
+      }
+      .no-text-decoration {
+        text-decoration: none;
+      }
       .badge-container {
-        grid-template-columns: 1fr;
-        gap: 0.5rem;
+        display: grid;
+        gap: 0.2rem; /* Reduced horizontal gap */
+        grid-template-columns: repeat(2, 1fr);
+      }
+      @media (min-width: 768px) {
+        .badge-container {
+          grid-template-columns: repeat(4, 1fr);
+        }
       }
       .responsive-container {
         flex-direction: column;
         text-align: center;
       }
-      .responsive-image {
-        margin-bottom: 1rem;
+      @media (min-width: 768px) {
+        .badge-container {
+          display: flex;
+          justify-content: center;
+        }
       }
-      .responsive-text {
-        margin-top: 0.5rem;
+      @media (max-width: 480px) {
+        .badge-container {
+          grid-template-columns: 1fr;
+          gap: 0.5rem;
+        }
+        .responsive-container {
+          flex-direction: column;
+          text-align: center;
+        }
+        .responsive-image {
+          margin-bottom: 1rem;
+        }
+        .responsive-text {
+          margin-top: 0.5rem;
+        }
       }
-    }
-    #fdroid_badge {
-      transform: scale(1.1);
-      height: 50px;
-      margin-top: -4px;
-    }
-    #playstore_badge {
-      height: 45px;
-    }
+      #fdroid_badge {
+        transform: scale(1.1);
+        height: 50px;
+        margin-top: -4px;
+      }
+      #playstore_badge {
+        height: 45px;
+      }
 
-    .logo-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      max-width: 720px;
-      gap: 2rem;
-      flex-wrap: wrap;
-    }
-  `
+      .logo-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-width: 720px;
+        gap: 2rem;
+        flex-wrap: wrap;
+      }
+    `,
+  ]
 
   /**
    * Controls visibility of Google Play Store badge
-   * @type {boolean}
    */
   @property({ type: Boolean, attribute: "hide-play-store" })
-  hidePlayStore = false
+  hidePlayStore: boolean = false
 
   /**
    * Controls visibility of F-Droid badge
-   * @type {boolean}
    */
   @property({ type: Boolean, attribute: "hide-f-droid" })
-  hideFDroid = false
+  hideFDroid: boolean = false
 
   /**
    * Controls visibility of APK download badge
-   * @type {boolean}
    */
   @property({ type: Boolean, attribute: "hide-apk" })
-  hideApk = false
+  hideApk: boolean = false
 
   /**
    * Controls visibility of App Store badge
-   * @type {boolean}
    */
   @property({ type: Boolean, attribute: "hide-app-store" })
-  hideAppStore = false
+  hideAppStore: boolean = false
 
   /**
    * Controls visibility of App Store badge
-   * @type {boolean}
    */
   @property({ type: Boolean, attribute: "hide-image" })
-  hideImage = false
+  hideImage: boolean = false
+
+  /**
+   * Whether to apply dark mode styling (auto-detected from prefers-color-scheme)
+   */
+  isDarkMode = darkModeListener.darkMode
+  private _darkModeCb = (isDark: boolean) => {
+    this.isDarkMode = isDark
+    this.requestUpdate()
+  }
+
+  override connectedCallback() {
+    super.connectedCallback()
+    darkModeListener.subscribe(this._darkModeCb)
+  }
+
+  override disconnectedCallback() {
+    darkModeListener.unsubscribe(this._darkModeCb)
+    super.disconnectedCallback()
+  }
 
   /**
    * Link to the F-Droid app page.
@@ -405,8 +456,11 @@ export class MobileBadges extends LitElement {
   }
 
   override render() {
+    const rootClasses = { "dark-mode": this.isDarkMode }
     return html`
-      <div class="" id="install_the_app_block">${this.renderImage()} ${this.renderBadges()}</div>
+      <div class=${classMap(rootClasses)} id="install_the_app_block">
+        ${this.renderImage()} ${this.renderBadges()}
+      </div>
     `
   }
 }

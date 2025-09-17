@@ -1,5 +1,8 @@
 name: Ventilate issues to the right GitHub projects
-
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
 on:
   issues:
     types:
@@ -151,4 +154,10 @@ jobs:
           project-url: https://github.com/orgs/openfoodfacts/projects/73
           github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
           labeled: Nutrient extraction
+          label-operator: OR
+      - uses: actions/add-to-project@main
+        with:
+          project-url: https://github.com/orgs/openfoodfacts/projects/133 # Add issue to the Release overview project
+          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+          labeled: "autorelease: pending"
           label-operator: OR
