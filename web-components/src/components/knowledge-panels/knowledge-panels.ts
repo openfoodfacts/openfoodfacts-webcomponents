@@ -79,8 +79,13 @@ export class KnowledgePanelsComponent extends LitElement {
   })
   headingLevel = "h3" // Set a default value
 
+  /** Array of top panel keys to render */
   @property({ type: String, attribute: "top-panels" })
-  topPanels: string[] = ["root"]
+  panels: string[] = ["root"]
+
+  /** If true, the top panels will be rendered within a frame */
+  @property({ type: Boolean, attribute: "top-frame" })
+  topFrame = false
 
   @property({ type: String })
   url = ""
@@ -188,18 +193,19 @@ export class KnowledgePanelsComponent extends LitElement {
     this.nutritionImages = extractImages(panels)
 
     const panelsToRender = Object.entries(panels)
-      .filter(([key]) => this.topPanels.includes(key))
+      .filter(([key]) => this.panels.includes(key))
       .map(([, panel]) => panel)
 
     return html`
       <div class="knowledge-panels-container">
         ${panelsToRender.map((panel: KnowledgePanel) =>
           panel
-            ? html` <panel-renderer
+            ? html`<panel-renderer
                 .panel=${panel}
                 .knowledgePanels=${this.knowledgePanels}
                 .nutritionImages=${this.nutritionImages}
-                headingLevel=${this.headingLevel}
+                .frame=${this.topFrame}
+                .headingLevel=${this.headingLevel}
               >
               </panel-renderer>`
             : html``
