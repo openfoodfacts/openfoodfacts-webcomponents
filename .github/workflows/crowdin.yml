@@ -5,6 +5,9 @@ on:
     branches: [ crowdin-trigger ]
 jobs:
   synchronize-with-crowdin:
+    permissions:
+      contents: write
+      pull-requests: write
     runs-on: ubuntu-latest
 
     steps:
