@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.14.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.13.2...v1.14.0) (2025-09-18)
+
+
+### Features
+
+* transition to Vite, add Storybook ([#274](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/274)) ([f416d9a](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/f416d9ad0d5f73831a818deff96444b790b42e55))
+
+
+### Bug Fixes
+
+* **deps:** bump marked from 16.2.1 to 16.3.0 in /web-components ([#287](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/287)) ([7169895](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/7169895c94263615653b85ffe7036e92f4dbee27))
+* Type errors, rename getTaxonomyNameByLang and use SDK Nutrient Type ([#273](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/273)) ([2eee761](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/2eee761d4f40b94cee6d6bf1ea1e9ee6f62e17ac))
+
 ## [1.13.2](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.13.1...v1.13.2) (2025-09-11)
 
 
