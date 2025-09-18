@@ -4,7 +4,6 @@ export { RobotoffQuestion } from "./components/robotoff-question/robotoff-questi
 export { RobotoffNutrientExtraction } from "./components/robotoff-nutrient-extraction/robotoff-nutrient-extraction"
 export { RobotoffIngredientSpellcheck } from "./components/robotoff-ingredient-spellcheck/robotoff-ingredient-spellcheck"
 export { RobotoffContributionMessage } from "./components/robotoff-contribution-message/robotoff-contribution-message"
-// Will be added in the future when design is ready
 export { KnowledgePanelsComponent } from "./components/knowledge-panels/knowledge-panels"
 export { DonationBanner } from "./components/donation-banner/donation-banner"
 export { MobileBadges } from "./components/mobile-badges/mobile-badges"

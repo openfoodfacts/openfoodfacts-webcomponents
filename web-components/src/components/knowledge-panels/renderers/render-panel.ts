@@ -27,7 +27,6 @@ export class PanelRenderer extends LitElement {
       border: 1px solid #f2d3ac;
       background: #fff;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-      border-radius: 16px;
       border-bottom: 1px solid #f2d3ac;
       background: #fffdfa;
       overflow: hidden;

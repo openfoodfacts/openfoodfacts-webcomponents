@@ -80,7 +80,7 @@ export class KnowledgePanelsComponent extends LitElement {
   headingLevel = "h3" // Set a default value
 
   /** Array of top panel keys to render */
-  @property({ type: String, attribute: "top-panels" })
+  @property({ type: Array, attribute: "top-panels" })
   panels: string[] = ["root"]
 
   /** If true, the top panels will be rendered within a frame */
