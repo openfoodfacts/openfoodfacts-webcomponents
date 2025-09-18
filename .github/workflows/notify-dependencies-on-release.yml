@@ -3,6 +3,14 @@ name: Notify dependency repositories on release
 on:
   release:
     types: [published]
+  # Allow manual trigger for testing
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run in dry-run mode (do not create issues)'
+        required: false
+        default: 'false'
+        type: boolean
 
 permissions:
   issues: write
@@ -27,9 +35,10 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const version = context.payload.release.tag_name;
-            const releaseUrl = context.payload.release.html_url;
-            const releaseBody = context.payload.release.body || '';
+            const isDryRun = '${{ github.event.inputs.dry_run }}' === 'true';
+            const version = context.payload.release?.tag_name || 'test-version';
+            const releaseUrl = context.payload.release?.html_url || 'https://github.com/openfoodfacts/openfoodfacts-webcomponents/releases';
+            const releaseBody = context.payload.release?.body || 'Test release notes';
             const packageName = '@openfoodfacts/openfoodfacts-webcomponents';
             
             // Extract repository owner and name from matrix
@@ -65,13 +74,40 @@ jobs:
               `*This issue was automatically created by the [openfoodfacts-webcomponents release workflow](${context.payload.repository.html_url}/actions).*`
             ].join('\n');
 
+            console.log(`🎯 Target: ${owner}/${repo}`);
+            console.log(`📝 Title: ${title}`);
+            console.log(`📄 Body preview: ${body.substring(0, 200)}...`);
+            
+            if (isDryRun) {
+              console.log('🧪 DRY RUN MODE - Issue would be created but not actually submitting');
+              return;
+            }
+
             try {
+              // Check if an issue with the same title already exists to avoid duplicates
+              const existingIssues = await github.rest.issues.listForRepo({
+                owner: owner,
+                repo: repo,
+                state: 'open',
+                per_page: 30
+              });
+              
+              const duplicateIssue = existingIssues.data.find(issue => 
+                issue.title === title
+              );
+              
+              if (duplicateIssue) {
+                console.log(`⚠️ Issue already exists: ${duplicateIssue.html_url}`);
+                console.log('Skipping creation to avoid duplicates');
+                return;
+              }
+              
               const issue = await github.rest.issues.create({
                 owner: owner,
                 repo: repo,
                 title: title,
                 body: body,
-                labels: ['dependencies', 'webcomponents-update']
+                labels: ['dependencies', 'webcomponents-update', 'automated']
               });
               
               console.log(`✅ Created issue #${issue.data.number} in ${owner}/${repo}: ${issue.data.html_url}`);
@@ -79,10 +115,15 @@ jobs:
               console.error(`❌ Failed to create issue in ${owner}/${repo}:`, error.message);
               
               // If it's a permissions error, provide helpful information
-              if (error.status === 403 || error.status === 404) {
-                console.error('This might be due to insufficient permissions or the repository not existing.');
-                console.error('Make sure the GITHUB_TOKEN has write access to issues in the target repository.');
+              if (error.status === 403) {
+                console.error('❌ Permissions error: The GITHUB_TOKEN does not have write access to issues in the target repository.');
+                console.error('This is expected for cross-organization repositories. The workflow will continue with other repositories.');
+              } else if (error.status === 404) {
+                console.error('❌ Repository not found or not accessible.');
+              } else if (error.status === 422) {
+                console.error('❌ Validation error: There might be an issue with the issue content.');
               }
               
-              throw error;  // Re-throw to mark the step as failed
+              // Don't re-throw the error to allow other repositories to continue
+              return { error: error.message, repository: `${owner}/${repo}` };
             }
