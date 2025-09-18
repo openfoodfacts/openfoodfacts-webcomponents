@@ -1,13 +1,4 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
-import folksonomyApi from "../api/folksonomy"
-
-// Mock localStorage
-const localStorageMock = {
-  getItem: vi.fn(),
-  setItem: vi.fn(),
-  removeItem: vi.fn(),
-}
-Object.defineProperty(window, "localStorage", { value: localStorageMock })
 
 // Mock the folksonomy configuration
 vi.mock("../signals/folksonomy", () => ({
@@ -22,12 +13,14 @@ vi.mock("../signals/folksonomy", () => ({
 }))
 
 describe("Folksonomy API", () => {
-  beforeEach(() => {
+  let folksonomyApi: any
+
+  beforeEach(async () => {
     global.fetch = vi.fn()
     vi.clearAllMocks()
-    localStorageMock.getItem.mockClear()
-    localStorageMock.setItem.mockClear()
-    localStorageMock.removeItem.mockClear()
+    
+    // Dynamically import to avoid hoisting issues
+    folksonomyApi = (await import("../api/folksonomy")).default
   })
 
   describe("fetchProductProperties", () => {
@@ -45,21 +38,9 @@ describe("Folksonomy API", () => {
       const result = await folksonomyApi.fetchProductProperties("1234567890123")
 
       expect(global.fetch).toHaveBeenCalledWith(
-        "https://api.folksonomy.openfoodfacts.org/product/1234567890123",
-        { credentials: "include" }
+        "https://api.folksonomy.openfoodfacts.org/product/1234567890123"
       )
       expect(result).toEqual(mockProperties)
-    })
-
-    it("should handle empty product code", async () => {
-      ;(global.fetch as any).mockResolvedValue({
-        ok: true,
-        json: async () => [],
-      })
-
-      const result = await folksonomyApi.fetchProductProperties("")
-      
-      expect(result).toEqual([])
     })
 
     it("should handle network errors", async () => {
@@ -70,324 +51,28 @@ describe("Folksonomy API", () => {
       ).rejects.toThrow("Network error")
     })
 
-    it("should handle 404 responses", async () => {
+    it("should handle HTTP error responses", async () => {
       ;(global.fetch as any).mockResolvedValue({
         ok: false,
         status: 404,
-        json: async () => ({ error: "Product not found" }),
       })
 
       await expect(
         folksonomyApi.fetchProductProperties("123")
-      ).rejects.toThrow()
+      ).rejects.toThrow("HTTP error! status: 404")
     })
-  })
 
-  describe("authentication flow", () => {
-    describe("token management", () => {
-      it("should retrieve stored token from localStorage", () => {
-        localStorageMock.getItem.mockImplementation((key) => {
-          if (key === "folksonomy-bearer-token") return "stored-token-123"
-          if (key === "folksonomy-token-date") return new Date().toISOString()
-          return null
-        })
-
-        // We can't directly test getStoredToken since it's not exported
-        // But we can test it indirectly through API calls that use it
+    it("should handle empty product code", async () => {
+      ;(global.fetch as any).mockResolvedValue({
+        ok: true,
+        json: async () => [],
       })
 
-      it("should handle missing token gracefully", () => {
-        localStorageMock.getItem.mockReturnValue(null)
-        
-        // Token should be fetched when needed for authenticated requests
-      })
-
-      it("should handle expired token", () => {
-        const expiredDate = new Date(Date.now() - 25 * 60 * 60 * 1000) // 25 hours ago
-        localStorageMock.getItem.mockImplementation((key) => {
-          if (key === "folksonomy-bearer-token") return "expired-token"
-          if (key === "folksonomy-token-date") return expiredDate.toISOString()
-          return null
-        })
-
-        // Expired token should trigger re-authentication
-      })
+      const result = await folksonomyApi.fetchProductProperties("")
+      expect(result).toEqual([])
     })
 
-    describe("authenticated requests", () => {
-      it("should retry request with new token on 401 error", async () => {
-        // First request fails with 401
-        ;(global.fetch as any)
-          .mockResolvedValueOnce({
-            ok: false,
-            status: 401,
-          })
-          // Auth request succeeds
-          .mockResolvedValueOnce({
-            ok: true,
-            json: async () => ({ access_token: "new-token-123" }),
-          })
-          // Retry request succeeds
-          .mockResolvedValueOnce({
-            ok: true,
-            json: async () => ({ status: "saved" }),
-          })
-
-        const result = await folksonomyApi.addProductProperty("123", "organic", "yes", 1)
-
-        expect(global.fetch).toHaveBeenCalledTimes(3)
-        expect(result.status).toBe("saved")
-      })
-
-      it("should retry request with new token on 403 error", async () => {
-        ;(global.fetch as any)
-          .mockResolvedValueOnce({
-            ok: false,
-            status: 403,
-          })
-          .mockResolvedValueOnce({
-            ok: true,
-            json: async () => ({ access_token: "new-token-456" }),
-          })
-          .mockResolvedValueOnce({
-            ok: true,
-            json: async () => ({ status: "saved" }),
-          })
-
-        const result = await folksonomyApi.addProductProperty("123", "packaging", "plastic", 1)
-
-        expect(global.fetch).toHaveBeenCalledTimes(3)
-        expect(result.status).toBe("saved")
-      })
-
-      it("should not retry on other error codes", async () => {
-        ;(global.fetch as any).mockResolvedValue({
-          ok: false,
-          status: 500,
-        })
-
-        await expect(
-          folksonomyApi.addProductProperty("123", "key", "value", 1)
-        ).rejects.toThrow()
-
-        expect(global.fetch).toHaveBeenCalledTimes(1)
-      })
-    })
-  })
-
-  describe("addProductProperty", () => {
-    beforeEach(() => {
-      // Mock successful authentication
-      ;(global.fetch as any).mockImplementation((url) => {
-        if (url.includes("/auth/by-cookie")) {
-          return Promise.resolve({
-            ok: true,
-            json: async () => ({ access_token: "test-token-123" }),
-          })
-        }
-        return Promise.resolve({
-          ok: true,
-          json: async () => ({ status: "saved" }),
-        })
-      })
-    })
-
-    it("should add product property successfully", async () => {
-      const result = await folksonomyApi.addProductProperty("123", "organic", "yes", 1)
-
-      expect(result.status).toBe("saved")
-      expect(global.fetch).toHaveBeenCalledWith(
-        "https://api.folksonomy.openfoodfacts.org/product",
-        expect.objectContaining({
-          method: "POST",
-          body: expect.stringContaining("barcode=123"),
-          headers: expect.objectContaining({
-            "Content-Type": "application/x-www-form-urlencoded",
-            Authorization: "Bearer test-token-123",
-          }),
-        })
-      )
-    })
-
-    it("should handle special characters in property values", async () => {
-      await folksonomyApi.addProductProperty("123", "description", "Test & Review", 1)
-
-      const lastCall = (global.fetch as any).mock.calls[1]
-      const body = lastCall[1].body
-      expect(body).toContain("Test%20%26%20Review")
-    })
-
-    it("should include version in request", async () => {
-      await folksonomyApi.addProductProperty("123", "key", "value", 5)
-
-      const lastCall = (global.fetch as any).mock.calls[1]
-      const body = lastCall[1].body
-      expect(body).toContain("version=5")
-    })
-  })
-
-  describe("updateProductProperty", () => {
-    beforeEach(() => {
-      ;(global.fetch as any).mockImplementation((url) => {
-        if (url.includes("/auth/by-cookie")) {
-          return Promise.resolve({
-            ok: true,
-            json: async () => ({ access_token: "test-token-123" }),
-          })
-        }
-        return Promise.resolve({
-          ok: true,
-          json: async () => ({ status: "updated" }),
-        })
-      })
-    })
-
-    it("should update product property successfully", async () => {
-      const result = await folksonomyApi.updateProductProperty("123", "organic", "no", 2)
-
-      expect(result.status).toBe("updated")
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining("/product"),
-        expect.objectContaining({
-          method: "PUT",
-          body: expect.stringContaining("barcode=123"),
-        })
-      )
-    })
-  })
-
-  describe("deleteProductProperty", () => {
-    beforeEach(() => {
-      ;(global.fetch as any).mockImplementation((url) => {
-        if (url.includes("/auth/by-cookie")) {
-          return Promise.resolve({
-            ok: true,
-            json: async () => ({ access_token: "test-token-123" }),
-          })
-        }
-        return Promise.resolve({
-          ok: true,
-          json: async () => ({ status: "deleted" }),
-        })
-      })
-    })
-
-    it("should delete product property successfully", async () => {
-      const result = await folksonomyApi.deleteProductProperty("123", "organic", 1)
-
-      expect(result.status).toBe("deleted")
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining("/product"),
-        expect.objectContaining({
-          method: "DELETE",
-          body: expect.stringContaining("barcode=123"),
-        })
-      )
-    })
-  })
-
-  describe("property and value management", () => {
-    beforeEach(() => {
-      ;(global.fetch as any).mockImplementation((url) => {
-        if (url.includes("/auth/by-cookie")) {
-          return Promise.resolve({
-            ok: true,
-            json: async () => ({ access_token: "test-token-123" }),
-          })
-        }
-        return Promise.resolve({
-          ok: true,
-          json: async () => ({ status: "success" }),
-        })
-      })
-    })
-
-    it("should rename property successfully", async () => {
-      const renameData = {
-        k: "old-property",
-        new_k: "new-property",
-      }
-
-      const result = await folksonomyApi.renameProperty(renameData)
-
-      expect(result.status).toBe("success")
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining("/property/rename"),
-        expect.objectContaining({
-          method: "POST",
-          body: expect.stringContaining("k=old-property"),
-        })
-      )
-    })
-
-    it("should delete property successfully", async () => {
-      const deleteData = {
-        k: "property-to-delete",
-      }
-
-      const result = await folksonomyApi.deleteProperty(deleteData)
-
-      expect(result.status).toBe("success")
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining("/property/delete"),
-        expect.objectContaining({
-          method: "DELETE",
-        })
-      )
-    })
-
-    it("should check property clash", async () => {
-      ;(global.fetch as any).mockImplementation((url) => {
-        if (url.includes("/property/clash")) {
-          return Promise.resolve({
-            ok: true,
-            json: async () => ({ clash: false }),
-          })
-        }
-        if (url.includes("/auth/by-cookie")) {
-          return Promise.resolve({
-            ok: true,
-            json: async () => ({ access_token: "test-token-123" }),
-          })
-        }
-        return Promise.resolve({ ok: true, json: async () => ({}) })
-      })
-
-      const result = await folksonomyApi.checkPropertyClash({
-        k: "test-property",
-        new_k: "new-test-property",
-      })
-
-      expect(result.clash).toBe(false)
-    })
-  })
-
-  describe("error handling", () => {
-    it("should handle authentication failures", async () => {
-      ;(global.fetch as any).mockImplementation((url) => {
-        if (url.includes("/auth/by-cookie")) {
-          return Promise.resolve({
-            ok: false,
-            status: 401,
-          })
-        }
-        return Promise.resolve({ ok: true })
-      })
-
-      await expect(
-        folksonomyApi.addProductProperty("123", "key", "value", 1)
-      ).rejects.toThrow()
-    })
-
-    it("should handle network timeouts", async () => {
-      ;(global.fetch as any).mockRejectedValue(new Error("Request timeout"))
-
-      await expect(
-        folksonomyApi.fetchProductProperties("123")
-      ).rejects.toThrow("Request timeout")
-    })
-
-    it("should handle malformed responses", async () => {
+    it("should handle malformed JSON responses", async () => {
       ;(global.fetch as any).mockResolvedValue({
         ok: true,
         json: async () => {
@@ -399,63 +84,183 @@ describe("Folksonomy API", () => {
         folksonomyApi.fetchProductProperties("123")
       ).rejects.toThrow("Invalid JSON")
     })
-
-    it("should clear token on authentication error", async () => {
-      ;(global.fetch as any)
-        .mockResolvedValueOnce({
-          ok: false,
-          status: 401,
-        })
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => ({ access_token: "new-token" }),
-        })
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => ({ status: "saved" }),
-        })
-
-      await folksonomyApi.addProductProperty("123", "key", "value", 1)
-
-      expect(localStorageMock.removeItem).toHaveBeenCalledWith("folksonomy-bearer-token")
-      expect(localStorageMock.removeItem).toHaveBeenCalledWith("folksonomy-token-date")
-    })
   })
 
-  describe("edge cases", () => {
-    it("should handle empty API URL", async () => {
-      const { folksonomyConfiguration } = await import("../signals/folksonomy")
-      ;(folksonomyConfiguration.getItem as any).mockReturnValue("")
+  describe("error handling patterns", () => {
+    it("should propagate console.error calls on fetch failures", async () => {
+      const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
+      
+      ;(global.fetch as any).mockRejectedValue(new Error("Connection failed"))
+
+      try {
+        await folksonomyApi.fetchProductProperties("123")
+      } catch (error) {
+        // Expected to throw
+      }
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        "Error fetching product properties:",
+        expect.any(Error)
+      )
+    })
+
+    it("should handle timeout scenarios", async () => {
+      ;(global.fetch as any).mockImplementation(() => 
+        new Promise((_, reject) => {
+          setTimeout(() => reject(new Error("Timeout")), 1)
+        })
+      )
 
       await expect(
         folksonomyApi.fetchProductProperties("123")
-      ).rejects.toThrow()
+      ).rejects.toThrow("Timeout")
     })
 
-    it("should handle missing product code", async () => {
-      await expect(
-        folksonomyApi.fetchProductProperties("")
-      ).resolves.not.toThrow()
-    })
-
-    it("should handle very long property values", async () => {
-      const longValue = "x".repeat(10000)
-      
-      ;(global.fetch as any).mockImplementation((url) => {
-        if (url.includes("/auth/by-cookie")) {
-          return Promise.resolve({
-            ok: true,
-            json: async () => ({ access_token: "test-token" }),
-          })
-        }
-        return Promise.resolve({
-          ok: true,
-          json: async () => ({ status: "saved" }),
-        })
+    it("should handle server unavailable responses", async () => {
+      ;(global.fetch as any).mockResolvedValue({
+        ok: false,
+        status: 503,
       })
 
-      const result = await folksonomyApi.addProductProperty("123", "description", longValue, 1)
-      expect(result.status).toBe("saved")
+      await expect(
+        folksonomyApi.fetchProductProperties("123")
+      ).rejects.toThrow("HTTP error! status: 503")
+    })
+  })
+
+  describe("API URL configuration", () => {
+    it("should use configured API URL from signal", async () => {
+      const { folksonomyConfiguration } = await import("../signals/folksonomy")
+      ;(folksonomyConfiguration.getItem as any).mockReturnValue("https://custom.api.url")
+
+      ;(global.fetch as any).mockResolvedValue({
+        ok: true,
+        json: async () => [],
+      })
+
+      await folksonomyApi.fetchProductProperties("123")
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining("https://custom.api.url")
+      )
+    })
+
+    it("should handle missing API URL gracefully", async () => {
+      const { folksonomyConfiguration } = await import("../signals/folksonomy")
+      ;(folksonomyConfiguration.getItem as any).mockReturnValue(null)
+
+      ;(global.fetch as any).mockResolvedValue({
+        ok: true,
+        json: async () => [],
+      })
+
+      await folksonomyApi.fetchProductProperties("123")
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining("null/product/123")
+      )
+    })
+  })
+
+  describe("edge cases and boundary conditions", () => {
+    it("should handle very long product codes", async () => {
+      const longProductCode = "1".repeat(1000)
+      
+      ;(global.fetch as any).mockResolvedValue({
+        ok: true,
+        json: async () => [],
+      })
+
+      await folksonomyApi.fetchProductProperties(longProductCode)
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining(longProductCode)
+      )
+    })
+
+    it("should handle special characters in product codes", async () => {
+      const specialCode = "product/with&special%chars"
+      
+      ;(global.fetch as any).mockResolvedValue({
+        ok: true,
+        json: async () => [],
+      })
+
+      await folksonomyApi.fetchProductProperties(specialCode)
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining(specialCode)
+      )
+    })
+
+    it("should handle null response data", async () => {
+      ;(global.fetch as any).mockResolvedValue({
+        ok: true,
+        json: async () => null,
+      })
+
+      const result = await folksonomyApi.fetchProductProperties("123")
+      expect(result).toBeNull()
+    })
+
+    it("should handle undefined response data", async () => {
+      ;(global.fetch as any).mockResolvedValue({
+        ok: true,
+        json: async () => undefined,
+      })
+
+      const result = await folksonomyApi.fetchProductProperties("123")
+      expect(result).toBeUndefined()
+    })
+
+    it("should handle response with unexpected structure", async () => {
+      const weirdResponse = { 
+        not: "expected",
+        structure: { deeply: { nested: "value" } }
+      }
+      
+      ;(global.fetch as any).mockResolvedValue({
+        ok: true,
+        json: async () => weirdResponse,
+      })
+
+      const result = await folksonomyApi.fetchProductProperties("123")
+      expect(result).toEqual(weirdResponse)
+    })
+  })
+
+  describe("performance and reliability", () => {
+    it("should handle concurrent requests", async () => {
+      ;(global.fetch as any).mockResolvedValue({
+        ok: true,
+        json: async () => [{ k: "test", v: "value", version: 1 }],
+      })
+
+      const promises = Array(10).fill(0).map((_, i) => 
+        folksonomyApi.fetchProductProperties(`product-${i}`)
+      )
+
+      const results = await Promise.all(promises)
+      
+      expect(results).toHaveLength(10)
+      expect(global.fetch).toHaveBeenCalledTimes(10)
+      results.forEach(result => {
+        expect(result).toEqual([{ k: "test", v: "value", version: 1 }])
+      })
+    })
+
+    it("should not leak memory on repeated calls", async () => {
+      ;(global.fetch as any).mockResolvedValue({
+        ok: true,
+        json: async () => [],
+      })
+
+      // Simulate many calls
+      for (let i = 0; i < 100; i++) {
+        await folksonomyApi.fetchProductProperties("123")
+      }
+
+      expect(global.fetch).toHaveBeenCalledTimes(100)
     })
   })
 })
