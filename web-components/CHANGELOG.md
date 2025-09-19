@@ -2,57 +2,66 @@
 
 ## [1.14.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.13.2...v1.14.0) (2025-09-18)
 
+
 ### Features
 
-- transition to Vite, add Storybook ([#274](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/274)) ([f416d9a](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/f416d9ad0d5f73831a818deff96444b790b42e55))
+* transition to Vite, add Storybook ([#274](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/274)) ([f416d9a](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/f416d9ad0d5f73831a818deff96444b790b42e55))
+
 
 ### Bug Fixes
 
-- **deps:** bump marked from 16.2.1 to 16.3.0 in /web-components ([#287](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/287)) ([7169895](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/7169895c94263615653b85ffe7036e92f4dbee27))
-- Type errors, rename getTaxonomyNameByLang and use SDK Nutrient Type ([#273](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/273)) ([2eee761](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/2eee761d4f40b94cee6d6bf1ea1e9ee6f62e17ac))
+* **deps:** bump marked from 16.2.1 to 16.3.0 in /web-components ([#287](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/287)) ([7169895](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/7169895c94263615653b85ffe7036e92f4dbee27))
+* Type errors, rename getTaxonomyNameByLang and use SDK Nutrient Type ([#273](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/273)) ([2eee761](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/2eee761d4f40b94cee6d6bf1ea1e9ee6f62e17ac))
 
 ## [1.13.2](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.13.1...v1.13.2) (2025-09-11)
 
+
 ### Bug Fixes
 
-- Robotoff instance creation in robotoff.ts ([#282](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/282)) ([2d8580c](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/2d8580c6358126a9deede0c3b6c1c8a4d6424762)), closes [#281](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/281)
+* Robotoff instance creation in robotoff.ts ([#282](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/282)) ([2d8580c](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/2d8580c6358126a9deede0c3b6c1c8a4d6424762)), closes [#281](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/281)
 
 ## [1.13.1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.13.0...v1.13.1) (2025-09-05)
 
+
 ### Bug Fixes
 
-- fix library publication ([3691141](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/369114137f5ffa7acc68565569463ed92c8e1d4b))
+* fix library publication ([3691141](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/369114137f5ffa7acc68565569463ed92c8e1d4b))
 
 ## [1.13.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.12.3...v1.13.0) (2025-09-02)
 
+
 ### Features
 
-- add news-feed web component ([#268](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/268)) ([24c80cd](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/24c80cd89d416991a4e4f67cd0db7c4f787bf5b1))
-- adds delete and replace for values and properties ([#264](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/264)) ([3bceb87](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/3bceb871be3aa02a7439eec2f6902847e61dfc9d))
-- Integrate @openfoodfacts/openfoodfacts-nodejs ([#266](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/266)) ([7052f3b](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/7052f3ba3677c1c8393b988bfa79d631521bf968))
+* add news-feed web component ([#268](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/268)) ([24c80cd](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/24c80cd89d416991a4e4f67cd0db7c4f787bf5b1))
+* adds delete and replace for values and properties ([#264](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/264)) ([3bceb87](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/3bceb871be3aa02a7439eec2f6902847e61dfc9d))
+* Integrate @openfoodfacts/openfoodfacts-nodejs ([#266](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/266)) ([7052f3b](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/7052f3ba3677c1c8393b988bfa79d631521bf968))
+
 
 ### Bug Fixes
 
-- fixes the link for properties exploration ([#213](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/213)) ([6385338](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/6385338de1a11a97de8e3b48cac18b121ef80742))
-- Include credentials in robotoff read requests ([#265](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/265)) ([cb52e90](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/cb52e901d5b33bec3d9da750840ca09958512528))
+* fixes the link for properties exploration ([#213](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/213)) ([6385338](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/6385338de1a11a97de8e3b48cac18b121ef80742))
+* Include credentials in robotoff read requests ([#265](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/265)) ([cb52e90](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/cb52e901d5b33bec3d9da750840ca09958512528))
 
 ## [1.12.3](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.12.2...v1.12.3) (2025-08-18)
 
+
 ### Bug Fixes
 
-- improve taxonomy name retrieval with better error handling ([#249](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/249)) ([8e24499](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/8e2449911bdfb49e7d9d25158a4990d6b00c481c)), closes [#217](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/217)
+* improve taxonomy name retrieval with better error handling ([#249](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/249)) ([8e24499](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/8e2449911bdfb49e7d9d25158a4990d6b00c481c)), closes [#217](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/217)
 
 ## [1.12.2](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.12.1...v1.12.2) (2025-08-17)
 
+
 ### Bug Fixes
 
-- Product card height inconsistency fixed ([#241](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/241)) ([822ad73](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/822ad73911b10537df8c93b2dd65fd616a550bd0))
+* Product card height  inconsistency fixed ([#241](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/241)) ([822ad73](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/822ad73911b10537df8c93b2dd65fd616a550bd0))
 
 ## [1.12.1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.12.0...v1.12.1) (2025-08-15)
 
+
 ### Bug Fixes
 
-- score value type in product card prop ([#235](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/235)) ([eefbcee](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/eefbcee1c866a1c14464880fcac3d92c1a941330))
+* score value type in product card prop ([#235](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/235)) ([eefbcee](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/eefbcee1c866a1c14464880fcac3d92c1a941330))
 
 ## [1.12.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.11.0...v1.12.0) (2025-08-13)
 
