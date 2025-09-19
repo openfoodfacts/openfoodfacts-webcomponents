@@ -1,6 +1,10 @@
 import { describe, it, expect, beforeEach } from "vitest"
 import { assetsImagesPath, getImageUrl, countryCode, languageCode } from "../signals/app"
-import { DEFAULT_ASSETS_IMAGES_PATH, DEFAULT_COUNTRY_CODE, DEFAULT_LANGUAGE_CODE } from "../constants"
+import {
+  DEFAULT_ASSETS_IMAGES_PATH,
+  DEFAULT_COUNTRY_CODE,
+  DEFAULT_LANGUAGE_CODE,
+} from "../constants"
 
 describe("App Signals", () => {
   beforeEach(() => {
@@ -55,9 +59,9 @@ describe("App Signals", () => {
     it("should react to changes in assetsImagesPath", () => {
       const customPath = "/custom/path"
       const fileName = "icon.png"
-      
+
       assetsImagesPath.set(customPath)
-      
+
       expect(getImageUrl(fileName)).toBe(`${customPath}/${fileName}`)
     })
 
@@ -133,7 +137,7 @@ describe("App Signals", () => {
     it("should handle null and undefined", () => {
       countryCode.set(null as any)
       expect(countryCode.get()).toBe(null)
-      
+
       countryCode.set(undefined as any)
       expect(countryCode.get()).toBe(undefined)
     })
@@ -158,8 +162,8 @@ describe("App Signals", () => {
 
     it("should handle different language codes", () => {
       const testCodes = ["es", "de", "it", "pt", "ja", "zh"]
-      
-      testCodes.forEach(code => {
+
+      testCodes.forEach((code) => {
         languageCode.set(code)
         expect(languageCode.get()).toBe(code)
       })
@@ -179,7 +183,7 @@ describe("App Signals", () => {
     it("should handle null and undefined", () => {
       languageCode.set(null as any)
       expect(languageCode.get()).toBe(null)
-      
+
       languageCode.set(undefined as any)
       expect(languageCode.get()).toBe(undefined)
     })
@@ -190,11 +194,11 @@ describe("App Signals", () => {
       const newAssetsPath = "/new/assets"
       const newCountry = "jp"
       const newLanguage = "ja"
-      
+
       assetsImagesPath.set(newAssetsPath)
       countryCode.set(newCountry)
       languageCode.set(newLanguage)
-      
+
       expect(assetsImagesPath.get()).toBe(newAssetsPath)
       expect(countryCode.get()).toBe(newCountry)
       expect(languageCode.get()).toBe(newLanguage)
@@ -202,8 +206,8 @@ describe("App Signals", () => {
 
     it("should handle rapid successive changes", () => {
       const values = ["value1", "value2", "value3", "value4", "value5"]
-      
-      values.forEach(value => {
+
+      values.forEach((value) => {
         languageCode.set(value)
         expect(languageCode.get()).toBe(value)
       })
@@ -214,11 +218,11 @@ describe("App Signals", () => {
       assetsImagesPath.set("/path1")
       countryCode.set("country1")
       languageCode.set("lang1")
-      
+
       assetsImagesPath.set("/path2")
       countryCode.set("country2")
       languageCode.set("lang2")
-      
+
       expect(assetsImagesPath.get()).toBe("/path2")
       expect(countryCode.get()).toBe("country2")
       expect(languageCode.get()).toBe("lang2")
@@ -230,11 +234,11 @@ describe("App Signals", () => {
       const longPath = "/".repeat(1000)
       const longCountry = "x".repeat(1000)
       const longLanguage = "y".repeat(1000)
-      
+
       assetsImagesPath.set(longPath)
       countryCode.set(longCountry)
       languageCode.set(longLanguage)
-      
+
       expect(assetsImagesPath.get()).toBe(longPath)
       expect(countryCode.get()).toBe(longCountry)
       expect(languageCode.get()).toBe(longLanguage)
@@ -244,11 +248,11 @@ describe("App Signals", () => {
       const specialPath = "/assets/测试/ñáéí/🚀"
       const specialCountry = "测试"
       const specialLanguage = "español"
-      
+
       assetsImagesPath.set(specialPath)
       countryCode.set(specialCountry)
       languageCode.set(specialLanguage)
-      
+
       expect(assetsImagesPath.get()).toBe(specialPath)
       expect(countryCode.get()).toBe(specialCountry)
       expect(languageCode.get()).toBe(specialLanguage)
@@ -258,7 +262,7 @@ describe("App Signals", () => {
       assetsImagesPath.set("123456")
       countryCode.set("42")
       languageCode.set("99")
-      
+
       expect(assetsImagesPath.get()).toBe("123456")
       expect(countryCode.get()).toBe("42")
       expect(languageCode.get()).toBe("99")
@@ -268,7 +272,7 @@ describe("App Signals", () => {
       assetsImagesPath.set("true")
       countryCode.set("false")
       languageCode.set("undefined")
-      
+
       expect(assetsImagesPath.get()).toBe("true")
       expect(countryCode.get()).toBe("false")
       expect(languageCode.get()).toBe("undefined")
@@ -287,12 +291,12 @@ describe("App Signals", () => {
       assetsImagesPath.set("/custom")
       countryCode.set("us")
       languageCode.set("es")
-      
+
       // Reset to defaults
       assetsImagesPath.set(DEFAULT_ASSETS_IMAGES_PATH)
       countryCode.set(DEFAULT_COUNTRY_CODE)
       languageCode.set(DEFAULT_LANGUAGE_CODE)
-      
+
       // Verify defaults are restored
       expect(assetsImagesPath.get()).toBe(DEFAULT_ASSETS_IMAGES_PATH)
       expect(countryCode.get()).toBe(DEFAULT_COUNTRY_CODE)

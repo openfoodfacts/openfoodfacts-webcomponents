@@ -18,7 +18,7 @@ describe("Folksonomy API", () => {
   beforeEach(async () => {
     global.fetch = vi.fn()
     vi.clearAllMocks()
-    
+
     // Dynamically import to avoid hoisting issues
     folksonomyApi = (await import("../api/folksonomy")).default
   })
@@ -46,9 +46,7 @@ describe("Folksonomy API", () => {
     it("should handle network errors", async () => {
       ;(global.fetch as any).mockRejectedValue(new Error("Network error"))
 
-      await expect(
-        folksonomyApi.fetchProductProperties("123")
-      ).rejects.toThrow("Network error")
+      await expect(folksonomyApi.fetchProductProperties("123")).rejects.toThrow("Network error")
     })
 
     it("should handle HTTP error responses", async () => {
@@ -57,9 +55,9 @@ describe("Folksonomy API", () => {
         status: 404,
       })
 
-      await expect(
-        folksonomyApi.fetchProductProperties("123")
-      ).rejects.toThrow("HTTP error! status: 404")
+      await expect(folksonomyApi.fetchProductProperties("123")).rejects.toThrow(
+        "HTTP error! status: 404"
+      )
     })
 
     it("should handle empty product code", async () => {
@@ -80,16 +78,14 @@ describe("Folksonomy API", () => {
         },
       })
 
-      await expect(
-        folksonomyApi.fetchProductProperties("123")
-      ).rejects.toThrow("Invalid JSON")
+      await expect(folksonomyApi.fetchProductProperties("123")).rejects.toThrow("Invalid JSON")
     })
   })
 
   describe("error handling patterns", () => {
     it("should propagate console.error calls on fetch failures", async () => {
       const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
-      
+
       ;(global.fetch as any).mockRejectedValue(new Error("Connection failed"))
 
       try {
@@ -105,15 +101,14 @@ describe("Folksonomy API", () => {
     })
 
     it("should handle timeout scenarios", async () => {
-      ;(global.fetch as any).mockImplementation(() => 
-        new Promise((_, reject) => {
-          setTimeout(() => reject(new Error("Timeout")), 1)
-        })
+      ;(global.fetch as any).mockImplementation(
+        () =>
+          new Promise((_, reject) => {
+            setTimeout(() => reject(new Error("Timeout")), 1)
+          })
       )
 
-      await expect(
-        folksonomyApi.fetchProductProperties("123")
-      ).rejects.toThrow("Timeout")
+      await expect(folksonomyApi.fetchProductProperties("123")).rejects.toThrow("Timeout")
     })
 
     it("should handle server unavailable responses", async () => {
@@ -122,9 +117,9 @@ describe("Folksonomy API", () => {
         status: 503,
       })
 
-      await expect(
-        folksonomyApi.fetchProductProperties("123")
-      ).rejects.toThrow("HTTP error! status: 503")
+      await expect(folksonomyApi.fetchProductProperties("123")).rejects.toThrow(
+        "HTTP error! status: 503"
+      )
     })
   })
 
@@ -132,7 +127,6 @@ describe("Folksonomy API", () => {
     it("should use configured API URL from signal", async () => {
       const { folksonomyConfiguration } = await import("../signals/folksonomy")
       ;(folksonomyConfiguration.getItem as any).mockReturnValue("https://custom.api.url")
-
       ;(global.fetch as any).mockResolvedValue({
         ok: true,
         json: async () => [],
@@ -140,15 +134,12 @@ describe("Folksonomy API", () => {
 
       await folksonomyApi.fetchProductProperties("123")
 
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining("https://custom.api.url")
-      )
+      expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining("https://custom.api.url"))
     })
 
     it("should handle missing API URL gracefully", async () => {
       const { folksonomyConfiguration } = await import("../signals/folksonomy")
       ;(folksonomyConfiguration.getItem as any).mockReturnValue(null)
-
       ;(global.fetch as any).mockResolvedValue({
         ok: true,
         json: async () => [],
@@ -156,16 +147,14 @@ describe("Folksonomy API", () => {
 
       await folksonomyApi.fetchProductProperties("123")
 
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining("null/product/123")
-      )
+      expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining("null/product/123"))
     })
   })
 
   describe("edge cases and boundary conditions", () => {
     it("should handle very long product codes", async () => {
       const longProductCode = "1".repeat(1000)
-      
+
       ;(global.fetch as any).mockResolvedValue({
         ok: true,
         json: async () => [],
@@ -173,14 +162,12 @@ describe("Folksonomy API", () => {
 
       await folksonomyApi.fetchProductProperties(longProductCode)
 
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining(longProductCode)
-      )
+      expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining(longProductCode))
     })
 
     it("should handle special characters in product codes", async () => {
       const specialCode = "product/with&special%chars"
-      
+
       ;(global.fetch as any).mockResolvedValue({
         ok: true,
         json: async () => [],
@@ -188,9 +175,7 @@ describe("Folksonomy API", () => {
 
       await folksonomyApi.fetchProductProperties(specialCode)
 
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining(specialCode)
-      )
+      expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining(specialCode))
     })
 
     it("should handle null response data", async () => {
@@ -214,11 +199,11 @@ describe("Folksonomy API", () => {
     })
 
     it("should handle response with unexpected structure", async () => {
-      const weirdResponse = { 
+      const weirdResponse = {
         not: "expected",
-        structure: { deeply: { nested: "value" } }
+        structure: { deeply: { nested: "value" } },
       }
-      
+
       ;(global.fetch as any).mockResolvedValue({
         ok: true,
         json: async () => weirdResponse,
@@ -236,15 +221,15 @@ describe("Folksonomy API", () => {
         json: async () => [{ k: "test", v: "value", version: 1 }],
       })
 
-      const promises = Array(10).fill(0).map((_, i) => 
-        folksonomyApi.fetchProductProperties(`product-${i}`)
-      )
+      const promises = Array(10)
+        .fill(0)
+        .map((_, i) => folksonomyApi.fetchProductProperties(`product-${i}`))
 
       const results = await Promise.all(promises)
-      
+
       expect(results).toHaveLength(10)
       expect(global.fetch).toHaveBeenCalledTimes(10)
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result).toEqual([{ k: "test", v: "value", version: 1 }])
       })
     })

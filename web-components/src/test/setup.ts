@@ -3,7 +3,7 @@ import { beforeEach, vi } from "vitest"
 // Mock global fetch
 global.fetch = vi.fn()
 
-// Ensure URL is available globally 
+// Ensure URL is available globally
 global.URL = URL
 
 // Mock console methods to reduce noise in tests

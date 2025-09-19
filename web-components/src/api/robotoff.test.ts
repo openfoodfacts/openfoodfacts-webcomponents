@@ -84,22 +84,18 @@ describe("Robotoff API", () => {
         insight_types: ["ingredient"],
       })
 
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining("count=10"),
-        { credentials: "include" }
-      )
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining("page=2"),
-        { credentials: "include" }
-      )
+      expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining("count=10"), {
+        credentials: "include",
+      })
+      expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining("page=2"), {
+        credentials: "include",
+      })
     })
 
     it("should handle network errors gracefully", async () => {
       ;(global.fetch as any).mockRejectedValue(new Error("Network failure"))
 
-      await expect(
-        robotoff.questionsByProductCode("123")
-      ).rejects.toThrow("Network failure")
+      await expect(robotoff.questionsByProductCode("123")).rejects.toThrow("Network failure")
     })
 
     it("should handle malformed JSON responses", async () => {
@@ -110,9 +106,7 @@ describe("Robotoff API", () => {
         },
       })
 
-      await expect(
-        robotoff.questionsByProductCode("123")
-      ).rejects.toThrow("Invalid JSON")
+      await expect(robotoff.questionsByProductCode("123")).rejects.toThrow("Invalid JSON")
     })
   })
 
@@ -195,14 +189,12 @@ describe("Robotoff API", () => {
         barcode: "123",
       })
 
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining("annotated=false"),
-        { credentials: "include" }
-      )
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining("insight_types="),
-        { credentials: "include" }
-      )
+      expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining("annotated=false"), {
+        credentials: "include",
+      })
+      expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining("insight_types="), {
+        credentials: "include",
+      })
       expect(result).toEqual(mockResponse.insights)
     })
 
@@ -216,10 +208,9 @@ describe("Robotoff API", () => {
         annotated: true, // Should be overridden to false
       })
 
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining("annotated=false"),
-        { credentials: "include" }
-      )
+      expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining("annotated=false"), {
+        credentials: "include",
+      })
     })
   })
 
@@ -229,7 +220,7 @@ describe("Robotoff API", () => {
         const mockRobotoff = {
           annotate: vi.fn().mockResolvedValue({ status: "saved" }),
         }
-        
+
         // Mock the Robotoff constructor
         const { Robotoff } = await import("@openfoodfacts/openfoodfacts-nodejs")
         ;(Robotoff as any).mockImplementation(() => mockRobotoff)
@@ -248,7 +239,7 @@ describe("Robotoff API", () => {
         const mockRobotoff = {
           annotate: vi.fn().mockResolvedValue({ status: "saved" }),
         }
-        
+
         const { Robotoff } = await import("@openfoodfacts/openfoodfacts-nodejs")
         ;(Robotoff as any).mockImplementation(() => mockRobotoff)
 
@@ -268,7 +259,7 @@ describe("Robotoff API", () => {
         const mockRobotoff = {
           annotate: vi.fn().mockResolvedValue({ status: "saved" }),
         }
-        
+
         const { Robotoff } = await import("@openfoodfacts/openfoodfacts-nodejs")
         ;(Robotoff as any).mockImplementation(() => mockRobotoff)
 
@@ -289,7 +280,7 @@ describe("Robotoff API", () => {
         const mockRobotoff = {
           annotate: vi.fn().mockResolvedValue({ status: "saved" }),
         }
-        
+
         const { Robotoff } = await import("@openfoodfacts/openfoodfacts-nodejs")
         ;(Robotoff as any).mockImplementation(() => mockRobotoff)
 
@@ -308,7 +299,7 @@ describe("Robotoff API", () => {
         const mockRobotoff = {
           annotate: vi.fn().mockResolvedValue({ status: "saved" }),
         }
-        
+
         const { Robotoff } = await import("@openfoodfacts/openfoodfacts-nodejs")
         ;(Robotoff as any).mockImplementation(() => mockRobotoff)
 
@@ -355,9 +346,7 @@ describe("Robotoff API", () => {
     it("should propagate fetch errors", async () => {
       ;(global.fetch as any).mockRejectedValue(new Error("Connection timeout"))
 
-      await expect(
-        robotoff.questionsByProductCode("123")
-      ).rejects.toThrow("Connection timeout")
+      await expect(robotoff.questionsByProductCode("123")).rejects.toThrow("Connection timeout")
     })
 
     it("should handle malformed API responses", async () => {

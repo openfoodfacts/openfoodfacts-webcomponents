@@ -53,11 +53,11 @@ describe("Utility Functions", () => {
     })
 
     it("should handle complex values", () => {
-      const params = { 
-        array: ["a", "b"], 
+      const params = {
+        array: ["a", "b"],
         obj: { nested: "value" },
         null: null,
-        undefined: undefined
+        undefined: undefined,
       }
       const result = paramsToUrl(params)
       // Arrays are joined with commas, not encoded commas
@@ -157,29 +157,29 @@ describe("Utility Functions", () => {
     it("should debounce function calls", async () => {
       const mockFn = vi.fn()
       const debouncedFn = initDebounce(mockFn, 100)
-      
+
       debouncedFn()
       debouncedFn()
       debouncedFn()
-      
+
       expect(mockFn).not.toHaveBeenCalled()
-      
-      await new Promise(resolve => setTimeout(resolve, 150))
+
+      await new Promise((resolve) => setTimeout(resolve, 150))
       expect(mockFn).toHaveBeenCalledTimes(1)
     })
 
     it("should reset timer on subsequent calls", async () => {
       const mockFn = vi.fn()
       const debouncedFn = initDebounce(mockFn, 100)
-      
+
       debouncedFn()
-      
+
       setTimeout(() => debouncedFn(), 50) // Reset timer
-      
-      await new Promise(resolve => setTimeout(resolve, 120))
+
+      await new Promise((resolve) => setTimeout(resolve, 120))
       expect(mockFn).not.toHaveBeenCalled()
-      
-      await new Promise(resolve => setTimeout(resolve, 80))
+
+      await new Promise((resolve) => setTimeout(resolve, 80))
       expect(mockFn).toHaveBeenCalledTimes(1)
     })
   })
@@ -188,24 +188,24 @@ describe("Utility Functions", () => {
     it("should create debounce utility with debounce method", async () => {
       const mockFn = vi.fn()
       const debouncer = createDebounce(100)
-      
+
       debouncer.debounce(mockFn)
       debouncer.debounce(mockFn)
-      
+
       expect(mockFn).not.toHaveBeenCalled()
-      
-      await new Promise(resolve => setTimeout(resolve, 150))
+
+      await new Promise((resolve) => setTimeout(resolve, 150))
       expect(mockFn).toHaveBeenCalledTimes(1)
     })
 
     it("should provide clear method to cancel pending execution", async () => {
       const mockFn = vi.fn()
       const debouncer = createDebounce(100)
-      
+
       debouncer.debounce(mockFn)
       debouncer.clear()
-      
-      await new Promise(resolve => setTimeout(resolve, 150))
+
+      await new Promise((resolve) => setTimeout(resolve, 150))
       expect(mockFn).not.toHaveBeenCalled()
     })
   })
@@ -229,21 +229,27 @@ describe("Utility Functions", () => {
     })
 
     it("should create CSV with headers and data", () => {
-      const rows = [["value1", "value2"], ["value3", "value4"]]
+      const rows = [
+        ["value1", "value2"],
+        ["value3", "value4"],
+      ]
       const headers = ["Header1", "Header2"]
       const mockLink = {
         setAttribute: vi.fn(),
         click: vi.fn(),
         style: {},
       }
-      
+
       document.createElement = vi.fn().mockReturnValue(mockLink)
-      
+
       downloadCSV(rows, "test", headers)
-      
+
       expect(document.createElement).toHaveBeenCalledWith("a")
       expect(mockLink.setAttribute).toHaveBeenCalledWith("href", "blob:mock-url")
-      expect(mockLink.setAttribute).toHaveBeenCalledWith("download", expect.stringContaining("test_"))
+      expect(mockLink.setAttribute).toHaveBeenCalledWith(
+        "download",
+        expect.stringContaining("test_")
+      )
       expect(mockLink.click).toHaveBeenCalled()
     })
   })

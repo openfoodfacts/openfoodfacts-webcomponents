@@ -29,8 +29,8 @@ describe("OpenFoodFacts API", () => {
         json: async () => mockProduct,
       })
 
-      const result = await fetchProduct("1234567890123", { 
-        fields: "code,product_name" 
+      const result = await fetchProduct("1234567890123", {
+        fields: "code,product_name",
       })
 
       expect(global.fetch).toHaveBeenCalledWith(
@@ -45,17 +45,17 @@ describe("OpenFoodFacts API", () => {
         status: 404,
       })
 
-      await expect(
-        fetchProduct("1234567890123", { fields: "code" })
-      ).rejects.toThrow("Failed to fetch product data")
+      await expect(fetchProduct("1234567890123", { fields: "code" })).rejects.toThrow(
+        "Failed to fetch product data"
+      )
     })
 
     it("should handle network errors", async () => {
       ;(global.fetch as any).mockRejectedValue(new Error("Network error"))
 
-      await expect(
-        fetchProduct("1234567890123", { fields: "code" })
-      ).rejects.toThrow("Network error")
+      await expect(fetchProduct("1234567890123", { fields: "code" })).rejects.toThrow(
+        "Network error"
+      )
     })
 
     it("should properly encode parameters", async () => {
@@ -120,9 +120,9 @@ describe("OpenFoodFacts API", () => {
         status: 500,
       })
 
-      await expect(
-        fetchNutrientsOrder({ cc: "fr", lc: "fr" })
-      ).rejects.toThrow("Failed to fetch nutrients order")
+      await expect(fetchNutrientsOrder({ cc: "fr", lc: "fr" })).rejects.toThrow(
+        "Failed to fetch nutrients order"
+      )
     })
 
     it("should handle missing parameters", async () => {
@@ -132,10 +132,8 @@ describe("OpenFoodFacts API", () => {
       })
 
       await fetchNutrientsOrder({})
-      
-      expect(global.fetch).toHaveBeenCalledWith(
-        "https://world.openfoodfacts.org/cgi/nutrients.pl?"
-      )
+
+      expect(global.fetch).toHaveBeenCalledWith("https://world.openfoodfacts.org/cgi/nutrients.pl?")
     })
 
     it("should handle JSON parsing errors", async () => {
@@ -146,9 +144,7 @@ describe("OpenFoodFacts API", () => {
         },
       })
 
-      await expect(
-        fetchNutrientsOrder({ cc: "fr" })
-      ).rejects.toThrow("Invalid JSON")
+      await expect(fetchNutrientsOrder({ cc: "fr" })).rejects.toThrow("Invalid JSON")
     })
   })
 
@@ -156,7 +152,6 @@ describe("OpenFoodFacts API", () => {
     it("should use configured API URL", async () => {
       const mockApiUrl = "https://custom.openfoodfacts.org"
       ;(openfoodfactsApiUrl.get as any).mockReturnValue(mockApiUrl)
-      
       ;(global.fetch as any).mockResolvedValue({
         ok: true,
         json: async () => ({ status: "found" }),
@@ -164,23 +159,18 @@ describe("OpenFoodFacts API", () => {
 
       await fetchProduct("123", { fields: "code" })
 
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining(mockApiUrl)
-      )
+      expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining(mockApiUrl))
     })
 
     it("should handle URL building errors", () => {
       // Test edge case where API URL might be malformed
       ;(openfoodfactsApiUrl.get as any).mockReturnValue("")
-      
       ;(global.fetch as any).mockResolvedValue({
         ok: true,
         json: async () => ({ status: "found" }),
       })
 
-      return expect(
-        fetchProduct("123", { fields: "code" })
-      ).resolves.not.toThrow()
+      return expect(fetchProduct("123", { fields: "code" })).resolves.not.toThrow()
     })
   })
 })
