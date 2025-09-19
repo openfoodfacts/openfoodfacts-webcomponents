@@ -30,6 +30,11 @@ jobs:
         run: npm run build
         working-directory: ./web-components
 
+      - name: Run Tests
+        if: failure() || success()
+        run: npm test
+        working-directory: ./web-components
+
       - name: Run Linter
         if: failure() || success()
         run: npm run lint
