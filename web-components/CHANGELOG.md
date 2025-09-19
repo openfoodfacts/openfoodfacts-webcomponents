@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.14.0...v1.14.1) (2025-09-19)
+
+
+### Bug Fixes
+
+* revert output file name to off-webcomponents.bundled.js ([#303](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/303)) ([84e8af3](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/84e8af312c4f54d98e569c0c6be0d86ffd8f045b))
+
 ## [1.14.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.13.2...v1.14.0) (2025-09-18)
 
 
