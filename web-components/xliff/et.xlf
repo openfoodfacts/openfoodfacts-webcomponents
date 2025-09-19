@@ -132,7 +132,7 @@
       </trans-unit>
       <trans-unit id="h5d824b4954e56ea5">
         <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
-        <target state="needs-translation">Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></target>
+        <target state="translated">Skaneeri oma <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>igapäevaseid<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>toiduaineid<x id="2" equiv-text="&lt;/span&gt;"/></target>
       </trans-unit>
       <trans-unit id="s8a8bfd67f2dd2810">
         <source>Download the OFF app with this QR code</source>
@@ -604,7 +604,7 @@
       </trans-unit>
       <trans-unit id="sa548778b24054030">
         <source>Explore all contributed properties from the Folksonomy Engine project. These properties provide additional metadata and insights about products in the Open Food Facts database.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Avastage kõiki Folksonomy Engine'i projektist saadud omadusi. Need omadused pakuvad täiendavaid metaandmeid ja teavet Open Food Factsi andmebaasi toodete kohta.</target>
+        <target state="translated">Avasta kõiki Folksonomy Engine'i projektist saadud teavet. Tegemist on täiendavate metaandmetega ja teabega Open Food Factsi andmebaasi toodete kohta.</target>
       </trans-unit>
       <trans-unit id="sf4cd86a2f5ef2588">
         <source>Product Barcode</source>
