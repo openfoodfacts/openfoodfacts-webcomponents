@@ -15,7 +15,7 @@ You will see the list of available components and how to use them.
 
 ### With CDN
 
-Link : [https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.js](https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.js)
+Link : [https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.bundled.js](https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.bundled.js)
 
 ### Import it in your project
 
@@ -69,7 +69,7 @@ export default defineConfig({
 <script src="<path-to-webcomponentsjs>/webcomponents-loader.js"></script>
 <script
   type="module"
-  src="<path-to-openfoodfacts-webcomponents>/dist/off-webcomponents.js"
+  src="<path-to-openfoodfacts-webcomponents>/dist/off-webcomponents.bundled.js"
 ></script>
 ```
 

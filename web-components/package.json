@@ -12,8 +12,8 @@
   },
   "exports": {
     ".": {
-      "import": "./dist/off-webcomponents.js",
-      "require": "./dist/off-webcomponents.cjs"
+      "import": "./dist/off-webcomponents.bundled.js",
+      "require": "./dist/off-webcomponents.bundled.cjs"
     }
   },
   "types": "dist/types/off-webcomponents.d.ts",
