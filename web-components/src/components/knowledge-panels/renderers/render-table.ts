@@ -8,6 +8,7 @@ import type {
   TableElement,
 } from "../../../types/knowledge-panel"
 import "../../../utils/knowledge-panels/heading-utils" // Import heading renderer component
+import { sanitizeHtml } from "../../../utils/html"
 
 /**
  * Table element renderer component
@@ -22,7 +23,7 @@ export class TableElementRenderer extends LitElement {
       overflow-x: auto;
       margin-bottom: 1.25rem;
       border-radius: 20px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      /*box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);*/
     }
 
     .table_element table {
@@ -97,7 +98,8 @@ export class TableElementRenderer extends LitElement {
           <thead>
             <tr>
               ${columns.map(
-                (column: TableColumn) => html`<th>${column.text || column.id || ""}</th>`
+                (column: TableColumn) =>
+                  html`<th>${sanitizeHtml(column.text || column.id || "")}</th>`
               )}
             </tr>
           </thead>

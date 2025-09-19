@@ -20,6 +20,15 @@ export class TextElementRenderer extends LitElement {
       overflow-wrap: break-word;
       color: #333;
     }
+
+    ul {
+      padding-left: 1.2rem;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 0.85rem;
+    }
   `
 
   @property({ type: Object })
