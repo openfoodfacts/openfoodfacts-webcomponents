@@ -14,7 +14,10 @@ type Story = StoryObj
 
 export const Basic: Story = {
   args: {
-    "product-code": "5000354922848",
-    options: { showMessage: true, showLoading: true, showError: true, showImage: true },
+    productCode: "5000354922848",
+    showMessage: true,
+    showLoading: true,
+    showError: true,
+    showImage: true,
   },
 }

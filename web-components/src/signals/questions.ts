@@ -82,8 +82,8 @@ export const checkIfQuestionsFinishedByProductCode = (productCode: string) => {
  * @param insightId - The ID of the insight.
  * @param value - The answer to the question.
  */
-export const answerQuestion = (insightId: string, value: AnnotationAnswer) => {
-  robotoff.annotateQuestion(insightId, value)
+export const answerQuestion = async (insightId: string, value: AnnotationAnswer) => {
+  await robotoff.annotateQuestion(insightId, value)
 }
 
 /**
