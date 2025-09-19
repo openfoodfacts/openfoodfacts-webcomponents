@@ -12,7 +12,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, "src/off-webcomponents.ts"),
-      fileName: "off-webcomponents",
+      fileName: "off-webcomponents.bundled",
       formats: ["es", "cjs"],
     },
     sourcemap: true,
