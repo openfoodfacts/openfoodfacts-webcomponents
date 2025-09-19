@@ -7,12 +7,14 @@ This document describes the comprehensive test suite implemented for the Open Fo
 ## Test Infrastructure
 
 ### Testing Framework
+
 - **Framework**: Vitest with jsdom environment
 - **Coverage**: v8 provider with text, JSON, and HTML reports
 - **Setup**: Centralized test setup with mocking utilities
 - **Environment**: Browser-like environment for component testing
 
 ### Configuration
+
 - **Config File**: `vitest.config.ts`
 - **Setup File**: `src/test/setup.ts`
 - **Test Pattern**: `**/*.test.ts`
@@ -21,9 +23,11 @@ This document describes the comprehensive test suite implemented for the Open Fo
 ## Test Categories
 
 ### 1. Utility Functions (`src/utils/index.test.ts`)
+
 **33 tests covering critical utility functions**
 
 **Focus Areas:**
+
 - URL parameter building and encoding
 - Data transformation and serialization
 - State management helpers
@@ -31,6 +35,7 @@ This document describes the comprehensive test suite implemented for the Open Fo
 - Mathematical operations and validation
 
 **Key Edge Cases Tested:**
+
 - Null/undefined handling
 - Special characters and encoding
 - Large data sets
@@ -38,10 +43,12 @@ This document describes the comprehensive test suite implemented for the Open Fo
 - Numeric precision and rounding
 
 **Example Critical Tests:**
+
 ```typescript
 // URL building with special characters
-expect(addParamsToUrl("https://api.com", { key: "value&special" }))
-  .toBe("https://api.com?key=value%26special")
+expect(addParamsToUrl("https://api.com", { key: "value&special" })).toBe(
+  "https://api.com?key=value%26special"
+)
 
 // Nested object creation
 setValueAndParentsObjectIfNotExists({}, "a.b.c", "value")
@@ -49,15 +56,18 @@ setValueAndParentsObjectIfNotExists({}, "a.b.c", "value")
 ```
 
 ### 2. API Layer (`src/api/*.test.ts`)
+
 **46 tests covering network operations and error handling**
 
 #### OpenFoodFacts API (`src/api/openfoodfacts.test.ts`)
+
 - **11 tests** covering product fetching and nutrients API
 - Error handling for network failures
 - Response parsing and validation
 - Parameter encoding and URL construction
 
 #### Robotoff API (`src/api/robotoff.test.ts`)
+
 - **18 tests** covering annotation and insight processing
 - Authentication token management
 - Complex parameter handling
@@ -65,6 +75,7 @@ setValueAndParentsObjectIfNotExists({}, "a.b.c", "value")
 - Error recovery and retries
 
 #### Folksonomy API (`src/api/folksonomy.test.ts`)
+
 - **17 tests** covering property management
 - Authentication flows and token refresh
 - CRUD operations on product properties
@@ -72,6 +83,7 @@ setValueAndParentsObjectIfNotExists({}, "a.b.c", "value")
 - Performance and reliability testing
 
 **Critical Error Scenarios Tested:**
+
 - Network timeouts and connection failures
 - HTTP error responses (401, 403, 404, 500, 503)
 - Malformed JSON responses
@@ -79,15 +91,18 @@ setValueAndParentsObjectIfNotExists({}, "a.b.c", "value")
 - Concurrent request handling
 
 ### 3. Signal Management (`src/signals/*.test.ts`)
+
 **69 tests covering reactive state management**
 
 #### App Signals (`src/signals/app.test.ts`)
+
 - **38 tests** covering global app state
 - Language and country code management
 - Asset path resolution
 - Reactive updates and consistency
 
 #### Signal Utilities (`src/utils/signals.test.ts`)
+
 - **31 tests** covering SignalObject and SignalMap classes
 - Immutability guarantees
 - Type safety and constraints
@@ -95,6 +110,7 @@ setValueAndParentsObjectIfNotExists({}, "a.b.c", "value")
 - Memory management
 
 **State Management Edge Cases:**
+
 - Rapid successive updates
 - Large object storage
 - Circular reference handling
@@ -104,12 +120,15 @@ setValueAndParentsObjectIfNotExists({}, "a.b.c", "value")
 ## Test Results
 
 ### Current Status
+
 ✅ **148 tests passing**
+
 - 33 utility function tests
-- 46 API layer tests  
+- 46 API layer tests
 - 69 signal management tests
 
 ### Coverage Areas
+
 - **URL handling and parameter encoding**
 - **Network error recovery**
 - **Authentication flows**
@@ -121,6 +140,7 @@ setValueAndParentsObjectIfNotExists({}, "a.b.c", "value")
 ## Running Tests
 
 ### Commands
+
 ```bash
 # Run all tests
 npm test
@@ -138,7 +158,9 @@ npm test -- --watch
 ```
 
 ### CI Integration
+
 Tests are integrated with GitHub Actions workflows:
+
 - Automatic test execution on PR creation
 - Coverage reporting
 - Build verification
@@ -146,6 +168,7 @@ Tests are integrated with GitHub Actions workflows:
 ## Critical Edge Cases Covered
 
 ### 1. Network Reliability
+
 - Connection timeouts and retries
 - Malformed server responses
 - Authentication token expiry
@@ -153,6 +176,7 @@ Tests are integrated with GitHub Actions workflows:
 - Concurrent request handling
 
 ### 2. Data Integrity
+
 - Unicode character handling
 - Large payload processing
 - Circular reference detection
@@ -160,6 +184,7 @@ Tests are integrated with GitHub Actions workflows:
 - Null/undefined boundaries
 
 ### 3. User Input Validation
+
 - Special character injection
 - Length limit testing
 - Format validation
@@ -167,6 +192,7 @@ Tests are integrated with GitHub Actions workflows:
 - XSS prevention patterns
 
 ### 4. State Consistency
+
 - Rapid state updates
 - Memory leak prevention
 - Immutability guarantees
@@ -186,6 +212,7 @@ During test implementation, several potential issues were identified:
 ## Future Testing Priorities
 
 ### Phase 2 - Component Testing
+
 - Web component rendering
 - Event handling and propagation
 - Property change reactions
@@ -193,6 +220,7 @@ During test implementation, several potential issues were identified:
 - User interaction flows
 
 ### Phase 3 - Integration Testing
+
 - End-to-end user workflows
 - Cross-component communication
 - API integration scenarios
@@ -200,6 +228,7 @@ During test implementation, several potential issues were identified:
 - Performance under load
 
 ### Phase 4 - Visual Testing
+
 - Screenshot comparison
 - Responsive design validation
 - Accessibility compliance
@@ -209,6 +238,7 @@ During test implementation, several potential issues were identified:
 ## Best Practices Implemented
 
 ### Test Structure
+
 - Descriptive test names explaining the scenario
 - Comprehensive edge case coverage
 - Isolated test environments
@@ -216,6 +246,7 @@ During test implementation, several potential issues were identified:
 - Performance-conscious test design
 
 ### Error Testing
+
 - Network failure simulation
 - Invalid input boundary testing
 - Authentication failure scenarios
@@ -223,6 +254,7 @@ During test implementation, several potential issues were identified:
 - Recovery mechanism validation
 
 ### Mock Strategy
+
 - Minimal, focused mocks
 - Realistic error simulation
 - State isolation between tests
@@ -232,6 +264,7 @@ During test implementation, several potential issues were identified:
 ## Maintenance Guidelines
 
 ### Adding New Tests
+
 1. Follow existing naming conventions
 2. Include edge cases and error scenarios
 3. Mock external dependencies appropriately
@@ -239,6 +272,7 @@ During test implementation, several potential issues were identified:
 5. Document critical test scenarios
 
 ### Updating Tests
+
 1. Update tests when APIs change
 2. Maintain backward compatibility coverage
 3. Add regression tests for bug fixes

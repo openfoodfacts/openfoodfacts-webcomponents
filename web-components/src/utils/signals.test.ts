@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from "vitest"
+import { describe, it, expect, beforeEach } from "vitest"
 import { SignalObject, SignalMap } from "../utils/signals"
 
 describe("Signal Utilities", () => {

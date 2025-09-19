@@ -18,6 +18,6 @@ export default defineConfig({
     setupFiles: ["./src/test/setup.ts"],
   },
   define: {
-    global: 'globalThis',
+    global: "globalThis",
   },
 })

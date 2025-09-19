@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import robotoff from "../api/robotoff"
-import { AnnotationAnswer, InsightType } from "../types/robotoff"
+import { AnnotationAnswer } from "../types/robotoff"
 
 // Mock dependencies
 vi.mock("../signals/robotoff", () => ({

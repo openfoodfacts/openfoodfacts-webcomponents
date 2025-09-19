@@ -90,7 +90,7 @@ describe("Folksonomy API", () => {
 
       try {
         await folksonomyApi.fetchProductProperties("123")
-      } catch (error) {
+      } catch {
         // Expected to throw
       }
 
