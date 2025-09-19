@@ -86,6 +86,12 @@ export class ZoomableImage extends MessageDisplayMixinElement {
       .toolbar .checkbox span {
         padding-top: 2px;
       }
+
+      @media (prefers-color-scheme: dark) {
+        .link-button {
+          filter: invert(1);
+        }
+      }
     `,
   ]
 

@@ -61,27 +61,18 @@ export class RobotoffQuestionForm extends SignalWatcher(
     `,
   ]
 
-  /**
-   * The question to display.
-   */
+  /** The question to display. */
   @property({ type: Object, reflect: true })
   question?: Question
 
-  /**
-   * Is the image expanded
-   * @type {boolean}
-   * @default false
-   */
+  /** True if the image is expanded (and zoomable). */
   @property({ type: Boolean, attribute: "is-image-expanded" })
-  isImageExpanded = false
+  isImageExpanded: boolean = false
 
   get imageSize() {
     return this.isImageExpanded
       ? { height: "350px", width: "100%", "max-width": "350px" }
-      : {
-          height: "200px",
-          width: "200px",
-        }
+      : { height: "200px", width: "200px" }
   }
 
   /**
@@ -102,7 +93,8 @@ export class RobotoffQuestionForm extends SignalWatcher(
   private _annotateProduct = async (event: Event, value: AnnotationAnswer) => {
     this.showLoading(value)
     await answerQuestion(this.question?.insight_id!, value)
-    await this.hideLoading()
+
+    this.hideLoading()
     this.emitEventClick(event, value)
   }
 
