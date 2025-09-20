@@ -18,7 +18,11 @@ import { languageCode } from "../signals/app"
 import { Robotoff } from "@openfoodfacts/openfoodfacts-nodejs"
 
 function createRobotoff(fetch: typeof window.fetch) {
-  return new Robotoff(fetch, {
+  // ensure that any user account credentials get used in Robotoff
+  const fetchWithCredentials: typeof window.fetch = (url, options) => {
+    return fetch(url, { ...options, credentials: "include" })
+  }
+  return new Robotoff(fetchWithCredentials, {
     baseUrl: robotoffConfiguration.getItem("apiUrl") as string,
   })
 }
