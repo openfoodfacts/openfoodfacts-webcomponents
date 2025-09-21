@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.2](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.14.1...v1.14.2) (2025-09-21)
+
+
+### Bug Fixes
+
+* Include credentials in all Robotoff API requests ([#306](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/306)) ([8537024](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/85370244af1418f6e95914efe44e163fa02ac36a))
+
 ## [1.14.1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.14.0...v1.14.1) (2025-09-19)
 
 
