@@ -19,3 +19,13 @@ export { NewsFeed } from "./components/news-feed/news-feed"
 
 // Will be added in the future when design is ready
 // export { KnowledgePanelsComponent } from "./components/knowledge-panels/knowledge-panels"
+
+type Global = typeof globalThis & {
+  OFF_WEBCOMPONENTS_VERSION?: string
+}
+
+if (window) {
+  ;(window as Global).OFF_WEBCOMPONENTS_VERSION = __OFF_WEBCOMPONENTS_VERSION__
+} else if (globalThis) {
+  ;(globalThis as Global).OFF_WEBCOMPONENTS_VERSION = __OFF_WEBCOMPONENTS_VERSION__
+}
