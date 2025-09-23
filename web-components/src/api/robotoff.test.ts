@@ -90,6 +90,12 @@ describe("Robotoff API", () => {
       expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining("page=2"), {
         credentials: "include",
       })
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining("insight_types=ingredient"),
+        {
+          credentials: "include",
+        }
+      )
     })
 
     it("should handle network errors gracefully", async () => {
@@ -225,11 +231,11 @@ describe("Robotoff API", () => {
         const { Robotoff } = await import("@openfoodfacts/openfoodfacts-nodejs")
         ;(Robotoff as any).mockImplementation(() => mockRobotoff)
 
-        await robotoff.annotateQuestion("insight-123", AnnotationAnswer.YES)
+        await robotoff.annotateQuestion("insight-123", AnnotationAnswer.ACCEPT)
 
         expect(mockRobotoff.annotate).toHaveBeenCalledWith({
           insight_id: "insight-123",
-          annotation: AnnotationAnswer.YES,
+          annotation: AnnotationAnswer.ACCEPT,
         })
       })
     })
@@ -244,11 +250,11 @@ describe("Robotoff API", () => {
         ;(Robotoff as any).mockImplementation(() => mockRobotoff)
 
         const nutrientData = { nutrient: "energy", value: "100", unit: "kJ" }
-        await robotoff.annotateNutrients("insight-123", AnnotationAnswer.YES, nutrientData)
+        await robotoff.annotateNutrients("insight-123", AnnotationAnswer.ACCEPT, nutrientData)
 
         expect(mockRobotoff.annotate).toHaveBeenCalledWith({
           insight_id: "insight-123",
-          annotation: AnnotationAnswer.YES,
+          annotation: AnnotationAnswer.ACCEPT,
           data: nutrientData,
         })
       })
@@ -265,13 +271,13 @@ describe("Robotoff API", () => {
 
         await robotoff.annotateIngredientSpellcheck(
           "insight-123",
-          AnnotationAnswer.YES,
+          AnnotationAnswer.ACCEPT,
           "corrected ingredient"
         )
 
         expect(mockRobotoff.annotate).toHaveBeenCalledWith({
           insight_id: "insight-123",
-          annotation: AnnotationAnswer.YES,
+          annotation: AnnotationAnswer.ACCEPT,
           data: { annotation: "corrected ingredient" },
         })
       })
@@ -284,13 +290,16 @@ describe("Robotoff API", () => {
         const { Robotoff } = await import("@openfoodfacts/openfoodfacts-nodejs")
         ;(Robotoff as any).mockImplementation(() => mockRobotoff)
 
-        await robotoff.annotateIngredientSpellcheck("insight-123", AnnotationAnswer.NO)
+        await robotoff.annotateIngredientSpellcheck("insight-123", AnnotationAnswer.REFUSE)
 
         expect(mockRobotoff.annotate).toHaveBeenCalledWith({
           insight_id: "insight-123",
-          annotation: AnnotationAnswer.NO,
-          data: { annotation: undefined },
+          annotation: AnnotationAnswer.REFUSE,
         })
+
+        expect(mockRobotoff.annotate).not.toHaveBeenCalledWith(
+          expect.objectContaining({ data: { annotation: "" } })
+        )
       })
     })
 
@@ -306,13 +315,13 @@ describe("Robotoff API", () => {
         const detectionData = { ingredients: ["salt", "sugar"] }
         await robotoff.annotateIngredientDetection(
           "insight-123",
-          AnnotationAnswer.YES,
+          AnnotationAnswer.ACCEPT,
           detectionData
         )
 
         expect(mockRobotoff.annotate).toHaveBeenCalledWith({
           insight_id: "insight-123",
-          annotation: AnnotationAnswer.YES,
+          annotation: AnnotationAnswer.ACCEPT,
           data: detectionData,
         })
       })
@@ -322,7 +331,7 @@ describe("Robotoff API", () => {
   describe("dry run mode", () => {
     it("should log instead of making request in dry run mode", async () => {
       const { robotoffConfiguration } = await import("../signals/robotoff")
-      ;(robotoffConfiguration.getItem as any).mockImplementation((key) => {
+      ;(robotoffConfiguration.getItem as any).mockImplementation((key: string) => {
         if (key === "apiUrl") return "https://robotoff.openfoodfacts.org/api/v1"
         if (key === "dryRun") return true
         return null
