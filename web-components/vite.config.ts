@@ -32,4 +32,7 @@ export default defineConfig({
       targets: [{ src: "src/assets", dest: "" }],
     }),
   ],
+  define: {
+    __OFF_WEBCOMPONENTS_VERSION__: JSON.stringify(process.env.npm_package_version),
+  },
 })
