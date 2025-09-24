@@ -1,4 +1,4 @@
-import { LitElement, html, css, type TemplateResult } from "lit"
+import { LitElement, html, css, type TemplateResult, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import type {
   KnowledgePanel,
@@ -22,87 +22,100 @@ import "./render-image"
 export class PanelRenderer extends LitElement {
   static override styles = css`
     .panel {
-      width: 96%;
-      background-color: #fff;
-      border: 1px solid #e0e0e0;
-      border-radius: 24px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       margin-bottom: 1.5rem;
+      border-radius: 16px;
+      border: 1px solid #f2d3ac;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      border-bottom: 1px solid #f2d3ac;
+      background: #fffdfa;
       overflow: hidden;
-      transition: box-shadow 0.2s ease;
+      transition: box-shadow 0.15s;
     }
 
-    .panel:hover {
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    summary {
+      background: #ffe9c7;
+      font-weight: bold;
+      font-size: 1.12rem;
+      cursor: pointer;
+      padding: 1rem 1rem;
+      border-bottom: 1px solid #f2d3ac;
+      outline: none;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #674d23;
+      transition: background 0.18s;
     }
 
-    .panel.small {
-      max-width: 100%;
+    summary:hover {
+      background: #ffe0a6;
     }
 
-    .panel.info {
-      border-left: 4px solid #79e1a6;
-      border-radius: 0 24px 24px 0;
+    summary::-webkit-details-marker {
+      display: none;
     }
 
-    .panel.warning {
-      border-left: 4px solid #f0ad4e;
-      border-radius: 0 24px 24px 0;
+    .panel-size-small > details summary {
+      padding: 0.5rem 1rem;
     }
 
-    .panel.success {
-      border-left: 4px solid #5cb85c;
-      border-radius: 0 24px 24px 0;
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
     }
 
-    .panel.danger {
-      border-left: 4px solid #d9534f;
-      border-radius: 0 24px 24px 0;
+    .panel-size-small .panel-header {
+      gap: 0.5rem;
     }
 
+    .panel-icon {
+      border-radius: 4px;
+      width: 5rem;
+      height: 5rem;
+      object-fit: contain;
+    }
+
+    .panel-icon-small {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    .panel-icon-medium {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    .panel-icon-large {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    .arrow {
+      transition: transform 0.2s;
+      margin-left: 0.5rem;
+      font-size: 1.3rem;
+    }
+    details[open] .arrow {
+      transform: rotate(90deg);
+    }
     .panel-content {
-      width: 100%;
-      padding: 1.25rem;
-      display: block;
+      padding: 1.2rem 1.3rem;
+      background: #fffdfa;
     }
-
-    .nutrition-panel .panel-content {
-      width: 100%;
-      display: block;
-    }
-
-    .nutrition-panel .panel-content .panel-left,
-    .nutrition-panel .panel-content .panel-right {
-      display: block;
-      width: 100%;
-      max-width: 100%;
-      margin: 0 0 1.25rem 0;
-    }
-
-    .nutrition-panel .panel-content .panel-right img {
-      width: auto;
-      max-width: 100%;
-      height: auto;
-      border-radius: 20px;
-      border: 1px solid #eee;
-      display: block;
-      margin: 0;
-    }
-
-    .elements {
-      width: 100%;
-      display: block;
-    }
-
-    @media (min-width: 769px) {
-      .panel-content {
-        padding: 1.5rem;
-      }
+    .panel-subtitle {
+      margin-bottom: 0.75rem;
+      font-style: italic;
+      color: #a88b56;
     }
   `
-
   @property({ type: Object })
   panel?: KnowledgePanel
+
+  @property({ type: Boolean })
+  frame = true
 
   @property({ type: Object })
   knowledgePanels: KnowledgePanelsData | null = null
@@ -125,81 +138,57 @@ export class PanelRenderer extends LitElement {
   }
 
   override render(): TemplateResult {
-    if (!this.panel) {
-      console.error("Attempted to render null or undefined panel")
-      return html``
-    }
+    if (!this.panel) return html``
 
-    // Get title from title_element if available
     const title = this.panel.title_element?.title || this.panel.title || ""
-    const subtitle = this.panel.title_element?.subtitle
+    const subtitle = this.panel.title_element?.subtitle || ""
 
-    // Get elements
-    const elements = this.panel.elements || []
+    const content =
+      this.panel.elements.length > 0
+        ? this.panel.elements.map(
+            (element: KnowledgePanelElement) =>
+              html`<element-renderer
+                .element=${element}
+                .knowledgePanels=${this.knowledgePanels}
+                headingLevel=${this.headingLevel}
+              ></element-renderer>`
+          )
+        : nothing
 
-    // Check if this is a nutrition panel that should have the special layout
-    const isNutrition = this.isNutritionPanel()
-    const panelClass = isNutrition
-      ? `panel nutrition-panel ${this.panel.level || ""} ${this.panel.size || ""}`.trim()
-      : `panel ${this.panel.level || ""} ${this.panel.size || ""}`.trim()
+    const icon = this.panel.title_element?.icon_url
 
-    if (isNutrition && this.nutritionImages.length > 0) {
-      return html`
-        <div class="${panelClass}">
-          <panel-header-renderer
-            title="${title}"
-            subtitle="${subtitle || ""}"
-            headingLevel="${this.headingLevel}"
-          >
-          </panel-header-renderer>
-          <div class="panel-content">
-            <div class="panel-left">
-              <div class="elements">
-                ${elements.map(
-                  (element: KnowledgePanelElement) =>
-                    html`<element-renderer
-                      .element=${element}
-                      .knowledgePanels=${this.knowledgePanels}
-                      headingLevel=${this.headingLevel}
-                    >
-                    </element-renderer>`
-                )}
-              </div>
-            </div>
-            <div class="panel-right">
-              <nutrition-image-renderer
-                imageUrl="${this.nutritionImages[0]}"
-                subtitle="${subtitle || ""}"
-              >
-              </nutrition-image-renderer>
-            </div>
-          </div>
-        </div>
-      `
+    if (!this.frame || this.panel.title_element == null) {
+      return html`${content}`
     }
 
-    // Standard panel layout for non-nutrition panels or nutrition panels without images
     return html`
-      <div class="${panelClass}">
-        <panel-header-renderer
-          title="${title}"
-          subtitle="${subtitle || ""}"
-          headingLevel="${this.headingLevel}"
-        >
-        </panel-header-renderer>
-        <div class="panel-content">
-          <div class="elements">
-            ${elements.map(
-              (element: KnowledgePanelElement) =>
-                html`<element-renderer
-                  .element=${element}
-                  .knowledgePanels=${this.knowledgePanels}
-                  headingLevel=${this.headingLevel}
-                >
-                </element-renderer>`
-            )}
+      <div
+        class="
+        panel
+        panel-size-${this.panel.size || "medium"}
+        panel-level-${this.panel.level || "info"}
+        "
+      >
+        <details .open=${this.panel.expanded ?? false}>
+          <summary>
+            <div class="panel-header">
+              ${icon
+                ? html`
+                    <img
+                      class="panel-icon panel-icon-${this.panel.title_element?.icon_size}"
+                      .src=${icon}
+                      .alt=${title}
+                    />
+                    <div>${title}</div>
+                  `
+                : html`<div>${title}</div>`}
+            </div>
+            <span class="arrow">▶</span>
+          </summary>
+          <div class="panel-content">
+            ${subtitle ? html`<div class="panel-subtitle">${subtitle}</div>` : ""} ${content}
           </div>
-        </div>
+        </details>
       </div>
     `
   }
