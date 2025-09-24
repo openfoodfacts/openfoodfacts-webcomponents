@@ -89,7 +89,7 @@ const robotoff = {
     return createRobotoff(fetch).annotate({
       insight_id: insightId,
       annotation: annotation,
-      data: { annotation: correction },
+      ...(correction ? { data: { annotation: correction } } : {}),
     })
   },
 
@@ -107,7 +107,7 @@ const robotoff = {
     return createRobotoff(fetch).annotate({
       insight_id: insightId,
       annotation: annotation,
-      data: data,
+      ...(data ? { data: data } : {}),
     })
   },
 
