@@ -158,9 +158,9 @@
         <source>Suggestion icon</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">Icône de suggestion</target>
       </trans-unit>
-      <trans-unit id="sf9aee319a006c9b4">
+      <trans-unit id="sf9aee319a006c9b4" approved="yes">
         <source>Add</source>
-        <target state="translated">Ajouter</target>
+        <target state="final">Ajouter</target>
       </trans-unit>
       <trans-unit id="s5666afe5cd0166de">
         <source>Please fix the errors or modify the text before confirming</source>
@@ -296,9 +296,9 @@
         <source>Invalidate image</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">Invalider l'image</target>
       </trans-unit>
-      <trans-unit id="scb489a1a173ac3f0">
+      <trans-unit id="scb489a1a173ac3f0" approved="yes">
         <source>Yes</source>
-        <target state="translated">Oui</target>
+        <target state="final">Oui</target>
       </trans-unit>
       <trans-unit id="s09205907b5b56cda">
         <source>No</source>
