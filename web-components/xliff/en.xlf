@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file target-language="en-GB" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+  <file target-language="en" source-language="en" original="lit-localize-inputs" datatype="plaintext">
     <body>
       <trans-unit id="s49730f3d5751a433">
         <source>Loading...</source>
@@ -12,7 +12,7 @@
       </trans-unit>
       <trans-unit id="s166bd56d19670a72">
         <source>Zoom</source>
-        <target state="translated">Zoom</target>
+        <target state="needs-translation">Zoom</target>
       </trans-unit>
       <trans-unit id="s01d2865e3e1d5501">
         <source>Thank you for your assistance!</source>
@@ -26,9 +26,9 @@
         <source>Thanks for your help! Can you assist with another question?</source>
         <target state="needs-translation">Thanks for your help! Can you assist with another question?</target>
       </trans-unit>
-      <trans-unit id="s7ce4fd9430e80cea">
+      <trans-unit id="s7ce4fd9430e80cea" approved="yes">
         <source>value</source>
-        <target state="translated">value</target>
+        <target state="final">value</target>
       </trans-unit>
       <trans-unit id="s6498dfe4855bb3a7">
         <source>unit</source>
@@ -38,9 +38,9 @@
         <source>Error: Invalid value.</source>
         <target state="needs-translation">Error: Invalid value.</target>
       </trans-unit>
-      <trans-unit id="sbd9a0b2293b3cd3c">
+      <trans-unit id="sbd9a0b2293b3cd3c" approved="yes">
         <source>Serving size</source>
-        <target state="translated">Serving size</target>
+        <target state="final">Serving size</target>
       </trans-unit>
       <trans-unit id="sbb623d6b18d966a0">
         <source>Nutrition facts are displayed on the packaging:</source>
@@ -54,9 +54,9 @@
         <source>per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
         <target state="needs-translation">per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</target>
       </trans-unit>
-      <trans-unit id="s453188ea728f64da">
+      <trans-unit id="s453188ea728f64da" approved="yes">
         <source>Add a nutrient</source>
-        <target state="translated">Add a nutrient</target>
+        <target state="final">Add a nutrient</target>
       </trans-unit>
       <trans-unit id="sc5575e3107f87874">
         <source>Rotate image to the left</source>
@@ -158,9 +158,9 @@
         <source>Suggestion icon</source>
         <target state="needs-translation">Suggestion icon</target>
       </trans-unit>
-      <trans-unit id="sf9aee319a006c9b4">
+      <trans-unit id="sf9aee319a006c9b4" approved="yes">
         <source>Add</source>
-        <target state="translated">Add</target>
+        <target state="final">Add</target>
       </trans-unit>
       <trans-unit id="s5666afe5cd0166de">
         <source>Please fix the errors or modify the text before confirming</source>
@@ -182,9 +182,9 @@
         <source>Edit ingredients list</source>
         <target state="needs-translation">Edit ingredients list</target>
       </trans-unit>
-      <trans-unit id="s33f85f24c0f5f008">
+      <trans-unit id="s33f85f24c0f5f008" approved="yes">
         <source>Save</source>
-        <target state="translated">Save</target>
+        <target state="final">Save</target>
       </trans-unit>
       <trans-unit id="s2ceb11be2290bb1b">
         <source>Cancel</source>
@@ -296,13 +296,13 @@
         <source>Invalidate image</source>
         <target state="needs-translation">Invalidate image</target>
       </trans-unit>
-      <trans-unit id="scb489a1a173ac3f0">
+      <trans-unit id="scb489a1a173ac3f0" approved="yes">
         <source>Yes</source>
-        <target state="translated">Yes</target>
+        <target state="final">Yes</target>
       </trans-unit>
-      <trans-unit id="s09205907b5b56cda">
+      <trans-unit id="s09205907b5b56cda" approved="yes">
         <source>No</source>
-        <target state="translated">No</target>
+        <target state="final">No</target>
       </trans-unit>
       <trans-unit id="s42dd66b2441566fd">
         <source>Center icon</source>
@@ -654,9 +654,9 @@
         <source>Grouped Values</source>
         <target state="needs-translation">Grouped Values</target>
       </trans-unit>
-      <trans-unit id="s9fc41f789c63b40d">
+      <trans-unit id="s9fc41f789c63b40d" approved="yes">
         <source>Products</source>
-        <target state="translated">Products</target>
+        <target state="final">Products</target>
       </trans-unit>
       <trans-unit id="s1e00019dc454872d">
         <source>Please provide a property name using the property-name attribute.</source>
