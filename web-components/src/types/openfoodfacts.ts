@@ -42,3 +42,19 @@ export interface NutrientOrderRequest {
 export interface NutrientsOrderRequest {
   nutrients: NutrientOrderRequest[]
 }
+
+export interface TaxonomyCategoryDetail {
+  children: string[]
+  description: string
+  name: string
+  parents: string[]
+}
+
+export function isTaxonomyCategoryDetail(obj: {} | TaxonomyCategoryDetail) {
+  for (var key in obj) {
+    if (!("name" in obj[key])) return false
+  }
+  return true
+}
+
+export type TaxonomyCategoryRequest = Record<string, TaxonomyCategoryDetail | {}>
