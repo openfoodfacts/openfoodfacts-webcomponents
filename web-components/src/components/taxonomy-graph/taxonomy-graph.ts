@@ -76,9 +76,10 @@ export class TaxonomyGraph extends LitElement {
       ],
       // Here is the doc for layouts : https://js.cytoscape.org/#layouts
       layout: {
-        name: "breadthfirst"
-      }
-    });
+        name: "breadthfirst",
+        direction: "rightward",
+      },
+    })
   }
 
   render() {
