@@ -54,6 +54,7 @@
     "@lit/localize": "^0.12.2",
     "@lit/task": "^1.0.2",
     "cropperjs": "^2.0.0",
+    "cytoscape": "^3.33.1",
     "dayjs": "^1.11.18",
     "diff": "^8.0.1",
     "dompurify": "^3.2.6",
