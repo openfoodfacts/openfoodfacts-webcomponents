@@ -12,7 +12,7 @@ export class TaxonomyGraph extends LitElement {
    * The root categories to display
    */
   @property({ type: Array })
-  categoriesNames: string[] = ["gnocchi", "terrine"]
+  categoriesNames: string[] = []
 
   static styles = css`
     #cy {
@@ -28,13 +28,13 @@ export class TaxonomyGraph extends LitElement {
       console.warn(`category ${categoryName} doesn't seem to exist since API returned`, categories)
       return []
     }
-    const graph_elements = []
+    const graphElements = []
     for (var categoryId in categories) {
       const category = categories[categoryId]
-      graph_elements.push({ data: { id: categoryId } })
+      graphElements.push({ data: { id: categoryId } })
       for (var child of category.children) {
-        graph_elements.push({ data: { id: child } })
-        graph_elements.push({
+        graphElements.push({ data: { id: child } })
+        graphElements.push({
           data: {
             id: `${categoryId}->${child}`,
             source: categoryId,
@@ -43,19 +43,18 @@ export class TaxonomyGraph extends LitElement {
         })
       }
     }
-    return graph_elements
+    return graphElements
   }
 
   async firstUpdated() {
-    const graph_elements = []
+    const graphElements = []
     for (var categoryName of this.categoriesNames) {
       var new_elements = await this.addCategoryAndChildren(categoryName)
-      console.log("new elements", new_elements)
-      graph_elements.push(...new_elements)
+      graphElements.push(...new_elements)
     }
     cytoscape({
       container: this.renderRoot.querySelector("#cy"),
-      elements: graph_elements,
+      elements: graphElements,
       style: [
         {
           selector: "node",

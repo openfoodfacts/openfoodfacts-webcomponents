@@ -50,7 +50,10 @@ export interface TaxonomyCategoryDetail {
   parents: string[]
 }
 
-export function isTaxonomyCategoryDetail(obj: {} | TaxonomyCategoryDetail) {
+export function isTaxonomyCategoryDetail(
+  obj: {} | TaxonomyCategoryDetail
+): obj is TaxonomyCategoryDetail {
+  // Check that obj is a valid taxonomy category API response by checking it has at least the property 'name'
   for (var key in obj) {
     if (!("name" in obj[key])) return false
   }
