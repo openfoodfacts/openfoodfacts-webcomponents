@@ -322,11 +322,11 @@
       </trans-unit>
       <trans-unit id="sb8178320160f84ea">
         <source>Show crop</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Afficher la récolte</target>
+        <target state="translated">Afficher la photo recadrée</target>
       </trans-unit>
       <trans-unit id="s33f786bb6b4f0cf4">
         <source>Crop Result</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Résultat de la récolte</target>
+        <target state="translated">Résultat du recadrage</target>
       </trans-unit>
       <trans-unit id="s6cee7cad81dfedd1">
         <source>Cropped Image</source>
@@ -334,11 +334,11 @@
       </trans-unit>
       <trans-unit id="s02ce7a2e7c1b020b">
         <source>Validate crop</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Valider la culture</target>
+        <target state="translated">Valider le recadrage</target>
       </trans-unit>
       <trans-unit id="s383ae4449428b61e">
         <source>Reset crop</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Réinitialiser la récolte</target>
+        <target state="translated">Réinitialiser le recadrage</target>
       </trans-unit>
       <trans-unit id="sc6daf8a31883f8b9">
         <source>Move image</source>
@@ -418,7 +418,7 @@
       </trans-unit>
       <trans-unit id="sec6377f3c4e9b28c">
         <source>I'll propose a better crop</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Je proposerai une meilleure récolte</target>
+        <target state="translated">Je propose un meilleur recadrage</target>
       </trans-unit>
       <trans-unit id="s03e9c8114521b998">
         <source>I'll edit the ingredients</source>
