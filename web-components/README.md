@@ -19,7 +19,7 @@ Link : [https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/
 
 ### Import it in your project
 
-You can use the components via ES6 modules or via script tag. To be sure webcomponents are handled correctly, you have to inport the polyfill.
+You can use the components via ES6 modules or via script tag. To be sure webcomponents are handled correctly, you have to import the polyfill.
 More details can be found in the [Lit web components polyfill documentation](https://lit.dev/docs/v1/tools/use/).
 
 #### Download polyfill
