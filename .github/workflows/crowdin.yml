@@ -3,6 +3,8 @@ name: Crowdin Action
 on:
   push:
     branches: [ crowdin-trigger ]
+  workflow_dispatch:
+
 jobs:
   synchronize-with-crowdin:
     permissions:
