@@ -252,10 +252,6 @@
         <source>Barcode corners icon</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">ਬਾਰਕੋਡ ਕੋਨਿਆਂ ਵਾਲਾ ਪ੍ਰਤੀਕ</target>
       </trans-unit>
-      <trans-unit id="sb5ceccad457e8cae">
-        <source>Are you sure you want to delete this item?</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਕੀ ਤੁਸੀਂ ਪੱਕਾ ਇਸ ਆਈਟਮ ਨੂੰ ਮਿਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?</target>
-      </trans-unit>
       <trans-unit id="sdc673e73b5c13aea">
         <source>Delete</source>
         <target state="needs-translation">Delete</target>
@@ -291,26 +287,6 @@
       <trans-unit id="s907f7a97c6b29425">
         <source>Be aware the data model might be modified. Use at your own risk.</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">ਧਿਆਨ ਰੱਖੋ ਕਿ ਡਾਟਾ ਮਾਡਲ ਵਿੱਚ ਸੋਧ ਕੀਤੀ ਜਾ ਸਕਦੀ ਹੈ। ਆਪਣੇ ਜੋਖਮ 'ਤੇ ਵਰਤੋਂ।</target>
-      </trans-unit>
-      <trans-unit id="hdbe45450d1a6419b">
-        <source>These properties are created and filed by users for any kind of usages. Feel
-                    free to add your own. The properties and values you create
-                    <x id="0" equiv-text="&lt;strong&gt;"/>must be factual<x id="1" equiv-text="&lt;/strong&gt;"/>. You can dive into
-                    <x id="2" equiv-text="&lt;a href=&quot;https://openfoodfacts-explorer.vercel.app/folksonomy&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
-                    or explore the
-                    <x id="4" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਇਹ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਉਪਭੋਗਤਾਵਾਂ ਦੁਆਰਾ ਕਿਸੇ ਵੀ ਕਿਸਮ ਦੀ ਵਰਤੋਂ ਲਈ ਬਣਾਈਆਂ ਅਤੇ ਫਾਈਲ ਕੀਤੀਆਂ ਜਾਂਦੀਆਂ ਹਨ।
-                    ਆਪਣੇ ਖੁਦ ਦੇ ਜੋੜਨ ਲਈ ਸੁਤੰਤਰ ਮਹਿਸੂਸ ਕਰੋ। ਤੁਹਾਡੇ ਦੁਆਰਾ ਬਣਾਏ ਗਏ ਗੁਣ ਅਤੇ ਮੁੱਲ
-                    <x id="0" equiv-text="&lt;strong&gt;"/>ਤੱਥਾਂ ਵਾਲੇ ਹੋਣੇ ਚਾਹੀਦੇ ਹਨ<x id="1" equiv-text="&lt;/strong&gt;"/>। ਤੁਸੀਂ
-                    <x id="2" equiv-text="&lt;a href=&quot;https://openfoodfacts-explorer.vercel.app/folksonomy&quot;&gt;"/>ਵਿੱਚ ਭਾਈਚਾਰੇ ਦੁਆਰਾ ਪਹਿਲਾਂ ਹੀ ਵਰਤੀਆਂ ਜਾਂਦੀਆਂ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਦੀ ਸੂਚੀ<x id="3" equiv-text="&lt;/a&gt;"/>
-                    ਵਿੱਚ ਡੁਬਕੀ ਲਗਾ ਸਕਦੇ ਹੋ ਜਾਂ
-                    <x id="4" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਦੇ ਦਸਤਾਵੇਜ਼ਾਂ ਅਤੇ ਇਸਦੇ ਖੋਜ ਇੰਜਣ<x id="5" equiv-text="&lt;/a&gt;"/>ਦੀ ਪੜਚੋਲ ਕਰ ਸਕਦੇ ਹੋ।</target>
-      </trans-unit>
-      <trans-unit id="h76766ba4ed1addb3">
-        <source>This is brought by the
-                    <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't hesitate to participate or give feedback.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਇਹ
-                    <x id="0" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy_Engine&quot;&gt;"/>ਫੋਕਸੋਨੋਮੀ ਇੰਜਣ ਪ੍ਰੋਜੈਕਟ<x id="1" equiv-text="&lt;/a&gt;"/>ਦੁਆਰਾ ਲਿਆਂਦਾ ਗਿਆ ਹੈ। ਹਿੱਸਾ ਲੈਣ ਜਾਂ ਫੀਡਬੈਕ ਦੇਣ ਤੋਂ ਸੰਕੋਚ ਨਾ ਕਰੋ।</target>
       </trans-unit>
       <trans-unit id="sf44a6b3b232c28ea">
         <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
@@ -459,6 +435,288 @@
       <trans-unit id="sd1077c055cf9ba6b">
         <source>Help us validate the ingredient list of the product.</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">ਉਤਪਾਦ ਦੀ ਸਮੱਗਰੀ ਸੂਚੀ ਨੂੰ ਪ੍ਰਮਾਣਿਤ ਕਰਨ ਵਿੱਚ ਸਾਡੀ ਮਦਦ ਕਰੋ।</target>
+      </trans-unit>
+      <trans-unit id="s8f839a03997a16d7">
+        <source>View Product</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਉਤਪਾਦ ਵੇਖੋ</target>
+      </trans-unit>
+      <trans-unit id="s1dc4daf989c71284">
+        <source>Help us correct the nutritional information</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਪੋਸ਼ਣ ਸੰਬੰਧੀ ਜਾਣਕਾਰੀ ਨੂੰ ਠੀਕ ਕਰਨ ਵਿੱਚ ਸਾਡੀ ਮਦਦ ਕਰੋ</target>
+      </trans-unit>
+      <trans-unit id="sf57a61152168cc81">
+        <source>Help us correct the ingredient detection</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਸਮੱਗਰੀ ਦੀ ਪਛਾਣ ਨੂੰ ਠੀਕ ਕਰਨ ਵਿੱਚ ਸਾਡੀ ਮਦਦ ਕਰੋ</target>
+      </trans-unit>
+      <trans-unit id="scf23a05631f93732">
+        <source>Confirm Delete</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਮਿਟਾਉਣ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ</target>
+      </trans-unit>
+      <trans-unit id="sdcc2555c5dde524f">
+        <source>Are you sure you want to delete this item? This action cannot be undone.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਕੀ ਤੁਸੀਂ ਪੱਕਾ ਇਸ ਆਈਟਮ ਨੂੰ ਮਿਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ? ਇਸ ਕਾਰਵਾਈ ਨੂੰ ਅਣਕੀਤਾ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ।</target>
+      </trans-unit>
+      <trans-unit id="s901ae1e236ac45d3">
+        <source>Cancel deletion</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਮਿਟਾਉਣਾ ਰੱਦ ਕਰੋ</target>
+      </trans-unit>
+      <trans-unit id="sc681b137e8f604f7">
+        <source>Confirm deletion</source>
+        <target state="needs-translation">Confirm deletion</target>
+      </trans-unit>
+      <trans-unit id="s4f751fb9b3ed766c">
+        <source>Creating a New Property</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਇੱਕ ਨਵੀਂ ਜਾਇਦਾਦ ਬਣਾਉਣਾ</target>
+      </trans-unit>
+      <trans-unit id="sdb97e5976482606e">
+        <source>Check if a property already exists</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਜਾਂਚ ਕਰੋ ਕਿ ਕੀ ਕੋਈ ਜਾਇਦਾਦ ਪਹਿਲਾਂ ਤੋਂ ਮੌਜੂਦ ਹੈ</target>
+      </trans-unit>
+      <trans-unit id="sb125227d436c2925">
+        <source>Search for your property concept in the existing properties database:</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਮੌਜੂਦਾ ਪ੍ਰਾਪਰਟੀ ਡੇਟਾਬੇਸ ਵਿੱਚ ਆਪਣੀ ਪ੍ਰਾਪਰਟੀ ਸੰਕਲਪ ਦੀ ਖੋਜ ਕਰੋ:</target>
+      </trans-unit>
+      <trans-unit id="s86197dcf3e96af64">
+        <source>Browse and search existing properties</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਮੌਜੂਦਾ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਨੂੰ ਬ੍ਰਾਊਜ਼ ਕਰੋ ਅਤੇ ਖੋਜੋ</target>
+      </trans-unit>
+      <trans-unit id="s34be4af4e8fec4ae">
+        <source>Ask the community first</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਪਹਿਲਾਂ ਭਾਈਚਾਰੇ ਨੂੰ ਪੁੱਛੋ</target>
+      </trans-unit>
+      <trans-unit id="s36d86adc823cbfa6">
+        <source>Before creating a new property, discuss it with the community:</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਨਵੀਂ ਜਾਇਦਾਦ ਬਣਾਉਣ ਤੋਂ ਪਹਿਲਾਂ, ਇਸ ਬਾਰੇ ਭਾਈਚਾਰੇ ਨਾਲ ਚਰਚਾ ਕਰੋ:</target>
+      </trans-unit>
+      <trans-unit id="s06847c221c4c0bc1">
+        <source>I would like to create a property to [describe your use case]...</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਮੈਂ [ਤੁਹਾਡੇ ਵਰਤੋਂ ਦੇ ਮਾਮਲੇ ਦਾ ਵਰਣਨ ਕਰਨ ਲਈ] ਇੱਕ ਵਿਸ਼ੇਸ਼ਤਾ ਬਣਾਉਣਾ ਚਾਹੁੰਦਾ ਹਾਂ...</target>
+      </trans-unit>
+      <trans-unit id="scd21019c3cd618f3">
+        <source>Join Slack Discussion</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਸਲੈਕ ਚਰਚਾ ਵਿੱਚ ਸ਼ਾਮਲ ਹੋਵੋ</target>
+      </trans-unit>
+      <trans-unit id="s8db84aa4bc949af2">
+        <source>Document the New Property</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਨਵੀਂ ਜਾਇਦਾਦ ਦਾ ਦਸਤਾਵੇਜ਼ੀਕਰਨ ਕਰੋ</target>
+      </trans-unit>
+      <trans-unit id="sb3cbcc1bd0fff140">
+        <source>Once you've verified that your property doesn't exist and the community agrees it's useful, you need to first document it in the wiki.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਇੱਕ ਵਾਰ ਜਦੋਂ ਤੁਸੀਂ ਇਹ ਪੁਸ਼ਟੀ ਕਰ ਲੈਂਦੇ ਹੋ ਕਿ ਤੁਹਾਡੀ ਜਾਇਦਾਦ ਮੌਜੂਦ ਨਹੀਂ ਹੈ ਅਤੇ ਭਾਈਚਾਰਾ ਸਹਿਮਤ ਹੋ ਜਾਂਦਾ ਹੈ ਕਿ ਇਹ ਲਾਭਦਾਇਕ ਹੈ, ਤਾਂ ਤੁਹਾਨੂੰ ਪਹਿਲਾਂ ਇਸਨੂੰ ਵਿਕੀ ਵਿੱਚ ਦਸਤਾਵੇਜ਼ ਬਣਾਉਣ ਦੀ ਲੋੜ ਹੈ।</target>
+      </trans-unit>
+      <trans-unit id="sfacbbe968fa7d773">
+        <source>Property name:</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਜਾਇਦਾਦ ਦਾ ਨਾਮ:</target>
+      </trans-unit>
+      <trans-unit id="s5560fb119e40923d">
+        <source>Enter property name...</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਪ੍ਰਾਪਰਟੀ ਦਾ ਨਾਮ ਦਰਜ ਕਰੋ...</target>
+      </trans-unit>
+      <trans-unit id="s2db7b654c0a9bde0">
+        <source>Document the property</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਜਾਇਦਾਦ ਦਾ ਦਸਤਾਵੇਜ਼ੀਕਰਨ ਕਰੋ</target>
+      </trans-unit>
+      <trans-unit id="s39e14e14300694c7">
+        <source>Documentation and Guidelines</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਦਸਤਾਵੇਜ਼ ਅਤੇ ਦਿਸ਼ਾ-ਨਿਰਦੇਸ਼</target>
+      </trans-unit>
+      <trans-unit id="s801a05fa8e881f37">
+        <source>Learn more about property creation and guidelines:</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਜਾਇਦਾਦ ਬਣਾਉਣ ਅਤੇ ਦਿਸ਼ਾ-ਨਿਰਦੇਸ਼ਾਂ ਬਾਰੇ ਹੋਰ ਜਾਣੋ:</target>
+      </trans-unit>
+      <trans-unit id="s3781d25aa51a736c">
+        <source>Folksonomy Engine Documentation</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਫੋਕਸੋਨੋਮੀ ਇੰਜਣ ਦਸਤਾਵੇਜ਼</target>
+      </trans-unit>
+      <trans-unit id="s9b87abd68fb9df45">
+        <source>Not found? Create new key {value}</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਨਹੀਂ ਮਿਲਿਆ? ਨਵੀਂ ਕੁੰਜੀ ਬਣਾਓ {value}</target>
+      </trans-unit>
+      <trans-unit id="hb28f1f2ec1744ee9">
+        <source>These properties are created and filed by users for any kind of usages. Feel
+                    free to add your own. The properties and values you create
+                    <x id="0" equiv-text="&lt;strong&gt;"/>must be factual<x id="1" equiv-text="&lt;/strong&gt;"/>. You can dive into
+                    <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
+                    or explore the
+                    <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਇਹ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਉਪਭੋਗਤਾਵਾਂ ਦੁਆਰਾ ਕਿਸੇ ਵੀ ਕਿਸਮ ਦੀ ਵਰਤੋਂ ਲਈ ਬਣਾਈਆਂ ਅਤੇ ਫਾਈਲ ਕੀਤੀਆਂ ਜਾਂਦੀਆਂ ਹਨ।
+                    ਆਪਣੇ ਖੁਦ ਦੇ ਜੋੜਨ ਲਈ ਸੁਤੰਤਰ ਮਹਿਸੂਸ ਕਰੋ। ਤੁਹਾਡੇ ਦੁਆਰਾ ਬਣਾਏ ਗਏ ਗੁਣ ਅਤੇ ਮੁੱਲ
+                    <x id="0" equiv-text="&lt;strong&gt;"/>ਤੱਥਾਂ ਵਾਲੇ ਹੋਣੇ ਚਾਹੀਦੇ ਹਨ<x id="1" equiv-text="&lt;/strong&gt;"/>। ਤੁਸੀਂ
+                    <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>ਵਿੱਚ ਭਾਈਚਾਰੇ ਦੁਆਰਾ ਪਹਿਲਾਂ ਹੀ ਵਰਤੀਆਂ ਜਾਂਦੀਆਂ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਦੀ ਸੂਚੀ<x id="3" equiv-text="&lt;/a&gt;"/>
+                    ਵਿੱਚ ਡੁਬਕੀ ਲਗਾ ਸਕਦੇ ਹੋ ਜਾਂ
+                    <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਦੇ ਦਸਤਾਵੇਜ਼ਾਂ ਅਤੇ ਇਸਦੇ ਖੋਜ ਇੰਜਣ<x id="5" equiv-text="&lt;/a&gt;"/>ਦੀ ਪੜਚੋਲ ਕਰ ਸਕਦੇ ਹੋ।</target>
+      </trans-unit>
+      <trans-unit id="h1fbdfea3ad6d664e">
+        <source>This is brought by the
+                    <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't
+                    hesitate to participate or give feedback</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਇਹ
+                    <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>ਫੋਕਸੋਨੋਮੀ ਇੰਜਣ ਪ੍ਰੋਜੈਕਟ<x id="1" equiv-text="&lt;/a&gt;"/>ਦੁਆਰਾ ਲਿਆਂਦਾ ਗਿਆ ਹੈ। ਹਿੱਸਾ ਲੈਣ ਜਾਂ ਫੀਡਬੈਕ ਦੇਣ ਤੋਂ
+                    ਸੰਕੋਚ ਨਾ ਕਰੋ।</target>
+      </trans-unit>
+      <trans-unit id="s71a5c9f4b68ef4d4">
+        <source>Count</source>
+        <target state="needs-translation">Count</target>
+      </trans-unit>
+      <trans-unit id="s57472465a23b41db">
+        <source>Values</source>
+        <target state="needs-translation">Values</target>
+      </trans-unit>
+      <trans-unit id="s74cb3d66f6a668e1">
+        <source>Documentation</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਦਸਤਾਵੇਜ਼ੀਕਰਨ</target>
+      </trans-unit>
+      <trans-unit id="s565867d84c04aea2">
+        <source>Filter properties...</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਫਿਲਟਰ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ...</target>
+      </trans-unit>
+      <trans-unit id="s3b430cfa5c1fe7f4">
+        <source>Documentation for <x id="0" equiv-text="${property.k}"/></source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt"><x id="0" equiv-text="${property.k}"/>ਲਈ ਦਸਤਾਵੇਜ਼ੀਕਰਨ</target>
+      </trans-unit>
+      <trans-unit id="s000a5b76bd3a01c2">
+        <source>Loading properties...</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਲੋਡ ਕੀਤੀਆਂ ਜਾ ਰਹੀਆਂ ਹਨ...</target>
+      </trans-unit>
+      <trans-unit id="s9a7f60fce090ecaf">
+        <source>Failed to load properties. Please try again later.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਨੂੰ ਲੋਡ ਕਰਨ ਵਿੱਚ ਅਸਫਲ। ਕਿਰਪਾ ਕਰਕੇ ਬਾਅਦ ਵਿੱਚ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</target>
+      </trans-unit>
+      <trans-unit id="scdb6cad0b92721bf">
+        <source>No properties found.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਕੋਈ ਜਾਇਦਾਦ ਨਹੀਂ ਮਿਲੀ।</target>
+      </trans-unit>
+      <trans-unit id="scace072bef961918">
+        <source>Rows</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਕਤਾਰਾਂ</target>
+      </trans-unit>
+      <trans-unit id="s0bb2d48532acc455">
+        <source>Download CSV</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">CSV ਡਾਊਨਲੋਡ ਕਰੋ</target>
+      </trans-unit>
+      <trans-unit id="s255857544a9d5ec0">
+        <source>Reset</source>
+        <target state="needs-translation">Reset</target>
+      </trans-unit>
+      <trans-unit id="sefaba4adc4ec9219">
+        <source>Folksonomy Properties</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਫੋਕਸੋਨੋਮੀ ਗੁਣ</target>
+      </trans-unit>
+      <trans-unit id="sa548778b24054030">
+        <source>Explore all contributed properties from the Folksonomy Engine project. These properties provide additional metadata and insights about products in the Open Food Facts database.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਫੋਕਸੋਨੋਮੀ ਇੰਜਣ ਪ੍ਰੋਜੈਕਟ ਤੋਂ ਸਾਰੀਆਂ ਯੋਗਦਾਨ ਪਾਈਆਂ ਗਈਆਂ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਦੀ ਪੜਚੋਲ ਕਰੋ। ਇਹ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਓਪਨ ਫੂਡ ਫੈਕਟਸ ਡੇਟਾਬੇਸ ਵਿੱਚ ਉਤਪਾਦਾਂ ਬਾਰੇ ਵਾਧੂ ਮੈਟਾਡੇਟਾ ਅਤੇ ਸੂਝ ਪ੍ਰਦਾਨ ਕਰਦੀਆਂ ਹਨ।</target>
+      </trans-unit>
+      <trans-unit id="sf4cd86a2f5ef2588">
+        <source>Product Barcode</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਉਤਪਾਦ ਬਾਰਕੋਡ</target>
+      </trans-unit>
+      <trans-unit id="sbe472dc3c2685985">
+        <source>Corresponding Value</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਅਨੁਸਾਰੀ ਮੁੱਲ</target>
+      </trans-unit>
+      <trans-unit id="s4d42cc7e00076a3b">
+        <source>Product Count</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਉਤਪਾਦ ਦੀ ਗਿਣਤੀ</target>
+      </trans-unit>
+      <trans-unit id="s1a52515ec8ddade8">
+        <source>Product barcode</source>
+        <target state="needs-translation">Product barcode</target>
+      </trans-unit>
+      <trans-unit id="sfe87465d50530725">
+        <source>Corresponding value</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਅਨੁਸਾਰੀ ਮੁੱਲ</target>
+      </trans-unit>
+      <trans-unit id="s839cc2908a5387f2">
+        <source>Filter barcodes...</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਬਾਰਕੋਡ ਫਿਲਟਰ ਕਰੋ...</target>
+      </trans-unit>
+      <trans-unit id="sb7f72e4c8a2d3357">
+        <source>Filter values...</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਫਿਲਟਰ ਮੁੱਲ...</target>
+      </trans-unit>
+      <trans-unit id="s1205d5f6fccf8e69">
+        <source>Property Value</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਜਾਇਦਾਦ ਦਾ ਮੁੱਲ</target>
+      </trans-unit>
+      <trans-unit id="s58e1eeea7a60ae51">
+        <source>Loading products...</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਉਤਪਾਦ ਲੋਡ ਕੀਤੇ ਜਾ ਰਹੇ ਹਨ...</target>
+      </trans-unit>
+      <trans-unit id="sb560fa37a7bfb6c2">
+        <source>No products found for this property.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਇਸ ਜਾਇਦਾਦ ਲਈ ਕੋਈ ਉਤਪਾਦ ਨਹੀਂ ਮਿਲਿਆ।</target>
+      </trans-unit>
+      <trans-unit id="seea3800e27baa686">
+        <source>Individual Products</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਵਿਅਕਤੀਗਤ ਉਤਪਾਦ</target>
+      </trans-unit>
+      <trans-unit id="s081e2ad82db71e1d">
+        <source>Grouped Values</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਸਮੂਹਬੱਧ ਮੁੱਲ</target>
+      </trans-unit>
+      <trans-unit id="s9fc41f789c63b40d">
+        <source>Products</source>
+        <target state="needs-translation">Products</target>
+      </trans-unit>
+      <trans-unit id="s1e00019dc454872d">
+        <source>Please provide a property name using the property-name attribute.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਕਿਰਪਾ ਕਰਕੇ ਪ੍ਰਾਪਰਟੀ-ਨਾਮ ਵਿਸ਼ੇਸ਼ਤਾ ਦੀ ਵਰਤੋਂ ਕਰਕੇ ਇੱਕ ਪ੍ਰਾਪਰਟੀ ਨਾਮ ਪ੍ਰਦਾਨ ਕਰੋ।</target>
+      </trans-unit>
+      <trans-unit id="sc895972c88d38ca5">
+        <source>Folksonomy property</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਲੋਕ-ਵਿਗਿਆਨਕ ਸੰਪਤੀ</target>
+      </trans-unit>
+      <trans-unit id="se5127cf0f92e7e48">
+        <source>Tip: you can also find the</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਸੁਝਾਅ: ਤੁਸੀਂ ਇਹ ਵੀ ਲੱਭ ਸਕਦੇ ਹੋ</target>
+      </trans-unit>
+      <trans-unit id="sb28639570ff3b852">
+        <source>list of all properties</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਸਾਰੀਆਂ ਜਾਇਦਾਦਾਂ ਦੀ ਸੂਚੀ</target>
+      </trans-unit>
+      <trans-unit id="sdbf806fefc584115">
+        <source>You should find a</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਤੁਹਾਨੂੰ ਇੱਕ ਲੱਭਣਾ ਚਾਹੀਦਾ ਹੈ</target>
+      </trans-unit>
+      <trans-unit id="s0b4235aae602a950">
+        <source>dedicated documentation</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਸਮਰਪਿਤ ਦਸਤਾਵੇਜ਼</target>
+      </trans-unit>
+      <trans-unit id="s55d7249883a98ca1">
+        <source>about this property on Open Food Facts wiki</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਓਪਨ ਫੂਡ ਫੈਕਟਸ ਵਿਕੀ 'ਤੇ ਇਸ ਜਾਇਦਾਦ ਬਾਰੇ</target>
+      </trans-unit>
+      <trans-unit id="s1e49126af0935a5b">
+        <source>List of products using this property</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਇਸ ਪ੍ਰਾਪਰਟੀ ਦੀ ਵਰਤੋਂ ਕਰਨ ਵਾਲੇ ਉਤਪਾਦਾਂ ਦੀ ਸੂਚੀ</target>
+      </trans-unit>
+      <trans-unit id="sb1c538e038f9b214">
+        <source>Very Good Match <x id="0" equiv-text="${score}"/>%</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਬਹੁਤ ਵਧੀਆ ਮੈਚ <x id="0" equiv-text="${score}"/>%</target>
+      </trans-unit>
+      <trans-unit id="s718dea04853f80ae">
+        <source>Good Match <x id="0" equiv-text="${score}"/>%</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਵਧੀਆ ਮੇਲ <x id="0" equiv-text="${score}"/>%</target>
+      </trans-unit>
+      <trans-unit id="s300b3a6ee4e1252d">
+        <source>Poor Match <x id="0" equiv-text="${score}"/>%</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਮਾੜਾ ਮੈਚ <x id="0" equiv-text="${score}"/>%</target>
+      </trans-unit>
+      <trans-unit id="sc1c08d0cbcc3bd24">
+        <source>Does Not Match</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਮੇਲ ਨਹੀਂ ਖਾਂਦਾ</target>
+      </trans-unit>
+      <trans-unit id="s9c0f52425fd2f07e">
+        <source>May Not Match</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਮੇਲ ਨਹੀਂ ਖਾਂਦਾ</target>
+      </trans-unit>
+      <trans-unit id="sf88b90b8ba23871c">
+        <source>Unknown Match</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਅਣਜਾਣ ਮੈਚ</target>
+      </trans-unit>
+      <trans-unit id="sa1fa766e0d5634d7">
+        <source>No Score Available</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ਕੋਈ ਸਕੋਰ ਉਪਲਬਧ ਨਹੀਂ ਹੈ</target>
       </trans-unit>
     </body>
   </file>

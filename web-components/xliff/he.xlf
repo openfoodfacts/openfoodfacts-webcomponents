@@ -436,214 +436,288 @@
         <source>Help us validate the ingredient list of the product.</source>
         <target state="translated">נשמח לעזרה באימות רשימת הרכיבים של המוצר.</target>
       </trans-unit>
-<trans-unit id="s8f839a03997a16d7">
-  <source>View Product</source>
-</trans-unit>
-<trans-unit id="s1dc4daf989c71284">
-  <source>Help us correct the nutritional information</source>
-</trans-unit>
-<trans-unit id="sf57a61152168cc81">
-  <source>Help us correct the ingredient detection</source>
-</trans-unit>
-<trans-unit id="scf23a05631f93732">
-  <source>Confirm Delete</source>
-</trans-unit>
-<trans-unit id="sdcc2555c5dde524f">
-  <source>Are you sure you want to delete this item? This action cannot be undone.</source>
-</trans-unit>
-<trans-unit id="s901ae1e236ac45d3">
-  <source>Cancel deletion</source>
-</trans-unit>
-<trans-unit id="sc681b137e8f604f7">
-  <source>Confirm deletion</source>
-</trans-unit>
-<trans-unit id="s4f751fb9b3ed766c">
-  <source>Creating a New Property</source>
-</trans-unit>
-<trans-unit id="sdb97e5976482606e">
-  <source>Check if a property already exists</source>
-</trans-unit>
-<trans-unit id="sb125227d436c2925">
-  <source>Search for your property concept in the existing properties database:</source>
-</trans-unit>
-<trans-unit id="s86197dcf3e96af64">
-  <source>Browse and search existing properties</source>
-</trans-unit>
-<trans-unit id="s34be4af4e8fec4ae">
-  <source>Ask the community first</source>
-</trans-unit>
-<trans-unit id="s36d86adc823cbfa6">
-  <source>Before creating a new property, discuss it with the community:</source>
-</trans-unit>
-<trans-unit id="s06847c221c4c0bc1">
-  <source>I would like to create a property to [describe your use case]...</source>
-</trans-unit>
-<trans-unit id="scd21019c3cd618f3">
-  <source>Join Slack Discussion</source>
-</trans-unit>
-<trans-unit id="s8db84aa4bc949af2">
-  <source>Document the New Property</source>
-</trans-unit>
-<trans-unit id="sb3cbcc1bd0fff140">
-  <source>Once you've verified that your property doesn't exist and the community agrees it's useful, you need to first document it in the wiki.</source>
-</trans-unit>
-<trans-unit id="sfacbbe968fa7d773">
-  <source>Property name:</source>
-</trans-unit>
-<trans-unit id="s5560fb119e40923d">
-  <source>Enter property name...</source>
-</trans-unit>
-<trans-unit id="s2db7b654c0a9bde0">
-  <source>Document the property</source>
-</trans-unit>
-<trans-unit id="s39e14e14300694c7">
-  <source>Documentation and Guidelines</source>
-</trans-unit>
-<trans-unit id="s801a05fa8e881f37">
-  <source>Learn more about property creation and guidelines:</source>
-</trans-unit>
-<trans-unit id="s3781d25aa51a736c">
-  <source>Folksonomy Engine Documentation</source>
-</trans-unit>
-<trans-unit id="s9b87abd68fb9df45">
-  <source>Not found? Create new key {value}</source>
-</trans-unit>
-<trans-unit id="hb28f1f2ec1744ee9">
-  <source>These properties are created and filed by users for any kind of usages. Feel
+      <trans-unit id="s8f839a03997a16d7">
+        <source>View Product</source>
+        <target state="translated">הצגת מוצר</target>
+      </trans-unit>
+      <trans-unit id="s1dc4daf989c71284">
+        <source>Help us correct the nutritional information</source>
+        <target state="translated">נשמח לעזרה בתיקון המידע התזונתי</target>
+      </trans-unit>
+      <trans-unit id="sf57a61152168cc81">
+        <source>Help us correct the ingredient detection</source>
+        <target state="translated">נשמח לעזרה בתיקון זיהוי המרכיבים</target>
+      </trans-unit>
+      <trans-unit id="scf23a05631f93732">
+        <source>Confirm Delete</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">אישור מחיקה</target>
+      </trans-unit>
+      <trans-unit id="sdcc2555c5dde524f">
+        <source>Are you sure you want to delete this item? This action cannot be undone.</source>
+        <target state="translated">למחוק את הפריט הזה? זאת פעולה בלתי הפיכה.</target>
+      </trans-unit>
+      <trans-unit id="s901ae1e236ac45d3">
+        <source>Cancel deletion</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ביטול המחיקה</target>
+      </trans-unit>
+      <trans-unit id="sc681b137e8f604f7">
+        <source>Confirm deletion</source>
+        <target state="translated">אישור מחיקה</target>
+      </trans-unit>
+      <trans-unit id="s4f751fb9b3ed766c">
+        <source>Creating a New Property</source>
+        <target state="translated">יצירת מאפיין חדש</target>
+      </trans-unit>
+      <trans-unit id="sdb97e5976482606e">
+        <source>Check if a property already exists</source>
+        <target state="translated">לבדוק אם מאפיין כבר קיים</target>
+      </trans-unit>
+      <trans-unit id="sb125227d436c2925">
+        <source>Search for your property concept in the existing properties database:</source>
+        <target state="translated">חיפוש אחר מושג המקפיין שלך במסד הנתונים של המאפיינים הקיימים:</target>
+      </trans-unit>
+      <trans-unit id="s86197dcf3e96af64">
+        <source>Browse and search existing properties</source>
+        <target state="translated">עיון וחיפוש במאפיינים הקיימים</target>
+      </trans-unit>
+      <trans-unit id="s34be4af4e8fec4ae">
+        <source>Ask the community first</source>
+        <target state="translated">לשאול קודם את הקהילה</target>
+      </trans-unit>
+      <trans-unit id="s36d86adc823cbfa6">
+        <source>Before creating a new property, discuss it with the community:</source>
+        <target state="translated">לפני יצירת מאפיין חדש, יש לדון בו עם הקהילה:</target>
+      </trans-unit>
+      <trans-unit id="s06847c221c4c0bc1">
+        <source>I would like to create a property to [describe your use case]...</source>
+        <target state="translated">אני רוצה ליצור מאפיין כדי [לתאר את מקרה השימוש שלך]…</target>
+      </trans-unit>
+      <trans-unit id="scd21019c3cd618f3">
+        <source>Join Slack Discussion</source>
+        <target state="translated">הצטרפות לדיון בסלאק</target>
+      </trans-unit>
+      <trans-unit id="s8db84aa4bc949af2">
+        <source>Document the New Property</source>
+        <target state="translated">תיעוד המאפיין החדש</target>
+      </trans-unit>
+      <trans-unit id="sb3cbcc1bd0fff140">
+        <source>Once you've verified that your property doesn't exist and the community agrees it's useful, you need to first document it in the wiki.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">לאחר שווידאת שהנכס שלך אינו קיים והקהילה מסכימה שהוא שימושי, עליך תחילה לתעד אותו בוויקי.</target>
+      </trans-unit>
+      <trans-unit id="sfacbbe968fa7d773">
+        <source>Property name:</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">שם הנכס:</target>
+      </trans-unit>
+      <trans-unit id="s5560fb119e40923d">
+        <source>Enter property name...</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">הזן שם נכס...</target>
+      </trans-unit>
+      <trans-unit id="s2db7b654c0a9bde0">
+        <source>Document the property</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">תעד את הנכס</target>
+      </trans-unit>
+      <trans-unit id="s39e14e14300694c7">
+        <source>Documentation and Guidelines</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">תיעוד והנחיות</target>
+      </trans-unit>
+      <trans-unit id="s801a05fa8e881f37">
+        <source>Learn more about property creation and guidelines:</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">למידע נוסף על יצירת נכסים והנחיות:</target>
+      </trans-unit>
+      <trans-unit id="s3781d25aa51a736c">
+        <source>Folksonomy Engine Documentation</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">תיעוד מנוע Folksonomy</target>
+      </trans-unit>
+      <trans-unit id="s9b87abd68fb9df45">
+        <source>Not found? Create new key {value}</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">לא נמצא? צור מפתח חדש {value}</target>
+      </trans-unit>
+      <trans-unit id="hb28f1f2ec1744ee9">
+        <source>These properties are created and filed by users for any kind of usages. Feel
                     free to add your own. The properties and values you create
                     <x id="0" equiv-text="&lt;strong&gt;"/>must be factual<x id="1" equiv-text="&lt;/strong&gt;"/>. You can dive into
                     <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
                     or explore the
                     <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</source>
-</trans-unit>
-<trans-unit id="h1fbdfea3ad6d664e">
-  <source>This is brought by the
+        <target state="needs-translation">These properties are created and filed by users for any kind of usages. Feel
+                    free to add your own. The properties and values you create
+                    <x id="0" equiv-text="&lt;strong&gt;"/>must be factual<x id="1" equiv-text="&lt;/strong&gt;"/>. You can dive into
+                    <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
+                    or explore the
+                    <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
+      </trans-unit>
+      <trans-unit id="h1fbdfea3ad6d664e">
+        <source>This is brought by the
                     <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't
                     hesitate to participate or give feedback</source>
-</trans-unit>
-<trans-unit id="s71a5c9f4b68ef4d4">
-  <source>Count</source>
-</trans-unit>
-<trans-unit id="s57472465a23b41db">
-  <source>Values</source>
-</trans-unit>
-<trans-unit id="s74cb3d66f6a668e1">
-  <source>Documentation</source>
-</trans-unit>
-<trans-unit id="s565867d84c04aea2">
-  <source>Filter properties...</source>
-</trans-unit>
-<trans-unit id="s3b430cfa5c1fe7f4">
-  <source>Documentation for <x id="0" equiv-text="${property.k}"/></source>
-</trans-unit>
-<trans-unit id="s000a5b76bd3a01c2">
-  <source>Loading properties...</source>
-</trans-unit>
-<trans-unit id="s9a7f60fce090ecaf">
-  <source>Failed to load properties. Please try again later.</source>
-</trans-unit>
-<trans-unit id="scdb6cad0b92721bf">
-  <source>No properties found.</source>
-</trans-unit>
-<trans-unit id="scace072bef961918">
-  <source>Rows</source>
-</trans-unit>
-<trans-unit id="s0bb2d48532acc455">
-  <source>Download CSV</source>
-</trans-unit>
-<trans-unit id="s255857544a9d5ec0">
-  <source>Reset</source>
-</trans-unit>
-<trans-unit id="sefaba4adc4ec9219">
-  <source>Folksonomy Properties</source>
-</trans-unit>
-<trans-unit id="sa548778b24054030">
-  <source>Explore all contributed properties from the Folksonomy Engine project. These properties provide additional metadata and insights about products in the Open Food Facts database.</source>
-</trans-unit>
-<trans-unit id="sf4cd86a2f5ef2588">
-  <source>Product Barcode</source>
-</trans-unit>
-<trans-unit id="sbe472dc3c2685985">
-  <source>Corresponding Value</source>
-</trans-unit>
-<trans-unit id="s4d42cc7e00076a3b">
-  <source>Product Count</source>
-</trans-unit>
-<trans-unit id="s1a52515ec8ddade8">
-  <source>Product barcode</source>
-</trans-unit>
-<trans-unit id="sfe87465d50530725">
-  <source>Corresponding value</source>
-</trans-unit>
-<trans-unit id="s839cc2908a5387f2">
-  <source>Filter barcodes...</source>
-</trans-unit>
-<trans-unit id="sb7f72e4c8a2d3357">
-  <source>Filter values...</source>
-</trans-unit>
-<trans-unit id="s1205d5f6fccf8e69">
-  <source>Property Value</source>
-</trans-unit>
-<trans-unit id="s58e1eeea7a60ae51">
-  <source>Loading products...</source>
-</trans-unit>
-<trans-unit id="sb560fa37a7bfb6c2">
-  <source>No products found for this property.</source>
-</trans-unit>
-<trans-unit id="seea3800e27baa686">
-  <source>Individual Products</source>
-</trans-unit>
-<trans-unit id="s081e2ad82db71e1d">
-  <source>Grouped Values</source>
-</trans-unit>
-<trans-unit id="s9fc41f789c63b40d">
-  <source>Products</source>
-</trans-unit>
-<trans-unit id="s1e00019dc454872d">
-  <source>Please provide a property name using the property-name attribute.</source>
-</trans-unit>
-<trans-unit id="sc895972c88d38ca5">
-  <source>Folksonomy property</source>
-</trans-unit>
-<trans-unit id="se5127cf0f92e7e48">
-  <source>Tip: you can also find the</source>
-</trans-unit>
-<trans-unit id="sb28639570ff3b852">
-  <source>list of all properties</source>
-</trans-unit>
-<trans-unit id="sdbf806fefc584115">
-  <source>You should find a</source>
-</trans-unit>
-<trans-unit id="s0b4235aae602a950">
-  <source>dedicated documentation</source>
-</trans-unit>
-<trans-unit id="s55d7249883a98ca1">
-  <source>about this property on Open Food Facts wiki</source>
-</trans-unit>
-<trans-unit id="s1e49126af0935a5b">
-  <source>List of products using this property</source>
-</trans-unit>
-<trans-unit id="sb1c538e038f9b214">
-  <source>Very Good Match <x id="0" equiv-text="${score}"/>%</source>
-</trans-unit>
-<trans-unit id="s718dea04853f80ae">
-  <source>Good Match <x id="0" equiv-text="${score}"/>%</source>
-</trans-unit>
-<trans-unit id="s300b3a6ee4e1252d">
-  <source>Poor Match <x id="0" equiv-text="${score}"/>%</source>
-</trans-unit>
-<trans-unit id="sc1c08d0cbcc3bd24">
-  <source>Does Not Match</source>
-</trans-unit>
-<trans-unit id="s9c0f52425fd2f07e">
-  <source>May Not Match</source>
-</trans-unit>
-<trans-unit id="sf88b90b8ba23871c">
-  <source>Unknown Match</source>
-</trans-unit>
-<trans-unit id="sa1fa766e0d5634d7">
-  <source>No Score Available</source>
-</trans-unit>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">זה נוצר בזכות פרויקט Folksonomy Engine
+                    <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/><x id="1" equiv-text="&lt;/a&gt;"/>. אל
+                    תהססו להשתתף או לתת משוב.</target>
+      </trans-unit>
+      <trans-unit id="s71a5c9f4b68ef4d4">
+        <source>Count</source>
+        <target state="translated">ספירה</target>
+      </trans-unit>
+      <trans-unit id="s57472465a23b41db">
+        <source>Values</source>
+        <target state="translated">ערכים</target>
+      </trans-unit>
+      <trans-unit id="s74cb3d66f6a668e1">
+        <source>Documentation</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">תיעוד</target>
+      </trans-unit>
+      <trans-unit id="s565867d84c04aea2">
+        <source>Filter properties...</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">סינון מאפיינים...</target>
+      </trans-unit>
+      <trans-unit id="s3b430cfa5c1fe7f4">
+        <source>Documentation for <x id="0" equiv-text="${property.k}"/></source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">תיעוד עבור <x id="0" equiv-text="${property.k}"/></target>
+      </trans-unit>
+      <trans-unit id="s000a5b76bd3a01c2">
+        <source>Loading properties...</source>
+        <target state="translated">המאפיינים נטענים…</target>
+      </trans-unit>
+      <trans-unit id="s9a7f60fce090ecaf">
+        <source>Failed to load properties. Please try again later.</source>
+        <target state="translated">טעינת המאפיינים נכשלה. נא לנסות שוב מאוחר יותר.</target>
+      </trans-unit>
+      <trans-unit id="scdb6cad0b92721bf">
+        <source>No properties found.</source>
+        <target state="translated">לא נמצאו מאפיינים.</target>
+      </trans-unit>
+      <trans-unit id="scace072bef961918">
+        <source>Rows</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">שורות</target>
+      </trans-unit>
+      <trans-unit id="s0bb2d48532acc455">
+        <source>Download CSV</source>
+        <target state="translated">הורדת CSV</target>
+      </trans-unit>
+      <trans-unit id="s255857544a9d5ec0">
+        <source>Reset</source>
+        <target state="translated">איפוס</target>
+      </trans-unit>
+      <trans-unit id="sefaba4adc4ec9219">
+        <source>Folksonomy Properties</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">נכסי פולקסונומי</target>
+      </trans-unit>
+      <trans-unit id="sa548778b24054030">
+        <source>Explore all contributed properties from the Folksonomy Engine project. These properties provide additional metadata and insights about products in the Open Food Facts database.</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">עיין בכל המאפיינים שנתרמו מפרויקט Folksonomy Engine. מאפיינים אלה מספקים מטא-נתונים ותובנות נוספות לגבי מוצרים במסד הנתונים Open Food Facts.</target>
+      </trans-unit>
+      <trans-unit id="sf4cd86a2f5ef2588">
+        <source>Product Barcode</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ברקוד המוצר</target>
+      </trans-unit>
+      <trans-unit id="sbe472dc3c2685985">
+        <source>Corresponding Value</source>
+        <target state="translated">ערך מתאים</target>
+      </trans-unit>
+      <trans-unit id="s4d42cc7e00076a3b">
+        <source>Product Count</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ספירת מוצרים</target>
+      </trans-unit>
+      <trans-unit id="s1a52515ec8ddade8">
+        <source>Product barcode</source>
+        <target state="translated">ברקוד מוצר</target>
+      </trans-unit>
+      <trans-unit id="sfe87465d50530725">
+        <source>Corresponding value</source>
+        <target state="translated">ערך תואם</target>
+      </trans-unit>
+      <trans-unit id="s839cc2908a5387f2">
+        <source>Filter barcodes...</source>
+        <target state="translated">סינון ברקודים…</target>
+      </trans-unit>
+      <trans-unit id="sb7f72e4c8a2d3357">
+        <source>Filter values...</source>
+        <target state="translated">סינון ערכים…</target>
+      </trans-unit>
+      <trans-unit id="s1205d5f6fccf8e69">
+        <source>Property Value</source>
+        <target state="translated">ערך המאפיין</target>
+      </trans-unit>
+      <trans-unit id="s58e1eeea7a60ae51">
+        <source>Loading products...</source>
+        <target state="translated">מוצרים נטענים…</target>
+      </trans-unit>
+      <trans-unit id="sb560fa37a7bfb6c2">
+        <source>No products found for this property.</source>
+        <target state="translated">לא נמצאו מוצרים עבור מאפיין זה.</target>
+      </trans-unit>
+      <trans-unit id="seea3800e27baa686">
+        <source>Individual Products</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">מוצרים בודדים</target>
+      </trans-unit>
+      <trans-unit id="s081e2ad82db71e1d">
+        <source>Grouped Values</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ערכים מקובצים</target>
+      </trans-unit>
+      <trans-unit id="s9fc41f789c63b40d">
+        <source>Products</source>
+        <target state="translated">מוצרים</target>
+      </trans-unit>
+      <trans-unit id="s1e00019dc454872d">
+        <source>Please provide a property name using the property-name attribute.</source>
+        <target state="translated">נא לספק שם מאפיין באמצעות המאפיין property-name.</target>
+      </trans-unit>
+      <trans-unit id="sc895972c88d38ca5">
+        <source>Folksonomy property</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">נכס פולקסונומי</target>
+      </trans-unit>
+      <trans-unit id="se5127cf0f92e7e48">
+        <source>Tip: you can also find the</source>
+        <target state="translated">עצה: ניתן למצוא גם את</target>
+      </trans-unit>
+      <trans-unit id="sb28639570ff3b852">
+        <source>list of all properties</source>
+        <target state="translated">רשימה של כל המאפיינים</target>
+      </trans-unit>
+      <trans-unit id="sdbf806fefc584115">
+        <source>You should find a</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">אתה אמור למצוא א</target>
+      </trans-unit>
+      <trans-unit id="s0b4235aae602a950">
+        <source>dedicated documentation</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">תיעוד ייעודי</target>
+      </trans-unit>
+      <trans-unit id="s55d7249883a98ca1">
+        <source>about this property on Open Food Facts wiki</source>
+        <target state="translated">על המאפיין זה בוויקי של Open Food Facts</target>
+      </trans-unit>
+      <trans-unit id="s1e49126af0935a5b">
+        <source>List of products using this property</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">רשימת מוצרים המשתמשים במאפיין זה</target>
+      </trans-unit>
+      <trans-unit id="sb1c538e038f9b214">
+        <source>Very Good Match <x id="0" equiv-text="${score}"/>%</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">התאמה טובה מאוד <x id="0" equiv-text="${score}"/>%</target>
+      </trans-unit>
+      <trans-unit id="s718dea04853f80ae">
+        <source>Good Match <x id="0" equiv-text="${score}"/>%</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">התאמה טובה <x id="0" equiv-text="${score}"/>%</target>
+      </trans-unit>
+      <trans-unit id="s300b3a6ee4e1252d">
+        <source>Poor Match <x id="0" equiv-text="${score}"/>%</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">התאמה גרועה <x id="0" equiv-text="${score}"/>%</target>
+      </trans-unit>
+      <trans-unit id="sc1c08d0cbcc3bd24">
+        <source>Does Not Match</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">לא תואם</target>
+      </trans-unit>
+      <trans-unit id="s9c0f52425fd2f07e">
+        <source>May Not Match</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ייתכן שלא תואם</target>
+      </trans-unit>
+      <trans-unit id="sf88b90b8ba23871c">
+        <source>Unknown Match</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">התאמה לא ידועה</target>
+      </trans-unit>
+      <trans-unit id="sa1fa766e0d5634d7">
+        <source>No Score Available</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">אין ציון זמין</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
