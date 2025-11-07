@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file target-language="sr" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+  <file target-language="sr-CS" source-language="en" original="lit-localize-inputs" datatype="plaintext">
     <body>
       <trans-unit id="s49730f3d5751a433">
         <source>Loading...</source>
@@ -40,7 +40,7 @@
       </trans-unit>
       <trans-unit id="sbd9a0b2293b3cd3c">
         <source>Serving size</source>
-        <target state="needs-translation">Serving size</target>
+        <target state="translated">Porcija</target>
       </trans-unit>
       <trans-unit id="sbb623d6b18d966a0">
         <source>Nutrition facts are displayed on the packaging:</source>
@@ -144,7 +144,7 @@
       </trans-unit>
       <trans-unit id="s5e8250fb85d64c23">
         <source>Close</source>
-        <target state="translated">Затвори</target>
+        <target state="translated">Zatvori</target>
       </trans-unit>
       <trans-unit id="s976dfd19ef58a1e1">
         <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
@@ -160,7 +160,7 @@
       </trans-unit>
       <trans-unit id="sf9aee319a006c9b4">
         <source>Add</source>
-        <target state="translated">Додај</target>
+        <target state="translated">Dodajte</target>
       </trans-unit>
       <trans-unit id="s5666afe5cd0166de">
         <source>Please fix the errors or modify the text before confirming</source>
@@ -184,7 +184,7 @@
       </trans-unit>
       <trans-unit id="s33f85f24c0f5f008">
         <source>Save</source>
-        <target state="needs-translation">Save</target>
+        <target state="translated">Sačuvaj</target>
       </trans-unit>
       <trans-unit id="s2ceb11be2290bb1b">
         <source>Cancel</source>
@@ -196,7 +196,7 @@
       </trans-unit>
       <trans-unit id="s64ef2a6c2dd1d3d1">
         <source>Edit</source>
-        <target state="needs-translation">Edit</target>
+        <target state="translated">Izmeni</target>
       </trans-unit>
       <trans-unit id="h6bdd1b427aa985a4">
         <source>This tool allows you to correct the ingredients list. You can add, remove or edit
@@ -254,7 +254,7 @@
       </trans-unit>
       <trans-unit id="sdc673e73b5c13aea">
         <source>Delete</source>
-        <target state="needs-translation">Delete</target>
+        <target state="translated">Obriši</target>
       </trans-unit>
       <trans-unit id="s15d64a0a6715285a">
         <source>New key</source>
@@ -298,11 +298,11 @@
       </trans-unit>
       <trans-unit id="scb489a1a173ac3f0">
         <source>Yes</source>
-        <target state="needs-translation">Yes</target>
+        <target state="translated">Da</target>
       </trans-unit>
       <trans-unit id="s09205907b5b56cda">
         <source>No</source>
-        <target state="needs-translation">No</target>
+        <target state="translated">Ne</target>
       </trans-unit>
       <trans-unit id="s42dd66b2441566fd">
         <source>Center icon</source>
@@ -656,7 +656,7 @@
       </trans-unit>
       <trans-unit id="s9fc41f789c63b40d">
         <source>Products</source>
-        <target state="needs-translation">Products</target>
+        <target state="translated">Proizvodi</target>
       </trans-unit>
       <trans-unit id="s1e00019dc454872d">
         <source>Please provide a property name using the property-name attribute.</source>
