@@ -86,12 +86,14 @@ export class DonationBanner extends LitElement {
       width: 100%;
       background-color: white;
       box-sizing: border-box;
+      border-radius: 15px;
     }
     .dark-mode .donation-banner,
     .dark-mode .donation-banner-footer {
       background-color: #2d2724;
       color: #f9f7f5;
       border-color: #ff6e78;
+      border-radius: 20px;
     }
     .dark-mode .donation-banner__main-title,
     .dark-mode .donation-banner-footer__main-title {
