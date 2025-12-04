@@ -53,7 +53,7 @@ export class DonationBanner extends LitElement {
   }
 
   getDefaultYear() {
-    return new Date().getFullYear().toString()
+    return (new Date().getFullYear() + 1).toString()
   }
 
   getLinkWithQueryParams(link: string) {
