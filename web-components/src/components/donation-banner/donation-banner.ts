@@ -27,7 +27,7 @@ export class DonationBanner extends LitElement {
   }
 
   /**
-   * The current year
+   * The fundraiser year (next year)
    * @type {String}
    */
   @property({ type: String, reflect: true })
@@ -61,7 +61,7 @@ export class DonationBanner extends LitElement {
     const params = new URLSearchParams(url.search)
     if (!params.has("utm_source")) params.set("utm_source", "off")
     if (!params.has("utm_medium")) params.set("utm_medium", "web")
-    if (!params.has("utm_campaign")) params.set("utm_campaign", "donate-2024-a")
+    if (!params.has("utm_campaign")) params.set("utm_campaign", `donate-${this.currentYear}-a`)
     if (!params.has("utm_term")) params.set("utm_term", "en-text-button")
     url.search = params.toString()
     return url.toString()
