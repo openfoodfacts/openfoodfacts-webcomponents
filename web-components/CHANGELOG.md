@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.15.1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.15.0...v1.15.1) (2025-12-04)
+
+
+### Bug Fixes
+
+* issue [#334](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/334) Round the red line in the donation web components. ([#369](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/369)) ([a2f086a](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/a2f086a464687783d829e1b63986afab2d44b847))
+* Update donation banner to display next year in fundraiser message ([#375](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/375)) ([484053b](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/484053bfc685ac8a4921003a93a8c0a0d472c581))
+
 ## [1.15.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.14.2...v1.15.0) (2025-10-27)
 
 
