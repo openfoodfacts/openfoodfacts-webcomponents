@@ -466,7 +466,7 @@
       </trans-unit>
       <trans-unit id="s4f751fb9b3ed766c">
         <source>Creating a New Property</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Креирање новог објекта</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Креирање новог својства</target>
       </trans-unit>
       <trans-unit id="sdb97e5976482606e">
         <source>Check if a property already exists</source>
