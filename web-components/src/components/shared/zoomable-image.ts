@@ -15,10 +15,10 @@ import CropperCrosshair from "@cropper/element-crosshair"
 import CropperShade from "@cropper/element-shade"
 import type { Selection } from "@cropper/element-selection"
 import { FLEX } from "../../styles/utils"
-import { CropperImageBoundingBox } from "../../types"
+import type { CropperImageBoundingBox } from "../../types"
 import { EventType } from "../../constants"
 import "../icons/arrows-center"
-import { CropperActionEvent } from "../../types/crops"
+import type { CropperActionEvent } from "../../types/crops"
 import { CHECKBOX } from "../../styles/form"
 import { normalizeRotation } from "../../utils"
 import { MessageDisplayMixin } from "../../mixins/message-display-mixin"
@@ -85,6 +85,12 @@ export class ZoomableImage extends MessageDisplayMixinElement {
 
       .toolbar .checkbox span {
         padding-top: 2px;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .link-button {
+          filter: invert(1);
+        }
       }
     `,
   ]

@@ -31,7 +31,13 @@ Icons:
 📖 Knowledge Panels:
 - changed-files:
     - any-glob-to-any-file: 'web-components/src/components/knowledge-panels/**/*'
-    - any-glob-to-any-file: 'web-components/src/components/knowledge-panels/knowledge-panels.ts'
+    - any-glob-to-any-file: '‎web-components/src/api/knowledgepanel.ts'
+    - any-glob-to-any-file: '‎web-components/src/components/knowledge-panels/renderers/render-panel.ts'
+    - any-glob-to-any-file: '‎web-components/src/components/knowledge-panels/renderers/render-table.ts'
+    - any-glob-to-any-file: '‎web-components/src/components/knowledge-panels/renderers/render-text.ts'
+    - any-glob-to-any-file: '‎web-components/src/components/knowledge-panels/knowledge-panels.stories.ts'
+    - any-glob-to-any-file: '‎web-components/src/components/knowledge-panels/knowledge-panels.ts'
+    - any-glob-to-any-file: '‎web-components/src/types/knowledge-panel.ts'
 
 Mobile badges:
 - changed-files:

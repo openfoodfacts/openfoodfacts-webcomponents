@@ -1,7 +1,7 @@
 import { LitElement, html, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { EventState, EventType, RobotoffContributionType } from "../../constants"
-import { BasicStateEventDetail } from "../../types"
+import type { BasicStateEventDetail } from "../../types"
 import { localized, msg } from "@lit/localize"
 import { IS_HIDDEN } from "../../styles/utils"
 import { classMap } from "lit/directives/class-map.js"
@@ -9,6 +9,7 @@ import { classMap } from "lit/directives/class-map.js"
 import "../shared/modal"
 import "../robotoff-ingredient-spellcheck/robotoff-ingredient-spellcheck"
 import "../robotoff-nutrient-extraction/robotoff-nutrient-extraction"
+import "../robotoff-ingredient-detection/robotoff-ingredient-detection"
 import "../robotoff-question/robotoff-question"
 
 enum MessageType {

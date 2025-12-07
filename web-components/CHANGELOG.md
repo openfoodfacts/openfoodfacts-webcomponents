@@ -1,5 +1,85 @@
 # Changelog
 
+## [1.15.1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.15.0...v1.15.1) (2025-12-04)
+
+
+### Bug Fixes
+
+* issue [#334](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/334) Round the red line in the donation web components. ([#369](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/369)) ([a2f086a](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/a2f086a464687783d829e1b63986afab2d44b847))
+* Update donation banner to display next year in fundraiser message ([#375](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/375)) ([484053b](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/484053bfc685ac8a4921003a93a8c0a0d472c581))
+
+## [1.15.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.14.2...v1.15.0) (2025-10-27)
+
+
+### Features
+
+* add webcomponents version field to window or globalThis ([#317](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/317)) ([674e451](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/674e4511dad6cee51b104c2e6d99b6ef083487f4))
+* **knowledge-panels:** add top-panels property ([#297](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/297)) ([22c27c2](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/22c27c2d4dd0fc97f387871f5fca055e72ad1020))
+
+
+### Bug Fixes
+
+* conditionally include correction and data in annotate calls ([#318](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/318)) ([e48cc93](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/e48cc93e8213a707e618dd14b0b8e7d07717a624))
+* **deps:** bump dompurify from 3.2.6 to 3.2.7 in /web-components ([#311](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/311)) ([280a928](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/280a928540e507592838c5dc04d212f2033dd967))
+* **deps:** bump the interface-libraries group in /web-components with 3 updates ([#201](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/201)) ([4cf80a6](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/4cf80a6accc30a8e9ef442dd5007ee21a1e4122c))
+* typo in readme ([#336](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/336)) ([d03eccc](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/d03eccc4a7761b3d2de695a5209608fda519be3e))
+
+## [1.14.2](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.14.1...v1.14.2) (2025-09-21)
+
+
+### Bug Fixes
+
+* Include credentials in all Robotoff API requests ([#306](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/306)) ([8537024](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/85370244af1418f6e95914efe44e163fa02ac36a))
+
+## [1.14.1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.14.0...v1.14.1) (2025-09-19)
+
+
+### Bug Fixes
+
+* revert output file name to off-webcomponents.bundled.js ([#303](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/303)) ([84e8af3](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/84e8af312c4f54d98e569c0c6be0d86ffd8f045b))
+
+## [1.14.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.13.2...v1.14.0) (2025-09-18)
+
+
+### Features
+
+* transition to Vite, add Storybook ([#274](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/274)) ([f416d9a](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/f416d9ad0d5f73831a818deff96444b790b42e55))
+
+
+### Bug Fixes
+
+* **deps:** bump marked from 16.2.1 to 16.3.0 in /web-components ([#287](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/287)) ([7169895](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/7169895c94263615653b85ffe7036e92f4dbee27))
+* Type errors, rename getTaxonomyNameByLang and use SDK Nutrient Type ([#273](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/273)) ([2eee761](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/2eee761d4f40b94cee6d6bf1ea1e9ee6f62e17ac))
+
+## [1.13.2](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.13.1...v1.13.2) (2025-09-11)
+
+
+### Bug Fixes
+
+* Robotoff instance creation in robotoff.ts ([#282](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/282)) ([2d8580c](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/2d8580c6358126a9deede0c3b6c1c8a4d6424762)), closes [#281](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/281)
+
+## [1.13.1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.13.0...v1.13.1) (2025-09-05)
+
+
+### Bug Fixes
+
+* fix library publication ([3691141](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/369114137f5ffa7acc68565569463ed92c8e1d4b))
+
+## [1.13.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.12.3...v1.13.0) (2025-09-02)
+
+
+### Features
+
+* add news-feed web component ([#268](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/268)) ([24c80cd](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/24c80cd89d416991a4e4f67cd0db7c4f787bf5b1))
+* adds delete and replace for values and properties ([#264](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/264)) ([3bceb87](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/3bceb871be3aa02a7439eec2f6902847e61dfc9d))
+* Integrate @openfoodfacts/openfoodfacts-nodejs ([#266](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/266)) ([7052f3b](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/7052f3ba3677c1c8393b988bfa79d631521bf968))
+
+
+### Bug Fixes
+
+* fixes the link for properties exploration ([#213](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/213)) ([6385338](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/6385338de1a11a97de8e3b48cac18b121ef80742))
+* Include credentials in robotoff read requests ([#265](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/265)) ([cb52e90](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/cb52e901d5b33bec3d9da750840ca09958512528))
+
 ## [1.12.3](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.12.2...v1.12.3) (2025-08-18)
 
 

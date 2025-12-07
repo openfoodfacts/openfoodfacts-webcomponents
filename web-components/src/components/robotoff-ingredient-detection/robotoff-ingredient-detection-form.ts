@@ -11,14 +11,14 @@ import { LitElement, css, html, nothing } from "lit"
 import { customElement, property, query, state } from "lit/decorators.js"
 import "../shared/zoomable-image"
 import {
-  IngredientDetectionInsight,
-  IngredientDetectionAnnotationData,
+  type IngredientDetectionInsight,
+  type IngredientDetectionAnnotationData,
   AnnotationAnswer,
 } from "../../types/robotoff"
 import { getRobotoffImageUrl } from "../../signals/robotoff"
 import { localized, msg } from "@lit/localize"
 import { FLEX } from "../../styles/utils"
-import { CropResult } from "../../types"
+import type { CropResult } from "../../types"
 import * as ZoomableImage from "../shared/zoomable-image"
 import {
   cropImageBoundingBoxToRobotoffBoundingBox,
@@ -65,10 +65,10 @@ export class RobotoffIngredientDetectionForm extends LitElement {
   form?: HTMLFormElement
 
   /**
-   * Whether the form is loading
-   * @type {boolean}
+   * Indicates which annotation answer is currently being sent by the form, if any.
+   * @type {AnnotationAnswer}
    */
-  @property({ type: String, reflect: true })
+  @property({ type: Number, reflect: true })
   loading?: AnnotationAnswer
 
   /**
@@ -206,9 +206,8 @@ export class RobotoffIngredientDetectionForm extends LitElement {
           <loading-button
             css-classes="button success-button"
             type="submit"
-            .loading=${[AnnotationAnswer.ACCEPT, AnnotationAnswer.ACCEPT_AND_ADD_DATA].includes(
-              this.loading!
-            )}
+            .loading=${this.loading === AnnotationAnswer.ACCEPT ||
+            this.loading === AnnotationAnswer.ACCEPT_AND_ADD_DATA}
             .disabled=${this.isLoading}
             @click="${() => triggerSubmit(this.form!)}"
             label="${msg("Validate")}"

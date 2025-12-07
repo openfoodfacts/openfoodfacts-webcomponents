@@ -14,7 +14,7 @@ import folksonomyApi from "../../api/folksonomy"
 export class FolksonomyEditor extends LitElement {
   /**
    * The product ID for which the properties are being added
-   * @type {boolean}
+   * @type {string}
    */
   @property({ type: String, attribute: "product-code" })
   productCode = ""
@@ -25,6 +25,27 @@ export class FolksonomyEditor extends LitElement {
    */
   @property({ type: String, attribute: "page-type" })
   pageType = "view"
+
+  /**
+   * The base URL for properties listing (e.g., "https://world.openfoodfacts.org/properties")
+   * @type {string}
+   */
+  @property({ type: String, attribute: "properties-base-url" })
+  propertiesBaseUrl = "/properties"
+
+  /**
+   * The URL for properties documentation (e.g., "https://wiki.openfoodfacts.org/Folksonomy/Property")
+   * @type {string}
+   */
+  @property({ type: String, attribute: "properties-documentation-url" })
+  propertiesDocumentationUrl = "https://wiki.openfoodfacts.org/Folksonomy/Property"
+
+  /**
+   * The URL for the Folksonomy Engine project (e.g., "https://wiki.openfoodfacts.org/Folksonomy_Engine")
+   * @type {string}
+   */
+  @property({ type: String, attribute: "folksonomy-engine-url" })
+  folksonomyEngineUrl = "https://wiki.openfoodfacts.org/Folksonomy_Engine"
 
   static override styles = css`
     :host {
@@ -256,14 +277,14 @@ export class FolksonomyEditor extends LitElement {
                 version=${item.version}
                 row-number=${index + 1}
                 page-type=${this.pageType}
-              />`
+              ></folksonomy-editor-row>`
           )}
           ${html`<folksonomy-editor-row
             product-code=${this.productCode}
             page-type=${this.pageType}
             row-number=${this.properties.length + 1}
             empty
-          />`}
+          ></folksonomy-editor-row>`}
         </table>
       </form>
     `
@@ -290,11 +311,11 @@ export class FolksonomyEditor extends LitElement {
                   html`These properties are created and filed by users for any kind of usages. Feel
                     free to add your own. The properties and values you create
                     <strong>must be factual</strong>. You can dive into
-                    <a href="https://openfoodfacts-explorer.vercel.app/folksonomy"
+                    <a href="${this.propertiesBaseUrl}"
                       >the list of properties already used by the community</a
                     >
                     or explore the
-                    <a href="https://wiki.openfoodfacts.org/Folksonomy/Property"
+                    <a href="${this.propertiesDocumentationUrl}"
                       >properties' documentation and its search engine</a
                     >.`
                 )}
@@ -303,9 +324,8 @@ export class FolksonomyEditor extends LitElement {
               <p>
                 ${msg(
                   html`This is brought by the
-                    <a href="https://wiki.openfoodfacts.org/Folksonomy_Engine"
-                      >Folksonomy Engine project</a
-                    >. Don't hesitate to participate or give feedback.`
+                    <a href="${this.folksonomyEngineUrl}">Folksonomy Engine project</a>. Don't
+                    hesitate to participate or give feedback`
                 )}
               </p>
               ${this.renderForm()}

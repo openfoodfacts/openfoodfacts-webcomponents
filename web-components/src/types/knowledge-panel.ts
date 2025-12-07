@@ -78,6 +78,7 @@ export interface TitleElement {
   subtitle?: string
   grade?: string
   icon_url?: string
+  icon_size?: "small" | "medium" | "large"
   type?: string
 }
 

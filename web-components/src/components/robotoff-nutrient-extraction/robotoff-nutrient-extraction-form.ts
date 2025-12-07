@@ -1,11 +1,11 @@
 import { LitElement, css, html, nothing } from "lit"
 import { customElement, property, query, state } from "lit/decorators.js"
 import {
-  NutrientsInsight,
-  NutrientInsightDatum,
-  InsightAnnotatationData,
+  type NutrientsInsight,
+  type NutrientInsightDatum,
+  type InsightAnnotatationData,
+  type InsightAnnotationAnswer,
   InsightAnnotationSize,
-  InsightAnnotationAnswer,
   AnnotationAnswer,
 } from "../../types/robotoff"
 import { localized, msg, str } from "@lit/localize"
@@ -28,7 +28,7 @@ import { INPUT, SELECT } from "../../styles/form"
 import { FLEX } from "../../styles/utils"
 import { backgroundImage } from "../../directives/background-image"
 import { ALERT } from "../../styles/alert"
-import { NutrimentsProductType } from "../../types/openfoodfacts"
+import type { NutrimentsProductType } from "../../types/openfoodfacts"
 import { GREEN } from "../../utils/colors"
 import {
   initDebounce,
@@ -46,7 +46,7 @@ import "../icons/add"
 import "../icons/eye-visible"
 
 import "../icons/eye-invisible"
-import { AutocompleteInputChangeEvent, AutocompleteSuggestionSelectEvent } from "../../types"
+import type { AutocompleteInputChangeEvent, AutocompleteSuggestionSelectEvent } from "../../types"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 
 export const ALLOWED_SPECIAL_VALUES = ["", "-", "traces"]
@@ -237,7 +237,7 @@ export class RobotoffNutrientExtractionForm extends LitElement {
   /**
    * Loading state for buttons
    */
-  @property({ type: String, reflect: true })
+  @property({ type: Number, reflect: true })
   loading?: AnnotationAnswer
   /**
    * Serving size value to display

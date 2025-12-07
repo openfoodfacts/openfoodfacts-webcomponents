@@ -4,6 +4,7 @@ export { RobotoffQuestion } from "./components/robotoff-question/robotoff-questi
 export { RobotoffNutrientExtraction } from "./components/robotoff-nutrient-extraction/robotoff-nutrient-extraction"
 export { RobotoffIngredientSpellcheck } from "./components/robotoff-ingredient-spellcheck/robotoff-ingredient-spellcheck"
 export { RobotoffContributionMessage } from "./components/robotoff-contribution-message/robotoff-contribution-message"
+export { KnowledgePanelsComponent } from "./components/knowledge-panels/knowledge-panels"
 export { DonationBanner } from "./components/donation-banner/donation-banner"
 export { MobileBadges } from "./components/mobile-badges/mobile-badges"
 export { DownloadAppQrCode } from "./components/download-app-qr-code/download-app-qr-code"
@@ -15,6 +16,17 @@ export { FolksonomyPropertyProducts } from "./components/folksonomy/folksonomy-p
 export { AutocompleteInput } from "./components/shared/autocomplete-input"
 export { RobotoffIngredientDetection as RobotoffCrops } from "./components/robotoff-ingredient-detection/robotoff-ingredient-detection"
 export { ProductCard } from "./components/product-card/product-card"
+export { NewsFeed } from "./components/news-feed/news-feed"
 
 // Will be added in the future when design is ready
 // export { KnowledgePanelsComponent } from "./components/knowledge-panels/knowledge-panels"
+
+type Global = typeof globalThis & {
+  OFF_WEBCOMPONENTS_VERSION?: string
+}
+
+if (window) {
+  ;(window as Global).OFF_WEBCOMPONENTS_VERSION = __OFF_WEBCOMPONENTS_VERSION__
+} else if (globalThis) {
+  ;(globalThis as Global).OFF_WEBCOMPONENTS_VERSION = __OFF_WEBCOMPONENTS_VERSION__
+}

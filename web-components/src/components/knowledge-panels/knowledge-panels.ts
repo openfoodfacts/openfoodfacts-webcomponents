@@ -1,4 +1,4 @@
-import { LitElement, html, css, TemplateResult } from "lit"
+import { LitElement, html, css, type TemplateResult } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { fetchKnowledgePanels } from "../../api/knowledgepanel"
 import { Task } from "@lit/task"
@@ -7,7 +7,7 @@ import { BASE } from "../../styles/base"
 import { ALERT } from "../../styles/alert"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 
-import { KnowledgePanel, KnowledgePanelsData } from "../../types/knowledge-panel"
+import type { KnowledgePanel, KnowledgePanelsData } from "../../types/knowledge-panel"
 
 // Import all renderer components
 import "./renderers"
@@ -53,16 +53,6 @@ export class KnowledgePanelsComponent extends LitElement {
         text-align: left;
         overflow-x: hidden; /* Prevent horizontal scrolling */
       }
-
-      .knowledge-panels-section-title {
-        width: 100%;
-        text-align: left;
-        margin-bottom: 1.25rem;
-        word-wrap: break-word;
-        font-weight: 600;
-        font-size: 1.3rem;
-      }
-
       .info {
         padding: 0.75rem;
         margin-bottom: 1rem;
@@ -88,6 +78,14 @@ export class KnowledgePanelsComponent extends LitElement {
     attribute: "heading-level", // Explicitly match the attribute name
   })
   headingLevel = "h3" // Set a default value
+
+  /** Array of top panel keys to render */
+  @property({ type: Array, attribute: "top-panels" })
+  panels: string[] = ["root"]
+
+  /** If true, the top panels will be rendered within a frame */
+  @property({ type: Boolean, attribute: "top-frame" })
+  topFrame = false
 
   @property({ type: String })
   url = ""
@@ -194,32 +192,20 @@ export class KnowledgePanelsComponent extends LitElement {
     // Extract all nutrition-related images
     this.nutritionImages = extractImages(panels)
 
-    // Create an array of top-level panels (ones that aren't only referenced by others)
-    const topLevelPanelIds = ["health_card", "product_card", "product_details"]
-    const topLevelPanels = topLevelPanelIds.filter((id) => panels[id]).map((id) => panels[id])
-
-    // If no top-level panels found, show all panels
-    const panelsToRender = topLevelPanels.length > 0 ? topLevelPanels : Object.values(panels)
-    console.log("Panels to render:", panelsToRender)
-
-    // Add a section title for the overall panels
-    const sectionTitle = "Knowledge Panels"
+    const panelsToRender = Object.entries(panels)
+      .filter(([key]) => this.panels.includes(key))
+      .map(([, panel]) => panel)
 
     return html`
       <div class="knowledge-panels-container">
-        <heading-renderer
-          text="${sectionTitle}"
-          class-name="knowledge-panels-section-title"
-          heading-level="${this.headingLevel}"
-        >
-        </heading-renderer>
         ${panelsToRender.map((panel: KnowledgePanel) =>
           panel
-            ? html` <panel-renderer
+            ? html`<panel-renderer
                 .panel=${panel}
                 .knowledgePanels=${this.knowledgePanels}
                 .nutritionImages=${this.nutritionImages}
-                headingLevel=${this.headingLevel}
+                .frame=${this.topFrame}
+                .headingLevel=${this.headingLevel}
               >
               </panel-renderer>`
             : html``

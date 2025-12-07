@@ -1,0 +1,129 @@
+name: Notify dependency repositories on release
+
+on:
+  release:
+    types: [published]
+  # Allow manual trigger for testing
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run in dry-run mode (do not create issues)'
+        required: false
+        default: 'false'
+        type: boolean
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  notify-dependencies:
+    runs-on: ubuntu-latest
+    if: github.event.release.draft == false && github.event.release.prerelease == false
+    
+    strategy:
+      matrix:
+        repository:
+          - openfoodfacts/openfoodfacts-server
+          - openfoodfacts/openfoodfacts-explorer
+          - openfoodfacts/hunger-games
+      fail-fast: false  # Continue with other repos even if one fails
+    
+    steps:
+      - name: Create issue in ${{ matrix.repository }}
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const isDryRun = '${{ github.event.inputs.dry_run }}' === 'true';
+            const version = context.payload.release?.tag_name || 'test-version';
+            const releaseUrl = context.payload.release?.html_url || 'https://github.com/openfoodfacts/openfoodfacts-webcomponents/releases';
+            const releaseBody = context.payload.release?.body || 'Test release notes';
+            const packageName = '@openfoodfacts/openfoodfacts-webcomponents';
+            
+            // Extract repository owner and name from matrix
+            const [owner, repo] = '${{ matrix.repository }}'.split('/');
+            
+            // Create issue title
+            const title = `Update ${packageName} to ${version}`;
+            
+            // Create issue body with release information
+            const body = [
+              '## 📦 New Version Available',
+              '',
+              `A new version of ${packageName} has been released: **${version}**`,
+              '',
+              '### 🔗 Release Information',
+              `- **Version**: ${version}`,
+              `- **Release URL**: ${releaseUrl}`,
+              `- **NPM Package**: https://www.npmjs.com/package/${packageName}`,
+              '',
+              '### 📋 Release Notes',
+              releaseBody,
+              '',
+              '### 🚀 Action Required',
+              `Please update the dependency in this repository to use the latest version of ${packageName}.`,
+              '',
+              'To update:',
+              `1. Update your \`package.json\` to use version \`${version}\``,
+              `2. Run \`npm install\` or \`npm update ${packageName}\``,
+              '3. Test the integration to ensure everything works as expected',
+              '4. Deploy the changes',
+              '',
+              '---',
+              `*This issue was automatically created by the [openfoodfacts-webcomponents release workflow](${context.payload.repository.html_url}/actions).*`
+            ].join('\n');
+
+            console.log(`🎯 Target: ${owner}/${repo}`);
+            console.log(`📝 Title: ${title}`);
+            console.log(`📄 Body preview: ${body.substring(0, 200)}...`);
+            
+            if (isDryRun) {
+              console.log('🧪 DRY RUN MODE - Issue would be created but not actually submitting');
+              return;
+            }
+
+            try {
+              // Check if an issue with the same title already exists to avoid duplicates
+              const existingIssues = await github.rest.issues.listForRepo({
+                owner: owner,
+                repo: repo,
+                state: 'open',
+                per_page: 30
+              });
+              
+              const duplicateIssue = existingIssues.data.find(issue => 
+                issue.title === title
+              );
+              
+              if (duplicateIssue) {
+                console.log(`⚠️ Issue already exists: ${duplicateIssue.html_url}`);
+                console.log('Skipping creation to avoid duplicates');
+                return;
+              }
+              
+              const issue = await github.rest.issues.create({
+                owner: owner,
+                repo: repo,
+                title: title,
+                body: body,
+                labels: ['dependencies', 'webcomponents-update', 'automated']
+              });
+              
+              console.log(`✅ Created issue #${issue.data.number} in ${owner}/${repo}: ${issue.data.html_url}`);
+            } catch (error) {
+              console.error(`❌ Failed to create issue in ${owner}/${repo}:`, error.message);
+              
+              // If it's a permissions error, provide helpful information
+              if (error.status === 403) {
+                console.error('❌ Permissions error: The GITHUB_TOKEN does not have write access to issues in the target repository.');
+                console.error('This is expected for cross-organization repositories. The workflow will continue with other repositories.');
+              } else if (error.status === 404) {
+                console.error('❌ Repository not found or not accessible.');
+              } else if (error.status === 422) {
+                console.error('❌ Validation error: There might be an issue with the issue content.');
+              }
+              
+              // Don't re-throw the error to allow other repositories to continue
+              return { error: error.message, repository: `${owner}/${repo}` };
+            }

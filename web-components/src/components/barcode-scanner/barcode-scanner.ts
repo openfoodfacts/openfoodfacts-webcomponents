@@ -7,7 +7,7 @@ import "../icons/search"
 import "../icons/close"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { EventType } from "../../constants"
-import { StyleInfo, styleMap } from "lit-html/directives/style-map.js"
+import { type StyleInfo, styleMap } from "lit-html/directives/style-map.js"
 import { ConsoleLogMixin } from "../../mixins/console-log-mixin"
 
 export enum BarcodeScannerState {
