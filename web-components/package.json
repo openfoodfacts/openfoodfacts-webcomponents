@@ -73,7 +73,7 @@
     "@storybook/builder-vite": "^9.1.4",
     "@storybook/web-components-vite": "^9.1.4",
     "@types/cropperjs": "^1.1.5",
-    "@types/diff": "^7.0.2",
+    "@types/diff": "^8.0.0",
     "@typescript-eslint/eslint-plugin": "^8.33.1",
     "@typescript-eslint/parser": "^8.33.1",
     "@vitest/browser": "^3.2.4",
