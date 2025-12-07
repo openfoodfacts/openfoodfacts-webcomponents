@@ -466,19 +466,19 @@
       </trans-unit>
       <trans-unit id="s4f751fb9b3ed766c">
         <source>Creating a New Property</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Креирање новог објекта</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Креирање новог својства</target>
       </trans-unit>
       <trans-unit id="sdb97e5976482606e">
         <source>Check if a property already exists</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Проверите да ли некретнина већ постоји</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Проверите да ли својство већ постоји</target>
       </trans-unit>
       <trans-unit id="sb125227d436c2925">
         <source>Search for your property concept in the existing properties database:</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Потражите свој концепт некретнине у постојећој бази података некретнина:</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Потражите свој концепт својства у постојећој бази података својстава:</target>
       </trans-unit>
       <trans-unit id="s86197dcf3e96af64">
         <source>Browse and search existing properties</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Прегледајте и претражите постојеће некретнине</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Прегледајте и претражите постојећа својства</target>
       </trans-unit>
       <trans-unit id="s34be4af4e8fec4ae">
         <source>Ask the community first</source>
@@ -486,7 +486,7 @@
       </trans-unit>
       <trans-unit id="s36d86adc823cbfa6">
         <source>Before creating a new property, discuss it with the community:</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Пре него што креирате нови објекат, разговарајте о томе са заједницом:</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Пре него што креирате ново својство, разговарајте о томе са заједницом:</target>
       </trans-unit>
       <trans-unit id="s06847c221c4c0bc1">
         <source>I would like to create a property to [describe your use case]...</source>
@@ -498,23 +498,23 @@
       </trans-unit>
       <trans-unit id="s8db84aa4bc949af2">
         <source>Document the New Property</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Документујте нову некретнину</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Документујте ново својство</target>
       </trans-unit>
       <trans-unit id="sb3cbcc1bd0fff140">
         <source>Once you've verified that your property doesn't exist and the community agrees it's useful, you need to first document it in the wiki.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Када потврдите да ваша некретнина не постоји и да се заједница сложи да је корисна, прво је потребно да је документујете на викију.</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Када потврдите да ваше својство не постоји и да се заједница сложи да је корисно, прво је потребно да га документујете на викију.</target>
       </trans-unit>
       <trans-unit id="sfacbbe968fa7d773">
         <source>Property name:</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Назив некретнине:</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Назив својства:</target>
       </trans-unit>
       <trans-unit id="s5560fb119e40923d">
         <source>Enter property name...</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Унесите назив некретнине...</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Унесите назив својства...</target>
       </trans-unit>
       <trans-unit id="s2db7b654c0a9bde0">
         <source>Document the property</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Документујте имовину</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Документујте својство</target>
       </trans-unit>
       <trans-unit id="s39e14e14300694c7">
         <source>Documentation and Guidelines</source>
@@ -522,7 +522,7 @@
       </trans-unit>
       <trans-unit id="s801a05fa8e881f37">
         <source>Learn more about property creation and guidelines:</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Сазнајте више о креирању некретнина и смерницама:</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Сазнајте више о креирању својстава и смерницама:</target>
       </trans-unit>
       <trans-unit id="s3781d25aa51a736c">
         <source>Folksonomy Engine Documentation</source>
@@ -584,7 +584,7 @@
       </trans-unit>
       <trans-unit id="scdb6cad0b92721bf">
         <source>No properties found.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Није пронађена ниједна некретнина.</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Није пронађено ниједно својство.</target>
       </trans-unit>
       <trans-unit id="scace072bef961918">
         <source>Rows</source>
@@ -636,7 +636,7 @@
       </trans-unit>
       <trans-unit id="s1205d5f6fccf8e69">
         <source>Property Value</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Вредност некретнине</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Вредност својства</target>
       </trans-unit>
       <trans-unit id="s58e1eeea7a60ae51">
         <source>Loading products...</source>
@@ -644,7 +644,7 @@
       </trans-unit>
       <trans-unit id="sb560fa37a7bfb6c2">
         <source>No products found for this property.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Није пронађен ниједан производ за ову некретнину.</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Није пронађен ниједан производ за ово својство.</target>
       </trans-unit>
       <trans-unit id="seea3800e27baa686">
         <source>Individual Products</source>
@@ -672,7 +672,7 @@
       </trans-unit>
       <trans-unit id="sb28639570ff3b852">
         <source>list of all properties</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">списак свих некретнина</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">списак свих својстава</target>
       </trans-unit>
       <trans-unit id="sdbf806fefc584115">
         <source>You should find a</source>
