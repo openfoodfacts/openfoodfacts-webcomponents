@@ -176,7 +176,7 @@
       </trans-unit>
       <trans-unit id="s417b90913e05bc17">
         <source>Preview</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">시사</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">미리보기</target>
       </trans-unit>
       <trans-unit id="s5dd6f12783fca34f">
         <source>Edit ingredients list</source>
