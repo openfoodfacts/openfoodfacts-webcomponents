@@ -132,7 +132,7 @@
       </trans-unit>
       <trans-unit id="h5d824b4954e56ea5">
         <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
-        <target state="translated">Scannen Sie <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>täglich Ihre<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>Lebensmittel<x id="2" equiv-text="&lt;/span&gt;"/></target>
+        <target state="translated">Scannen Sie <x id="0" equiv-text=„&lt;span class=&quot;everyday&quot;&gt;“/>täglich Ihre<x id="1" equiv-text=„&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;“/>Lebensmittel<x id="2" equiv-text=„&lt;/span&gt;“/></target>
       </trans-unit>
       <trans-unit id="s8a8bfd67f2dd2810">
         <source>Download the OFF app with this QR code</source>
@@ -660,7 +660,7 @@
       </trans-unit>
       <trans-unit id="s1e00019dc454872d">
         <source>Please provide a property name using the property-name attribute.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Bitte geben Sie mithilfe des Attributs "property-name" einen Eigenschaftsnamen an.</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Bitte geben Sie mithilfe des Attributs „property-name“ einen Eigenschaftsnamen an.</target>
       </trans-unit>
       <trans-unit id="sc895972c88d38ca5">
         <source>Folksonomy property</source>
