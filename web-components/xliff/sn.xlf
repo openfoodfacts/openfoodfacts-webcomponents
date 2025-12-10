@@ -542,7 +542,7 @@
         <target state="needs-review-translation" state-qualifier="leveraged-mt">Izvi zvivakwa zvinogadzirwa uye zvinofayerwa nevashandisi kune chero mhando yekushandisa. Inzwa
                     wakasununguka kuwedzera yako. Zvimiro nehunhu zvaunogadzira
                     <x id="0" equiv-text="&lt;strong&gt;"/>zvinofanirwa kunge zviri zvechokwadi<x id="1" equiv-text="&lt;/strong&gt;"/>. Unogona kunyura mu
-                    <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>rondedzero yezvivakwa zvakatoshandiswa nenharaunda~⌇6⌇
+                    <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>rondedzero yezvivakwa zvakatoshandiswa nenharaunda<x id="3" equiv-text="&lt;/a&gt;"/>
                     kana kuongorora
                     <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>zvinyorwa' uye injini yayo yekutsvaga<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
       </trans-unit>
