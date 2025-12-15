@@ -1,3 +1,4 @@
+
 import { LitElement, html, css } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import "./delete-modal"
@@ -171,7 +172,7 @@ export class FolksonomyEditorRow extends LitElement {
    */
   private selectKeySuggestion(suggestion: string) {
     // Check if this is the "not found" option
-    if (suggestion === "__NOT_FOUND__") {
+    if (suggestion === "_NOT_FOUND_") {
       this.showNewKeyModal = true
       return
     }
@@ -308,6 +309,63 @@ export class FolksonomyEditorRow extends LitElement {
     this.tempValue = (e.target as HTMLInputElement).value
   }
 
+  // <<< CHANGED CODE START: Methods for linkification and warning
+
+  /**
+   * Renders the value field, detecting URLs and wrapping them in anchor tags.
+   * @param value - The property value string.
+   * @private
+   */
+  private renderValue(value: string) {
+    if (!value) return value
+
+    // Regex to detect http(s) URLs
+    const urlRegex = /(https?:\/\/[^\s]+)/g
+    const parts = value.split(urlRegex)
+
+    // Using Lit's html tag to render mixed text and templates
+    return parts.map((part) => {
+      if (urlRegex.test(part)) {
+        return html`
+          <a
+            href=${part}
+            target="_blank"
+            rel="nofollow noopener noreferrer"
+            @click=${this.handleExternalLinkClick}
+          >
+            ${part}
+          </a>
+        `
+      }
+      return part
+    })
+  }
+
+  /**
+   * Handles the click event for external links, showing a confirmation dialog.
+   * @param e - The click event.
+   * @private
+   */
+  private handleExternalLinkClick(e: Event) {
+    // Prevent the default navigation action
+    e.preventDefault()
+
+    const link = e.currentTarget as HTMLAnchorElement
+
+    // Show the confirmation dialog
+    const ok = window.confirm(
+      " You are about to leave this website.\nExternal links are not controlled by us.\n\nContinue?"
+    )
+
+    if (ok) {
+      // If confirmed, manually open the link in a new tab
+      // Using window.open() here is necessary because we prevented the default navigation.
+      window.open(link.href, "_blank", "noopener,noreferrer")
+    }
+  }
+
+  // CHANGED CODE END >>>
+
   /**
    * Handles closing the new key modal.
    * @private
@@ -327,7 +385,7 @@ export class FolksonomyEditorRow extends LitElement {
         width: 100%;
         display: contents;
       }
-
+      /* ... rest of your styles ... */
       .odd-row {
         background-color: #ffffff;
       }
@@ -481,8 +539,9 @@ export class FolksonomyEditorRow extends LitElement {
                 .value=${this.tempValue}
                 @input=${this.handleInputChange}
               />`
-            : this.value}
-        </td>
+            // <<< CHANGED CODE START: Use renderValue for non-editable state
+            : this.renderValue(this.value)}
+            </td>
         <td>
           <div class="button-container">
             ${this.editable
