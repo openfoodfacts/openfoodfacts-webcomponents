@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="s49730f3d5751a433">
         <source>Loading...</source>
-        <target state="needs-translation">Loading...</target>
+        <target state="translated">Φόρτωση...</target>
       </trans-unit>
       <trans-unit id="s95d23d03f9147581">
         <source>Unzoom</source>
@@ -104,11 +104,11 @@
       </trans-unit>
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
-        <target state="needs-translation">group photo donation <x id="0" equiv-text="${this.currentYear}"/></target>
+        <target state="translated">δωρεά ομαδικής φωτογραφίας <x id="0" equiv-text="${this.currentYear}"/></target>
       </trans-unit>
       <trans-unit id="s43df2e8395f6834e">
         <source>Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</source>
-        <target state="needs-translation">Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</target>
+        <target state="translated">Παρακαλούμε δωρίστε στον Έρανό μας για το <x id="0" equiv-text="${this.currentYear}"/></target>
       </trans-unit>
       <trans-unit id="s000d98595e959c1e">
         <source>Get It On Google Play</source>
@@ -132,15 +132,15 @@
       </trans-unit>
       <trans-unit id="h5d824b4954e56ea5">
         <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
-        <target state="needs-translation">Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></target>
+        <target state="translated">Σαρώστε τα <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>καθημερινά<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>τρόφιμά σας<x id="2" equiv-text="&lt;/span&gt;"/></target>
       </trans-unit>
       <trans-unit id="s8a8bfd67f2dd2810">
         <source>Download the OFF app with this QR code</source>
-        <target state="needs-translation">Download the OFF app with this QR code</target>
+        <target state="translated">Κατεβάστε την εφαρμογή OFF με αυτόν τον κωδικό QR</target>
       </trans-unit>
       <trans-unit id="s4bbc7472834a9686">
         <source>Your browser does not support barcode scanning.</source>
-        <target state="needs-translation">Your browser does not support barcode scanning.</target>
+        <target state="translated">Το πρόγραμμα περιήγησής σας δεν υποστηρίζει σάρωση γραμμωτού κώδικα.</target>
       </trans-unit>
       <trans-unit id="s5e8250fb85d64c23">
         <source>Close</source>
@@ -148,11 +148,11 @@
       </trans-unit>
       <trans-unit id="s976dfd19ef58a1e1">
         <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
-        <target state="needs-translation">Click to scan a barcode and find out its details (health, preferences, etc.)</target>
+        <target state="translated">Κάντε κλικ για να σαρώσετε έναν γραμμωτό κώδικα και να μάθετε τις λεπτομέρειές του (κατάσταση, προτιμήσεις κλπ.)</target>
       </trans-unit>
       <trans-unit id="sc0520e1732a5c568">
         <source>Expand image</source>
-        <target state="needs-translation">Expand image</target>
+        <target state="translated">Ανάπτυξη εικόνας</target>
       </trans-unit>
       <trans-unit id="sab56a1d439576fd6">
         <source>Suggestion icon</source>
@@ -278,7 +278,7 @@
       </trans-unit>
       <trans-unit id="s8af61807443f32a4">
         <source>Actions</source>
-        <target state="needs-translation">Actions</target>
+        <target state="translated">Δράσεις</target>
       </trans-unit>
       <trans-unit id="seffa8ca49175b5f0">
         <source>Personalized properties</source>
@@ -402,7 +402,7 @@
       </trans-unit>
       <trans-unit id="s5ed03bb1f3a15949">
         <source>Picture</source>
-        <target state="needs-translation">Picture</target>
+        <target state="translated">Εικόνα</target>
       </trans-unit>
       <trans-unit id="sbad7d2734149470b">
         <source>Validate</source>
@@ -539,20 +539,20 @@
                     <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
                     or explore the
                     <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="needs-translation">These properties are created and filed by users for any kind of usages. Feel
-                    free to add your own. The properties and values you create
-                    <x id="0" equiv-text="&lt;strong&gt;"/>must be factual<x id="1" equiv-text="&lt;/strong&gt;"/>. You can dive into
-                    <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
-                    or explore the
-                    <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="translated">Αυτές οι ιδιότητες δημιουργούνται και συμπληρώνονται από χρήστες για οποιαδήποτε χρήση. Προσθέστε
+                    ελέυθερα τις δικές σας. Οι ιδιότητες και οι τιμές που δημιουργείτε
+                    <x id="0" equiv-text="&lt;strong&gt;"/>πρέπει να είναι σωστές<x id="1" equiv-text="&lt;/strong&gt;"/>. Μπορείτε να εμβαθύνετε
+                    <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>στη λίστα ιδιοτήτων που χρησιμοποιούνται ήδη απ' τη κοινότητα<x id="3" equiv-text="&lt;/a&gt;"/>
+                    ή εξερευνήστε τη
+                    <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>τεκμηρίωση των ιδιοτήτων και τη μηχανή αναζήτησής του<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
       </trans-unit>
       <trans-unit id="h1fbdfea3ad6d664e">
         <source>This is brought by the
                     <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't
                     hesitate to participate or give feedback</source>
-        <target state="needs-translation">This is brought by the
-                    <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't
-                    hesitate to participate or give feedback</target>
+        <target state="translated">Αυτό προσφέρεται από το έργο
+                    <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>Folksonomy Engine<x id="1" equiv-text="&lt;/a&gt;"/>. Μην
+                    διστάσετε να συμμετάσχετε ή να δώσετε σχόλια</target>
       </trans-unit>
       <trans-unit id="s71a5c9f4b68ef4d4">
         <source>Count</source>
@@ -596,7 +596,7 @@
       </trans-unit>
       <trans-unit id="s255857544a9d5ec0">
         <source>Reset</source>
-        <target state="needs-translation">Reset</target>
+        <target state="translated">Επαναφορά</target>
       </trans-unit>
       <trans-unit id="sefaba4adc4ec9219">
         <source>Folksonomy Properties</source>
@@ -620,7 +620,7 @@
       </trans-unit>
       <trans-unit id="s1a52515ec8ddade8">
         <source>Product barcode</source>
-        <target state="needs-translation">Product barcode</target>
+        <target state="translated">Γραμμωτός κώδικας προϊόντος</target>
       </trans-unit>
       <trans-unit id="sfe87465d50530725">
         <source>Corresponding value</source>
