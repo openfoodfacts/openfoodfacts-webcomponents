@@ -14,6 +14,7 @@ import { darkModeListener } from "../../utils/dark-mode-listener"
  * @fires input-change - Fired when the input value changes.
  * @fires suggestion-select - Fired when a suggestion is selected.
  */
+
 @customElement("autocomplete-input")
 export class AutocompleteInput extends LitElement {
   static override styles = [
