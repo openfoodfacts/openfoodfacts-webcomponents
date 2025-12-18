@@ -13,6 +13,6 @@ concurrency:
 
 jobs:
   assign-author:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - uses: toshimaru/auto-author-assign@v2.1.1
