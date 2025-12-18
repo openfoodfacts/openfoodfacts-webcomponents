@@ -7,11 +7,12 @@ export enum Unit {
   MICROGRAMS = "µg",
   MILIGRAMS = "mg",
   GRAMS = "g",
+  PERCENT_D = "%D",
   KILOJOULES = "kj",
   KILOCALORIES = "kcal",
 }
 
-export const EDITABLE_UNITS = [Unit.GRAMS, Unit.MILIGRAMS, Unit.MICROGRAMS]
+export const EDITABLE_UNITS = [Unit.GRAMS, Unit.MILIGRAMS, Unit.MICROGRAMS, Unit.PERCENT_D]
 
 export enum NutrientSuffix {
   PER_100G = "_100g",
