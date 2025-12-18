@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.15.1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.15.0...v1.15.1) (2025-12-04)
+
+
+### Bug Fixes
+
+* issue [#334](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/334) Round the red line in the donation web components. ([#369](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/369)) ([a2f086a](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/a2f086a464687783d829e1b63986afab2d44b847))
+* Update donation banner to display next year in fundraiser message ([#375](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/375)) ([484053b](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/484053bfc685ac8a4921003a93a8c0a0d472c581))
+
+## [1.15.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.14.2...v1.15.0) (2025-10-27)
+
+
+### Features
+
+* add webcomponents version field to window or globalThis ([#317](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/317)) ([674e451](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/674e4511dad6cee51b104c2e6d99b6ef083487f4))
+* **knowledge-panels:** add top-panels property ([#297](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/297)) ([22c27c2](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/22c27c2d4dd0fc97f387871f5fca055e72ad1020))
+
+
+### Bug Fixes
+
+* conditionally include correction and data in annotate calls ([#318](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/318)) ([e48cc93](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/e48cc93e8213a707e618dd14b0b8e7d07717a624))
+* **deps:** bump dompurify from 3.2.6 to 3.2.7 in /web-components ([#311](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/311)) ([280a928](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/280a928540e507592838c5dc04d212f2033dd967))
+* **deps:** bump the interface-libraries group in /web-components with 3 updates ([#201](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/201)) ([4cf80a6](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/4cf80a6accc30a8e9ef442dd5007ee21a1e4122c))
+* typo in readme ([#336](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/336)) ([d03eccc](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/d03eccc4a7761b3d2de695a5209608fda519be3e))
+
 ## [1.14.2](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.14.1...v1.14.2) (2025-09-21)
 
 
