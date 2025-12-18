@@ -238,7 +238,7 @@
       </trans-unit>
       <trans-unit id="sdc792b75f1edcaba">
         <source>Help us correct the spelling of ingredients.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Aidez-nous à corriger l'orthographe des ingrédients.</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Aidez-nous à corriger I'orthographe des ingrédients.</target>
       </trans-unit>
       <trans-unit id="s5c92c0051d44b6de">
         <source>Help us correct the nutritional information.</source>
@@ -418,7 +418,7 @@
       </trans-unit>
       <trans-unit id="sec6377f3c4e9b28c">
         <source>I'll propose a better crop</source>
-        <target state="translated">Je proposerai une meilleure récolte</target>
+        <target state="translated">Je proposerai un meilleur recadrage</target>
       </trans-unit>
       <trans-unit id="s03e9c8114521b998">
         <source>I'll edit the ingredients</source>
