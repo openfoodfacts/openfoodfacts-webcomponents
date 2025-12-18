@@ -7,6 +7,13 @@ import { SAFE_BLUE } from "../../utils/colors"
 import { randomIdGenerator } from "../../utils"
 import { darkModeListener } from "../../utils/dark-mode-listener"
 
+/**
+ * AutocompleteInput Component
+ * @element autocomplete-input
+ * @description A reusable autocomplete input field with suggestions.
+ * @fires input-change - Fired when the input value changes.
+ * @fires suggestion-select - Fired when a suggestion is selected.
+ */
 @customElement("autocomplete-input")
 export class AutocompleteInput extends LitElement {
   static override styles = [
@@ -103,13 +110,41 @@ export class AutocompleteInput extends LitElement {
     super.disconnectedCallback()
   }
 
+   /**
+   * Placeholder text for the input field.
+   */
   @property({ type: String }) placeholder = ""
+  /**
+   * Current value of the input field.
+   */
   @property({ type: String }) _inputValue = ""
+  /**
+   * List of suggestions to display in the autocomplete dropdown.
+   * Each suggestion can be a string or an object with label and value properties.
+   */
   @property({ type: Array }) suggestions: AutocompleteSuggestion[] = []
+   /**
+   * Whether to show a "not found" option when no suggestions match.
+   */
   @property({ type: Boolean, attribute: "show-not-found-option" }) showNotFoundOption = false
+   /**
+   * Text to display for the "not found" option.
+   */
   @property({ type: String, attribute: "not-found-text" }) notFoundText = "Not found"
+  /**
+   * Whether to show the suggestions dropdown.
+   * @private
+   */
   @state() private showSuggestions = false
+  /**
+   * Index of the currently highlighted suggestion.
+   * @private
+   */
   @state() private highlightedIndex = -1
+  /**
+   * Unique ID for the input field.
+   * @private
+   */
   @state() private _id: string = ""
 
   get value() {
@@ -120,6 +155,10 @@ export class AutocompleteInput extends LitElement {
     this.requestUpdate()
   }
 
+  /**
+   * ID for the suggestions list.
+   * @private
+   */
   get suggestionId() {
     return `autocomplete-list-${this._id}`
   }
@@ -128,10 +167,18 @@ export class AutocompleteInput extends LitElement {
     return `autocomplete-item-${this._id}-${index}`
   }
 
+  /**
+   * Filtered suggestions based on the current input value.
+   * @private
+   */
   get filteredSuggestions() {
     return this.filterSuggestions(this.value)
   }
 
+  /**
+   * Get suggestions including a "not found" option if no matches are found
+   * @private
+   */
   get suggestionsWithNotFound() {
     const filtered = this.filteredSuggestions
     if (this.showNotFoundOption && filtered.length === 0 && this.value.trim().length > 0) {
@@ -146,6 +193,11 @@ export class AutocompleteInput extends LitElement {
     return filtered
   }
 
+  /**
+   * Filters suggestions based on the input value.
+   * @param inputValue - The current input value.
+   * @returns Filtered suggestions that match the input value.
+   */
   private filterSuggestions(inputValue: string): AutocompleteSuggestion[] {
     if (!inputValue) return this.suggestions
     return this.suggestions.filter((suggestion) => {
@@ -159,6 +211,10 @@ export class AutocompleteInput extends LitElement {
     return suggestionText.toLowerCase()
   }
 
+  /**
+   * Handles input changes and dispatches the "input-change" event.
+   * @param e - The input event.
+   */
   private onInput(e: Event) {
     const inputValue = (e.target as HTMLInputElement).value
     this.value = inputValue
@@ -166,6 +222,7 @@ export class AutocompleteInput extends LitElement {
     const filteredSuggestions = this.filteredSuggestions
     const suggestionsToShow = this.suggestionsWithNotFound
     this.showSuggestions = suggestionsToShow.length > 0
+    // If there is only one suggestion and it matches the input value, consider it a notable match
     const matching =
       filteredSuggestions.length === 1 &&
       this.getSuggestionTextToFilter(filteredSuggestions[0]) === this.value
@@ -180,6 +237,10 @@ export class AutocompleteInput extends LitElement {
     )
   }
 
+  /**
+   * Selects a suggestion and dispatches the "suggestion-select" event.
+   * @param suggestion - The selected suggestion.
+   */
   private selectSuggestion(suggestion: AutocompleteSuggestion) {
     if (suggestion.value !== "__NOT_FOUND__") {
       this._inputValue = suggestion.value
@@ -194,13 +255,19 @@ export class AutocompleteInput extends LitElement {
     )
   }
 
+  /**
+   * Handles keyboard navigation for suggestions.
+   * @param e - The keyboard event.
+   */
   private onKeyDown(e: KeyboardEvent) {
     const suggestionsToShow = this.suggestionsWithNotFound
     if (suggestionsToShow.length === 0) return
 
+    // Do it before check if we show suggestions because we want to be able to
     if (!this.showSuggestions) {
       if (e.key === "Enter") {
         e.preventDefault()
+        // return selected Suggestion if it matches the input value
         this.selectMatchingSuggestion()
       }
       return
@@ -217,8 +284,10 @@ export class AutocompleteInput extends LitElement {
         break
       case "Enter":
         e.preventDefault()
+        // If a suggestion is highlighted, select it
         if (this.highlightedIndex >= 0) {
           this.selectSuggestion(suggestionsToShow[this.highlightedIndex])
+          // If no suggestion is highlighted, check if the input match exactly with one suggestion
         } else {
           this.selectMatchingSuggestion()
         }
