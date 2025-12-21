@@ -12,6 +12,7 @@ export enum Unit {
   KILOCALORIES = "kcal",
 }
 
+// Units that can be edited by the user
 export const EDITABLE_UNITS = [Unit.GRAMS, Unit.MILIGRAMS, Unit.MICROGRAMS, Unit.PERCENT_D]
 
 export enum NutrientSuffix {
