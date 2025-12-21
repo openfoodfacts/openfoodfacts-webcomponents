@@ -402,7 +402,7 @@
       </trans-unit>
       <trans-unit id="s5ed03bb1f3a15949">
         <source>Picture</source>
-        <target state="needs-translation">Picture</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">صورة</target>
       </trans-unit>
       <trans-unit id="sbad7d2734149470b">
         <source>Validate</source>
@@ -620,7 +620,7 @@
       </trans-unit>
       <trans-unit id="s1a52515ec8ddade8">
         <source>Product barcode</source>
-        <target state="needs-translation">Product barcode</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">الباركود الخاص بالمنتج</target>
       </trans-unit>
       <trans-unit id="sfe87465d50530725">
         <source>Corresponding value</source>
