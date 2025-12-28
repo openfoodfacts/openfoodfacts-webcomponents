@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file target-language="nl" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+  <file target-language="nl-BE" source-language="en" original="lit-localize-inputs" datatype="plaintext">
     <body>
       <trans-unit id="s49730f3d5751a433" approved="yes">
         <source>Loading...</source>
-        <target state="final">Aan het laden...</target>
+        <target state="final">Bezig met laden...</target>
       </trans-unit>
       <trans-unit id="s95d23d03f9147581" approved="yes">
         <source>Unzoom</source>
@@ -12,7 +12,7 @@
       </trans-unit>
       <trans-unit id="s166bd56d19670a72" approved="yes">
         <source>Zoom</source>
-        <target state="final">Zoom</target>
+        <target state="final">Inzoomen</target>
       </trans-unit>
       <trans-unit id="s01d2865e3e1d5501" approved="yes">
         <source>Thank you for your assistance!</source>
@@ -230,7 +230,7 @@
       </trans-unit>
       <trans-unit id="s061eb5af92512c85" approved="yes">
         <source>Saved! Can you help with another one?</source>
-        <target state="final">Opgeslagen! Kun je helpen met een andere vraag?</target>
+        <target state="final">Opgeslagen! Kun je ons helpen met nog een vraag?</target>
       </trans-unit>
       <trans-unit id="sb125568d43642e6f" approved="yes">
         <source>Answer questions about the product.</source>
@@ -266,7 +266,7 @@
       </trans-unit>
       <trans-unit id="sb3d4f79d9d8b71e5" approved="yes">
         <source>Submit</source>
-        <target state="final">Verzenden</target>
+        <target state="final">Bevestigen</target>
       </trans-unit>
       <trans-unit id="s0d5b7fee0311db68" approved="yes">
         <source>Property</source>
@@ -462,7 +462,7 @@
       </trans-unit>
       <trans-unit id="sc681b137e8f604f7" approved="yes">
         <source>Confirm deletion</source>
-        <target state="final">Verwijdering bevestigen</target>
+        <target state="final">Bevestig verwijderen</target>
       </trans-unit>
       <trans-unit id="s4f751fb9b3ed766c" approved="yes">
         <source>Creating a New Property</source>
