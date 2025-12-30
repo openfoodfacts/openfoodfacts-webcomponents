@@ -48,7 +48,7 @@
       </trans-unit>
       <trans-unit id="se206feec7ec57b28">
         <source>per 100g</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">per 100 g</target>
+        <target state="translated">per 100 g</target>
       </trans-unit>
       <trans-unit id="sca0c3305aff570b8">
         <source>per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
@@ -176,7 +176,7 @@
       </trans-unit>
       <trans-unit id="s417b90913e05bc17">
         <source>Preview</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Forhåndsvisning</target>
+        <target state="translated">Forhåndsvisning</target>
       </trans-unit>
       <trans-unit id="s5dd6f12783fca34f">
         <source>Edit ingredients list</source>
@@ -270,7 +270,7 @@
       </trans-unit>
       <trans-unit id="s0d5b7fee0311db68">
         <source>Property</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Eiendom</target>
+        <target state="translated">Eiendom</target>
       </trans-unit>
       <trans-unit id="s41f7dca46d3f1b4a">
         <source>Value</source>
