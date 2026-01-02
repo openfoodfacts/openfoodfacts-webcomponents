@@ -48,7 +48,7 @@
       </trans-unit>
       <trans-unit id="se206feec7ec57b28">
         <source>per 100g</source>
-        <target state="needs-translation">per 100g</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">setiap 100g</target>
       </trans-unit>
       <trans-unit id="sca0c3305aff570b8">
         <source>per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
@@ -176,7 +176,7 @@
       </trans-unit>
       <trans-unit id="s417b90913e05bc17">
         <source>Preview</source>
-        <target state="needs-translation">Preview</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Pratonton</target>
       </trans-unit>
       <trans-unit id="s5dd6f12783fca34f">
         <source>Edit ingredients list</source>
@@ -226,7 +226,7 @@
       </trans-unit>
       <trans-unit id="s67ae6594857a4d57">
         <source>Thanks for your contribution!</source>
-        <target state="needs-translation">Thanks for your contribution!</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Terima kasih atas sumbangan anda!</target>
       </trans-unit>
       <trans-unit id="s061eb5af92512c85">
         <source>Saved! Can you help with another one?</source>
@@ -254,7 +254,7 @@
       </trans-unit>
       <trans-unit id="sdc673e73b5c13aea">
         <source>Delete</source>
-        <target state="needs-translation">Delete</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Padam</target>
       </trans-unit>
       <trans-unit id="s15d64a0a6715285a">
         <source>New key</source>
@@ -270,7 +270,7 @@
       </trans-unit>
       <trans-unit id="s0d5b7fee0311db68">
         <source>Property</source>
-        <target state="needs-translation">Property</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Hartanah</target>
       </trans-unit>
       <trans-unit id="s41f7dca46d3f1b4a">
         <source>Value</source>

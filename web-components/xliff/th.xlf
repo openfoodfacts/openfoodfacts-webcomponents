@@ -176,7 +176,7 @@
       </trans-unit>
       <trans-unit id="s417b90913e05bc17">
         <source>Preview</source>
-        <target state="needs-translation">Preview</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ตัวอย่าง</target>
       </trans-unit>
       <trans-unit id="s5dd6f12783fca34f">
         <source>Edit ingredients list</source>
@@ -226,7 +226,7 @@
       </trans-unit>
       <trans-unit id="s67ae6594857a4d57">
         <source>Thanks for your contribution!</source>
-        <target state="needs-translation">Thanks for your contribution!</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ขอบคุณสำหรับการสนับสนุนของคุณ!</target>
       </trans-unit>
       <trans-unit id="s061eb5af92512c85">
         <source>Saved! Can you help with another one?</source>
@@ -270,7 +270,7 @@
       </trans-unit>
       <trans-unit id="s0d5b7fee0311db68">
         <source>Property</source>
-        <target state="needs-translation">Property</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">คุณสมบัติ</target>
       </trans-unit>
       <trans-unit id="s41f7dca46d3f1b4a">
         <source>Value</source>

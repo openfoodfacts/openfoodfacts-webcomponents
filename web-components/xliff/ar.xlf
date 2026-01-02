@@ -116,7 +116,7 @@
       </trans-unit>
       <trans-unit id="s547c12ae169d00bc">
         <source>Available on F-Droid</source>
-        <target state="needs-translation">Available on F-Droid</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">متوفر على F-Droid</target>
       </trans-unit>
       <trans-unit id="s7124dde792a8faa2">
         <source>Android APK</source>
@@ -128,7 +128,7 @@
       </trans-unit>
       <trans-unit id="sc52696641af72b53">
         <source>Install the app!</source>
-        <target state="needs-translation">Install the app!</target>
+        <target state="translated">ثبّت التطبيق!</target>
       </trans-unit>
       <trans-unit id="h5d824b4954e56ea5">
         <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
@@ -176,7 +176,7 @@
       </trans-unit>
       <trans-unit id="s417b90913e05bc17">
         <source>Preview</source>
-        <target state="needs-translation">Preview</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">معاينة</target>
       </trans-unit>
       <trans-unit id="s5dd6f12783fca34f">
         <source>Edit ingredients list</source>
@@ -226,7 +226,7 @@
       </trans-unit>
       <trans-unit id="s67ae6594857a4d57">
         <source>Thanks for your contribution!</source>
-        <target state="needs-translation">Thanks for your contribution!</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">شكرا لمساهمتك!</target>
       </trans-unit>
       <trans-unit id="s061eb5af92512c85">
         <source>Saved! Can you help with another one?</source>
@@ -270,7 +270,7 @@
       </trans-unit>
       <trans-unit id="s0d5b7fee0311db68">
         <source>Property</source>
-        <target state="needs-translation">Property</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ملكية</target>
       </trans-unit>
       <trans-unit id="s41f7dca46d3f1b4a">
         <source>Value</source>
@@ -402,7 +402,7 @@
       </trans-unit>
       <trans-unit id="s5ed03bb1f3a15949">
         <source>Picture</source>
-        <target state="needs-translation">Picture</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">صورة</target>
       </trans-unit>
       <trans-unit id="sbad7d2734149470b">
         <source>Validate</source>
@@ -620,7 +620,7 @@
       </trans-unit>
       <trans-unit id="s1a52515ec8ddade8">
         <source>Product barcode</source>
-        <target state="needs-translation">Product barcode</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">الباركود الخاص بالمنتج</target>
       </trans-unit>
       <trans-unit id="sfe87465d50530725">
         <source>Corresponding value</source>
