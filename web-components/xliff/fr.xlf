@@ -542,9 +542,9 @@
         <target state="translated">Ces propriétés sont créées et ajoutées par les utilisateurs pour tout type d’utilisation. N’hésitez pas à
                     ajouter les vôtres. Les propriétés et valeurs que vous créez
                     <x id="0" equiv-text="&lt;strong&gt;"/>doivent être factuel<x id="1" equiv-text="&lt;/strong&gt;"/>. Vous pouvez approfondir dans
-                    <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>la liste des propriétés déjà utilisées par la communauté<x id="3" equiv-text="&lt;/a&gt;"/>
+                    <x id="2" equiv-text="&lt;a href=&quot;https://openfoodfacts-explorer.vercel.app/folksonomy&quot;&gt;"/>la liste des propriétés déjà utilisées par la communauté<x id="3" equiv-text="&lt;/a&gt;"/>
                     ou explorer la
-                    <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>documentation des propriétés et son moteur de recherche<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
+                    <x id="4" equiv-text="&lt;a href=&quot;https://wiki.openfoodfacts.org/Folksonomy/Property&quot;&gt;"/>documentation des propriétés et son moteur de recherche<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
       </trans-unit>
       <trans-unit id="h1fbdfea3ad6d664e">
         <source>This is brought by the
