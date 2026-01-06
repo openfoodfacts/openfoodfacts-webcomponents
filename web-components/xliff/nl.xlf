@@ -539,15 +539,19 @@
                     <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
                     or explore the
                     <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="final">Deze eigenschappen worden door gebruikers aangemaakt en opgeslagen voor allerlei doeleinden. Voeg gerust                     uw eigen eigenschappen toe. De eigenschappen en waarden die u aanmaakt                     <x id="0" equiv-text=“&lt;strong&gt;”/>moeten waarheidsgetrouw zijn                     <x id="1" equiv-text=“&lt;/strong&gt;”/>.                     U kunt een kijkje nemen in                     &lt;X id="2" equiv-text=“&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;”/&gt;de lijst met eigenschappen die al door de gemeenschap worden gebruikt
-                    of de                     <x id="4" equiv-text=“&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;”/>documentatie van de eigenschappen en de zoekmachine bekijken<x id="5" equiv-text=“&lt;/a&gt;”/>.</target>
+        <target state="final">Deze eigenschappen worden door gebruikers aangemaakt en opgeslagen voor allerlei doeleinden. Voeg gerust                     uw eigen eigenschappen toe. De eigenschappen en waarden die u aanmaakt                     
+                    <x id="0" equiv-text="&lt;strong&gt;"/>moeten waarheidsgetrouw zijn<x id="1" equiv-text="&lt;/strong&gt;"/>. Je kuntU kuntU kunt een kijkje nemen in
+                    <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>de lijst met eigenschappen die al door de gemeenschap worden gebruikt<x id="3" equiv-text="&lt;/a&gt;"/>
+                    of De
+                    <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>documentatie van de eigenschappen en de zoekmachine bekijken
+                    <x id="5" equiv-text="&lt;/a&gt;"/>.</target>
       </trans-unit>
       <trans-unit id="h1fbdfea3ad6d664e" approved="yes">
         <source>This is brought by the
                     <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't
                     hesitate to participate or give feedback</source>
         <target state="final">Dit wordt aangeboden door het
-                    <x id="0" equiv-text=“&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;”/>Folksonomy Engine-project<x id="1" equiv-text=“&lt;/a&gt;”/>. Aarzel niet
+                    <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>Folksonomy Engine-project<x id="1" equiv-text="&lt;/a&gt;"/>. Aarzel niet
                     om deel te nemen of feedback te geven</target>
       </trans-unit>
       <trans-unit id="s71a5c9f4b68ef4d4" approved="yes">
