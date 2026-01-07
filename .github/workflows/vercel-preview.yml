@@ -1,0 +1,72 @@
+name: Vercel Preview Deployment
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  deploy-preview:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.head.repo.fork == false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: npm
+          cache-dependency-path: web-components/package-lock.json
+
+      - name: Install dependencies
+        working-directory: web-components
+        run: npm ci
+
+      - name: Build Storybook
+        working-directory: web-components
+        run: npm run build:doc
+
+      - name: Deploy to Vercel
+        id: deploy
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.ORG_VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.ORG_VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.ORG_VERCEL_PROJECT_ID }}
+          working-directory: web-components
+          vercel-args: "--confirm --scope ${{ secrets.ORG_VERCEL_TEAM }}"
+
+      - name: Comment PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const url = "${{ steps.deploy.outputs.deployment-url }}";
+            const body = `## 🚀 Preview Deployment
+
+            🔗 **Preview URL**: ${url}
+
+            _Updated automatically on new commits._`;
+
+            const { data: comments } =
+              await github.rest.issues.listComments({
+                ...context.repo,
+                issue_number: context.issue.number,
+              });
+
+            const bot = comments.find(c =>
+              c.user.type === "Bot" && c.body.includes("Preview Deployment")
+            );
+
+            if (bot) {
+              await github.rest.issues.updateComment({
+                ...context.repo,
+                comment_id: bot.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                ...context.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
