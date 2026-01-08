@@ -539,9 +539,9 @@
                     <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
                     or explore the
                     <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Need omadused on kasutajate loodud ja salvestatud igat tüüpi kasutuseks. Võite
-                    lisada ka oma omadusi. Teie loodud omadused ja väärtused
-                    <x id="0" equiv-text="&lt;strong&gt;"/>peavad olema faktilised<x id="1" equiv-text="&lt;/strong&gt;"/>. Võite süveneda
+        <target state="translated">Need omadused on kasutajate loodud ja salvestatud igat tüüpi kasutuseks. Võid
+                    lisada ka oma omadusi. Sinu loodud omadused ja väärtused
+                    <x id="0" equiv-text="&lt;strong&gt;"/>peavad olema faktilised<x id="1" equiv-text="&lt;/strong&gt;"/>. Võid süveneda
                     <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>kogukonna poolt juba kasutatavate omaduste loendisse<x id="3" equiv-text="&lt;/a&gt;"/>
                     või uurida
                     <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>omaduste dokumentatsiooni ja selle otsingumootorit<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
@@ -620,7 +620,7 @@
       </trans-unit>
       <trans-unit id="s1a52515ec8ddade8">
         <source>Product barcode</source>
-        <target state="needs-translation">Product barcode</target>
+        <target state="translated">Toote triipkood</target>
       </trans-unit>
       <trans-unit id="sfe87465d50530725">
         <source>Corresponding value</source>
@@ -668,7 +668,7 @@
       </trans-unit>
       <trans-unit id="se5127cf0f92e7e48">
         <source>Tip: you can also find the</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Näpunäide: võite leida ka</target>
+        <target state="translated">Näpunäide: võid leida ka</target>
       </trans-unit>
       <trans-unit id="sb28639570ff3b852">
         <source>list of all properties</source>
