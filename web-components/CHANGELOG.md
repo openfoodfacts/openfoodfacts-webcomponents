@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.15.1...v1.16.0) (2026-01-09)
+
+
+### Features
+
+* view only mode for folksonomy editor ([#396](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/396)) ([abcdcc7](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/abcdcc72a54d9357173e335e23f372964261fad6))
+
 ## [1.15.1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.15.0...v1.15.1) (2025-12-04)
 
 
