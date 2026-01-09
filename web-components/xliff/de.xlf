@@ -132,7 +132,7 @@
       </trans-unit>
       <trans-unit id="h5d824b4954e56ea5">
         <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
-        <target state="translated">Scannen Sie <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>täglich Ihre<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>Lebensmittel<x id="2" equiv-text="&lt;/span&gt;"/></target>
+        <target state="translated">Scannen Sie <x id="0" equiv-text=„&lt;span class=&quot;everyday&quot;&gt;“/>täglich Ihre<x id="1" equiv-text=„&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;“/>Lebensmittel<x id="2" equiv-text=„&lt;/span&gt;“/></target>
       </trans-unit>
       <trans-unit id="s8a8bfd67f2dd2810">
         <source>Download the OFF app with this QR code</source>
@@ -539,12 +539,12 @@
                     <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
                     or explore the
                     <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Diese Eigenschaften werden von Benutzern für jede Art von Nutzung erstellt und abgelegt. Fühlen Sie sich
+        <target state="translated">Diese Eigenschaften werden von Benutzern für jede Art von Nutzung erstellt und abgelegt. Fühlen Sie sich
                     frei, um Ihre eigenen hinzuzufügen. Die Eigenschaften und Werte, die Sie
                     <x id="0" equiv-text="&lt;strong&gt;"/>erstellen, müssen faktisch<x id="1" equiv-text="&lt;/strong&gt;"/>sein. Sie können eintauchen in
                     <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>die Liste der bereits von der Gemeinschaft<x id="3" equiv-text="&lt;/a&gt;"/>
                     verwendeten Objekte oder die Dokumentation der
-                    <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>Immobilien und deren Suchmaschine<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
+                   <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>Immobilien und deren Suchmaschine<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
       </trans-unit>
       <trans-unit id="h1fbdfea3ad6d664e">
         <source>This is brought by the

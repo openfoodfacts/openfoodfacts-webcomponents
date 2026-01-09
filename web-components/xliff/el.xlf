@@ -12,7 +12,7 @@
       </trans-unit>
       <trans-unit id="s166bd56d19670a72">
         <source>Zoom</source>
-        <target state="needs-translation">Zoom</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ανίπταμαι διαγωνίως</target>
       </trans-unit>
       <trans-unit id="s01d2865e3e1d5501">
         <source>Thank you for your assistance!</source>
