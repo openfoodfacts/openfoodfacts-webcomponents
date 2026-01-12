@@ -63,7 +63,7 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.1",
-    "@custom-elements-manifest/analyzer": "^0.10.4",
+    "@custom-elements-manifest/analyzer": "^0.11.0",
     "@lit/localize-tools": "^0.8.0",
     "@open-wc/testing": "^4.0.0",
     "@openfoodfacts/openfoodfacts-nodejs": "^2.0.0-alpha.18",
