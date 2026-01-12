@@ -68,11 +68,11 @@
       </trans-unit>
       <trans-unit id="s475b08749d0706ed">
         <source>Help us inform millions of consumers around the world about what they eat</source>
-        <target state="needs-translation">Help us inform millions of consumers around the world about what they eat</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">به ما کمک کنید تا میلیون‌ها مصرف‌کننده در سراسر جهان را در مورد آنچه می‌خورند آگاه کنیم</target>
       </trans-unit>
       <trans-unit id="sfc40ea3d5d5aa6f8">
         <source>Your donations fund the day-to-day operations of our non-profit association:</source>
-        <target state="needs-translation">Your donations fund the day-to-day operations of our non-profit association:</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">کمک‌های مالی شما، هزینه‌های روزمره‌ی انجمن غیرانتفاعی ما را تأمین می‌کند:</target>
       </trans-unit>
       <trans-unit id="s1c5031113de500ce">
         <source>keeping our database open &amp; available to all,</source>
@@ -84,23 +84,23 @@
       </trans-unit>
       <trans-unit id="sd82bc2decefa621b">
         <source>remain independent of the food industry,</source>
-        <target state="needs-translation">remain independent of the food industry,</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">مستقل ماندن از صنایع غذایی،</target>
       </trans-unit>
       <trans-unit id="sb3bdd638a58d30f4">
         <source>engage a community of committed citizens,</source>
-        <target state="needs-translation">engage a community of committed citizens,</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">مشارکت دادن جامعه‌ای از شهروندان متعهد،</target>
       </trans-unit>
       <trans-unit id="s100c4928cc74642a">
         <source>support the advancement of public health research.</source>
-        <target state="needs-translation">support the advancement of public health research.</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">حمایت از پیشرفت تحقیقات در حوزه سلامت عمومی</target>
       </trans-unit>
       <trans-unit id="s6d7b6cdedaadfb6e">
         <source>Each donation counts! We appreciate your support in bringing further food transparency in the world.</source>
-        <target state="needs-translation">Each donation counts! We appreciate your support in bringing further food transparency in the world.</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">هر کمک مالی ارزشمند است! ما از حمایت شما در ایجاد شفافیت بیشتر در زمینه مواد غذایی در جهان قدردانی می‌کنیم.</target>
       </trans-unit>
       <trans-unit id="s6306a31415aea913">
         <source>I SUPPORT</source>
-        <target state="needs-translation">I SUPPORT</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">من حمایت می‌کنم</target>
       </trans-unit>
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
@@ -128,7 +128,7 @@
       </trans-unit>
       <trans-unit id="sc52696641af72b53">
         <source>Install the app!</source>
-        <target state="needs-translation">Install the app!</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">برنامه را نصب کنید!</target>
       </trans-unit>
       <trans-unit id="h5d824b4954e56ea5">
         <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
