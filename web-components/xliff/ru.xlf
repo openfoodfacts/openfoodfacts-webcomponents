@@ -8,7 +8,7 @@
       </trans-unit>
       <trans-unit id="s95d23d03f9147581">
         <source>Unzoom</source>
-        <target state="needs-translation">Unzoom</target>
+        <target state="translated">Свернуть</target>
       </trans-unit>
       <trans-unit id="s166bd56d19670a72">
         <source>Zoom</source>
@@ -16,15 +16,15 @@
       </trans-unit>
       <trans-unit id="s01d2865e3e1d5501">
         <source>Thank you for your assistance!</source>
-        <target state="needs-translation">Thank you for your assistance!</target>
+        <target state="translated">Спасибо за помощь!</target>
       </trans-unit>
       <trans-unit id="s4e94adf723979402">
         <source>Open Food Facts needs your help with this product.</source>
-        <target state="needs-translation">Open Food Facts needs your help with this product.</target>
+        <target state="translated">Open Food Facts нуждается в вашей помощи с этим продуктом.</target>
       </trans-unit>
       <trans-unit id="s25e94495991e95ba">
         <source>Thanks for your help! Can you assist with another question?</source>
-        <target state="needs-translation">Thanks for your help! Can you assist with another question?</target>
+        <target state="translated">Спасибо за вашу помощь! Вы можете помочь с другим вопросом?</target>
       </trans-unit>
       <trans-unit id="s7ce4fd9430e80cea">
         <source>value</source>
@@ -32,11 +32,11 @@
       </trans-unit>
       <trans-unit id="s6498dfe4855bb3a7">
         <source>unit</source>
-        <target state="needs-translation">unit</target>
+        <target state="translated">единица</target>
       </trans-unit>
       <trans-unit id="s59df20feee978e5b">
         <source>Error: Invalid value.</source>
-        <target state="needs-translation">Error: Invalid value.</target>
+        <target state="translated">Ошибка: Недопустимое значение.</target>
       </trans-unit>
       <trans-unit id="sbd9a0b2293b3cd3c">
         <source>Serving size</source>
@@ -44,7 +44,7 @@
       </trans-unit>
       <trans-unit id="sbb623d6b18d966a0">
         <source>Nutrition facts are displayed on the packaging:</source>
-        <target state="needs-translation">Nutrition facts are displayed on the packaging:</target>
+        <target state="translated">Пищевая ценность указанная на упаковке:</target>
       </trans-unit>
       <trans-unit id="se206feec7ec57b28">
         <source>per 100g</source>
@@ -52,7 +52,7 @@
       </trans-unit>
       <trans-unit id="sca0c3305aff570b8">
         <source>per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
-        <target state="needs-translation">per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</target>
+        <target state="translated">на указанную порцию "<x id="0" equiv-text="${this._servingSizeValue}"/>"</target>
       </trans-unit>
       <trans-unit id="s453188ea728f64da">
         <source>Add a nutrient</source>
@@ -60,11 +60,11 @@
       </trans-unit>
       <trans-unit id="sc5575e3107f87874">
         <source>Rotate image to the left</source>
-        <target state="needs-translation">Rotate image to the left</target>
+        <target state="translated">Повернуть изображение влево</target>
       </trans-unit>
       <trans-unit id="se773f50d2a16d481">
         <source>Rotate image to the right</source>
-        <target state="needs-translation">Rotate image to the right</target>
+        <target state="translated">Повернуть изображение вправо</target>
       </trans-unit>
       <trans-unit id="s475b08749d0706ed">
         <source>Help us inform millions of consumers around the world about what they eat</source>
@@ -76,11 +76,11 @@
       </trans-unit>
       <trans-unit id="s1c5031113de500ce">
         <source>keeping our database open &amp; available to all,</source>
-        <target state="needs-translation">keeping our database open &amp; available to all,</target>
+        <target state="translated">сохраняя нашу базу данных открытой и доступной для всех,</target>
       </trans-unit>
       <trans-unit id="sebb2c6c830a44574">
         <source>technical infrastructure (website/mobile app) &amp; a small permanent team</source>
-        <target state="needs-translation">technical infrastructure (website/mobile app) &amp; a small permanent team</target>
+        <target state="translated">техническая инфраструктура (сайт/мобильное приложение) и небольшая постоянная команда</target>
       </trans-unit>
       <trans-unit id="sd82bc2decefa621b">
         <source>remain independent of the food industry,</source>
@@ -104,11 +104,11 @@
       </trans-unit>
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
-        <target state="needs-translation">group photo donation <x id="0" equiv-text="${this.currentYear}"/></target>
+        <target state="translated">групповое фото пожертвования <x id="0" equiv-text="${this.currentYear}"/></target>
       </trans-unit>
       <trans-unit id="s43df2e8395f6834e">
         <source>Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</source>
-        <target state="needs-translation">Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</target>
+        <target state="translated">Пожалуйста, помогите нашему <x id="0" equiv-text="${this.currentYear}"/> Фонду</target>
       </trans-unit>
       <trans-unit id="s000d98595e959c1e">
         <source>Get It On Google Play</source>
@@ -132,15 +132,15 @@
       </trans-unit>
       <trans-unit id="h5d824b4954e56ea5">
         <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
-        <target state="needs-translation">Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></target>
+        <target state="translated">Сканируйте свою <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>ежедневную<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>пищу<x id="2" equiv-text="&lt;/span&gt;"/></target>
       </trans-unit>
       <trans-unit id="s8a8bfd67f2dd2810">
         <source>Download the OFF app with this QR code</source>
-        <target state="needs-translation">Download the OFF app with this QR code</target>
+        <target state="translated">Загрузите приложение OFF с помощью этого QR-кода</target>
       </trans-unit>
       <trans-unit id="s4bbc7472834a9686">
         <source>Your browser does not support barcode scanning.</source>
-        <target state="needs-translation">Your browser does not support barcode scanning.</target>
+        <target state="translated">Ваш браузер не поддерживает сканирование штрихкодов.</target>
       </trans-unit>
       <trans-unit id="s5e8250fb85d64c23">
         <source>Close</source>
@@ -148,11 +148,11 @@
       </trans-unit>
       <trans-unit id="s976dfd19ef58a1e1">
         <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
-        <target state="needs-translation">Click to scan a barcode and find out its details (health, preferences, etc.)</target>
+        <target state="translated">Нажмите, чтобы отсканировать штрихкод и узнать подробности (здоровье, предпочтения и т. д.)</target>
       </trans-unit>
       <trans-unit id="sc0520e1732a5c568">
         <source>Expand image</source>
-        <target state="needs-translation">Expand image</target>
+        <target state="translated">Развернуть изображение</target>
       </trans-unit>
       <trans-unit id="sab56a1d439576fd6">
         <source>Suggestion icon</source>
@@ -278,7 +278,7 @@
       </trans-unit>
       <trans-unit id="s8af61807443f32a4">
         <source>Actions</source>
-        <target state="needs-translation">Actions</target>
+        <target state="translated">Действия</target>
       </trans-unit>
       <trans-unit id="seffa8ca49175b5f0">
         <source>Personalized properties</source>
@@ -539,20 +539,20 @@
                     <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
                     or explore the
                     <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="needs-translation">These properties are created and filed by users for any kind of usages. Feel
-                    free to add your own. The properties and values you create
-                    <x id="0" equiv-text="&lt;strong&gt;"/>must be factual<x id="1" equiv-text="&lt;/strong&gt;"/>. You can dive into
-                    <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
-                    or explore the
-                    <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="translated">Эти свойства создаются и сохраняются пользователями для любых целей. Чувствуйте
+                    добавлять свои. Создаваемые вами свойства и значения
+                    <x id="0" equiv-text="&lt;strong&gt;"/>должно быть достоверными<x id="1" equiv-text="&lt;/strong&gt;"/>. Вы можете погрузиться в
+                    <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>список объектов, уже используемых сообществом<x id="3" equiv-text="&lt;/a&gt;"/>
+                    или изучите
+                    <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>'правильную' документацию и ее поисковую систему<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
       </trans-unit>
       <trans-unit id="h1fbdfea3ad6d664e">
         <source>This is brought by the
                     <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't
                     hesitate to participate or give feedback</source>
-        <target state="needs-translation">This is brought by the
-                    <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't
-                    hesitate to participate or give feedback</target>
+        <target state="translated">Это стало возможным благодаря
+                    <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>проекту Folksonomy Engine<x id="1" equiv-text="&lt;/a&gt;"/>. Не
+                    стесняйтесь участвовать и оставлять отзывы</target>
       </trans-unit>
       <trans-unit id="s71a5c9f4b68ef4d4">
         <source>Count</source>
