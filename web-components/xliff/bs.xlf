@@ -144,7 +144,7 @@
       </trans-unit>
       <trans-unit id="s5e8250fb85d64c23">
         <source>Close</source>
-        <target state="needs-translation">Close</target>
+        <target state="translated">Zatvori</target>
       </trans-unit>
       <trans-unit id="s976dfd19ef58a1e1">
         <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
