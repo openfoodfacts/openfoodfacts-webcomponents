@@ -68,11 +68,11 @@
       </trans-unit>
       <trans-unit id="s475b08749d0706ed">
         <source>Help us inform millions of consumers around the world about what they eat</source>
-        <target state="needs-translation">Help us inform millions of consumers around the world about what they eat</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ajutați-ne să informăm milioane de consumatori din întreaga lume despre ceea ce mănâncă</target>
       </trans-unit>
       <trans-unit id="sfc40ea3d5d5aa6f8">
         <source>Your donations fund the day-to-day operations of our non-profit association:</source>
-        <target state="needs-translation">Your donations fund the day-to-day operations of our non-profit association:</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Donațiile dumneavoastră finanțează operațiunile zilnice ale asociației noastre non-profit:</target>
       </trans-unit>
       <trans-unit id="s1c5031113de500ce">
         <source>keeping our database open &amp; available to all,</source>
@@ -84,23 +84,23 @@
       </trans-unit>
       <trans-unit id="sd82bc2decefa621b">
         <source>remain independent of the food industry,</source>
-        <target state="needs-translation">remain independent of the food industry,</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">să rămână independenți de industria alimentară,</target>
       </trans-unit>
       <trans-unit id="sb3bdd638a58d30f4">
         <source>engage a community of committed citizens,</source>
-        <target state="needs-translation">engage a community of committed citizens,</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">a implica o comunitate de cetățeni dedicați,</target>
       </trans-unit>
       <trans-unit id="s100c4928cc74642a">
         <source>support the advancement of public health research.</source>
-        <target state="needs-translation">support the advancement of public health research.</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">susține avansarea cercetării în sănătate publică.</target>
       </trans-unit>
       <trans-unit id="s6d7b6cdedaadfb6e">
         <source>Each donation counts! We appreciate your support in bringing further food transparency in the world.</source>
-        <target state="needs-translation">Each donation counts! We appreciate your support in bringing further food transparency in the world.</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Fiecare donație contează! Apreciem sprijinul acordat în promovarea unei transparențe alimentare sporite în lume.</target>
       </trans-unit>
       <trans-unit id="s6306a31415aea913">
         <source>I SUPPORT</source>
-        <target state="needs-translation">I SUPPORT</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">EU SUSȚIN</target>
       </trans-unit>
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
@@ -462,7 +462,7 @@
       </trans-unit>
       <trans-unit id="sc681b137e8f604f7">
         <source>Confirm deletion</source>
-        <target state="needs-translation">Confirm deletion</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Confirmați ștergerea</target>
       </trans-unit>
       <trans-unit id="s4f751fb9b3ed766c">
         <source>Creating a New Property</source>

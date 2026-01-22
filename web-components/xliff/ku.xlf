@@ -462,7 +462,7 @@
       </trans-unit>
       <trans-unit id="sc681b137e8f604f7">
         <source>Confirm deletion</source>
-        <target state="needs-translation">Confirm deletion</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Jêbirinê piştrast bike</target>
       </trans-unit>
       <trans-unit id="s4f751fb9b3ed766c">
         <source>Creating a New Property</source>
