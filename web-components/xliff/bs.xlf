@@ -184,7 +184,7 @@
       </trans-unit>
       <trans-unit id="s33f85f24c0f5f008">
         <source>Save</source>
-        <target state="needs-translation">Save</target>
+        <target state="translated">Sačuvaj</target>
       </trans-unit>
       <trans-unit id="s2ceb11be2290bb1b">
         <source>Cancel</source>
@@ -406,7 +406,7 @@
       </trans-unit>
       <trans-unit id="sbad7d2734149470b">
         <source>Validate</source>
-        <target state="needs-translation">Validate</target>
+        <target state="translated">Potvrdi</target>
       </trans-unit>
       <trans-unit id="se419a9ab36987490">
         <source>Invalidate</source>
