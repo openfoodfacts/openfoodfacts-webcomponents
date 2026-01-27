@@ -310,13 +310,9 @@ export class DonationBanner extends LitElement {
               ${msg("Your donations fund the day-to-day operations of our non-profit association:")}
             </p>
             <ul class="unordered-list">
+              <li>${msg("keeping our database open & available to all,")}</li>
               <li>
-                ${msg("keeping our database open & available to all,")}
-                <ul>
-                  <li>
-                    ${msg("technical infrastructure (website/mobile app) & a small permanent team")}
-                  </li>
-                </ul>
+                ${msg("technical infrastructure (website/mobile app) & a small permanent team")}
               </li>
               <li>
                 <p>${msg("remain independent of the food industry,")}</p>
