@@ -25,7 +25,8 @@ jobs:
         with:
           node-version: "24.x"
           registry-url: "https://registry.npmjs.org"
-      - run: |
+      - name: Publish on NPM
+        run: |
           cd web-components
           npm install
           npm run publish:package
@@ -35,7 +36,8 @@ jobs:
           node-version: "24.x"
           registry-url: 'https://npm.pkg.github.com'
           scope: "@openfoodfacts"
-      - run: |
+      - name: Publish on Github registry
+        run: |
           cd web-components
           npm install
           npm run publish:package
