@@ -2,10 +2,6 @@ name: WebComponents Package publication
 on:
   release:
     types: ["created"]
-  # FIXME - temporary
-  push:
-    branches:
-      - ci-trusted-publishing
 
 permissions:
   contents: read
