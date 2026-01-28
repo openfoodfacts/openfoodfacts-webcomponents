@@ -70,7 +70,7 @@
     "@storybook/addon-a11y": "^10.2.1",
     "@storybook/addon-docs": "^9.1.4",
     "@storybook/addon-vitest": "^9.1.4",
-    "@storybook/builder-vite": "^9.1.4",
+    "@storybook/builder-vite": "^10.2.1",
     "@storybook/web-components-vite": "^9.1.4",
     "@types/cropperjs": "^1.1.5",
     "@types/diff": "^7.0.2",
