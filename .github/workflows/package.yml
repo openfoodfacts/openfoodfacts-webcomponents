@@ -5,11 +5,15 @@ on:
 
 permissions:
   contents: read
+  # Required for OIDC with NPMJS
+  id-token: write
+  # this is for github registry publishing
   packages: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: npmjs
     steps:
       - uses: actions/checkout@v6
       # Setup .npmrc file to publish to npm
@@ -22,8 +26,6 @@ jobs:
           cd web-components
           npm install
           npm run publish:package
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         continue-on-error: true
       - uses: actions/setup-node@v6
         with:
