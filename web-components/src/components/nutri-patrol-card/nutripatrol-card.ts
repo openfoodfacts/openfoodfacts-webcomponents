@@ -49,13 +49,16 @@ export class NutriPatrolCard extends LitElement {
       min-width: 280px;   
       box-sizing: border-box;
     }
+    .comment{
+      font-size: .95rem;
+      color: #444c56;
+    }
 
     h3 {
       font-size: 1rem;
       font-weight: 700;
-      margin-bottom: 0.4rem;
       display: flex;
-      gap: .2rem;
+      gap: 4px;
       align-items: center;
     }
 
@@ -124,7 +127,7 @@ export class NutriPatrolCard extends LitElement {
   render() {
     return html`
       <div class="card">
-        <h3><img src='https://nutripatrol.openfoodfacts.org/assets/off-logo-_mdtrtmK.png' style="height: 30px; width: auto; vertical-align: middle; margin-right: 6px;"></img> Nutri-Patrol Issues</h3>
+        <h3><img src='https://nutripatrol.openfoodfacts.org/assets/off-logo-_mdtrtmK.png' style="height: 30px; width: auto; margin-right: 6px;"></img> Nutri-Patrol Issues</h3>
 
         ${this.issues.length === 0
           ? html`<p>No issues found.</p>`
@@ -135,7 +138,7 @@ export class NutriPatrolCard extends LitElement {
               })}>
                 <span class="badge">${i.severity}</span>
                 <strong>${i.reason}</strong>
-                <p>${i.comment}</p>
+                <p class="comment">${i.comment}</p>
                 <div class="footer">
                 ${i.confidence
                   ? html`<small class="badge">Confidence: ${(i.confidence * 100).toFixed(0)}%</small>`
