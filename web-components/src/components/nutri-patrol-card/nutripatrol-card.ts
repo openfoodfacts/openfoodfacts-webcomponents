@@ -4,27 +4,28 @@ import { classMap } from "lit/directives/class-map.js"
 
 interface NutriPatrolFlag {
   id: number
-  type: string
   confidence?: number
-  reason?: string
+  reason: string
   comment?: string
   created_at: string
 }
 
 interface NutriPatrolIssueUI {
-  type: string
-  message: string
+  reason: string
+  comment: string
   confidence?: number
+  created_at?: string
   severity: "high" | "medium" | "low"
 }
 
 function toIssueUI(flag: NutriPatrolFlag): NutriPatrolIssueUI {
   const c = flag.confidence ?? 0
   return {
-    type: flag.type,
-    message: flag.reason || flag.comment || "No details",
+    reason: flag.reason,
+    comment: flag.comment || "No details",
     confidence: flag.confidence,
     severity: c >= 0.8 ? "high" : c >= 0.5 ? "medium" : "low",
+    created_at: flag.created_at,
   }
 }
 
@@ -104,6 +105,13 @@ export class NutriPatrolCard extends LitElement {
       border-radius: .5rem;
       cursor: pointer;
     }
+    
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.95rem;
+      color: #6b7280;
+      }
   `
 
   @property({ type: Array }) flags: NutriPatrolFlag[] = []
@@ -126,11 +134,16 @@ export class NutriPatrolCard extends LitElement {
                 [i.severity]: true,
               })}>
                 <span class="badge">${i.severity}</span>
-                <strong>${i.type}</strong>
-                <p>${i.message}</p>
+                <strong>${i.reason}</strong>
+                <p>${i.comment}</p>
+                <div class="footer">
                 ${i.confidence
-                  ? html`<small>Confidence: ${(i.confidence * 100).toFixed(0)}%</small>`
+                  ? html`<small class="badge">Confidence: ${(i.confidence * 100).toFixed(0)}%</small>`
                   : nothing}
+                ${i.created_at
+                  ? html`<small>${i.created_at}</small>`
+                  : nothing}
+                </div>
               </div>
             `)}
 

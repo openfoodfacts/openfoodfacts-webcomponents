@@ -16,9 +16,16 @@ export const Basic: Story = {
     flags: [
       {
         id: 1,
-        type: "low-quality-image",
+        reason: "low-quality-image",
+        confidence: 0.2,
+        comment: "Picture is not clear enough to read the nutrition facts",
+        created_at: "2025-01-01",
+      },
+      {
+        id: 2,
+        reason: "Inappropriate",
         confidence: 0.8,
-        reason: "Picture is not clear enough to read the nutrition facts",
+        comment: "Product contains inappropriate ingredients",
         created_at: "2025-01-01",
       },
     ],
