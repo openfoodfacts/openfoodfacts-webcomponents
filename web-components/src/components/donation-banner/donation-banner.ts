@@ -79,9 +79,11 @@ export class DonationBanner extends LitElement {
     .donation-banner-footer {
       position: relative;
       display: flex;
+      flex-wrap: wrap; /*Using Flex wrap for arrangement*/
       justify-content: center;
       align-items: center;
-      padding: 20px 0;
+      padding: 30px;
+      gap: 40px;
       border: 10px solid #ff6e78;
       width: 100%;
       background-color: white;
@@ -107,18 +109,14 @@ export class DonationBanner extends LitElement {
       background-color: #0050a0;
       color: #fff;
     }
-    @media (max-width: 732px) {
-      .donation-banner,
-      .donation-banner-footer {
-        flex-direction: column;
-        padding: 20px 10px;
-      }
-    }
     .group-image {
       height: auto;
+      width: 100%;
       max-width: 100%;
       display: inline-block;
       vertical-align: middle;
+      border-radius: 5px;
+      object-fit: contain;
     }
     .donation-banner__group-photo,
     .donation-banner-footer__group-photo {
@@ -140,38 +138,31 @@ export class DonationBanner extends LitElement {
       align-items: center;
       background-color: #008c8c;
       color: white;
-      padding: 10px;
-      margin: 10px;
+      padding: 10px 15px;
+      margin-bottom: 15px;
       border-radius: 10px;
       z-index: 1;
+      width: 100%;
+      box-sizing: border-box;
     }
     .donation-banner__hook-section p,
     .donation-banner-footer__hook-section p {
       font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
       font-size: 25px;
       font-weight: 700;
-      line-height: 35px;
+      line-height: 1.2;
       text-transform: uppercase;
       margin: 0;
     }
-    @media (max-width: 732px) {
-      .donation-banner__hook-section p,
-      .donation-banner-footer__hook-section p {
-        font-size: 15px;
-        line-height: 20px;
-      }
-    }
     .donation-banner__left-aside,
     .donation-banner-footer__left-aside {
-      width: 60%;
-      margin: 0 10px;
+      flex: 1 1 450px;
+      min-width: 300px;
+      max-width: 650px;
+      margin: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
-    }
-    .donation-banner__left-aside img,
-    .donation-banner-footer__left-aside img {
-      transform: translatey(-15px);
     }
     .donation-banner__aside,
     .donation-banner-footer__aside {
@@ -184,10 +175,16 @@ export class DonationBanner extends LitElement {
       color: #ff6e78;
       font-weight: 800;
       font-size: 25px;
-      margin: 0.2rem 0rem 0.5rem;
+      margin: 0;
       font-weight: 500;
+      line-height: 1.2;
     }
     .donation-banner__main-div-wrapper {
+      flex: 1 1 450px;
+      min-width: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       color: black;
     }
     .donation-banner__main-div {
@@ -197,31 +194,23 @@ export class DonationBanner extends LitElement {
     .donation-banner-footer__main-section {
       display: flex;
       align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
     }
     .donation-banner__actions-section,
     .donation-banner-footer__actions-section {
       display: flex;
-      justify-content: space-around;
-      gap: 15px;
-      padding: 0 10px;
-    }
-    @media (max-width: 732px) {
-      .donation-banner__actions-section,
-      .donation-banner-footer__actions-section {
-        flex-direction: column;
-        align-items: center;
-        padding: 20px 10px;
-      }
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
     }
     .donation-banner__actions-section__financial,
     .donation-banner-footer__actions-section__financial {
-      width: 50%;
-    }
-    @media (max-width: 732px) {
-      .donation-banner__actions-section__financial,
-      .donation-banner-footer__actions-section__financial {
-        width: 90%;
-      }
+      flex: 1 1 250px;
     }
     .donation-banner__actions-section__financial p,
     .donation-banner-footer__actions-section__financial p {
@@ -229,10 +218,11 @@ export class DonationBanner extends LitElement {
       font-size: 15px;
       color: #008c8c;
       font-weight: bolder;
+      margin: 0;
     }
     .donation-banner__actions-section__donate-button,
     .donation-banner-footer__actions-section__donate-button {
-      width: 40%;
+      flex: 0 0 auto;
     }
     .donation-banner__actions-section__donate-button a button,
     .donation-banner-footer__actions-section__donate-button a button {
@@ -241,42 +231,137 @@ export class DonationBanner extends LitElement {
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       font-size: 20px;
       font-weight: 900;
-      padding: 1.1428571429rem 2.2857142857rem 1.2142857143rem;
+      padding: 12px 30px;
       color: white;
       border: none;
       cursor: pointer;
-    }
-    @media (max-width: 837px) {
-      .donation-banner-footer__actions-section__donate-button a button {
-        padding: 1rem 2rem 1rem;
-        font-size: 16px;
-      }
-    }
-    @media (min-width: 733px) and (max-width: 837px) {
-      .donation-banner-footer__actions-section__donate-button a button {
-        padding: 1rem 2rem 1rem;
-        font-size: 16px;
-        margin-left: -15px;
-      }
+      white-space: nowrap;
     }
     .donation-banner__actions-section__donate-button a button:hover,
     .donation-banner-footer__actions-section__donate-button a button:hover {
       background-color: rgba(255, 110, 120, 0.8);
     }
     .unordered-list {
-      margin-left: 15.4px;
-      margin-bottom: 20px;
-      margin-top: 0;
-      padding: 1px;
+      margin: 0 0 20px 15px;
+      padding: 0;
       line-height: 1.6;
       font-size: 14px;
-      padding-right: 10px;
     }
     .unordered-list li p {
       margin: 0;
     }
-  `
 
+    /*Put accommodations for tablet and phone together for better readability and maintenance*/
+
+    /* Mobile Optimizations for tablet */
+    @media (min-width: 700px) and (max-width: 1050px) {
+      .donation-banner,
+      .donation-banner-footer {
+        flex-wrap: nowrap;
+        padding: 20px 15px;
+        gap: 15px;
+      }
+
+      .donation-banner__left-aside,
+      .donation-banner-footer__left-aside {
+        flex: 35;
+        min-width: 0;
+        max-width: 300px;
+        margin: 0;
+      }
+      .donation-banner__main-div-wrapper {
+        flex: 65;
+        min-width: 0;
+      }
+      .donation-banner__actions-section,
+      .donation-banner-footer__actions-section {
+        flex-wrap: nowrap;
+        gap: 5px;
+        padding-top: 5px;
+      }
+      .donation-banner__actions-section__financial p,
+      .donation-banner-footer__actions-section__financial p {
+        font-size: 13px;
+        line-height: 1.2;
+      }
+      .donation-banner__actions-section__donate-button a button,
+      .donation-banner-footer__actions-section__donate-button a button {
+        font-size: 18px;
+        padding: 8px 12px;
+        white-space: nowrap;
+      }
+      .donation-banner__hook-section p,
+      .donation-banner-footer__hook-section p {
+        font-size: 20px;
+        line-height: 1.2;
+        flex: 1;
+        width: auto;
+      }
+    }
+    /* Mobile Optimizations for phone */
+    @media (max-width: 700px) {
+      .donation-banner,
+      .donation-banner-footer {
+        padding: 20px 10px;
+        gap: 25px;
+      }
+
+      /* Allow flex items to shrink below their content size on mobile */
+      .donation-banner__left-aside,
+      .donation-banner-footer__left-aside,
+      .donation-banner__main-div-wrapper {
+        min-width: 0 !important;
+        width: 100% !important;
+        flex-basis: auto !important;
+      }
+      .donation-banner__actions-section__donate-button a button,
+      .donation-banner-footer__actions-section__donate-button a button {
+        font-size: 18px;
+        padding: 8px 12px;
+        white-space: nowrap;
+      }
+      .group-image {
+        width: 100%;
+        height: auto;
+      }
+
+      /* Reduce font size for mobile, balance the visual effect*/
+      .donation-banner__main-title,
+      .donation-banner-footer__main-title {
+        font-size: 20px;
+      }
+      .donation-banner__hook-section p,
+      .donation-banner-footer__hook-section p {
+        font-size: 18px;
+        line-height: 1.2;
+        flex: 1;
+        width: auto;
+      }
+
+      .donation-banner__main-section,
+      .donation-banner-footer__main-section {
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        text-align: left;
+        width: 100%;
+      }
+
+      /* Prevent long words (like URLs) from breaking layout */
+      .unordered-list li,
+      p {
+        word-break: break-word;
+        overflow-wrap: anywhere;
+        hyphens: auto;
+      }
+
+      .donation-banner__actions-section,
+      .donation-banner-footer__actions-section {
+        justify-content: center;
+        text-align: center;
+      }
+    }
+  `
   override render() {
     const rootClasses = { "dark-mode": this.isDarkMode }
     return html`<section class=${classMap(rootClasses)}>
