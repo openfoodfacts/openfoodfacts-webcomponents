@@ -1,7 +1,7 @@
 import { LitElement, html, css, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { classMap } from "lit/directives/class-map.js"
-
+import { DEFAULT_NUTRI_PATROL_CONFIGURATION } from "../../constants"
 interface NutriPatrolFlag {
   id: number
   confidence?: number
@@ -109,12 +109,19 @@ export class NutriPatrolCard extends LitElement {
       cursor: pointer;
     }
     
+    .logo {
+      height: 30px;
+      width: auto;
+      margin-right: 6px;
+      }    
+
     .footer {
       display: flex;
       justify-content: space-between;
       font-size: 0.95rem;
       color: #6b7280;
       }
+
   `
 
   @property({ type: Array }) flags: NutriPatrolFlag[] = []
@@ -123,32 +130,35 @@ export class NutriPatrolCard extends LitElement {
   private get issues(): NutriPatrolIssueUI[] {
     return this.flags.map(toIssueUI)
   }
+  private renderIssue(issue: NutriPatrolIssueUI){
+    return html`
+              <div class=${classMap({
+                issue: true,
+                [issue.severity]: true,
+              })}>
+                <span class="badge">${issue.severity}</span>
+                <strong>${issue.reason}</strong>
+                <p class="comment">${issue.comment}</p>
+                <div class="footer">
+                ${issue.confidence
+                  ? html`<small class="badge">Confidence: ${(issue.confidence * 100).toFixed(0)}%</small>`
+                  : nothing}
+                ${issue.created_at
+                  ? html`<small>${issue.created_at}</small>`
+                  : nothing}
+                </div>
+              </div>
+            `
+  }
 
   render() {
     return html`
       <div class="card">
-        <h3><img src='https://nutripatrol.openfoodfacts.org/assets/off-logo-_mdtrtmK.png' style="height: 30px; width: auto; margin-right: 6px;"></img> Nutri-Patrol Issues</h3>
+        <h3><img class="logo" src=${DEFAULT_NUTRI_PATROL_CONFIGURATION.imgUrl} ></img> Nutri-Patrol Issues</h3>
 
         ${this.issues.length === 0
           ? html`<p>No issues found.</p>`
-          : this.issues.map(i => html`
-              <div class=${classMap({
-                issue: true,
-                [i.severity]: true,
-              })}>
-                <span class="badge">${i.severity}</span>
-                <strong>${i.reason}</strong>
-                <p class="comment">${i.comment}</p>
-                <div class="footer">
-                ${i.confidence
-                  ? html`<small class="badge">Confidence: ${(i.confidence * 100).toFixed(0)}%</small>`
-                  : nothing}
-                ${i.created_at
-                  ? html`<small>${i.created_at}</small>`
-                  : nothing}
-                </div>
-              </div>
-            `)}
+          : this.issues.map(issue => this.renderIssue(issue))}
 
         ${this.showActions
           ? html`
