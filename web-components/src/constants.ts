@@ -9,7 +9,6 @@ export const DEFAULT_FOLKSONOMY_CONFIGURATION = {
 }
 
 export const DEFAULT_NUTRI_PATROL_CONFIGURATION = {
-  apiUrl: "https://nutripatrol.openfoodfacts.org/api/v1",
   imgUrl: "https://nutripatrol.openfoodfacts.org/assets/off-logo-_mdtrtmK.png",
 }
 export const PAGE_SIZE = 25
