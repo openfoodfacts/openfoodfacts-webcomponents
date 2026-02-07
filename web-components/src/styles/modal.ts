@@ -75,6 +75,23 @@ export const MODAL = css`
     border-color: black;
   }
 
+  .modal.dark-mode {
+    background: #2d2724;
+    color: #f9f7f5;
+  }
+
+  .overlay.dark-mode {
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  .dark-mode h2 {
+    color: #f9f7f5;
+  }
+
+  .dark-mode .close-icon:hover {
+    border-color: white;
+  }
+
   @keyframes fadeIn {
     from {
       opacity: 0;
