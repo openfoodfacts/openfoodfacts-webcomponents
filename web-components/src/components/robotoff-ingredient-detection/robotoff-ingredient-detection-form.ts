@@ -7,7 +7,7 @@
  * @element robotoff-ingredient-detection-form
  */
 
-import { LitElement, css, html, nothing } from "lit"
+import { LitElement, css, html, nothing, type TemplateResult } from "lit"
 import { customElement, property, query, state } from "lit/decorators.js"
 import "../shared/zoomable-image"
 import {
@@ -28,6 +28,8 @@ import { EventType } from "../../constants"
 import "../shared/loading-button"
 import { triggerSubmit } from "../../utils"
 import "../shared/text-corrector-highlight"
+import "../icons/info"
+import { parseIngredients } from "../../utils/ingredient-highlight"
 
 @customElement("robotoff-ingredient-detection-form")
 @localized()
@@ -52,6 +54,63 @@ export class RobotoffIngredientDetectionForm extends LitElement {
         display: flex;
         margin-top: 0.5rem;
         margin-bottom: 0.5rem;
+      }
+
+      .ingredient-word {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+      }
+
+      .confidence-icon {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        cursor: help;
+      }
+
+      .confidence-icon info-icon {
+        color: #ffc107;
+        width: 16px;
+        height: 16px;
+      }
+
+      .tooltip {
+        visibility: hidden;
+        background: #333;
+        color: #fff;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        position: absolute;
+        bottom: calc(100% + 8px);
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.2s ease-in-out;
+        z-index: 100;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .tooltip::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -6px;
+        border-width: 6px;
+        border-style: solid;
+        border-color: #333 transparent transparent transparent;
+      }
+
+      .confidence-icon:hover .tooltip {
+        visibility: visible;
+        opacity: 1;
+      }
+
+      .low-confidence-word {
+        color: #856404;
       }
     `,
     FLEX,
@@ -307,35 +366,70 @@ export class RobotoffIngredientDetectionForm extends LitElement {
     const textarea = e.target as HTMLTextAreaElement
     this.data.annotation = textarea.value
   }
+
+  /**
+   * Renders ingredients text with inline confidence indicators
+   * @param {IngredientDetectionInsight} insight - The current insight
+   * @returns {TemplateResult}
+   */
+  renderIngredientsWithConfidence(insight: IngredientDetectionInsight): TemplateResult {
+    const highlights = parseIngredients(
+      insight.data.text,
+      insight.data.ingredients
+    )
+
+    // Fallback: if no highlights found, show raw text
+    if (highlights.length === 0) {
+      return html`<p>${insight.data.text}</p>`
+    }
+
+    return html`
+      <p>
+        ${highlights.map(
+          (item) => html`
+            <span class="ingredient-word ${item.isLowConfidence ? "low-confidence-word" : ""}">
+              ${item.isLowConfidence
+                ? html`
+                    <span class="confidence-icon">
+                      <info-icon></info-icon>
+                      <span class="tooltip">${Math.round(item.confidence)}% confidence</span>
+                    </span>
+                  `
+                : nothing}
+              ${item.text}
+            </span>
+          `
+        )}
+      </p>
+    `
+  }
+
   /**
    * Renders the ingredients editing interface
    * @param {IngredientDetectionInsight} insight - The current insight
    * @returns {TemplateResult} The template for the ingredients section
    */
   renderEditIngredients(insight: IngredientDetectionInsight) {
-    let content
-    if (this.isEditingIngredients) {
-      content = html`<text-corrector-highlight
-        heading-level="h4"
-        original=${insight.data.text}
-        .value=${this.data.annotation}
-        @input="${this.onAnnotationChange}"
-      ></text-corrector-highlight>`
-    } else {
-      content = html`
-        <p>${insight.data.text}</p>
-        <loading-button
-          css-classes="button chocolate-button"
-          .disabled=${this.isLoading}
-          @click="${this.toggleEditIngredients}"
-          label="${msg("I'll edit the ingredients")}"
-        ></loading-button>
-      `
-    }
-
     return html`
-      <h3>${msg("Ingredients :")}</h3>
-      ${content}
+      ${this.isEditingIngredients
+        ? html`
+            <text-corrector-highlight
+              heading-level="h4"
+              original=${insight.data.text}
+              .value=${this.data.annotation}
+              @input="${this.onAnnotationChange}"
+            ></text-corrector-highlight>
+          `
+        : html`
+            <h3>${msg("Ingredients :")}</h3>
+            ${this.renderIngredientsWithConfidence(insight)}
+            <loading-button
+              css-classes="button chocolate-button"
+              .disabled=${this.loading}
+              @click="${this.toggleEditIngredients}"
+              label="${msg("I'll edit the ingredients")}"
+            ></loading-button>
+          `}
     `
   }
 
