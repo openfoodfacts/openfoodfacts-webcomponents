@@ -82,32 +82,4 @@ export const ALERT = css`
       border-color: #2c6e3d;
     }
   }
-
-  :host(.dark-mode) .info,
-  .info.dark-mode {
-    color: #a8d4f0;
-    background-color: #1a2d3d !important;
-    border-color: #2c4f6e;
-  }
-
-  :host(.dark-mode) .error,
-  .error.dark-mode {
-    color: #f5a8a8;
-    background-color: #3d1a1a !important;
-    border-color: #6e2c2c;
-  }
-
-  :host(.dark-mode) .warning,
-  .warning.dark-mode {
-    color: #f0d8a8;
-    background-color: #3d2d1a !important;
-    border-color: #6e4f2c;
-  }
-
-  :host(.dark-mode) .success,
-  .success.dark-mode {
-    color: #a8f0b0;
-    background-color: #1a3d24 !important;
-    border-color: #2c6e3d;
-  }
 `
