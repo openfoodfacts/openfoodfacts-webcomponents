@@ -6,7 +6,7 @@ export interface IngredientHighlight {
   isLowConfidence: boolean
 }
 
-export const CONFIDENCE_THRESHOLD = 60 
+export const CONFIDENCE_THRESHOLD = 60
 
 export function isLowConfidence(score: number): boolean {
   return score < CONFIDENCE_THRESHOLD
@@ -80,10 +80,7 @@ export function parseIngredients(
   })
 }
 
-export function highlightLowConfidence(
-  text: string,
-  ingredients: IngredientDetection[]
-): string {
+export function highlightLowConfidence(text: string, ingredients: IngredientDetection[]): string {
   const highlights = parseIngredients(text, ingredients)
 
   return highlights

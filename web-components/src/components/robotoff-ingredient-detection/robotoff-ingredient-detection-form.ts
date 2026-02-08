@@ -373,10 +373,7 @@ export class RobotoffIngredientDetectionForm extends LitElement {
    * @returns {TemplateResult}
    */
   renderIngredientsWithConfidence(insight: IngredientDetectionInsight): TemplateResult {
-    const highlights = parseIngredients(
-      insight.data.text,
-      insight.data.ingredients
-    )
+    const highlights = parseIngredients(insight.data.text, insight.data.ingredients)
 
     // Fallback: if no highlights found, show raw text
     if (highlights.length === 0) {
