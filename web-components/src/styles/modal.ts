@@ -75,6 +75,25 @@ export const MODAL = css`
     border-color: black;
   }
 
+  @media (prefers-color-scheme: dark) {
+    .modal {
+      background: #2d2724;
+      color: #f9f7f5;
+    }
+
+    .overlay {
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    h2 {
+      color: #f9f7f5;
+    }
+
+    .close-icon:hover {
+      border-color: white;
+    }
+  }
+
   .modal.dark-mode {
     background: #2d2724;
     color: #f9f7f5;

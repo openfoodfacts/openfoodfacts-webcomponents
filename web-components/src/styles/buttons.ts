@@ -186,3 +186,104 @@ export const getButtonClasses = (types: ButtonType[]): CSSResult[] => {
   })
   return buttonClasses
 }
+
+export const BUTTON_DARK_MODE_CLASSES: CSSResult = css`
+  @media (prefers-color-scheme: dark) {
+    .chocolate-button {
+      background-color: #6d4c41;
+      border-color: #6d4c41;
+      color: white;
+    }
+
+    .chocolate-button:hover {
+      background-color: #3e2723;
+      color: white;
+    }
+
+    .cappucino-button {
+      background-color: #a1887f;
+      border-color: #a1887f;
+      color: white;
+    }
+
+    .cappucino-button:hover {
+      background-color: #5d4037;
+      color: white;
+    }
+
+    .chocolate-button-outline {
+      background-color: transparent;
+      border-color: #8d6e63;
+      color: #d7ccc8;
+    }
+
+    .chocolate-button-outline:hover {
+      background-color: #5d4037;
+      color: white;
+    }
+
+    .white-button {
+      background-color: #424242;
+      border-color: #616161;
+      color: #e0e0e0;
+    }
+
+    .white-button:hover {
+      border-color: #9e9e9e;
+      background-color: #616161;
+      color: white;
+    }
+
+    .link-button {
+      color: #90caf9;
+    }
+
+    .link-button:hover {
+      text-decoration: underline;
+    }
+
+    .success-button {
+      background-color: #2e7d32;
+      border-color: #2e7d32;
+      color: white;
+    }
+
+    .success-button:hover {
+      background-color: #1b5e20;
+      color: white;
+    }
+
+    .danger-button {
+      background-color: #c62828;
+      border-color: #c62828;
+      color: white;
+    }
+
+    .danger-button:hover {
+      background-color: #b71c1c;
+      color: white;
+    }
+
+    .light-red-button {
+      background-color: #ef5350;
+      border-color: #ef5350;
+      color: white;
+    }
+
+    .light-red-button:hover {
+      background-color: #e53935;
+      color: white;
+    }
+
+    .light-green-button {
+      background-color: #66bb6a;
+      border-color: #66bb6a;
+      color: white;
+    }
+
+    .light-green-button:hover {
+      background-color: #43a047;
+      color: white;
+    }
+  }
+`

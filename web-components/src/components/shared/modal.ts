@@ -5,9 +5,6 @@ import "./loader"
 import { EventType } from "../../constants"
 import "../icons/cross"
 import { localized, msg } from "@lit/localize"
-import { darkModeListener } from "../../utils/dark-mode-listener"
-import { SignalWatcher } from "@lit-labs/signals"
-import { classMap } from "lit/directives/class-map.js"
 
 /**
  * The `modal-component` is a reusable web component that displays a modal dialog.
@@ -27,24 +24,8 @@ import { classMap } from "lit/directives/class-map.js"
 
 @customElement("modal-component")
 @localized()
-class ModalComponent extends SignalWatcher(LitElement) {
+export class ModalComponent extends LitElement {
   static override styles = [MODAL]
-
-  isDarkMode = darkModeListener.darkMode
-  private _darkModeCb = (isDark: boolean) => {
-    this.isDarkMode = isDark
-    this.requestUpdate()
-  }
-
-  override connectedCallback() {
-    super.connectedCallback()
-    darkModeListener.subscribe(this._darkModeCb)
-  }
-
-  override disconnectedCallback() {
-    darkModeListener.unsubscribe(this._darkModeCb)
-    super.disconnectedCallback()
-  }
 
   /**
    * Indicates whether the modal is open.
@@ -74,12 +55,8 @@ class ModalComponent extends SignalWatcher(LitElement) {
       return nothing
     }
     return html`
-      <div
-        class="overlay ${classMap({ "dark-mode": this.isDarkMode })}"
-        @click="${this.closeModal}"
-        aria-hidden="true"
-      ></div>
-      <div class="modal ${classMap({ "dark-mode": this.isDarkMode })}">
+      <div class="overlay" @click="${this.closeModal}" aria-hidden="true"></div>
+      <div class="modal">
         <div class="modal-content">
           <div class="modal-header">
             <button class="close-icon" @click="${this.closeModal}" aria-label=${msg("Close modal")}>

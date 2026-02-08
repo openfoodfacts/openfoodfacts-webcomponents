@@ -1,7 +1,6 @@
 import { LitElement, css, html, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { Task } from "@lit/task"
-import { classMap } from "lit/directives/class-map.js"
 import { ALERT } from "../../styles/alert.js"
 
 import { fetchQuestionsByProductCode } from "../../signals/questions"
@@ -10,11 +9,9 @@ import { ButtonType, getButtonClasses } from "../../styles/buttons.js"
 import { RobotoffContributionType } from "../../constants.js"
 import { CONTAINER } from "../../styles/responsive.js"
 import "../robotoff-modal/robotoff-modal"
-import { SignalWatcher } from "@lit-labs/signals"
 import robotoff from "../../api/robotoff.js"
 import { InsightType } from "../../types/robotoff.js"
 import { LanguageCodesMixin } from "../../mixins/language-codes-mixin.js"
-import { darkModeListener } from "../../utils/dark-mode-listener"
 
 /**
  * The `robotoff-contribution-message` component is a web component that displays messages prompting users to contribute to improving product information.
@@ -30,7 +27,7 @@ import { darkModeListener } from "../../utils/dark-mode-listener"
  */
 @customElement("robotoff-contribution-message")
 @localized()
-export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatcher(LitElement)) {
+export class RobotoffContributionMessage extends LanguageCodesMixin(LitElement) {
   static override styles = [
     ALERT,
     CONTAINER,
@@ -59,18 +56,6 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
       }
       .robotoff-contribution-message li {
         text-align: left;
-      }
-      .robotoff-contribution-message.dark-mode {
-        background-color: #1a2d3d;
-        color: #a8d4f0;
-      }
-      .robotoff-contribution-message.dark-mode button.white-button {
-        background-color: #2c4f6e;
-        color: #a8d4f0;
-        border-color: #4a7a9e;
-      }
-      .robotoff-contribution-message.dark-mode button.white-button:hover {
-        background-color: #3d5f7d;
       }
     `,
   ]
@@ -105,26 +90,6 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
     [RobotoffContributionType.NUTRIENT_EXTRACTION]: false,
     [RobotoffContributionType.INGREDIENT_DETECTION]: false,
     [RobotoffContributionType.QUESTIONS]: false,
-  }
-
-  isDarkMode = darkModeListener.darkMode
-  private _darkModeCb = (isDark: boolean) => {
-    this.isDarkMode = isDark
-    this.requestUpdate()
-  }
-
-  override connectedCallback() {
-    super.connectedCallback()
-    darkModeListener.subscribe(this._darkModeCb)
-  }
-
-  override disconnectedCallback() {
-    darkModeListener.unsubscribe(this._darkModeCb)
-    super.disconnectedCallback()
-  }
-
-  get rootClasses() {
-    return { "dark-mode": this.isDarkMode }
   }
 
   /**
@@ -246,14 +211,14 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
         if (!messagesToShow.length) {
           return nothing
         }
-        return html` <div class=${classMap(this.rootClasses)}>
+        return html` <div>
           <robotoff-modal
             product-code=${this.productCode}
             .robotoffContributionType=${this.robotoffContributionType}
             @close=${this.closeModal}
             @success=${this.onSave}
           ></robotoff-modal>
-          <div class="robotoff-contribution-message alert info ${classMap(this.rootClasses)}">
+          <div class="robotoff-contribution-message alert info">
             <div class="container">
               <p>
                 ${msg(
