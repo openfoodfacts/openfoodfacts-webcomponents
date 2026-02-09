@@ -17,6 +17,7 @@ export { AutocompleteInput } from "./components/shared/autocomplete-input"
 export { RobotoffIngredientDetection as RobotoffCrops } from "./components/robotoff-ingredient-detection/robotoff-ingredient-detection"
 export { ProductCard } from "./components/product-card/product-card"
 export { NewsFeed } from "./components/news-feed/news-feed"
+export { TaxonomyGraph } from "./components/taxonomy-graph/taxonomy-graph"
 
 // Will be added in the future when design is ready
 // export { KnowledgePanelsComponent } from "./components/knowledge-panels/knowledge-panels"

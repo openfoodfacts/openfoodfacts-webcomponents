@@ -4,6 +4,7 @@ import type {
   NutrientsOrderRequest,
   NutrientsParams,
   RequestProductParams,
+  TaxonomyCategoryRequest,
 } from "../types/openfoodfacts"
 import { addParamsToUrl } from "../utils"
 
@@ -53,4 +54,18 @@ export async function fetchNutrientsOrder(params: NutrientsParams) {
     throw new Error("Failed to fetch nutrients order")
   }
   return (await response.json()) as NutrientsOrderRequest
+}
+
+/**
+ * Fetch product data from openfoodfacts
+ * @param categoryName category name in english
+ * @returns The taxonomy category data
+ */
+export async function fetchTaxonomyCategory(categoryName: string) {
+  const url = getUrl(`${ApiBaseUrl.API_V2}/taxonomy?tagtype=categories&tags=en:${categoryName}`)
+  const response = await fetch(url)
+  if (!response.ok) {
+    throw new Error("Failed to fetch taxonomy category data")
+  }
+  return (await response.json()) as TaxonomyCategoryRequest
 }
