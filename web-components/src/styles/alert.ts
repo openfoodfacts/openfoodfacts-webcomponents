@@ -56,4 +56,30 @@ export const ALERT = css`
     align-items: center;
     gap: 0.5rem;
   }
+
+  @media (prefers-color-scheme: dark) {
+    .info {
+      color: #a8d4f0;
+      background-color: #1a2d3d !important;
+      border-color: #2c4f6e;
+    }
+
+    .error {
+      color: #f5a8a8;
+      background-color: #3d1a1a !important;
+      border-color: #6e2c2c;
+    }
+
+    .warning {
+      color: #f0d8a8;
+      background-color: #3d2d1a !important;
+      border-color: #6e4f2c;
+    }
+
+    .success {
+      color: #a8f0b0;
+      background-color: #1a3d24 !important;
+      border-color: #2c6e3d;
+    }
+  }
 `

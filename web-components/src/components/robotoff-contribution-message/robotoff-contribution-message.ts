@@ -9,7 +9,6 @@ import { ButtonType, getButtonClasses } from "../../styles/buttons.js"
 import { RobotoffContributionType } from "../../constants.js"
 import { CONTAINER } from "../../styles/responsive.js"
 import "../robotoff-modal/robotoff-modal"
-import { SignalWatcher } from "@lit-labs/signals"
 import robotoff from "../../api/robotoff.js"
 import { InsightType } from "../../types/robotoff.js"
 import { LanguageCodesMixin } from "../../mixins/language-codes-mixin.js"
@@ -28,7 +27,7 @@ import { LanguageCodesMixin } from "../../mixins/language-codes-mixin.js"
  */
 @customElement("robotoff-contribution-message")
 @localized()
-export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatcher(LitElement)) {
+export class RobotoffContributionMessage extends LanguageCodesMixin(LitElement) {
   static override styles = [
     ALERT,
     CONTAINER,
