@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.17.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.16.0...v1.17.0) (2026-02-09)
+
+
+### Features
+
+* add types generation to vite build ([#422](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/422)) ([c99d4ef](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/c99d4ef7ed9e8f42318ec4124099375360874760))
+
+
+### Bug Fixes
+
+* Revert "chore(deps-dev): bump @storybook/addon-a11y from 9.1.6 to 9.1.15 in /web-components" ([#410](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/410)) ([2aec4ea](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/2aec4ea3909f11928bfab2b39e77f349779226e2))
+* Update dependencies to fix published security vulns, pin npm ([#423](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/423)) ([bd7c1dd](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/bd7c1ddbb0b0dc58c4cf2bb8864320d0e78e670f))
+
 ## [1.16.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.15.1...v1.16.0) (2026-01-27)
 
 
