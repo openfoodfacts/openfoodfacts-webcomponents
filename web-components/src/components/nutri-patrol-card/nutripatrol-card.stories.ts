@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite"
+import type { FlagCreate } from "@openfoodfacts/openfoodfacts-nodejs"
 import "./nutripatrol-card"
 
 const meta: Meta = {
@@ -9,24 +10,39 @@ const meta: Meta = {
 
 export default meta
 
-type Story = StoryObj
+type Story = StoryObj<{
+  flags: FlagCreate[]
+  showActions: boolean
+}>
 
 export const Basic: Story = {
   args: {
     flags: [
       {
-        id: 1,
+        barcode: null,
+        type: "image",
+        url: "",
+        user_id: "ramneet_test",
+        source: "web",
+        confidence: 0.4,
+        image_id: null,
+        flavor: "off",
         reason: "low-quality-image",
-        confidence: 0.2,
-        comment: "Picture is not clear enough to read the nutrition facts",
-        created_at: "2025-01-01",
+        comment: "The image is blurry and unreadable",
+        created_at: "2026-01-08",
       },
       {
-        id: 2,
+        barcode: null,
+        type: "image",
+        url: "",
+        user_id: "ramneet_test",
+        source: "web",
+        confidence: 0.9,
+        image_id: null,
+        flavor: "off",
         reason: "Inappropriate",
-        confidence: 0.8,
-        comment: "Product contains inappropriate ingredients",
-        created_at: "2025-01-01",
+        comment: "The image contains inappropriate content",
+        created_at: "2026-02-01",
       },
     ],
     showActions: true,
