@@ -2,13 +2,7 @@ import { LitElement, html, css, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { classMap } from "lit/directives/class-map.js"
 import { DEFAULT_NUTRI_PATROL_CONFIGURATION } from "../../constants"
-interface NutriPatrolFlag {
-  id: number
-  confidence?: number
-  reason: string
-  comment?: string
-  created_at: string
-}
+import type { FlagCreate } from "@openfoodfacts/openfoodfacts-nodejs"
 
 interface NutriPatrolIssueUI {
   reason: string
@@ -18,12 +12,12 @@ interface NutriPatrolIssueUI {
   severity: "high" | "medium" | "low"
 }
 
-function toIssueUI(flag: NutriPatrolFlag): NutriPatrolIssueUI {
+function toIssueUI(flag: FlagCreate): NutriPatrolIssueUI {
   const c = flag.confidence ?? 0
   return {
-    reason: flag.reason,
+    reason: flag.reason || "No reason provided",
     comment: flag.comment || "No details",
-    confidence: flag.confidence,
+    confidence: c,
     severity: c >= 0.8 ? "high" : c >= 0.5 ? "medium" : "low",
     created_at: flag.created_at,
   }
@@ -129,7 +123,7 @@ export class NutriPatrolCard extends LitElement {
     }
   `
 
-  @property({ type: Array }) flags: NutriPatrolFlag[] = []
+  @property({ type: Array }) flags: FlagCreate[] = []
   @property({ type: Boolean }) showActions = false
 
   private get issues(): NutriPatrolIssueUI[] {

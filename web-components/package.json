@@ -66,7 +66,7 @@
     "@custom-elements-manifest/analyzer": "^0.11.0",
     "@lit/localize-tools": "^0.8.0",
     "@open-wc/testing": "^4.0.0",
-    "@openfoodfacts/openfoodfacts-nodejs": "^2.0.0-alpha.18",
+    "@openfoodfacts/openfoodfacts-nodejs": "^2.0.0-alpha.29",
     "@storybook/addon-a11y": "^9.1.4",
     "@storybook/addon-docs": "^9.1.4",
     "@storybook/addon-vitest": "^9.1.4",
