@@ -68,7 +68,7 @@ export class ProductLinkButton extends LitElement {
         <a href="${this.productUrl}" target="_blank" rel="noopener noreferrer">
           <button class="link-button button with-icon small">
             <external-link-icon></external-link-icon>
-                  <span>${msg("View Product")}</span>
+            <span>${msg("View Product")}</span>
           </button>
         </a>
       </section>
