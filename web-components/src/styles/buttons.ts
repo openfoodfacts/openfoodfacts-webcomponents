@@ -130,6 +130,12 @@ export const BUTTON_CLASS_BY_TYPE: Record<ButtonType, CSSResult> = {
     .link-button:hover {
       text-decoration: underline;
     }
+      
+    @media (prefers-color-scheme: dark) {
+      .link-button button {
+        color: white;
+      }
+    }
   `,
   [ButtonType.Success]: css`
     .success-button {
