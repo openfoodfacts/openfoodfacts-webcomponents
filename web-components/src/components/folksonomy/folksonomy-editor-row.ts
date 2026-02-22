@@ -420,6 +420,17 @@ export class FolksonomyEditorRow extends LitElement {
     `,
   ]
 
+  private isUrl(value: string) {
+    return /^https?:\/\/\S+$/i.test(value)
+  }
+
+  private confirmExternalNavigation(e: Event) {
+    const confirmed = confirm("You are about to visit an external website. Continue?")
+    if (!confirmed) {
+      e.preventDefault()
+    }
+  }
+
   override render() {
     if (this.empty) {
       return html`
@@ -481,7 +492,18 @@ export class FolksonomyEditorRow extends LitElement {
                 .value=${this.tempValue}
                 @input=${this.handleInputChange}
               />`
-            : this.value}
+            : this.isUrl(this.value)
+              ? html`
+                  <a
+                    href=${this.value}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    @click=${this.confirmExternalNavigation}
+                  >
+                    ${this.value}
+                  </a>
+                `
+              : this.value}
         </td>
         ${this.pageType == "edit"
           ? html`<td>
