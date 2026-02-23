@@ -6,7 +6,7 @@ export type OffWebcomponentConfigurationOptions = {
   robotoffConfiguration: RobotoffConfigurationOptions
   languageCode: string
   countryCode: string
-  assetsImagesPath: string
+  assetsPath: string
   folksonomyConfiguration: FolksonomyConfigurationOptions
   openfoodfactsApiUrl: string
 }
