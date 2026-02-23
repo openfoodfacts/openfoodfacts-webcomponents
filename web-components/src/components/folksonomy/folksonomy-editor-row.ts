@@ -420,8 +420,13 @@ export class FolksonomyEditorRow extends LitElement {
     `,
   ]
 
-  private isUrl(value: string) {
-    return /^https?:\/\/\S+$/i.test(value)
+  private isUrl(value: string): boolean {
+    try {
+      const url = new URL(value)
+      return url.protocol == "http:" || url.protocol == "https:"
+    } catch (err) {
+      return false
+    }
   }
 
   private confirmExternalNavigation(e: Event) {
