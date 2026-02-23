@@ -424,7 +424,7 @@ export class FolksonomyEditorRow extends LitElement {
     try {
       const url = new URL(value)
       return url.protocol == "http:" || url.protocol == "https:"
-    } catch (err) {
+    } catch {
       return false
     }
   }
