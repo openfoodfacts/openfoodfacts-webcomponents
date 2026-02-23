@@ -62,16 +62,18 @@ export class ProductLinkButton extends LitElement {
       console.error("Product code is required")
       return nothing
     }
-    const rootClasses = { "dark-mode": this.isDarkMode }
     return html`
-      <section class=${classMap(rootClasses)}>
-        <a href="${this.productUrl}" target="_blank" rel="noopener noreferrer">
-          <button class="link-button button with-icon small">
-            <external-link-icon></external-link-icon>
-            <span>${msg("View Product")}</span>
-          </button>
-        </a>
-      </section>
+      <a
+        href="${this.productUrl}"
+        class=${classMap({ "dark-mode": this.isDarkMode })}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <button class="link-button button with-icon small">
+          <external-link-icon></external-link-icon>
+          <span>${msg("View Product")}</span>
+        </button>
+      </a>
     `
   }
 }
