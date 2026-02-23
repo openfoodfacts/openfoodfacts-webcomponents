@@ -4,7 +4,6 @@ import { DEFAULT_ASSETS_PATH, DEFAULT_COUNTRY_CODE, DEFAULT_LANGUAGE_CODE } from
 export const assetsPath = signal(DEFAULT_ASSETS_PATH)
 
 export const getImageUrl = (fileName: string) => {
-  console.log(`${assetsPath.get()}/${fileName}`)
   return `${assetsPath.get()}/images/${fileName}`
 }
 
