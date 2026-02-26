@@ -3,5 +3,6 @@
     "@types/jest": "^29.5.14",
     "jest": "^29.7.0",
     "ts-jest": "^29.3.1"
-  }
+  },
+  "packageManager": "npm@11.9.0+sha512.04166853ddba142ca98f86fb57b1258a7c6c59ccb82acb3cf141b77a315898acaaed47395e74f7e0c7b69c486008e68be6a6381ef1aee5a23dd82e0e61decd68"
 }
