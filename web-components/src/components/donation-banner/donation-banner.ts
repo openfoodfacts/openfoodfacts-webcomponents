@@ -79,7 +79,7 @@ export class DonationBanner extends LitElement {
     .donation-banner-footer {
       position: relative;
       display: flex;
-      flex-wrap: wrap; /*Using Flex wrap for arrangement*/
+      flex-wrap: wrap;
       justify-content: center;
       align-items: center;
       padding: 30px;
@@ -250,8 +250,6 @@ export class DonationBanner extends LitElement {
     .unordered-list li p {
       margin: 0;
     }
-
-    /*Put accommodations for tablet and phone together for better readability and maintenance*/
 
     /* Mobile Optimizations for tablet */
     @media (min-width: 700px) and (max-width: 1050px) {
