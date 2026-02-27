@@ -60,6 +60,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
         z-index: 1;
         top: 1rem;
         display: flex;
+        flex-direction: column;
         align-items: center;
         margin-bottom: 1rem;
         background-color: white;
@@ -71,6 +72,12 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
         box-sizing: border-box;
         max-width: ${IMAGE_MAX_WIDTH}px;
         width: 100%;
+      }
+
+      .date {
+        padding-top: 15px;
+        font-size: medium;
+        font-weight: 500;
       }
 
       .nutrients {
@@ -213,7 +220,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
     const imgUrl = getRobotoffImageUrl(insight.source_image)
     return html`
       <div class="image-wrapper">
-        <span>${this.uploaded_Date ? this.uploaded_Date : ""}</span>
+        <div class="date">${this.uploaded_Date ? this.uploaded_Date : ""}</div>
         <zoomable-image
           src=${imgUrl}
           .size="${{
