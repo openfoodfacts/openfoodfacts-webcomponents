@@ -421,9 +421,14 @@ export class FolksonomyEditorRow extends LitElement {
   ]
 
   private isUrl(value: string): boolean {
+    const trimmedValue = value.trim()
+    if (!trimmedValue) {
+      return false
+    }
+
     try {
-      const url = new URL(value)
-      return url.protocol == "http:" || url.protocol == "https:"
+      const url = new URL(trimmedValue)
+      return url.protocol === "http:" || url.protocol === "https:"
     } catch {
       return false
     }
@@ -433,6 +438,7 @@ export class FolksonomyEditorRow extends LitElement {
     const confirmed = confirm(msg("You are about to visit an external website. Continue?"))
     if (!confirmed) {
       e.preventDefault()
+      e.stopPropagation()
     }
   }
 
@@ -504,6 +510,7 @@ export class FolksonomyEditorRow extends LitElement {
                     target="_blank"
                     rel="noopener noreferrer nofollow"
                     @click=${this.confirmExternalNavigation}
+                    @auxclick=${this.confirmExternalNavigation}
                   >
                     ${this.value}
                   </a>
