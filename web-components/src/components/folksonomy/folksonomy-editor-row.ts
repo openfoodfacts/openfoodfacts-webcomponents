@@ -430,7 +430,7 @@ export class FolksonomyEditorRow extends LitElement {
   }
 
   private confirmExternalNavigation(e: Event) {
-    const confirmed = confirm("You are about to visit an external website. Continue?")
+    const confirmed = confirm(msg("You are about to visit an external website. Continue?"))
     if (!confirmed) {
       e.preventDefault()
     }
@@ -502,7 +502,7 @@ export class FolksonomyEditorRow extends LitElement {
                   <a
                     href=${this.value}
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="noopener noreferrer nofollow"
                     @click=${this.confirmExternalNavigation}
                   >
                     ${this.value}
