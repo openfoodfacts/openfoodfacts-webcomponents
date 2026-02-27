@@ -113,6 +113,9 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
   @state()
   private nutrimentsData?: NutrimentsProductType
 
+  @state()
+  private uploaded_Date: string = ""
+
   get currentInsightId() {
     return this.insightsIds[this.currentInsightIndex]
   }
@@ -182,12 +185,26 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
   async getProductNutriments(productCode: string) {
     this.nutrimentsData = undefined
     const result = await fetchProduct<NutrimentsProductType>(productCode, {
-      fields: [ProductFields.NUTRIMENTS],
+      fields: [ProductFields.NUTRIMENTS, ProductFields.IMAGES],
       lc: languageCode.get(),
     })
     this.nutrimentsData = result.product
+    const images = result?.product?.images
+    const key = images["nutrition_en"]?.imgid
+    const uploaded_t = key ? images[key]?.uploaded_t : undefined
+
+    this.uploaded_Date = this.getUploadedTime(uploaded_t)
     return result.product.nutriments
   }
+
+  getUploadedTime = (data: number | undefined) =>
+    data
+      ? new Date(data * 1000).toLocaleDateString(undefined, {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })
+      : ""
 
   renderImage(insight: NutrientsInsight) {
     if (!insight?.source_image) {
@@ -196,6 +213,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
     const imgUrl = getRobotoffImageUrl(insight.source_image)
     return html`
       <div class="image-wrapper">
+        <span>${this.uploaded_Date ? this.uploaded_Date : ""}</span>
         <zoomable-image
           src=${imgUrl}
           .size="${{
