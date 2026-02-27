@@ -13,9 +13,9 @@ export const Basic: Story = {
   args: {
     placeholder: "Search for a property...",
     suggestions: [
-      { id: "1", label: "Vegan", value: "vegan" },
-      { id: "2", label: "Vegetarian", value: "vegetarian" },
-      { id: "3", label: "Palm oil free", value: "palm-oil-free" },
+      { label: "Vegan", value: "vegan" },
+      { label: "Vegetarian", value: "vegetarian" },
+      { label: "Palm oil free", value: "palm-oil-free" },
     ],
   },
 }
