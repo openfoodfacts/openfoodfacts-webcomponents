@@ -173,6 +173,9 @@ export class ZoomableImage extends MessageDisplayMixinElement {
     this.resetRotatation()
   }
 
+  @property({ type: String })
+  customClass = ""
+
   @state()
   private _rotation = 0
 
@@ -909,7 +912,11 @@ export class ZoomableImage extends MessageDisplayMixinElement {
     }
 
     return html`
-      <div class="toolbar flex justify-end" role="toolbar" aria-label=${msg("Image controls")}>
+      <div
+        class="toolbar flex ${this.customClass != "" ? this.customClass : "justify-end"}"
+        role="toolbar"
+        aria-label=${msg("Image controls")}
+      >
         ${this.renderMobileCanvasToggle()} ${this.renderCenterButton()}
         ${this.renderRotateButtons()}
       </div>
