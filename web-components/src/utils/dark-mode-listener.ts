@@ -11,11 +11,23 @@ class DarkModeListener {
   constructor() {
     this.mq = window.matchMedia("(prefers-color-scheme: dark)")
     this.isDark = this.mq.matches
+    this.applyDarkModeClass()
     this.mq.addEventListener("change", this.handleChange)
+  }
+
+  private applyDarkModeClass() {
+    if (typeof document !== "undefined") {
+      if (this.isDark) {
+        document.documentElement.classList.add("dark-mode")
+      } else {
+        document.documentElement.classList.remove("dark-mode")
+      }
+    }
   }
 
   private handleChange = (e: MediaQueryListEvent) => {
     this.isDark = e.matches
+    this.applyDarkModeClass()
     this.listeners.forEach((cb) => cb(this.isDark))
   }
 

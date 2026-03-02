@@ -24,7 +24,7 @@ import { localized, msg } from "@lit/localize"
 
 @customElement("modal-component")
 @localized()
-class ModalComponent extends LitElement {
+export class ModalComponent extends LitElement {
   static override styles = [MODAL]
 
   /**
