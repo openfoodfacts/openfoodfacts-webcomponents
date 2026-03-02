@@ -8,6 +8,9 @@ export const DEFAULT_FOLKSONOMY_CONFIGURATION = {
   apiUrl: "https://api.folksonomy.openfoodfacts.org",
 }
 
+export const DEFAULT_NUTRI_PATROL_CONFIGURATION = {
+  imgUrl: "https://nutripatrol.openfoodfacts.org/assets/off-logo-_mdtrtmK.png",
+}
 export const PAGE_SIZE = 25
 
 export enum EventType {
