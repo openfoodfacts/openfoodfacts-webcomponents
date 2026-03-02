@@ -17,6 +17,10 @@ export class ProductLinkButton extends LitElement {
       :host {
         display: inline-block;
       }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
     `,
   ]
 
