@@ -69,7 +69,7 @@
     "@openfoodfacts/openfoodfacts-nodejs": "^2.0.0-alpha.18",
     "@storybook/addon-a11y": "^9.1.4",
     "@storybook/addon-docs": "^9.1.4",
-    "@storybook/addon-vitest": "^9.1.4",
+    "@storybook/addon-vitest": "^10.2.3",
     "@storybook/builder-vite": "^9.1.4",
     "@storybook/web-components-vite": "^9.1.4",
     "@types/cropperjs": "^1.1.5",
