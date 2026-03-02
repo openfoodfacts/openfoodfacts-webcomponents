@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.17.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.16.0...v1.17.0) (2026-03-02)
+
+
+### Features
+
+* add types generation to vite build ([#422](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/422)) ([c99d4ef](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/c99d4ef7ed9e8f42318ec4124099375360874760))
+
+
+### Bug Fixes
+
+* Add ingredients-spellcheck to storybook components ([#441](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/441)) ([3b7b970](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/3b7b970e787c07884138594d260d15c7b6b5cdc4))
+* **donation-banner:** refactor layout for better responsiveness ([#420](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/420)) ([b1824d1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/b1824d1466caa3c7a34d2f848fa4e289b7261411))
+* Prevent infinite spinner in ingredient spellcheck on API error ([#432](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/432)) ([4feecf9](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/4feecf937c1cbe7eaad1a9dd2216eb0dd40853ed))
+* Revert "chore(deps-dev): bump @storybook/addon-a11y from 9.1.6 to 9.1.15 in /web-components" ([#410](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/410)) ([2aec4ea](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/2aec4ea3909f11928bfab2b39e77f349779226e2))
+* Update dependencies to fix published security vulns, pin npm ([#423](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/423)) ([bd7c1dd](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/bd7c1ddbb0b0dc58c4cf2bb8864320d0e78e670f))
+
 ## [1.16.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.15.1...v1.16.0) (2026-01-27)
 
 
