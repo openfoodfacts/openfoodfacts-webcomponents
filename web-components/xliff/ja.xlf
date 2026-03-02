@@ -8,23 +8,23 @@
       </trans-unit>
       <trans-unit id="s95d23d03f9147581">
         <source>Unzoom</source>
-        <target state="needs-translation">Unzoom</target>
+        <target state="translated">ズーム解除</target>
       </trans-unit>
       <trans-unit id="s166bd56d19670a72">
         <source>Zoom</source>
-        <target state="needs-translation">Zoom</target>
+        <target state="translated">ズーム</target>
       </trans-unit>
       <trans-unit id="s01d2865e3e1d5501">
         <source>Thank you for your assistance!</source>
-        <target state="needs-translation">Thank you for your assistance!</target>
+        <target state="translated">ご協力ありがとうございました！</target>
       </trans-unit>
       <trans-unit id="s4e94adf723979402">
         <source>Open Food Facts needs your help with this product.</source>
-        <target state="needs-translation">Open Food Facts needs your help with this product.</target>
+        <target state="translated">Open Food Facts はこの製品に関してあなたの協力を必要としています。</target>
       </trans-unit>
       <trans-unit id="s25e94495991e95ba">
         <source>Thanks for your help! Can you assist with another question?</source>
-        <target state="needs-translation">Thanks for your help! Can you assist with another question?</target>
+        <target state="translated">ご協力ありがとうございます！別の質問にもお答えいただけますか？</target>
       </trans-unit>
       <trans-unit id="s7ce4fd9430e80cea">
         <source>value</source>
@@ -32,11 +32,11 @@
       </trans-unit>
       <trans-unit id="s6498dfe4855bb3a7">
         <source>unit</source>
-        <target state="needs-translation">unit</target>
+        <target state="translated">ユニット</target>
       </trans-unit>
       <trans-unit id="s59df20feee978e5b">
         <source>Error: Invalid value.</source>
-        <target state="needs-translation">Error: Invalid value.</target>
+        <target state="translated">エラー: 無効な値です。</target>
       </trans-unit>
       <trans-unit id="sbd9a0b2293b3cd3c">
         <source>Serving size</source>
@@ -44,7 +44,7 @@
       </trans-unit>
       <trans-unit id="sbb623d6b18d966a0">
         <source>Nutrition facts are displayed on the packaging:</source>
-        <target state="needs-translation">Nutrition facts are displayed on the packaging:</target>
+        <target state="translated">栄養成分表示はパッケージに表示されています：</target>
       </trans-unit>
       <trans-unit id="se206feec7ec57b28">
         <source>per 100g</source>
@@ -52,7 +52,7 @@
       </trans-unit>
       <trans-unit id="sca0c3305aff570b8">
         <source>per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
-        <target state="needs-translation">per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</target>
+        <target state="translated">指定された1食分あたり"<x id="0" equiv-text="${this._servingSizeValue}"/>"</target>
       </trans-unit>
       <trans-unit id="s453188ea728f64da">
         <source>Add a nutrient</source>
@@ -64,7 +64,7 @@
       </trans-unit>
       <trans-unit id="se773f50d2a16d481">
         <source>Rotate image to the right</source>
-        <target state="needs-translation">Rotate image to the right</target>
+        <target state="translated">画像を右に回転</target>
       </trans-unit>
       <trans-unit id="s475b08749d0706ed">
         <source>Help us inform millions of consumers around the world about what they eat</source>
@@ -104,11 +104,11 @@
       </trans-unit>
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
-        <target state="needs-translation">group photo donation <x id="0" equiv-text="${this.currentYear}"/></target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">集合写真の寄付 <x id="0" equiv-text="${this.currentYear}"/></target>
       </trans-unit>
       <trans-unit id="s43df2e8395f6834e">
         <source>Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</source>
-        <target state="needs-translation">Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt"><x id="0" equiv-text="${this.currentYear}"/> 募金活動にご協力ください</target>
       </trans-unit>
       <trans-unit id="s000d98595e959c1e">
         <source>Get It On Google Play</source>
@@ -116,11 +116,11 @@
       </trans-unit>
       <trans-unit id="s547c12ae169d00bc">
         <source>Available on F-Droid</source>
-        <target state="needs-translation">Available on F-Droid</target>
+        <target state="translated">F-Droidで利用可能</target>
       </trans-unit>
       <trans-unit id="s7124dde792a8faa2">
         <source>Android APK</source>
-        <target state="needs-translation">Android APK</target>
+        <target state="translated">Android APK</target>
       </trans-unit>
       <trans-unit id="s21e73088de6f26f3">
         <source>Download on the App Store</source>
@@ -132,15 +132,15 @@
       </trans-unit>
       <trans-unit id="h5d824b4954e56ea5">
         <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
-        <target state="needs-translation">Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt"><x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>毎日の<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>食べ物<x id="2" equiv-text="&lt;/span&gt;"/>をスキャンします</target>
       </trans-unit>
       <trans-unit id="s8a8bfd67f2dd2810">
         <source>Download the OFF app with this QR code</source>
-        <target state="needs-translation">Download the OFF app with this QR code</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">このQRコードでOFFアプリをダウンロードしてください</target>
       </trans-unit>
       <trans-unit id="s4bbc7472834a9686">
         <source>Your browser does not support barcode scanning.</source>
-        <target state="needs-translation">Your browser does not support barcode scanning.</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">お使いのブラウザはバーコードスキャンをサポートしていません。</target>
       </trans-unit>
       <trans-unit id="s5e8250fb85d64c23">
         <source>Close</source>
@@ -148,11 +148,11 @@
       </trans-unit>
       <trans-unit id="s976dfd19ef58a1e1">
         <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
-        <target state="needs-translation">Click to scan a barcode and find out its details (health, preferences, etc.)</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">クリックしてバーコードをスキャンし、詳細（健康状態、好みなど）を確認します</target>
       </trans-unit>
       <trans-unit id="sc0520e1732a5c568">
         <source>Expand image</source>
-        <target state="needs-translation">Expand image</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">画像を拡大</target>
       </trans-unit>
       <trans-unit id="sab56a1d439576fd6">
         <source>Suggestion icon</source>
@@ -278,7 +278,7 @@
       </trans-unit>
       <trans-unit id="s8af61807443f32a4">
         <source>Actions</source>
-        <target state="needs-translation">Actions</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">アクション</target>
       </trans-unit>
       <trans-unit id="seffa8ca49175b5f0">
         <source>Personalized properties</source>
@@ -539,20 +539,20 @@
                     <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
                     or explore the
                     <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="needs-translation">These properties are created and filed by users for any kind of usages. Feel
-                    free to add your own. The properties and values you create
-                    <x id="0" equiv-text="&lt;strong&gt;"/>must be factual<x id="1" equiv-text="&lt;/strong&gt;"/>. You can dive into
-                    <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
-                    or explore the
-                    <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">これらのプロパティは、ユーザーによって作成され、あらゆる用途のために登録されています。
+                    ご自身のプロパティを自由に追加してください。作成するプロパティと値は
+                    <x id="0" equiv-text="&lt;strong&gt;"/>事実に基づいたものでなければなりません<x id="1" equiv-text="&lt;/strong&gt;"/>。
+                    <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>コミュニティで既に使用されているプロパティのリスト<x id="3" equiv-text="&lt;/a&gt;"/>
+                    を参照したり、
+                    <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>プロパティのドキュメントと検索エンジン<x id="5" equiv-text="&lt;/a&gt;"/>を調べたりすることもできます。</target>
       </trans-unit>
       <trans-unit id="h1fbdfea3ad6d664e">
         <source>This is brought by the
                     <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't
                     hesitate to participate or give feedback</source>
-        <target state="needs-translation">This is brought by the
-                    <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't
-                    hesitate to participate or give feedback</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">これは
+                    <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>Folksonomy Engineプロジェクト<x id="1" equiv-text="&lt;/a&gt;"/>によって実現されました。ぜひ参加したりフィードバックをお送りください
+</target>
       </trans-unit>
       <trans-unit id="s71a5c9f4b68ef4d4">
         <source>Count</source>
