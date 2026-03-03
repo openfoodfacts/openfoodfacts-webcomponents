@@ -48,6 +48,12 @@ export class FolksonomyEditorRow extends LitElement {
   @state() private valueSuggestions: AutocompleteSuggestion[] = []
 
   /**
+   * Map of property keys to their product counts.
+   * @private
+   */
+  @state() private keyCounts: Record<string, number> | null = null
+
+  /**
    * Temporary value used during editing.
    * @private
    */
@@ -110,11 +116,19 @@ export class FolksonomyEditorRow extends LitElement {
     folksonomyApi
       .fetchKeys()
       .then((keys) => {
-        this.keySuggestions = keys.map((key) => ({
-          value: key.k,
-        }))
+        const counts: Record<string, number> = {}
+        this.keySuggestions = keys.map((key) => {
+          counts[key.k] = key.count
+          return {
+            value: key.k,
+            label: `${key.k} (${key.count ?? 0})`,
+          }
+        })
+        this.keyCounts = counts
       })
-      .catch((error) => console.error("Error fetching keys:", error))
+      .catch(() => {
+        this.keyCounts = {}
+      })
   }
 
   /**
@@ -470,8 +484,11 @@ export class FolksonomyEditorRow extends LitElement {
           <a
             class="property-link"
             href="https://wiki.openfoodfacts.org/Folksonomy/Property/${this.key}"
-            >${this.key}</a
           >
+            ${this.key}${this.keyCounts?.[this.key] !== undefined
+              ? ` (${this.keyCounts[this.key]})`
+              : ""}
+          </a>
         </td>
         <td>
           ${this.editable
