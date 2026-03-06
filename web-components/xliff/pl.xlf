@@ -176,7 +176,7 @@
       </trans-unit>
       <trans-unit id="s417b90913e05bc17">
         <source>Preview</source>
-        <target state="needs-translation">Preview</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Zapowiedź</target>
       </trans-unit>
       <trans-unit id="s5dd6f12783fca34f">
         <source>Edit ingredients list</source>
@@ -462,7 +462,7 @@
       </trans-unit>
       <trans-unit id="sc681b137e8f604f7">
         <source>Confirm deletion</source>
-        <target state="needs-translation">Confirm deletion</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Potwierdź usunięcie</target>
       </trans-unit>
       <trans-unit id="s4f751fb9b3ed766c">
         <source>Creating a New Property</source>

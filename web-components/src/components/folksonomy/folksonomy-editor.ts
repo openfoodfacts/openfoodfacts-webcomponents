@@ -266,7 +266,7 @@ export class FolksonomyEditor extends LitElement {
             >
               <span class="sort-header"> ${msg("Value")} ${this.renderSortIcon("value")} </span>
             </th>
-            <th>${msg("Actions")}</th>
+            ${this.pageType == "edit" ? html`<th>${msg("Actions")}</th>` : null}
           </tr>
           ${this.properties.map(
             (item, index) =>
@@ -279,12 +279,14 @@ export class FolksonomyEditor extends LitElement {
                 page-type=${this.pageType}
               ></folksonomy-editor-row>`
           )}
-          ${html`<folksonomy-editor-row
-            product-code=${this.productCode}
-            page-type=${this.pageType}
-            row-number=${this.properties.length + 1}
-            empty
-          ></folksonomy-editor-row>`}
+          ${this.pageType == "edit"
+            ? html`<folksonomy-editor-row
+                product-code=${this.productCode}
+                page-type=${this.pageType}
+                row-number=${this.properties.length + 1}
+                empty
+              ></folksonomy-editor-row>`
+            : null}
         </table>
       </form>
     `

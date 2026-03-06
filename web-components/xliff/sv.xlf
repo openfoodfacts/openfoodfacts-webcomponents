@@ -68,11 +68,11 @@
       </trans-unit>
       <trans-unit id="s475b08749d0706ed">
         <source>Help us inform millions of consumers around the world about what they eat</source>
-        <target state="needs-translation">Help us inform millions of consumers around the world about what they eat</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Hjälp oss att informera miljontals konsumenter runt om i världen om vad de äter</target>
       </trans-unit>
       <trans-unit id="sfc40ea3d5d5aa6f8">
         <source>Your donations fund the day-to-day operations of our non-profit association:</source>
-        <target state="needs-translation">Your donations fund the day-to-day operations of our non-profit association:</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Dina donationer finansierar den dagliga verksamheten i vår ideella förening:</target>
       </trans-unit>
       <trans-unit id="s1c5031113de500ce">
         <source>keeping our database open &amp; available to all,</source>
@@ -84,19 +84,19 @@
       </trans-unit>
       <trans-unit id="sd82bc2decefa621b">
         <source>remain independent of the food industry,</source>
-        <target state="needs-translation">remain independent of the food industry,</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">förbli oberoende av livsmedelsindustrin,</target>
       </trans-unit>
       <trans-unit id="sb3bdd638a58d30f4">
         <source>engage a community of committed citizens,</source>
-        <target state="needs-translation">engage a community of committed citizens,</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">engagera en gemenskap av engagerade medborgare,</target>
       </trans-unit>
       <trans-unit id="s100c4928cc74642a">
         <source>support the advancement of public health research.</source>
-        <target state="needs-translation">support the advancement of public health research.</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">stödja utvecklingen av folkhälsoforskning.</target>
       </trans-unit>
       <trans-unit id="s6d7b6cdedaadfb6e">
         <source>Each donation counts! We appreciate your support in bringing further food transparency in the world.</source>
-        <target state="needs-translation">Each donation counts! We appreciate your support in bringing further food transparency in the world.</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Varje donation räknas! Vi uppskattar ditt stöd för att skapa ytterligare transparens kring livsmedelsförsörjning i världen.</target>
       </trans-unit>
       <trans-unit id="s6306a31415aea913">
         <source>I SUPPORT</source>
@@ -104,7 +104,7 @@
       </trans-unit>
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
-        <target state="needs-translation">group photo donation <x id="0" equiv-text="${this.currentYear}"/></target>
+        <target state="translated">gruppfotodonation <x id="0" equiv-text="${this.currentYear}"/></target>
       </trans-unit>
       <trans-unit id="s43df2e8395f6834e">
         <source>Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</source>
@@ -136,11 +136,11 @@
       </trans-unit>
       <trans-unit id="s8a8bfd67f2dd2810">
         <source>Download the OFF app with this QR code</source>
-        <target state="needs-translation">Download the OFF app with this QR code</target>
+        <target state="translated">Ladda ner OFF-appen med den här QR-koden</target>
       </trans-unit>
       <trans-unit id="s4bbc7472834a9686">
         <source>Your browser does not support barcode scanning.</source>
-        <target state="needs-translation">Your browser does not support barcode scanning.</target>
+        <target state="translated">Din webbläsare stöder inte streckkodsläsning.</target>
       </trans-unit>
       <trans-unit id="s5e8250fb85d64c23">
         <source>Close</source>
@@ -148,7 +148,7 @@
       </trans-unit>
       <trans-unit id="s976dfd19ef58a1e1">
         <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
-        <target state="needs-translation">Click to scan a barcode and find out its details (health, preferences, etc.)</target>
+        <target state="translated">Klicka för att skanna en streckkod och ta reda på dess detaljer (hälsa, preferenser etc.)</target>
       </trans-unit>
       <trans-unit id="sc0520e1732a5c568">
         <source>Expand image</source>
@@ -176,7 +176,7 @@
       </trans-unit>
       <trans-unit id="s417b90913e05bc17">
         <source>Preview</source>
-        <target state="needs-translation">Preview</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Förhandsvisning</target>
       </trans-unit>
       <trans-unit id="s5dd6f12783fca34f">
         <source>Edit ingredients list</source>
@@ -226,7 +226,7 @@
       </trans-unit>
       <trans-unit id="s67ae6594857a4d57">
         <source>Thanks for your contribution!</source>
-        <target state="needs-translation">Thanks for your contribution!</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Tack för ditt bidrag!</target>
       </trans-unit>
       <trans-unit id="s061eb5af92512c85">
         <source>Saved! Can you help with another one?</source>

@@ -40,7 +40,7 @@
       </trans-unit>
       <trans-unit id="sbd9a0b2293b3cd3c">
         <source>Serving size</source>
-        <target state="needs-translation">Serving size</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">የማቅረቢያ መጠን</target>
       </trans-unit>
       <trans-unit id="sbb623d6b18d966a0">
         <source>Nutrition facts are displayed on the packaging:</source>
@@ -48,7 +48,7 @@
       </trans-unit>
       <trans-unit id="se206feec7ec57b28">
         <source>per 100g</source>
-        <target state="needs-translation">per 100g</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">በ100 ግራም</target>
       </trans-unit>
       <trans-unit id="sca0c3305aff570b8">
         <source>per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
@@ -56,7 +56,7 @@
       </trans-unit>
       <trans-unit id="s453188ea728f64da">
         <source>Add a nutrient</source>
-        <target state="needs-translation">Add a nutrient</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ንጥረ ነገር ይጨምሩ</target>
       </trans-unit>
       <trans-unit id="sc5575e3107f87874">
         <source>Rotate image to the left</source>
@@ -160,7 +160,7 @@
       </trans-unit>
       <trans-unit id="sf9aee319a006c9b4">
         <source>Add</source>
-        <target state="needs-translation">Add</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ያክሉ</target>
       </trans-unit>
       <trans-unit id="s5666afe5cd0166de">
         <source>Please fix the errors or modify the text before confirming</source>
@@ -176,7 +176,7 @@
       </trans-unit>
       <trans-unit id="s417b90913e05bc17">
         <source>Preview</source>
-        <target state="needs-translation">Preview</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ቅድመ እይታ</target>
       </trans-unit>
       <trans-unit id="s5dd6f12783fca34f">
         <source>Edit ingredients list</source>
@@ -226,7 +226,7 @@
       </trans-unit>
       <trans-unit id="s67ae6594857a4d57">
         <source>Thanks for your contribution!</source>
-        <target state="needs-translation">Thanks for your contribution!</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ላበረከቱት አስተዋጽኦ እናመሰግናለን!</target>
       </trans-unit>
       <trans-unit id="s061eb5af92512c85">
         <source>Saved! Can you help with another one?</source>
@@ -254,7 +254,7 @@
       </trans-unit>
       <trans-unit id="sdc673e73b5c13aea">
         <source>Delete</source>
-        <target state="needs-translation">Delete</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ሰርዝ</target>
       </trans-unit>
       <trans-unit id="s15d64a0a6715285a">
         <source>New key</source>
@@ -270,7 +270,7 @@
       </trans-unit>
       <trans-unit id="s0d5b7fee0311db68">
         <source>Property</source>
-        <target state="needs-translation">Property</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ንብረት</target>
       </trans-unit>
       <trans-unit id="s41f7dca46d3f1b4a">
         <source>Value</source>
@@ -656,7 +656,7 @@
       </trans-unit>
       <trans-unit id="s9fc41f789c63b40d">
         <source>Products</source>
-        <target state="needs-translation">Products</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">ምርቶች</target>
       </trans-unit>
       <trans-unit id="s1e00019dc454872d">
         <source>Please provide a property name using the property-name attribute.</source>

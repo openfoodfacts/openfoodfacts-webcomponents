@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.16.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.15.1...v1.16.0) (2026-01-27)
+
+
+### Features
+
+* view only mode for folksonomy editor ([#396](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/396)) ([abcdcc7](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/abcdcc72a54d9357173e335e23f372964261fad6))
+
+
+### Bug Fixes
+
+* align donation banner bullet list spacing ([#401](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/401)) ([5631b68](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/5631b6897f40659fc6928a163ae27a995bdbe172))
+* **deps:** bump diff from 8.0.2 to 8.0.3 in /web-components ([#400](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/400)) ([92f97d1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/92f97d161987bf6e0591da78ec1de3990c684f90))
+* **deps:** bump qs from 6.14.0 to 6.14.1 in /web-components ([#394](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/394)) ([84710f8](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/84710f8a9f2d8863ff5e098e57d6c65f5519b3d1))
+
 ## [1.15.1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.15.0...v1.15.1) (2025-12-04)
 
 

@@ -483,25 +483,27 @@ export class FolksonomyEditorRow extends LitElement {
               />`
             : this.value}
         </td>
-        <td>
-          <div class="button-container">
-            ${this.editable
-              ? html`
-                  <button class="button chocolate-button" @click=${this.handleSave}>
-                    ${msg("Save")}
-                  </button>
-                  <button class="button chocolate-button" @click=${this.handleCancel}>
-                    ${msg("Cancel")}
-                  </button>
-                `
-              : html`<button class="button chocolate-button" @click=${this.handleEdit}>
-                  ${msg("Edit")}
-                </button>`}
-            <button class="button chocolate-button" @click=${this.handleDelete}>
-              ${msg("Delete")}
-            </button>
-          </div>
-        </td>
+        ${this.pageType == "edit"
+          ? html`<td>
+              <div class="button-container">
+                ${this.editable
+                  ? html`
+                      <button class="button chocolate-button" @click=${this.handleSave}>
+                        ${msg("Save")}
+                      </button>
+                      <button class="button chocolate-button" @click=${this.handleCancel}>
+                        ${msg("Cancel")}
+                      </button>
+                    `
+                  : html`<button class="button chocolate-button" @click=${this.handleEdit}>
+                      ${msg("Edit")}
+                    </button>`}
+                <button class="button chocolate-button" @click=${this.handleDelete}>
+                  ${msg("Delete")}
+                </button>
+              </div>
+            </td>`
+          : null}
       </tr>
       ${this.showNewKeyModal
         ? html`<new-key-modal @close-modal=${this.handleCloseNewKeyModal}></new-key-modal>`

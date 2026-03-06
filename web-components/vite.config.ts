@@ -3,6 +3,7 @@ import { dirname, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
 import { viteStaticCopy } from "vite-plugin-static-copy"
+import dts from "vite-plugin-dts"
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -30,6 +31,10 @@ export default defineConfig({
   plugins: [
     viteStaticCopy({
       targets: [{ src: "src/assets", dest: "" }],
+    }),
+    dts({
+      tsconfigPath: "./tsconfig.json",
+      outDir: "dist/types",
     }),
   ],
   define: {
