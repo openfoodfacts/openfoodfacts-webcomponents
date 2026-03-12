@@ -3,6 +3,7 @@ import { LitElement, html, css } from "lit-element"
 import { customElement, state } from "lit/decorators.js"
 import { getButtonClasses, ButtonType } from "../../styles/buttons"
 import { MODAL } from "../../styles/modal"
+import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme"
 
 /**
  * @customElement("delete-modal")
@@ -15,6 +16,7 @@ export class DeleteModal extends LitElement {
   @state() open = true
 
   static override styles = [
+    FOLKSONOMY_THEME,
     MODAL,
     ...getButtonClasses([ButtonType.Danger, ButtonType.Chocolate]),
     css`
@@ -34,7 +36,7 @@ export class DeleteModal extends LitElement {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background: white;
+        background: var(--off-folksonomy-modal-bg, white);
         border-radius: 12px;
         padding: 24px;
         min-width: 400px;
@@ -69,7 +71,7 @@ export class DeleteModal extends LitElement {
       .modal-title {
         font-size: 20px;
         font-weight: 600;
-        color: #1f2937;
+        color: var(--off-folksonomy-modal-title, #1f2937);
         margin: 0 0 24px 0;
         text-align: center;
         margin-bottom: 12px;
@@ -81,7 +83,7 @@ export class DeleteModal extends LitElement {
 
       .modal-message {
         font-size: 16px;
-        color: #6b7280;
+        color: var(--off-folksonomy-modal-message, #6b7280);
         line-height: 1.5;
         margin: 0;
       }
@@ -109,14 +111,14 @@ export class DeleteModal extends LitElement {
       }
 
       .chocolate-button {
-        background: #341100;
-        border: 1px solid #341100;
+        background: var(--off-folksonomy-accent, #341100);
+        border: 1px solid var(--off-folksonomy-accent, #341100);
         color: white;
       }
 
       .danger-button {
-        border: 1px solid #ff5252;
-        background: #ff5252;
+        border: 1px solid var(--off-folksonomy-danger, #ff5252);
+        background: var(--off-folksonomy-danger, #ff5252);
         color: white;
       }
 
