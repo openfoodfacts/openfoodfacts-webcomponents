@@ -312,7 +312,7 @@ export class DonationBanner extends LitElement {
         width: 100% !important;
         flex-basis: auto !important;
       }
-      
+
       /* Make button container full-width for proper centering */
       .donation-banner__actions-section__donate-button,
       .donation-banner-footer__actions-section__donate-button {
@@ -320,7 +320,7 @@ export class DonationBanner extends LitElement {
         display: flex;
         justify-content: center;
       }
-      
+
       .donation-banner__actions-section__donate-button a button,
       .donation-banner-footer__actions-section__donate-button a button {
         font-size: 18px;
@@ -371,14 +371,14 @@ export class DonationBanner extends LitElement {
         flex-direction: column;
         gap: 15px;
       }
-      
+
       .donation-banner__actions-section__financial,
       .donation-banner-footer__actions-section__financial {
         flex: 1 1 100%;
         text-align: center;
       }
     }
-    
+
     /* Extra small devices (phones less than 400px) */
     @media (max-width: 400px) {
       .donation-banner__actions-section__donate-button a button,
@@ -387,17 +387,17 @@ export class DonationBanner extends LitElement {
         padding: 10px 20px;
         max-width: 100%;
       }
-      
+
       .donation-banner__hook-section p,
       .donation-banner-footer__hook-section p {
         font-size: 16px;
       }
-      
+
       .donation-banner__main-title,
       .donation-banner-footer__main-title {
         font-size: 18px;
       }
-      
+
       .unordered-list {
         font-size: 13px;
       }
