@@ -568,13 +568,13 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
           valuesMax: Math.max(valuesMax, valuesMin + 1),
         }
 
-        // Initialize filters with full range
+        // Initialize filters with full rangeF
         this.filters = {
           property: "",
           countMin: this.ranges.countMin,
           countMax: this.ranges.countMax,
           valuesMin: this.ranges.valuesMin,
-          valuesMax: this.ranges.valuesMax,
+          valuesMax: this.ranges.valuesMax,F
         }
       }
     } catch (error) {
@@ -597,7 +597,9 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
   private getDocumentationUrl(propertyName: string) {
     return `https://wiki.openfoodfacts.org/Folksonomy/Property/${propertyName}`
   }
-
+  private getCreateDocumentationUrl(propertyName: string) {
+    return `https://wiki.openfoodfacts.org/w/index.php?title=Folksonomy/Property/${propertyName}&action=edit`
+  }
   private applyFilters() {
     const { property, countMin, countMax, valuesMin, valuesMax } = this.filters
 
@@ -1024,6 +1026,15 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
             rel="noopener noreferrer"
           >
             🛈
+          </a>
+          <a
+            href="${this.getCreateDocumentationUrl(property.k)}"
+            class="doc-link"
+            title="${msg(str`Create documentation for ${property.k}`)}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            ✏️
           </a>
         </td>
         <td class="count">${property.count}</td>
