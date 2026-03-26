@@ -58,6 +58,8 @@ export class FolksonomyEditorRow extends LitElement {
    */
   @property({ type: String, attribute: "product-code" }) productCode = ""
 
+  @property({ type: String, attribute: "auth-token" }) authToken = ""
+
   /**
    * Version number of the product property.
    */
@@ -217,7 +219,8 @@ export class FolksonomyEditorRow extends LitElement {
         this.productCode,
         this.key,
         this.tempValue,
-        this.version
+        this.version,
+        { authToken: this.authToken }
       )
       this.editable = false
 
@@ -254,7 +257,9 @@ export class FolksonomyEditorRow extends LitElement {
     const deleteModal = document.createElement("delete-modal")
     deleteModal.addEventListener("confirm-delete", async () => {
       try {
-        await folksonomyApi.deleteProductProperty(this.productCode, this.key, this.version)
+        await folksonomyApi.deleteProductProperty(this.productCode, this.key, this.version, {
+          authToken: this.authToken,
+        })
         this.dispatchEvent(
           new CustomEvent("delete-row", {
             detail: { key: this.key },
@@ -282,7 +287,8 @@ export class FolksonomyEditorRow extends LitElement {
           this.productCode,
           this.keyInput,
           this.valueInput,
-          this.version
+          this.version,
+          { authToken: this.authToken }
         )
         this.dispatchEvent(
           new CustomEvent("add-row", {

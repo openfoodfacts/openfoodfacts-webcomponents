@@ -19,6 +19,9 @@ export class FolksonomyEditor extends LitElement {
   @property({ type: String, attribute: "product-code" })
   productCode = ""
 
+  @property({ type: String, attribute: "auth-token" })
+  authToken = ""
+
   /**
    * The type of page being displayed (e.g., "view", "edit")
    * @type {string}
@@ -277,6 +280,7 @@ export class FolksonomyEditor extends LitElement {
                 version=${item.version}
                 row-number=${index + 1}
                 page-type=${this.pageType}
+                auth-token=${this.authToken}
               ></folksonomy-editor-row>`
           )}
           ${this.pageType == "edit"
@@ -284,6 +288,7 @@ export class FolksonomyEditor extends LitElement {
                 product-code=${this.productCode}
                 page-type=${this.pageType}
                 row-number=${this.properties.length + 1}
+                auth-token=${this.authToken}
                 empty
               ></folksonomy-editor-row>`
             : null}
