@@ -1,14 +1,10 @@
 import { signal } from "@lit-labs/signals"
-import {
-  DEFAULT_ASSETS_IMAGES_PATH,
-  DEFAULT_COUNTRY_CODE,
-  DEFAULT_LANGUAGE_CODE,
-} from "../constants"
+import { DEFAULT_ASSETS_PATH, DEFAULT_COUNTRY_CODE, DEFAULT_LANGUAGE_CODE } from "../constants"
 
-export const assetsImagesPath = signal(DEFAULT_ASSETS_IMAGES_PATH)
+export const assetsPath = signal(DEFAULT_ASSETS_PATH)
 
 export const getImageUrl = (fileName: string) => {
-  return `${assetsImagesPath.get()}/${fileName}`
+  return `${assetsPath.get()}/images/${fileName}`
 }
 
 export const countryCode = signal(DEFAULT_COUNTRY_CODE)
