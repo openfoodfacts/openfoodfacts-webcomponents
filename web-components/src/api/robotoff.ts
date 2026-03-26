@@ -128,6 +128,9 @@ const robotoff = {
     const url = addParamsToUrl(apiUrl, questionRequestParams)
     // Note: we need credentials to be sure to have all questions
     const response = await fetch(url, { credentials: "include" })
+    if (!response.ok) {
+      throw new Error(`ROBOTOFF_${response.status}`)
+    }
     const result: QuestionsResponse = await response.json()
     return result
   },
@@ -139,16 +142,17 @@ const robotoff = {
    * nutrients insights are supported
    */
   async insights<
-    T extends NutrientsInsight | IngredientSpellcheckInsight | IngredientDetectionInsight,
-  >(requestParams: InsightsRequestParams = {}): Promise<InsightsResponse<T>> {
-    const apiUrl = getApiUrl("/insights")
-    const url = addParamsToUrl(apiUrl, requestParams)
-    // Note: we need credentials to be sure to have all insights
-    const response = await fetch(url, { credentials: "include" })
-    const result: InsightsResponse<T> = await response.json()
-    return result
-  },
-
+  T extends NutrientsInsight | IngredientSpellcheckInsight | IngredientDetectionInsight,
+>(requestParams: InsightsRequestParams = {}): Promise<InsightsResponse<T>> {
+  const apiUrl = getApiUrl("/insights")
+  const url = addParamsToUrl(apiUrl, requestParams)
+  const response = await fetch(url, { credentials: "include" })
+  if (!response.ok) {
+    throw new Error(`ROBOTOFF_${response.status}`)
+  }
+  const result: InsightsResponse<T> = await response.json()
+  return result
+},
   /**
    * Get insights for the robotoff contribution message
    * Reduces the number of calls to the API by fetching multiple insights at once
