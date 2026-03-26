@@ -1110,7 +1110,10 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
           <div class="main-content">
             <div class="header-section">
               <div class="property-title-container">
-                <h2 id="property_title">${msg("Folksonomy property")}: ${this.propertyName}</h2>
+                <h2 id="property_title">
+                  ${msg("Folksonomy property")}: ${this.propertyName}
+                  (${this.products?.length ?? 0})
+                </h2>
 
                 <div id="fe_infobox" class="info-box">
                   ${msg("Tip: you can also find the")}
