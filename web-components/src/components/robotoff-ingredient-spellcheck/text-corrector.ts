@@ -28,6 +28,8 @@ import "../shared/loading-button"
 import "../shared/text-corrector-highlight"
 import { triggerSubmit } from "../../utils"
 import { TextDiffMixin } from "../../mixins/text-diff-mixin"
+import { darkModeListener } from "../../utils/dark-mode-listener"
+import { classMap } from "lit-html/directives/class-map.js"
 
 // key is the index of the change in the groupedChanges array
 // value is boolean indicating if the change is validated or not
@@ -56,6 +58,20 @@ export enum TextCorrectorKeyboardShortcut {
  */
 @customElement("text-corrector")
 export class TextCorrector extends TextDiffMixin(LitElement) {
+  /**
+   * Whether to apply dark mode styling (auto-detected from prefers-color-scheme)
+   */
+  isDarkMode = darkModeListener.darkMode
+  private _darkModeCb = (isDark: boolean) => {
+    this.isDarkMode = isDark
+    this.requestUpdate()
+  }
+
+  override connectedCallback() {
+    super.connectedCallback()
+    darkModeListener.subscribe(this._darkModeCb)
+  }
+
   static override styles = [
     BASE,
     TEXTAREA,
@@ -135,6 +151,16 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
       .info-popover {
         z-index: 2;
         min-width: 200px;
+      }
+
+      .dark-mode {
+        background-color: #1e1e1e;
+        color: #ffffff;
+        border: 1px solid #333;
+      }
+
+      .dark-mode .popover-content {
+        background-color: #1e1e1e;
       }
 
       .suggestion-button {
@@ -291,6 +317,7 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
    * Removes the event listener for the keydown event if keyboard mode is enabled.
    */
   override disconnectedCallback() {
+    darkModeListener.unsubscribe(this._darkModeCb)
     super.disconnectedCallback()
     if (this.enableKeyboardMode) {
       this.form!.removeEventListener("keydown", this.handleKeyboardShortcut.bind(this))
@@ -1014,7 +1041,15 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
       return nothing
     }
     return html`
-      <div class="popover popover-left info-popover" ${clickOutside(() => this.closeInfoPopover())}>
+      <div
+        class=${classMap({
+          popover: true,
+          "popover-left": true,
+          "info-popover": true,
+          "dark-mode": this.isDarkMode,
+        })}
+        ${clickOutside(() => this.closeInfoPopover())}
+      >
         <div class="popover-content">
           <p>
             ${msg(
