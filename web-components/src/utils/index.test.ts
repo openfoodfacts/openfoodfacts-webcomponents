@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest"
+import { describe, it, expect, vi, beforeEach } from "vitest"
 import {
   paramToString,
   paramsToUrl,
@@ -251,6 +251,23 @@ describe("Utility Functions", () => {
         expect.stringContaining("test_")
       )
       expect(mockLink.click).toHaveBeenCalled()
+    })
+
+    it("should return early and warn when document is not defined (SSR)", () => {
+      const originalDocument = globalThis.document
+      // @ts-expect-error — simulate SSR environment where document is not defined
+      delete globalThis.document
+
+      const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {})
+
+      downloadCSV([["value1", "value2"]], "test", ["Header1", "Header2"])
+
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.stringContaining("SSR environment")
+      )
+
+      globalThis.document = originalDocument
+      consoleSpy.mockRestore()
     })
   })
 
