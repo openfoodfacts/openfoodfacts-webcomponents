@@ -147,6 +147,13 @@ export const downloadCSV = (rows: Array<Array<any>>, filename: string, headers: 
     return
   }
 
+  if (typeof document === "undefined" || typeof URL === "undefined") {
+    console.warn(
+      "downloadCSV: browser APIs not available (SSR environment), skipping download."
+    )
+    return
+  }
+
   const csvContent = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n")
 
   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
@@ -176,7 +183,7 @@ export const downloadCSV = (rows: Array<Array<any>>, filename: string, headers: 
  * @example removeUselessZeros("1.0010") => "1,001"
  */
 export const removeUselessZeros = (value: string) => {
-  return value.replace(/(\.\d*?[1-9])0+$|\.0+$/, "$1")
+  return value.replace(/(\.[\d]*?[1-9])0+$|\.0+$/, "$1")
 }
 
 /**
