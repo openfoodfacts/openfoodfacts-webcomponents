@@ -31,31 +31,45 @@ export class MobileBadges extends LitElement {
       :host {
         display: block;
       }
+      :host {
+        display: block;
+      }
+
+      :host-context(.dark),
       .dark-mode {
         background-color: #201a17;
         color: #f9f7f5;
       }
+
       #footer_scan {
         color: #000;
       }
+
+      :host-context(.dark) #footer_scan,
       .dark-mode #footer_scan {
         color: #f9f7f5;
       }
+
       .everyday {
         background-color: #0064c8;
         border-inline: 5px solid #0064c8;
         color: #fff;
       }
+
+      :host-context(.dark) .everyday,
       .dark-mode .everyday {
         background-color: #0050a0;
         border-inline: 5px solid #0050a0;
         color: #fff;
       }
+
       .foods {
         background-color: #ff8714;
         border-inline: 5px solid #ff8714;
         color: #fff;
       }
+
+      :host-context(.dark) .foods,
       .dark-mode .foods {
         background-color: #cc6c10;
         border-inline: 5px solid #cc6c10;
