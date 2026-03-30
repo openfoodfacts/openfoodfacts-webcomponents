@@ -1,6 +1,6 @@
 import { LitElement, html, css, nothing } from "lit"
 import { customElement, state, property } from "lit/decorators.js"
-import { localized, msg } from "@lit/localize"
+import { localized, msg, str } from "@lit/localize"
 import { getImageUrl, languageCode } from "../../signals/app"
 import { classMap } from "lit/directives/class-map.js"
 import { darkModeListener } from "../../utils/dark-mode-listener"
@@ -428,10 +428,11 @@ export class MobileBadges extends LitElement {
         />
         <div id="footer_scan" style="display:block">
           <div id="footer_install_the_app">${msg("Install the app!")}</div>
-          <!-- TODO find fix to add text between span for translations ex for fr : "Scannez vos <span class="foods">aliments</span> de votre <span class="everyday">quotidien</span>" -->
-          ${msg(
-            html`Scan your <span class="everyday">everyday</span> <span class="foods">foods</span>`
-          )}
+          
+         ${msg(str`Scan your ${'everyday'} ${'foods'}`, {
+      everyday: html`<span class="everyday">everyday</span>`,
+      foods: html`<span class="foods">foods</span>`
+    })}
         </div>
       </div>
     `
@@ -448,8 +449,8 @@ export class MobileBadges extends LitElement {
       ? html`
           <div class="badge-container ">
             ${filteredBadges.map((badge) =>
-              this.generateBadgeLink(badge.href, badge.src, badge.alt, badge.id, badge.errorHandler)
-            )}
+        this.generateBadgeLink(badge.href, badge.src, badge.alt, badge.id, badge.errorHandler)
+      )}
           </div>
         `
       : ""}`
