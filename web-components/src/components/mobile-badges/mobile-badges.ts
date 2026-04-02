@@ -429,9 +429,9 @@ export class MobileBadges extends LitElement {
         <div id="footer_scan" style="display:block">
           <div id="footer_install_the_app">${msg("Install the app!")}</div>
           
-         ${msg(str`Scan your ${'everyday'} ${'foods'}`, {
-      everyday: html`<span class="everyday">everyday</span>`,
-      foods: html`<span class="foods">foods</span>`
+    ${msg(str`Scan your ${'everyday'} ${'foods'}`, {
+      everyday: html`<span class="everyday">${msg('everyday')}</span>`,
+      foods: html`<span class="foods">${msg('foods')}</span>`
     })}
         </div>
       </div>
