@@ -40,7 +40,7 @@
       </trans-unit>
       <trans-unit id="sbd9a0b2293b3cd3c">
         <source>Serving size</source>
-        <target state="needs-translation">Serving size</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Madhësia e servirjes</target>
       </trans-unit>
       <trans-unit id="sbb623d6b18d966a0">
         <source>Nutrition facts are displayed on the packaging:</source>
@@ -56,7 +56,7 @@
       </trans-unit>
       <trans-unit id="s453188ea728f64da">
         <source>Add a nutrient</source>
-        <target state="needs-translation">Add a nutrient</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Shtoni një lëndë ushqyese</target>
       </trans-unit>
       <trans-unit id="sc5575e3107f87874">
         <source>Rotate image to the left</source>
@@ -104,11 +104,11 @@
       </trans-unit>
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
-        <target state="needs-translation">group photo donation <x id="0" equiv-text="${this.currentYear}"/></target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">dhurim fotosh në grup <x id="0" equiv-text="${this.currentYear}"/></target>
       </trans-unit>
       <trans-unit id="s43df2e8395f6834e">
         <source>Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</source>
-        <target state="needs-translation">Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ju lutemi të kontribuoni në <x id="0" equiv-text="${this.currentYear}"/> Mbledhjen tonë të fondeve</target>
       </trans-unit>
       <trans-unit id="s000d98595e959c1e">
         <source>Get It On Google Play</source>
@@ -132,15 +132,15 @@
       </trans-unit>
       <trans-unit id="h5d824b4954e56ea5">
         <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
-        <target state="needs-translation">Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Skanoni ushqimet tuaja <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>të përditshme<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/><x id="2" equiv-text="&lt;/span&gt;"/></target>
       </trans-unit>
       <trans-unit id="s8a8bfd67f2dd2810">
         <source>Download the OFF app with this QR code</source>
-        <target state="needs-translation">Download the OFF app with this QR code</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Shkarko aplikacionin OFF me këtë kod QR</target>
       </trans-unit>
       <trans-unit id="s4bbc7472834a9686">
         <source>Your browser does not support barcode scanning.</source>
-        <target state="needs-translation">Your browser does not support barcode scanning.</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Shfletuesi juaj nuk mbështet skanimin e barkodit.</target>
       </trans-unit>
       <trans-unit id="s5e8250fb85d64c23">
         <source>Close</source>
@@ -148,11 +148,11 @@
       </trans-unit>
       <trans-unit id="s976dfd19ef58a1e1">
         <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
-        <target state="needs-translation">Click to scan a barcode and find out its details (health, preferences, etc.)</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Klikoni për të skanuar një barkod dhe për të zbuluar detajet e tij (gjendja shëndetësore, preferencat, etj.)</target>
       </trans-unit>
       <trans-unit id="sc0520e1732a5c568">
         <source>Expand image</source>
-        <target state="needs-translation">Expand image</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Zgjero imazhin</target>
       </trans-unit>
       <trans-unit id="sab56a1d439576fd6">
         <source>Suggestion icon</source>
@@ -176,7 +176,7 @@
       </trans-unit>
       <trans-unit id="s417b90913e05bc17">
         <source>Preview</source>
-        <target state="needs-translation">Preview</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Pamje paraprake</target>
       </trans-unit>
       <trans-unit id="s5dd6f12783fca34f">
         <source>Edit ingredients list</source>
@@ -226,7 +226,7 @@
       </trans-unit>
       <trans-unit id="s67ae6594857a4d57">
         <source>Thanks for your contribution!</source>
-        <target state="needs-translation">Thanks for your contribution!</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Faleminderit për kontributin tuaj!</target>
       </trans-unit>
       <trans-unit id="s061eb5af92512c85">
         <source>Saved! Can you help with another one?</source>
@@ -254,7 +254,7 @@
       </trans-unit>
       <trans-unit id="sdc673e73b5c13aea">
         <source>Delete</source>
-        <target state="needs-translation">Delete</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Fshij</target>
       </trans-unit>
       <trans-unit id="s15d64a0a6715285a">
         <source>New key</source>
@@ -270,7 +270,7 @@
       </trans-unit>
       <trans-unit id="s0d5b7fee0311db68">
         <source>Property</source>
-        <target state="needs-translation">Property</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Pronë</target>
       </trans-unit>
       <trans-unit id="s41f7dca46d3f1b4a">
         <source>Value</source>
@@ -278,7 +278,7 @@
       </trans-unit>
       <trans-unit id="s8af61807443f32a4">
         <source>Actions</source>
-        <target state="needs-translation">Actions</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Veprime</target>
       </trans-unit>
       <trans-unit id="seffa8ca49175b5f0">
         <source>Personalized properties</source>
@@ -656,7 +656,7 @@
       </trans-unit>
       <trans-unit id="s9fc41f789c63b40d">
         <source>Products</source>
-        <target state="needs-translation">Products</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Produkte</target>
       </trans-unit>
       <trans-unit id="s1e00019dc454872d">
         <source>Please provide a property name using the property-name attribute.</source>
