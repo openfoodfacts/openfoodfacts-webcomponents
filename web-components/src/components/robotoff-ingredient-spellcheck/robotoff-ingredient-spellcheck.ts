@@ -265,20 +265,29 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
       return
     }
 
-    // Send the annotation to Robotoff API
-    await robotoff.annotateIngredientSpellcheck(
-      insight.id,
-      event.detail.annotation,
-      event.detail.correction
-    )
+    try {
+      // Send the annotation to Robotoff API
+      await robotoff.annotateIngredientSpellcheck(
+        insight.id,
+        event.detail.annotation,
+        event.detail.correction
+      )
 
-    await this.afterInsightAnnotation()
+      await this.afterInsightAnnotation()
 
-    if (this.allInsightsAreAnswered) {
+      if (this.allInsightsAreAnswered) {
+        this.dispatchIngredientSpellcheckStateEvent({
+          state: EventState.FINISHED,
+          insightId: insight.id,
+          ...event.detail,
+        })
+      }
+    } catch (error) {
+      console.error("Failed to submit annotation:", error)
+      await this.hideLoading()
       this.dispatchIngredientSpellcheckStateEvent({
-        state: EventState.FINISHED,
+        state: EventState.ERROR,
         insightId: insight.id,
-        ...event.detail,
       })
     }
   }

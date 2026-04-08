@@ -137,6 +137,9 @@ export class RobotoffModal extends LitElement {
         // Send success event if no data to display because we don't want to show the modal again
         this.sendSuccessEvent(this.robotoffContributionType!)
         break
+      case EventState.ERROR:
+        this.isLoading = false
+        break
     }
   }
 
