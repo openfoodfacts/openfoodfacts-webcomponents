@@ -12,7 +12,6 @@ export default meta
 
 type Story = StoryObj<{
   flags: Flag[]
-  showActions: boolean
 }>
 
 export const Basic: Story = {
@@ -84,6 +83,5 @@ export const Basic: Story = {
         created_at: "2026-02-01",
       },
     ],
-    showActions: true,
   },
 }
