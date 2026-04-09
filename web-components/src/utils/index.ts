@@ -62,6 +62,13 @@ export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
 export const isNullOrUndefined = (value: any) => value === null || value === undefined
 
 /**
+ * Returns true if running in a browser environment with the required APIs.
+ * Used to guard browser-only APIs (document, URL) against SSR contexts.
+ */
+export const isBrowser = (): boolean =>
+  typeof document !== "undefined" && typeof URL !== "undefined"
+
+/**
  * Given a key with dot inside representing nested objects,
  * create inner object and set value on leaf node
  *
@@ -147,11 +154,8 @@ export const downloadCSV = (rows: Array<Array<any>>, filename: string, headers: 
     return
   }
 
-  if (typeof document === "undefined" || typeof URL === "undefined") {
-    console.warn(
-      "downloadCSV: browser APIs not available (SSR environment), skipping download."
-    )
-    return
+  if (!isBrowser()) {
+    throw new Error("downloadCSV: browser APIs not available (SSR environment)")
   }
 
   const csvContent = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n")
@@ -183,7 +187,7 @@ export const downloadCSV = (rows: Array<Array<any>>, filename: string, headers: 
  * @example removeUselessZeros("1.0010") => "1,001"
  */
 export const removeUselessZeros = (value: string) => {
-  return value.replace(/(\.[\d]*?[1-9])0+$|\.0+$/, "$1")
+  return value.replace(/(\.\d*?[1-9])0+$|\.0+$/, "$1")
 }
 
 /**

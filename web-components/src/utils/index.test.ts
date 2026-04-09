@@ -253,21 +253,18 @@ describe("Utility Functions", () => {
       expect(mockLink.click).toHaveBeenCalled()
     })
 
-    it("should return early and warn when document is not defined (SSR)", () => {
+    it("should throw when browser APIs are not available (SSR)", () => {
       const originalDocument = globalThis.document
       // @ts-expect-error — simulate SSR environment where document is not defined
       delete globalThis.document
 
-      const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {})
-
-      downloadCSV([["value1", "value2"]], "test", ["Header1", "Header2"])
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining("SSR environment")
-      )
-
-      globalThis.document = originalDocument
-      consoleSpy.mockRestore()
+      try {
+        expect(() => downloadCSV([["value1", "value2"]], "test", ["Header1", "Header2"])).toThrow(
+          "SSR environment"
+        )
+      } finally {
+        globalThis.document = originalDocument
+      }
     })
   })
 
