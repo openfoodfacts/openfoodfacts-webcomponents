@@ -285,7 +285,7 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
    */
   private setupBarcodeDetector() {
     try {
-      if (typeof BarcodeDetector === "undefined") {
+      if (!("BarcodeDetector" in globalThis)) {
         throw new Error("BarcodeDetector API is not supported in this browser.")
       }
       this.codeReader = new BarcodeDetector({ formats: ["ean_13", "ean_8"] })
