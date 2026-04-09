@@ -50,7 +50,7 @@ A set of web components for Open Food Facts to help build edition interfaces
 ## 📆 Weekly meetings
 
 - We e-meet Wednesdays · 11:00 – 11:25am - Time zone: Europe/Paris
-- ![Google Meet](https://meet.google.com/uep-fhvf-gto) Video call link: https://meet.google.com/uep-fhvf-gto
+- [Google Meet](https://meet.google.com/uep-fhvf-gto) Video call link: https://meet.google.com/uep-fhvf-gto
 - Join by phone: https://tel.meet/uep-fhvf-gto?pin=8160344286211
 - Add the Event to your Calendar by [adding the Open Food Facts community calendar to your calendar](https://wiki.openfoodfacts.org/Events)
 - [Weekly Agenda](https://docs.google.com/document/d/1BGHfvrgx5eFIGjK8aTNPK2QwAggRp4oohGuYG9lNX8g/edit?tab=t.0): please add the Agenda items as early as you can. Make sure to check the Agenda items in advance of the meeting, so that we have the most informed discussions possible, leading to argumented decisions.
