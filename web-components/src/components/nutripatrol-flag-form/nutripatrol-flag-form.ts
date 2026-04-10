@@ -205,6 +205,7 @@ export class NutriPatrolFlagForm extends LitElement {
   private dialog!: HTMLDialogElement
 
   private client = new NutriPatrol(globalThis.fetch)
+  private autoCloseTimer?: ReturnType<typeof setTimeout>
 
   override updated(changedProperties: Map<string, any>) {
     if (changedProperties.has("open")) {
@@ -226,8 +227,20 @@ export class NutriPatrolFlagForm extends LitElement {
   }
 
   private handleClose() {
+    if (this.autoCloseTimer) {
+      clearTimeout(this.autoCloseTimer)
+      this.autoCloseTimer = undefined
+    }
     this.open = false
     this.dispatchEvent(new CustomEvent("close", { bubbles: true, composed: true }))
+  }
+
+  override disconnectedCallback() {
+    super.disconnectedCallback()
+    if (this.autoCloseTimer) {
+      clearTimeout(this.autoCloseTimer)
+      this.autoCloseTimer = undefined
+    }
   }
 
   private async handleSubmit(e: Event) {
@@ -269,11 +282,11 @@ export class NutriPatrolFlagForm extends LitElement {
       } else {
         this.success = true
         // Close modal automatically after delay
-        setTimeout(() => this.handleClose(), 3000)
+        this.autoCloseTimer = setTimeout(() => this.handleClose(), 3000)
       }
     } catch (err: any) {
       console.error("Flag API submission error:", err)
-      this.error = err.message || msg("An unexpected error occurred.")
+      this.error = msg("An unexpected error occurred.")
     } finally {
       this.loading = false
     }
@@ -313,13 +326,21 @@ export class NutriPatrolFlagForm extends LitElement {
                     <select
                       id="reason"
                       .value=${this.reason}
-                      @change=${(e: any) => (this.reason = e.target.value)}
+                      @change=${(e: Event) => (this.reason = (e.target as HTMLSelectElement).value)}
                       required
                     >
-                      <option value="Wrong Barcode">${msg("Wrong Barcode")}</option>
-                      <option value="Missing Data">${msg("Missing Data")}</option>
-                      <option value="Wrong Data">${msg("Wrong Data")}</option>
-                      <option value="Other">${msg("Other")}</option>
+                      <option value="Wrong Barcode" ?selected=${this.reason === "Wrong Barcode"}>
+                        ${msg("Wrong Barcode")}
+                      </option>
+                      <option value="Missing Data" ?selected=${this.reason === "Missing Data"}>
+                        ${msg("Missing Data")}
+                      </option>
+                      <option value="Wrong Data" ?selected=${this.reason === "Wrong Data"}>
+                        ${msg("Wrong Data")}
+                      </option>
+                      <option value="Other" ?selected=${this.reason === "Other"}>
+                        ${msg("Other")}
+                      </option>
                     </select>
                   </div>
 
@@ -328,7 +349,8 @@ export class NutriPatrolFlagForm extends LitElement {
                     <textarea
                       id="comment"
                       .value=${this.comment}
-                      @input=${(e: any) => (this.comment = e.target.value)}
+                      @input=${(e: Event) =>
+                        (this.comment = (e.target as HTMLTextAreaElement).value)}
                       placeholder=${msg("Optional details")}
                     ></textarea>
                   </div>

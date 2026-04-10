@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite"
 import { html } from "lit"
+import { ref, createRef } from "lit/directives/ref.js"
 import "./nutripatrol-flag-form"
 import type { NutriPatrolFlagForm } from "./nutripatrol-flag-form"
 
@@ -34,19 +35,20 @@ export const Basic: Story = {
     userId: "test_user_story",
     url: "https://world.openfoodfacts.org/product/6410405143648",
   },
-  render: (args) => html`
-    <button
-      @click=${() => document.querySelector("nutripatrol-flag-form")?.setAttribute("open", "")}
-    >
-      Open Flag Form
-    </button>
-    <nutripatrol-flag-form
-      .barcode=${args.barcode}
-      .type=${args.type}
-      .flavor=${args.flavor}
-      ?open=${args.open}
-      user-id=${args.userId as any}
-      .url=${args.url}
-    ></nutripatrol-flag-form>
-  `,
+  render: (args) => {
+    const formRef = createRef<NutriPatrolFlagForm>()
+
+    return html`
+      <button @click=${() => formRef.value?.setAttribute("open", "")}>Open Flag Form</button>
+      <nutripatrol-flag-form
+        ${ref(formRef)}
+        .barcode=${args.barcode}
+        .type=${args.type}
+        .flavor=${args.flavor}
+        ?open=${args.open}
+        user-id=${String(args.userId ?? "")}
+        .url=${args.url}
+      ></nutripatrol-flag-form>
+    `
+  },
 }
