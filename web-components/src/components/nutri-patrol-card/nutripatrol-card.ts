@@ -10,7 +10,7 @@ interface NutriPatrolIssueUI {
   confidence?: Flag["confidence"]
   created_at?: Flag["created_at"]
   severity: "high" | "medium" | "low"
-  barcode: Flag["barcode"]
+  type: Flag["type"]
   image_id: Flag["image_id"]
 }
 
@@ -22,7 +22,7 @@ function toIssueUI(flag: Flag): NutriPatrolIssueUI {
     confidence: c,
     severity: c != null && c >= 0.8 ? "high" : c != null && c >= 0.5 ? "medium" : "low",
     created_at: flag.created_at,
-    barcode: flag.barcode,
+    type: flag.type,
     image_id: flag.image_id,
   }
 }
@@ -54,13 +54,27 @@ export class NutriPatrolCard extends LitElement {
       display: flex;
       align-items: center;
       gap: 4px;
-      margin: 0 0 0.75rem;
+      margin: 0 0 0.5rem;
     }
 
     .logo {
       height: 30px;
       width: auto;
       margin-right: 6px;
+    }
+
+    .barcode {
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin: 0 0 0.75rem;
+    }
+
+    .barcode span {
+      font-weight: 600;
+      color: #043f7f;
+      background: #e0e7ff;
+      padding: 2px 6px;
+      border-radius: 6px;
     }
 
     .issues-container {
@@ -143,10 +157,10 @@ export class NutriPatrolCard extends LitElement {
       color: #065f46;
     }
 
-    .barcode-tag {
+    .type-tag {
       font-size: 0.7rem;
       background: #e0e7ff;
-      color: #3730a3;
+      color: #043f7f;
       padding: 2px 6px;
       border-radius: 4px;
     }
@@ -178,6 +192,10 @@ export class NutriPatrolCard extends LitElement {
     return this.flags.map(toIssueUI)
   }
 
+  private get barcode(): string | null | undefined {
+    return this.flags[0]?.barcode
+  }
+
   private renderIssue(issue: NutriPatrolIssueUI) {
     return html`
       <div class=${classMap({ issue: true, [issue.severity]: true })}>
@@ -189,12 +207,13 @@ export class NutriPatrolCard extends LitElement {
         <p class="comment">${issue.comment}</p>
 
         <div class="footer">
-          ${issue.barcode ? html`<span class="barcode-tag">${issue.barcode}</span>` : nothing}
+          <span class="type-tag">${issue.type}</span>
+
+          ${issue.type === "image" && issue.image_id != null
+            ? html`<span class="image-tag">Image ${issue.image_id}</span>`
+            : nothing}
           ${issue.confidence != null
             ? html`<span class="badge">${(issue.confidence * 100).toFixed(0)}% confidence</span>`
-            : nothing}
-          ${issue.image_id != null
-            ? html`<span class="image-tag">Image ${issue.image_id}</span>`
             : nothing}
           ${issue.created_at
             ? html`<small>${new Date(issue.created_at).toLocaleDateString()}</small>`
@@ -216,6 +235,9 @@ export class NutriPatrolCard extends LitElement {
           Nutri-Patrol Issues
         </h3>
 
+        ${this.barcode
+          ? html`<p class="barcode">Barcode: <span>${this.barcode}</span></p>`
+          : nothing}
         ${this.loading
           ? html`<p class="empty-state">Loading issues…</p>`
           : this.issues.length === 0

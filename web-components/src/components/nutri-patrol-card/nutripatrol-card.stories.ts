@@ -52,14 +52,14 @@ export const Basic: Story = {
       {
         id: 3,
         barcode: "828738739292",
-        type: "image",
+        type: "product",
         ticket_id: 2,
         device_id: "",
         url: "",
         user_id: "ramneet_test",
         source: "web",
         confidence: 0.7,
-        image_id: "8",
+        image_id: null,
         flavor: "off",
         reason: "Misleading health claims",
         comment:
