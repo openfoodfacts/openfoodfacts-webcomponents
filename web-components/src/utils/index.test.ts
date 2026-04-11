@@ -253,17 +253,41 @@ describe("Utility Functions", () => {
       expect(mockLink.click).toHaveBeenCalled()
     })
 
-    it("should throw when browser APIs are not available (SSR)", () => {
+    it("should warn and return when document is unavailable (SSR)", () => {
       const originalDocument = globalThis.document
+      const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {})
       // @ts-expect-error — simulate SSR environment where document is not defined
       delete globalThis.document
 
       try {
-        expect(() => downloadCSV([["value1", "value2"]], "test", ["Header1", "Header2"])).toThrow(
-          "SSR environment"
+        expect(() =>
+          downloadCSV([["value1", "value2"]], "test", ["Header1", "Header2"])
+        ).not.toThrow()
+        expect(warnSpy).toHaveBeenCalledWith(
+          expect.stringContaining("SSR environment")
         )
       } finally {
         globalThis.document = originalDocument
+        warnSpy.mockRestore()
+      }
+    })
+
+    it("should warn and return when URL is unavailable (SSR)", () => {
+      const originalURL = globalThis.URL
+      const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {})
+      // @ts-expect-error — simulate SSR environment where URL is not defined
+      delete globalThis.URL
+
+      try {
+        expect(() =>
+          downloadCSV([["value1", "value2"]], "test", ["Header1", "Header2"])
+        ).not.toThrow()
+        expect(warnSpy).toHaveBeenCalledWith(
+          expect.stringContaining("SSR environment")
+        )
+      } finally {
+        globalThis.URL = originalURL
+        warnSpy.mockRestore()
       }
     })
   })
