@@ -20,22 +20,21 @@ export const EditMode: Story = {
   },
   render: (args) => {
     const element = document.createElement("folksonomy-editor")
-    element.setAttribute("page-type", args["page-type"])
-    element.setAttribute("product-code", args["product-code"])
+    element.setAttribute("page-type", args["page-type"] as string)
+    element.setAttribute("product-code", args["product-code"] as string)
 
-    // Manually set mock properties after a short delay
-    setTimeout(() => {
-      const component = element as any
-      component.properties = [
-        { key: "Origin", value: "France", version: 1 },
-        { key: "Producer", value: "Example Corp", version: 1 },
-        { key: "Certification", value: "Organic", version: 2 },
-      ]
-    }, 100)
+    // Set mock properties synchronously right away (no setTimeout)
+    const component = element as any
+    component.properties = [
+      { key: "Origin", value: "France", version: 1 },
+      { key: "Producer", value: "Example Corp", version: 1 },
+      { key: "Certification", value: "Organic", version: 2 },
+    ]
 
     return element
   },
 }
+
 export const ViewOnlyMode: Story = {
   args: {
     "page-type": "edit",
@@ -44,19 +43,17 @@ export const ViewOnlyMode: Story = {
   },
   render: (args) => {
     const element = document.createElement("folksonomy-editor")
-    element.setAttribute("page-type", args["page-type"])
-    element.setAttribute("product-code", args["product-code"])
+    element.setAttribute("page-type", args["page-type"] as string)
+    element.setAttribute("product-code", args["product-code"] as string)
     element.setAttribute("view-only", "")
 
-    // Manually set mock properties after a short delay
-    setTimeout(() => {
-      const component = element as any
-      component.properties = [
-        { key: "Origin", value: "France", version: 1 },
-        { key: "Producer", value: "Example Corp", version: 1 },
-        { key: "Certification", value: "Organic", version: 2 },
-      ]
-    }, 100)
+    // Set mock properties synchronously right away (no setTimeout)
+    const component = element as any
+    component.properties = [
+      { key: "Origin", value: "France", version: 1 },
+      { key: "Producer", value: "Example Corp", version: 1 },
+      { key: "Certification", value: "Organic", version: 2 },
+    ]
 
     return element
   },

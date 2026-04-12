@@ -42,6 +42,13 @@ export class FolksonomyEditor extends LitElement {
   propertiesBaseUrl = "/properties"
 
   /**
+   * The URL for the login page
+   * @type {string}
+   */
+  @property({ type: String, attribute: "login-url" })
+  loginUrl = "/cgi/login.pl"
+
+  /**
    * The URL for properties documentation (e.g., "https://wiki.openfoodfacts.org/Folksonomy/Property")
    * @type {string}
    */
@@ -57,7 +64,7 @@ export class FolksonomyEditor extends LitElement {
 
   static override styles = [
     FOLKSONOMY_THEME,
-    css
+    css`
       :host {
         font-family: Arial, sans-serif;
         color: var(--off-folksonomy-text, #333);
@@ -65,7 +72,6 @@ export class FolksonomyEditor extends LitElement {
       .login-message {
         margin-top: 1rem;
         font-style: italic;
-      }
       }
       .feus {
         margin-bottom: 1rem;
@@ -213,6 +219,7 @@ export class FolksonomyEditor extends LitElement {
 
   override connectedCallback() {
     super.connectedCallback()
+
     this.fetchAndLogFolksonomyKeys()
 
     this.addEventListener("add-row", this.handleRowAdd as EventListener)
@@ -306,7 +313,7 @@ export class FolksonomyEditor extends LitElement {
         </table>
         ${this.viewOnly
           ? html`<p class="login-message">
-              ${msg(html`Please <a href="/cgi/login.pl">log in</a> to edit or add properties.`)}
+              ${msg(html`Please <a href="${this.loginUrl}">log in</a> to edit or add properties.`)}
             </p>`
           : null}
       </form>
@@ -365,4 +372,3 @@ declare global {
     "folksonomy-editor": FolksonomyEditor
   }
 }
-
