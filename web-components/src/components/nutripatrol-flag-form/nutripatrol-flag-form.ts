@@ -227,6 +227,8 @@ export class NutriPatrolFlagForm extends LitElement {
   }
 
   private handleClose() {
+    if (!this.open) return
+
     if (this.autoCloseTimer) {
       clearTimeout(this.autoCloseTimer)
       this.autoCloseTimer = undefined
