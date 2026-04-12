@@ -113,6 +113,15 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
   @state()
   private nutrimentsData?: NutrimentsProductType
 
+  @state()
+  private totalInsightsCount: number = 0
+
+  private currentPage: number = 1
+
+  private readonly pageSize: number = 10
+
+  private fetchMoreInsightsPromise?: Promise<void>
+
   get currentInsightId() {
     return this.insightsIds[this.currentInsightIndex]
   }
@@ -145,13 +154,28 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
   private _insightsTask = new Task(this, {
     task: async ([productCode], {}) => {
       this.emitNutrientEvent(EventState.LOADING)
-      const [insights] = await Promise.all([
-        fetchNutrientInsights(productCode, {
-          lc: this._languageCodes,
-        }),
+      this.currentInsightIndex = 0
+      this.currentPage = 1
+      this.totalInsightsCount = 0
+      this.insightsIds = []
+
+      // Keep country filtering optional; do not send lc as it can hide valid insights.
+      const params: any = {
+        count: this.pageSize,
+        page: this.currentPage,
+      }
+      if (this.countryCode) {
+        params.countries = this.countryCode
+      }
+
+      const [insightsResponse] = await Promise.all([
+        fetchNutrientInsights(productCode, params),
         fetchNutrientsTaxonomies(),
-        fetchNutrientsOrderByCountryCode(this._countryCode),
+        fetchNutrientsOrderByCountryCode(this.countryCode || this._countryCode),
       ])
+
+      const insights = insightsResponse.insights
+      this.totalInsightsCount = insightsResponse.count ?? insights.length
 
       this.insightsIds = insights.map((insight) => insight.id)
       if (!this.insightsIds.length) {
@@ -164,11 +188,60 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
     args: () => [this.productCode, this.countryCode, ...this._languageCodes],
   })
 
+  private async fetchNextInsightsPage() {
+    if (this.fetchMoreInsightsPromise) {
+      return this.fetchMoreInsightsPromise
+    }
+    if (this.insightsIds.length >= this.totalInsightsCount) {
+      return
+    }
+
+    this.fetchMoreInsightsPromise = (async () => {
+      try {
+        const nextPage = this.currentPage + 1
+        const params: any = {
+          count: this.pageSize,
+          page: nextPage,
+        }
+        if (this.countryCode) {
+          params.countries = this.countryCode
+        }
+
+        const response = await fetchNutrientInsights(this.productCode, params)
+        this.totalInsightsCount = response.count ?? this.totalInsightsCount
+        const existingIds = new Set(this.insightsIds)
+        const nextIds = response.insights
+          .map((insight) => insight.id)
+          .filter((id) => !existingIds.has(id))
+
+        if (nextIds.length > 0) {
+          this.insightsIds = [...this.insightsIds, ...nextIds]
+        }
+
+        this.currentPage = nextPage
+      } finally {
+        this.fetchMoreInsightsPromise = undefined
+      }
+    })()
+
+    return this.fetchMoreInsightsPromise
+  }
+
   async loadInsight(index: number) {
+    if (index >= this.insightsIds.length && this.insightsIds.length < this.totalInsightsCount) {
+      await this.fetchNextInsightsPage()
+    }
+
     if (index >= this.insightsIds.length) {
       this.emitNutrientEvent(EventState.FINISHED)
       return
     }
+
+    const remainingBuffered = this.insightsIds.length - index
+    if (remainingBuffered <= 5 && this.insightsIds.length < this.totalInsightsCount) {
+      void this.fetchNextInsightsPage()
+    }
+
     this.currentInsightIndex = index
     const insight = this.currentInsight
     await this.getProductNutriments(insight.barcode)
@@ -218,7 +291,17 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
   async afterInsightAnnotation() {
     await this.hideLoading()
     this.emitNutrientEvent(EventState.ANNOTATED)
-    this.loadInsight(this.currentInsightIndex + 1)
+
+    // Remove the annotated item from the list (like Questions does)
+    const annotatedId = this.currentInsightId
+    this.insightsIds = this.insightsIds.filter((id) => id !== annotatedId)
+
+    // Check if we need to fetch more (like Questions: if count > length && length <= 5)
+    if (this.totalInsightsCount > this.insightsIds.length && this.insightsIds.length <= 5) {
+      void this.fetchNextInsightsPage()
+    }
+
+    this.loadInsight(this.currentInsightIndex)
   }
 
   /**
@@ -249,9 +332,13 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
     await this.afterInsightAnnotation()
   }
   renderHeader(insight: NutrientsInsight) {
+    const total = this.totalInsightsCount || this.insightsIds.length
+    const remainingProducts = Math.max(total - this.currentInsightIndex, 0)
+
     return html`
       <div>
         <h2>${msg("Help us correct the nutritional information")}</h2>
+        <p>${msg("Remaining products")}: ${remainingProducts}</p>
         ${this.renderProductLink(insight.barcode)}
       </div>
     `
@@ -263,7 +350,11 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
       complete: () => {
         const insight = this.currentInsight
         if (!insight) {
-          return html`<slot name="no-insight"></slot>`
+          return html`
+            <p>${msg("No more products available for this filter.")}</p>
+            <p>${msg("Remaining products")}: 0</p>
+            <slot name="no-insight"></slot>
+          `
         }
         return html`
           <div class="nutrients" part="nutrients">
