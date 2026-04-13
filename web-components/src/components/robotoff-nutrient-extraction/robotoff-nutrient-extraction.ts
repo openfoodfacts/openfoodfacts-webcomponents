@@ -104,8 +104,12 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
   @property({ type: String, attribute: "product-code", reflect: true })
   productCode?: string = undefined
 
+
   @state()
   insightsIds: string[] = []
+
+  @state()
+  annotatedIds: Set<string> = new Set()
 
   @state()
   currentInsightIndex: number = 0
@@ -158,6 +162,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
       this.currentPage = 1
       this.totalInsightsCount = 0
       this.insightsIds = []
+      this.annotatedIds = new Set()
 
       // Keep country filtering optional; do not send lc as it can hide valid insights.
       const params: any = {
@@ -295,13 +300,14 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
     // Remove the annotated item from the list (like Questions does)
     const annotatedId = this.currentInsightId
     this.insightsIds = this.insightsIds.filter((id) => id !== annotatedId)
+    this.annotatedIds.add(annotatedId)
 
     // Check if we need to fetch more (like Questions: if count > length && length <= 5)
     if (this.totalInsightsCount > this.insightsIds.length && this.insightsIds.length <= 5) {
       void this.fetchNextInsightsPage()
     }
 
-    this.loadInsight(this.currentInsightIndex)
+    await this.loadInsight(this.currentInsightIndex)
   }
 
   /**
@@ -332,9 +338,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
     await this.afterInsightAnnotation()
   }
   renderHeader(insight: NutrientsInsight) {
-    const total = this.totalInsightsCount || this.insightsIds.length
-    const remainingProducts = Math.max(total - this.currentInsightIndex, 0)
-
+    const remainingProducts = Math.max(this.totalInsightsCount - this.annotatedIds.size, 0)
     return html`
       <div>
         <h2>${msg("Help us correct the nutritional information")}</h2>
