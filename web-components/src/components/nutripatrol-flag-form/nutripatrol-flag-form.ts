@@ -331,18 +331,18 @@ export class NutriPatrolFlagForm extends LitElement {
                       @change=${(e: Event) => (this.reason = (e.target as HTMLSelectElement).value)}
                       required
                     >
-                      <option value="Wrong Barcode" ?selected=${this.reason === "Wrong Barcode"}>
-                        ${msg("Wrong Barcode")}
-                      </option>
-                      <option value="Missing Data" ?selected=${this.reason === "Missing Data"}>
-                        ${msg("Missing Data")}
-                      </option>
-                      <option value="Wrong Data" ?selected=${this.reason === "Wrong Data"}>
-                        ${msg("Wrong Data")}
-                      </option>
-                      <option value="Other" ?selected=${this.reason === "Other"}>
-                        ${msg("Other")}
-                      </option>
+                      ${[
+                        { value: "Wrong Barcode", label: msg("Wrong Barcode") },
+                        { value: "Missing Data", label: msg("Missing Data") },
+                        { value: "Wrong Data", label: msg("Wrong Data") },
+                        { value: "Other", label: msg("Other") },
+                      ].map(
+                        (opt) => html`
+                          <option value="${opt.value}" ?selected=${this.reason === opt.value}>
+                            ${opt.label}
+                          </option>
+                        `
+                      )}
                     </select>
                   </div>
 
