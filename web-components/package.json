@@ -23,7 +23,7 @@
   "scripts": {
     "build": "MODE=prod npm run translations:build && vite build",
     "build:watch": "vite build --watch",
-    "build:doc": "npm run analyze && npm x storybook build",
+    "build:doc": "npm run translations:build && npm run analyze && npm x storybook build",
     "clean": "rimraf dist && rimraf my-element.{d.ts,d.ts.map,js,js.map} test/my-element.{d.ts,d.ts.map,js,js.map} test/my-element_test.{d.ts,d.ts.map,js,js.map}",
     "lint": "npm run lint:eslint",
     "lint:eslint": "eslint --config eslint.config.js",
