@@ -155,8 +155,7 @@ export const downloadCSV = (rows: Array<Array<any>>, filename: string, headers: 
   }
 
   if (!isBrowser()) {
-    console.warn("downloadCSV: browser APIs not available (SSR environment), skipping download.")
-    return
+    throw new Error("downloadCSV: browser APIs not available (SSR environment).")
   }
 
   const csvContent = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n")
