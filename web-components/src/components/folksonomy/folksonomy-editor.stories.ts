@@ -19,7 +19,8 @@ export const EditMode: Story = {
     "product-code": "3274080005003",
   },
   render: (args) => {
-    const element = document.createElement("folksonomy-editor")
+    const element = document.createElement("folksonomy-editor") as any
+    element.fetchAndLogFolksonomyKeys = async () => {} // Prevent real network fetch in Storybook
     element.setAttribute("page-type", args["page-type"] as string)
     element.setAttribute("product-code", args["product-code"] as string)
 
@@ -42,7 +43,8 @@ export const ViewOnlyMode: Story = {
     "product-code": "3274080005003",
   },
   render: (args) => {
-    const element = document.createElement("folksonomy-editor")
+    const element = document.createElement("folksonomy-editor") as any
+    element.fetchAndLogFolksonomyKeys = async () => {} // Prevent real network fetch in Storybook
     element.setAttribute("page-type", args["page-type"] as string)
     element.setAttribute("product-code", args["product-code"] as string)
     element.setAttribute("view-only", "")
