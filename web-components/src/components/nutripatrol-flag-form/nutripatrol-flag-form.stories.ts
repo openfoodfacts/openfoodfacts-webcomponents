@@ -20,13 +20,14 @@ const meta: Meta<NutriPatrolFlagForm> = {
     open: { control: "boolean" },
     userId: { control: "text" },
     url: { control: "text" },
+    imageId: { control: "text" },
   },
 }
 export default meta
 
 type Story = StoryObj<NutriPatrolFlagForm>
 
-export const Basic: Story = {
+export const FlagProduct: Story = {
   args: {
     barcode: "6410405143648",
     type: "product",
@@ -48,7 +49,28 @@ export const Basic: Story = {
         ?open=${args.open}
         user-id=${String(args.userId ?? "")}
         .url=${args.url}
+        .imageId=${args.imageId ?? ""}
       ></nutripatrol-flag-form>
     `
   },
+}
+
+export const FlagImage: Story = {
+  args: {
+    ...FlagProduct.args,
+    barcode: "3017620422003",
+    type: "image",
+    imageId: "front_fr",
+    url: "https://image.openfoodfacts.org/images/products/301/762/042/2003/149.400.jpg",
+  },
+  render: FlagProduct.render,
+}
+
+export const FlagSearch: Story = {
+  args: {
+    ...FlagProduct.args,
+    type: "search",
+    url: "https://world.openfoodfacts.org/cgi/search.pl?search_terms=nutella",
+  },
+  render: FlagProduct.render,
 }

@@ -196,7 +196,7 @@ export class NutriPatrolFlagForm extends LitElement {
   private success = false
 
   @state()
-  private reason = "Wrong Data"
+  private reason = "wrong_data"
 
   @state()
   private comment = ""
@@ -207,6 +207,50 @@ export class NutriPatrolFlagForm extends LitElement {
   private client = new NutriPatrol(globalThis.fetch)
   private autoCloseTimer?: ReturnType<typeof setTimeout>
 
+  private get modalTitle(): string {
+    switch (this.type) {
+      case "image":
+        return msg("Flag an image")
+      case "search":
+        return msg("Flag a search result")
+      default:
+        return msg("Flag a product")
+    }
+  }
+
+  private get reasonOptions(): { value: string; label: string }[] {
+    switch (this.type) {
+      case "image":
+        return [
+          { value: "inappropriate", label: msg("Inappropriate") },
+          { value: "outdated", label: msg("Outdated") },
+          { value: "includes_personal_infos", label: msg("Includes Personal Information") },
+          { value: "duplicate", label: msg("Duplicate") },
+          { value: "other", label: msg("Other") },
+        ]
+      case "search":
+        return [{ value: "other", label: msg("Other") }]
+      default:
+        return [
+          { value: "wrong_barcode", label: msg("Wrong Barcode") },
+          { value: "missing_data", label: msg("Missing Data") },
+          { value: "wrong_data", label: msg("Wrong Data") },
+          { value: "other", label: msg("Other") },
+        ]
+    }
+  }
+
+  private get submitLabel(): string {
+    switch (this.type) {
+      case "image":
+        return msg("FLAG IMAGE")
+      case "search":
+        return msg("FLAG SEARCH")
+      default:
+        return msg("FLAG PRODUCT")
+    }
+  }
+
   override updated(changedProperties: Map<string, any>) {
     if (changedProperties.has("open")) {
       if (this.open) {
@@ -216,13 +260,18 @@ export class NutriPatrolFlagForm extends LitElement {
         this.dialog?.close()
       }
     }
+
+    if (changedProperties.has("type")) {
+      this.reason = this.reasonOptions[0].value
+    }
   }
 
   private resetForm() {
     this.success = false
     this.error = null
     this.loading = false
-    this.reason = "Wrong Data"
+    // Reset reason to the first valid option for the current type
+    this.reason = this.reasonOptions[0].value
     this.comment = ""
   }
 
@@ -253,6 +302,11 @@ export class NutriPatrolFlagForm extends LitElement {
       return
     }
 
+    if (this.type === "image" && !this.imageId) {
+      this.error = msg("Image ID is required to flag an image.")
+      return
+    }
+
     this.loading = true
     this.error = null
 
@@ -267,11 +321,11 @@ export class NutriPatrolFlagForm extends LitElement {
       comment: this.comment || undefined,
     }
 
-    if (this.barcode) {
+    if (this.barcode && this.type !== "search") {
       payload.barcode = this.barcode
     }
 
-    if (this.type === "image" && this.imageId) {
+    if (this.type === "image") {
       payload.image_id = this.imageId
     }
 
@@ -298,7 +352,7 @@ export class NutriPatrolFlagForm extends LitElement {
     return html`
       <dialog @close=${this.handleClose}>
         <div class="modal-header">
-          <h2 class="modal-title">${msg("Flag a product")}</h2>
+          <h2 class="modal-title">${this.modalTitle}</h2>
           <!-- Close button -->
           <button class="close-btn" @click=${this.handleClose} aria-label="${msg("Close")}">
             &times;
@@ -314,11 +368,30 @@ export class NutriPatrolFlagForm extends LitElement {
               `
             : html`
                 <form @submit=${this.handleSubmit}>
-                  ${this.barcode
+                  ${this.type === "image" && this.url
+                    ? html`
+                        <div class="form-group image-preview">
+                          <img
+                            src=${this.url}
+                            alt=${msg("Image to flag")}
+                            style="max-width: 100%; max-height: 200px; object-fit: contain; border: 1px solid #e0e0e0; border-radius: 4px;"
+                          />
+                        </div>
+                      `
+                    : nothing}
+                  ${this.barcode && this.type !== "search"
                     ? html`
                         <div class="form-group">
                           <label for="barcode">${msg("Barcode")} *</label>
                           <input type="text" id="barcode" .value=${this.barcode} disabled />
+                        </div>
+                      `
+                    : nothing}
+                  ${this.type === "image" && this.imageId
+                    ? html`
+                        <div class="form-group">
+                          <label for="image-id">${msg("Image ID")} *</label>
+                          <input type="text" id="image-id" .value=${this.imageId} disabled />
                         </div>
                       `
                     : nothing}
@@ -331,12 +404,7 @@ export class NutriPatrolFlagForm extends LitElement {
                       @change=${(e: Event) => (this.reason = (e.target as HTMLSelectElement).value)}
                       required
                     >
-                      ${[
-                        { value: "Wrong Barcode", label: msg("Wrong Barcode") },
-                        { value: "Missing Data", label: msg("Missing Data") },
-                        { value: "Wrong Data", label: msg("Wrong Data") },
-                        { value: "Other", label: msg("Other") },
-                      ].map(
+                      ${this.reasonOptions.map(
                         (opt) => html`
                           <option value="${opt.value}" ?selected=${this.reason === opt.value}>
                             ${opt.label}
@@ -360,7 +428,7 @@ export class NutriPatrolFlagForm extends LitElement {
                   ${this.error ? html`<div class="message error">${this.error}</div>` : nothing}
 
                   <button type="submit" class="submit-btn" ?disabled=${this.loading}>
-                    ${this.loading ? msg("Submitting...") : msg("FLAG PRODUCT")}
+                    ${this.loading ? msg("Submitting...") : this.submitLabel}
                   </button>
                 </form>
               `}
