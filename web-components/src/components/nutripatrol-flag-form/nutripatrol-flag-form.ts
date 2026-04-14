@@ -254,7 +254,9 @@ export class NutriPatrolFlagForm extends LitElement {
   override updated(changedProperties: Map<string, any>) {
     if (changedProperties.has("open")) {
       if (this.open) {
-        this.dialog?.showModal()
+        if (this.dialog && !this.dialog.open) {
+          this.dialog.showModal()
+        }
         this.resetForm()
       } else {
         this.dialog?.close()
@@ -296,6 +298,19 @@ export class NutriPatrolFlagForm extends LitElement {
 
   private async handleSubmit(e: Event) {
     e.preventDefault()
+
+    const validTypes: FlagCreatePayload["type"][] = ["product", "image", "search"]
+    const validFlavors: FlagCreatePayload["flavor"][] = ["off", "obf", "opff", "opf", "off-pro"]
+
+    if (!validTypes.includes(this.type as FlagCreatePayload["type"])) {
+      this.error = msg("Invalid flag type.")
+      return
+    }
+
+    if (!validFlavors.includes(this.flavor as FlagCreatePayload["flavor"])) {
+      this.error = msg("Invalid flavor.")
+      return
+    }
 
     if (!this.userId) {
       this.error = msg("User ID is required to submit a flag. Please log in.")
