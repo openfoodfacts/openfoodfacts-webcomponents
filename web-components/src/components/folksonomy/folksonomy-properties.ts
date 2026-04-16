@@ -1021,7 +1021,9 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
       <tr class="property">
         <td></td>
         <td>
-          <a href="${this.getPropertyUrl(property.k)}" class="property-name"> ${property.k} </a>
+          <a href="${this.getPropertyUrl(property.k)}" class="property-name">
+            ${property.k} (${property.count ?? 0})
+          </a>
         </td>
         <td>
           <a
