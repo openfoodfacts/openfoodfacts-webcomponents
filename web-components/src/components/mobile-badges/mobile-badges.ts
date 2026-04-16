@@ -41,8 +41,7 @@ export class MobileBadges extends LitElement {
       #footer_scan {
         color: #000;
       }
-
-      :host-context(.dark) #footer_scan,
+      
       .dark-mode #footer_scan {
         color: #f9f7f5;
       }
@@ -53,7 +52,6 @@ export class MobileBadges extends LitElement {
         color: #fff;
       }
 
-      :host-context(.dark) .everyday,
       .dark-mode .everyday {
         background-color: #0050a0;
         border-inline: 5px solid #0050a0;
@@ -66,7 +64,6 @@ export class MobileBadges extends LitElement {
         color: #fff;
       }
 
-      :host-context(.dark) .foods,
       .dark-mode .foods {
         background-color: #cc6c10;
         border-inline: 5px solid #cc6c10;
