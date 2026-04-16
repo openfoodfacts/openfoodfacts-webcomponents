@@ -52,10 +52,6 @@ export class MobileBadges extends LitElement {
         color: #fff;
       }
 
-      .dark-mode .everyday {
-        background-color: #0050a0;
-        border-inline: 5px solid #0050a0;
-        color: #fff;
       }
 
      .dark-mode .foods {
@@ -64,11 +60,6 @@ export class MobileBadges extends LitElement {
         color: #fff;
       }
 
-      .dark-mode .foods {
-        background-color: #cc6c10;
-        border-inline: 5px solid #cc6c10;
-        color: #fff;
-      }
       #install_the_app_block {
         display: flex;
         align-items: center;
