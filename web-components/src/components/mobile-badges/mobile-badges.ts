@@ -32,7 +32,7 @@ export class MobileBadges extends LitElement {
         display: block;
       }
 
-      :host-context(.dark),
+      
       .dark-mode {
         background-color: #201a17;
         color: #f9f7f5;
