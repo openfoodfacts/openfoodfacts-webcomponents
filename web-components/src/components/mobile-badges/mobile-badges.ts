@@ -31,9 +31,6 @@ export class MobileBadges extends LitElement {
       :host {
         display: block;
       }
-      :host {
-        display: block;
-      }
 
       :host-context(.dark),
       .dark-mode {
