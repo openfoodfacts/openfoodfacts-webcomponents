@@ -115,14 +115,14 @@ export const initDebounce = (callback: () => any, debounceTime: number = 500) =>
  * @returns object with debounce method and clear method
  */
 export const createDebounce = (debounceTime: number = 500) => {
-  let timeout: number | null = null
+  let timeout: ReturnType<typeof setTimeout> | null = null
 
   return {
     debounce: (callback: () => void) => {
       if (timeout) {
         clearTimeout(timeout)
       }
-      timeout = window.setTimeout(() => {
+      timeout = setTimeout(() => {
         callback()
         timeout = null
       }, debounceTime)
@@ -176,7 +176,7 @@ export const downloadCSV = (rows: Array<Array<any>>, filename: string, headers: 
  * @example removeUselessZeros("1.0010") => "1,001"
  */
 export const removeUselessZeros = (value: string) => {
-  return value.replace(/(\.\d*?[1-9])0+$|\.0+$/, "$1")
+  return value.replace(/(\.d*?[1-9])0+$|\.0+$/, "$1")
 }
 
 /**
