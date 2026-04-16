@@ -257,7 +257,7 @@ export class NutriPatrolFlagForm extends LitElement {
     }
   }
 
-  override updated(changedProperties: Map<string, any>) {
+  override updated(changedProperties: Map<string, unknown>) {
     if (changedProperties.has("open")) {
       if (this.open) {
         if (this.dialog && !this.dialog.open) {
@@ -358,7 +358,7 @@ export class NutriPatrolFlagForm extends LitElement {
         // Close modal automatically after delay
         this.autoCloseTimer = setTimeout(() => this.handleClose(), 3000)
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error("Flag API submission error:", err)
       this.error = msg("An unexpected error occurred.")
     } finally {
