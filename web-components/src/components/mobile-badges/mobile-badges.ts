@@ -47,9 +47,9 @@ export class MobileBadges extends LitElement {
         color: #f9f7f5;
       }
 
-      .everyday {
-        background-color: #0064c8;
-        border-inline: 5px solid #0064c8;
+     .dark-mode .everyday {
+        background-color: #0050a0;
+        border-inline: 5px solid #0050a8;
         color: #fff;
       }
 
@@ -60,9 +60,9 @@ export class MobileBadges extends LitElement {
         color: #fff;
       }
 
-      .foods {
-        background-color: #ff8714;
-        border-inline: 5px solid #ff8714;
+     .dark-mode .foods {
+        background-color: #cc6c10;
+        border-inline: 5px solid #cc6c10;
         color: #fff;
       }
 
