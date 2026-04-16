@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit"
+﻿import { LitElement, html, css } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { localized, msg } from "@lit/localize"
 import "./folksonomy-editor-row"
@@ -28,11 +28,25 @@ export class FolksonomyEditor extends LitElement {
   pageType = "view"
 
   /**
+   * Disables editing and adding properties for non-logged-in users.
+   * @type {boolean}
+   */
+  @property({ type: Boolean, attribute: "view-only" })
+  viewOnly = false
+
+  /**
    * The base URL for properties listing (e.g., "https://world.openfoodfacts.org/properties")
    * @type {string}
    */
   @property({ type: String, attribute: "properties-base-url" })
   propertiesBaseUrl = "/properties"
+
+  /**
+   * The URL for the login page
+   * @type {string}
+   */
+  @property({ type: String, attribute: "login-url" })
+  loginUrl = "/cgi/login.pl"
 
   /**
    * The URL for properties documentation (e.g., "https://wiki.openfoodfacts.org/Folksonomy/Property")
@@ -54,6 +68,10 @@ export class FolksonomyEditor extends LitElement {
       :host {
         font-family: Arial, sans-serif;
         color: var(--off-folksonomy-text, #333);
+      }
+      .login-message {
+        margin-top: 1rem;
+        font-style: italic;
       }
       .feus {
         margin-bottom: 1rem;
@@ -201,6 +219,7 @@ export class FolksonomyEditor extends LitElement {
 
   override connectedCallback() {
     super.connectedCallback()
+
     this.fetchAndLogFolksonomyKeys()
 
     this.addEventListener("add-row", this.handleRowAdd as EventListener)
@@ -270,7 +289,7 @@ export class FolksonomyEditor extends LitElement {
             >
               <span class="sort-header"> ${msg("Value")} ${this.renderSortIcon("value")} </span>
             </th>
-            ${this.pageType == "edit" ? html`<th>${msg("Actions")}</th>` : null}
+            ${this.pageType == "edit" && !this.viewOnly ? html`<th>${msg("Actions")}</th>` : null}
           </tr>
           ${this.properties.map(
             (item, index) =>
@@ -280,10 +299,10 @@ export class FolksonomyEditor extends LitElement {
                 value=${item.value}
                 version=${item.version}
                 row-number=${index + 1}
-                page-type=${this.pageType}
+                page-type=${this.viewOnly ? "view" : this.pageType}
               ></folksonomy-editor-row>`
           )}
-          ${this.pageType == "edit"
+          ${this.pageType == "edit" && !this.viewOnly
             ? html`<folksonomy-editor-row
                 product-code=${this.productCode}
                 page-type=${this.pageType}
@@ -292,6 +311,11 @@ export class FolksonomyEditor extends LitElement {
               ></folksonomy-editor-row>`
             : null}
         </table>
+        ${this.viewOnly
+          ? html`<p class="login-message">
+              ${msg(html`Please <a href="${this.loginUrl}">log in</a> to edit or add properties.`)}
+            </p>`
+          : null}
       </form>
     `
   }
