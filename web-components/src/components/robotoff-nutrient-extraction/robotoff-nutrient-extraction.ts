@@ -20,7 +20,7 @@ import {
 import { BASE } from "../../styles/base"
 import { getRobotoffImageUrl } from "../../signals/robotoff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
-import { FLEX } from "../../styles/utils"
+import { FLEX, RELATIVE } from "../../styles/utils"
 import { EventState, EventType } from "../../constants"
 import type { BasicStateEventDetail } from "../../types"
 import type { NutrimentsProductType } from "../../types/openfoodfacts"
@@ -35,6 +35,11 @@ import { CountryCodeMixin } from "../../mixins/country-codes-mixin"
 import { DisplayProductLinkMixin } from "../../mixins/display-product-link-mixin"
 import { localized, msg } from "@lit/localize"
 import { languageCode } from "../../signals/app"
+import { clickOutside } from "../../directives/click-outside"
+import "../shared/info-button"
+import { POPOVER } from "../../styles/popover"
+import { darkModeListener } from "../../utils/dark-mode-listener"
+import { classMap } from "lit-html/directives/class-map.js"
 
 const IMAGE_MAX_WIDTH = 700
 /**
@@ -50,9 +55,26 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
     CountryCodeMixin(LoadingWithTimeoutMixin(LitElement, undefined as AnnotationAnswer | undefined))
   )
 ) {
+  isDarkMode = darkModeListener.darkMode
+  private _darkModeCb = (isDark: boolean) => {
+    this.isDarkMode = isDark
+    this.requestUpdate()
+  }
+
+  override connectedCallback() {
+    super.connectedCallback()
+    darkModeListener.subscribe(this._darkModeCb)
+  }
+
+  override disconnectedCallback() {
+    darkModeListener.unsubscribe(this._darkModeCb)
+    super.disconnectedCallback()
+  }
   static override styles = [
     BASE,
     FLEX,
+    POPOVER,
+    RELATIVE,
     ...getButtonClasses([ButtonType.LINK]),
     css`
       .image-wrapper {
@@ -60,6 +82,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
         z-index: 1;
         top: 1rem;
         display: flex;
+        flex-direction: column;
         align-items: center;
         margin-bottom: 1rem;
         background-color: white;
@@ -71,6 +94,12 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
         box-sizing: border-box;
         max-width: ${IMAGE_MAX_WIDTH}px;
         width: 100%;
+      }
+
+      .date {
+        padding-top: 15px;
+        font-size: medium;
+        font-weight: 500;
       }
 
       .nutrients {
@@ -94,6 +123,39 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
       .nutrients product-link-button {
         margin-bottom: 1rem;
       }
+
+      .info-popover {
+        z-index: 2;
+        min-width: 200px;
+      }
+
+      .info-button-wrapper {
+        display: flex-start;
+        position: absolute;
+      }
+
+      .relative {
+        position: relative;
+        margin-top: 6px;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: start;
+        justify-content: end;
+        width: 100%;
+        right: 1px;
+        top: 1px;
+        z-index: 10;
+      }
+
+      .dark-mode {
+        background-color: #1e1e1e;
+        color: #ffffff;
+        border: 1px solid #333;
+      }
+
+      .dark-mode .popover-content {
+        background-color: #1e1e1e;
+      }
     `,
   ]
 
@@ -112,6 +174,12 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
 
   @state()
   private nutrimentsData?: NutrimentsProductType
+
+  @state()
+  private uploaded_Date: string = ""
+
+  @state()
+  showInfoPopover: boolean = false
 
   get currentInsightId() {
     return this.insightsIds[this.currentInsightIndex]
@@ -182,12 +250,40 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
   async getProductNutriments(productCode: string) {
     this.nutrimentsData = undefined
     const result = await fetchProduct<NutrimentsProductType>(productCode, {
-      fields: [ProductFields.NUTRIMENTS],
+      fields: [ProductFields.NUTRIMENTS, ProductFields.IMAGES],
       lc: languageCode.get(),
     })
     this.nutrimentsData = result.product
+    const images = result?.product?.images
+    const key = images["nutrition_en"]?.imgid
+    const uploaded_t = key ? images[key]?.uploaded_t : undefined
+
+    this.uploaded_Date = this.getUploadedTime(uploaded_t)
     return result.product.nutriments
   }
+
+  /**
+   * Toggles the info popover.
+   */
+  toggleInfoPopover() {
+    this.showInfoPopover = !this.showInfoPopover
+  }
+
+  /**
+   * Closes the info popover.
+   */
+  closeInfoPopover() {
+    this.showInfoPopover = false
+  }
+
+  getUploadedTime = (data: number | undefined) =>
+    data
+      ? new Date(data * 1000).toLocaleDateString(undefined, {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })
+      : ""
 
   renderImage(insight: NutrientsInsight) {
     if (!insight?.source_image) {
@@ -196,8 +292,15 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
     const imgUrl = getRobotoffImageUrl(insight.source_image)
     return html`
       <div class="image-wrapper">
+        <div class="relative">
+          <div class="info-button-wrapper">
+            <info-button @click=${this.toggleInfoPopover} size="sm"></info-button>
+            ${this.renderInfoPopover()}
+          </div>
+        </div>
         <zoomable-image
           src=${imgUrl}
+          customClass="justify-start"
           .size="${{
             height: "35vh",
             width: "100%",
@@ -205,6 +308,39 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
           }}"
           show-buttons
         ></zoomable-image>
+      </div>
+    `
+  }
+
+  /**
+   * Renders the info popover.
+   * @returns {TemplateResult} The rendered info popover.
+   */
+  renderInfoPopover() {
+    if (!this.showInfoPopover) {
+      return nothing
+    }
+    return html`
+      <div
+        class=${classMap({
+          popover: true,
+          "info-popover": true,
+          "dark-mode": this.isDarkMode,
+        })}
+        ${clickOutside(() => this.closeInfoPopover())}
+      >
+        <div class="popover-right popover-content">
+          ${msg(html`
+            <div>
+              ${this.uploaded_Date
+                ? html`Image uploaded on <br />
+                    <span style="margin-top:4px;">
+                      <em> ${this.uploaded_Date}</em>
+                    </span> `
+                : html`No information available`}
+            </div>
+          `)}
+        </div>
       </div>
     `
   }
