@@ -4,17 +4,23 @@ import { localized, msg } from "@lit/localize"
 import { NutriPatrol } from "@openfoodfacts/openfoodfacts-nodejs"
 import { BASE } from "../../styles/base"
 
+const VALID_TYPES = ["product", "image", "search"] as const
+const VALID_FLAVORS = ["off", "obf", "opff", "opf", "off-pro"] as const
+
+type FlagType = (typeof VALID_TYPES)[number]
+type FlagFlavor = (typeof VALID_FLAVORS)[number]
+
 /**
  * Interface mimicking the NutriPatrol API's FlagCreate schema.
  * We define it locally because the current SDK alpha version installed
  * does not export the type directly.
  */
 interface FlagCreatePayload {
-  type: "product" | "image" | "search"
+  type: FlagType
   url: string
   user_id: string
   source: "web" | "mobile" | "robotoff"
-  flavor: "off" | "obf" | "opff" | "opf" | "off-pro"
+  flavor: FlagFlavor
   barcode?: string
   image_id?: string
   reason?: string
@@ -42,7 +48,7 @@ export class NutriPatrolFlagForm extends LitElement {
         border: none;
         border-radius: 8px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        background: #fdfaf5; /* Matches the NutriPatrol off-white background */
+        background: #fdfaf5;
         color: #333;
         max-width: 500px;
         width: 100%;
@@ -122,7 +128,7 @@ export class NutriPatrolFlagForm extends LitElement {
       }
 
       .submit-btn {
-        background-color: #32863b; /* Green button from provided UI */
+        background-color: #32863b;
         color: white;
         border: none;
         padding: 0.75rem 1rem;
@@ -169,13 +175,13 @@ export class NutriPatrolFlagForm extends LitElement {
   barcode = ""
 
   @property({ type: String })
-  type: "product" | "image" | "search" = "product"
+  type: FlagType = "product"
 
   @property({ type: String, attribute: "image-id" })
   imageId = ""
 
   @property({ type: String })
-  flavor: "off" | "obf" | "opff" | "opf" | "off-pro" = "off"
+  flavor: FlagFlavor = "off"
 
   @property({ type: String, attribute: "user-id" })
   userId = ""
@@ -299,15 +305,12 @@ export class NutriPatrolFlagForm extends LitElement {
   private async handleSubmit(e: Event) {
     e.preventDefault()
 
-    const validTypes: FlagCreatePayload["type"][] = ["product", "image", "search"]
-    const validFlavors: FlagCreatePayload["flavor"][] = ["off", "obf", "opff", "opf", "off-pro"]
-
-    if (!validTypes.includes(this.type as FlagCreatePayload["type"])) {
+    if (!VALID_TYPES.includes(this.type as FlagType)) {
       this.error = msg("Invalid flag type.")
       return
     }
 
-    if (!validFlavors.includes(this.flavor as FlagCreatePayload["flavor"])) {
+    if (!VALID_FLAVORS.includes(this.flavor as FlagFlavor)) {
       this.error = msg("Invalid flavor.")
       return
     }
