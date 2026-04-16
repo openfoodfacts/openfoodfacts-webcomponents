@@ -1,7 +1,7 @@
 import { robotoffConfiguration } from "../../signals/robotoff"
 import { folksonomyConfiguration } from "../../signals/folksonomy"
 import {
-  DEFAULT_ASSETS_IMAGES_PATH,
+  DEFAULT_ASSETS_PATH,
   DEFAULT_LANGUAGE_CODE,
   DEFAULT_ROBOTOFF_CONFIGURATION,
   DEFAULT_FOLKSONOMY_CONFIGURATION,
@@ -12,7 +12,7 @@ import type { OffWebcomponentConfigurationOptions } from "../../types"
 import type { RobotoffConfigurationOptions } from "../../types/robotoff"
 import type { FolksonomyConfigurationOptions } from "../../types/folksonomy"
 import { setLanguageCode } from "../../localization"
-import { assetsImagesPath, countryCode } from "../../signals/app"
+import { assetsPath, countryCode } from "../../signals/app"
 import { DEFAULT_OPENFOODFACTS_API_URL, openfoodfactsApiUrl } from "../../signals/openfoodfacts"
 
 /**
@@ -52,10 +52,10 @@ const CONFIGURATION_PROPERTIES: Record<
       countryCode.set(value)
     },
   },
-  "assets-images-path": {
-    propertyName: "assetsImagesPath",
+  "assets-path": {
+    propertyName: "assetsPath",
     fn: (value: string) => {
-      assetsImagesPath.set(value)
+      assetsPath.set(value)
     },
   },
   "folksonomy-configuration": {
@@ -111,8 +111,8 @@ export class OffWebcomponentsConfiguration extends LitElement {
    * The image path we need to use to retrieve the images in assets/images folder.
    * @attr image-path
    */
-  @property({ type: String, attribute: "assets-images-path", reflect: true })
-  assetsImagesPath?: string = DEFAULT_ASSETS_IMAGES_PATH
+  @property({ type: String, attribute: "assets-path", reflect: true })
+  assetsPath?: string = DEFAULT_ASSETS_PATH
 
   /**
    * The folksonomy configuration object.
