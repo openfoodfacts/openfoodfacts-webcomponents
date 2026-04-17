@@ -61,13 +61,13 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
         top: 1rem;
         display: flex;
         align-items: center;
-        justify-content: center; /* Fixes the horizontal alignment */
-        overflow: hidden; /* Keeps the zoomed image contained */
+        justify-content: center; 
+        overflow: hidden; 
         margin-bottom: 1rem;
         background-color: white;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         border-radius: 5px;
-        padding: 1rem; /* Fixes uneven padding */
+        padding: 1rem; 
         box-sizing: border-box;
         max-width: ${IMAGE_MAX_WIDTH}px;
         width: 100%;
