@@ -199,7 +199,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
         <zoomable-image
           src=${imgUrl}
           .size="${{
-            height: "50vh",
+            height: "clamp(320px, 50vh, 720px)",
             width: "100%",
             "max-width": `${IMAGE_MAX_WIDTH}px`,
           }}"
