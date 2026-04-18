@@ -124,6 +124,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
   private readonly pageSize: number = 10
 
   private fetchMoreInsightsPromise?: Promise<void>
+  private fetchSessionToken: number = 0
 
   get currentInsightId() {
     return this.insightsIds[this.currentInsightIndex]
@@ -156,12 +157,15 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
    */
   private _insightsTask = new Task(this, {
     task: async ([productCode], {}) => {
+      this.fetchSessionToken++
+      const sessionToken = this.fetchSessionToken
       this.emitNutrientEvent(EventState.LOADING)
       this.currentInsightIndex = 0
       this.currentPage = 1
       this.totalInsightsCount = 0
       this.insightsIds = []
       this.annotatedIds = new Set()
+      this.fetchMoreInsightsPromise = undefined
 
       // Keep country filtering optional; do not send lc as it can hide valid insights.
       const params: any = {
@@ -178,6 +182,9 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
         fetchNutrientsOrderByCountryCode(this.countryCode || this._countryCode),
       ])
 
+      // If a new session started, abort writing state
+      if (sessionToken !== this.fetchSessionToken) return
+
       const insights = insightsResponse.insights
       this.totalInsightsCount = insightsResponse.count ?? insights.length
 
@@ -193,6 +200,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
   })
 
   private async fetchNextInsightsPage() {
+    const sessionToken = this.fetchSessionToken
     if (this.fetchMoreInsightsPromise) {
       return this.fetchMoreInsightsPromise
     }
@@ -212,8 +220,12 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
         }
 
         const response = await fetchNutrientInsights(this.productCode, params)
+        // If a new session started, abort writing state
+        if (sessionToken !== this.fetchSessionToken) return
         this.totalInsightsCount = response.count ?? this.totalInsightsCount
-        const existingIds = new Set(this.insightsIds)
+
+        // Also exclude already-annotated IDs so they can never re-enter the buffer
+        const existingIds = new Set([...this.insightsIds, ...this.annotatedIds])
         const nextIds = response.insights
           .map((insight) => insight.id)
           .filter((id) => !existingIds.has(id))
@@ -248,6 +260,10 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
 
     this.currentInsightIndex = index
     const insight = this.currentInsight
+    if (!insight) {
+      this.emitNutrientEvent(EventState.NO_DATA)
+      return
+    }
     await this.getProductNutriments(insight.barcode)
   }
 
