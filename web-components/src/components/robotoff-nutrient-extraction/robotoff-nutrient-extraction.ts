@@ -244,8 +244,12 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
   }
 
   async loadInsight(index: number) {
-    if (index >= this.insightsIds.length && this.insightsIds.length < this.totalInsightsCount) {
+    while (index >= this.insightsIds.length && this.insightsIds.length < this.totalInsightsCount) {
+      const lengthBefore = this.insightsIds.length
+      const pageBefore = this.currentPage
       await this.fetchNextInsightsPage()
+      // No progress (e.g. page returned only dupes and no longer advanced) → stop to avoid an infinite loop.
+      if (this.insightsIds.length === lengthBefore && this.currentPage === pageBefore) break
     }
 
     if (index >= this.insightsIds.length) {
@@ -314,8 +318,10 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
 
     // Remove the annotated item from the list (like Questions does)
     const annotatedId = this.currentInsightId
-    this.insightsIds = this.insightsIds.filter((id) => id !== annotatedId)
-    this.annotatedIds.add(annotatedId)
+    if (annotatedId) {
+      this.insightsIds = this.insightsIds.filter((id) => id !== annotatedId)
+      this.annotatedIds = new Set(this.annotatedIds).add(annotatedId)
+    }
 
     // Check if we need to fetch more (like Questions: if count > length && length <= 5)
     if (this.totalInsightsCount > this.insightsIds.length && this.insightsIds.length <= 5) {
