@@ -104,8 +104,11 @@ async function getValidToken(): Promise<string> {
  * @param options
  * @returns {Promise<Response>}
  */
-async function makeAuthenticatedRequest(url: string, options: RequestInit = {}): Promise<Response> {
-  const token = await getValidToken()
+async function makeAuthenticatedRequest(
+  url: string,
+  options: RequestInit & { authToken?: string } = {}
+): Promise<Response> {
+  const token = options.authToken || (await getValidToken())
 
   const requestOptions = {
     ...options,
@@ -118,7 +121,7 @@ async function makeAuthenticatedRequest(url: string, options: RequestInit = {}):
   const response = await fetch(url, requestOptions)
 
   // If auth fails (401/403), try once more with fresh token
-  if (response.status === 401 || response.status === 403) {
+  if ((response.status === 401 || response.status === 403) && !options.authToken) {
     console.error("Auth failed, retrying with fresh token...")
     clearStoredToken()
     const newToken = await getValidToken()
@@ -155,10 +158,12 @@ async function addProductProperty(
   product: string,
   k: string,
   v: string,
-  version: number
+  version: number,
+  options?: { authToken?: string }
 ): Promise<AddProductPropertyResponse> {
   try {
     const response = await makeAuthenticatedRequest(getApiUrl("/product"), {
+      ...options,
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -179,12 +184,14 @@ async function addProductProperty(
 async function deleteProductProperty(
   product: string,
   k: string,
-  version: number
+  version: number,
+  options?: { authToken?: string }
 ): Promise<DeleteProductPropertyResponse> {
   try {
     const response = await makeAuthenticatedRequest(
       getApiUrl(`/product/${product}/${k}?version=${version}`),
       {
+        ...options,
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -206,10 +213,12 @@ async function updateProductProperty(
   product: string,
   k: string,
   v: string,
-  version: number
+  version: number,
+  options?: { authToken?: string }
 ): Promise<UpdateProductPropertyResponse> {
   try {
     const response = await makeAuthenticatedRequest(getApiUrl("/product"), {
+      ...options,
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
