@@ -1,4 +1,4 @@
-git import { Task } from "@lit/task"
+import { Task } from "@lit/task"
 import { css, html, LitElement, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import {
