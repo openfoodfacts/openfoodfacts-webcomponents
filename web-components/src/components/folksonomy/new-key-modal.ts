@@ -6,6 +6,7 @@ import {
   FolksnomyEngineDocumentationLink,
   FolksnomyEnginePropertyLink,
 } from "../../utils"
+import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme"
 
 /**
  * New Key Modal Component
@@ -17,182 +18,188 @@ import {
 export class NewKeyModal extends LitElement {
   @state()
   private propertyName = ""
-  static override styles = css`
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10000;
-    }
+  static override styles = [
+    FOLKSONOMY_THEME,
+    css`
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+      }
 
-    .modal-content {
-      background: white;
-      padding: 2rem;
-      border-radius: 8px;
-      max-width: 600px;
-      width: 90%;
-      max-height: 80vh;
-      overflow-y: auto;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid #e0e0e0;
-    }
-
-    .modal-title {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: #333;
-      margin: 0;
-    }
-
-    .close-button {
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: #666;
-      padding: 0.5rem;
-      border-radius: 4px;
-      transition: background-color 0.2s;
-    }
-
-    .close-button:hover {
-      background-color: #f0f0f0;
-    }
-
-    .property-input-section {
-      margin-bottom: 1.5rem;
-      padding: 1rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-    }
-
-    .property-input-container {
-      align-items: flex-end;
-    }
-
-    .input-group {
-      flex: 1;
-    }
-
-    .input-label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-    }
-
-    .property-input {
-      width: 100%;
-      padding: 0.5rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 1rem;
-    }
-
-    .property-input:focus {
-      outline: none;
-      border-color: #007bff;
-    }
-
-    .create-wiki-button {
-      margin-top: 4px;
-      background: #007bff;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    .create-wiki-button:hover:not(:disabled) {
-      background: #0056b3;
-    }
-
-    .create-wiki-button:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-    }
-
-    .instruction-list {
-      margin: 1rem 0;
-      padding-left: 0;
-    }
-
-    .instruction-item {
-      margin-bottom: 1.5rem;
-      padding: 1rem;
-      border-left: 4px solid #007bff;
-      background: #f8f9fa;
-    }
-
-    .instruction-title {
-      font-weight: 600;
-      color: #007bff;
-      margin-bottom: 0.5rem;
-    }
-
-    .instruction-description {
-      color: #555;
-      margin-bottom: 0.5rem;
-    }
-
-    .instruction-link {
-      color: #007bff;
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .instruction-link:hover {
-      text-decoration: underline;
-    }
-
-    .join-slack-discussion {
-      padding-top: 6px;
-    }
-
-    .instruction-button {
-      background: #007bff;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      cursor: pointer;
-      text-decoration: none;
-    }
-
-    .instruction-button:hover {
-      background: #0056b3;
-    }
-
-    @media (max-width: 768px) {
       .modal-content {
-        width: 95%;
+        background: var(--off-folksonomy-modal-bg, white);
+        padding: 2rem;
+        border-radius: 8px;
+        max-width: 600px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--off-folksonomy-modal-header-border, #e0e0e0);
+      }
+
+      .modal-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--off-folksonomy-modal-text, #333);
+        margin: 0;
+      }
+
+      .close-button {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--off-folksonomy-loading-text, #666);
+        padding: 0.5rem;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+      }
+
+      .close-button:hover {
+        background-color: var(--off-folksonomy-btn-secondary-hover, #f0f0f0);
+      }
+
+      .property-input-section {
+        margin-bottom: 1.5rem;
         padding: 1rem;
+        border: 1px solid var(--off-folksonomy-border, #ddd);
+        border-radius: 4px;
       }
 
       .property-input-container {
-        flex-direction: column;
-        align-items: stretch;
+        align-items: flex-end;
+      }
+
+      .input-group {
+        flex: 1;
+      }
+
+      .input-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--off-folksonomy-text, inherit);
+      }
+
+      .property-input {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid var(--off-folksonomy-input-border, #ddd);
+        border-radius: 4px;
+        font-size: 1rem;
+        background-color: var(--off-folksonomy-input-bg, rgb(252, 251, 251));
+        color: var(--off-folksonomy-text, #333);
+      }
+
+      .property-input:focus {
+        outline: none;
+        border-color: var(--off-folksonomy-link, #007bff);
       }
 
       .create-wiki-button {
-        margin-top: 0.5rem;
+        margin-top: 4px;
+        background: var(--off-folksonomy-link, #007bff);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
       }
-    }
-  `
+
+      .create-wiki-button:hover:not(:disabled) {
+        background: var(--off-folksonomy-link-hover, #0056b3);
+      }
+
+      .create-wiki-button:disabled {
+        background: var(--off-folksonomy-input-border, #ccc);
+        cursor: not-allowed;
+      }
+
+      .instruction-list {
+        margin: 1rem 0;
+        padding-left: 0;
+      }
+
+      .instruction-item {
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        border-left: 4px solid var(--off-folksonomy-instruction-border, #007bff);
+        background: var(--off-folksonomy-instruction-bg, #f8f9fa);
+      }
+
+      .instruction-title {
+        font-weight: 600;
+        color: var(--off-folksonomy-link, #007bff);
+        margin-bottom: 0.5rem;
+      }
+
+      .instruction-description {
+        color: var(--off-folksonomy-modal-text-secondary, #555);
+        margin-bottom: 0.5rem;
+      }
+
+      .instruction-link {
+        color: var(--off-folksonomy-link, #007bff);
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .instruction-link:hover {
+        text-decoration: underline;
+      }
+
+      .join-slack-discussion {
+        padding-top: 6px;
+      }
+
+      .instruction-button {
+        background: var(--off-folksonomy-link, #007bff);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+      }
+
+      .instruction-button:hover {
+        background: var(--off-folksonomy-link-hover, #0056b3);
+      }
+
+      @media (max-width: 768px) {
+        .modal-content {
+          width: 95%;
+          padding: 1rem;
+        }
+
+        .property-input-container {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .create-wiki-button {
+          margin-top: 0.5rem;
+        }
+      }
+    `,
+  ]
 
   private handleClose() {
     this.dispatchEvent(
