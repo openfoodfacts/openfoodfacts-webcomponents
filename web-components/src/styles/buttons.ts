@@ -124,7 +124,7 @@ export const BUTTON_CLASS_BY_TYPE: Record<ButtonType, CSSResult> = {
       background-color: transparent;
       border-color: transparent;
       cursor: pointer;
-      color: black;
+      color: inherit;
     }
 
     .link-button:hover {
