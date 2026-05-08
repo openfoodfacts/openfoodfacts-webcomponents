@@ -23,7 +23,7 @@
   "scripts": {
     "build": "MODE=prod npm run translations:build && vite build",
     "build:watch": "vite build --watch",
-    "build:doc": "npm run analyze && npm x storybook build",
+    "build:doc": "npm run translations:build && npm run analyze && npm x storybook build",
     "clean": "rimraf dist && rimraf my-element.{d.ts,d.ts.map,js,js.map} test/my-element.{d.ts,d.ts.map,js,js.map} test/my-element_test.{d.ts,d.ts.map,js,js.map}",
     "lint": "npm run lint:eslint",
     "lint:eslint": "eslint --config eslint.config.js",
@@ -38,7 +38,7 @@
     "prepack": "npm run build",
     "analyze": "cem analyze --litelement --globs \"src/**/*.ts\"",
     "analyze:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
-    "dev": "concurrently 'npm run storybook' 'npm run analyze:watch'",
+    "dev": "concurrently \"npm run storybook\" \"npm run analyze:watch\"",
     "test": "vitest",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build"
@@ -62,18 +62,18 @@
     "marked": "^16.2.1"
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "^4.1.1",
+    "@chromatic-com/storybook": "^5.1.2",
     "@custom-elements-manifest/analyzer": "^0.11.0",
     "@lit/localize-tools": "^0.8.0",
     "@open-wc/testing": "^4.0.0",
     "@openfoodfacts/openfoodfacts-nodejs": "^2.0.0-alpha.18",
-    "@storybook/addon-a11y": "^9.1.4",
-    "@storybook/addon-docs": "^9.1.4",
-    "@storybook/addon-vitest": "^9.1.4",
-    "@storybook/builder-vite": "^9.1.4",
-    "@storybook/web-components-vite": "^9.1.4",
+    "@storybook/addon-a11y": "^10.3.6",
+    "@storybook/addon-docs": "^10.3.6",
+    "@storybook/addon-vitest": "^10.3.6",
+    "@storybook/builder-vite": "^10.3.6",
+    "@storybook/web-components-vite": "^10.3.6",
     "@types/cropperjs": "^1.1.5",
-    "@types/diff": "^7.0.2",
+    "@types/diff": "^8.0.0",
     "@typescript-eslint/eslint-plugin": "^8.33.1",
     "@typescript-eslint/parser": "^8.33.1",
     "@vitest/browser": "^3.2.4",
@@ -87,13 +87,13 @@
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-lit": "^2.1.1",
     "eslint-plugin-prettier": "^5.4.1",
-    "eslint-plugin-storybook": "^9.1.4",
+    "eslint-plugin-storybook": "^10.3.6",
     "glob": "^11.0.2",
     "jsdom": "^27.0.0",
     "playwright": "^1.55.0",
     "prettier": "^3.5.3",
     "rimraf": "^6.0.1",
-    "storybook": "^9.1.4",
+    "storybook": "^10.3.6",
     "ts-node": "^10.9.2",
     "typescript": "~5.9.2",
     "vite": "^7.1.4",
@@ -101,5 +101,6 @@
     "vite-plugin-static-copy": "^3.1.2",
     "vitest": "^3.2.4"
   },
-  "customElements": "custom-elements.json"
+  "customElements": "custom-elements.json",
+  "packageManager": "npm@11.12.1+sha512.cdca14b85d647b3192028d02aadbe82d75f79a446aceea9874be98e6d768f20ebd3555770a48d0e9906106007877bbc690f715e9372f2e2dc644a3c3157fb14c"
 }
