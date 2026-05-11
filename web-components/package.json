@@ -50,7 +50,7 @@
     "lit"
   ],
   "dependencies": {
-    "@lit-labs/signals": "^0.1.2",
+    "@lit-labs/signals": "^0.2.0",
     "@lit/localize": "^0.12.2",
     "@lit/task": "^1.0.2",
     "cropperjs": "^2.0.0",
