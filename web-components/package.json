@@ -76,8 +76,8 @@
     "@types/diff": "^8.0.0",
     "@typescript-eslint/eslint-plugin": "^8.33.1",
     "@typescript-eslint/parser": "^8.33.1",
-    "@vitest/browser": "^3.2.4",
-    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/browser": "^4.1.6",
+    "@vitest/coverage-v8": "^4.1.6",
     "@web/test-runner": "^0.20.2",
     "@web/test-runner-playwright": "^0.11.0",
     "@webcomponents/webcomponentsjs": "^2.8.0",
@@ -99,7 +99,7 @@
     "vite": "^7.1.4",
     "vite-plugin-dts": "^4.5.4",
     "vite-plugin-static-copy": "^3.1.2",
-    "vitest": "^3.2.4"
+    "vitest": "^4.1.6"
   },
   "customElements": "custom-elements.json",
   "packageManager": "npm@11.12.1+sha512.cdca14b85d647b3192028d02aadbe82d75f79a446aceea9874be98e6d768f20ebd3555770a48d0e9906106007877bbc690f715e9372f2e2dc644a3c3157fb14c"
