@@ -12,6 +12,9 @@ export const FLEX = css`
   .flex-col {
     flex-direction: column;
   }
+  .justify-start {
+    justify-content: flex-start;
+  }
   .justify-center {
     justify-content: center;
   }
