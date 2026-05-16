@@ -90,6 +90,8 @@ export class DonationBanner extends LitElement {
       box-sizing: border-box;
       border-radius: 20px;
     }
+    :host-context(.dark) .donation-banner,
+    :host-context(.dark) .donation-banner-footer,
     .dark-mode .donation-banner,
     .dark-mode .donation-banner-footer {
       background-color: #2d2724;
@@ -97,13 +99,21 @@ export class DonationBanner extends LitElement {
       border-color: #ff6e78;
       border-radius: 20px;
     }
+
+    :host-context(.dark) .donation-banner__main-title,
+    :host-context(.dark) .donation-banner-footer__main-title,
     .dark-mode .donation-banner__main-title,
     .dark-mode .donation-banner-footer__main-title {
       color: #ff6e78;
     }
+
+    :host-context(.dark) .donation-banner__main-div-wrapper,
     .dark-mode .donation-banner__main-div-wrapper {
       color: #f9f7f5;
     }
+
+    :host-context(.dark) .donation-banner__hook-section,
+    :host-context(.dark) .donation-banner-footer__hook-section,
     .dark-mode .donation-banner__hook-section,
     .dark-mode .donation-banner-footer__hook-section {
       background-color: #0050a0;
