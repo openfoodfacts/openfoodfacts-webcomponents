@@ -224,7 +224,10 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
     })
     this.nutrimentsData = result.product
     const images = result?.product?.images
-    const nutritionImage = images?.["nutrition_en"]
+    const nutritionImage =
+      images?.[`nutrition_${languageCode.get()}`] ??
+      images?.nutrition ??
+      Object.entries(images ?? {}).find(([key]) => key.startsWith("nutrition_"))?.[1]
     const key = nutritionImage?.imgid !== undefined ? String(nutritionImage.imgid) : undefined
     const uploaded_t = key ? images?.[key]?.uploaded_t : undefined
 
@@ -295,20 +298,21 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
         class=${classMap({
           popover: true,
           "info-popover": true,
+          "popover-right": true,
         })}
         ${clickOutside(() => this.closeInfoPopover())}
       >
-        <div class="popover-right popover-content">
-          ${msg(html`
-            <div>
-              ${this.uploadedDate
-                ? html`Image uploaded on <br />
-                    <span style="margin-top:4px;">
-                      <em> ${this.uploadedDate}</em>
-                    </span> `
-                : html`No information available`}
-            </div>
-          `)}
+        <div class="popover-content">
+          <div>
+            ${this.uploadedDate
+              ? html`
+                  ${msg("Image uploaded on")}<br />
+                  <span style="margin-top:4px;">
+                    <em>${this.uploadedDate}</em>
+                  </span>
+                `
+              : msg("No information available")}
+          </div>
         </div>
       </div>
     `

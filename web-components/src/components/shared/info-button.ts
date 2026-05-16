@@ -12,6 +12,10 @@ import { Breakpoints } from "../../utils/breakpoints"
 export class InfoButton extends LitElement {
   @property({ type: String })
   size: "sm" | "" = ""
+
+  @property({ type: String, attribute: "aria-label" })
+  ariaLabel = "More information"
+
   static override styles = css`
     .info-button {
       display: flex;
@@ -46,7 +50,11 @@ export class InfoButton extends LitElement {
 
   override render() {
     return html`
-      <button type="button" class="info-button ${this.size ? this.size : ""}">
+      <button
+        type="button"
+        aria-label=${this.ariaLabel}
+        class="info-button ${this.size ? this.size : ""}"
+      >
         <info-icon .custom-styles="${{ fill: "white" }}"></info-icon>
       </button>
     `
