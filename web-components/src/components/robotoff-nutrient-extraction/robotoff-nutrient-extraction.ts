@@ -38,7 +38,6 @@ import { languageCode } from "../../signals/app"
 import { clickOutside } from "../../directives/click-outside"
 import "../shared/info-button"
 import { POPOVER } from "../../styles/popover"
-import { darkModeListener } from "../../utils/dark-mode-listener"
 import { classMap } from "lit-html/directives/class-map.js"
 
 const IMAGE_MAX_WIDTH = 700
@@ -55,21 +54,6 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
     CountryCodeMixin(LoadingWithTimeoutMixin(LitElement, undefined as AnnotationAnswer | undefined))
   )
 ) {
-  isDarkMode = darkModeListener.darkMode
-  private _darkModeCb = (isDark: boolean) => {
-    this.isDarkMode = isDark
-    this.requestUpdate()
-  }
-
-  override connectedCallback() {
-    super.connectedCallback()
-    darkModeListener.subscribe(this._darkModeCb)
-  }
-
-  override disconnectedCallback() {
-    darkModeListener.unsubscribe(this._darkModeCb)
-    super.disconnectedCallback()
-  }
   static override styles = [
     BASE,
     FLEX,
@@ -94,12 +78,6 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
         box-sizing: border-box;
         max-width: ${IMAGE_MAX_WIDTH}px;
         width: 100%;
-      }
-
-      .date {
-        padding-top: 15px;
-        font-size: medium;
-        font-weight: 500;
       }
 
       .nutrients {
@@ -130,7 +108,8 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
       }
 
       .info-button-wrapper {
-        display: flex-start;
+        display: flex;
+        justify-content: flex-start;
         position: absolute;
       }
 
@@ -145,16 +124,6 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
         right: 1px;
         top: 1px;
         z-index: 10;
-      }
-
-      .dark-mode {
-        background-color: #1e1e1e;
-        color: #ffffff;
-        border: 1px solid #333;
-      }
-
-      .dark-mode .popover-content {
-        background-color: #1e1e1e;
       }
     `,
   ]
@@ -176,7 +145,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
   private nutrimentsData?: NutrimentsProductType
 
   @state()
-  private uploaded_Date: string = ""
+  private uploadedDate: string = ""
 
   @state()
   showInfoPopover: boolean = false
@@ -255,10 +224,11 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
     })
     this.nutrimentsData = result.product
     const images = result?.product?.images
-    const key = images["nutrition_en"]?.imgid
-    const uploaded_t = key ? images[key]?.uploaded_t : undefined
+    const nutritionImage = images?.["nutrition_en"]
+    const key = nutritionImage?.imgid !== undefined ? String(nutritionImage.imgid) : undefined
+    const uploaded_t = key ? images?.[key]?.uploaded_t : undefined
 
-    this.uploaded_Date = this.getUploadedTime(uploaded_t)
+    this.uploadedDate = this.getUploadedTime(uploaded_t)
     return result.product.nutriments
   }
 
@@ -325,17 +295,16 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
         class=${classMap({
           popover: true,
           "info-popover": true,
-          "dark-mode": this.isDarkMode,
         })}
         ${clickOutside(() => this.closeInfoPopover())}
       >
         <div class="popover-right popover-content">
           ${msg(html`
             <div>
-              ${this.uploaded_Date
+              ${this.uploadedDate
                 ? html`Image uploaded on <br />
                     <span style="margin-top:4px;">
-                      <em> ${this.uploaded_Date}</em>
+                      <em> ${this.uploadedDate}</em>
                     </span> `
                 : html`No information available`}
             </div>

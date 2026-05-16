@@ -913,7 +913,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
 
     return html`
       <div
-        class="toolbar flex ${this.customClass != "" ? this.customClass : "justify-end"}"
+        class="toolbar flex ${this.customClass !== "" ? this.customClass : "justify-end"}"
         role="toolbar"
         aria-label=${msg("Image controls")}
       >

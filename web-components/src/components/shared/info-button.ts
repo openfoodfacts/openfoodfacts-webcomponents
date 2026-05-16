@@ -46,7 +46,7 @@ export class InfoButton extends LitElement {
 
   override render() {
     return html`
-      <button class="info-button ${this.size ? this.size : ""}">
+      <button type="button" class="info-button ${this.size ? this.size : ""}">
         <info-icon .custom-styles="${{ fill: "white" }}"></info-icon>
       </button>
     `

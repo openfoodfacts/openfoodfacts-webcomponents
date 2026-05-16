@@ -13,7 +13,7 @@ export const FLEX = css`
     flex-direction: column;
   }
   .justify-start {
-    justify-content: start;
+    justify-content: flex-start;
   }
   .justify-center {
     justify-content: center;
