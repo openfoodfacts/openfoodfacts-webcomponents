@@ -145,7 +145,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
   private nutrimentsData?: NutrimentsProductType
 
   @state()
-  private uploadedDate: string = ""
+  private uploadedDate: string | undefined
 
   @state()
   showInfoPopover: boolean = false
@@ -208,7 +208,10 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
     }
     this.currentInsightIndex = index
     const insight = this.currentInsight
-    await this.getProductNutriments(insight.barcode)
+    const data = await this.getProductNutriments(insight.barcode)
+
+    this.nutrimentsData = data?.product
+    this.uploadedDate = data?.uploadedDate
   }
 
   /**
@@ -217,22 +220,26 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
    * @returns {Promise<NutrimentsProductType>}
    */
   async getProductNutriments(productCode: string) {
-    this.nutrimentsData = undefined
     const result = await fetchProduct<NutrimentsProductType>(productCode, {
       fields: [ProductFields.NUTRIMENTS, ProductFields.IMAGES],
       lc: languageCode.get(),
     })
-    this.nutrimentsData = result.product
+
     const images = result?.product?.images
+
     const nutritionImage =
       images?.[`nutrition_${languageCode.get()}`] ??
       images?.nutrition ??
       Object.entries(images ?? {}).find(([key]) => key.startsWith("nutrition_"))?.[1]
+
     const key = nutritionImage?.imgid !== undefined ? String(nutritionImage.imgid) : undefined
+
     const uploaded_t = key ? images?.[key]?.uploaded_t : undefined
 
-    this.uploadedDate = this.getUploadedTime(uploaded_t)
-    return result.product.nutriments
+    return {
+      product: result.product,
+      uploadedDate: this.getUploadedTime(uploaded_t),
+    }
   }
 
   /**
@@ -249,14 +256,15 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
     this.showInfoPopover = false
   }
 
-  getUploadedTime = (data: number | undefined) =>
-    data
-      ? new Date(data * 1000).toLocaleDateString(undefined, {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        })
-      : ""
+  getUploadedTime = (data: number | undefined) => {
+    if (!data) return undefined
+
+    return new Date(data * 1000).toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    })
+  }
 
   renderImage(insight: NutrientsInsight) {
     if (!insight?.source_image) {
@@ -381,7 +389,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
               ${this.renderImage(insight as NutrientsInsight)}
               <robotoff-nutrient-extraction-form
                 loading=${ifDefined(this.loading) as AnnotationAnswer}
-                .nutrimentsData="${this.nutrimentsData}"
+                .nutrimentsData="${this.nutrimentsData?.nutriments}"
                 .insight="${insight as NutrientsInsight}"
                 @submit="${this.onSubmit}"
                 @refuse="${this.onRefuse}"
