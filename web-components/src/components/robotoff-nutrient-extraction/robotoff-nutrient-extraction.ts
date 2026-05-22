@@ -207,6 +207,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
       return
     }
     this.currentInsightIndex = index
+    this.showInfoPopover = false
     const insight = this.currentInsight
     const data = await this.getProductNutriments(insight.barcode)
 
