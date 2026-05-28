@@ -50,7 +50,7 @@
     "lit"
   ],
   "dependencies": {
-    "@lit-labs/signals": "^0.1.2",
+    "@lit-labs/signals": "^0.2.0",
     "@lit/localize": "^0.12.2",
     "@lit/task": "^1.0.2",
     "cropperjs": "^2.0.0",
@@ -59,7 +59,7 @@
     "dompurify": "^3.2.6",
     "lit": "^3.3.0",
     "lit-html": "^3.3.0",
-    "marked": "^16.2.1"
+    "marked": "^18.0.3"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.1.2",
@@ -76,20 +76,20 @@
     "@types/diff": "^8.0.0",
     "@typescript-eslint/eslint-plugin": "^8.33.1",
     "@typescript-eslint/parser": "^8.33.1",
-    "@vitest/browser": "^3.2.4",
-    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/browser": "^4.1.6",
+    "@vitest/coverage-v8": "^4.1.6",
     "@web/test-runner": "^0.20.2",
     "@web/test-runner-playwright": "^0.11.0",
     "@webcomponents/webcomponentsjs": "^2.8.0",
     "concurrently": "^9.1.2",
-    "dotenv": "^16.5.0",
+    "dotenv": "^17.4.2",
     "eslint": "^9.28.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-lit": "^2.1.1",
     "eslint-plugin-prettier": "^5.4.1",
     "eslint-plugin-storybook": "^10.3.6",
     "glob": "^11.0.2",
-    "jsdom": "^27.0.0",
+    "jsdom": "^29.1.1",
     "playwright": "^1.55.0",
     "prettier": "^3.5.3",
     "rimraf": "^6.0.1",
@@ -99,8 +99,8 @@
     "vite": "^7.1.4",
     "vite-plugin-dts": "^4.5.4",
     "vite-plugin-static-copy": "^3.1.2",
-    "vitest": "^3.2.4"
+    "vitest": "^4.1.6"
   },
   "customElements": "custom-elements.json",
-  "packageManager": "npm@11.12.1+sha512.cdca14b85d647b3192028d02aadbe82d75f79a446aceea9874be98e6d768f20ebd3555770a48d0e9906106007877bbc690f715e9372f2e2dc644a3c3157fb14c"
+  "packageManager": "npm@11.14.1+sha512.6a8a4d67478497a2dbc6815cad72e64c43f33413717e242756047d466241ab39bee61e691683a64658e94496ec5f1a1c05e4a5ec62dcc773280dfd949443a367"
 }
