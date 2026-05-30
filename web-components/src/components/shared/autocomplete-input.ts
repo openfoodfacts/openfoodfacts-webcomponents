@@ -6,6 +6,9 @@ import type { AutocompleteSuggestion, AutocompleteInputChangeEventDetail } from 
 import { SAFE_BLUE } from "../../utils/colors"
 import { randomIdGenerator } from "../../utils"
 
+const BLUR_DELAY_MS = 150
+const HIERARCHY_SEPARATOR = " / "
+
 /**
  * AutocompleteInput Component
  * @element autocomplete-input
@@ -287,7 +290,7 @@ export class AutocompleteInput extends LitElement {
       this.navigationPath = [...this.navigationPath, suggestion]
       this._inputValue = ""
       this.highlightedIndex = -1
-      this.showSuggestions = (suggestion.children?.length ?? 0) > 0
+      this.showSuggestions = true
       void this.updateComplete.then(() => this.inputElement?.focus())
       return
     }
@@ -395,7 +398,7 @@ export class AutocompleteInput extends LitElement {
       return
     }
 
-    setTimeout(() => (this.showSuggestions = false), 150)
+    setTimeout(() => (this.showSuggestions = false), BLUR_DELAY_MS)
   }
 
   override render() {
@@ -440,7 +443,7 @@ export class AutocompleteInput extends LitElement {
                     >
                       ${this.navigationPath
                         .map((suggestion) => suggestion.label ?? suggestion.value)
-                        .join(" / ")}
+                        .join(HIERARCHY_SEPARATOR)}
                     </span>
                   </div>`
                 : null}
