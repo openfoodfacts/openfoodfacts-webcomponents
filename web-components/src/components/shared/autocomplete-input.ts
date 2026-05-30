@@ -406,8 +406,13 @@ export class AutocompleteInput extends LitElement {
                     >
                       ← ${this.hierarchyBackText}
                     </button>
-                    <span class="autocomplete-hierarchy-path" part="autocomplete-input-hierarchy-path">
-                      ${this.navigationPath.map((suggestion) => suggestion.label ?? suggestion.value).join(" / ")}
+                    <span
+                      class="autocomplete-hierarchy-path"
+                      part="autocomplete-input-hierarchy-path"
+                    >
+                      ${this.navigationPath
+                        .map((suggestion) => suggestion.label ?? suggestion.value)
+                        .join(" / ")}
                     </span>
                   </div>`
                 : null}

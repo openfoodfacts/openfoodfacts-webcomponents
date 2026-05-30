@@ -113,9 +113,10 @@ describe("autocomplete-input", () => {
     await flushUpdates(element)
 
     expect(element.shadowRoot?.querySelector(".autocomplete-hierarchy")).toBeNull()
-    expect(Array.from(element.shadowRoot?.querySelectorAll("li") ?? []).map((item) => item.textContent?.trim())).toEqual([
-      "Apple",
-      "Banana",
-    ])
+    expect(
+      Array.from(element.shadowRoot?.querySelectorAll("li") ?? []).map((item) =>
+        item.textContent?.trim()
+      )
+    ).toEqual(["Apple", "Banana"])
   })
 })
