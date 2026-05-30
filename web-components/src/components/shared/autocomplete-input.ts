@@ -4,9 +4,10 @@ import { FOLKSONOMY_INPUT } from "../../styles/folksonomy-input"
 import { classMap } from "lit/directives/class-map.js"
 import type { AutocompleteSuggestion, AutocompleteInputChangeEventDetail } from "../../types"
 import { SAFE_BLUE } from "../../utils/colors"
-import { randomIdGenerator } from "../../utils"
+import { randomIdGenerator, createDebounce } from "../../utils"
 
 const BLUR_DELAY_MS = 150
+const MAX_VISIBLE_SUGGESTIONS = 100
 
 type VisibleSuggestion = {
   suggestion: AutocompleteSuggestion
@@ -68,14 +69,43 @@ export class AutocompleteInput extends LitElement {
 
       .autocomplete-item-expander {
         color: #6c757d;
-        flex: 0 0 12px;
-        font-size: 0.85rem;
+        flex: 0 0 20px;
+        font-size: 1rem;
         text-align: center;
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 4px;
+      }
+
+      .autocomplete-item-expander:hover {
+        background-color: #e9ecef;
+        color: #212529;
       }
 
       .autocomplete-item-label {
         flex: 1;
         min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .autocomplete-item-breadcrumb {
+        font-size: 0.75rem;
+        color: #6c757d;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .autocomplete-item-text {
+        font-weight: 500;
+      }
+
+      .match-highlight {
+        color: ${SAFE_BLUE};
+        font-weight: 700;
+        text-decoration: underline;
       }
 
       .autocomplete-item.not-found {
@@ -168,6 +198,7 @@ export class AutocompleteInput extends LitElement {
 
   private ignoreNextBlur = false
   private blurTimeoutId?: ReturnType<typeof setTimeout>
+  private searchDebounce = createDebounce(200)
 
   /**
    * ID for the suggestions list.
@@ -199,15 +230,79 @@ export class AutocompleteInput extends LitElement {
 
   /**
    * Suggestions visible in the dropdown.
-   * When the user types, the full tree is searched and matching branches are shown.
-   * Otherwise the tree shows the currently expanded hierarchy path.
+   * Combined search and browse logic.
    * @private
    */
   get visibleSuggestions() {
-    if (!this.value) {
-      return this.getExpandedVisibleSuggestions(this.suggestions)
+    const results: VisibleSuggestion[] = []
+    this.getVisibleSuggestions(this.suggestions, this.value, 0, [], results)
+    return results.slice(0, MAX_VISIBLE_SUGGESTIONS)
+  }
+
+  /**
+   * Recursive method to get visible suggestions based on search and expansion state.
+   */
+  private getVisibleSuggestions(
+    suggestions: AutocompleteSuggestion[],
+    inputValue: string,
+    depth = 0,
+    parentPath: AutocompleteSuggestion[] = [],
+    results: VisibleSuggestion[] = [],
+    forceShow = false
+  ): void {
+    const searchMode = !!inputValue
+    for (const suggestion of suggestions) {
+      if (results.length >= MAX_VISIBLE_SUGGESTIONS) break
+
+      const path = [...parentPath, suggestion]
+      const matches = this.getSuggestionTextToFilter(suggestion).includes(inputValue.toLowerCase())
+      const isExpanded = this.isPathExpanded(path)
+
+      // In search mode, we only show matches at the "top level" of the search results
+      // unless we are inside an expanded branch (forceShow).
+      const shouldShowThis = forceShow || (searchMode && matches) || (!searchMode && matches)
+
+      if (shouldShowThis) {
+        results.push({ suggestion, depth, path })
+        if (suggestion.children?.length && isExpanded) {
+          // If expanded, we show all children indented
+          this.getVisibleSuggestions(
+            suggestion.children,
+            inputValue,
+            depth + 1,
+            path,
+            results,
+            true // forceShow children because parent is expanded
+          )
+        }
+      } else if (searchMode && !forceShow) {
+        // If we're searching and this didn't match, we still need to check children
+        if (suggestion.children?.length) {
+          this.getVisibleSuggestions(
+            suggestion.children,
+            inputValue,
+            depth, // Keep same depth for "new roots" in search results
+            path,
+            results,
+            false
+          )
+        }
+      } else if (!searchMode) {
+        // Normal browse mode: if not forceShow (root) and not matching (all match empty),
+        // this part shouldn't really be hit but for safety:
+        results.push({ suggestion, depth, path })
+        if (suggestion.children?.length && isExpanded) {
+          this.getVisibleSuggestions(
+            suggestion.children,
+            inputValue,
+            depth + 1,
+            path,
+            results,
+            true
+          )
+        }
+      }
     }
-    return this.getSearchVisibleSuggestions(this.suggestions, this.value)
   }
 
   /**
@@ -244,6 +339,7 @@ export class AutocompleteInput extends LitElement {
     if (this.blurTimeoutId) {
       clearTimeout(this.blurTimeoutId)
     }
+    this.searchDebounce.clear()
     super.disconnectedCallback()
   }
   /**
@@ -266,57 +362,29 @@ export class AutocompleteInput extends LitElement {
 
   private findMatchingSuggestions(
     suggestions: AutocompleteSuggestion[],
-    inputValue: string
-  ): AutocompleteSuggestion[] {
-    return suggestions.flatMap((suggestion) => {
-      const matches = this.getSuggestionTextToFilter(suggestion).includes(inputValue.toLowerCase())
-      const children = suggestion.children?.length
-        ? this.findMatchingSuggestions(suggestion.children, inputValue)
-        : []
-      return [...(matches ? [suggestion] : []), ...children]
-    })
-  }
-
-  private getExpandedVisibleSuggestions(
-    suggestions: AutocompleteSuggestion[],
-    depth = 0,
-    parentPath: AutocompleteSuggestion[] = []
-  ): VisibleSuggestion[] {
-    return suggestions.flatMap((suggestion) => {
-      const path = [...parentPath, suggestion]
-      const children =
-        (suggestion.children?.length ?? 0) > 0 && this.isPathExpanded(path)
-          ? this.getExpandedVisibleSuggestions(suggestion.children ?? [], depth + 1, path)
-          : []
-
-      return [{ suggestion, depth, path }, ...children]
-    })
-  }
-
-  private getSearchVisibleSuggestions(
-    suggestions: AutocompleteSuggestion[],
     inputValue: string,
-    depth = 0,
-    parentPath: AutocompleteSuggestion[] = []
-  ): VisibleSuggestion[] {
-    return suggestions.flatMap((suggestion) => {
-      const path = [...parentPath, suggestion]
-      const children =
-        (suggestion.children?.length ?? 0) > 0
-          ? this.getSearchVisibleSuggestions(suggestion.children ?? [], inputValue, depth + 1, path)
-          : []
-      const matches = this.getSuggestionTextToFilter(suggestion).includes(inputValue.toLowerCase())
+    results: AutocompleteSuggestion[] = []
+  ): AutocompleteSuggestion[] {
+    for (const suggestion of suggestions) {
+      if (results.length >= MAX_VISIBLE_SUGGESTIONS) break
 
-      if (!matches && children.length === 0) {
-        return []
+      const matches = this.getSuggestionTextToFilter(suggestion).includes(inputValue.toLowerCase())
+      if (matches) {
+        results.push(suggestion)
       }
 
-      return [{ suggestion, depth, path }, ...children]
-    })
+      if (suggestion.children?.length) {
+        this.findMatchingSuggestions(suggestion.children, inputValue, results)
+      }
+    }
+    return results
   }
 
   private isPathExpanded(path: AutocompleteSuggestion[]) {
-    return path.every((suggestion, index) => this.navigationPath[index]?.value === suggestion.value)
+    return (
+      path.length > 0 &&
+      path.every((suggestion, index) => this.navigationPath[index]?.value === suggestion.value)
+    )
   }
 
   private findPathToSuggestion(
@@ -346,26 +414,37 @@ export class AutocompleteInput extends LitElement {
     const inputValue = (e.target as HTMLInputElement).value
     this.value = inputValue
     this.highlightedIndex = -1
-    const filteredSuggestions = this.filteredSuggestions
-    const suggestionsToShow = this.visibleSuggestionsWithNotFound
-    this.showSuggestions = suggestionsToShow.length > 0
-    // If there is only one suggestion and it matches the input value, consider it a notable match
-    const matching =
-      filteredSuggestions.length === 1 &&
-      this.getSuggestionTextToFilter(filteredSuggestions[0]) === this.value
-        ? filteredSuggestions[0]
-        : undefined
-    this.dispatchEvent(
-      new CustomEvent<AutocompleteInputChangeEventDetail>("input-change", {
-        detail: {
-          value: inputValue,
-          filteredSuggestions,
-          matching,
-        },
-        bubbles: true,
-        composed: true,
-      })
-    )
+
+    this.searchDebounce.debounce(() => {
+      const filteredSuggestions = this.filteredSuggestions
+      const suggestionsToShow = this.visibleSuggestionsWithNotFound
+      this.showSuggestions = suggestionsToShow.length > 0
+      // If there is only one suggestion and it matches the input value, consider it a notable match
+      const matching =
+        filteredSuggestions.length === 1 &&
+        this.getSuggestionTextToFilter(filteredSuggestions[0]) === this.value
+          ? filteredSuggestions[0]
+          : undefined
+      this.dispatchEvent(
+        new CustomEvent<AutocompleteInputChangeEventDetail>("input-change", {
+          detail: {
+            value: inputValue,
+            filteredSuggestions,
+            matching,
+          },
+          bubbles: true,
+          composed: true,
+        })
+      )
+    })
+  }
+
+  private toggleExpansion(e: Event, path: AutocompleteSuggestion[]) {
+    e.stopPropagation()
+    this.ignoreNextBlur = true
+    this.navigationPath = this.isPathExpanded(path) ? path.slice(0, -1) : path
+    this.showSuggestions = true
+    void this.updateComplete.then(() => this.focusInput())
   }
 
   /**
@@ -376,22 +455,22 @@ export class AutocompleteInput extends LitElement {
     suggestion: AutocompleteSuggestion,
     path: AutocompleteSuggestion[] = []
   ) {
-    if ((suggestion.children?.length ?? 0) > 0) {
-      this.ignoreNextBlur = true
-      this.navigationPath = this.isPathExpanded(path) ? path.slice(0, -1) : path
-      this._inputValue = ""
-      this.highlightedIndex = -1
-      this.showSuggestions = true
-      void this.updateComplete.then(() => this.focusInput())
+    if (suggestion.value === "__NOT_FOUND__") {
+      this.showSuggestions = false
+      this.dispatchEvent(
+        new CustomEvent<AutocompleteSuggestion>("suggestion-select", {
+          detail: suggestion,
+          bubbles: true,
+          composed: true,
+        })
+      )
       return
     }
 
-    // Don't change the input value for the "not found" special case
-    if (suggestion.value !== "__NOT_FOUND__") {
-      this.navigationPath = path.slice(0, -1)
-      this._inputValue = suggestion.value
-    }
+    this.navigationPath = path.slice(0, -1)
+    this._inputValue = suggestion.value
     this.showSuggestions = false
+
     this.dispatchEvent(
       new CustomEvent<AutocompleteSuggestion>("suggestion-select", {
         detail: suggestion,
@@ -489,7 +568,57 @@ export class AutocompleteInput extends LitElement {
     }, BLUR_DELAY_MS)
   }
 
+  private renderLabel(
+    suggestion: AutocompleteSuggestion,
+    path: AutocompleteSuggestion[],
+    index: number,
+    visibleSuggestions: VisibleSuggestion[]
+  ) {
+    const label = suggestion.label ?? suggestion.value
+    const isSearching = !!this.value
+
+    let content
+    if (isSearching) {
+      const searchIndex = label.toLowerCase().indexOf(this.value.toLowerCase())
+      if (searchIndex >= 0) {
+        content = html`
+          ${label.substring(0, searchIndex)}<span class="match-highlight"
+            >${label.substring(searchIndex, searchIndex + this.value.length)}</span
+          >${label.substring(searchIndex + this.value.length)}
+        `
+      } else {
+        content = label
+      }
+    } else {
+      content = label
+    }
+
+    // Context logic:
+    // 1. If the parent is visible immediately above, we indent and show no breadcrumb.
+    // 2. Otherwise (top-level search result), we show the breadcrumb.
+    const parentSuggestion = path.length > 1 ? path[path.length - 2] : null
+    const previousVisibleSuggestion = index > 0 ? visibleSuggestions[index - 1] : null
+    const isParentVisible =
+      parentSuggestion && previousVisibleSuggestion?.suggestion.value === parentSuggestion.value
+
+    const showBreadcrumb = isSearching && parentSuggestion && !isParentVisible
+    const breadcrumb = showBreadcrumb
+      ? path
+          .slice(0, -1)
+          .map((p) => p.label ?? p.value)
+          .join(" › ")
+      : ""
+
+    return html`
+      <div class="autocomplete-item-label">
+        ${breadcrumb ? html`<span class="autocomplete-item-breadcrumb">${breadcrumb}</span>` : null}
+        <span class="autocomplete-item-text">${content}</span>
+      </div>
+    `
+  }
+
   override render() {
+    const visibleSuggestions = this.visibleSuggestionsWithNotFound
     return html`
       <div class="autocomplete-wrapper">
         <input
@@ -518,40 +647,54 @@ export class AutocompleteInput extends LitElement {
                 role="listbox"
                 part="autocomplete-input-list"
               >
-                ${this.visibleSuggestionsWithNotFound.map(
-                  ({ suggestion, depth, path }, index) =>
-                    html`<li
-                      class="autocomplete-item ${classMap({
-                        highlighted: index === this.highlightedIndex,
-                        "not-found": suggestion.isNotFound === true,
-                      })}"
-                      role="option"
-                      id=${this.getSuggestionItemId(index)}
-                      @mousedown=${() => this.selectSuggestion(suggestion, path)}
-                      @mouseenter=${() => (this.highlightedIndex = index)}
-                      aria-selected=${index === this.highlightedIndex}
+                ${visibleSuggestions.map(({ suggestion, depth, path }, index) => {
+                  const parentSuggestion = path.length > 1 ? path[path.length - 2] : null
+                  const previousVisibleSuggestion = index > 0 ? visibleSuggestions[index - 1] : null
+                  const isParentVisible =
+                    parentSuggestion &&
+                    previousVisibleSuggestion?.suggestion.value === parentSuggestion.value
+
+                  // Use indentation if parent is visible (tree feel)
+                  const useIndentation = isParentVisible || (!this.value && depth > 0)
+                  const effectiveDepth = useIndentation ? depth : 0
+
+                  return html`<li
+                    class="autocomplete-item ${classMap({
+                      highlighted: index === this.highlightedIndex,
+                      "not-found": suggestion.isNotFound === true,
+                    })}"
+                    role="option"
+                    id=${this.getSuggestionItemId(index)}
+                    @mousedown=${() => this.selectSuggestion(suggestion, path)}
+                    @mouseenter=${() => (this.highlightedIndex = index)}
+                    aria-selected=${index === this.highlightedIndex}
+                  >
+                    <span
+                      class="autocomplete-item-content ${useIndentation
+                        ? "autocomplete-item-tree"
+                        : ""}"
+                      style=${`padding-inline-start: ${10 + effectiveDepth * 20}px;`}
                     >
-                      <span
-                        class="autocomplete-item-content ${depth > 0
-                          ? "autocomplete-item-tree"
-                          : ""}"
-                        style=${`padding-inline-start: ${10 + depth * 20}px;`}
-                      >
-                        ${suggestion.isNotFound
-                          ? null
-                          : html`<span class="autocomplete-item-expander">
-                              ${(suggestion.children?.length ?? 0) > 0
-                                ? this.isPathExpanded(path)
-                                  ? "▾"
-                                  : "▸"
-                                : ""}
-                            </span>`}
-                        <span class="autocomplete-item-label"
-                          >${suggestion.label ?? suggestion.value}</span
-                        >
-                      </span>
-                    </li>`
-                )}
+                      ${suggestion.isNotFound
+                        ? null
+                        : html`<span
+                            class="autocomplete-item-expander"
+                            @mousedown=${(e: Event) => this.toggleExpansion(e, path)}
+                          >
+                            ${(suggestion.children?.length ?? 0) > 0
+                              ? this.isPathExpanded(path)
+                                ? "▾"
+                                : "▸"
+                              : ""}
+                          </span>`}
+                      ${suggestion.isNotFound
+                        ? html`<span class="autocomplete-item-label"
+                            >${suggestion.label ?? suggestion.value}</span
+                          >`
+                        : this.renderLabel(suggestion, path, index, visibleSuggestions)}
+                    </span>
+                  </li>`
+                })}
               </ul>
             `
           : null}

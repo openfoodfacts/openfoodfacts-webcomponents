@@ -51,15 +51,12 @@ describe("autocomplete-input", () => {
     expect(element.value).toBe("palm-oil-free")
   })
 
-  it("drills into child suggestions before selecting a leaf", async () => {
+  it("selects a node even if it has children", async () => {
     const suggestions: AutocompleteSuggestion[] = [
       {
         label: "Apple",
         value: "apple",
-        children: [
-          { label: "Gala Apple", value: "gala-apple" },
-          { label: "Macintosh Apple", value: "macintosh-apple" },
-        ],
+        children: [{ label: "Gala Apple", value: "gala-apple" }],
       },
     ]
     const { element, input } = await createAutocomplete(suggestions)
@@ -73,17 +70,41 @@ describe("autocomplete-input", () => {
     if (!(firstSuggestion instanceof HTMLElement)) {
       throw new Error("Expected first suggestion")
     }
-    firstSuggestion.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }))
+    // Click the label to select
+    const label = firstSuggestion.querySelector(".autocomplete-item-label")
+    label?.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }))
     await flushUpdates(element)
 
-    expect(onSelect).not.toHaveBeenCalled()
-    expect(element.value).toBe("")
-    expect(getSuggestionLabels(element)).toEqual(["Apple", "Gala Apple", "Macintosh Apple"])
+    expect(onSelect).toHaveBeenCalledTimes(1)
+    expect(onSelect.mock.calls[0][0].detail.value).toBe("apple")
+    expect(element.value).toBe("apple")
   })
 
-  it("keeps the hierarchy open after clicking into a child level", async () => {
-    vi.useFakeTimers()
+  it("expands a node when clicking the expander", async () => {
+    const suggestions: AutocompleteSuggestion[] = [
+      {
+        label: "Apple",
+        value: "apple",
+        children: [{ label: "Gala Apple", value: "gala-apple" }],
+      },
+    ]
+    const { element, input } = await createAutocomplete(suggestions)
 
+    input.dispatchEvent(new FocusEvent("focus"))
+    await flushUpdates(element)
+
+    const expander = element.shadowRoot?.querySelector(".autocomplete-item-expander")
+    if (!(expander instanceof HTMLElement)) {
+      throw new Error("Expected expander")
+    }
+    expander.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }))
+    await flushUpdates(element)
+
+    expect(getSuggestionLabels(element)).toEqual(["Apple", "Gala Apple"])
+  })
+
+  it("searches the whole tree with debouncing", async () => {
+    vi.useFakeTimers()
     try {
       const suggestions: AutocompleteSuggestion[] = [
         {
@@ -91,53 +112,22 @@ describe("autocomplete-input", () => {
           value: "apple",
           children: [{ label: "Gala Apple", value: "gala-apple" }],
         },
+        { label: "Banana", value: "banana" },
       ]
       const { element, input } = await createAutocomplete(suggestions)
 
       input.dispatchEvent(new FocusEvent("focus"))
       await flushUpdates(element)
 
-      const firstSuggestion = element.shadowRoot?.querySelector("li")
-      if (!(firstSuggestion instanceof HTMLElement)) {
-        throw new Error("Expected first suggestion")
-      }
-      firstSuggestion.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }))
-      input.dispatchEvent(new FocusEvent("blur"))
-      await flushUpdates(element)
-      await vi.advanceTimersByTimeAsync(200)
+      input.value = "ban"
+      input.dispatchEvent(new Event("input", { bubbles: true }))
+
+      await vi.advanceTimersByTimeAsync(300)
       await flushUpdates(element)
 
-      expect(getSuggestionLabels(element)).toEqual(["Apple", "Gala Apple"])
+      expect(getSuggestionLabels(element)).toEqual(["Banana"])
     } finally {
       vi.useRealTimers()
     }
-  })
-
-  it("searches the whole tree after expanding a branch", async () => {
-    const suggestions: AutocompleteSuggestion[] = [
-      {
-        label: "Apple",
-        value: "apple",
-        children: [{ label: "Gala Apple", value: "gala-apple" }],
-      },
-      { label: "Banana", value: "banana" },
-    ]
-    const { element, input } = await createAutocomplete(suggestions)
-
-    input.dispatchEvent(new FocusEvent("focus"))
-    await flushUpdates(element)
-
-    const firstSuggestion = element.shadowRoot?.querySelector("li")
-    if (!(firstSuggestion instanceof HTMLElement)) {
-      throw new Error("Expected first suggestion")
-    }
-    firstSuggestion.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }))
-    await flushUpdates(element)
-
-    input.value = "ban"
-    input.dispatchEvent(new Event("input", { bubbles: true }))
-    await flushUpdates(element)
-
-    expect(getSuggestionLabels(element)).toEqual(["Banana"])
   })
 })

@@ -1,5 +1,8 @@
 import "./autocomplete-input"
 import type { Meta, StoryObj } from "@storybook/web-components-vite"
+import { html } from "lit"
+import { until } from "lit/directives/until.js"
+import { buildCategoryTree } from "../../utils/taxonomy"
 
 const meta: Meta = {
   title: "Shared/Autocomplete Input",
@@ -41,5 +44,33 @@ export const Hierarchical: Story = {
         ],
       },
     ],
+  },
+}
+
+async function fetchAndBuildTaxonomy() {
+  console.time("fetchTaxonomy")
+  const response = await fetch(
+    "https://static.openfoodfacts.org/data/taxonomies/categories.full.json"
+  )
+  const data = await response.json()
+  console.timeEnd("fetchTaxonomy")
+  return buildCategoryTree(data, "en")
+}
+
+export const RealTaxonomy: Story = {
+  render: () => {
+    return html`
+      ${until(
+        fetchAndBuildTaxonomy().then(
+          (suggestions) => html`
+            <autocomplete-input
+              placeholder="Search real categories..."
+              .suggestions=${suggestions}
+            ></autocomplete-input>
+          `
+        ),
+        html`<div>Loading taxonomy data...</div>`
+      )}
+    `
   },
 }
