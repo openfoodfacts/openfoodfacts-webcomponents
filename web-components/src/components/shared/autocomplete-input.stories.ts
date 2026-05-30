@@ -23,7 +23,6 @@ export const Basic: Story = {
 export const Hierarchical: Story = {
   args: {
     placeholder: "Search for a category...",
-    hierarchyBackText: "All categories",
     suggestions: [
       {
         label: "Apple",

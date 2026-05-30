@@ -8,6 +8,11 @@ const flushUpdates = async (element: AutocompleteInput) => {
   await Promise.resolve()
 }
 
+const getSuggestionLabels = (element: AutocompleteInput) =>
+  Array.from(element.shadowRoot?.querySelectorAll(".autocomplete-item-label") ?? []).map((item) =>
+    item.textContent?.trim()
+  )
+
 const createAutocomplete = async (suggestions: AutocompleteSuggestion[]) => {
   const element = document.createElement("autocomplete-input") as AutocompleteInput
   element.suggestions = suggestions
@@ -71,17 +76,9 @@ describe("autocomplete-input", () => {
     firstSuggestion.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }))
     await flushUpdates(element)
 
-    const hierarchyPath = element.shadowRoot?.querySelector(".autocomplete-hierarchy-path")
-    const childSuggestions = element.shadowRoot?.querySelectorAll("li")
-
     expect(onSelect).not.toHaveBeenCalled()
     expect(element.value).toBe("")
-    expect(hierarchyPath?.textContent).toContain("Apple")
-    expect(childSuggestions).toHaveLength(2)
-    expect(Array.from(childSuggestions ?? []).map((item) => item.textContent?.trim())).toEqual([
-      "Gala Apple",
-      "Macintosh Apple",
-    ])
+    expect(getSuggestionLabels(element)).toEqual(["Apple", "Gala Apple", "Macintosh Apple"])
   })
 
   it("keeps the hierarchy open after clicking into a child level", async () => {
@@ -110,14 +107,13 @@ describe("autocomplete-input", () => {
       await vi.advanceTimersByTimeAsync(200)
       await flushUpdates(element)
 
-      expect(element.shadowRoot?.querySelector(".autocomplete-hierarchy")).not.toBeNull()
-      expect(element.shadowRoot?.querySelectorAll("li")).toHaveLength(1)
+      expect(getSuggestionLabels(element)).toEqual(["Apple", "Gala Apple"])
     } finally {
       vi.useRealTimers()
     }
   })
 
-  it("allows navigating back from a child level", async () => {
+  it("searches the whole tree after expanding a branch", async () => {
     const suggestions: AutocompleteSuggestion[] = [
       {
         label: "Apple",
@@ -138,18 +134,10 @@ describe("autocomplete-input", () => {
     firstSuggestion.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }))
     await flushUpdates(element)
 
-    const backButton = element.shadowRoot?.querySelector(".autocomplete-hierarchy-back")
-    if (!(backButton instanceof HTMLButtonElement)) {
-      throw new Error("Expected hierarchy back button")
-    }
-    backButton.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }))
+    input.value = "ban"
+    input.dispatchEvent(new Event("input", { bubbles: true }))
     await flushUpdates(element)
 
-    expect(element.shadowRoot?.querySelector(".autocomplete-hierarchy")).toBeNull()
-    expect(
-      Array.from(element.shadowRoot?.querySelectorAll("li") ?? []).map((item) =>
-        item.textContent?.trim()
-      )
-    ).toEqual(["Apple", "Banana"])
+    expect(getSuggestionLabels(element)).toEqual(["Banana"])
   })
 })
