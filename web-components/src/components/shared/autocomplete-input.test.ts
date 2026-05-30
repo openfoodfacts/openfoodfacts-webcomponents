@@ -84,6 +84,39 @@ describe("autocomplete-input", () => {
     ])
   })
 
+  it("keeps the hierarchy open after clicking into a child level", async () => {
+    vi.useFakeTimers()
+
+    try {
+      const suggestions: AutocompleteSuggestion[] = [
+        {
+          label: "Apple",
+          value: "apple",
+          children: [{ label: "Gala Apple", value: "gala-apple" }],
+        },
+      ]
+      const { element, input } = await createAutocomplete(suggestions)
+
+      input.dispatchEvent(new FocusEvent("focus"))
+      await flushUpdates(element)
+
+      const firstSuggestion = element.shadowRoot?.querySelector("li")
+      if (!(firstSuggestion instanceof HTMLElement)) {
+        throw new Error("Expected first suggestion")
+      }
+      firstSuggestion.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }))
+      input.dispatchEvent(new FocusEvent("blur"))
+      await flushUpdates(element)
+      await vi.advanceTimersByTimeAsync(200)
+      await flushUpdates(element)
+
+      expect(element.shadowRoot?.querySelector(".autocomplete-hierarchy")).not.toBeNull()
+      expect(element.shadowRoot?.querySelectorAll("li")).toHaveLength(1)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
   it("allows navigating back from a child level", async () => {
     const suggestions: AutocompleteSuggestion[] = [
       {

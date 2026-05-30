@@ -171,6 +171,8 @@ export class AutocompleteInput extends LitElement {
   @state()
   private _inputValue: string = ""
 
+  private ignoreNextBlur = false
+
   /**
    * ID for the suggestions list.
    * @private
@@ -183,6 +185,10 @@ export class AutocompleteInput extends LitElement {
     return `autocomplete-item-${this._id}-${index}`
   }
 
+  private get inputElement() {
+    return this.renderRoot.querySelector("input")
+  }
+
   /**
    * Filtered suggestions based on the current input value.
    * @private
@@ -191,6 +197,11 @@ export class AutocompleteInput extends LitElement {
     return this.filterSuggestions(this.value)
   }
 
+  /**
+   * Suggestions available at the current hierarchy level.
+   * Returns the root suggestions until a parent suggestion with children is selected.
+   * @private
+   */
   get currentSuggestions() {
     return this.navigationPath.at(-1)?.children ?? this.suggestions
   }
@@ -272,10 +283,12 @@ export class AutocompleteInput extends LitElement {
    */
   private selectSuggestion(suggestion: AutocompleteSuggestion) {
     if ((suggestion.children?.length ?? 0) > 0) {
+      this.ignoreNextBlur = true
       this.navigationPath = [...this.navigationPath, suggestion]
       this._inputValue = ""
       this.highlightedIndex = -1
-      this.showSuggestions = suggestion.children!.length > 0
+      this.showSuggestions = (suggestion.children?.length ?? 0) > 0
+      void this.updateComplete.then(() => this.inputElement?.focus())
       return
     }
 
@@ -293,11 +306,17 @@ export class AutocompleteInput extends LitElement {
     )
   }
 
+  /**
+   * Goes back to the previous hierarchy level and resets the current filter.
+   * @private
+   */
   private navigateBack() {
+    this.ignoreNextBlur = true
     this.navigationPath = this.navigationPath.slice(0, -1)
     this._inputValue = ""
     this.highlightedIndex = -1
     this.showSuggestions = this.currentSuggestions.length > 0
+    void this.updateComplete.then(() => this.inputElement?.focus())
   }
 
   /**
@@ -370,6 +389,15 @@ export class AutocompleteInput extends LitElement {
     this.highlightedIndex = -1
   }
 
+  private onBlur() {
+    if (this.ignoreNextBlur) {
+      this.ignoreNextBlur = false
+      return
+    }
+
+    setTimeout(() => (this.showSuggestions = false), 150)
+  }
+
   override render() {
     return html`
       <div class="autocomplete-wrapper">
@@ -382,7 +410,7 @@ export class AutocompleteInput extends LitElement {
           @input=${this.onInput}
           @keydown=${this.onKeyDown}
           @focus=${() => this.onFocus()}
-          @blur=${() => setTimeout(() => (this.showSuggestions = false), 150)}
+          @blur=${() => this.onBlur()}
           aria-autocomplete="list"
           aria-controls=${this.suggestionId}
           aria-expanded=${this.showSuggestions}
