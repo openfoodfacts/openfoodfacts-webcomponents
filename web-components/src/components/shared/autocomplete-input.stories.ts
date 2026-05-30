@@ -19,3 +19,28 @@ export const Basic: Story = {
     ],
   },
 }
+
+export const Hierarchical: Story = {
+  args: {
+    placeholder: "Search for a category...",
+    hierarchyBackText: "All categories",
+    suggestions: [
+      {
+        label: "Apple",
+        value: "apple",
+        children: [
+          { label: "Gala Apple", value: "gala-apple" },
+          { label: "Macintosh Apple", value: "macintosh-apple" },
+        ],
+      },
+      {
+        label: "Banana",
+        value: "banana",
+        children: [
+          { label: "Plantain", value: "plantain" },
+          { label: "Red Banana", value: "red-banana" },
+        ],
+      },
+    ],
+  },
+}

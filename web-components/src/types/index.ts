@@ -43,6 +43,7 @@ export type AutocompleteSuggestion = {
   label?: string
   value: string
   isNotFound?: boolean
+  children?: AutocompleteSuggestion[]
 }
 
 export type CropperImageBoundingBox = {
