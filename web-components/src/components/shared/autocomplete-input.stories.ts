@@ -57,6 +57,29 @@ async function fetchAndBuildTaxonomy() {
   return buildCategoryTree(data, "en")
 }
 
+export const DropdownTop: Story = {
+  args: {
+    placeholder: "Opens upwards...",
+    "dropdown-direction": "top",
+    suggestions: [
+      { label: "Option 1", value: "opt1" },
+      { label: "Option 2", value: "opt2" },
+      { label: "Option 3", value: "opt3" },
+    ],
+  },
+  render: (args) => {
+    return html`
+      <div style="margin-top: 200px;">
+        <autocomplete-input
+          .placeholder=${args.placeholder}
+          .suggestions=${args.suggestions}
+          dropdown-direction="top"
+        ></autocomplete-input>
+      </div>
+    `
+  },
+}
+
 export const RealTaxonomy: Story = {
   render: () => {
     return html`
