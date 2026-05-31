@@ -435,8 +435,8 @@ export class AutocompleteInput extends LitElement {
       return [
         {
           suggestion: {
-            value: "__NOT_FOUND__",
-            label: this.notFoundText.replace("{value}", this.value),
+            value: this.value,
+            label: this.value,
             isNotFound: true,
           },
           depth: 0,
@@ -584,18 +584,6 @@ export class AutocompleteInput extends LitElement {
     suggestion: AutocompleteSuggestion,
     path: AutocompleteSuggestion[] = []
   ) {
-    if (suggestion.value === "__NOT_FOUND__") {
-      this.showSuggestions = false
-      this.dispatchEvent(
-        new CustomEvent<AutocompleteSuggestion>("suggestion-select", {
-          detail: suggestion,
-          bubbles: true,
-          composed: true,
-        })
-      )
-      return
-    }
-
     this.navigationPath = path.slice(0, -1)
     this._inputValue = suggestion.value
     this.showSuggestions = false
