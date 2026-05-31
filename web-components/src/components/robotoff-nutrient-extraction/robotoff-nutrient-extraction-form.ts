@@ -30,12 +30,7 @@ import { backgroundImage } from "../../directives/background-image"
 import { ALERT } from "../../styles/alert"
 import type { NutrimentsProductType } from "../../types/openfoodfacts"
 import { GREEN } from "../../utils/colors"
-import {
-  initDebounce,
-  removeUselessZeros,
-  setValueAndParentsObjectIfNotExists,
-  triggerSubmit,
-} from "../../utils"
+import { removeUselessZeros, setValueAndParentsObjectIfNotExists, triggerSubmit } from "../../utils"
 import { nutrientsOrderByCountryCode, sortKeysByNutrientsOrder } from "../../signals/openfoodfacts"
 import { countryCode, languageCode } from "../../signals/app"
 
@@ -48,6 +43,7 @@ import "../icons/eye-visible"
 import "../icons/eye-invisible"
 import type { AutocompleteInputChangeEvent, AutocompleteSuggestionSelectEvent } from "../../types"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
+import { createDebounce } from "../../utils/debounce"
 
 export const ALLOWED_SPECIAL_VALUES = ["", "-", "traces"]
 
@@ -262,9 +258,7 @@ export class RobotoffNutrientExtractionForm extends LitElement {
     }
 
   @state()
-  private debounceUpdatedInsight = initDebounce(() => {
-    this.onUpdateInsight()
-  })
+  private debounceUpdatedInsight = createDebounce(500)
 
   /**
    * Autocomplete value
@@ -334,7 +328,9 @@ export class RobotoffNutrientExtractionForm extends LitElement {
   override attributeChangedCallback(name: string, oldval: string, newval: string) {
     super.attributeChangedCallback(name, oldval, newval)
     if (["insight", "nutriments-data"].includes(name)) {
-      this.debounceUpdatedInsight()
+      this.debounceUpdatedInsight.debounce(() => {
+        this.onUpdateInsight()
+      })
     }
   }
 

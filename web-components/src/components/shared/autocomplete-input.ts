@@ -4,7 +4,8 @@ import { FOLKSONOMY_INPUT } from "../../styles/folksonomy-input"
 import { classMap } from "lit/directives/class-map.js"
 import type { AutocompleteSuggestion, AutocompleteInputChangeEventDetail } from "../../types"
 import { SAFE_BLUE } from "../../utils/colors"
-import { randomIdGenerator, createDebounce } from "../../utils"
+import { randomIdGenerator } from "../../utils"
+import { createDebounce } from "../../utils/debounce"
 
 const BLUR_DELAY_MS = 150
 const MAX_VISIBLE_SUGGESTIONS = 100
@@ -138,7 +139,8 @@ export class AutocompleteInput extends LitElement {
   /**
    * Placeholder text for the input field.
    */
-  @property({ type: String }) placeholder = ""
+  @property({ type: String })
+  placeholder = ""
 
   /**
    * Current value of the input field.
@@ -156,35 +158,41 @@ export class AutocompleteInput extends LitElement {
    * List of suggestions to display in the autocomplete dropdown.
    * Each suggestion can be a string or an object with label and value properties.
    */
-  @property({ type: Array }) suggestions: AutocompleteSuggestion[] = []
+  @property({ type: Array })
+  suggestions: AutocompleteSuggestion[] = []
 
   /**
    * Whether to show a "not found" option when no suggestions match.
    */
-  @property({ type: Boolean, attribute: "show-not-found-option" }) showNotFoundOption = false
+  @property({ type: Boolean, attribute: "show-not-found-option" })
+  showNotFoundOption = false
 
   /**
    * Text to display for the "not found" option.
    */
-  @property({ type: String, attribute: "not-found-text" }) notFoundText = "Not found"
+  @property({ type: String, attribute: "not-found-text" })
+  notFoundText = "Not found"
 
   /**
    * Whether to show the suggestions dropdown.
    * @private
    */
-  @state() private showSuggestions = false
+  @state()
+  private showSuggestions = false
 
   /**
    * Index of the currently highlighted suggestion.
    * @private
    */
-  @state() private highlightedIndex = -1
+  @state()
+  private highlightedIndex = -1
 
   /**
    * Selected hierarchy path when browsing nested suggestions.
    * @private
    */
-  @state() private navigationPath: AutocompleteSuggestion[] = []
+  @state()
+  private navigationPath: AutocompleteSuggestion[] = []
 
   /**
    * Unique ID for the input field.
