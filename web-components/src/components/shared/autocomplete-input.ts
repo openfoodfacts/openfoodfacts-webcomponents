@@ -236,7 +236,24 @@ export class AutocompleteInput extends LitElement {
    * @private
    */
   @state()
-  private highlightedIndex = -1
+  get highlightedIndex() {
+    return this._highlightedIndex
+  }
+  set highlightedIndex(val: number) {
+    const oldVal = this._highlightedIndex
+    this._highlightedIndex = val
+    this.requestUpdate("highlightedIndex", oldVal)
+
+    if (val >= 0 && val !== oldVal) {
+      void this.updateComplete.then(() => {
+        const highlightedElement = this.renderRoot.querySelector(".autocomplete-item.highlighted")
+        highlightedElement?.scrollIntoView({ block: "nearest" })
+      })
+    }
+  }
+
+  @state()
+  private _highlightedIndex = -1
 
   /**
    * Selected hierarchy path when browsing nested suggestions.
