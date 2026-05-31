@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit"
+import { LitElement, html, css, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { FOLKSONOMY_INPUT } from "../../styles/folksonomy-input"
 import { classMap } from "lit/directives/class-map.js"
@@ -6,6 +6,8 @@ import type { AutocompleteSuggestion, AutocompleteInputChangeEventDetail } from 
 import { SAFE_BLUE } from "../../utils/colors"
 import { randomIdGenerator } from "../../utils"
 import { createDebounce } from "../../utils/debounce"
+import { styleMap } from "lit-html/directives/style-map.js"
+import { msg } from "@lit/localize/init/install"
 
 const BLUR_DELAY_MS = 150
 const MAX_VISIBLE_SUGGESTIONS = 100
@@ -171,7 +173,7 @@ export class AutocompleteInput extends LitElement {
    * Text to display for the "not found" option.
    */
   @property({ type: String, attribute: "not-found-text" })
-  notFoundText = "Not found"
+  notFoundText = msg("Not found")
 
   /**
    * Whether to show the suggestions dropdown.
@@ -520,6 +522,7 @@ export class AutocompleteInput extends LitElement {
       }
       return
     }
+
     switch (e.key) {
       case "ArrowDown":
         e.preventDefault()
@@ -614,7 +617,7 @@ export class AutocompleteInput extends LitElement {
       ? path
           .slice(0, -1)
           .map((p) => p.label ?? p.value)
-          .join(" › ")
+          .join(" > ")
       : ""
 
     return html`
@@ -678,13 +681,14 @@ export class AutocompleteInput extends LitElement {
                     aria-selected=${index === this.highlightedIndex}
                   >
                     <span
-                      class="autocomplete-item-content ${useIndentation
-                        ? "autocomplete-item-tree"
-                        : ""}"
-                      style=${`padding-inline-start: ${10 + effectiveDepth * 20}px;`}
+                      class=${classMap({
+                        "autocomplete-item-content": true,
+                        "autocomplete-item-tree": useIndentation,
+                      })}
+                      style=${styleMap({ "padding-inline-start": `${10 + effectiveDepth * 20}px` })}
                     >
                       ${suggestion.isNotFound
-                        ? null
+                        ? nothing
                         : html`<span
                             class="autocomplete-item-expander"
                             @mousedown=${(e: Event) => this.toggleExpansion(e, path)}
