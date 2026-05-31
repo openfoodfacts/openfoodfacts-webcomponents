@@ -70,6 +70,25 @@ export class AutocompleteInput extends LitElement {
         box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
       }
 
+      .autocomplete-list.is-flipped {
+        bottom: 100%;
+        border-top: 1px solid var(--off-autocomplete-border, #ccc);
+        border-bottom: none;
+        box-shadow: 0 -0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
       .autocomplete-item {
         cursor: pointer;
       }
@@ -194,6 +213,18 @@ export class AutocompleteInput extends LitElement {
   placeholder = ""
 
   /**
+   * Delay in milliseconds before triggering the search after input.
+   */
+  @property({ type: Number, attribute: "debounce-delay" })
+  debounceDelay = 200
+
+  /**
+   * The direction in which the dropdown opens.
+   */
+  @property({ type: String, attribute: "dropdown-direction" })
+  dropdownDirection: "top" | "bottom" = "bottom"
+
+  /**
    * Current value of the input field.
    */
   @property({ type: String })
@@ -272,9 +303,19 @@ export class AutocompleteInput extends LitElement {
   @state()
   private _inputValue: string = ""
 
+  @state()
+  private _announcement = ""
+
   private ignoreNextBlur = false
   private blurTimeoutId?: ReturnType<typeof setTimeout>
-  private searchDebounce = createDebounce(200)
+  private searchDebounce = createDebounce(this.debounceDelay)
+
+  override willUpdate(changedProperties: PropertyValues<this>) {
+    if (changedProperties.has("debounceDelay")) {
+      this.searchDebounce.clear()
+      this.searchDebounce = createDebounce(this.debounceDelay)
+    }
+  }
 
   /**
    * ID for the suggestions list.
@@ -495,6 +536,18 @@ export class AutocompleteInput extends LitElement {
       const filteredSuggestions = this.filteredSuggestions
       const suggestionsToShow = this.visibleSuggestionsWithNotFound
       this.showSuggestions = suggestionsToShow.length > 0
+
+      // Accessibility announcement
+      if (this.showSuggestions) {
+        const count = suggestionsToShow.length
+        this._announcement =
+          count === 1 ? msg("1 suggestion found") : msg(`${count} suggestions found`)
+      } else if (inputValue.trim().length > 0) {
+        this._announcement = this.notFoundText
+      } else {
+        this._announcement = ""
+      }
+
       // If there is only one suggestion and it matches the input value, consider it a notable match
       const matching =
         filteredSuggestions.length === 1 &&
@@ -698,9 +751,12 @@ export class AutocompleteInput extends LitElement {
     const visibleSuggestions = this.visibleSuggestionsWithNotFound
     return html`
       <div class="autocomplete-wrapper">
+        <div class="sr-only" aria-live="polite" aria-atomic="true">${this._announcement}</div>
         <input
           id=${this._id}
           type="text"
+          role="combobox"
+          aria-haspopup="listbox"
           class="autocomplete-input"
           .value=${this.value}
           placeholder=${this.placeholder}
@@ -719,7 +775,10 @@ export class AutocompleteInput extends LitElement {
         ${this.showSuggestions
           ? html`
               <ul
-                class="autocomplete-list"
+                class=${classMap({
+                  "autocomplete-list": true,
+                  "is-flipped": this.dropdownDirection === "top",
+                })}
                 id=${this.suggestionId}
                 role="listbox"
                 part="autocomplete-input-list"
