@@ -1,6 +1,6 @@
 import { LitElement, html, css, nothing } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
-import { FOLKSONOMY_INPUT } from "../../styles/folksonomy-input"
+import { BASE } from "../../styles/base"
 import { classMap } from "lit/directives/class-map.js"
 import type { AutocompleteSuggestion, AutocompleteInputChangeEventDetail } from "../../types"
 import { SAFE_BLUE } from "../../utils/colors"
@@ -28,25 +28,46 @@ type VisibleSuggestion = {
 @customElement("autocomplete-input")
 export class AutocompleteInput extends LitElement {
   static override styles = [
-    FOLKSONOMY_INPUT,
+    BASE,
     css`
       .autocomplete-wrapper {
         width: 100%;
         position: relative;
       }
 
+      .autocomplete-input {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid var(--off-autocomplete-border, #ccc);
+        border-radius: 0.25rem;
+        box-sizing: border-box;
+        font-size: 0.9rem;
+        height: 2.2rem;
+        background-color: var(--off-autocomplete-bg, #fff);
+        color: var(--off-autocomplete-text, #333);
+        font-family: inherit;
+      }
+
+      .autocomplete-input:focus {
+        outline: none;
+        border-color: var(--off-autocomplete-focus-border, ${SAFE_BLUE});
+        box-shadow: 0 0 0 3px var(--off-autocomplete-focus-shadow, rgba(0, 123, 255, 0.25));
+      }
+
       .autocomplete-list {
         position: absolute;
-        background: #fff;
-        border: 1px solid #ccc;
+        background: var(--off-autocomplete-bg, #fff);
+        border: 1px solid var(--off-autocomplete-border, #ccc);
         border-top: none;
         list-style-type: none;
         padding: 0;
         margin: 0;
-        max-height: 200px;
+        max-height: 18.75rem;
         overflow-y: auto;
         z-index: 9999;
         width: 100%;
+        color: var(--off-autocomplete-text, #333);
+        box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
       }
 
       .autocomplete-item {
@@ -55,34 +76,34 @@ export class AutocompleteInput extends LitElement {
 
       .autocomplete-item:hover,
       .autocomplete-item.highlighted {
-        background-color: #f0f0f0;
+        background-color: var(--off-autocomplete-hover-bg, #f0f0f0);
       }
 
       .autocomplete-item-content {
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 10px;
+        gap: 0.5rem;
+        padding: 0.625rem;
       }
 
       .autocomplete-item-tree {
-        border-left: 1px solid #e5e7eb;
-        margin-left: 16px;
+        border-left: 1px solid var(--off-autocomplete-border, #e5e7eb);
+        margin-left: 1rem;
       }
 
       .autocomplete-item-expander {
-        color: #6c757d;
-        flex: 0 0 20px;
+        color: var(--off-autocomplete-text-secondary, #6c757d);
+        flex: 0 0 1.25rem;
         font-size: 1rem;
         text-align: center;
         cursor: pointer;
-        padding: 4px;
-        border-radius: 4px;
+        padding: 0.25rem;
+        border-radius: 0.25rem;
       }
 
       .autocomplete-item-expander:hover {
-        background-color: #e9ecef;
-        color: #212529;
+        background-color: var(--off-autocomplete-hover-bg, #e9ecef);
+        color: var(--off-autocomplete-text, #212529);
       }
 
       .autocomplete-item-label {
@@ -90,12 +111,12 @@ export class AutocompleteInput extends LitElement {
         min-width: 0;
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: 0.125rem;
       }
 
       .autocomplete-item-breadcrumb {
         font-size: 0.75rem;
-        color: #6c757d;
+        color: var(--off-autocomplete-text-secondary, #6c757d);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -106,34 +127,62 @@ export class AutocompleteInput extends LitElement {
       }
 
       .match-highlight {
-        color: ${SAFE_BLUE};
+        color: var(--off-autocomplete-accent, ${SAFE_BLUE});
         font-weight: 700;
         text-decoration: underline;
       }
 
       .autocomplete-item.not-found {
-        background-color: #f8f9fa;
-        border-top: 1px solid #ddd;
-        color: #007bff;
+        background-color: var(--off-autocomplete-bg-alt, #f8f9fa);
+        border-top: 1px solid var(--off-autocomplete-border, #ddd);
+        color: var(--off-autocomplete-accent, #007bff);
         font-style: italic;
       }
 
       .autocomplete-item.not-found .autocomplete-item-content {
-        padding: 12px 10px;
+        padding: 0.75rem 0.625rem;
       }
 
       .autocomplete-item.not-found:hover {
-        background-color: #e7f3ff;
+        background-color: var(--off-autocomplete-hover-bg, #e7f3ff);
       }
 
       .autocomplete-item.not-found.highlighted {
-        background-color: #d4ebff;
+        background-color: var(--off-autocomplete-hover-bg, #d4ebff);
         font-weight: normal;
       }
 
-      .autocomplete-input:focus {
-        outline: none;
-        border-color: ${SAFE_BLUE};
+      @media (prefers-color-scheme: dark) {
+        .autocomplete-input {
+          background-color: var(--off-autocomplete-bg, #2a2a3a);
+          border-color: var(--off-autocomplete-border, #555);
+          color: var(--off-autocomplete-text, #e0e0e0);
+        }
+
+        .autocomplete-list {
+          background: var(--off-autocomplete-bg, #1e1e2e);
+          border-color: var(--off-autocomplete-border, #444);
+          color: var(--off-autocomplete-text, #e0e0e0);
+        }
+
+        .autocomplete-item:hover,
+        .autocomplete-item.highlighted {
+          background-color: var(--off-autocomplete-hover-bg, #2d3748);
+        }
+
+        .autocomplete-item-tree {
+          border-left-color: var(--off-autocomplete-border, #444);
+        }
+
+        .autocomplete-item.not-found {
+          background-color: var(--off-autocomplete-bg-alt, #252535);
+          border-top-color: var(--off-autocomplete-border, #444);
+          color: var(--off-autocomplete-accent, #5b9bd5);
+        }
+
+        .match-highlight {
+          color: var(--off-autocomplete-accent, #e8a87c);
+        }
       }
     `,
   ]
@@ -685,7 +734,9 @@ export class AutocompleteInput extends LitElement {
                         "autocomplete-item-content": true,
                         "autocomplete-item-tree": useIndentation,
                       })}
-                      style=${styleMap({ "padding-inline-start": `${10 + effectiveDepth * 20}px` })}
+                      style=${styleMap({
+                        "padding-inline-start": `${0.625 + effectiveDepth * 1.25}rem`,
+                      })}
                     >
                       ${suggestion.isNotFound
                         ? nothing
