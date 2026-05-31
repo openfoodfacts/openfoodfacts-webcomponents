@@ -69,7 +69,7 @@
     "@openfoodfacts/openfoodfacts-nodejs": "^2.0.0-alpha.18",
     "@storybook/addon-a11y": "^10.3.6",
     "@storybook/addon-docs": "^10.3.6",
-    "@storybook/addon-vitest": "^10.3.6",
+    "@storybook/addon-vitest": "^10.4.1",
     "@storybook/builder-vite": "^10.3.6",
     "@storybook/web-components-vite": "^10.3.6",
     "@types/cropperjs": "^1.1.5",
@@ -99,7 +99,8 @@
     "vite": "^8.0.14",
     "vite-plugin-dts": "^5.0.2",
     "vite-plugin-static-copy": "^4.1.0",
-    "vitest": "^4.1.6"
+    "vitest": "^4.1.6",
+    "@vitest/browser-playwright": "^4.1.6"
   },
   "customElements": "custom-elements.json",
   "packageManager": "npm@11.14.1+sha512-aopNZ0eEl6LbxoFcrXLmTEPzNBNxfiQnVgR9RmJBqzm+5h5pFoOmRljpRJbsXxocBeSl7GLcx3MoDf2UlEOjZw=="
