@@ -81,7 +81,7 @@
     "@web/test-runner": "^0.20.2",
     "@web/test-runner-playwright": "^0.11.0",
     "@webcomponents/webcomponentsjs": "^2.8.0",
-    "concurrently": "^9.1.2",
+    "concurrently": "^10.0.3",
     "dotenv": "^17.4.2",
     "eslint": "^9.28.0",
     "eslint-config-prettier": "^10.1.5",
