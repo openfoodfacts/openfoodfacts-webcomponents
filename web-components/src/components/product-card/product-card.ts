@@ -441,13 +441,16 @@ export class ProductCard extends LitElement {
     const hasProductImage = Boolean(this.product.image_front_small_url)
     const matchTagInfo = this.getMatchTagInfo()
 
+    const brands = this.product.brands?.trim()
+    const quantity = this.product.quantity?.trim()
+
     let brandQuantityStr = msg("Unknown Brand/Quantity")
-    if (this.product.brands && this.product.quantity) {
-      brandQuantityStr = msg(str`${this.product.brands} - ${this.product.quantity}`)
-    } else if (this.product.brands) {
-      brandQuantityStr = `${this.product.brands}`
-    } else if (this.product.quantity) {
-      brandQuantityStr = `${this.product.quantity}`
+    if (brands && quantity) {
+      brandQuantityStr = `${brands} - ${quantity}`
+    } else if (brands) {
+      brandQuantityStr = brands.toString()
+    } else if (quantity) {
+      brandQuantityStr = quantity.toString()
     }
 
     const cardClasses = {
