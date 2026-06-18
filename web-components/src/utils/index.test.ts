@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest"
+import { describe, it, expect, vi, beforeEach } from "vitest"
 import {
   paramToString,
   paramsToUrl,
@@ -6,8 +6,6 @@ import {
   isNullOrUndefined,
   setValueAndParentsObjectIfNotExists,
   randomIdGenerator,
-  initDebounce,
-  createDebounce,
   downloadCSV,
   removeUselessZeros,
   normalizeRotation,
@@ -150,63 +148,6 @@ describe("Utility Functions", () => {
       const id = randomIdGenerator()
       // Should be alphanumeric string from base36 conversion
       expect(id).toMatch(/^[a-z0-9]+$/)
-    })
-  })
-
-  describe("initDebounce", () => {
-    it("should debounce function calls", async () => {
-      const mockFn = vi.fn()
-      const debouncedFn = initDebounce(mockFn, 100)
-
-      debouncedFn()
-      debouncedFn()
-      debouncedFn()
-
-      expect(mockFn).not.toHaveBeenCalled()
-
-      await new Promise((resolve) => setTimeout(resolve, 150))
-      expect(mockFn).toHaveBeenCalledTimes(1)
-    })
-
-    it("should reset timer on subsequent calls", async () => {
-      const mockFn = vi.fn()
-      const debouncedFn = initDebounce(mockFn, 100)
-
-      debouncedFn()
-
-      setTimeout(() => debouncedFn(), 50) // Reset timer
-
-      await new Promise((resolve) => setTimeout(resolve, 120))
-      expect(mockFn).not.toHaveBeenCalled()
-
-      await new Promise((resolve) => setTimeout(resolve, 80))
-      expect(mockFn).toHaveBeenCalledTimes(1)
-    })
-  })
-
-  describe("createDebounce", () => {
-    it("should create debounce utility with debounce method", async () => {
-      const mockFn = vi.fn()
-      const debouncer = createDebounce(100)
-
-      debouncer.debounce(mockFn)
-      debouncer.debounce(mockFn)
-
-      expect(mockFn).not.toHaveBeenCalled()
-
-      await new Promise((resolve) => setTimeout(resolve, 150))
-      expect(mockFn).toHaveBeenCalledTimes(1)
-    })
-
-    it("should provide clear method to cancel pending execution", async () => {
-      const mockFn = vi.fn()
-      const debouncer = createDebounce(100)
-
-      debouncer.debounce(mockFn)
-      debouncer.clear()
-
-      await new Promise((resolve) => setTimeout(resolve, 150))
-      expect(mockFn).not.toHaveBeenCalled()
     })
   })
 

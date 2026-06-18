@@ -3,11 +3,12 @@ import { customElement, property, state } from "lit/decorators.js"
 import { localized, msg, str } from "@lit/localize"
 import { SignalWatcher } from "@lit-labs/signals"
 import folksonomyApi from "../../api/folksonomy"
-import { createDebounce, downloadCSV } from "../../utils"
+import { downloadCSV } from "../../utils"
 import "../shared/dual-range-slider"
 import type { PropertyClashCheck } from "../../types/folksonomy"
 import { userInfo } from "../../signals/folksonomy"
 import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme"
+import { createDebounce } from "../../utils/debounce"
 
 /**
  * Folksonomy Properties Viewer
