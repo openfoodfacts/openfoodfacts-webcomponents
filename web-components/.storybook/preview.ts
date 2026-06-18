@@ -5,9 +5,9 @@ import { setCustomElementsManifest } from "@storybook/web-components-vite"
 import customElements from "../custom-elements.json"
 setCustomElementsManifest(customElements)
 
-import { assetsImagesPath } from "../src/signals/app"
+import { assetsPath } from "../src/signals/app"
 
-assetsImagesPath.set(import.meta.env.BASE_URL + "assets/images")
+assetsPath.set(import.meta.env.BASE_URL + "assets")
 
 const preview: Preview = {
   parameters: {

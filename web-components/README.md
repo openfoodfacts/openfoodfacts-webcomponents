@@ -95,7 +95,7 @@ It has this parameters :
   - `img-url` : url of the images of the products
   - `dry-run` : usefull for testing annotations without saving them, default is `false`. It will console.log the annotations instead of sending them to the api.
 - `language-code` : language code of the user, default is `en`
-- `assets-images-path` : path of the images in assets/images folder, default is `/assets/images`
+- `assets-path` : path of the images in assets/images folder, default is `/assets`
 
 The default configuration is :
 
@@ -107,7 +107,7 @@ The default configuration is :
           "apiUrl": "https://robotoff.openfoodfacts.net/api/v1",
           "imgUrl": "https://images.openfoodfacts.net/images/products"
         }'
-  assets-images-path="/assets/images"
+  assets-path="/assets"
 ></off-webcomponents-configuration>
 <off-boolean-attribute></off-boolean-attribute>
 ```
