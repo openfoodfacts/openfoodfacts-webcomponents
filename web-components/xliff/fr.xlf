@@ -716,6 +716,14 @@
         <source>No Score Available</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">Aucune partition disponible</target>
       </trans-unit>
+      <trans-unit id="sa4efa3283e995ce1">
+        <source>Remaining products</source>
+        <target>Produits restants</target>
+      </trans-unit>
+      <trans-unit id="s2186dc7d7ece737f">
+        <source>No more products available for this filter.</source>
+        <target>Aucun produit disponible pour ce filtre.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
