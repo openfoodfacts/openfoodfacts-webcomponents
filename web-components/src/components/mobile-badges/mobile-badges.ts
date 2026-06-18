@@ -31,36 +31,35 @@ export class MobileBadges extends LitElement {
       :host {
         display: block;
       }
+
+      
       .dark-mode {
         background-color: #201a17;
         color: #f9f7f5;
       }
+
       #footer_scan {
         color: #000;
       }
+      
       .dark-mode #footer_scan {
         color: #f9f7f5;
       }
-      .everyday {
-        background-color: #0064c8;
-        border-inline: 5px solid #0064c8;
-        color: #fff;
-      }
-      .dark-mode .everyday {
+
+     .dark-mode .everyday {
         background-color: #0050a0;
-        border-inline: 5px solid #0050a0;
+        border-inline: 5px solid #0050a8;
         color: #fff;
       }
-      .foods {
-        background-color: #ff8714;
-        border-inline: 5px solid #ff8714;
-        color: #fff;
+
       }
-      .dark-mode .foods {
+
+     .dark-mode .foods {
         background-color: #cc6c10;
         border-inline: 5px solid #cc6c10;
         color: #fff;
       }
+
       #install_the_app_block {
         display: flex;
         align-items: center;
