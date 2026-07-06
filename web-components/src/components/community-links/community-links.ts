@@ -4,7 +4,7 @@ import { SignalWatcher } from "@lit-labs/signals"
 import { languageCode } from "../../signals/app"
 import { Breakpoints } from "../../utils/breakpoints"
 import { darkModeListener } from "../../utils/dark-mode-listener"
-import { TemplateResult } from "lit"
+import type { TemplateResult } from "lit"
 
 
 
