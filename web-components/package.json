@@ -50,12 +50,12 @@
     "lit"
   ],
   "dependencies": {
-    "@lit-labs/signals": "^0.2.0",
+    "@lit-labs/signals": "^0.3.0",
     "@lit/localize": "^0.12.2",
     "@lit/task": "^1.0.2",
     "cropperjs": "^2.0.0",
     "dayjs": "^1.11.18",
-    "diff": "^8.0.1",
+    "diff": "^9.0.0",
     "dompurify": "^3.2.6",
     "lit": "^3.3.0",
     "lit-html": "^3.3.0",
