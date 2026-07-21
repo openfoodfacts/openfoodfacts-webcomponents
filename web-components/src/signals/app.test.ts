@@ -98,7 +98,7 @@ describe("App Signals", () => {
     it("should handle assets path with trailing slash", () => {
       assetsImagesPath.set("/assets/")
       const fileName = "image.png"
-      expect(getImageUrl(fileName)).toBe("/assets//image.png") // Double slash - might be a bug in implementation
+      expect(getImageUrl(fileName)).toBe("/assets/image.png")
     })
 
     it("should work with CDN URLs", () => {
