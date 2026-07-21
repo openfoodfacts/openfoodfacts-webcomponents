@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest"
+import { describe, it, expect, vi, beforeEach } from "vitest"
 import {
   paramToString,
   paramsToUrl,
@@ -251,6 +251,34 @@ describe("Utility Functions", () => {
         expect.stringContaining("test_")
       )
       expect(mockLink.click).toHaveBeenCalled()
+    })
+
+    it("should throw when document is unavailable (SSR)", () => {
+      const originalDocument = globalThis.document
+      // @ts-expect-error - simulate SSR environment where document is not defined
+      delete globalThis.document
+
+      try {
+        expect(() =>
+          downloadCSV([["value1", "value2"]], "test", ["Header1", "Header2"])
+        ).toThrow("SSR environment")
+      } finally {
+        globalThis.document = originalDocument
+      }
+    })
+
+    it("should throw when URL is unavailable (SSR)", () => {
+      const originalURL = globalThis.URL
+      // @ts-expect-error - simulate SSR environment where URL is not defined
+      delete globalThis.URL
+
+      try {
+        expect(() =>
+          downloadCSV([["value1", "value2"]], "test", ["Header1", "Header2"])
+        ).toThrow("SSR environment")
+      } finally {
+        globalThis.URL = originalURL
+      }
     })
   })
 
