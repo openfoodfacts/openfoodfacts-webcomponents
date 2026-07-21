@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.17.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.16.0...v1.17.0) (2026-07-21)
+
+
+### Features
+
+* add nutripatrol flag form component ([#458](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/458)) ([e19f02e](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/e19f02e8f1eed2bfa4b1c8b45183b7408d0e1ece))
+* add types generation to vite build ([#422](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/422)) ([c99d4ef](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/c99d4ef7ed9e8f42318ec4124099375360874760))
+* **folksonomy-editor:** add view-only mode for unauthenticated users ([#483](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/483)) ([f1b4610](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/f1b461008e266bd5ad947b8b63cd56f65a4802a5))
+* **folksonomy:** Added dark mode support ([#460](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/460)) ([b68d984](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/b68d9845bc4628f8049e200e2ba6cfe067e5e86a))
+* **folksonomy:** Made URLs values clickable ([#433](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/433)) ([be1a9b5](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/be1a9b55d76e54d05b1a0d9ace7dbea6207bcfbf))
+
+
+### Bug Fixes
+
+* Add ingredients-spellcheck to storybook components ([#441](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/441)) ([3b7b970](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/3b7b970e787c07884138594d260d15c7b6b5cdc4))
+* **barcode-scanner:** Replace [@ts-ignore](https://github.com/ts-ignore) with proper types ([#493](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/493)) ([a177dad](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/a177dad22ff2205273ee7d311b0a04fd18adb5d9))
+* **deps:** bump @lit-labs/signals from 0.1.3 to 0.2.0 in /web-components ([e38ef82](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/e38ef8295eb3ef48cb2c5eb534befbe1e0660506))
+* **deps:** bump @lit-labs/signals from 0.2.0 to 0.3.0 in /web-components ([#553](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/553)) ([d2be937](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/d2be9373f8ccdb7802c32b30f49d6df3ba4072a8))
+* **deps:** bump dayjs from 1.11.18 to 1.11.21 in /web-components ([#544](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/544)) ([26e0779](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/26e0779a118d3252ff7aedd8ce0b4f7f201bbbd3))
+* **deps:** bump ip-address and socks in /web-components ([d93d92d](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/d93d92d62cd67531d8781737424fc5704b6d8dd3))
+* **deps:** bump marked from 16.3.0 to 18.0.3 in /web-components ([08134a1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/08134a1e3257d86bf38fe9268f46c5f0b60c3a08))
+* **deps:** bump marked from 18.0.3 to 18.0.5 in /web-components ([ef8ec84](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/ef8ec84d8550fa82e244d08e0a016e042529d1ee))
+* **deps:** bump qs from 6.15.0 to 6.15.2 in /web-components ([ab4ee52](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/ab4ee52875d1357efdfc6634f8fe59289b163ea1))
+* **deps:** bump the interface-libraries group across 1 directory with 2 updates ([467d199](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/467d199395c769ace6b130d6aafab50d84f9e920))
+* **donation-banner:** refactor layout for better responsiveness ([#420](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/420)) ([b1824d1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/b1824d1466caa3c7a34d2f848fa4e289b7261411))
+* Make button text compatible with dark mode ([#434](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/434)) ([833c741](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/833c74193ae3fc3bb2d27a94579f4b67e7fb7fca))
+* make dev script work on Windows ([#431](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/431)) ([8b5aed4](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/8b5aed4fea359a92ab6f1dee8563d47b34fa4cfd))
+* Prevent dangling brand/quantity separator in `product-card` ([#547](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/547)) ([b6c4219](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/b6c42198eb301d0d2d818ae54bdd7933cdaadea6))
+* Prevent infinite spinner in ingredient spellcheck on API error ([#432](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/432)) ([4feecf9](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/4feecf937c1cbe7eaad1a9dd2216eb0dd40853ed))
+* resolve npm audit security vulnerabilities ([#496](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/496)) ([f640e8a](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/f640e8a95927765a856dccd8abe152079c5fb127))
+* restore root package.json for release-please workflow ([#549](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/549)) ([39b387a](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/39b387a7f86629c718d1313c224fc9c2959a624b)), closes [#548](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/548)
+* Revert "chore(deps-dev): bump @storybook/addon-a11y from 9.1.6 to 9.1.15 in /web-components" ([#410](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/410)) ([2aec4ea](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/2aec4ea3909f11928bfab2b39e77f349779226e2))
+* update concurrently to v10 to resolve critical shell-quote vulnerability ([7c933b8](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/7c933b81c1a7dc5d23d832fc3d332cbbf58ecf94))
+* Update dependencies to fix published security vulns, pin npm ([#423](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/423)) ([bd7c1dd](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/bd7c1ddbb0b0dc58c4cf2bb8864320d0e78e670f))
+
 ## [1.16.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.15.1...v1.16.0) (2026-01-27)
 
 
