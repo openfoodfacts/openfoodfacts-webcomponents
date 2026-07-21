@@ -95,14 +95,27 @@ describe("App Signals", () => {
       expect(getImageUrl(fileName)).toBe("/assets/image.png")
     })
 
-    it("should handle assets path with trailing slash", () => {
+    it("should not produce double slash when assets path has trailing slash", () => {
+      // Regression test for https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/473
       assetsImagesPath.set("/assets/")
       const fileName = "image.png"
-      expect(getImageUrl(fileName)).toBe("/assets//image.png") // Double slash - might be a bug in implementation
+      expect(getImageUrl(fileName)).toBe("/assets/image.png")
+    })
+
+    it("should strip multiple trailing slashes", () => {
+      assetsImagesPath.set("/assets///")
+      const fileName = "logo.png"
+      expect(getImageUrl(fileName)).toBe("/assets/logo.png")
     })
 
     it("should work with CDN URLs", () => {
       assetsImagesPath.set("https://cdn.example.com/assets")
+      const fileName = "logo.svg"
+      expect(getImageUrl(fileName)).toBe("https://cdn.example.com/assets/logo.svg")
+    })
+
+    it("should work with CDN URLs that have trailing slash", () => {
+      assetsImagesPath.set("https://cdn.example.com/assets/")
       const fileName = "logo.svg"
       expect(getImageUrl(fileName)).toBe("https://cdn.example.com/assets/logo.svg")
     })
