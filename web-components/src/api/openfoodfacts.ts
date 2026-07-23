@@ -54,3 +54,20 @@ export async function fetchNutrientsOrder(params: NutrientsParams) {
   }
   return (await response.json()) as NutrientsOrderRequest
 }
+
+/**
+ * Stub for uploadProductImage. Previously provided in this module, now a no-op.
+ * @param params Object containing code, imagefield, file, imgupload_lang.
+ * @returns A resolved promise simulating a successful upload.
+ */
+export async function uploadProductImage(params: {
+  code: string;
+  imagefield: string;
+  file: File;
+  imgupload_lang: string;
+}): Promise<any> {
+  // In a real environment, this would call the Open Food Facts API.
+  // Here we simply simulate a successful response.
+  console.warn('[uploadProductImage] stub called with params', params);
+  return Promise.resolve({ status: 'stub', detail: params });
+}
