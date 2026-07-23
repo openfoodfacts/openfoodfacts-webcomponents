@@ -1,9 +1,8 @@
 export type RequestProductParams = {
-  lc: string
-  fields: string[]
+  lc?: string
+  fields: string | string[]
 }
 
-// type for the response of the product API
 export type BaseProductType = {
   schema_version: number
 }
@@ -19,6 +18,7 @@ export type ImageIngredientsProductType = {
   image_ingredients_url: string
   product_name: string
 }
+
 export type NutrimentsData = Record<string, number | string>
 
 export type NutrimentsProductType = {
@@ -28,6 +28,7 @@ export type NutrimentsProductType = {
 
 export type NutrientsParams = {
   cc: string
+  lc?: string
 }
 
 export interface NutrientOrderRequest {
