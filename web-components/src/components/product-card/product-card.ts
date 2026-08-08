@@ -162,7 +162,7 @@ export class ProductCard extends LitElement {
       width: 100%;
       border-radius: 0.5rem;
       background-color: transparent;
-      object-fit: cover;
+      object-fit: contain;
       opacity: 0.7;
       overflow: hidden;
     }
