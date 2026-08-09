@@ -8,7 +8,9 @@ import {
 export const assetsImagesPath = signal(DEFAULT_ASSETS_IMAGES_PATH)
 
 export const getImageUrl = (fileName: string) => {
-  return `${assetsImagesPath.get()}/${fileName}`
+  const path = assetsImagesPath.get()
+  const normalizedPath = path.endsWith("/") ? path.slice(0, -1) : path
+  return `${normalizedPath}/${fileName}`
 }
 
 export const countryCode = signal(DEFAULT_COUNTRY_CODE)
