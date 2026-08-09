@@ -25,4 +25,6 @@ Object.defineProperty(window, "crypto", {
 URL.createObjectURL = vi.fn(() => "blob:mock-url")
 URL.revokeObjectURL = vi.fn()
 
-global.Blob = vi.fn((content, options) => ({ content, options })) as any
+global.Blob = vi.fn().mockImplementation(function (content, options) {
+  return { content, options }
+}) as any

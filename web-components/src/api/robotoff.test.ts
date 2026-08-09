@@ -20,9 +20,11 @@ vi.mock("../signals/app", () => ({
 }))
 
 vi.mock("@openfoodfacts/openfoodfacts-nodejs", () => ({
-  Robotoff: vi.fn().mockImplementation(() => ({
-    annotate: vi.fn().mockResolvedValue({ status: "saved" }),
-  })),
+  Robotoff: vi.fn().mockImplementation(function () {
+    return {
+      annotate: vi.fn().mockResolvedValue({ status: "saved" }),
+    }
+  }),
 }))
 
 describe("Robotoff API", () => {
@@ -229,7 +231,9 @@ describe("Robotoff API", () => {
 
         // Mock the Robotoff constructor
         const { Robotoff } = await import("@openfoodfacts/openfoodfacts-nodejs")
-        ;(Robotoff as any).mockImplementation(() => mockRobotoff)
+        ;(Robotoff as any).mockImplementation(function () {
+          return mockRobotoff
+        })
 
         await robotoff.annotateQuestion("insight-123", AnnotationAnswer.ACCEPT)
 
@@ -247,7 +251,9 @@ describe("Robotoff API", () => {
         }
 
         const { Robotoff } = await import("@openfoodfacts/openfoodfacts-nodejs")
-        ;(Robotoff as any).mockImplementation(() => mockRobotoff)
+        ;(Robotoff as any).mockImplementation(function () {
+          return mockRobotoff
+        })
 
         const nutrientData = { nutrient: "energy", value: "100", unit: "kJ" }
         await robotoff.annotateNutrients("insight-123", AnnotationAnswer.ACCEPT, nutrientData)
@@ -267,7 +273,9 @@ describe("Robotoff API", () => {
         }
 
         const { Robotoff } = await import("@openfoodfacts/openfoodfacts-nodejs")
-        ;(Robotoff as any).mockImplementation(() => mockRobotoff)
+        ;(Robotoff as any).mockImplementation(function () {
+          return mockRobotoff
+        })
 
         await robotoff.annotateIngredientSpellcheck(
           "insight-123",
@@ -288,7 +296,9 @@ describe("Robotoff API", () => {
         }
 
         const { Robotoff } = await import("@openfoodfacts/openfoodfacts-nodejs")
-        ;(Robotoff as any).mockImplementation(() => mockRobotoff)
+        ;(Robotoff as any).mockImplementation(function () {
+          return mockRobotoff
+        })
 
         await robotoff.annotateIngredientSpellcheck("insight-123", AnnotationAnswer.REFUSE)
 
@@ -310,7 +320,9 @@ describe("Robotoff API", () => {
         }
 
         const { Robotoff } = await import("@openfoodfacts/openfoodfacts-nodejs")
-        ;(Robotoff as any).mockImplementation(() => mockRobotoff)
+        ;(Robotoff as any).mockImplementation(function () {
+          return mockRobotoff
+        })
 
         const detectionData = { ingredients: ["salt", "sugar"] }
         await robotoff.annotateIngredientDetection(

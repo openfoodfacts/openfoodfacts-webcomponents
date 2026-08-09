@@ -1,8 +1,9 @@
-import { LitElement, html, css } from "lit"
+﻿import { LitElement, html, css } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { localized, msg } from "@lit/localize"
 import "./folksonomy-editor-row"
 import folksonomyApi from "../../api/folksonomy"
+import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme"
 
 /**
  * Folksonomy Editor
@@ -27,11 +28,25 @@ export class FolksonomyEditor extends LitElement {
   pageType = "view"
 
   /**
+   * Disables editing and adding properties for non-logged-in users.
+   * @type {boolean}
+   */
+  @property({ type: Boolean, attribute: "view-only" })
+  viewOnly = false
+
+  /**
    * The base URL for properties listing (e.g., "https://world.openfoodfacts.org/properties")
    * @type {string}
    */
   @property({ type: String, attribute: "properties-base-url" })
   propertiesBaseUrl = "/properties"
+
+  /**
+   * The URL for the login page
+   * @type {string}
+   */
+  @property({ type: String, attribute: "login-url" })
+  loginUrl = "/cgi/login.pl"
 
   /**
    * The URL for properties documentation (e.g., "https://wiki.openfoodfacts.org/Folksonomy/Property")
@@ -47,97 +62,104 @@ export class FolksonomyEditor extends LitElement {
   @property({ type: String, attribute: "folksonomy-engine-url" })
   folksonomyEngineUrl = "https://wiki.openfoodfacts.org/Folksonomy_Engine"
 
-  static override styles = css`
-    :host {
-      font-family: Arial, sans-serif;
-      color: #333;
-    }
-    .feus {
-      margin-bottom: 1rem;
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      padding: 1rem;
-    }
-    .feus h2 {
-      font-size: 2.2rem;
-      font-weight: 600;
-      color: #222;
-      margin-top: 10px;
-      margin-bottom: 0.5rem;
-    }
-    .feus p {
-      font-size: 0.9rem;
-      line-height: 1.5;
-      margin-bottom: 0.8rem;
-    }
-    #free_properties_form table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-      border: solid 1px #ddd;
-      font-size: 0.9rem;
-      table-layout: fixed;
-    }
-    #free_properties_form table th,
-    #free_properties_form table td {
-      padding: 0.8rem;
-      text-align: left;
-      border: solid 1px #ddd;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    #free_properties_form table th {
-      background-color: #dedede;
-      font-weight: bold;
-      cursor: pointer;
-      user-select: none;
-      white-space: nowrap;
-    }
-    .sort-header {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.2em;
-    }
-    .sort-icon {
-      display: inline-flex;
-      flex-direction: column;
-      margin-left: 0.5em;
-      font-size: 0.9em;
-      line-height: 1;
-    }
-    .sort-arrow {
-      opacity: 0.3;
-      height: 0.8em;
-      width: 0.8em;
-      padding: 0;
-      margin: 0;
-      display: block;
-    }
-    .sort-arrow.active {
-      opacity: 1;
-    }
-    #free_properties_form table th.sortable {
-      padding-right: 0.8em;
-    }
-    #free_properties_form table th.sortable::before,
-    #free_properties_form table th.sortable::after {
-      display: none;
-    }
-    #free_properties_form table tr {
-      height: 4rem;
-    }
-    #free_properties_form table tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-    @media (max-width: 480px) {
-      #free_properties_form table tr:first-child {
-        height: 0.5rem;
+  static override styles = [
+    FOLKSONOMY_THEME,
+    css`
+      :host {
+        font-family: Arial, sans-serif;
+        color: var(--off-folksonomy-text, #333);
       }
-    }
-  `
+      .login-message {
+        margin-top: 1rem;
+        font-style: italic;
+      }
+      .feus {
+        margin-bottom: 1rem;
+        background-color: var(--off-folksonomy-bg, #fff);
+        border: 1px solid var(--off-folksonomy-border, #ddd);
+        border-radius: 8px;
+        box-shadow: 0 2px 4px var(--off-folksonomy-shadow, rgba(0, 0, 0, 0.1));
+        padding: 1rem;
+      }
+      .feus h2 {
+        font-size: 2.2rem;
+        font-weight: 600;
+        color: var(--off-folksonomy-text-secondary, #222);
+        margin-top: 10px;
+        margin-bottom: 0.5rem;
+      }
+      .feus p {
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin-bottom: 0.8rem;
+      }
+      #free_properties_form table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+        border: solid 1px var(--off-folksonomy-border, #ddd);
+        font-size: 0.9rem;
+        table-layout: fixed;
+      }
+      #free_properties_form table th,
+      #free_properties_form table td {
+        padding: 0.8rem;
+        text-align: left;
+        border: solid 1px var(--off-folksonomy-border, #ddd);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      #free_properties_form table th {
+        background-color: var(--off-folksonomy-table-header-bg, #dedede);
+        font-weight: bold;
+        cursor: pointer;
+        user-select: none;
+        white-space: nowrap;
+      }
+      .sort-header {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.2em;
+      }
+      .sort-icon {
+        display: inline-flex;
+        flex-direction: column;
+        margin-left: 0.5em;
+        font-size: 0.9em;
+        line-height: 1;
+      }
+      .sort-arrow {
+        opacity: 0.3;
+        height: 0.8em;
+        width: 0.8em;
+        padding: 0;
+        margin: 0;
+        display: block;
+      }
+      .sort-arrow.active {
+        opacity: 1;
+      }
+      #free_properties_form table th.sortable {
+        padding-right: 0.8em;
+      }
+      #free_properties_form table th.sortable::before,
+      #free_properties_form table th.sortable::after {
+        display: none;
+      }
+      #free_properties_form table tr {
+        height: 4rem;
+      }
+      #free_properties_form table tr:nth-child(even) {
+        background-color: var(--off-folksonomy-row-even-bg, #f9f9f9);
+      }
+      @media (max-width: 480px) {
+        #free_properties_form table tr:first-child {
+          height: 0.5rem;
+        }
+      }
+    `,
+  ]
 
   /**
    * State representing all the properties and values
@@ -197,6 +219,7 @@ export class FolksonomyEditor extends LitElement {
 
   override connectedCallback() {
     super.connectedCallback()
+
     this.fetchAndLogFolksonomyKeys()
 
     this.addEventListener("add-row", this.handleRowAdd as EventListener)
@@ -266,7 +289,7 @@ export class FolksonomyEditor extends LitElement {
             >
               <span class="sort-header"> ${msg("Value")} ${this.renderSortIcon("value")} </span>
             </th>
-            ${this.pageType == "edit" ? html`<th>${msg("Actions")}</th>` : null}
+            ${this.pageType == "edit" && !this.viewOnly ? html`<th>${msg("Actions")}</th>` : null}
           </tr>
           ${this.properties.map(
             (item, index) =>
@@ -276,10 +299,10 @@ export class FolksonomyEditor extends LitElement {
                 value=${item.value}
                 version=${item.version}
                 row-number=${index + 1}
-                page-type=${this.pageType}
+                page-type=${this.viewOnly ? "view" : this.pageType}
               ></folksonomy-editor-row>`
           )}
-          ${this.pageType == "edit"
+          ${this.pageType == "edit" && !this.viewOnly
             ? html`<folksonomy-editor-row
                 product-code=${this.productCode}
                 page-type=${this.pageType}
@@ -288,6 +311,11 @@ export class FolksonomyEditor extends LitElement {
               ></folksonomy-editor-row>`
             : null}
         </table>
+        ${this.viewOnly
+          ? html`<p class="login-message">
+              ${msg(html`Please <a href="${this.loginUrl}">log in</a> to edit or add properties.`)}
+            </p>`
+          : null}
       </form>
     `
   }
