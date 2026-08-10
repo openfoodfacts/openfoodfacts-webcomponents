@@ -440,6 +440,21 @@ export class ProductCard extends LitElement {
     const isNavigatingToProduct = this.navigating.to?.params?.barcode === this.product.code
     const hasProductImage = Boolean(this.product.image_front_small_url)
     const matchTagInfo = this.getMatchTagInfo()
+
+    const brands = this.product.brands?.trim()
+    const quantity = this.product.quantity?.trim()
+
+    let brandQuantityStr = msg("Unknown Brand/Quantity")
+    if (brands && quantity) {
+      // Use localized template for combined brand and quantity so the separator
+      // can be translated if needed.
+      brandQuantityStr = msg(str`${brands} - ${quantity}`)
+    } else if (brands) {
+      brandQuantityStr = brands
+    } else if (quantity) {
+      brandQuantityStr = quantity
+    }
+
     const cardClasses = {
       "card-container": true,
       "dark-mode": this.isDarkMode,
@@ -487,9 +502,7 @@ export class ProductCard extends LitElement {
             </div>
 
             <div class="brand-quantity">
-              <p title="${this.product.brands} - ${this.product.quantity}">
-                ${this.product.brands} - ${this.product.quantity}
-              </p>
+              <p title="${brandQuantityStr}">${brandQuantityStr}</p>
             </div>
 
             ${this.product.product_type === "food"

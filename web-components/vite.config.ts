@@ -30,7 +30,7 @@ export default defineConfig({
   },
   plugins: [
     viteStaticCopy({
-      targets: [{ src: "src/assets", dest: "" }],
+      targets: [{ src: "src/assets", dest: "", rename: { stripBase: 1 } }],
     }),
     dts({
       tsconfigPath: "./tsconfig.json",
