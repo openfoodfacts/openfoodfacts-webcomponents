@@ -261,7 +261,7 @@ export class MobileBadges extends LitElement {
    * @returns The URL suffix with UTM parameters.
    */
   private getAndroidUrlSuffix(language: string, campaign: string): string {
-    return `?utm_source=off&utf_medium=web&utm_campaign=${campaign}_${language}`
+    return `?utm_source=off&utm_medium=web&utm_campaign=${campaign}_${language}`
   }
 
   /**
@@ -322,7 +322,7 @@ export class MobileBadges extends LitElement {
    */
   getIosAppLink(language: string): string {
     const baseURI =
-      "https://apps.apple.com/app/open-food-facts/id588797948?utm_source=off&utf_medium=web"
+      "https://apps.apple.com/app/open-food-facts/id588797948?utm_source=off&utm_medium=web"
     return `${baseURI}&utm_campaign=install_the_app_ios_footer_${language}`
   }
 
