@@ -178,7 +178,7 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
     }
     const result = await fetchProduct<ImageIngredientsProductType>(insight.barcode, {
       lc: insight.data.lang,
-      fields: [ProductFields.IMAGE_INGREDIENTS_URL, ProductFields.PRODUCT_NAME],
+      fields: [ProductFields.IMAGE_INGREDIENTS_URL, ProductFields.PRODUCT_NAME].join(","),
     })
 
     this.productData = {
@@ -199,7 +199,7 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
         state: EventState.LOADING,
       })
       const insights = await fetchSpellcheckInsights(productCode ? productCode : undefined, {
-        lc: this._languageCodes,
+        lc: this._languageCodes.join(","),
       })
       this._insightIds = insights
         // Currently we filter by lang here but we should do it in the API when is available

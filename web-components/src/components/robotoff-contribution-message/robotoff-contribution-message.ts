@@ -148,7 +148,7 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
           ? [
               robotoff.fetchRobotoffContributionMessageInsights({
                 barcode: productCode,
-                lc: this._languageCodes,
+                lc: this._languageCodes.join(","),
               }),
             ]
           : []),

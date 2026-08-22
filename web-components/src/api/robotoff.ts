@@ -168,7 +168,7 @@ const robotoff = {
         InsightType.nutrient_extraction,
         InsightType.ingredient_spellcheck,
         InsightType.ingredient_detection,
-      ],
+      ].join(","),
     })
     return result.insights
   },
