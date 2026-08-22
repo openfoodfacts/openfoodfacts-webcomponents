@@ -149,6 +149,6 @@ export class OffWebcomponentsConfiguration extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "off-webcomponent-configuration": OffWebcomponentsConfiguration
+    "off-webcomponents-configuration": OffWebcomponentsConfiguration
   }
 }
