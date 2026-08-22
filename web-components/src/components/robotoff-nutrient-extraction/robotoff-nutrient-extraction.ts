@@ -282,7 +282,19 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
           </div>
         `
       },
-      error: (error) => html`<p>Error: ${error}</p>`,
+      error: (error) => {
+        const errorMessage = String(error)
+        if (errorMessage.includes("502")) {
+          return html`
+            <p>
+              ${msg(
+                "The Robotoff service is temporarily unavailable. Please try again later."
+              )}
+            </p>
+          `
+        }
+        return html`<p>${msg("An error occurred while loading insights. Please try again.")}</p>`
+      },
     })
   }
 }
