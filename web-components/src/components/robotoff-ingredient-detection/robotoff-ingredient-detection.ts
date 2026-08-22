@@ -131,7 +131,7 @@ export class RobotoffIngredientDetection extends DisplayProductLinkMixin(
         count,
         page,
         // use _languageCodes instead of languageCodes to get fallback language
-        lc: this._languageCodes,
+        lc: this._languageCodes.join(","),
       })
       this.insightIds = response.map((insight) => insight.id)
       this.dispatchIngredientDetectionStateEvent({

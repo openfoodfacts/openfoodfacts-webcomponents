@@ -147,7 +147,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
       this.emitNutrientEvent(EventState.LOADING)
       const [insights] = await Promise.all([
         fetchNutrientInsights(productCode, {
-          lc: this._languageCodes,
+          lc: this._languageCodes.join(","),
         }),
         fetchNutrientsTaxonomies(),
         fetchNutrientsOrderByCountryCode(this._countryCode),
@@ -182,7 +182,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
   async getProductNutriments(productCode: string) {
     this.nutrimentsData = undefined
     const result = await fetchProduct<NutrimentsProductType>(productCode, {
-      fields: [ProductFields.NUTRIMENTS],
+      fields: ProductFields.NUTRIMENTS,
       lc: languageCode.get(),
     })
     this.nutrimentsData = result.product

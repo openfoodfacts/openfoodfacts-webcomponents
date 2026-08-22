@@ -1,4 +1,3 @@
-import { addParamsToUrl } from "../utils"
 import {
   type QuestionRequestParams,
   type QuestionsResponse,
@@ -15,7 +14,7 @@ import {
 import { robotoffConfiguration } from "../signals/robotoff"
 import { languageCode } from "../signals/app"
 
-import { Robotoff } from "@openfoodfacts/openfoodfacts-nodejs"
+import { Robotoff, type RobotoffAnnotateBody } from "@openfoodfacts/openfoodfacts-nodejs"
 
 function createRobotoff(fetch: typeof window.fetch) {
   // ensure that any user account credentials get used in Robotoff
@@ -28,50 +27,38 @@ function createRobotoff(fetch: typeof window.fetch) {
 }
 
 /**
- * Get the API URL for a given path with the current configuration
- */
-const getApiUrl = (path: string) => {
-  return `${robotoffConfiguration.getItem("apiUrl")}${path}`
-}
-
-/**
  * Annotate an insight
- * @param formBody
- * @returns {Promise<Response>}
+ * @param body
  */
-const annotate = (formBody: string) => {
-  const apiUrl = getApiUrl("/insights/annotate")
+const annotate = async (body: RobotoffAnnotateBody): Promise<unknown> => {
   if (robotoffConfiguration.getItem("dryRun")) {
-    console.log("Annotated :", apiUrl, formBody)
-    return
-  } else {
-    return fetch(apiUrl, {
-      method: "POST",
-      body: formBody,
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      credentials: "include",
-    })
+    console.log("Annotated :", body)
+    return undefined
   }
+
+  const result = (await createRobotoff(fetch).annotate(body)) as unknown as {
+    data?: unknown
+    error?: unknown
+  }
+  if (result.error) {
+    throw result.error
+  }
+  return result.data
 }
 
 /**
  * Robotoff API
  */
 const robotoff = {
-  annotate,
-  annotateQuestion(insightId: string, annotation: AnnotationAnswer) {
-    const robotoff = createRobotoff(fetch)
-    return robotoff.annotate({ insight_id: insightId, annotation: annotation })
+  annotateQuestion(insightId: string, annotation: AnnotationAnswer): Promise<unknown> {
+    return annotate({ insight_id: insightId, annotation: annotation })
   },
   annotateNutrients(
     insightId: string,
     annotation: AnnotationAnswer,
     data?: NutrientsAnnotationData
-  ) {
-    const newLocal = createRobotoff(fetch)
-    return newLocal.annotate({ insight_id: insightId, annotation: annotation, data: data })
+  ): Promise<unknown> {
+    return annotate({ insight_id: insightId, annotation: annotation, data: data })
   },
 
   /**
@@ -85,8 +72,8 @@ const robotoff = {
     insightId: string,
     annotation: AnnotationAnswer,
     correction?: string
-  ) {
-    return createRobotoff(fetch).annotate({
+  ): Promise<unknown> {
+    return annotate({
       insight_id: insightId,
       annotation: annotation,
       ...(correction ? { data: { annotation: correction } } : {}),
@@ -103,8 +90,8 @@ const robotoff = {
     insightId: string,
     annotation: AnnotationAnswer,
     data?: IngredientDetectionAnnotationData
-  ) {
-    return createRobotoff(fetch).annotate({
+  ): Promise<unknown> {
+    return annotate({
       insight_id: insightId,
       annotation: annotation,
       ...(data ? { data: data } : {}),
@@ -121,15 +108,14 @@ const robotoff = {
     code: string,
     questionRequestParams: QuestionRequestParams = {}
   ): Promise<QuestionsResponse> {
-    if (!questionRequestParams.lang) {
-      questionRequestParams.lang = languageCode.get()
+    const result = (await createRobotoff(fetch).questionsByProductCode(code as unknown as number, {
+      ...questionRequestParams,
+      lang: questionRequestParams.lang ?? languageCode.get(),
+    })) as unknown as { data?: QuestionsResponse; error?: unknown }
+    if (result.error) {
+      throw result.error
     }
-    const apiUrl = getApiUrl(`/questions/${code}`)
-    const url = addParamsToUrl(apiUrl, questionRequestParams)
-    // Note: we need credentials to be sure to have all questions
-    const response = await fetch(url, { credentials: "include" })
-    const result: QuestionsResponse = await response.json()
-    return result
+    return result.data as QuestionsResponse
   },
 
   /**
@@ -141,12 +127,14 @@ const robotoff = {
   async insights<
     T extends NutrientsInsight | IngredientSpellcheckInsight | IngredientDetectionInsight,
   >(requestParams: InsightsRequestParams = {}): Promise<InsightsResponse<T>> {
-    const apiUrl = getApiUrl("/insights")
-    const url = addParamsToUrl(apiUrl, requestParams)
-    // Note: we need credentials to be sure to have all insights
-    const response = await fetch(url, { credentials: "include" })
-    const result: InsightsResponse<T> = await response.json()
-    return result
+    const result = (await createRobotoff(fetch).insights(requestParams as never)) as unknown as {
+      data?: InsightsResponse<T>
+      error?: unknown
+    }
+    if (result.error) {
+      throw result.error
+    }
+    return result.data as InsightsResponse<T>
   },
 
   /**
@@ -168,7 +156,7 @@ const robotoff = {
         InsightType.nutrient_extraction,
         InsightType.ingredient_spellcheck,
         InsightType.ingredient_detection,
-      ],
+      ].join(","),
     })
     return result.insights
   },
