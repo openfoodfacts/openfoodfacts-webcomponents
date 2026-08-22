@@ -234,14 +234,20 @@ export class ZoomableImage extends MessageDisplayMixinElement {
     this.initCropper()
   }
 
+  override connectedCallback() {
+    super.connectedCallback()
+    // firstUpdated() is only called once; reconnecting needs to restore the listener.
+    if (this.canvasElement) {
+      this.initZoomLimit()
+    }
+  }
+
   /**
    * Called when the component is disconnected from the DOM.
    * Used to remove the event listener from the cropper canvas.
    */
   override disconnectedCallback(): void {
-    this.canvasElement.removeEventListener("actionstart", (e) => {
-      this.onCropperCanvasAction(e as CropperActionEvent)
-    })
+    this.canvasElement?.removeEventListener("action", this.handleCropperCanvasAction)
     super.disconnectedCallback()
   }
 
@@ -250,9 +256,11 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    * This is used to prevent the user from zooming in or out too much.
    */
   initZoomLimit() {
-    this.canvasElement.addEventListener("action", (e) => {
-      this.onCropperCanvasAction(e as CropperActionEvent)
-    })
+    this.canvasElement.addEventListener("action", this.handleCropperCanvasAction)
+  }
+
+  private handleCropperCanvasAction = (event: Event) => {
+    this.onCropperCanvasAction(event as CropperActionEvent)
   }
 
   resetRotatation() {
