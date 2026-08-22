@@ -82,14 +82,10 @@ describe("Robotoff API", () => {
 
       await robotoff.questionsByProductCode("123", {
         count: 10,
-        page: 2,
-        insight_types: ["ingredient"],
+        insight_types: "ingredient",
       })
 
       expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining("count=10"), {
-        credentials: "include",
-      })
-      expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining("page=2"), {
         credentials: "include",
       })
       expect(global.fetch).toHaveBeenCalledWith(
@@ -152,7 +148,7 @@ describe("Robotoff API", () => {
 
       await robotoff.insights({
         barcode: "123",
-        insight_types: ["nutrient_extraction"],
+        insight_types: "nutrient_extraction",
         count: 25,
         annotated: false,
       })
@@ -161,18 +157,18 @@ describe("Robotoff API", () => {
       expect(global.fetch).toHaveBeenCalledWith(expectedUrl, { credentials: "include" })
     })
 
-    it("should handle array parameters correctly", async () => {
+    it("should handle comma-separated parameters correctly", async () => {
       ;(global.fetch as any).mockResolvedValue({
         ok: true,
         json: async () => ({ insights: [] }),
       })
 
       await robotoff.insights({
-        insight_types: ["nutrient_extraction", "ingredient_spellcheck"],
+        insight_types: "nutrient_extraction,ingredient_spellcheck",
       })
 
       expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining("insight_types=nutrient_extraction,ingredient_spellcheck"),
+        expect.stringContaining("insight_types=nutrient_extraction%2Cingredient_spellcheck"),
         { credentials: "include" }
       )
     })
@@ -255,7 +251,11 @@ describe("Robotoff API", () => {
           return mockRobotoff
         })
 
-        const nutrientData = { nutrient: "energy", value: "100", unit: "kJ" }
+        const nutrientData = {
+          serving_size: null,
+          nutrients: { energy: { value: "100", unit: "kJ" } },
+          nutrition_data_per: "100g",
+        }
         await robotoff.annotateNutrients("insight-123", AnnotationAnswer.ACCEPT, nutrientData)
 
         expect(mockRobotoff.annotate).toHaveBeenCalledWith({
@@ -324,7 +324,11 @@ describe("Robotoff API", () => {
           return mockRobotoff
         })
 
-        const detectionData = { ingredients: ["salt", "sugar"] }
+        const detectionData = {
+          annotation: "salt, sugar",
+          bounding_box: [0, 0, 1, 1] as [number, number, number, number],
+          rotation: 0,
+        }
         await robotoff.annotateIngredientDetection(
           "insight-123",
           AnnotationAnswer.ACCEPT,
