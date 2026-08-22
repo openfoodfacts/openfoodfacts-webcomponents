@@ -61,7 +61,7 @@ const annotate = (formBody: string) => {
  */
 const robotoff = {
   annotate,
-  annotateQuestion(insightId: string, annotation: AnnotationAnswer) {
+  annotateQuestion(insightId: string, annotation: AnnotationAnswer): Promise<unknown> {
     const robotoff = createRobotoff(fetch)
     return robotoff.annotate({ insight_id: insightId, annotation: annotation })
   },
@@ -69,7 +69,7 @@ const robotoff = {
     insightId: string,
     annotation: AnnotationAnswer,
     data?: NutrientsAnnotationData
-  ) {
+  ): Promise<unknown> {
     const newLocal = createRobotoff(fetch)
     return newLocal.annotate({ insight_id: insightId, annotation: annotation, data: data })
   },
@@ -85,7 +85,7 @@ const robotoff = {
     insightId: string,
     annotation: AnnotationAnswer,
     correction?: string
-  ) {
+  ): Promise<unknown> {
     return createRobotoff(fetch).annotate({
       insight_id: insightId,
       annotation: annotation,
@@ -103,7 +103,7 @@ const robotoff = {
     insightId: string,
     annotation: AnnotationAnswer,
     data?: IngredientDetectionAnnotationData
-  ) {
+  ): Promise<unknown> {
     return createRobotoff(fetch).annotate({
       insight_id: insightId,
       annotation: annotation,
