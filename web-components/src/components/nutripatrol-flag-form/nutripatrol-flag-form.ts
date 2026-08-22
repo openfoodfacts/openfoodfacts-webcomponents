@@ -168,7 +168,56 @@ export class NutriPatrolFlagForm extends LitElement {
         color: #2e7d32;
         border: 1px solid #a5d6a7;
       }
-    `,
+    @media (prefers-color-scheme: dark) {
+  dialog {
+    background: #1e1e1e;
+    color: #eee;
+    box-shadow: 0 4px 12px rgba(255,255,255,0.15);
+  }
+  .modal-header {
+    border-color: #444;
+  }
+  .modal-title {
+    color: #fff;
+  }
+  .close-btn {
+    color: #aaa;
+  }
+  label {
+    color: #ccc;
+  }
+  input,
+  select,
+  textarea {
+    background: #2b2b2b;
+    border: 1px solid #555;
+    color: #eee;
+  }
+  input:disabled {
+    background: #333;
+    color: #999;
+  }
+  .submit-btn {
+    background-color: #4a9c4f;
+  }
+  .submit-btn:hover {
+    background-color: #3b7e3d;
+  }
+  .submit-btn:disabled {
+    background-color: #555;
+  }
+  .message.error {
+    background-color: #5f2120;
+    border-color: #873c3c;
+    color: #ffbaba;
+  }
+  .message.success {
+    background-color: #1b4332;
+    border-color: #2e7d32;
+    color: #a7f3d0;
+  }
+}
+`,
   ]
 
   @property({ type: String })
