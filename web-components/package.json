@@ -76,10 +76,8 @@
     "@types/diff": "^8.0.0",
     "@typescript-eslint/eslint-plugin": "^8.33.1",
     "@typescript-eslint/parser": "^8.33.1",
-    "@vitest/browser": "^4.1.6",
-    "@vitest/coverage-v8": "^4.1.6",
-    "@web/test-runner": "^0.20.2",
-    "@web/test-runner-playwright": "^0.11.0",
+    "@vitest/browser": "^4.1.11",
+    "@vitest/coverage-v8": "^4.1.11",
     "@webcomponents/webcomponentsjs": "^2.8.0",
     "concurrently": "^10.0.3",
     "dotenv": "^17.4.2",
@@ -99,7 +97,7 @@
     "vite": "^8.0.14",
     "vite-plugin-dts": "^5.0.2",
     "vite-plugin-static-copy": "^4.1.0",
-    "vitest": "^4.1.6"
+    "vitest": "^4.1.11"
   },
   "customElements": "custom-elements.json",
   "packageManager": "npm@11.14.1+sha512-aopNZ0eEl6LbxoFcrXLmTEPzNBNxfiQnVgR9RmJBqzm+5h5pFoOmRljpRJbsXxocBeSl7GLcx3MoDf2UlEOjZw=="
