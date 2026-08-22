@@ -124,4 +124,28 @@ export const POPOVER = css`
   .popover .button {
     display: flex;
   }
+
+  @media (prefers-color-scheme: dark) {
+    .popover {
+      background-color: #1e1e1e;
+      color: #ffffff;
+      border: 1px solid #333;
+    }
+
+    .popover::before {
+      border-bottom-color: #333;
+    }
+
+    .popover::after {
+      border-bottom-color: #1e1e1e;
+    }
+
+    .popover.popover-top::before {
+      border-top-color: #333;
+    }
+
+    .popover.popover-top::after {
+      border-top-color: #1e1e1e;
+    }
+  }
 `
