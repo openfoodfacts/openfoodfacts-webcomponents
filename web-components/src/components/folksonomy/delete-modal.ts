@@ -157,7 +157,7 @@ export class DeleteModal extends LitElement {
     this.open = false
   }
 
-  private handleKeyDown(event: KeyboardEvent) {
+  private handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === "Escape") {
       this.handleCancel(event)
     }
@@ -165,12 +165,12 @@ export class DeleteModal extends LitElement {
 
   override connectedCallback() {
     super.connectedCallback()
-    document.addEventListener("keydown", this.handleKeyDown.bind(this))
+    document.addEventListener("keydown", this.handleKeyDown)
   }
 
   override disconnectedCallback() {
+    document.removeEventListener("keydown", this.handleKeyDown)
     super.disconnectedCallback()
-    document.removeEventListener("keydown", this.handleKeyDown.bind(this))
   }
 
   override render() {
