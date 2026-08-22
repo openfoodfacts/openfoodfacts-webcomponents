@@ -277,33 +277,12 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
     }
   }
   /**
-   * Called when the component is first updated.
-   * Adds an event listener for the keydown event if keyboard mode is enabled.
-   */
-  override firstUpdated() {
-    if (this.enableKeyboardMode) {
-      this.form!.addEventListener("keydown", this.handleKeyboardShortcut.bind(this))
-    }
-  }
-
-  /**
-   * Called when the component is disconnected from the DOM.
-   * Removes the event listener for the keydown event if keyboard mode is enabled.
-   */
-  override disconnectedCallback() {
-    super.disconnectedCallback()
-    if (this.enableKeyboardMode) {
-      this.form!.removeEventListener("keydown", this.handleKeyboardShortcut.bind(this))
-    }
-  }
-
-  /**
    * Renders the component.
    * @returns {TemplateResult} The rendered component.
    */
   override render() {
     return html`
-      <form @submit=${this.confirmText}>
+      <form @submit=${this.confirmText} @keydown=${this.handleKeyboardShortcut}>
         <div>
           ${this.isEditMode
             ? html`<text-corrector-highlight
@@ -981,7 +960,7 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
    * Handles the keyboard shortcuts.
    * @param {KeyboardEvent} event - The keyboard event.
    */
-  private handleKeyboardShortcut(event: KeyboardEvent) {
+  private handleKeyboardShortcut = (event: KeyboardEvent) => {
     if (!this.enableKeyboardMode || this.isEditMode) {
       return
     }
