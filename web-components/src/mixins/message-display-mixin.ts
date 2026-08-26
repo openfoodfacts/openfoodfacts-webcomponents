@@ -1,6 +1,6 @@
-import { css, html, LitElement, nothing, TemplateResult } from "lit"
+import { css, html, LitElement, nothing, type TemplateResult } from "lit"
 import { state } from "lit/decorators.js"
-import { Constructor } from "."
+import type { Constructor } from "."
 import { ALERT } from "../styles/alert"
 
 export declare class MessageDisplayMixinInterface {

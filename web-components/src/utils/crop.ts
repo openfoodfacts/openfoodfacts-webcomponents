@@ -1,5 +1,5 @@
-import { CropperImageBoundingBox } from "../types"
-import { RobotoffBoundingBox } from "../types/robotoff"
+import type { CropperImageBoundingBox } from "../types"
+import type { RobotoffBoundingBox } from "../types/robotoff"
 
 /**
  * Converts a bounding box from the robotoff format to the crop image format.

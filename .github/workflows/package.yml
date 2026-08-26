@@ -1,0 +1,42 @@
+name: WebComponents Package publication
+on:
+  release:
+    types: ["created"]
+
+permissions:
+  contents: read
+  # Required for OIDC with NPMJS
+  id-token: write
+  # this is for github registry publishing
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: npmjs
+    steps:
+      - uses: actions/checkout@v7
+      # Setup .npmrc file to publish to npm
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24.x"
+          registry-url: "https://registry.npmjs.org"
+      - name: Publish on NPM
+        run: |
+          cd web-components
+          npm install
+          npm run publish:package
+        continue-on-error: true
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24.x"
+          registry-url: 'https://npm.pkg.github.com'
+          scope: "@openfoodfacts"
+      - name: Publish on Github registry
+        run: |
+          cd web-components
+          npm install
+          npm run publish:package
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          continue-on-error: true

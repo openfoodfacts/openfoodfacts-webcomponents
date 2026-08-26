@@ -1,7 +1,7 @@
 import { signal } from "@lit-labs/signals"
 import { SignalMap } from "../utils/signals"
 import { fetchNutrientsOrder } from "../api/openfoodfacts"
-import { NutrientOrderRequest } from "../types/openfoodfacts"
+import type { NutrientOrderRequest } from "../types/openfoodfacts"
 
 export type NutrientsOrder = Record<string, { index: number; displayInEditForm: boolean }>
 export const DEFAULT_OPENFOODFACTS_API_URL = "https://world.openfoodfacts.org"

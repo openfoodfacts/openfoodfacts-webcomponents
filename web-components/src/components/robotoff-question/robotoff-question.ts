@@ -1,4 +1,4 @@
-import { LitElement, html, css, nothing } from "lit"
+import { LitElement, html, css, nothing, type TemplateResult } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import {
   currentQuestionIndex,
@@ -12,7 +12,7 @@ import {
 import { Task } from "@lit/task"
 import { localized, msg } from "@lit/localize"
 import { EventState, EventType } from "../../constants"
-import { QuestionStateEventDetail } from "../../types"
+import type { QuestionStateEventDetail } from "../../types"
 import { SignalWatcher } from "@lit-labs/signals"
 import "../shared/loader"
 import "./robotoff-question-form"
@@ -31,6 +31,7 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
     css`
       :host {
         display: block;
+        padding: 1rem;
       }
       .question-wrapper {
         display: flex;
@@ -38,60 +39,52 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
         align-items: center;
         text-align: center;
       }
-
       .message {
         font-style: italic;
+        color: var(--robotoff-question-message-color, #444);
+      }
+      @media (prefers-color-scheme: dark) {
+        :host {
+          background: var(--robotoff-question-bg-dark, #181a1b);
+          color: var(--robotoff-question-color-dark, #f3f3f3);
+        }
+        .message {
+          color: var(--robotoff-question-message-color-dark, #b3b3b3);
+        }
       }
     `,
   ]
-  /**
-   * Options for the component
-   * @type {Object}
-   */
-  @property({ type: Object, reflect: true })
-  options: {
-    showMessage?: boolean
-    showLoading?: boolean
-    showError?: boolean
-    isImageExpanded?: boolean
-  } = {
-    isImageExpanded: false,
-  }
 
-  /**
-   * The product code to fetch questions for
-   * @type {string}
-   */
+  @property({ type: Boolean, attribute: "show-message" })
+  showMessage = true
+
+  @property({ type: Boolean, attribute: "show-loading" })
+  showLoading = true
+
+  @property({ type: Boolean, attribute: "show-error" })
+  showError = true
+
+  @property({ type: Boolean, attribute: "image-expanded" })
+  isImageExpanded = false
+
+  /** Product code to fetch questions for */
   @property({ type: String, attribute: "product-code" })
-  productCode = ""
+  productCode: string = ""
 
-  /**
-   * The insight types to filter questions separate by comma
-   * @type {string}
-   */
+  /** Insight types to filter questions, comma-separated */
   @property({ type: String, attribute: "insight-types" })
-  insightTypes = ""
+  insightTypes: string = ""
 
-  /**
-   * Whether the user has answered the question
-   * @type {boolean}
-   */
+  /** Whether the user has answered the question */
   @state()
-  private hasAnswered = false
+  private hasAnswered: boolean = false
 
-  /**
-   * Task to fetch questions for the given product code
-   * @type {Task}
-   * @private
-   */
+  /** Task to fetch questions for the given product code */
   private _questionsTask = new Task(this, {
-    task: async ([productCode, insightTypes], {}) => {
+    task: async ([productCode, insightTypes]) => {
       this.hasAnswered = false
-      if (!productCode) {
-        return []
-      }
+      if (!productCode) return []
       const params = insightTypes ? { insight_types: insightTypes } : {}
-
       this._emitQuestionStateEvent(EventState.LOADING)
       await fetchQuestionsByProductCode(productCode, params)
       const value = questions(productCode).get()
@@ -101,11 +94,8 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
     args: () => [this.productCode, this.insightTypes],
   })
 
-  /**
-   * Emit a custom event when the question state changes to know current state outside the component
-   * @returns {void}
-   */
-  private _emitQuestionStateEvent = (state: EventState) => {
+  /** Emit a custom event when the question state changes */
+  private _emitQuestionStateEvent(state: EventState): void {
     const detail: QuestionStateEventDetail =
       state === EventState.LOADING
         ? { state }
@@ -122,44 +112,36 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
       })
     )
   }
-  private onQuestionAnswered = () => {
+
+  private onQuestionAnswered = (): void => {
     this.hasAnswered = true
     nextQuestionByProductCode(this.productCode)
     this.requestUpdate()
     this._emitQuestionStateEvent(EventState.ANNOTATED)
-    // Check if all questions are answered to emit the finished event
     if (isQuestionsFinished(this.productCode).get()) {
       this._emitQuestionStateEvent(EventState.FINISHED)
     }
   }
 
-  /**
-   * Render the message to display to the user
-   * @returns {TemplateResult}
-   * @private
-   **/
-  private renderMessage() {
+  /** Render the message to display to the user */
+  private renderMessage(): TemplateResult | typeof nothing {
     const getMessageWrapper = (message: string) => html`<div class="message">${message}</div>`
-
     if (isQuestionsFinished(this.productCode).get()) {
       return getMessageWrapper(msg("Thank you for your assistance!"))
-    } else if (!this.options?.showMessage) {
+    }
+    if (!this.showMessage) {
       return nothing
-    } else if (!this.hasAnswered) {
+    }
+    if (!this.hasAnswered) {
       return getMessageWrapper(msg("Open Food Facts needs your help with this product."))
     }
-
     return html`<div>${msg("Thanks for your help! Can you assist with another question?")}</div>`
   }
 
   override render() {
     return this._questionsTask.render({
-      pending: () => {
-        if (!this.options?.showLoading) {
-          return nothing
-        }
-        return html`<off-wc-loader></off-wc-loader>`
-      },
+      pending: () => (this.showLoading ? html`<off-wc-loader></off-wc-loader>` : nothing),
+      error: (error) => (this.showError ? html`<div>Error: ${error}</div>` : nothing),
       complete: (questionsList) => {
         const index = currentQuestionIndex(this.productCode).get() ?? 0
         const question = questionsList[index]
@@ -173,19 +155,13 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
               ? nothing
               : html`
                   <robotoff-question-form
-                    .is-image-expanded=${this.options.isImageExpanded}
+                    .isImageExpanded=${this.isImageExpanded}
                     .question=${question}
                     @submit=${this.onQuestionAnswered}
                   ></robotoff-question-form>
                 `}
           </div>
         `
-      },
-      error: (error) => {
-        if (!this.options.showError) {
-          return nothing
-        }
-        return html`<div>Error: ${error}</div>`
       },
     })
   }

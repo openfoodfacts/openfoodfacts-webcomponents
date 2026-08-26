@@ -34,10 +34,10 @@ export type QuestionsResponse = {
 
 // https://openfoodfacts.github.io/robotoff/references/api/#tag/Insights/paths/~1insights~1annotate/post
 export enum AnnotationAnswer {
-  ACCEPT_AND_ADD_DATA = "2",
-  ACCEPT = "1",
-  REFUSE = "0",
-  SKIP = "-1",
+  ACCEPT_AND_ADD_DATA = 2,
+  ACCEPT = 1,
+  REFUSE = 0,
+  SKIP = -1,
 }
 export enum InsightAnnotationSize {
   CENTGRAMS = "100g",

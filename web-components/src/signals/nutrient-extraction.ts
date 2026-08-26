@@ -1,12 +1,12 @@
 import { Computed } from "@lit-labs/signals"
 import robotoff from "../api/robotoff"
 import {
-  NutrientsInsight,
-  InsightAnnotationAnswer,
+  type NutrientsInsight,
+  type InsightAnnotationAnswer,
+  type InsightsRequestParams,
+  type NutrientsAnnotationData,
   InsightType,
-  InsightsRequestParams,
   AnnotationAnswer,
-  NutrientsAnnotationData,
 } from "../types/robotoff"
 import { SignalMap } from "../utils/signals"
 

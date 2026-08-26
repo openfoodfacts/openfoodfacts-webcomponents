@@ -7,7 +7,7 @@ import "../icons/search"
 import "../icons/close"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { EventType } from "../../constants"
-import { StyleInfo, styleMap } from "lit-html/directives/style-map.js"
+import { type StyleInfo, styleMap } from "lit-html/directives/style-map.js"
 import { ConsoleLogMixin } from "../../mixins/console-log-mixin"
 
 export enum BarcodeScannerState {
@@ -21,6 +21,11 @@ export enum BarcodeScannerState {
 
 interface BarcodeDetector {
   detect(video: ImageBitmap): Promise<{ rawValue: string }[]>
+}
+
+declare var BarcodeDetector: {
+  prototype: BarcodeDetector
+  new (options?: { formats: string[] }): BarcodeDetector
 }
 
 /**
@@ -280,8 +285,9 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
    */
   private setupBarcodeDetector() {
     try {
-      // Remove the type assertion for BarcodeDetector to avoid TypeScript error
-      // @ts-ignore
+      if (!("BarcodeDetector" in globalThis)) {
+        throw new Error("BarcodeDetector API is not supported in this browser.")
+      }
       this.codeReader = new BarcodeDetector({ formats: ["ean_13", "ean_8"] })
       this.detectFn = this.detectWithBarcodeDetector
       this.sendBarcodeStateEvent({ state: BarcodeScannerState.DETECTOR_AVAILABLE })

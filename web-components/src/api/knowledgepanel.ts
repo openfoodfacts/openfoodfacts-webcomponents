@@ -1,5 +1,4 @@
-import { KnowledgePanelsData } from "../types/knowledge-panel"
-import { languageCode } from "../signals/app"
+import type { KnowledgePanelsData } from "../types/knowledge-panel"
 
 /**
  * Fetches knowledge panels data from specified URL and extracts data at the given path
@@ -12,19 +11,7 @@ export const fetchKnowledgePanels = async (
   path: string
 ): Promise<KnowledgePanelsData> => {
   try {
-    // Check if URL contains language code parameter
-    const urlObj = new URL(url)
-    let finalUrl = url
-
-    // If no 'lc' parameter in the URL, add it
-    if (!urlObj.searchParams.has("lc")) {
-      const localeCode = languageCode.get()
-      urlObj.searchParams.append("lc", localeCode)
-      finalUrl = urlObj.toString()
-      console.log(`Language code not found in URL. Added locale '${localeCode}': ${finalUrl}`)
-    }
-
-    const response = await fetch(finalUrl)
+    const response = await fetch(url)
 
     if (!response.ok) {
       throw new Error(`Failed to fetch: ${response.statusText}`)

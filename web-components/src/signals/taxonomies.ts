@@ -1,4 +1,4 @@
-import { NutrientTaxonomy } from "../types/taxonomies"
+import type { NutrientTaxonomy } from "../types/taxonomies"
 import { SignalMap } from "../utils/signals"
 import { LoadingState } from "../constants"
 import taxonomies from "../api/taxonomies"
@@ -29,14 +29,18 @@ export const nutrientTaxonomies = new Computed(() => {
  * Load the taxonomies if they are not already loaded.
  * @returns
  */
-export const getTaxonomyNameByLang = (taxonomy: NutrientTaxonomy, lang: string) => {
-  if (!taxonomy) {
+export const getTaxonomyNameByLang = (node: NutrientTaxonomy, lang: string) => {
+  if (!node) {
+    console.warn("getTaxonomyNameByLang called with undefined taxonomy", { taxonomy: node })
     return ""
   }
-  if (lang in taxonomy.name) {
-    return taxonomy.name[lang]
-  }
-  return taxonomy.name["en"]
+
+  return (
+    node.name[lang] ||
+    node.name["en"] ||
+    node.name["xx"] ||
+    (console.warn("No name found for taxonomy", { taxonomy: node, lang }), "")
+  )
 }
 
 /**
@@ -58,7 +62,7 @@ export const getTaxonomyUnitById = (id: string): string | undefined => {
   if (!taxonomy) {
     return
   }
-  return taxonomy.unit.en
+  return taxonomy?.unit?.en
 }
 
 /**

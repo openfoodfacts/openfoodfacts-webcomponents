@@ -201,38 +201,33 @@ export class MobileBadges extends LitElement {
 
   /**
    * Controls visibility of Google Play Store badge
-   * @type {boolean}
    */
   @property({ type: Boolean, attribute: "hide-play-store" })
-  hidePlayStore = false
+  hidePlayStore: boolean = false
 
   /**
    * Controls visibility of F-Droid badge
-   * @type {boolean}
    */
   @property({ type: Boolean, attribute: "hide-f-droid" })
-  hideFDroid = false
+  hideFDroid: boolean = false
 
   /**
    * Controls visibility of APK download badge
-   * @type {boolean}
    */
   @property({ type: Boolean, attribute: "hide-apk" })
-  hideApk = false
+  hideApk: boolean = false
 
   /**
    * Controls visibility of App Store badge
-   * @type {boolean}
    */
   @property({ type: Boolean, attribute: "hide-app-store" })
-  hideAppStore = false
+  hideAppStore: boolean = false
 
   /**
    * Controls visibility of App Store badge
-   * @type {boolean}
    */
   @property({ type: Boolean, attribute: "hide-image" })
-  hideImage = false
+  hideImage: boolean = false
 
   /**
    * Whether to apply dark mode styling (auto-detected from prefers-color-scheme)
@@ -266,7 +261,7 @@ export class MobileBadges extends LitElement {
    * @returns The URL suffix with UTM parameters.
    */
   private getAndroidUrlSuffix(language: string, campaign: string): string {
-    return `?utm_source=off&utf_medium=web&utm_campaign=${campaign}_${language}`
+    return `?utm_source=off&utm_medium=web&utm_campaign=${campaign}_${language}`
   }
 
   /**
@@ -327,7 +322,7 @@ export class MobileBadges extends LitElement {
    */
   getIosAppLink(language: string): string {
     const baseURI =
-      "https://apps.apple.com/app/open-food-facts/id588797948?utm_source=off&utf_medium=web"
+      "https://apps.apple.com/app/open-food-facts/id588797948?utm_source=off&utm_medium=web"
     return `${baseURI}&utm_campaign=install_the_app_ios_footer_${language}`
   }
 

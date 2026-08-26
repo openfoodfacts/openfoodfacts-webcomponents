@@ -40,6 +40,7 @@ export enum EventState {
   HAS_DATA = "has-data", // data to display
   ANNOTATED = "annotated", // user do one annotation
   FINISHED = "FINISHED", // user do all annotations
+  ERROR = "error", // an error occurred during annotation
 }
 
 export const DEFAULT_ASSETS_IMAGES_PATH = "/assets/images"

@@ -1,5 +1,5 @@
 import { Directive, directive } from "lit/directive.js"
-import { StyleInfo, styleMap } from "lit-html/directives/style-map.js"
+import { type StyleInfo, styleMap } from "lit-html/directives/style-map.js"
 import { getImageUrl } from "../signals/app"
 
 /**

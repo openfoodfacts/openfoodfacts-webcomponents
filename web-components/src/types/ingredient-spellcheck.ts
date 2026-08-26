@@ -1,4 +1,4 @@
-import { Change } from "diff"
+import type { Change } from "diff"
 import { AnnotationAnswer } from "./robotoff"
 import { EventState } from "../constants"
 

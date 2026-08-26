@@ -4,10 +4,11 @@ import "./delete-modal"
 import "./new-key-modal"
 import "../shared/autocomplete-input"
 import folksonomyApi from "../../api/folksonomy"
+import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme"
 import { msg } from "@lit/localize"
 import { getButtonClasses, ButtonType } from "../../styles/buttons"
 import { FOLKSONOMY_INPUT } from "../../styles/folksonomy-input"
-import {
+import type {
   AutocompleteSuggestion,
   AutocompleteInputChangeEvent,
   AutocompleteSuggestionSelectEvent,
@@ -317,23 +318,24 @@ export class FolksonomyEditorRow extends LitElement {
   }
 
   static override styles = [
+    FOLKSONOMY_THEME,
     FOLKSONOMY_INPUT,
     ...getButtonClasses([ButtonType.Chocolate]),
     css`
       :host {
         font-family: Arial, sans-serif;
         font-size: 0.9rem;
-        color: #333;
+        color: var(--off-folksonomy-text, #333);
         width: 100%;
         display: contents;
       }
 
       .odd-row {
-        background-color: #ffffff;
+        background-color: var(--off-folksonomy-bg, #ffffff);
       }
 
       .even-row {
-        background-color: #f2f2f2;
+        background-color: var(--off-folksonomy-row-even-bg-alt, #f2f2f2);
       }
 
       .button-container {
@@ -359,7 +361,7 @@ export class FolksonomyEditorRow extends LitElement {
       }
 
       .property-link {
-        color: black;
+        color: var(--off-folksonomy-text, black);
       }
 
       #create-button {
@@ -419,6 +421,28 @@ export class FolksonomyEditorRow extends LitElement {
       }
     `,
   ]
+
+  private isUrl(value: string): boolean {
+    const trimmedValue = value.trim()
+    if (!trimmedValue) {
+      return false
+    }
+
+    try {
+      const url = new URL(trimmedValue)
+      return url.protocol === "http:" || url.protocol === "https:"
+    } catch {
+      return false
+    }
+  }
+
+  private confirmExternalNavigation(e: Event) {
+    const confirmed = confirm(msg("You are about to visit an external website. Continue?"))
+    if (!confirmed) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
+  }
 
   override render() {
     if (this.empty) {
@@ -481,27 +505,41 @@ export class FolksonomyEditorRow extends LitElement {
                 .value=${this.tempValue}
                 @input=${this.handleInputChange}
               />`
-            : this.value}
-        </td>
-        <td>
-          <div class="button-container">
-            ${this.editable
+            : this.isUrl(this.value)
               ? html`
-                  <button class="button chocolate-button" @click=${this.handleSave}>
-                    ${msg("Save")}
-                  </button>
-                  <button class="button chocolate-button" @click=${this.handleCancel}>
-                    ${msg("Cancel")}
-                  </button>
+                  <a
+                    href=${this.value}
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    @click=${this.confirmExternalNavigation}
+                    @auxclick=${this.confirmExternalNavigation}
+                  >
+                    ${this.value}
+                  </a>
                 `
-              : html`<button class="button chocolate-button" @click=${this.handleEdit}>
-                  ${msg("Edit")}
-                </button>`}
-            <button class="button chocolate-button" @click=${this.handleDelete}>
-              ${msg("Delete")}
-            </button>
-          </div>
+              : this.value}
         </td>
+        ${this.pageType == "edit"
+          ? html`<td>
+              <div class="button-container">
+                ${this.editable
+                  ? html`
+                      <button class="button chocolate-button" @click=${this.handleSave}>
+                        ${msg("Save")}
+                      </button>
+                      <button class="button chocolate-button" @click=${this.handleCancel}>
+                        ${msg("Cancel")}
+                      </button>
+                    `
+                  : html`<button class="button chocolate-button" @click=${this.handleEdit}>
+                      ${msg("Edit")}
+                    </button>`}
+                <button class="button chocolate-button" @click=${this.handleDelete}>
+                  ${msg("Delete")}
+                </button>
+              </div>
+            </td>`
+          : null}
       </tr>
       ${this.showNewKeyModal
         ? html`<new-key-modal @close-modal=${this.handleCloseNewKeyModal}></new-key-modal>`

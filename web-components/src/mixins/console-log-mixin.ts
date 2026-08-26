@@ -1,5 +1,5 @@
 import { LitElement } from "lit"
-import { Constructor } from "."
+import type { Constructor } from "."
 
 /**
  * Interface for the ConsoleLogMixin.

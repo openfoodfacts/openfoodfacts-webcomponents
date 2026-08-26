@@ -1,5 +1,5 @@
-import { html, LitElement, nothing, TemplateResult } from "lit"
-import { Constructor } from "."
+import { html, LitElement, nothing, type TemplateResult } from "lit"
+import type { Constructor } from "."
 import { property } from "lit/decorators.js"
 import "../components/shared/product-link-button"
 

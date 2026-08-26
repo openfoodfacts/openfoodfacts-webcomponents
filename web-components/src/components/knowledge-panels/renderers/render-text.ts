@@ -1,6 +1,6 @@
-import { LitElement, html, css, TemplateResult } from "lit"
+import { LitElement, html, css, type TemplateResult } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { KnowledgePanelElement } from "../../../types/knowledge-panel"
+import type { KnowledgePanelElement } from "../../../types/knowledge-panel"
 import { sanitizeHtml } from "../../../utils/html"
 
 /**
@@ -19,6 +19,15 @@ export class TextElementRenderer extends LitElement {
       word-wrap: break-word;
       overflow-wrap: break-word;
       color: #333;
+    }
+
+    ul {
+      padding-left: 1.2rem;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 0.85rem;
     }
   `
 

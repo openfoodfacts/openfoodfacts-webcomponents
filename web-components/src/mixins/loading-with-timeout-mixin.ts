@@ -1,14 +1,14 @@
+import type { Constructor } from "."
 import { LitElement } from "lit"
-import { Constructor } from "."
 import { state } from "lit/decorators.js"
 
 /**
  * Interface for the LoadingMixin.
  */
-export interface LoadingMixinInterface {
+export interface LoadingMixinInterface<L> {
   startTime?: number
-  loading: string | undefined
-  showLoading(message: string): void
+  loading: L | undefined
+  showLoading(message: L): void
   hideLoading(): void
 }
 
@@ -18,16 +18,17 @@ const DURATION = 750
  * Mixin that adds loading functionality to a LitElement.
  * It will show the loading state for at least 750ms to avoid flickering.
  */
-export const LoadingWithTimeoutMixin = <T extends Constructor<LitElement>>(
-  superClass: T
-): Constructor<LoadingMixinInterface> & T => {
+export const LoadingWithTimeoutMixin = <L, T extends Constructor<LitElement>>(
+  superClass: T,
+  initialLoading: L | undefined
+): Constructor<LoadingMixinInterface<L>> & T => {
   class LoadingWithTimeoutMixinClass extends superClass {
     /**
      * Indicates the loading state of the component.
      * Can be undefined or a string value.
      */
     @state()
-    loading: string | undefined = undefined
+    loading: L | undefined = initialLoading
 
     /**
      * The time when the loading state started.
@@ -38,7 +39,7 @@ export const LoadingWithTimeoutMixin = <T extends Constructor<LitElement>>(
      * Shows the loading state with a specific message
      * @param loading - The loading to display
      */
-    showLoading(loading: string) {
+    showLoading(loading: L) {
       this.startTime = Date.now()
       this.loading = loading
     }
@@ -57,5 +58,5 @@ export const LoadingWithTimeoutMixin = <T extends Constructor<LitElement>>(
       })
     }
   }
-  return LoadingWithTimeoutMixinClass as Constructor<LoadingMixinInterface> & T
+  return LoadingWithTimeoutMixinClass as Constructor<LoadingMixinInterface<L>> & T
 }

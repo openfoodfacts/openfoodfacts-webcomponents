@@ -1,8 +1,11 @@
 import { LitElement, html, css } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { downloadCSV } from "../../utils"
-import { localized, msg } from "@lit/localize"
+import { localized, msg, str } from "@lit/localize"
+import { SignalWatcher } from "@lit-labs/signals"
 import folksonomyApi from "../../api/folksonomy"
+import { userInfo } from "../../signals/folksonomy"
+import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme"
 
 /**
  * Folksonomy Property Products Viewer
@@ -12,314 +15,549 @@ import folksonomyApi from "../../api/folksonomy"
  */
 @customElement("folksonomy-property-products")
 @localized()
-export class FolksonomyPropertyProducts extends LitElement {
-  static override styles = css`
-    :host {
-      font-family: Arial, sans-serif;
-      color: #333;
-    }
+export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
+  static override styles = [
+    FOLKSONOMY_THEME,
+    css`
+      :host {
+        font-family: Arial, sans-serif;
+        color: var(--off-folksonomy-text, #333);
+      }
 
-    .property-container {
-      margin: 0 auto 1rem auto;
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      padding: 1rem;
-      box-sizing: border-box;
-    }
+      .property-container {
+        margin: 0 auto 1rem auto;
+        background-color: var(--off-folksonomy-bg, #fff);
+        border: 1px solid var(--off-folksonomy-border, #ddd);
+        border-radius: 8px;
+        box-shadow: 0 2px 4px var(--off-folksonomy-shadow, rgba(0, 0, 0, 0.1));
+        padding: 1rem;
+        box-sizing: border-box;
+      }
 
-    .property-container h2 {
-      font-size: 2.2rem;
-      font-weight: 400;
-      color: #222;
-      margin-top: 10px;
-      margin-bottom: 0.5rem;
-    }
+      .property-container h2 {
+        font-size: 2.2rem;
+        font-weight: 400;
+        color: var(--off-folksonomy-text-secondary, #222);
+        margin-top: 10px;
+        margin-bottom: 0.5rem;
+      }
 
-    .property-container p {
-      font-size: 0.9rem;
-      line-height: 1.5;
-      margin-bottom: 1rem;
-      color: #222;
-    }
+      .property-container p {
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+        color: var(--off-folksonomy-text-secondary, #222);
+      }
 
-    .property-container a {
-      color: #341100;
-    }
+      .property-container a {
+        color: var(--off-folksonomy-accent, #341100);
+      }
 
-    .content-wrapper {
-      display: flex;
-      gap: 1rem;
-      align-items: flex-start;
-    }
-
-    .main-content {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .header-section {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 1rem;
-    }
-
-    .property-title-container {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .info-box {
-      margin-top: 10px;
-      align-self: flex-start;
-    }
-
-    .table-container {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .products-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-      border: solid 1px #ddd;
-      font-size: 0.9rem;
-    }
-
-    .products-table th,
-    .products-table td {
-      padding: 0.8rem;
-      text-align: left;
-      border: solid 1px #ddd;
-    }
-
-    .products-table th {
-      background-color: #f8f9fa;
-      font-weight: bold;
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
-
-    .products-table tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-
-    .products-table tr:hover {
-      background-color: #e8f4fd;
-    }
-
-    .product-code {
-      font-weight: 500;
-      color: #341100;
-    }
-
-    .property-value {
-      font-weight: 500;
-      color: #341100;
-    }
-
-    .count {
-      text-align: right;
-      font-weight: bold;
-      color: #333;
-    }
-
-    .count-header {
-      text-align: right;
-    }
-
-    .loading {
-      text-align: center;
-      padding: 2rem;
-      color: #666;
-    }
-
-    .error {
-      color: #dc3545;
-      text-align: center;
-      padding: 1rem;
-      background-color: #f8d7da;
-      border: 1px solid #f5c6cb;
-      border-radius: 4px;
-      margin: 1rem 0;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 2rem;
-      color: #666;
-    }
-
-    /* Filter styles */
-    .filter-row {
-      background-color: #f8f9fa;
-    }
-
-    .filter-input {
-      width: 100%;
-      padding: 0.25rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 0.875rem;
-      box-sizing: border-box;
-    }
-
-    .filter-input:focus {
-      outline: none;
-      border-color: #007bff;
-      box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-    }
-
-    .filter-controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 1rem 0;
-      padding: 0.5rem;
-      background-color: #f8f9fa;
-      border-radius: 4px;
-    }
-
-    .rows-counter {
-      font-size: 0.875rem;
-      color: #666;
-    }
-
-    .download-btn {
-      background-color: #341100;
-      color: white;
-      border: 1px solid #341100;
-      padding: 0.4rem 0.8rem;
-      border-radius: 4px;
-      cursor: pointer;
-      transition:
-        background-color 0.3s,
-        color 0.3s;
-    }
-
-    .download-btn:hover {
-      background-color: rgb(255, 255, 255);
-      color: #341100;
-      border: 1px solid #341100;
-    }
-
-    .reset-btn {
-      background-color: #341100;
-      color: white;
-      border: 1px solid #341100;
-      padding: 0.4rem 0.8rem;
-      border-radius: 4px;
-      cursor: pointer;
-      transition:
-        background-color 0.3s,
-        color 0.3s;
-      margin-left: 1rem;
-    }
-
-    .reset-btn:hover {
-      background-color: rgb(255, 255, 255);
-      color: #341100;
-      border: 1px solid #341100;
-    }
-
-    .button-group {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .view-mode-toggle {
-      display: flex;
-      background-color: #f8f9fa;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .view-mode-btn {
-      background-color: transparent;
-      border: none;
-      padding: 0.4rem 0.8rem;
-      cursor: pointer;
-      transition: background-color 0.2s;
-      font-size: 0.875rem;
-    }
-
-    .view-mode-btn:hover {
-      background-color: #e9ecef;
-    }
-
-    .view-mode-btn.active {
-      background-color: #341100;
-      color: white;
-    }
-
-    .view-controls {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    /* Mobile responsiveness */
-    @media (max-width: 768px) {
       .content-wrapper {
-        flex-direction: column;
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+
+      .main-content {
+        flex: 1;
+        min-width: 0;
       }
 
       .header-section {
-        flex-direction: column;
-        gap: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+      }
+
+      .property-title-container {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .info-box {
+        margin-top: 10px;
+        align-self: flex-start;
+      }
+
+      .table-container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
       }
 
       .products-table {
-        font-size: 0.8rem;
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+        border: solid 1px var(--off-folksonomy-border, #ddd);
+        font-size: 0.9rem;
       }
 
       .products-table th,
       .products-table td {
-        padding: 0.5rem;
+        padding: 0.8rem;
+        text-align: left;
+        border: solid 1px var(--off-folksonomy-border, #ddd);
       }
 
-      .property-container h2 {
-        font-size: 1.8rem;
+      .products-table th {
+        background-color: var(--off-folksonomy-table-header-bg-alt, #f8f9fa);
+        font-weight: bold;
+        position: sticky;
+        top: 0;
+        z-index: 1;
       }
 
-      .property-container p {
-        font-size: 0.8rem;
+      .products-table tr:nth-child(even) {
+        background-color: var(--off-folksonomy-row-even-bg, #f9f9f9);
+      }
+
+      .products-table tr:hover {
+        background-color: var(--off-folksonomy-row-hover-bg, #e8f4fd);
+      }
+
+      .product-code {
+        font-weight: 500;
+        color: var(--off-folksonomy-accent, #341100);
+      }
+
+      .property-value {
+        font-weight: 500;
+        color: var(--off-folksonomy-accent, #341100);
+      }
+
+      .count {
+        text-align: right;
+        font-weight: bold;
+        color: var(--off-folksonomy-text, #333);
+      }
+
+      .count-header {
+        text-align: right;
+      }
+
+      .loading {
+        text-align: center;
+        padding: 2rem;
+        color: var(--off-folksonomy-loading-text, #666);
+      }
+
+      .error {
+        color: var(--off-folksonomy-danger, #dc3545);
+        text-align: center;
+        padding: 1rem;
+        background-color: var(--off-folksonomy-error-bg, #f8d7da);
+        border: 1px solid var(--off-folksonomy-error-border, #f5c6cb);
+        border-radius: 4px;
+        margin: 1rem 0;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 2rem;
+        color: var(--off-folksonomy-loading-text, #666);
+      }
+
+      /* Filter styles */
+      .filter-row {
+        background-color: var(--off-folksonomy-filter-bg, #f8f9fa);
+      }
+
+      .filter-input {
+        width: 100%;
+        padding: 0.25rem;
+        border: 1px solid var(--off-folksonomy-border, #ddd);
+        border-radius: 4px;
+        font-size: 0.875rem;
+        box-sizing: border-box;
+        background-color: var(--off-folksonomy-input-bg, rgb(252, 251, 251));
+        color: var(--off-folksonomy-text, #333);
+      }
+
+      .filter-input:focus {
+        outline: none;
+        border-color: var(--off-folksonomy-input-focus-border, #007bff);
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
       }
 
       .filter-controls {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: stretch;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 1rem 0;
+        padding: 0.5rem;
+        background-color: var(--off-folksonomy-filter-bg, #f8f9fa);
+        border-radius: 4px;
       }
 
-      .view-controls {
-        flex-direction: column;
+      .rows-counter {
+        font-size: 0.875rem;
+        color: var(--off-folksonomy-loading-text, #666);
+      }
+
+      .download-btn {
+        background-color: var(--off-folksonomy-accent, #341100);
+        color: white;
+        border: 1px solid var(--off-folksonomy-accent, #341100);
+        padding: 0.4rem 0.8rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition:
+          background-color 0.3s,
+          color 0.3s;
+      }
+
+      .download-btn:hover {
+        background-color: var(--off-folksonomy-bg, rgb(255, 255, 255));
+        color: var(--off-folksonomy-accent, #341100);
+        border: 1px solid var(--off-folksonomy-accent, #341100);
+      }
+
+      .reset-btn {
+        background-color: var(--off-folksonomy-accent, #341100);
+        color: white;
+        border: 1px solid var(--off-folksonomy-accent, #341100);
+        padding: 0.4rem 0.8rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition:
+          background-color 0.3s,
+          color 0.3s;
+        margin-left: 1rem;
+      }
+
+      .reset-btn:hover {
+        background-color: var(--off-folksonomy-bg, rgb(255, 255, 255));
+        color: var(--off-folksonomy-accent, #341100);
+        border: 1px solid var(--off-folksonomy-accent, #341100);
+      }
+
+      .button-group {
+        display: flex;
         gap: 0.5rem;
-        align-items: center;
       }
 
       .view-mode-toggle {
-        width: 100%;
-        max-width: 300px;
+        display: flex;
+        background-color: var(--off-folksonomy-filter-bg, #f8f9fa);
+        border: 1px solid var(--off-folksonomy-border, #ddd);
+        border-radius: 4px;
+        overflow: hidden;
       }
 
       .view-mode-btn {
-        flex: 1;
+        background-color: transparent;
+        border: none;
+        padding: 0.4rem 0.8rem;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        font-size: 0.875rem;
+        color: var(--off-folksonomy-text, #333);
       }
-    }
-  `
+
+      .view-mode-btn:hover {
+        background-color: var(--off-folksonomy-btn-secondary-hover, #e9ecef);
+      }
+
+      .view-mode-btn.active {
+        background-color: var(--off-folksonomy-accent, #341100);
+        color: white;
+      }
+
+      .view-controls {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      /* Mobile responsiveness */
+      @media (max-width: 768px) {
+        .content-wrapper {
+          flex-direction: column;
+        }
+
+        .header-section {
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .products-table {
+          font-size: 0.8rem;
+        }
+
+        .products-table th,
+        .products-table td {
+          padding: 0.5rem;
+        }
+
+        .property-container h2 {
+          font-size: 1.8rem;
+        }
+
+        .property-container p {
+          font-size: 0.8rem;
+        }
+
+        .filter-controls {
+          flex-direction: column;
+          gap: 1rem;
+          align-items: stretch;
+        }
+
+        .view-controls {
+          flex-direction: column;
+          gap: 0.5rem;
+          align-items: center;
+        }
+
+        .view-mode-toggle {
+          width: 100%;
+          max-width: 300px;
+        }
+
+        .view-mode-btn {
+          flex: 1;
+        }
+      }
+
+      .actions-column {
+        text-align: center;
+        width: 120px;
+      }
+
+      .actions-buttons {
+        display: flex;
+        gap: 0.25rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .action-btn {
+        background-color: transparent;
+        border: 1px solid var(--off-folksonomy-accent, #341100);
+        color: var(--off-folksonomy-accent, #341100);
+        padding: 0.25rem 0.5rem;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 0.75rem;
+        transition: all 0.2s;
+        min-width: 50px;
+      }
+
+      .action-btn:hover {
+        background-color: var(--off-folksonomy-accent, #341100);
+        color: white;
+      }
+
+      .action-btn.delete {
+        border-color: var(--off-folksonomy-danger, #dc3545);
+        color: var(--off-folksonomy-danger, #dc3545);
+      }
+
+      .action-btn.delete:hover {
+        background-color: var(--off-folksonomy-danger, #dc3545);
+        color: white;
+      }
+
+      .action-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .action-btn:disabled:hover {
+        background-color: transparent;
+        color: var(--off-folksonomy-accent, #341100);
+      }
+
+      .action-btn.delete:disabled:hover {
+        background-color: transparent;
+        color: var(--off-folksonomy-danger, #dc3545);
+      }
+
+      @media (max-width: 768px) {
+        .actions-column {
+          width: 100px;
+        }
+
+        .actions-buttons {
+          flex-direction: column;
+          gap: 0.125rem;
+        }
+
+        .action-btn {
+          font-size: 0.7rem;
+          padding: 0.2rem 0.4rem;
+          min-width: 40px;
+        }
+      }
+
+      /* Modal styles */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        animation: fadeIn 0.2s ease-out;
+      }
+
+      .modal {
+        background: var(--off-folksonomy-modal-bg, white);
+        border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        max-width: 500px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        animation: slideIn 0.2s ease-out;
+      }
+
+      .modal-header {
+        padding: 1.5rem 1.5rem 0;
+        border-bottom: 1px solid var(--off-folksonomy-modal-header-border, #eee);
+      }
+
+      .modal-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--off-folksonomy-modal-text, #333);
+        margin: 0 0 1rem 0;
+      }
+
+      .modal-body {
+        padding: 1.5rem;
+      }
+
+      .modal-footer {
+        padding: 0 1.5rem 1.5rem;
+        display: flex;
+        gap: 0.75rem;
+        justify-content: flex-end;
+      }
+
+      .modal-input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--off-folksonomy-border, #ddd);
+        border-radius: 4px;
+        font-size: 1rem;
+        margin-top: 0.5rem;
+        background-color: var(--off-folksonomy-input-bg, rgb(252, 251, 251));
+        color: var(--off-folksonomy-text, #333);
+      }
+
+      .modal-input:focus {
+        outline: none;
+        border-color: var(--off-folksonomy-accent, #341100);
+        box-shadow: 0 0 0 2px rgba(52, 17, 0, 0.1);
+      }
+
+      .modal-text {
+        color: var(--off-folksonomy-modal-text-secondary, #555);
+        line-height: 1.5;
+        margin-bottom: 1rem;
+      }
+
+      .modal-btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        min-width: 80px;
+      }
+
+      .modal-btn-primary {
+        background-color: var(--off-folksonomy-accent, #341100);
+        color: white;
+      }
+
+      .modal-btn-primary:hover {
+        background-color: var(--off-folksonomy-accent-hover, #2a0e00);
+      }
+
+      .modal-btn-danger {
+        background-color: var(--off-folksonomy-danger, #dc3545);
+        color: white;
+      }
+
+      .modal-btn-danger:hover {
+        background-color: var(--off-folksonomy-danger-hover, #c82333);
+      }
+
+      .modal-btn-secondary {
+        background-color: var(--off-folksonomy-btn-secondary-bg, #f8f9fa);
+        color: var(--off-folksonomy-modal-text, #333);
+        border: 1px solid var(--off-folksonomy-border, #ddd);
+      }
+
+      .modal-btn-secondary:hover {
+        background-color: var(--off-folksonomy-btn-secondary-hover, #e9ecef);
+      }
+
+      .modal-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .modal {
+          width: 95%;
+          margin: 1rem;
+        }
+
+        .modal-footer {
+          flex-direction: column;
+        }
+
+        .modal-btn {
+          width: 100%;
+        }
+      }
+    `,
+  ]
 
   /**
    * The property name for which we will display barcodes and values
    */
   @property({ type: String, attribute: "property-name" })
   propertyName = ""
+
+  /**
+   * The base URL for properties listing (e.g., "https://world.openfoodfacts.org/properties")
+   * @type {string}
+   */
+  @property({ type: String, attribute: "properties-url" })
+  propertiesUrl = "/properties"
 
   @state()
   private products: Array<{ product: string; v: string }> = []
@@ -348,6 +586,31 @@ export class FolksonomyPropertyProducts extends LitElement {
     value: "",
   }
 
+  @state()
+  private showReplaceModal = false
+
+  @state()
+  private showDeleteModal = false
+
+  @state()
+  private showMessageModal = false
+
+  @state()
+  private replaceModalData = {
+    value: "",
+    newValue: "",
+  }
+
+  @state()
+  private deleteModalValue = ""
+
+  @state()
+  private messageModalData = {
+    title: "",
+    message: "",
+    type: "success" as "success" | "error",
+  }
+
   private filterTimeout: number | null = null
 
   override async connectedCallback() {
@@ -355,6 +618,7 @@ export class FolksonomyPropertyProducts extends LitElement {
     if (this.propertyName) {
       await this.fetchProductsPropertiesMain()
     }
+    await folksonomyApi.fetchUserInfo()
   }
 
   override disconnectedCallback() {
@@ -394,6 +658,223 @@ export class FolksonomyPropertyProducts extends LitElement {
     } finally {
       this.loading = false
     }
+  }
+
+  private get canModerateValues(): boolean {
+    const currentUserInfo = userInfo.get()
+    return currentUserInfo?.admin === true || currentUserInfo?.moderator === true
+  }
+
+  private openReplaceModal(value: string) {
+    this.replaceModalData = {
+      value,
+      newValue: "",
+    }
+    this.showReplaceModal = true
+  }
+
+  private closeReplaceModal() {
+    this.showReplaceModal = false
+    this.replaceModalData = {
+      value: "",
+      newValue: "",
+    }
+  }
+
+  private async handleReplaceValue() {
+    const { value, newValue } = this.replaceModalData
+
+    if (!newValue.trim() || newValue.trim() === value) {
+      return
+    }
+
+    try {
+      await folksonomyApi.replaceValue({
+        property: this.propertyName,
+        old_value: value,
+        new_value: newValue.trim(),
+      })
+
+      this.closeReplaceModal()
+      await this.fetchProductsPropertiesMain()
+      this.showMessage("success", msg("Success"), msg("Value replaced successfully!"))
+    } catch (error) {
+      console.error("Error replacing value:", error)
+      this.showMessage("error", msg("Error"), msg("Failed to replace value. Please try again."))
+    }
+  }
+
+  private openDeleteModal(value: string) {
+    this.deleteModalValue = value
+    this.showDeleteModal = true
+  }
+
+  private closeDeleteModal() {
+    this.showDeleteModal = false
+    this.deleteModalValue = ""
+  }
+
+  private async handleDeleteValue() {
+    try {
+      await folksonomyApi.deleteValue({
+        property: this.propertyName,
+        value: this.deleteModalValue,
+      })
+
+      this.closeDeleteModal()
+      await this.fetchProductsPropertiesMain()
+      this.showMessage("success", msg("Success"), msg("Value deleted successfully!"))
+    } catch (error) {
+      console.error("Error deleting value:", error)
+      this.showMessage("error", msg("Error"), msg("Failed to delete value. Please try again."))
+    }
+  }
+
+  private showMessage(type: "success" | "error", title: string, message: string) {
+    this.messageModalData = { type, title, message }
+    this.showMessageModal = true
+  }
+
+  private closeMessageModal() {
+    this.showMessageModal = false
+    this.messageModalData = {
+      title: "",
+      message: "",
+      type: "success",
+    }
+  }
+
+  private renderReplaceModal() {
+    if (!this.showReplaceModal) return ""
+
+    return html`
+      <div class="modal-overlay" @click="${this.closeReplaceModal}">
+        <div class="modal" @click="${(e: Event) => e.stopPropagation()}">
+          <div class="modal-header">
+            <h3 class="modal-title">${msg("Replace Value")}</h3>
+          </div>
+          <div class="modal-body">
+            <div class="modal-text">
+              ${msg(
+                str`Replace all instances of '${this.replaceModalData.value}' with a new value:`
+              )}
+            </div>
+            <label for="new-value">${msg("New value:")}</label>
+            <input
+              id="new-value"
+              type="text"
+              class="modal-input"
+              .value="${this.replaceModalData.newValue}"
+              @input="${(e: Event) => {
+                this.replaceModalData = {
+                  ...this.replaceModalData,
+                  newValue: (e.target as HTMLInputElement).value,
+                }
+              }}"
+              @keydown="${(e: KeyboardEvent) => {
+                if (e.key === "Enter") {
+                  this.handleReplaceValue()
+                } else if (e.key === "Escape") {
+                  this.closeReplaceModal()
+                }
+              }}"
+              placeholder="${msg("Enter new value...")}"
+              autofocus
+            />
+          </div>
+          <div class="modal-footer">
+            <button class="modal-btn modal-btn-secondary" @click="${this.closeReplaceModal}">
+              ${msg("Cancel")}
+            </button>
+            <button
+              class="modal-btn modal-btn-primary"
+              @click="${this.handleReplaceValue}"
+              ?disabled="${!this.replaceModalData.newValue.trim() ||
+              this.replaceModalData.newValue.trim() === this.replaceModalData.value}"
+            >
+              ${msg("Replace")}
+            </button>
+          </div>
+        </div>
+      </div>
+    `
+  }
+
+  private renderDeleteModal() {
+    if (!this.showDeleteModal) return ""
+
+    return html`
+      <div class="modal-overlay" @click="${this.closeDeleteModal}">
+        <div class="modal" @click="${(e: Event) => e.stopPropagation()}">
+          <div class="modal-header">
+            <h3 class="modal-title">${msg("Delete Value")}</h3>
+          </div>
+          <div class="modal-body">
+            <div class="modal-text">
+              ${msg(
+                str`Are you sure you want to delete all instances of the value '${this.deleteModalValue}'?`
+              )}
+            </div>
+            <div class="modal-text">
+              <strong>${msg("This action cannot be undone.")}</strong>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="modal-btn modal-btn-secondary" @click="${this.closeDeleteModal}">
+              ${msg("Cancel")}
+            </button>
+            <button class="modal-btn modal-btn-danger" @click="${this.handleDeleteValue}">
+              ${msg("Delete")}
+            </button>
+          </div>
+        </div>
+      </div>
+    `
+  }
+
+  private renderMessageModal() {
+    if (!this.showMessageModal) return ""
+
+    return html`
+      <div class="modal-overlay" @click="${this.closeMessageModal}">
+        <div class="modal" @click="${(e: Event) => e.stopPropagation()}">
+          <div class="modal-header">
+            <h3 class="modal-title">${this.messageModalData.title}</h3>
+          </div>
+          <div class="modal-body">
+            <div class="modal-text">${this.messageModalData.message}</div>
+          </div>
+          <div class="modal-footer">
+            <button class="modal-btn modal-btn-primary" @click="${this.closeMessageModal}">
+              ${msg("OK")}
+            </button>
+          </div>
+        </div>
+      </div>
+    `
+  }
+
+  private renderValueActions(valueItem: { value: string; count: number }) {
+    return html`
+      <td class="actions-column">
+        <div class="actions-buttons">
+          <button
+            class="action-btn"
+            @click="${() => this.openReplaceModal(valueItem.value)}"
+            title="${msg("Replace this value across all products")}"
+          >
+            ${msg("Replace")}
+          </button>
+          <button
+            class="action-btn delete"
+            @click="${() => this.openDeleteModal(valueItem.value)}"
+            title="${msg("Delete this value from all products")}"
+          >
+            ${msg("Delete")}
+          </button>
+        </div>
+      </td>
+    `
   }
 
   private applyFilters() {
@@ -530,6 +1011,7 @@ export class FolksonomyPropertyProducts extends LitElement {
           </a>
         </td>
         <td class="count">${valueItem.count}</td>
+        ${this.canModerateValues ? this.renderValueActions(valueItem) : ""}
       </tr>
     `
   }
@@ -540,6 +1022,7 @@ export class FolksonomyPropertyProducts extends LitElement {
         <tr>
           <th class="value-header">${msg("Property Value")}</th>
           <th class="count-header">${msg("Product Count")}</th>
+          ${this.canModerateValues ? html`<th class="actions-column">${msg("Actions")}</th>` : ""}
         </tr>
         <tr class="filter-row">
           <td>
@@ -553,6 +1036,7 @@ export class FolksonomyPropertyProducts extends LitElement {
             />
           </td>
           <td></td>
+          ${this.canModerateValues ? html`<td></td>` : ""}
         </tr>
       </thead>
     `
@@ -639,7 +1123,7 @@ export class FolksonomyPropertyProducts extends LitElement {
 
                 <div id="fe_infobox" class="info-box">
                   ${msg("Tip: you can also find the")}
-                  <a href="https://world.openfoodfacts.org/properties" target="_blank"
+                  <a href="${this.propertiesUrl}" target="_blank"
                     >${msg("list of all properties")}</a
                   >.
                 </div>
@@ -666,6 +1150,8 @@ export class FolksonomyPropertyProducts extends LitElement {
           </div>
         </div>
       </div>
+
+      ${this.renderReplaceModal()} ${this.renderDeleteModal()} ${this.renderMessageModal()}
     `
   }
 }

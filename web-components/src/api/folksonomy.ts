@@ -1,11 +1,18 @@
-import {
+import type {
   FetchProductPropertiesResponse,
   AddProductPropertyResponse,
   DeleteProductPropertyResponse,
   UpdateProductPropertyResponse,
   AuthByCookieResponse,
+  ValueRenameRequest,
+  ValueDeleteRequest,
+  UserInfo,
+  PropertyRenameRequest,
+  PropertyDeleteRequest,
+  PropertyClashCheck,
 } from "../types/folksonomy"
-import { folksonomyConfiguration } from "../signals/folksonomy"
+
+import { folksonomyConfiguration, userInfo, userInfoLoading } from "../signals/folksonomy"
 
 // Constants for localStorage
 const FOLKSONOMY_BEARER_TOKEN_KEY = "folksonomy-bearer-token"
@@ -287,6 +294,172 @@ async function fetchValues(key: string): Promise<{ v: string; product_count: num
   }
 }
 
+async function getUserInfo(): Promise<UserInfo> {
+  try {
+    const response = await makeAuthenticatedRequest(getApiUrl("/user/me"), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      } as HeadersInit,
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const data: UserInfo = await response.json()
+    return data
+  } catch (error) {
+    console.error("Error fetching user info:", error)
+    throw error
+  }
+}
+
+/**
+ * Fetch user info and update the shared signal
+ * Only fetches if not already loading or if force is true
+ */
+async function fetchUserInfo(force: boolean = false): Promise<UserInfo | null> {
+  // Don't fetch if already loading (unless forced)
+  if (userInfoLoading.get() && !force) {
+    return userInfo.get()
+  }
+
+  // Don't fetch if we already have user info (unless forced)
+  if (userInfo.get() && !force) {
+    return userInfo.get()
+  }
+
+  userInfoLoading.set(true)
+
+  try {
+    const fetchedUserInfo = await getUserInfo()
+    userInfo.set(fetchedUserInfo)
+    return fetchedUserInfo
+  } catch (error) {
+    console.error("Error fetching user info:", error)
+    // User might not be authenticated, which is fine
+    userInfo.set(null)
+    return null
+  } finally {
+    userInfoLoading.set(false)
+  }
+}
+
+/**
+ * Clear user info (useful for logout)
+ */
+export function clearUserInfo() {
+  userInfo.set(null)
+  userInfoLoading.set(false)
+}
+
+async function replaceValue(request: ValueRenameRequest): Promise<{ success: boolean }> {
+  try {
+    const response = await makeAuthenticatedRequest(getApiUrl("/admin/value/replace"), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      } as HeadersInit,
+      body: JSON.stringify(request),
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    return { success: true }
+  } catch (error) {
+    console.error("Error replacing value:", error)
+    throw error
+  }
+}
+
+async function deleteValue(request: ValueDeleteRequest): Promise<{ success: boolean }> {
+  try {
+    const response = await makeAuthenticatedRequest(getApiUrl("/admin/value"), {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      } as HeadersInit,
+      body: JSON.stringify(request),
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    return { success: true }
+  } catch (error) {
+    console.error("Error deleting value:", error)
+    throw error
+  }
+}
+
+async function checkPropertyClash(request: PropertyRenameRequest): Promise<PropertyClashCheck> {
+  try {
+    const response = await makeAuthenticatedRequest(getApiUrl("/admin/property/check-clash"), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      } as HeadersInit,
+      body: JSON.stringify(request),
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const data: PropertyClashCheck = await response.json()
+    return data
+  } catch (error) {
+    console.error("Error checking property clash:", error)
+    throw error
+  }
+}
+
+async function renameProperty(request: PropertyRenameRequest): Promise<{ success: boolean }> {
+  try {
+    const response = await makeAuthenticatedRequest(getApiUrl("/admin/property/rename"), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      } as HeadersInit,
+      body: JSON.stringify(request),
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    return { success: true }
+  } catch (error) {
+    console.error("Error renaming property:", error)
+    throw error
+  }
+}
+
+async function deleteProperty(request: PropertyDeleteRequest): Promise<{ success: boolean }> {
+  try {
+    const response = await makeAuthenticatedRequest(getApiUrl("/admin/property"), {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      } as HeadersInit,
+      body: JSON.stringify(request),
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    return { success: true }
+  } catch (error) {
+    console.error("Error deleting property:", error)
+    throw error
+  }
+}
+
 export default {
   fetchProductProperties,
   addProductProperty,
@@ -296,4 +469,11 @@ export default {
   fetchProductsProperties,
   fetchValues,
   authByCookie,
+  getUserInfo,
+  fetchUserInfo,
+  replaceValue,
+  deleteValue,
+  checkPropertyClash,
+  renameProperty,
+  deleteProperty,
 }

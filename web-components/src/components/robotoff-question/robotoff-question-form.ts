@@ -1,6 +1,6 @@
 import { LitElement, html, css, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { Question, AnnotationAnswer } from "../../types/robotoff"
+import { type Question, AnnotationAnswer } from "../../types/robotoff"
 import { EventType } from "../../constants"
 import { answerQuestion } from "../../signals/questions"
 import { SignalWatcher } from "@lit-labs/signals"
@@ -10,6 +10,8 @@ import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin
 import { FULL_WIDTH } from "../../styles/utils"
 import "../shared/loading-button"
 import "../buttons/zoom-unzoom-button"
+import "../shared/zoomable-image"
+
 /**
  * RobotoffQuestionForm component
  * It displays a form to answer a question about a product.
@@ -18,7 +20,9 @@ import "../buttons/zoom-unzoom-button"
  */
 @customElement("robotoff-question-form")
 @localized()
-export class RobotoffQuestionForm extends SignalWatcher(LoadingWithTimeoutMixin(LitElement)) {
+export class RobotoffQuestionForm extends SignalWatcher(
+  LoadingWithTimeoutMixin(LitElement, undefined as AnnotationAnswer | undefined)
+) {
   static override styles = [
     ...getButtonClasses([ButtonType.White]),
     FULL_WIDTH,
@@ -57,34 +61,25 @@ export class RobotoffQuestionForm extends SignalWatcher(LoadingWithTimeoutMixin(
     `,
   ]
 
-  /**
-   * The question to display.
-   */
+  /** The question to display. */
   @property({ type: Object, reflect: true })
   question?: Question
 
-  /**
-   * Is the image expanded
-   * @type {boolean}
-   * @default false
-   */
+  /** True if the image is expanded (and zoomable). */
   @property({ type: Boolean, attribute: "is-image-expanded" })
-  isImageExpanded = false
+  isImageExpanded: boolean = false
 
   get imageSize() {
     return this.isImageExpanded
       ? { height: "350px", width: "100%", "max-width": "350px" }
-      : {
-          height: "200px",
-          width: "200px",
-        }
+      : { height: "200px", width: "200px" }
   }
 
   /**
    * Emit an event submit when the user clicks on a button.
    * It stops the propagation of the event to avoid the click event on the parent.
    */
-  private emitEventClick = (event: Event, value: string) => {
+  private emitEventClick = (event: Event, value: AnnotationAnswer) => {
     event.stopPropagation()
     const click = new CustomEvent(EventType.SUBMIT, {
       detail: { value },
@@ -94,10 +89,12 @@ export class RobotoffQuestionForm extends SignalWatcher(LoadingWithTimeoutMixin(
 
     this.dispatchEvent(click)
   }
+
   private _annotateProduct = async (event: Event, value: AnnotationAnswer) => {
     this.showLoading(value)
     await answerQuestion(this.question?.insight_id!, value)
-    await this.hideLoading()
+
+    this.hideLoading()
     this.emitEventClick(event, value)
   }
 
