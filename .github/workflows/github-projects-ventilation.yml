@@ -185,4 +185,9 @@ jobs:
           github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
           labeled: Nutrition editing
           label-operator: OR
-        
+      - uses: actions/add-to-project@v2.0.0
+        with:
+          project-url: https://github.com/orgs/openfoodfacts/projects/111
+          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+          labeled: 🛡️ Nutri-Patrol
+          label-operator: OR
