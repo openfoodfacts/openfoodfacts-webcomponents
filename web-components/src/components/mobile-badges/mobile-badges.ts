@@ -300,7 +300,7 @@ export class MobileBadges extends LitElement {
     } catch (e) {
       // Ignore
     }
-    return `playstore/img/latest/GetItOnGooglePlay_Badge_Web_color_${languageName}.svg`
+    return `https://world.openfoodfacts.org/images/misc/playstore/img/latest/GetItOnGooglePlay_Badge_Web_color_${languageName}.svg`
   }
 
   /**
@@ -309,7 +309,7 @@ export class MobileBadges extends LitElement {
    * @returns The path to the badge icon.
    */
   getFDroidAppIconPath(language: string): string {
-    return `f-droid/svg/get-it-on-${language}.svg`
+    return `https://world.openfoodfacts.org/images/misc/f-droid/svg/get-it-on-${language}.svg`
   }
 
   /**
@@ -319,9 +319,9 @@ export class MobileBadges extends LitElement {
    */
   getIosAppIconPath(language: string): string {
     if (language === "en") {
-      return "appstore/black/appstore_US.svg"
+      return "https://world.openfoodfacts.org/images/misc/appstore/black/appstore_US.svg"
     }
-    return `appstore/black/appstore_${language.toLocaleUpperCase()}.svg`
+    return `https://world.openfoodfacts.org/images/misc/appstore/black/appstore_${language.toLocaleUpperCase()}.svg`
   }
 
   /**
@@ -375,42 +375,42 @@ export class MobileBadges extends LitElement {
     const badges: Badge[] = [
       {
         href: this.getAndroidAppLink(language),
-        src: getImageUrl(this.getAndroidAppIconPath(language)),
+        src: this.getAndroidAppIconPath(language),
         alt: msg("Get It On Google Play"),
         id: "playstore_badge",
         hide: this.hidePlayStore,
         errorHandler: (e: Event) => {
           const target = e.target as HTMLImageElement
-          target.src = getImageUrl(this.getAndroidAppIconPath("en"))
+          target.src = this.getAndroidAppIconPath("en")
         },
       },
       {
         href: this.fDroidAppLink,
-        src: getImageUrl(this.getFDroidAppIconPath(language)),
+        src: this.getFDroidAppIconPath(language),
         alt: msg("Available on F-Droid"),
         id: "fdroid_badge",
         hide: this.hideFDroid,
         errorHandler: (e: Event) => {
           const target = e.target as HTMLImageElement
-          target.src = getImageUrl(this.getFDroidAppIconPath("en"))
+          target.src = this.getFDroidAppIconPath("en")
         },
       },
       {
         href: this.getAndroidApkAppLink(language),
-        src: getImageUrl("app-landing-page/download-apk/download-apk_en.svg"),
+        src: "https://world.openfoodfacts.org/images/misc/app-landing-page/download-apk/download-apk_en.svg",
         alt: msg("Android APK"),
         id: "apk_badge",
         hide: this.hideApk,
       },
       {
         href: this.getIosAppLink(language),
-        src: getImageUrl(this.getIosAppIconPath(language)),
+        src: this.getIosAppIconPath(language),
         alt: msg("Download on the App Store"),
         id: "appstore_badge",
         hide: this.hideAppStore,
         errorHandler: (e: Event) => {
           const target = e.target as HTMLImageElement
-          target.src = getImageUrl(this.getIosAppIconPath("en"))
+          target.src = this.getIosAppIconPath("en")
         },
       },
     ]
