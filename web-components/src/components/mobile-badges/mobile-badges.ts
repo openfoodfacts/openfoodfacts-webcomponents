@@ -290,7 +290,17 @@ export class MobileBadges extends LitElement {
    * @returns The path to the badge icon.
    */
   getAndroidAppIconPath(language: string): string {
-    return `https://play.google.com/intl/en_us/badges/static/images/badges/${language}_badge_web_generic.png`
+    let languageName = "English"
+    try {
+      const names = new Intl.DisplayNames(["en"], { type: "language" })
+      const name = names.of(language)
+      if (name) {
+        languageName = name.split(" (")[0].replace(/[^a-zA-Z]/g, "")
+      }
+    } catch (e) {
+      // Ignore
+    }
+    return `playstore/img/latest/GetItOnGooglePlay_Badge_Web_color_${languageName}.svg`
   }
 
   /**
@@ -299,18 +309,17 @@ export class MobileBadges extends LitElement {
    * @returns The path to the badge icon.
    */
   getFDroidAppIconPath(language: string): string {
-    return `https://fdroid.gitlab.io/artwork/badge/get-it-on-${language}.png`
+    return `f-droid/svg/get-it-on-${language}.svg`
   }
 
   /**
    * Generates the path to the Apple App Store badge icon.
-   * Note: This code does not handle the US locale specifically.
    * @param language - The language code.
    * @returns The path to the badge icon.
    */
   getIosAppIconPath(language: string): string {
     if (language === "en") {
-      return "appstore/black/appstore_UK.svg"
+      return "appstore/black/appstore_US.svg"
     }
     return `appstore/black/appstore_${language.toLocaleUpperCase()}.svg`
   }
@@ -366,29 +375,29 @@ export class MobileBadges extends LitElement {
     const badges: Badge[] = [
       {
         href: this.getAndroidAppLink(language),
-        src: this.getAndroidAppIconPath(language),
+        src: getImageUrl(this.getAndroidAppIconPath(language)),
         alt: msg("Get It On Google Play"),
         id: "playstore_badge",
         hide: this.hidePlayStore,
         errorHandler: (e: Event) => {
           const target = e.target as HTMLImageElement
-          target.src = this.getAndroidAppIconPath("en")
+          target.src = getImageUrl(this.getAndroidAppIconPath("en"))
         },
       },
       {
         href: this.fDroidAppLink,
-        src: this.getFDroidAppIconPath(language),
+        src: getImageUrl(this.getFDroidAppIconPath(language)),
         alt: msg("Available on F-Droid"),
         id: "fdroid_badge",
         hide: this.hideFDroid,
         errorHandler: (e: Event) => {
           const target = e.target as HTMLImageElement
-          target.src = this.getFDroidAppIconPath("en")
+          target.src = getImageUrl(this.getFDroidAppIconPath("en"))
         },
       },
       {
         href: this.getAndroidApkAppLink(language),
-        src: getImageUrl("download-apk_en.svg"),
+        src: getImageUrl("app-landing-page/download-apk/download-apk_en.svg"),
         alt: msg("Android APK"),
         id: "apk_badge",
         hide: this.hideApk,
