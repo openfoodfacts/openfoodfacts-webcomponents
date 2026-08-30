@@ -1,7 +1,7 @@
 import { LitElement, html, css, nothing } from "lit"
 import { customElement, property, query, state } from "lit/decorators.js"
 import { BASE } from "../../styles/base"
-import { msg } from "@lit/localize"
+import { msg, localized } from "@lit/localize"
 import { EventType } from "../../constants"
 import { AnnotationAnswer } from "../../types/robotoff"
 import "../icons/check"
@@ -54,6 +54,7 @@ export enum TextCorrectorKeyboardShortcut {
  * @fires submit - when the user submits the form
  * @fires skip - when the user skips the question
  */
+@localized()
 @customElement("text-corrector")
 export class TextCorrector extends TextDiffMixin(LitElement) {
   static override styles = [
