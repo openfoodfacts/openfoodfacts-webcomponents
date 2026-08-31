@@ -290,7 +290,17 @@ export class MobileBadges extends LitElement {
    * @returns The path to the badge icon.
    */
   getAndroidAppIconPath(language: string): string {
-    return `https://play.google.com/intl/en_us/badges/static/images/badges/${language}_badge_web_generic.png`
+    let languageName = "English"
+    try {
+      const names = new Intl.DisplayNames(["en"], { type: "language" })
+      const name = names.of(language)
+      if (name) {
+        languageName = name.split(" (")[0].replace(/[^a-zA-Z]/g, "")
+      }
+    } catch (e) {
+      // Ignore
+    }
+    return `https://world.openfoodfacts.org/images/misc/playstore/img/latest/GetItOnGooglePlay_Badge_Web_color_${languageName}.svg`
   }
 
   /**
@@ -299,20 +309,19 @@ export class MobileBadges extends LitElement {
    * @returns The path to the badge icon.
    */
   getFDroidAppIconPath(language: string): string {
-    return `https://fdroid.gitlab.io/artwork/badge/get-it-on-${language}.png`
+    return `https://world.openfoodfacts.org/images/misc/f-droid/svg/get-it-on-${language}.svg`
   }
 
   /**
    * Generates the path to the Apple App Store badge icon.
-   * Note: This code does not handle the US locale specifically.
    * @param language - The language code.
    * @returns The path to the badge icon.
    */
   getIosAppIconPath(language: string): string {
     if (language === "en") {
-      return "appstore/black/appstore_UK.svg"
+      return "https://world.openfoodfacts.org/images/misc/appstore/black/appstore_US.svg"
     }
-    return `appstore/black/appstore_${language.toLocaleUpperCase()}.svg`
+    return `https://world.openfoodfacts.org/images/misc/appstore/black/appstore_${language.toLocaleUpperCase()}.svg`
   }
 
   /**
@@ -388,20 +397,20 @@ export class MobileBadges extends LitElement {
       },
       {
         href: this.getAndroidApkAppLink(language),
-        src: getImageUrl("download-apk_en.svg"),
+        src: "https://world.openfoodfacts.org/images/misc/app-landing-page/download-apk/download-apk_en.svg",
         alt: msg("Android APK"),
         id: "apk_badge",
         hide: this.hideApk,
       },
       {
         href: this.getIosAppLink(language),
-        src: getImageUrl(this.getIosAppIconPath(language)),
+        src: this.getIosAppIconPath(language),
         alt: msg("Download on the App Store"),
         id: "appstore_badge",
         hide: this.hideAppStore,
         errorHandler: (e: Event) => {
           const target = e.target as HTMLImageElement
-          target.src = getImageUrl(this.getIosAppIconPath("en"))
+          target.src = this.getIosAppIconPath("en")
         },
       },
     ]
