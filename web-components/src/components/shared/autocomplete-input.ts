@@ -5,6 +5,7 @@ import { classMap } from "lit/directives/class-map.js"
 import type { AutocompleteSuggestion, AutocompleteInputChangeEventDetail } from "../../types"
 import { SAFE_BLUE } from "../../utils/colors"
 import { randomIdGenerator } from "../../utils"
+import { darkModeListener } from "../../utils/dark-mode-listener"
 
 /**
  * AutocompleteInput Component
@@ -37,6 +38,12 @@ export class AutocompleteInput extends LitElement {
         width: 100%;
       }
 
+      .dark-mode .autocomplete-list {
+        background: #2b2b2b;
+        border: 1px solid #555;
+        color: #f5f5f5;
+      }
+
       .autocomplete-item {
         padding: 10px;
         cursor: pointer;
@@ -46,9 +53,17 @@ export class AutocompleteInput extends LitElement {
         background-color: #f0f0f0;
       }
 
+      .dark-mode .autocomplete-item:hover {
+        background-color: #3a3a3a;
+      }
+
       .autocomplete-item.highlighted {
         background-color: #e0e0e0;
         font-weight: bold;
+      }
+
+      .dark-mode .autocomplete-item.highlighted {
+        background-color: #444;
       }
 
       .autocomplete-item.not-found {
@@ -59,18 +74,20 @@ export class AutocompleteInput extends LitElement {
         padding: 12px 10px;
       }
 
-      .autocomplete-item.not-found:hover {
-        background-color: #e7f3ff;
-      }
-
-      .autocomplete-item.not-found.highlighted {
-        background-color: #d4ebff;
-        font-weight: normal;
+      .dark-mode .autocomplete-item.not-found {
+        background-color: #353535;
+        color: #5faaff;
       }
 
       .autocomplete-input:focus {
         outline: none;
         border-color: ${SAFE_BLUE};
+      }
+
+      .dark-mode .autocomplete-input {
+        background: #222;
+        color: white;
+        border-color: #555;
       }
     `,
   ]
@@ -124,11 +141,16 @@ export class AutocompleteInput extends LitElement {
    * Unique ID for the input field.
    * @private
    */
-  @state()
-  private _id: string = ""
+  @state() private _id: string = ""
 
-  @state()
-  private _inputValue: string = ""
+  @state() private _inputValue: string = ""
+
+  // Dark mode handling
+  isDarkMode = darkModeListener.darkMode
+  private _darkModeCb = (isDark: boolean) => {
+    this.isDarkMode = isDark
+    this.requestUpdate()
+  }
 
   /**
    * ID for the suggestions list.
@@ -171,7 +193,14 @@ export class AutocompleteInput extends LitElement {
   override connectedCallback() {
     super.connectedCallback()
     this._id = randomIdGenerator()
+    darkModeListener.subscribe(this._darkModeCb)
   }
+
+  override disconnectedCallback() {
+    darkModeListener.unsubscribe(this._darkModeCb)
+    super.disconnectedCallback()
+  }
+
   /**
    * Filters suggestions based on the input value.
    * @param inputValue - The current input value.
@@ -202,12 +231,14 @@ export class AutocompleteInput extends LitElement {
     const filteredSuggestions = this.filteredSuggestions
     const suggestionsToShow = this.suggestionsWithNotFound
     this.showSuggestions = suggestionsToShow.length > 0
+
     // If there is only one suggestion and it matches the input value, consider it a notable match
     const matching =
       filteredSuggestions.length === 1 &&
       this.getSuggestionTextToFilter(filteredSuggestions[0]) === this.value
         ? filteredSuggestions[0]
         : undefined
+
     this.dispatchEvent(
       new CustomEvent<AutocompleteInputChangeEventDetail>("input-change", {
         detail: {
@@ -266,12 +297,11 @@ export class AutocompleteInput extends LitElement {
     if (!this.showSuggestions) {
       if (e.key === "Enter") {
         e.preventDefault()
-
-        // return selected Suggestion if it matches the input value
         this.selectMatchingSuggestion()
       }
       return
     }
+
     switch (e.key) {
       case "ArrowDown":
         e.preventDefault()
@@ -283,11 +313,8 @@ export class AutocompleteInput extends LitElement {
         break
       case "Enter":
         e.preventDefault()
-
-        // If a suggestion is highlighted, select it
         if (this.highlightedIndex >= 0) {
           this.selectSuggestion(suggestionsToShow[this.highlightedIndex])
-          // If no suggestion is highlighted, check if the input match exactly with one suggestion
         } else {
           this.selectMatchingSuggestion()
         }
@@ -311,51 +338,55 @@ export class AutocompleteInput extends LitElement {
   }
 
   override render() {
+    const rootClasses = { "dark-mode": this.isDarkMode }
+
     return html`
-      <div class="autocomplete-wrapper">
-        <input
-          id=${this._id}
-          type="text"
-          class="autocomplete-input"
-          .value=${this.value}
-          placeholder=${this.placeholder}
-          @input=${this.onInput}
-          @keydown=${this.onKeyDown}
-          @focus=${() => this.onFocus()}
-          @blur=${() => setTimeout(() => (this.showSuggestions = false), 150)}
-          aria-autocomplete="list"
-          aria-controls=${this.suggestionId}
-          aria-expanded=${this.showSuggestions}
-          aria-activedescendant=${this.highlightedIndex >= 0
-            ? this.getSuggestionItemId(this.highlightedIndex)
-            : ""}
-          part="autocomplete-input"
-        />
-        ${this.showSuggestions
-          ? html`<ul
-              class="autocomplete-list"
-              id=${this.suggestionId}
-              role="listbox"
-              part="autocomplete-input-list"
-            >
-              ${this.suggestionsWithNotFound.map(
-                (s, index) =>
-                  html`<li
-                    class="autocomplete-item ${classMap({
-                      highlighted: index === this.highlightedIndex,
-                      "not-found": s.isNotFound === true,
-                    })}"
-                    role="option"
-                    id=${this.getSuggestionItemId(index)}
-                    @mousedown=${() => this.selectSuggestion(this.suggestionsWithNotFound[index])}
-                    @mouseenter=${() => (this.highlightedIndex = index)}
-                    aria-selected=${index === this.highlightedIndex}
-                  >
-                    ${s.label ?? s.value}
-                  </li>`
-              )}
-            </ul>`
-          : null}
+      <div class=${classMap(rootClasses)}>
+        <div class="autocomplete-wrapper">
+          <input
+            id=${this._id}
+            type="text"
+            class="autocomplete-input"
+            .value=${this.value}
+            placeholder=${this.placeholder}
+            @input=${this.onInput}
+            @keydown=${this.onKeyDown}
+            @focus=${() => this.onFocus()}
+            @blur=${() => setTimeout(() => (this.showSuggestions = false), 150)}
+            aria-autocomplete="list"
+            aria-controls=${this.suggestionId}
+            aria-expanded=${this.showSuggestions}
+            aria-activedescendant=${this.highlightedIndex >= 0
+              ? this.getSuggestionItemId(this.highlightedIndex)
+              : ""}
+            part="autocomplete-input"
+          />
+          ${this.showSuggestions
+            ? html`<ul
+                class="autocomplete-list"
+                id=${this.suggestionId}
+                role="listbox"
+                part="autocomplete-input-list"
+              >
+                ${this.suggestionsWithNotFound.map(
+                  (s, index) =>
+                    html`<li
+                      class="autocomplete-item ${classMap({
+                        highlighted: index === this.highlightedIndex,
+                        "not-found": s.isNotFound === true,
+                      })}"
+                      role="option"
+                      id=${this.getSuggestionItemId(index)}
+                      @mousedown=${() => this.selectSuggestion(this.suggestionsWithNotFound[index])}
+                      @mouseenter=${() => (this.highlightedIndex = index)}
+                      aria-selected=${index === this.highlightedIndex}
+                    >
+                      ${s.label ?? s.value}
+                    </li>`
+                )}
+              </ul>`
+            : null}
+        </div>
       </div>
     `
   }
