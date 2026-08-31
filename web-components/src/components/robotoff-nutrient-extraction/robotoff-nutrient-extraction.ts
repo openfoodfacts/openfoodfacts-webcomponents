@@ -61,13 +61,13 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
         top: 1rem;
         display: flex;
         align-items: center;
+        justify-content: center; 
+        overflow: hidden; 
         margin-bottom: 1rem;
         background-color: white;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         border-radius: 5px;
-        padding-left: 1rem;
-        padding-right: 1rem;
-        padding-bottom: 1rem;
+        padding: 1rem; 
         box-sizing: border-box;
         max-width: ${IMAGE_MAX_WIDTH}px;
         width: 100%;
@@ -199,7 +199,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
         <zoomable-image
           src=${imgUrl}
           .size="${{
-            height: "35vh",
+            height: "clamp(320px, 50vh, 720px)",
             width: "100%",
             "max-width": `${IMAGE_MAX_WIDTH}px`,
           }}"
