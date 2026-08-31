@@ -718,6 +718,12 @@
         <source>No Score Available</source>
         <target state="needs-translation">No Score Available</target>
       </trans-unit>
+      <trans-unit id="sa4efa3283e995ce1">
+        <source>Remaining products</source>
+      </trans-unit>
+      <trans-unit id="s2186dc7d7ece737f">
+        <source>No more products available for this filter.</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>
