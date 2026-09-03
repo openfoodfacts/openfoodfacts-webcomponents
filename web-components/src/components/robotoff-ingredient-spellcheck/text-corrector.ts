@@ -74,6 +74,11 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
         border-bottom: 1px solid ${SAFE_LIGHT_GREY};
         box-shadow: 0 0.5rem 2px -2px rgba(0, 0, 0, 0.1);
       }
+      @media (prefers-color-scheme: dark) {
+        .summary {
+          border-bottom-color: #333;
+        }
+      }
 
       .submit-buttons-wrapper {
         margin-top: 1rem;
