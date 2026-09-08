@@ -1,0 +1,63 @@
+name: Extract and update translations
+
+on:
+  schedule:
+    # Run daily at 04:00 UTC
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  extract-translations:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+          cache-dependency-path: "./web-components/package-lock.json"
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./web-components
+
+      - name: Extract translations
+        run: npm run translations:extract
+        working-directory: ./web-components
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore(translations): update extracted translations"
+          committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          branch: "automation/extract-translations"
+          delete-branch: true
+          base: "main"
+          title: "chore(translations): update extracted translation strings"
+          body: |
+            ### What
+            - Automated pull request running `npm run translations:extract`.
+            - Updates language codes and extracted XLIFF translation source files.
+
+            ### Why
+            - Keeps source strings and target locales in sync with the codebase and taxonomies for Crowdin synchronization.
+
+            ### Checklist
+            - [ ] Verify that the extracted strings and target locales are accurate.
+            - [ ] Once checks pass, approve and merge.
+          labels: |
+            translations
