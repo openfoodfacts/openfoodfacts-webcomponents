@@ -720,7 +720,7 @@
       </trans-unit>
       <trans-unit id="sd1aedfb27dd7ef6c">
         <source>You are about to visit an external website. Continue?</source>
-        <target state="needs-translation">You are about to visit an external website. Continue?</target>
+        <target state="translated">Du är på väg att besöka en extern webbplats. Vill du fortsätta?</target>
       </trans-unit>
       <trans-unit id="h47db3e6a86aa1671">
         <source>Please <x id="0" equiv-text="&lt;a href=&quot;${this.loginUrl}&quot;&gt;"/>log in<x id="1" equiv-text="&lt;/a&gt;"/> to edit or add properties.</source>
@@ -732,7 +732,7 @@
       </trans-unit>
       <trans-unit id="sd947a599045e9e0e">
         <source>Failed to check property conflicts. Please try again.</source>
-        <target state="needs-translation">Failed to check property conflicts. Please try again.</target>
+        <target state="translated">Det gick inte att kontrollera egenskapskonflikter. Försök igen.</target>
       </trans-unit>
       <trans-unit id="s92a0d19a28995530" approved="yes">
         <source>Success</source>
@@ -740,23 +740,23 @@
       </trans-unit>
       <trans-unit id="s371091f240c17a7e">
         <source>Property renamed successfully!</source>
-        <target state="needs-translation">Property renamed successfully!</target>
+        <target state="translated">Egenskapen har bytt namn!</target>
       </trans-unit>
       <trans-unit id="s4603f58131a777bf">
         <source>Failed to rename property. Please try again.</source>
-        <target state="needs-translation">Failed to rename property. Please try again.</target>
+        <target state="translated">Det gick inte att byta namn på egenskap. Försök igen.</target>
       </trans-unit>
       <trans-unit id="s21694d2ab9c0bec5">
         <source>Property deleted successfully!</source>
-        <target state="needs-translation">Property deleted successfully!</target>
+        <target state="translated">Egenskapen har raderats!</target>
       </trans-unit>
       <trans-unit id="scf78b75273a6b5fe">
         <source>Failed to delete property. Please try again.</source>
-        <target state="needs-translation">Failed to delete property. Please try again.</target>
+        <target state="translated">Det gick inte att ta bort egenskapen. Försök igen.</target>
       </trans-unit>
       <trans-unit id="s71ffcb25fc1c5356">
         <source>Rename this property</source>
-        <target state="needs-translation">Rename this property</target>
+        <target state="translated">Byt namn på denna egenskap</target>
       </trans-unit>
       <trans-unit id="s60320a18282b2b33">
         <source>Rename</source>
@@ -764,11 +764,11 @@
       </trans-unit>
       <trans-unit id="s6e2a82009cc3dfc7">
         <source>Delete this property</source>
-        <target state="needs-translation">Delete this property</target>
+        <target state="translated">Ta bort denna egenskap</target>
       </trans-unit>
       <trans-unit id="s8bccacf0fc176064">
         <source>Rename Property</source>
-        <target state="needs-translation">Rename Property</target>
+        <target state="translated">Byt namn på egenskap</target>
       </trans-unit>
       <trans-unit id="s0df37909a355e56f">
         <source>Rename property '<x id="0" equiv-text="${this.renameModalData.property}"/>' to:</source>
@@ -776,15 +776,15 @@
       </trans-unit>
       <trans-unit id="sb550440eeb3f39c5">
         <source>New property name:</source>
-        <target state="needs-translation">New property name:</target>
+        <target state="translated">Nytt egenskapsnamn:</target>
       </trans-unit>
       <trans-unit id="sbb53591e587764b7">
         <source>Enter new property name...</source>
-        <target state="needs-translation">Enter new property name...</target>
+        <target state="translated">Ange nytt egenskapsnamn...</target>
       </trans-unit>
       <trans-unit id="s8acd49e96b4ee7d4">
         <source>Check Conflicts</source>
-        <target state="needs-translation">Check Conflicts</target>
+        <target state="translated">Kontrollera konflikter</target>
       </trans-unit>
       <trans-unit id="sd1cfdf0ef29cb6a5">
         <source>Property Rename Conflicts</source>
