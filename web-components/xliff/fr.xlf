@@ -718,7 +718,7 @@
       </trans-unit>
       <trans-unit id="sd1aedfb27dd7ef6c">
         <source>You are about to visit an external website. Continue?</source>
-        <target state="needs-translation">You are about to visit an external website. Continue?</target>
+        <target state="translated">Vous allez visiter un site web externe. Continuer ?</target>
       </trans-unit>
       <trans-unit id="h47db3e6a86aa1671">
         <source>Please <x id="0" equiv-text="&lt;a href=&quot;${this.loginUrl}&quot;&gt;"/>log in<x id="1" equiv-text="&lt;/a&gt;"/> to edit or add properties.</source>
@@ -738,19 +738,19 @@
       </trans-unit>
       <trans-unit id="s371091f240c17a7e">
         <source>Property renamed successfully!</source>
-        <target state="needs-translation">Property renamed successfully!</target>
+        <target state="translated">Propriété renommée avec succès !</target>
       </trans-unit>
       <trans-unit id="s4603f58131a777bf">
         <source>Failed to rename property. Please try again.</source>
-        <target state="needs-translation">Failed to rename property. Please try again.</target>
+        <target state="translated">Impossible de renommer la propriété. Veuillez réessayer.</target>
       </trans-unit>
       <trans-unit id="s21694d2ab9c0bec5">
         <source>Property deleted successfully!</source>
-        <target state="needs-translation">Property deleted successfully!</target>
+        <target state="translated">Propriété supprimée avec succès !</target>
       </trans-unit>
       <trans-unit id="scf78b75273a6b5fe">
         <source>Failed to delete property. Please try again.</source>
-        <target state="needs-translation">Failed to delete property. Please try again.</target>
+        <target state="translated">Impossible de supprimer la propriété. Veuillez réessayer.</target>
       </trans-unit>
       <trans-unit id="s71ffcb25fc1c5356">
         <source>Rename this property</source>
