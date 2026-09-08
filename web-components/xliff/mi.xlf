@@ -718,6 +718,219 @@
         <source>No Score Available</source>
         <target state="needs-review-translation" state-qualifier="leveraged-mt">Karekau he kaute e waatea ana</target>
       </trans-unit>
+<trans-unit id="sd1aedfb27dd7ef6c">
+  <source>You are about to visit an external website. Continue?</source>
+</trans-unit>
+<trans-unit id="h47db3e6a86aa1671">
+  <source>Please <x id="0" equiv-text="&lt;a href=&quot;${this.loginUrl}&quot;&gt;"/>log in<x id="1" equiv-text="&lt;/a&gt;"/> to edit or add properties.</source>
+</trans-unit>
+<trans-unit id="s5f343a43e7ea9f91">
+  <source>Error</source>
+</trans-unit>
+<trans-unit id="sd947a599045e9e0e">
+  <source>Failed to check property conflicts. Please try again.</source>
+</trans-unit>
+<trans-unit id="s92a0d19a28995530">
+  <source>Success</source>
+</trans-unit>
+<trans-unit id="s371091f240c17a7e">
+  <source>Property renamed successfully!</source>
+</trans-unit>
+<trans-unit id="s4603f58131a777bf">
+  <source>Failed to rename property. Please try again.</source>
+</trans-unit>
+<trans-unit id="s21694d2ab9c0bec5">
+  <source>Property deleted successfully!</source>
+</trans-unit>
+<trans-unit id="scf78b75273a6b5fe">
+  <source>Failed to delete property. Please try again.</source>
+</trans-unit>
+<trans-unit id="s71ffcb25fc1c5356">
+  <source>Rename this property</source>
+</trans-unit>
+<trans-unit id="s60320a18282b2b33">
+  <source>Rename</source>
+</trans-unit>
+<trans-unit id="s6e2a82009cc3dfc7">
+  <source>Delete this property</source>
+</trans-unit>
+<trans-unit id="s8bccacf0fc176064">
+  <source>Rename Property</source>
+</trans-unit>
+<trans-unit id="s0df37909a355e56f">
+  <source>Rename property '<x id="0" equiv-text="${this.renameModalData.property}"/>' to:</source>
+</trans-unit>
+<trans-unit id="sb550440eeb3f39c5">
+  <source>New property name:</source>
+</trans-unit>
+<trans-unit id="sbb53591e587764b7">
+  <source>Enter new property name...</source>
+</trans-unit>
+<trans-unit id="s8acd49e96b4ee7d4">
+  <source>Check Conflicts</source>
+</trans-unit>
+<trans-unit id="sd1cfdf0ef29cb6a5">
+  <source>Property Rename Conflicts</source>
+</trans-unit>
+<trans-unit id="sf417737adaa5a8c2">
+  <source>Renaming '<x id="0" equiv-text="${this.renameModalData.property}"/>' to '<x id="1" equiv-text="${this.renameModalData.newProperty}"/>' will affect:</source>
+</trans-unit>
+<trans-unit id="s14571d0ac58a8b43">
+  <source>Products with both properties:</source>
+</trans-unit>
+<trans-unit id="sb0d459e32656033f">
+  <source>Products with old property only:</source>
+</trans-unit>
+<trans-unit id="sfa3027dde47305fe">
+  <source>Products with new property only:</source>
+</trans-unit>
+<trans-unit id="s9e5b8feb0892646e">
+  <source>Do you want to proceed with the rename?</source>
+</trans-unit>
+<trans-unit id="s97171907a2d1620b">
+  <source>Proceed with Rename</source>
+</trans-unit>
+<trans-unit id="s712d70fdcc3dd42b">
+  <source>Delete Property</source>
+</trans-unit>
+<trans-unit id="sc11b78f2f3173f75">
+  <source>Are you sure you want to delete the property '<x id="0" equiv-text="${this.deleteModalProperty}"/>'?</source>
+</trans-unit>
+<trans-unit id="s3b3fe4e829af3e8e">
+  <source>This action cannot be undone.</source>
+</trans-unit>
+<trans-unit id="s091d3d07b5b3076f">
+  <source>OK</source>
+</trans-unit>
+<trans-unit id="s72c9c4e6ab4ca7ae">
+  <source>Value replaced successfully!</source>
+</trans-unit>
+<trans-unit id="sdd0eacd725bb2b1d">
+  <source>Failed to replace value. Please try again.</source>
+</trans-unit>
+<trans-unit id="sfe87a7a8bed11acf">
+  <source>Value deleted successfully!</source>
+</trans-unit>
+<trans-unit id="sccd2745bdd1087f6">
+  <source>Failed to delete value. Please try again.</source>
+</trans-unit>
+<trans-unit id="s88ece9a678e2f106">
+  <source>Replace Value</source>
+</trans-unit>
+<trans-unit id="s3355d65e22e222c9">
+  <source>Replace all instances of '<x id="0" equiv-text="${this.replaceModalData.value}"/>' with a new value:</source>
+</trans-unit>
+<trans-unit id="s0d426d718d97d14e">
+  <source>New value:</source>
+</trans-unit>
+<trans-unit id="se80a1ed3dcab7408">
+  <source>Enter new value...</source>
+</trans-unit>
+<trans-unit id="s2a8434b16dc214a3">
+  <source>Replace</source>
+</trans-unit>
+<trans-unit id="s8263352c7a634e7f">
+  <source>Delete Value</source>
+</trans-unit>
+<trans-unit id="sebe99e3299746177">
+  <source>Are you sure you want to delete all instances of the value '<x id="0" equiv-text="${this.deleteModalValue}"/>'?</source>
+</trans-unit>
+<trans-unit id="s4b0b53abbd6af54a">
+  <source>Replace this value across all products</source>
+</trans-unit>
+<trans-unit id="sb02836b5e3176cfe">
+  <source>Delete this value from all products</source>
+</trans-unit>
+<trans-unit id="sbf00647c8838c247">
+  <source>Flag an image</source>
+</trans-unit>
+<trans-unit id="s3f1427291c349441">
+  <source>Flag a search result</source>
+</trans-unit>
+<trans-unit id="s5d027691867d9a4b">
+  <source>Flag a product</source>
+</trans-unit>
+<trans-unit id="sba82478b9fa28e99">
+  <source>Inappropriate</source>
+</trans-unit>
+<trans-unit id="s76cc1c6d9fab3a2d">
+  <source>Outdated</source>
+</trans-unit>
+<trans-unit id="sd0aac0480b0d2e1a">
+  <source>Includes Personal Information</source>
+</trans-unit>
+<trans-unit id="sfac15b89e0668996">
+  <source>Duplicate</source>
+</trans-unit>
+<trans-unit id="sc9e494c8346b7cb5">
+  <source>Other</source>
+</trans-unit>
+<trans-unit id="s92f7e81236df966a">
+  <source>Wrong Barcode</source>
+</trans-unit>
+<trans-unit id="sa4ed3ae23155d4a5">
+  <source>Missing Data</source>
+</trans-unit>
+<trans-unit id="s3e878b312b793ad2">
+  <source>Wrong Data</source>
+</trans-unit>
+<trans-unit id="sbb3f654e375fc42a">
+  <source>FLAG IMAGE</source>
+</trans-unit>
+<trans-unit id="s4df493c3ade6bff9">
+  <source>FLAG SEARCH</source>
+</trans-unit>
+<trans-unit id="sa41d7d40e6d1ad7c">
+  <source>FLAG PRODUCT</source>
+</trans-unit>
+<trans-unit id="sfbf30728d115ad08">
+  <source>Invalid flag type.</source>
+</trans-unit>
+<trans-unit id="sb1eb1f63600f779e">
+  <source>Invalid flavor.</source>
+</trans-unit>
+<trans-unit id="sd2aa918fd2068705">
+  <source>User ID is required to submit a flag. Please log in.</source>
+</trans-unit>
+<trans-unit id="sf8746eab0484d95b">
+  <source>Image ID is required to flag an image.</source>
+</trans-unit>
+<trans-unit id="sca386b8a0876810a">
+  <source>Failed to submit flag. Please try again later.</source>
+</trans-unit>
+<trans-unit id="s62d9da7ce0def73c">
+  <source>An unexpected error occurred.</source>
+</trans-unit>
+<trans-unit id="s45dce293964ced00">
+  <source>Thank you for reporting. Your flag has been submitted successfully.</source>
+</trans-unit>
+<trans-unit id="s30c7b1afc9fe65d3">
+  <source>Image to flag</source>
+</trans-unit>
+<trans-unit id="s39d54c8748d51877">
+  <source>Barcode</source>
+</trans-unit>
+<trans-unit id="s4fb2e52ef0c61ab3">
+  <source>Image ID</source>
+</trans-unit>
+<trans-unit id="saa29a2ac03cd9d19">
+  <source>Reason</source>
+</trans-unit>
+<trans-unit id="saf84ec86139d349e">
+  <source>Comment</source>
+</trans-unit>
+<trans-unit id="scbf8442741ae9d1b">
+  <source>Optional details</source>
+</trans-unit>
+<trans-unit id="se7c56a68f0ecf6e9">
+  <source>Submitting...</source>
+</trans-unit>
+<trans-unit id="sf245e27cbd126b9c">
+  <source>Unknown Brand/Quantity</source>
+</trans-unit>
+<trans-unit id="s6ffdc18b840acf30">
+  <source><x id="0" equiv-text="${brands}"/> - <x id="1" equiv-text="${quantity}"/></source>
+</trans-unit>
     </body>
   </file>
 </xliff>

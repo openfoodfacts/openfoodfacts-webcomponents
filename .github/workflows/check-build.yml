@@ -39,3 +39,14 @@ jobs:
         if: failure() || success()
         run: npm run lint
         working-directory: ./web-components
+
+      - name: Check missing translations
+        if: failure() || success()
+        run: |
+          npm run translations:extract
+          if [[ -n $(git status --porcelain xliff/ lit-localize.json) ]]; then
+            echo "Translation files are not up-to-date. Please run 'npm run translations:extract' locally and commit the changes."
+            git status --porcelain xliff/ lit-localize.json
+            exit 1
+          fi
+        working-directory: ./web-components
