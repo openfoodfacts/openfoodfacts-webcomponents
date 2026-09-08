@@ -108,10 +108,23 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
   insightsIds: string[] = []
 
   @state()
+  annotatedIds: Set<string> = new Set()
+
+  @state()
   currentInsightIndex: number = 0
 
   @state()
   private nutrimentsData?: NutrimentsProductType
+
+  @state()
+  private totalInsightsCount: number = 0
+
+  private currentPage: number = 1
+
+  private readonly pageSize: number = 10
+
+  private fetchMoreInsightsPromise?: Promise<void>
+  private fetchSessionToken: number = 0
 
   get currentInsightId() {
     return this.insightsIds[this.currentInsightIndex]
@@ -144,14 +157,36 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
    */
   private _insightsTask = new Task(this, {
     task: async ([productCode], {}) => {
+      this.fetchSessionToken++
+      const sessionToken = this.fetchSessionToken
       this.emitNutrientEvent(EventState.LOADING)
-      const [insights] = await Promise.all([
-        fetchNutrientInsights(productCode, {
-          lc: this._languageCodes,
-        }),
+      this.currentInsightIndex = 0
+      this.currentPage = 1
+      this.totalInsightsCount = 0
+      this.insightsIds = []
+      this.annotatedIds = new Set()
+      this.fetchMoreInsightsPromise = undefined
+
+      // Keep country filtering optional; do not send lc as it can hide valid insights.
+      const params: any = {
+        count: this.pageSize,
+        page: this.currentPage,
+      }
+      if (this.countryCode) {
+        params.countries = this.countryCode
+      }
+
+      const [insightsResponse] = await Promise.all([
+        fetchNutrientInsights(productCode, params),
         fetchNutrientsTaxonomies(),
-        fetchNutrientsOrderByCountryCode(this._countryCode),
+        fetchNutrientsOrderByCountryCode(this.countryCode || this._countryCode),
       ])
+
+      // If a new session started, abort writing state
+      if (sessionToken !== this.fetchSessionToken) return
+
+      const insights = insightsResponse.insights
+      this.totalInsightsCount = insightsResponse.count ?? insights.length
 
       this.insightsIds = insights.map((insight) => insight.id)
       if (!this.insightsIds.length) {
@@ -164,13 +199,75 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
     args: () => [this.productCode, this.countryCode, ...this._languageCodes],
   })
 
+  private async fetchNextInsightsPage() {
+    const sessionToken = this.fetchSessionToken
+    if (this.fetchMoreInsightsPromise) {
+      return this.fetchMoreInsightsPromise
+    }
+    if (this.insightsIds.length >= this.totalInsightsCount) {
+      return
+    }
+
+    this.fetchMoreInsightsPromise = (async () => {
+      try {
+        const nextPage = this.currentPage + 1
+        const params: any = {
+          count: this.pageSize,
+          page: nextPage,
+        }
+        if (this.countryCode) {
+          params.countries = this.countryCode
+        }
+
+        const response = await fetchNutrientInsights(this.productCode, params)
+        // If a new session started, abort writing state
+        if (sessionToken !== this.fetchSessionToken) return
+        this.totalInsightsCount = response.count ?? this.totalInsightsCount
+
+        // Also exclude already-annotated IDs so they can never re-enter the buffer
+        const existingIds = new Set([...this.insightsIds, ...this.annotatedIds])
+        const nextIds = response.insights
+          .map((insight) => insight.id)
+          .filter((id) => !existingIds.has(id))
+
+        if (nextIds.length > 0) {
+          this.insightsIds = [...this.insightsIds, ...nextIds]
+        }
+
+        this.currentPage = nextPage
+      } finally {
+        this.fetchMoreInsightsPromise = undefined
+      }
+    })()
+
+    return this.fetchMoreInsightsPromise
+  }
+
   async loadInsight(index: number) {
+    while (index >= this.insightsIds.length && this.insightsIds.length < this.totalInsightsCount) {
+      const lengthBefore = this.insightsIds.length
+      const pageBefore = this.currentPage
+      await this.fetchNextInsightsPage()
+      // No progress (e.g. page returned only dupes and no longer advanced) → stop to avoid an infinite loop.
+      if (this.insightsIds.length === lengthBefore && this.currentPage === pageBefore) break
+    }
+
     if (index >= this.insightsIds.length) {
       this.emitNutrientEvent(EventState.FINISHED)
       return
     }
+
+    const remainingBuffered = this.insightsIds.length - index
+    if (remainingBuffered <= 5 && this.insightsIds.length < this.totalInsightsCount) {
+      void this.fetchNextInsightsPage()
+    }
+
     this.currentInsightIndex = index
     const insight = this.currentInsight
+    if (!insight) {
+      this.emitNutrientEvent(EventState.NO_DATA)
+      return
+    }
     await this.getProductNutriments(insight.barcode)
   }
 
@@ -218,7 +315,20 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
   async afterInsightAnnotation() {
     await this.hideLoading()
     this.emitNutrientEvent(EventState.ANNOTATED)
-    this.loadInsight(this.currentInsightIndex + 1)
+
+    // Remove the annotated item from the list (like Questions does)
+    const annotatedId = this.currentInsightId
+    if (annotatedId) {
+      this.insightsIds = this.insightsIds.filter((id) => id !== annotatedId)
+      this.annotatedIds = new Set(this.annotatedIds).add(annotatedId)
+    }
+
+    // Check if we need to fetch more (like Questions: if count > length && length <= 5)
+    if (this.totalInsightsCount > this.insightsIds.length && this.insightsIds.length <= 5) {
+      void this.fetchNextInsightsPage()
+    }
+
+    await this.loadInsight(this.currentInsightIndex)
   }
 
   /**
@@ -249,9 +359,11 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
     await this.afterInsightAnnotation()
   }
   renderHeader(insight: NutrientsInsight) {
+    const remainingProducts = Math.max(this.totalInsightsCount - this.annotatedIds.size, 0)
     return html`
       <div>
         <h2>${msg("Help us correct the nutritional information")}</h2>
+        <p>${msg("Remaining products")}: ${remainingProducts}</p>
         ${this.renderProductLink(insight.barcode)}
       </div>
     `
@@ -263,7 +375,11 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
       complete: () => {
         const insight = this.currentInsight
         if (!insight) {
-          return html`<slot name="no-insight"></slot>`
+          return html`
+            <p>${msg("No more products available for this filter.")}</p>
+            <p>${msg("Remaining products")}: 0</p>
+            <slot name="no-insight"></slot>
+          `
         }
         return html`
           <div class="nutrients" part="nutrients">
