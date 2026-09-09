@@ -66,10 +66,6 @@
         <source>Rotate image to the right</source>
         <target state="needs-translation">Rotate image to the right</target>
       </trans-unit>
-      <trans-unit id="s475b08749d0706ed">
-        <source>Help us inform millions of consumers around the world about what they eat</source>
-        <target state="needs-translation">Help us inform millions of consumers around the world about what they eat</target>
-      </trans-unit>
       <trans-unit id="sfc40ea3d5d5aa6f8">
         <source>Your donations fund the day-to-day operations of our non-profit association:</source>
         <target state="needs-translation">Your donations fund the day-to-day operations of our non-profit association:</target>
@@ -94,10 +90,6 @@
         <source>support the advancement of public health research.</source>
         <target state="needs-translation">support the advancement of public health research.</target>
       </trans-unit>
-      <trans-unit id="s6d7b6cdedaadfb6e">
-        <source>Each donation counts! We appreciate your support in bringing further food transparency in the world.</source>
-        <target state="needs-translation">Each donation counts! We appreciate your support in bringing further food transparency in the world.</target>
-      </trans-unit>
       <trans-unit id="s6306a31415aea913">
         <source>I SUPPORT</source>
         <target state="needs-translation">I SUPPORT</target>
@@ -105,10 +97,6 @@
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
         <target state="needs-translation">group photo donation <x id="0" equiv-text="${this.currentYear}"/></target>
-      </trans-unit>
-      <trans-unit id="s43df2e8395f6834e">
-        <source>Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</source>
-        <target state="needs-translation">Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</target>
       </trans-unit>
       <trans-unit id="s000d98595e959c1e">
         <source>Get It On Google Play</source>
@@ -1010,6 +998,15 @@
 </trans-unit>
 <trans-unit id="sfb6c2292955d4453">
   <source>Fundraiser progress</source>
+</trans-unit>
+<trans-unit id="s8966e013dce8891f">
+  <source>We still need €120,000 to finish 2026!</source>
+</trans-unit>
+<trans-unit id="s4b2638408d2e3aa8">
+  <source>Become an Open Food Facts patron</source>
+</trans-unit>
+<trans-unit id="s12b36eaac15a1c74">
+  <source>If every visitor this month clicked on Donate and gave just 1€, we'd get over 8 times our yearly budget!</source>
 </trans-unit>
     </body>
   </file>
