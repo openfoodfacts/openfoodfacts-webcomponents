@@ -1,9 +1,10 @@
-import { LitElement, html, css } from "lit"
+import { LitElement, html, css, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { localized, msg, str } from "@lit/localize"
 import { getImageUrl, languageCode } from "../../signals/app"
 import { classMap } from "lit/directives/class-map.js"
 import { darkModeListener } from "../../utils/dark-mode-listener"
+import "../donation-meter/donation-meter"
 
 /**
  * Donation banner
@@ -25,6 +26,13 @@ export class DonationBanner extends LitElement {
     fr: "https://open-food-facts.assoconnect.com/collect/description/476750-c-faire-un-don-a-open-food-facts",
     default: "https://world.openfoodfacts.org/donate-to-open-food-facts",
   }
+
+  /**
+   * News feed carrying the campaign figures.
+   * @type {String}
+   */
+  @property({ type: String, attribute: "news-url" })
+  newsUrl?: string
 
   /**
    * The fundraiser year (next year)
@@ -63,6 +71,7 @@ export class DonationBanner extends LitElement {
     if (!params.has("utm_medium")) params.set("utm_medium", "web")
     if (!params.has("utm_campaign")) params.set("utm_campaign", `donate-${this.currentYear}-a`)
     if (!params.has("utm_term")) params.set("utm_term", "en-text-button")
+    if (this.newsUrl && !params.has("utm_content")) params.set("utm_content", "meter")
     url.search = params.toString()
     return url.toString()
   }
@@ -407,6 +416,7 @@ export class DonationBanner extends LitElement {
                 <p>${msg("support the advancement of public health research.")}</p>
               </li>
             </ul>
+            ${this.newsUrl ? html`<donation-meter url=${this.newsUrl}></donation-meter>` : nothing}
           </div>
           <div class="donation-banner-footer__actions-section">
             <div class="donation-banner-footer__actions-section__financial">
