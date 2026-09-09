@@ -1002,6 +1002,15 @@
         <source><x id="0" equiv-text="${brands}"/> - <x id="1" equiv-text="${quantity}"/></source>
         <target state="needs-translation"><x id="0" equiv-text="${brands}"/> - <x id="1" equiv-text="${quantity}"/></target>
       </trans-unit>
+<trans-unit id="sb18dd702b5f51223">
+  <source><x id="0" equiv-text="${missing}"/> short</source>
+</trans-unit>
+<trans-unit id="s4e037fb4937e78d2">
+  <source>of <x id="0" equiv-text="${goal}"/></source>
+</trans-unit>
+<trans-unit id="sfb6c2292955d4453">
+  <source>Fundraiser progress</source>
+</trans-unit>
     </body>
   </file>
 </xliff>
