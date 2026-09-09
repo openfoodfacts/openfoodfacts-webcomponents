@@ -2,5 +2,8 @@
   "name": "openfoodfacts-webcomponents-root",
   "private": true,
   "description": "Stub package.json required by the release-please-action workflow to identify the repository context.",
+  "scripts": {
+    "translations:extract": "npm --prefix web-components run translations:extract"
+  },
   "packageManager": "npm@11.14.1+sha512-aopNZ0eEl6LbxoFcrXLmTEPzNBNxfiQnVgR9RmJBqzm+5h5pFoOmRljpRJbsXxocBeSl7GLcx3MoDf2UlEOjZw=="
 }
