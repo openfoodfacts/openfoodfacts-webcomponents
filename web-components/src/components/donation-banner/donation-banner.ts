@@ -91,12 +91,19 @@ export class DonationBanner extends LitElement {
 
   getLinkWithQueryParams(link: string) {
     const locale = languageCode.get()
-    const url = new URL(
+    let url = new URL(
       link,
       typeof window !== "undefined" && window.location?.href
         ? window.location.href
         : "https://world.openfoodfacts.org"
     )
+    // The link is rendered into an href, which is a script sink, and the page
+    // embedding this element chooses it. `javascript:donate()//` would run in
+    // that page and comment out the parameters appended below, so anything
+    // that is not one of the two web schemes falls back to the donation page.
+    if (url.protocol !== "https:" && url.protocol !== "http:") {
+      url = new URL(this.links.default)
+    }
     const params = new URLSearchParams(url.search)
     if (!params.has("utm_source")) params.set("utm_source", "off")
     if (!params.has("utm_medium")) params.set("utm_medium", "web")

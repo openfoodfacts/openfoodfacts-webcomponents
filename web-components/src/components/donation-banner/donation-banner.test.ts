@@ -271,6 +271,14 @@ describe("donation-banner", () => {
     expect(href).toContain("utm_source=off")
   })
 
+  it("refuses a donate link that is not an http(s) URL", async () => {
+    const element = await createBanner({ "donate-url": "javascript:alert(document.cookie)//" })
+
+    const href = donateLink(element)
+    expect(href.startsWith("javascript:")).toBe(false)
+    expect(href).toContain("https://world.openfoodfacts.org/donate-to-open-food-facts")
+  })
+
   it("localizes the fallback donation link and utm_term for Japanese", async () => {
     languageCode.set("ja")
     const element = await createBanner()
