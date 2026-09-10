@@ -22,6 +22,7 @@ export enum EventType {
   BARCODE_SCANNER_STATE = "barcode-scanner-state",
   INGREDIENT_SPELLCHECK_STATE = "ingredient-spellcheck-state",
   INGREDIENT_DETECTION_STATE = "ingredient-detection-state",
+  DONATION_METER_STATE = "donation-meter-state",
   INPUT = "INPUT",
 }
 
