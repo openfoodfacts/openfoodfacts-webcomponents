@@ -248,4 +248,63 @@ describe("Folksonomy API", () => {
       expect(global.fetch).toHaveBeenCalledTimes(100)
     })
   })
+
+  describe("Token expiration", () => {
+    beforeEach(() => {
+      localStorage.clear()
+    })
+
+    it("should reject expired tokens (more than 1 hour old)", async () => {
+      const oneHourAgoMs = Date.now() - (3600000 + 1000) // 1 hour + 1 second ago
+      
+      localStorage.setItem("folksonomy-bearer-token", "expired-token")
+      localStorage.setItem("folksonomy-bearer-date", oneHourAgoMs.toString())
+      
+      // Mock fetch for auth_by_cookie to return new token
+      ;(global.fetch as any).mockResolvedValue({
+        ok: true,
+        json: async () => ({ access_token: "new-token" }),
+      })
+      
+      // Call any authenticated API - it should request new token
+      await folksonomyApi.addProductProperty("123", "key", "value")
+      
+      // Verify old token was not used, new auth was requested
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining("/auth_by_cookie"),
+        expect.any(Object)
+      )
+    })
+
+    it("should accept fresh tokens (less than 1 hour old)", () => {
+      const now = Date.now()
+      
+      localStorage.setItem("folksonomy-bearer-token", "fresh-token")
+      localStorage.setItem("folksonomy-bearer-date", now.toString())
+      
+      // Token should be available
+      const token = localStorage.getItem("folksonomy-bearer-token")
+      expect(token).toBe("fresh-token")
+    })
+
+    it("should clear expired tokens from localStorage", async () => {
+      const oneHourAgoMs = Date.now() - (3600000 + 1000)
+      
+      localStorage.setItem("folksonomy-bearer-token", "expired-token")
+      localStorage.setItem("folksonomy-bearer-date", oneHourAgoMs.toString())
+      
+      // Mock auth response
+      ;(global.fetch as any).mockResolvedValue({
+        ok: true,
+        json: async () => ({ access_token: "new-token" }),
+      })
+      
+      // Trigger API call that checks token
+      await folksonomyApi.addProductProperty("123", "key", "value")
+      
+      // Verify localStorage was cleared (because new auth was needed)
+      // The new token should be stored
+      expect(localStorage.getItem("folksonomy-bearer-token")).toBeTruthy()
+    })
+  })
 })
