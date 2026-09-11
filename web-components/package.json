@@ -97,7 +97,7 @@
     "vite": "^8.0.14",
     "vite-plugin-dts": "^5.0.2",
     "vite-plugin-static-copy": "^4.1.0",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.0"
   },
   "customElements": "custom-elements.json",
   "packageManager": "npm@11.14.1+sha512-aopNZ0eEl6LbxoFcrXLmTEPzNBNxfiQnVgR9RmJBqzm+5h5pFoOmRljpRJbsXxocBeSl7GLcx3MoDf2UlEOjZw=="
