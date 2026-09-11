@@ -1,9 +1,12 @@
-import { LitElement, html, css } from "lit"
-import { customElement, property } from "lit/decorators.js"
+import { LitElement, html, css, nothing } from "lit"
+import { customElement, property, state } from "lit/decorators.js"
 import { localized, msg, str } from "@lit/localize"
 import { getImageUrl, languageCode } from "../../signals/app"
+import { EventState } from "../../constants"
+import type { BasicStateEventDetail } from "../../types"
 import { classMap } from "lit/directives/class-map.js"
 import { darkModeListener } from "../../utils/dark-mode-listener"
+import "../donation-meter/donation-meter"
 
 /**
  * Donation banner
@@ -25,6 +28,27 @@ export class DonationBanner extends LitElement {
     fr: "https://open-food-facts.assoconnect.com/collect/description/476750-c-faire-un-don-a-open-food-facts",
     default: "https://world.openfoodfacts.org/donate-to-open-food-facts",
   }
+
+  /**
+   * News feed carrying the campaign figures.
+   * @type {String}
+   */
+  @property({ type: String, attribute: "news-url" })
+  newsUrl?: string
+
+  /** Whether the meter is showing figures, not merely mounted. */
+  @state()
+  private meterHasFigures = false
+
+  /**
+   * Custom link/url to the donation page.
+   * @type {String}
+   */
+  @property({ type: String, attribute: "donate-url" })
+  donateUrl?: string
+
+  @property({ type: String, attribute: "donate-link" })
+  donateLinkProp?: string
 
   /**
    * The fundraiser year (next year)
@@ -56,21 +80,55 @@ export class DonationBanner extends LitElement {
     return (new Date().getFullYear() + 1).toString()
   }
 
+  private onMeterState = (event: CustomEvent<BasicStateEventDetail>) => {
+    // A meter removed from the page keeps its in-flight request, and Lit keeps
+    // the listener bound to it, so a late answer must not speak for the banner.
+    if (!(event.target as HTMLElement).isConnected) {
+      return
+    }
+    this.meterHasFigures = event.detail.state === EventState.HAS_DATA
+  }
+
   getLinkWithQueryParams(link: string) {
-    const url = new URL(link)
+    const locale = languageCode.get()
+    let url = new URL(
+      link,
+      typeof window !== "undefined" && window.location?.href
+        ? window.location.href
+        : "https://world.openfoodfacts.org"
+    )
+    // The link is rendered into an href, which is a script sink, and the page
+    // embedding this element chooses it. `javascript:donate()//` would run in
+    // that page and comment out the parameters appended below, so anything
+    // that is not one of the two web schemes falls back to the donation page.
+    if (url.protocol !== "https:" && url.protocol !== "http:") {
+      url = new URL(this.links.default)
+    }
     const params = new URLSearchParams(url.search)
     if (!params.has("utm_source")) params.set("utm_source", "off")
     if (!params.has("utm_medium")) params.set("utm_medium", "web")
     if (!params.has("utm_campaign")) params.set("utm_campaign", `donate-${this.currentYear}-a`)
-    if (!params.has("utm_term")) params.set("utm_term", "en-text-button")
+    if (!params.has("utm_term")) params.set("utm_term", `${locale || "en"}-text-button`)
+    // A meter showing nothing leaves the banner identical to the plain one, so
+    // crediting the click to a meter that is not there would inflate the count.
+    if (this.newsUrl && this.meterHasFigures && !params.has("utm_content"))
+      params.set("utm_content", "meter")
     url.search = params.toString()
     return url.toString()
   }
 
   get donateLink() {
     const locale = languageCode.get()
+    const customLink = this.donateUrl || this.donateLinkProp
+    if (customLink) {
+      return this.getLinkWithQueryParams(customLink)
+    }
     const link =
-      locale in this.links ? this.links[locale as keyof typeof this.links] : this.links.default
+      locale in this.links
+        ? this.links[locale as keyof typeof this.links]
+        : locale && locale !== "en"
+          ? `https://world-${locale}.openfoodfacts.org/donate-to-open-food-facts`
+          : this.links.default
     return this.getLinkWithQueryParams(link)
   }
 
@@ -366,9 +424,7 @@ export class DonationBanner extends LitElement {
       <div class="donation-banner-footer row">
         <div class="donation-banner-footer__left-aside">
           <div class="donation-banner-footer__hook-section">
-            <p>
-              ${msg("Help us inform millions of consumers around the world about what they eat")}
-            </p>
+            <p>${msg("We still need €120,000 to finish 2026!")}</p>
           </div>
           <img
             class="group-image"
@@ -386,7 +442,7 @@ export class DonationBanner extends LitElement {
                 alt="open food facts logo"
               />
               <h3 class="donation-banner-footer__main-title">
-                ${msg(str`Please give to our ${this.currentYear} Fundraiser`)}
+                ${msg("Become an Open Food Facts patron")}
               </h3>
             </div>
             <p style="margin: 0 0 20px; font-size: 14px;">
@@ -407,12 +463,18 @@ export class DonationBanner extends LitElement {
                 <p>${msg("support the advancement of public health research.")}</p>
               </li>
             </ul>
+            ${this.newsUrl
+              ? html`<donation-meter
+                  url=${this.newsUrl}
+                  @donation-meter-state="${this.onMeterState}"
+                ></donation-meter>`
+              : nothing}
           </div>
           <div class="donation-banner-footer__actions-section">
             <div class="donation-banner-footer__actions-section__financial">
               <p style="margin: 0px; line-height: 1.6">
                 ${msg(
-                  "Each donation counts! We appreciate your support in bringing further food transparency in the world."
+                  "If every visitor this month clicked on Donate and gave just 1€, we'd get over 8 times our yearly budget!"
                 )}
               </p>
             </div>
