@@ -249,9 +249,15 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
     await this.afterInsightAnnotation()
   }
   renderHeader(insight: NutrientsInsight) {
+    const hasNutriments =
+      this.nutrimentsData?.nutriments && Object.keys(this.nutrimentsData.nutriments).length > 0
     return html`
       <div>
-        <h2>${msg("Help us correct the nutritional information")}</h2>
+        <h2>
+          ${hasNutriments
+            ? msg("Help us correct the nutritional information")
+            : msg("Help us complete the nutritional information")}
+        </h2>
         ${this.renderProductLink(insight.barcode)}
       </div>
     `
