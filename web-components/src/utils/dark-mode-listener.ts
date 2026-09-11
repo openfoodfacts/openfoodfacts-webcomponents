@@ -4,14 +4,19 @@
 export type DarkModeCallback = (isDark: boolean) => void
 
 class DarkModeListener {
-  private isDark: boolean
+  private isDark: boolean = false
   private listeners: Set<DarkModeCallback> = new Set()
-  private mq: MediaQueryList
+  private mq: MediaQueryList | null = null
 
   constructor() {
-    this.mq = window.matchMedia("(prefers-color-scheme: dark)")
-    this.isDark = this.mq.matches
-    this.mq.addEventListener("change", this.handleChange)
+    // Guard against SSR environments (e.g. Node.js / SvelteKit / Nuxt)
+    // where `window` is not defined. In those cases we fall back to
+    // `isDark = false` and skip MediaQuery initialisation entirely.
+    if (typeof window !== "undefined") {
+      this.mq = window.matchMedia("(prefers-color-scheme: dark)")
+      this.isDark = this.mq.matches
+      this.mq.addEventListener("change", this.handleChange)
+    }
   }
 
   private handleChange = (e: MediaQueryListEvent) => {
