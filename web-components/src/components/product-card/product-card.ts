@@ -88,6 +88,7 @@ export class ProductCard extends LitElement {
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
     }
 
     @media (min-width: 640px) {
@@ -145,6 +146,24 @@ export class ProductCard extends LitElement {
       object-fit: cover;
       border-top-left-radius: 1rem;
       border-bottom-left-radius: 1rem;
+    }
+
+    .image-wrapper {
+      position: relative;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .image-wrapper .loading-ring {
+      position: absolute;
+      z-index: 1;
+    }
+
+    .product-image.image-loading {
+      visibility: hidden;
     }
 
     .placeholder-container {
@@ -345,6 +364,12 @@ export class ProductCard extends LitElement {
   @state()
   greenscoreSrc = ""
 
+  @state()
+  private imageLoading = false
+
+  @state()
+  private imageFailed = false
+
   /**
    * Placeholder image URL for products without an image
    */
@@ -368,6 +393,20 @@ export class ProductCard extends LitElement {
   override disconnectedCallback() {
     darkModeListener.unsubscribe(this._darkModeCb)
     super.disconnectedCallback()
+  }
+
+  override willUpdate(changedProperties: Map<string, any>) {
+    super.willUpdate(changedProperties)
+
+    if (changedProperties.has("product")) {
+      const previousProduct = changedProperties.get("product") as Product | undefined
+      const imageUrl = this.product.image_front_small_url
+
+      if (imageUrl !== previousProduct?.image_front_small_url) {
+        this.imageLoading = Boolean(imageUrl)
+        this.imageFailed = false
+      }
+    }
   }
 
   /**
@@ -436,9 +475,19 @@ export class ProductCard extends LitElement {
     }
   }
 
+  private handleImageLoad = () => {
+    this.imageLoading = false
+  }
+
+  private handleImageError = () => {
+    this.imageLoading = false
+    this.imageFailed = true
+  }
+
   override render() {
     const isNavigatingToProduct = this.navigating.to?.params?.barcode === this.product.code
     const hasProductImage = Boolean(this.product.image_front_small_url)
+    const shouldShowProductImage = hasProductImage && !this.imageFailed
     const matchTagInfo = this.getMatchTagInfo()
 
     const brands = this.product.brands?.trim()
@@ -466,20 +515,28 @@ export class ProductCard extends LitElement {
           ? html`<div class="match-tag ${matchTagInfo.cssClass}">${matchTagInfo.text}</div>`
           : nothing}
         <div class="card-content">
-          <div class="image-container">
+          <div class="image-container" aria-busy=${this.imageLoading}>
             ${isNavigatingToProduct
               ? html`
                   <div class="loading-container">
                     <span class="loading-ring"></span>
                   </div>
                 `
-              : hasProductImage
+              : shouldShowProductImage
                 ? html`
-                    <div class="loading-container">
+                    <div class="image-wrapper">
+                      ${this.imageLoading
+                        ? html`<span class="loading-ring" aria-hidden="true"></span>`
+                        : nothing}
                       <img
                         src=${this.product.image_front_small_url}
-                        class="product-image"
+                        class=${classMap({
+                          "product-image": true,
+                          "image-loading": this.imageLoading,
+                        })}
                         alt="Product front"
+                        @load=${this.handleImageLoad}
+                        @error=${this.handleImageError}
                       />
                     </div>
                   `

@@ -16,15 +16,15 @@
       </trans-unit>
       <trans-unit id="s01d2865e3e1d5501">
         <source>Thank you for your assistance!</source>
-        <target state="needs-translation">Thank you for your assistance!</target>
+        <target state="translated">Tack för din hjälp!</target>
       </trans-unit>
       <trans-unit id="s4e94adf723979402">
         <source>Open Food Facts needs your help with this product.</source>
-        <target state="needs-translation">Open Food Facts needs your help with this product.</target>
+        <target state="translated">Open Food Facts behöver din hjälp med denna produkt.</target>
       </trans-unit>
       <trans-unit id="s25e94495991e95ba">
         <source>Thanks for your help! Can you assist with another question?</source>
-        <target state="needs-translation">Thanks for your help! Can you assist with another question?</target>
+        <target state="translated">Tack för din hjälp! Kan du hjälpa till med en annan fråga?</target>
       </trans-unit>
       <trans-unit id="s7ce4fd9430e80cea">
         <source>value</source>
@@ -32,7 +32,7 @@
       </trans-unit>
       <trans-unit id="s6498dfe4855bb3a7">
         <source>unit</source>
-        <target state="needs-translation">unit</target>
+        <target state="translated">enhet</target>
       </trans-unit>
       <trans-unit id="s59df20feee978e5b">
         <source>Error: Invalid value.</source>
@@ -44,7 +44,7 @@
       </trans-unit>
       <trans-unit id="sbb623d6b18d966a0">
         <source>Nutrition facts are displayed on the packaging:</source>
-        <target state="needs-translation">Nutrition facts are displayed on the packaging:</target>
+        <target state="translated">Näringsdeklarationen visas på förpackningen:</target>
       </trans-unit>
       <trans-unit id="se206feec7ec57b28">
         <source>per 100g</source>
@@ -52,7 +52,7 @@
       </trans-unit>
       <trans-unit id="sca0c3305aff570b8">
         <source>per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
-        <target state="needs-translation">per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</target>
+        <target state="translated">per angiven portion "<x id="0" equiv-text="${this._servingSizeValue}"/>"</target>
       </trans-unit>
       <trans-unit id="s453188ea728f64da">
         <source>Add a nutrient</source>
@@ -60,47 +60,47 @@
       </trans-unit>
       <trans-unit id="sc5575e3107f87874">
         <source>Rotate image to the left</source>
-        <target state="needs-translation">Rotate image to the left</target>
+        <target state="translated">Rotera bilden åt vänster</target>
       </trans-unit>
       <trans-unit id="se773f50d2a16d481">
         <source>Rotate image to the right</source>
-        <target state="needs-translation">Rotate image to the right</target>
+        <target state="translated">Rotera bilden åt höger</target>
       </trans-unit>
-      <trans-unit id="s475b08749d0706ed">
+      <trans-unit id="s475b08749d0706ed" approved="yes">
         <source>Help us inform millions of consumers around the world about what they eat</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Hjälp oss att informera miljontals konsumenter runt om i världen om vad de äter</target>
+        <target state="final">Hjälp oss att informera miljontals konsumenter runt om i världen om vad de äter</target>
       </trans-unit>
-      <trans-unit id="sfc40ea3d5d5aa6f8">
+      <trans-unit id="sfc40ea3d5d5aa6f8" approved="yes">
         <source>Your donations fund the day-to-day operations of our non-profit association:</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Dina donationer finansierar den dagliga verksamheten i vår ideella förening:</target>
+        <target state="final">Dina donationer finansierar den dagliga verksamheten i vår ideella förening:</target>
       </trans-unit>
       <trans-unit id="s1c5031113de500ce">
         <source>keeping our database open &amp; available to all,</source>
-        <target state="needs-translation">keeping our database open &amp; available to all,</target>
+        <target state="translated">och håller vår databas öppen &amp; tillgänglig för alla,</target>
       </trans-unit>
       <trans-unit id="sebb2c6c830a44574">
         <source>technical infrastructure (website/mobile app) &amp; a small permanent team</source>
-        <target state="needs-translation">technical infrastructure (website/mobile app) &amp; a small permanent team</target>
+        <target state="translated">teknisk infrastruktur (webbplats/mobilapp) &amp; ett litet fast team</target>
       </trans-unit>
-      <trans-unit id="sd82bc2decefa621b">
+      <trans-unit id="sd82bc2decefa621b" approved="yes">
         <source>remain independent of the food industry,</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">förbli oberoende av livsmedelsindustrin,</target>
+        <target state="final">förbli oberoende av livsmedelsindustrin,</target>
       </trans-unit>
-      <trans-unit id="sb3bdd638a58d30f4">
+      <trans-unit id="sb3bdd638a58d30f4" approved="yes">
         <source>engage a community of committed citizens,</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">engagera en gemenskap av engagerade medborgare,</target>
+        <target state="final">engagera en gemenskap av engagerade medborgare,</target>
       </trans-unit>
-      <trans-unit id="s100c4928cc74642a">
+      <trans-unit id="s100c4928cc74642a" approved="yes">
         <source>support the advancement of public health research.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">stödja utvecklingen av folkhälsoforskning.</target>
+        <target state="final">stödja utvecklingen av folkhälsoforskning.</target>
       </trans-unit>
-      <trans-unit id="s6d7b6cdedaadfb6e">
+      <trans-unit id="s6d7b6cdedaadfb6e" approved="yes">
         <source>Each donation counts! We appreciate your support in bringing further food transparency in the world.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Varje donation räknas! Vi uppskattar ditt stöd för att skapa ytterligare transparens kring livsmedelsförsörjning i världen.</target>
+        <target state="final">Varje donation räknas! Vi uppskattar ditt stöd för att skapa ytterligare transparens kring livsmedelsförsörjning i världen.</target>
       </trans-unit>
-      <trans-unit id="s6306a31415aea913">
+      <trans-unit id="s6306a31415aea913" approved="yes">
         <source>I SUPPORT</source>
-        <target state="translated">JAG STÖDJER</target>
+        <target state="final">JAG STÖDJER</target>
       </trans-unit>
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
@@ -108,7 +108,7 @@
       </trans-unit>
       <trans-unit id="s43df2e8395f6834e">
         <source>Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</source>
-        <target state="needs-translation">Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</target>
+        <target state="translated">Ge ett bidrag till vår insamling <x id="0" equiv-text="${this.currentYear}"/></target>
       </trans-unit>
       <trans-unit id="s000d98595e959c1e">
         <source>Get It On Google Play</source>
@@ -122,17 +122,17 @@
         <source>Android APK</source>
         <target state="translated">Android APK</target>
       </trans-unit>
-      <trans-unit id="s21e73088de6f26f3">
+      <trans-unit id="s21e73088de6f26f3" approved="yes">
         <source>Download on the App Store</source>
-        <target state="translated">Ladda ner från App Store</target>
+        <target state="final">Ladda ner från App Store</target>
       </trans-unit>
-      <trans-unit id="sc52696641af72b53">
+      <trans-unit id="sc52696641af72b53" approved="yes">
         <source>Install the app!</source>
-        <target state="translated">Installera appen!</target>
+        <target state="final">Installera appen!</target>
       </trans-unit>
       <trans-unit id="h5d824b4954e56ea5">
         <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
-        <target state="needs-translation">Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></target>
+        <target state="translated">Skanna din <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>vardags<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>mat<x id="2" equiv-text="&lt;/span&gt;"/></target>
       </trans-unit>
       <trans-unit id="s8a8bfd67f2dd2810">
         <source>Download the OFF app with this QR code</source>
@@ -152,7 +152,7 @@
       </trans-unit>
       <trans-unit id="sc0520e1732a5c568">
         <source>Expand image</source>
-        <target state="needs-translation">Expand image</target>
+        <target state="translated">Förstora bilden</target>
       </trans-unit>
       <trans-unit id="sab56a1d439576fd6">
         <source>Suggestion icon</source>
@@ -164,7 +164,7 @@
       </trans-unit>
       <trans-unit id="s5666afe5cd0166de">
         <source>Please fix the errors or modify the text before confirming</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Vänligen åtgärda felen eller ändra texten innan du bekräftar</target>
+        <target state="translated">Åtgärda felen eller ändra texten innan du bekräftar</target>
       </trans-unit>
       <trans-unit id="s06f6c6f99db6b552">
         <source>Original</source>
@@ -172,7 +172,7 @@
       </trans-unit>
       <trans-unit id="sc57b630a7a70c61f">
         <source>Suggested fix</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Föreslagen åtgärd</target>
+        <target state="translated">Föreslagen korrigering</target>
       </trans-unit>
       <trans-unit id="s417b90913e05bc17">
         <source>Preview</source>
@@ -192,7 +192,7 @@
       </trans-unit>
       <trans-unit id="s66413c24dcf680e2">
         <source>Skip</source>
-        <target state="translated">Hoppa over</target>
+        <target state="translated">Hoppa över</target>
       </trans-unit>
       <trans-unit id="s64ef2a6c2dd1d3d1">
         <source>Edit</source>
@@ -205,12 +205,12 @@
                 This character <x id="1" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>␣<x id="2" equiv-text="&lt;/span&gt;"/> represents a space.
                 <x id="3" equiv-text="&lt;br&gt;"/>
                 This character <x id="4" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>↩︎<x id="5" equiv-text="&lt;/span&gt;"/> represents a line break. </source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Det här verktyget låter dig korrigera ingredienslistan. Du kan lägga till, ta bort eller redigera ingredienslistan
-                .
+        <target state="translated">Med det här verktyget kan du korrigera ingredienslistan. Du kan lägga till, ta bort eller redigera
+                ingredienser i listan.
                 <x id="0" equiv-text="&lt;br&gt;"/>
-                Detta tecken <x id="1" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>␣<x id="2" equiv-text="&lt;/span&gt;"/> representerar ett mellanslag.
+                Tecknet <x id="1" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>␣<x id="2" equiv-text="&lt;/span&gt;"/> motsvarar ett mellanslag.
                 <x id="3" equiv-text="&lt;br&gt;"/>
-                Detta tecken <x id="4" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>↩︎<x id="5" equiv-text="&lt;/span&gt;"/> representerar en radbrytning. </target>
+                Tecknet <x id="4" equiv-text="&lt;span class=&quot;highlight&quot;&gt;"/>↩︎<x id="5" equiv-text="&lt;/span&gt;"/> motsvarar en radbrytning. </target>
       </trans-unit>
       <trans-unit id="s11a18a69b30b65ed">
         <source>Help us fix errors in ingredients list</source>
@@ -218,11 +218,11 @@
       </trans-unit>
       <trans-unit id="sbd6be5cde472f37c">
         <source>All insights have been answered! Thanks for your help!</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Alla insikter har besvarats! Tack för din hjälp!</target>
+        <target state="translated">Alla frågor har besvarats! Tack för din hjälp!</target>
       </trans-unit>
       <trans-unit id="sa95b4224f685a36a">
         <source>Close modal</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Stäng modal</target>
+        <target state="translated">Stäng dialogrutan</target>
       </trans-unit>
       <trans-unit id="s67ae6594857a4d57">
         <source>Thanks for your contribution!</source>
@@ -230,7 +230,7 @@
       </trans-unit>
       <trans-unit id="s061eb5af92512c85">
         <source>Saved! Can you help with another one?</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Sparad! Kan du hjälpa till med en till?</target>
+        <target state="translated">Sparat! Kan du hjälpa till med en till?</target>
       </trans-unit>
       <trans-unit id="sb125568d43642e6f">
         <source>Answer questions about the product.</source>
@@ -246,11 +246,11 @@
       </trans-unit>
       <trans-unit id="sd698d21ddecba56b">
         <source>Hey! You can help us improve the product information by answering the following parts:</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Hej! Du kan hjälpa oss att förbättra produktinformationen genom att svara på följande frågor:</target>
+        <target state="translated">Hej! Du kan hjälpa oss att förbättra produktinformationen genom att svara på följande:</target>
       </trans-unit>
       <trans-unit id="s05ec315d9308091a">
         <source>Barcode corners icon</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Streckkodshörnikon</target>
+        <target state="translated">Ikon för streckkodens hörn</target>
       </trans-unit>
       <trans-unit id="sdc673e73b5c13aea">
         <source>Delete</source>
@@ -282,11 +282,11 @@
       </trans-unit>
       <trans-unit id="seffa8ca49175b5f0">
         <source>Personalized properties</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Anpassade egenskaper</target>
+        <target state="translated">Personanpassade egenskaper</target>
       </trans-unit>
       <trans-unit id="s907f7a97c6b29425">
         <source>Be aware the data model might be modified. Use at your own risk.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Var medveten om att datamodellen kan ändras. Användning sker på egen risk.</target>
+        <target state="translated">Tänk på att datamodellen kan ändras. Använd den på egen risk.</target>
       </trans-unit>
       <trans-unit id="sf44a6b3b232c28ea">
         <source>Replace current value by <x id="0" equiv-text="${text}"/></source>
@@ -294,7 +294,7 @@
       </trans-unit>
       <trans-unit id="s0fb218abc2e157ed">
         <source>Invalidate image</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ogiltig bild</target>
+        <target state="translated">Underkänn bilden</target>
       </trans-unit>
       <trans-unit id="scb489a1a173ac3f0">
         <source>Yes</source>
@@ -306,7 +306,7 @@
       </trans-unit>
       <trans-unit id="s42dd66b2441566fd">
         <source>Center icon</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Centerikon</target>
+        <target state="translated">Centreringsikon</target>
       </trans-unit>
       <trans-unit id="s422bba9636ce2489">
         <source>Center image</source>
@@ -314,19 +314,19 @@
       </trans-unit>
       <trans-unit id="s8038273de2cf8b73">
         <source>Please select a region to crop.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Välj en region att beskära.</target>
+        <target state="translated">Välj ett område att beskära.</target>
       </trans-unit>
       <trans-unit id="s39bcf88721a1e8ee">
         <source>Reset selection</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Återställ val</target>
+        <target state="translated">Återställ markering</target>
       </trans-unit>
       <trans-unit id="sb8178320160f84ea">
         <source>Show crop</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Visa gröda</target>
+        <target state="translated">Visa beskärning</target>
       </trans-unit>
       <trans-unit id="s33f786bb6b4f0cf4">
         <source>Crop Result</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Grödresultat</target>
+        <target state="translated">Beskärningsresultat</target>
       </trans-unit>
       <trans-unit id="s6cee7cad81dfedd1">
         <source>Cropped Image</source>
@@ -334,7 +334,7 @@
       </trans-unit>
       <trans-unit id="s02ce7a2e7c1b020b">
         <source>Validate crop</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Validera gröda</target>
+        <target state="translated">Godkänn beskärningen</target>
       </trans-unit>
       <trans-unit id="s383ae4449428b61e">
         <source>Reset crop</source>
@@ -346,7 +346,7 @@
       </trans-unit>
       <trans-unit id="s19059bf0c4f7c162">
         <source>Selection area</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Urvalsområde</target>
+        <target state="translated">Markeringsområde</target>
       </trans-unit>
       <trans-unit id="s4f4886341969d552">
         <source>Move selection</source>
@@ -374,19 +374,19 @@
       </trans-unit>
       <trans-unit id="s8b33c244759d7bd4">
         <source>Resize top right</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ändra storlek övre högra</target>
+        <target state="translated">Ändra storlek på övre högra hörnet</target>
       </trans-unit>
       <trans-unit id="sa63907958bd0ec4b">
         <source>Resize top left</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ändra storlek övre vänstra</target>
+        <target state="translated">Ändra storlek på övre vänstra hörnet</target>
       </trans-unit>
       <trans-unit id="sdca5deead576ceee">
         <source>Resize bottom right</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ändra storlek längst ner till höger</target>
+        <target state="translated">Ändra storlek på nedre högra hörnet</target>
       </trans-unit>
       <trans-unit id="sac47ea2901d04c15">
         <source>Resize bottom left</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ändra storlek längst ner till vänster</target>
+        <target state="translated">Ändra storlek på nedre vänstra hörnet</target>
       </trans-unit>
       <trans-unit id="s4df2f533c0c1e7d0">
         <source>Image controls</source>
@@ -394,7 +394,7 @@
       </trans-unit>
       <trans-unit id="sd1022bc1ef9204f7">
         <source>Zoomable image</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Zoombar bild</target>
+        <target state="translated">Bild som kan zoomas</target>
       </trans-unit>
       <trans-unit id="s3f4e4b52f230a892">
         <source>Image canvas</source>
@@ -410,7 +410,7 @@
       </trans-unit>
       <trans-unit id="se419a9ab36987490">
         <source>Invalidate</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ogiltigförklara</target>
+        <target state="translated">Underkänn</target>
       </trans-unit>
       <trans-unit id="s10db5498186c083b">
         <source>Cancel crop</source>
@@ -418,11 +418,11 @@
       </trans-unit>
       <trans-unit id="sec6377f3c4e9b28c">
         <source>I'll propose a better crop</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Jag föreslår en bättre skörd</target>
+        <target state="translated">Jag föreslår en bättre beskärning</target>
       </trans-unit>
       <trans-unit id="s03e9c8114521b998">
         <source>I'll edit the ingredients</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Jag ska redigera ingredienserna</target>
+        <target state="translated">Jag redigerar ingredienserna</target>
       </trans-unit>
       <trans-unit id="s98ff35f2a00dc60d">
         <source>Ingredients :</source>
@@ -446,7 +446,7 @@
       </trans-unit>
       <trans-unit id="sf57a61152168cc81">
         <source>Help us correct the ingredient detection</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Hjälp oss att korrigera ingrediensdetekteringen</target>
+        <target state="translated">Hjälp oss att korrigera identifieringen av ingredienser</target>
       </trans-unit>
       <trans-unit id="scf23a05631f93732">
         <source>Confirm Delete</source>
@@ -466,7 +466,7 @@
       </trans-unit>
       <trans-unit id="s4f751fb9b3ed766c">
         <source>Creating a New Property</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Skapa en ny egendom</target>
+        <target state="translated">Skapa en ny egenskap</target>
       </trans-unit>
       <trans-unit id="sdb97e5976482606e">
         <source>Check if a property already exists</source>
@@ -474,23 +474,23 @@
       </trans-unit>
       <trans-unit id="sb125227d436c2925">
         <source>Search for your property concept in the existing properties database:</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Sök efter ditt fastighetskoncept i den befintliga fastighetsdatabasen:</target>
+        <target state="translated">Sök efter ditt egenskapsbegrepp i databasen över befintliga egenskaper:</target>
       </trans-unit>
       <trans-unit id="s86197dcf3e96af64">
         <source>Browse and search existing properties</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Bläddra och sök efter befintliga fastigheter</target>
+        <target state="translated">Bläddra och sök bland befintliga egenskaper</target>
       </trans-unit>
       <trans-unit id="s34be4af4e8fec4ae">
         <source>Ask the community first</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Fråga samhället först</target>
+        <target state="translated">Fråga gemenskapen först</target>
       </trans-unit>
       <trans-unit id="s36d86adc823cbfa6">
         <source>Before creating a new property, discuss it with the community:</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Innan du skapar en ny fastighet, diskutera den med allmänheten:</target>
+        <target state="translated">Innan du skapar en ny egenskap, diskutera den med gemenskapen:</target>
       </trans-unit>
       <trans-unit id="s06847c221c4c0bc1">
         <source>I would like to create a property to [describe your use case]...</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Jag skulle vilja skapa en egenskap för att [beskriva ditt användningsfall]...</target>
+        <target state="translated">Jag skulle vilja skapa en egenskap för att [beskriv ditt användningsfall]...</target>
       </trans-unit>
       <trans-unit id="scd21019c3cd618f3">
         <source>Join Slack Discussion</source>
@@ -498,23 +498,23 @@
       </trans-unit>
       <trans-unit id="s8db84aa4bc949af2">
         <source>Document the New Property</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Dokumentera den nya fastigheten</target>
+        <target state="translated">Dokumentera den nya egenskapen</target>
       </trans-unit>
       <trans-unit id="sb3cbcc1bd0fff140">
         <source>Once you've verified that your property doesn't exist and the community agrees it's useful, you need to first document it in the wiki.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">När du har verifierat att din egenskap inte existerar och gemenskapen håller med om att den är användbar, måste du först dokumentera den i wikin.</target>
+        <target state="translated">När du har verifierat att din egenskap inte finns och gemenskapen håller med om att den är användbar, måste du först dokumentera den i wikin.</target>
       </trans-unit>
       <trans-unit id="sfacbbe968fa7d773">
         <source>Property name:</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Fastighetsnamn:</target>
+        <target state="translated">Egenskapsnamn:</target>
       </trans-unit>
       <trans-unit id="s5560fb119e40923d">
         <source>Enter property name...</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ange fastighetsnamn...</target>
+        <target state="translated">Ange egenskapsnamn...</target>
       </trans-unit>
       <trans-unit id="s2db7b654c0a9bde0">
         <source>Document the property</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Dokumentera fastigheten</target>
+        <target state="translated">Dokumentera egenskapen</target>
       </trans-unit>
       <trans-unit id="s39e14e14300694c7">
         <source>Documentation and Guidelines</source>
@@ -522,11 +522,11 @@
       </trans-unit>
       <trans-unit id="s801a05fa8e881f37">
         <source>Learn more about property creation and guidelines:</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Läs mer om skapande av fastigheter och riktlinjer:</target>
+        <target state="translated">Läs mer om skapande av egenskaper och riktlinjer:</target>
       </trans-unit>
       <trans-unit id="s3781d25aa51a736c">
         <source>Folksonomy Engine Documentation</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Dokumentation för Folksonomy-motorn</target>
+        <target state="translated">Dokumentation för Folksonomy Engine</target>
       </trans-unit>
       <trans-unit id="s9b87abd68fb9df45">
         <source>Not found? Create new key {value}</source>
@@ -539,20 +539,20 @@
                     <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>the list of properties already used by the community<x id="3" equiv-text="&lt;/a&gt;"/>
                     or explore the
                     <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>properties' documentation and its search engine<x id="5" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Dessa egenskaper skapas och arkiveras av användare för alla typer av användningsområden. Känn dig
-                    fri att lägga till dina egna. Egenskaperna och värdena du skapar
-                    <x id="0" equiv-text="&lt;strong&gt;"/>måste vara faktabaserade<x id="1" equiv-text="&lt;/strong&gt;"/>. Du kan dyka ner i
-                    <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>listan över egenskaper som redan används av communityn<x id="3" equiv-text="&lt;/a&gt;"/>
-                    eller utforska dokumentationen för
-                    <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>egenskaper och dess sökmotor<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="translated">Dessa egenskaper skapas och registreras av användare för alla slags ändamål. Du får
+                    gärna lägga till egna. Egenskaperna och värdena du skapar
+                    <x id="0" equiv-text="&lt;strong&gt;"/>måste vara faktabaserade<x id="1" equiv-text="&lt;/strong&gt;"/>. Du kan utforska
+                    <x id="2" equiv-text="&lt;a href=&quot;${this.propertiesBaseUrl}&quot;&gt;"/>listan över egenskaper som redan används av gemenskapen<x id="3" equiv-text="&lt;/a&gt;"/>
+                    eller ta del av
+                    <x id="4" equiv-text="&lt;a href=&quot;${this.propertiesDocumentationUrl}&quot;&gt;"/>dokumentationen om egenskaperna och den tillhörande sökmotorn<x id="5" equiv-text="&lt;/a&gt;"/>.</target>
       </trans-unit>
       <trans-unit id="h1fbdfea3ad6d664e">
         <source>This is brought by the
                     <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't
                     hesitate to participate or give feedback</source>
-        <target state="needs-translation">This is brought by the
-                    <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>Folksonomy Engine project<x id="1" equiv-text="&lt;/a&gt;"/>. Don't
-                    hesitate to participate or give feedback</target>
+        <target state="translated">Detta möjliggörs av
+                    <x id="0" equiv-text="&lt;a href=&quot;${this.folksonomyEngineUrl}&quot;&gt;"/>projektet Folksonomy Engine<x id="1" equiv-text="&lt;/a&gt;"/>. Tveka inte
+                    att delta eller lämna synpunkter</target>
       </trans-unit>
       <trans-unit id="s71a5c9f4b68ef4d4">
         <source>Count</source>
@@ -568,7 +568,7 @@
       </trans-unit>
       <trans-unit id="s565867d84c04aea2">
         <source>Filter properties...</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Filteregenskaper...</target>
+        <target state="translated">Filtrera egenskaper...</target>
       </trans-unit>
       <trans-unit id="s3b430cfa5c1fe7f4">
         <source>Documentation for <x id="0" equiv-text="${property.k}"/></source>
@@ -576,7 +576,7 @@
       </trans-unit>
       <trans-unit id="s000a5b76bd3a01c2">
         <source>Loading properties...</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Laddar egenskaper...</target>
+        <target state="translated">Läser in egenskaper...</target>
       </trans-unit>
       <trans-unit id="s9a7f60fce090ecaf">
         <source>Failed to load properties. Please try again later.</source>
@@ -584,7 +584,7 @@
       </trans-unit>
       <trans-unit id="scdb6cad0b92721bf">
         <source>No properties found.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Inga fastigheter hittades.</target>
+        <target state="translated">Inga egenskaper hittades.</target>
       </trans-unit>
       <trans-unit id="scace072bef961918">
         <source>Rows</source>
@@ -592,7 +592,7 @@
       </trans-unit>
       <trans-unit id="s0bb2d48532acc455">
         <source>Download CSV</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Ladda ner CSV-filen</target>
+        <target state="translated">Ladda ner CSV</target>
       </trans-unit>
       <trans-unit id="s255857544a9d5ec0">
         <source>Reset</source>
@@ -600,11 +600,11 @@
       </trans-unit>
       <trans-unit id="sefaba4adc4ec9219">
         <source>Folksonomy Properties</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Folksonomy-fastigheter</target>
+        <target state="translated">Egenskaper i Folksonomy Engine</target>
       </trans-unit>
       <trans-unit id="sa548778b24054030">
         <source>Explore all contributed properties from the Folksonomy Engine project. These properties provide additional metadata and insights about products in the Open Food Facts database.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Utforska alla bidragna egenskaper från Folksonomy Engine-projektet. Dessa egenskaper ger ytterligare metadata och insikter om produkter i Open Food Facts-databasen.</target>
+        <target state="translated">Utforska alla egenskaper som har lagts till i projektet Folksonomy Engine. Egenskaperna ger ytterligare metadata och information om produkter i Open Food Facts-databasen.</target>
       </trans-unit>
       <trans-unit id="sf4cd86a2f5ef2588">
         <source>Product Barcode</source>
@@ -620,7 +620,7 @@
       </trans-unit>
       <trans-unit id="s1a52515ec8ddade8">
         <source>Product barcode</source>
-        <target state="needs-translation">Product barcode</target>
+        <target state="translated">Produktens streckkod</target>
       </trans-unit>
       <trans-unit id="sfe87465d50530725">
         <source>Corresponding value</source>
@@ -636,15 +636,15 @@
       </trans-unit>
       <trans-unit id="s1205d5f6fccf8e69">
         <source>Property Value</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Fastighetsvärde</target>
+        <target state="translated">Egenskapsvärde</target>
       </trans-unit>
       <trans-unit id="s58e1eeea7a60ae51">
         <source>Loading products...</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Laddar produkter...</target>
+        <target state="translated">Läser in produkter...</target>
       </trans-unit>
       <trans-unit id="sb560fa37a7bfb6c2">
         <source>No products found for this property.</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Inga produkter hittades för den här fastigheten.</target>
+        <target state="translated">Inga produkter hittades för den här egenskapen.</target>
       </trans-unit>
       <trans-unit id="seea3800e27baa686">
         <source>Individual Products</source>
@@ -664,7 +664,7 @@
       </trans-unit>
       <trans-unit id="sc895972c88d38ca5">
         <source>Folksonomy property</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Folksonomy-egenskap</target>
+        <target state="translated">Egenskap i Folksonomy Engine</target>
       </trans-unit>
       <trans-unit id="se5127cf0f92e7e48">
         <source>Tip: you can also find the</source>
@@ -672,19 +672,19 @@
       </trans-unit>
       <trans-unit id="sb28639570ff3b852">
         <source>list of all properties</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">lista över alla fastigheter</target>
+        <target state="translated">listan över alla egenskaper</target>
       </trans-unit>
       <trans-unit id="sdbf806fefc584115">
         <source>You should find a</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Du borde hitta en</target>
+        <target state="translated">Du bör hitta en</target>
       </trans-unit>
       <trans-unit id="s0b4235aae602a950">
         <source>dedicated documentation</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">dedikerad dokumentation</target>
+        <target state="translated">särskild dokumentation</target>
       </trans-unit>
       <trans-unit id="s55d7249883a98ca1">
         <source>about this property on Open Food Facts wiki</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">om den här egendomen på Open Food Facts wiki</target>
+        <target state="translated">om den här egenskapen på Open Food Facts-wikin</target>
       </trans-unit>
       <trans-unit id="s1e49126af0935a5b">
         <source>List of products using this property</source>
@@ -708,7 +708,7 @@
       </trans-unit>
       <trans-unit id="s9c0f52425fd2f07e">
         <source>May Not Match</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Kan inte matcha</target>
+        <target state="translated">Matchar kanske inte</target>
       </trans-unit>
       <trans-unit id="sf88b90b8ba23871c">
         <source>Unknown Match</source>
@@ -716,7 +716,291 @@
       </trans-unit>
       <trans-unit id="sa1fa766e0d5634d7">
         <source>No Score Available</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">Inget resultat tillgängligt</target>
+        <target state="translated">Inget betyg tillgängligt</target>
+      </trans-unit>
+      <trans-unit id="sd1aedfb27dd7ef6c">
+        <source>You are about to visit an external website. Continue?</source>
+        <target state="translated">Du är på väg att besöka en extern webbplats. Vill du fortsätta?</target>
+      </trans-unit>
+      <trans-unit id="h47db3e6a86aa1671">
+        <source>Please <x id="0" equiv-text="&lt;a href=&quot;${this.loginUrl}&quot;&gt;"/>log in<x id="1" equiv-text="&lt;/a&gt;"/> to edit or add properties.</source>
+        <target state="needs-translation">Please <x id="0" equiv-text="&lt;a href=&quot;${this.loginUrl}&quot;&gt;"/>log in<x id="1" equiv-text="&lt;/a&gt;"/> to edit or add properties.</target>
+      </trans-unit>
+      <trans-unit id="s5f343a43e7ea9f91">
+        <source>Error</source>
+        <target state="translated">Fel</target>
+      </trans-unit>
+      <trans-unit id="sd947a599045e9e0e">
+        <source>Failed to check property conflicts. Please try again.</source>
+        <target state="translated">Det gick inte att kontrollera egenskapskonflikter. Försök igen.</target>
+      </trans-unit>
+      <trans-unit id="s92a0d19a28995530" approved="yes">
+        <source>Success</source>
+        <target state="final">Framgång</target>
+      </trans-unit>
+      <trans-unit id="s371091f240c17a7e">
+        <source>Property renamed successfully!</source>
+        <target state="translated">Egenskapen har bytt namn!</target>
+      </trans-unit>
+      <trans-unit id="s4603f58131a777bf">
+        <source>Failed to rename property. Please try again.</source>
+        <target state="translated">Det gick inte att byta namn på egenskap. Försök igen.</target>
+      </trans-unit>
+      <trans-unit id="s21694d2ab9c0bec5">
+        <source>Property deleted successfully!</source>
+        <target state="translated">Egenskapen har raderats!</target>
+      </trans-unit>
+      <trans-unit id="scf78b75273a6b5fe">
+        <source>Failed to delete property. Please try again.</source>
+        <target state="translated">Det gick inte att ta bort egenskapen. Försök igen.</target>
+      </trans-unit>
+      <trans-unit id="s71ffcb25fc1c5356">
+        <source>Rename this property</source>
+        <target state="translated">Byt namn på denna egenskap</target>
+      </trans-unit>
+      <trans-unit id="s60320a18282b2b33">
+        <source>Rename</source>
+        <target state="translated">Byt namn</target>
+      </trans-unit>
+      <trans-unit id="s6e2a82009cc3dfc7">
+        <source>Delete this property</source>
+        <target state="translated">Ta bort denna egenskap</target>
+      </trans-unit>
+      <trans-unit id="s8bccacf0fc176064">
+        <source>Rename Property</source>
+        <target state="translated">Byt namn på egenskap</target>
+      </trans-unit>
+      <trans-unit id="s0df37909a355e56f">
+        <source>Rename property '<x id="0" equiv-text="${this.renameModalData.property}"/>' to:</source>
+        <target state="needs-translation">Rename property '<x id="0" equiv-text="${this.renameModalData.property}"/>' to:</target>
+      </trans-unit>
+      <trans-unit id="sb550440eeb3f39c5">
+        <source>New property name:</source>
+        <target state="translated">Nytt egenskapsnamn:</target>
+      </trans-unit>
+      <trans-unit id="sbb53591e587764b7">
+        <source>Enter new property name...</source>
+        <target state="translated">Ange nytt egenskapsnamn...</target>
+      </trans-unit>
+      <trans-unit id="s8acd49e96b4ee7d4">
+        <source>Check Conflicts</source>
+        <target state="translated">Kontrollera konflikter</target>
+      </trans-unit>
+      <trans-unit id="sd1cfdf0ef29cb6a5">
+        <source>Property Rename Conflicts</source>
+        <target state="needs-translation">Property Rename Conflicts</target>
+      </trans-unit>
+      <trans-unit id="sf417737adaa5a8c2">
+        <source>Renaming '<x id="0" equiv-text="${this.renameModalData.property}"/>' to '<x id="1" equiv-text="${this.renameModalData.newProperty}"/>' will affect:</source>
+        <target state="needs-translation">Renaming '<x id="0" equiv-text="${this.renameModalData.property}"/>' to '<x id="1" equiv-text="${this.renameModalData.newProperty}"/>' will affect:</target>
+      </trans-unit>
+      <trans-unit id="s14571d0ac58a8b43">
+        <source>Products with both properties:</source>
+        <target state="needs-translation">Products with both properties:</target>
+      </trans-unit>
+      <trans-unit id="sb0d459e32656033f">
+        <source>Products with old property only:</source>
+        <target state="needs-translation">Products with old property only:</target>
+      </trans-unit>
+      <trans-unit id="sfa3027dde47305fe">
+        <source>Products with new property only:</source>
+        <target state="needs-translation">Products with new property only:</target>
+      </trans-unit>
+      <trans-unit id="s9e5b8feb0892646e">
+        <source>Do you want to proceed with the rename?</source>
+        <target state="needs-translation">Do you want to proceed with the rename?</target>
+      </trans-unit>
+      <trans-unit id="s97171907a2d1620b">
+        <source>Proceed with Rename</source>
+        <target state="needs-translation">Proceed with Rename</target>
+      </trans-unit>
+      <trans-unit id="s712d70fdcc3dd42b">
+        <source>Delete Property</source>
+        <target state="needs-translation">Delete Property</target>
+      </trans-unit>
+      <trans-unit id="sc11b78f2f3173f75">
+        <source>Are you sure you want to delete the property '<x id="0" equiv-text="${this.deleteModalProperty}"/>'?</source>
+        <target state="needs-translation">Are you sure you want to delete the property '<x id="0" equiv-text="${this.deleteModalProperty}"/>'?</target>
+      </trans-unit>
+      <trans-unit id="s3b3fe4e829af3e8e">
+        <source>This action cannot be undone.</source>
+        <target state="needs-translation">This action cannot be undone.</target>
+      </trans-unit>
+      <trans-unit id="s091d3d07b5b3076f">
+        <source>OK</source>
+        <target state="translated">OK</target>
+      </trans-unit>
+      <trans-unit id="s72c9c4e6ab4ca7ae">
+        <source>Value replaced successfully!</source>
+        <target state="needs-translation">Value replaced successfully!</target>
+      </trans-unit>
+      <trans-unit id="sdd0eacd725bb2b1d">
+        <source>Failed to replace value. Please try again.</source>
+        <target state="needs-translation">Failed to replace value. Please try again.</target>
+      </trans-unit>
+      <trans-unit id="sfe87a7a8bed11acf">
+        <source>Value deleted successfully!</source>
+        <target state="needs-translation">Value deleted successfully!</target>
+      </trans-unit>
+      <trans-unit id="sccd2745bdd1087f6">
+        <source>Failed to delete value. Please try again.</source>
+        <target state="needs-translation">Failed to delete value. Please try again.</target>
+      </trans-unit>
+      <trans-unit id="s88ece9a678e2f106">
+        <source>Replace Value</source>
+        <target state="needs-translation">Replace Value</target>
+      </trans-unit>
+      <trans-unit id="s3355d65e22e222c9">
+        <source>Replace all instances of '<x id="0" equiv-text="${this.replaceModalData.value}"/>' with a new value:</source>
+        <target state="needs-translation">Replace all instances of '<x id="0" equiv-text="${this.replaceModalData.value}"/>' with a new value:</target>
+      </trans-unit>
+      <trans-unit id="s0d426d718d97d14e">
+        <source>New value:</source>
+        <target state="needs-translation">New value:</target>
+      </trans-unit>
+      <trans-unit id="se80a1ed3dcab7408">
+        <source>Enter new value...</source>
+        <target state="needs-translation">Enter new value...</target>
+      </trans-unit>
+      <trans-unit id="s2a8434b16dc214a3">
+        <source>Replace</source>
+        <target state="needs-translation">Replace</target>
+      </trans-unit>
+      <trans-unit id="s8263352c7a634e7f">
+        <source>Delete Value</source>
+        <target state="needs-translation">Delete Value</target>
+      </trans-unit>
+      <trans-unit id="sebe99e3299746177">
+        <source>Are you sure you want to delete all instances of the value '<x id="0" equiv-text="${this.deleteModalValue}"/>'?</source>
+        <target state="needs-translation">Are you sure you want to delete all instances of the value '<x id="0" equiv-text="${this.deleteModalValue}"/>'?</target>
+      </trans-unit>
+      <trans-unit id="s4b0b53abbd6af54a">
+        <source>Replace this value across all products</source>
+        <target state="needs-translation">Replace this value across all products</target>
+      </trans-unit>
+      <trans-unit id="sb02836b5e3176cfe">
+        <source>Delete this value from all products</source>
+        <target state="needs-translation">Delete this value from all products</target>
+      </trans-unit>
+      <trans-unit id="sbf00647c8838c247">
+        <source>Flag an image</source>
+        <target state="needs-translation">Flag an image</target>
+      </trans-unit>
+      <trans-unit id="s3f1427291c349441">
+        <source>Flag a search result</source>
+        <target state="needs-translation">Flag a search result</target>
+      </trans-unit>
+      <trans-unit id="s5d027691867d9a4b">
+        <source>Flag a product</source>
+        <target state="needs-translation">Flag a product</target>
+      </trans-unit>
+      <trans-unit id="sba82478b9fa28e99">
+        <source>Inappropriate</source>
+        <target state="needs-translation">Inappropriate</target>
+      </trans-unit>
+      <trans-unit id="s76cc1c6d9fab3a2d">
+        <source>Outdated</source>
+        <target state="needs-translation">Outdated</target>
+      </trans-unit>
+      <trans-unit id="sd0aac0480b0d2e1a">
+        <source>Includes Personal Information</source>
+        <target state="needs-translation">Includes Personal Information</target>
+      </trans-unit>
+      <trans-unit id="sfac15b89e0668996">
+        <source>Duplicate</source>
+        <target state="needs-translation">Duplicate</target>
+      </trans-unit>
+      <trans-unit id="sc9e494c8346b7cb5" approved="yes">
+        <source>Other</source>
+        <target state="final">Övrigt</target>
+      </trans-unit>
+      <trans-unit id="s92f7e81236df966a">
+        <source>Wrong Barcode</source>
+        <target state="needs-translation">Wrong Barcode</target>
+      </trans-unit>
+      <trans-unit id="sa4ed3ae23155d4a5">
+        <source>Missing Data</source>
+        <target state="needs-translation">Missing Data</target>
+      </trans-unit>
+      <trans-unit id="s3e878b312b793ad2">
+        <source>Wrong Data</source>
+        <target state="needs-translation">Wrong Data</target>
+      </trans-unit>
+      <trans-unit id="sbb3f654e375fc42a">
+        <source>FLAG IMAGE</source>
+        <target state="needs-translation">FLAG IMAGE</target>
+      </trans-unit>
+      <trans-unit id="s4df493c3ade6bff9">
+        <source>FLAG SEARCH</source>
+        <target state="needs-translation">FLAG SEARCH</target>
+      </trans-unit>
+      <trans-unit id="sa41d7d40e6d1ad7c">
+        <source>FLAG PRODUCT</source>
+        <target state="needs-translation">FLAG PRODUCT</target>
+      </trans-unit>
+      <trans-unit id="sfbf30728d115ad08">
+        <source>Invalid flag type.</source>
+        <target state="needs-translation">Invalid flag type.</target>
+      </trans-unit>
+      <trans-unit id="sb1eb1f63600f779e">
+        <source>Invalid flavor.</source>
+        <target state="needs-translation">Invalid flavor.</target>
+      </trans-unit>
+      <trans-unit id="sd2aa918fd2068705">
+        <source>User ID is required to submit a flag. Please log in.</source>
+        <target state="needs-translation">User ID is required to submit a flag. Please log in.</target>
+      </trans-unit>
+      <trans-unit id="sf8746eab0484d95b">
+        <source>Image ID is required to flag an image.</source>
+        <target state="needs-translation">Image ID is required to flag an image.</target>
+      </trans-unit>
+      <trans-unit id="sca386b8a0876810a">
+        <source>Failed to submit flag. Please try again later.</source>
+        <target state="needs-translation">Failed to submit flag. Please try again later.</target>
+      </trans-unit>
+      <trans-unit id="s62d9da7ce0def73c">
+        <source>An unexpected error occurred.</source>
+        <target state="needs-translation">An unexpected error occurred.</target>
+      </trans-unit>
+      <trans-unit id="s45dce293964ced00">
+        <source>Thank you for reporting. Your flag has been submitted successfully.</source>
+        <target state="needs-translation">Thank you for reporting. Your flag has been submitted successfully.</target>
+      </trans-unit>
+      <trans-unit id="s30c7b1afc9fe65d3">
+        <source>Image to flag</source>
+        <target state="needs-translation">Image to flag</target>
+      </trans-unit>
+      <trans-unit id="s39d54c8748d51877">
+        <source>Barcode</source>
+        <target state="translated">Streckkod</target>
+      </trans-unit>
+      <trans-unit id="s4fb2e52ef0c61ab3">
+        <source>Image ID</source>
+        <target state="needs-translation">Image ID</target>
+      </trans-unit>
+      <trans-unit id="saa29a2ac03cd9d19">
+        <source>Reason</source>
+        <target state="translated">Anledning</target>
+      </trans-unit>
+      <trans-unit id="saf84ec86139d349e">
+        <source>Comment</source>
+        <target state="translated">Kommentar</target>
+      </trans-unit>
+      <trans-unit id="scbf8442741ae9d1b">
+        <source>Optional details</source>
+        <target state="needs-translation">Optional details</target>
+      </trans-unit>
+      <trans-unit id="se7c56a68f0ecf6e9">
+        <source>Submitting...</source>
+        <target state="needs-translation">Submitting...</target>
+      </trans-unit>
+      <trans-unit id="sf245e27cbd126b9c">
+        <source>Unknown Brand/Quantity</source>
+        <target state="needs-translation">Unknown Brand/Quantity</target>
+      </trans-unit>
+      <trans-unit id="s6ffdc18b840acf30">
+        <source><x id="0" equiv-text="${brands}"/> - <x id="1" equiv-text="${quantity}"/></source>
+        <target state="needs-translation"><x id="0" equiv-text="${brands}"/> - <x id="1" equiv-text="${quantity}"/></target>
       </trans-unit>
     </body>
   </file>

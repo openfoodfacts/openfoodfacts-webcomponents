@@ -5,7 +5,7 @@ import "./new-key-modal"
 import "../shared/autocomplete-input"
 import folksonomyApi from "../../api/folksonomy"
 import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme"
-import { msg } from "@lit/localize"
+import { msg, localized } from "@lit/localize"
 import { getButtonClasses, ButtonType } from "../../styles/buttons"
 import { FOLKSONOMY_INPUT } from "../../styles/folksonomy-input"
 import type {
@@ -22,6 +22,7 @@ import type {
  * @fires delete-row - Fired when a row is deleted.
  * @fires add-row - Fired when a new row is added.
  */
+@localized()
 @customElement("folksonomy-editor-row")
 export class FolksonomyEditorRow extends LitElement {
   /**
