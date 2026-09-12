@@ -1,6 +1,8 @@
+import type { SearchQueryV2 } from "@openfoodfacts/openfoodfacts-nodejs"
+
 export type RequestProductParams = {
-  lc: string
-  fields: string[]
+  lc?: string
+  fields: NonNullable<NonNullable<SearchQueryV2>["fields"]>
 }
 
 // type for the response of the product API
@@ -26,9 +28,10 @@ export type NutrimentsProductType = {
   serving_size: string
 }
 
-export type NutrientsParams = {
+export type NutrientsParams = Partial<{
   cc: string
-}
+  lc: string
+}>
 
 export interface NutrientOrderRequest {
   name: string
