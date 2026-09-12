@@ -14,16 +14,58 @@ import {
 import { robotoffConfiguration } from "../signals/robotoff"
 import { languageCode } from "../signals/app"
 
-import { Robotoff, type RobotoffAnnotateBody } from "@openfoodfacts/openfoodfacts-nodejs"
+import {
+  Robotoff,
+  type RobotoffAnnotateBody,
+  type RobotoffInsightQuery as SDKRobotoffInsightQuery,
+} from "@openfoodfacts/openfoodfacts-nodejs"
+
+const ROBOTOFF_API_PATH = "/api/v1"
 
 function createRobotoff(fetch: typeof window.fetch) {
+  const configuredBaseUrl = new URL(
+    robotoffConfiguration.getItem("apiUrl") as string,
+    window.location.href
+  )
+  const configuredBasePath = configuredBaseUrl.pathname.replace(/\/+$/, "")
+
   // ensure that any user account credentials get used in Robotoff
   const fetchWithCredentials: typeof window.fetch = (url, options) => {
-    return fetch(url, { ...options, credentials: "include" })
+    const requestUrl = new URL(url instanceof Request ? url.url : url.toString())
+    const requestPath = requestUrl.pathname
+    if (
+      requestUrl.origin === configuredBaseUrl.origin &&
+      (requestPath === ROBOTOFF_API_PATH || requestPath.startsWith(`${ROBOTOFF_API_PATH}/`))
+    ) {
+      requestUrl.pathname = configuredBasePath + requestPath.slice(ROBOTOFF_API_PATH.length)
+    }
+    const request =
+      url instanceof Request
+        ? new Request(requestUrl, {
+            method: url.method,
+            headers: url.headers,
+            ...(url.method === "GET" || url.method === "HEAD"
+              ? {}
+              : { body: url.body, duplex: "half" as const }),
+          })
+        : requestUrl
+    return fetch(request, { ...options, credentials: "include" })
   }
   return new Robotoff(fetchWithCredentials, {
-    baseUrl: robotoffConfiguration.getItem("apiUrl") as string,
+    // The SDK always normalizes its base URL to /api/v1. The fetch adapter above
+    // restores the configured path prefix after that normalization.
+    baseUrl: new URL(ROBOTOFF_API_PATH, configuredBaseUrl.origin).toString(),
   })
+}
+
+const toRobotoffInsightQuery = (
+  requestParams: InsightsRequestParams
+): NonNullable<SDKRobotoffInsightQuery> => {
+  const { barcode, ...query } = requestParams
+  return {
+    ...query,
+    ...(barcode === undefined ? {} : { barcode: Number(barcode) }),
+  }
 }
 
 /**
@@ -127,7 +169,9 @@ const robotoff = {
   async insights<
     T extends NutrientsInsight | IngredientSpellcheckInsight | IngredientDetectionInsight,
   >(requestParams: InsightsRequestParams = {}): Promise<InsightsResponse<T>> {
-    const result = (await createRobotoff(fetch).insights(requestParams as never)) as unknown as {
+    const result = (await createRobotoff(fetch).insights(
+      toRobotoffInsightQuery(requestParams)
+    )) as unknown as {
       data?: InsightsResponse<T>
       error?: unknown
     }

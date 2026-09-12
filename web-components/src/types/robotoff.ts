@@ -1,4 +1,8 @@
-import type { Robotoff, RobotoffAnnotateBody } from "@openfoodfacts/openfoodfacts-nodejs"
+import type {
+  Robotoff,
+  RobotoffAnnotateBody,
+  RobotoffInsightQuery,
+} from "@openfoodfacts/openfoodfacts-nodejs"
 
 export type RobotoffConfigurationOptions = {
   apiUrl: string
@@ -61,22 +65,9 @@ export enum InsightType {
   ingredient_detection = "ingredient_detection",
 }
 
-export type InsightsRequestParams = Partial<{
-  insight_types: string
-  barcode: string
-  annotated: boolean
-  annotation: number
-  value_tag: string
-  brands: string
-  countries: string
-  server_type: "off" | "obf" | "opff" | "opf" | "off_pro"
-  predictor: string
-  order_by: "confidence" | "random" | "popularity"
-  count: number
-  page: number
-  campaigns: string
-  lc: string
-}>
+export type InsightsRequestParams = Omit<NonNullable<RobotoffInsightQuery>, "barcode"> & {
+  barcode?: string
+}
 
 export type NutrientInsightDatum = {
   end: number

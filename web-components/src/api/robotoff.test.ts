@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import robotoff from "../api/robotoff"
 import { AnnotationAnswer } from "../types/robotoff"
+import { robotoffConfiguration } from "../signals/robotoff"
 
 // Mock dependencies
 vi.mock("../signals/robotoff", () => ({
@@ -19,6 +20,16 @@ vi.mock("../signals/app", () => ({
   },
 }))
 
+const defaultRobotoffApiUrl = "https://robotoff.openfoodfacts.org/api/v1"
+
+const setRobotoffConfiguration = (apiUrl = defaultRobotoffApiUrl, dryRun = false) => {
+  ;(robotoffConfiguration.getItem as any).mockImplementation((key: string) => {
+    if (key === "apiUrl") return apiUrl
+    if (key === "dryRun") return dryRun
+    return null
+  })
+}
+
 const jsonResponse = (body: unknown) =>
   new Response(JSON.stringify(body), {
     status: 200,
@@ -32,6 +43,7 @@ describe("Robotoff API", () => {
   beforeEach(() => {
     global.fetch = vi.fn().mockResolvedValue(jsonResponse({ status: "saved" }))
     vi.clearAllMocks()
+    setRobotoffConfiguration()
   })
 
   describe("questionsByProductCode", () => {
@@ -121,6 +133,27 @@ describe("Robotoff API", () => {
       expect(lastRequest().url).toBe("https://robotoff.openfoodfacts.org/api/v1/insights")
       expect(lastRequestOptions()).toEqual({ credentials: "include" })
       expect(result).toEqual(mockInsights)
+    })
+
+    it("should preserve a configured API path prefix", async () => {
+      setRobotoffConfiguration("https://proxy.example/robotoff/api/v1")
+      ;(global.fetch as any).mockResolvedValue(jsonResponse({ insights: [] }))
+
+      await robotoff.insights()
+
+      expect(lastRequest().url).toBe("https://proxy.example/robotoff/api/v1/insights")
+    })
+
+    it("should resolve relative configured API paths", async () => {
+      const apiPath = "/proxy/robotoff/api/v1"
+      setRobotoffConfiguration(apiPath)
+      ;(global.fetch as any).mockResolvedValue(jsonResponse({ insights: [] }))
+
+      await robotoff.insights()
+
+      expect(lastRequest().url).toBe(
+        new URL(`${apiPath}/insights`, window.location.href).toString()
+      )
     })
 
     it("should handle request parameters", async () => {
@@ -256,12 +289,7 @@ describe("Robotoff API", () => {
 
   describe("dry run mode", () => {
     it("should log instead of making request in dry run mode", async () => {
-      const { robotoffConfiguration } = await import("../signals/robotoff")
-      ;(robotoffConfiguration.getItem as any).mockImplementation((key: string) => {
-        if (key === "apiUrl") return "https://robotoff.openfoodfacts.org/api/v1"
-        if (key === "dryRun") return true
-        return null
-      })
+      setRobotoffConfiguration(defaultRobotoffApiUrl, true)
 
       const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {})
 
