@@ -988,15 +988,15 @@
       </trans-unit>
       <trans-unit id="scbf8442741ae9d1b">
         <source>Optional details</source>
-        <target state="needs-translation">Optional details</target>
+        <target state="translated">Ytterligare detaljer</target>
       </trans-unit>
       <trans-unit id="se7c56a68f0ecf6e9">
         <source>Submitting...</source>
-        <target state="needs-translation">Submitting...</target>
+        <target state="translated">Skickar in ...</target>
       </trans-unit>
       <trans-unit id="sf245e27cbd126b9c">
         <source>Unknown Brand/Quantity</source>
-        <target state="needs-translation">Unknown Brand/Quantity</target>
+        <target state="translated">Okänt märke/kvantitet</target>
       </trans-unit>
       <trans-unit id="s6ffdc18b840acf30">
         <source><x id="0" equiv-text="${brands}"/> - <x id="1" equiv-text="${quantity}"/></source>
