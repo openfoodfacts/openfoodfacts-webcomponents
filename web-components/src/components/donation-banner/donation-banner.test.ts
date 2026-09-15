@@ -74,15 +74,19 @@ describe("donation-banner", () => {
   it("displays the updated title, hook, financial callout and community image", async () => {
     const element = await createBanner()
 
-    expect(element.shadowRoot.querySelector(".donation-banner-footer__main-title").textContent.trim()).toBe(
-      "Become an Open Food Facts patron"
-    )
-    expect(element.shadowRoot.querySelector(".donation-banner-footer__hook-section p").textContent.trim()).toBe(
-      "We still need €120,000 to finish 2026!"
-    )
     expect(
-      element.shadowRoot.querySelector(".donation-banner-footer__actions-section__financial p").textContent.trim()
-    ).toBe("If every visitor this month clicked on Donate and gave just 1€, we'd get over 8 times our yearly budget!")
+      element.shadowRoot.querySelector(".donation-banner-footer__main-title").textContent.trim()
+    ).toBe("Become an Open Food Facts patron")
+    expect(
+      element.shadowRoot.querySelector(".donation-banner-footer__hook-section p").textContent.trim()
+    ).toBe("We still need €120,000 to finish 2026!")
+    expect(
+      element.shadowRoot
+        .querySelector(".donation-banner-footer__actions-section__financial p")
+        .textContent.trim()
+    ).toBe(
+      "If every visitor this month clicked on Donate and gave just 1€, we'd get over 8 times our yearly budget!"
+    )
     expect(element.shadowRoot.querySelector("img.group-image")).not.toBeNull()
   })
 

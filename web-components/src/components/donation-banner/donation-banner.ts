@@ -102,8 +102,8 @@ export class DonationBanner extends LitElement {
       locale in this.links
         ? this.links[locale as keyof typeof this.links]
         : locale && locale !== "en"
-        ? `https://world-${locale}.openfoodfacts.org/donate-to-open-food-facts`
-        : this.links.default
+          ? `https://world-${locale}.openfoodfacts.org/donate-to-open-food-facts`
+          : this.links.default
     return this.getLinkWithQueryParams(link)
   }
 
@@ -399,9 +399,7 @@ export class DonationBanner extends LitElement {
       <div class="donation-banner-footer row">
         <div class="donation-banner-footer__left-aside">
           <div class="donation-banner-footer__hook-section">
-            <p>
-              ${msg("We still need €120,000 to finish 2026!")}
-            </p>
+            <p>${msg("We still need €120,000 to finish 2026!")}</p>
           </div>
           <img
             class="group-image"
