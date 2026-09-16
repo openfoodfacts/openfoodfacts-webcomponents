@@ -5,6 +5,8 @@ import type { NewsData, ProcessedNewsItem } from "../../types/news-feed"
 import { Task } from "@lit/task"
 import { sanitizeHtml } from "../../utils/html"
 import dayjs from "dayjs/esm"
+import { parseFunding } from "../../utils/funding"
+import "../donation-meter/donation-meter"
 
 /**
  * `news-feed` - A web component that displays news items from a JSON feed.
@@ -130,6 +132,12 @@ export class NewsFeed extends LitElement {
       color: #1f2937;
     }
 
+    .funding {
+      display: block;
+      margin-top: 0.75rem;
+      color: #1f2937;
+    }
+
     /* Message Type Styles */
     .info {
       border-left: 4px solid #3b82f6; /* Blue */
@@ -193,6 +201,9 @@ export class NewsFeed extends LitElement {
       }
       .message strong,
       .message b {
+        color: #fafafa;
+      }
+      .funding {
         color: #fafafa;
       }
       .info {
@@ -280,6 +291,7 @@ export class NewsFeed extends LitElement {
         min_app_version: details.min_app_version,
         max_app_version: details.max_app_version,
         enabled: details.enabled !== false, // Default to true if not explicitly false
+        funding: parseFunding(details.raised, details.goal, details.currency) ?? undefined,
         message_type: (details.message_type || "info").toLowerCase(), // Default to 'info'
         // Add other fields from 'details' if needed for filtering later
       })
@@ -450,6 +462,9 @@ export class NewsFeed extends LitElement {
         <p class="message">
           ${sanitizeHtml(item.parsedMessage) || item.message || "No message content."}
         </p>
+        ${item.funding
+          ? html`<donation-meter class="funding" .funding=${item.funding}></donation-meter>`
+          : ""}
       </div>
     `
 
