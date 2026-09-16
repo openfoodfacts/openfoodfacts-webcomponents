@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.17.0...v1.18.0) (2026-09-16)
+
+
+### Features
+
+* show the live fundraiser figures in the donation banner and the news feed ([#616](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/616)) ([53f1000](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/53f10008b708f054f5d91d4fa4a1e71ef822d01c))
+
 ## [1.17.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.16.0...v1.17.0) (2026-09-09)
 
 
