@@ -70,6 +70,23 @@ const text = (element: any) =>
 
 const bar = (element: any) => element.shadowRoot.querySelector(".bar")
 
+const recordStates = (element: any) => {
+  const states: string[] = []
+  element.addEventListener("donation-meter-state", (event: any) => states.push(event.detail.state))
+  return states
+}
+
+/** Waits for the fetch to land: `loading` is announced before the answer is known. */
+const settleState = async (element: any, states: string[]) => {
+  for (let attempt = 0; attempt < 20; attempt++) {
+    await element.updateComplete
+    if (states.length > 0 && states.at(-1) !== "loading") {
+      break
+    }
+    await new Promise((resolve) => setTimeout(resolve, 5))
+  }
+}
+
 beforeEach(() => {
   document.body.innerHTML = ""
 })
@@ -201,5 +218,48 @@ describe("donation-meter", () => {
     await element.updateComplete
 
     expect(text(element)).toBe("")
+  })
+
+  it("announces has-data once the figures are on screen", async () => {
+    const element = document.createElement("donation-meter") as any
+    const states = recordStates(element)
+    element.funding = { raised: 44156, goal: 170000, currency: "EUR" }
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    expect(bar(element)).not.toBeNull()
+    expect(states).toEqual(["has-data"])
+
+    element.requestUpdate()
+    await element.updateComplete
+    expect(states).toEqual(["has-data"])
+  })
+
+  it("announces no-data when the figures do not parse", async () => {
+    const element = document.createElement("donation-meter") as any
+    const states = recordStates(element)
+    element.funding = { raised: 44156, goal: 0, currency: "EUR" }
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    expect(bar(element)).toBeNull()
+    expect(states).toEqual(["no-data"])
+  })
+
+  it("announces the drop back to no-data when a live feed stops carrying figures", async () => {
+    const element = await meterFromFeed(feedWith({ raised: 44156, goal: 170000, currency: "EUR" }))
+    expect(bar(element)).not.toBeNull()
+
+    const states = recordStates(element)
+    vi.mocked(global.fetch).mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => feedWith({ raised: 44156, currency: "EUR" }),
+    } as Response)
+    element.setAttribute("url", "https://example.org/other.json")
+    await settleState(element, states)
+
+    expect(bar(element)).toBeNull()
+    expect(states).toEqual(["loading", "no-data"])
   })
 })

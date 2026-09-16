@@ -1,8 +1,10 @@
-import { LitElement, html, css, nothing } from "lit"
+import { LitElement, html, css, nothing, type PropertyValues } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { localized, msg, str } from "@lit/localize"
-import { Task } from "@lit/task"
+import { Task, TaskStatus } from "@lit/task"
 import { languageCode } from "../../signals/app"
+import { EventState, EventType } from "../../constants"
+import type { BasicStateEventDetail } from "../../types"
 import type { Funding, NewsData } from "../../types/news-feed"
 import { findFunding, parseFunding } from "../../utils/funding"
 
@@ -16,6 +18,8 @@ import { findFunding, parseFunding } from "../../utils/funding"
  * <donation-meter
  *   url="https://raw.githubusercontent.com/openfoodfacts/smooth-app_assets/refs/heads/main/prod/tagline/web/main.json"
  * ></donation-meter>
+ *
+ * @fires {EventType.DONATION_METER_STATE} - When the element starts or stops showing figures.
  */
 @customElement("donation-meter")
 @localized()
@@ -27,6 +31,8 @@ export class DonationMeter extends LitElement {
   @property({ attribute: "url" }) url?: string
 
   @property({ type: Object }) funding?: Funding
+
+  private lastState?: EventState
 
   static override styles = css`
     :host {
@@ -97,6 +103,45 @@ export class DonationMeter extends LitElement {
     },
   })
 
+  override connectedCallback() {
+    super.connectedCallback()
+    // An announcement made while the host was detached never reached it, so the
+    // element has to say where it stands again rather than dedupe against it.
+    this.lastState = undefined
+    this.requestUpdate()
+  }
+
+  private get visibleFunding(): Funding | null {
+    if (this.funding) {
+      const { raised, goal, currency } = this.funding
+      return parseFunding(raised, goal, currency)
+    }
+    if (this._fundingTask.status !== TaskStatus.COMPLETE) {
+      return null
+    }
+    return this._fundingTask.value ?? null
+  }
+
+  private get state(): EventState {
+    if (!this.funding && this._fundingTask.status === TaskStatus.PENDING) {
+      return EventState.LOADING
+    }
+    return this.visibleFunding ? EventState.HAS_DATA : EventState.NO_DATA
+  }
+
+  override updated(changedProperties: PropertyValues) {
+    super.updated(changedProperties)
+    const state = this.state
+    if (state === this.lastState) {
+      return
+    }
+    this.lastState = state
+    const detail: BasicStateEventDetail = { state }
+    this.dispatchEvent(
+      new CustomEvent(EventType.DONATION_METER_STATE, { detail, bubbles: true, composed: true })
+    )
+  }
+
   private format(amount: number, currency: string) {
     return new Intl.NumberFormat(this.locale, {
       style: "currency",
@@ -145,18 +190,9 @@ export class DonationMeter extends LitElement {
     return html`<span class="shortfall">${msg(str`${missing} short`)}</span>`
   }
 
+  // No figures beats wrong figures: the host keeps its static donation ask.
   override render() {
-    if (this.funding) {
-      const { raised, goal, currency } = this.funding
-      return this.renderMeter(parseFunding(raised, goal, currency))
-    }
-
-    return this._fundingTask.render({
-      // No figures beats wrong figures: the host keeps its static donation ask.
-      pending: () => nothing,
-      error: () => nothing,
-      complete: (funding) => this.renderMeter(funding),
-    })
+    return this.renderMeter(this.visibleFunding)
   }
 }
 

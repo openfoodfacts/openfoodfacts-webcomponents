@@ -3,7 +3,7 @@
   "author": "Open Food Facts",
   "license": "LGPL-2.1-or-later",
   "private": false,
-  "version": "1.16.0",
+  "version": "1.17.0",
   "description": "Reusable Web Components for Open Food Facts",
   "type": "module",
   "repository": {
@@ -87,7 +87,7 @@
     "eslint-plugin-prettier": "^5.4.1",
     "eslint-plugin-storybook": "^10.5.10",
     "glob": "^11.0.2",
-    "jsdom": "^29.1.1",
+    "jsdom": "^30.0.1",
     "playwright": "^1.55.0",
     "prettier": "^3.5.3",
     "rimraf": "^6.0.1",

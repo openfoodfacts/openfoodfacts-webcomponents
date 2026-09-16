@@ -1,7 +1,9 @@
 import { LitElement, html, css, nothing } from "lit"
-import { customElement, property } from "lit/decorators.js"
+import { customElement, property, state } from "lit/decorators.js"
 import { localized, msg, str } from "@lit/localize"
 import { getImageUrl, languageCode } from "../../signals/app"
+import { EventState } from "../../constants"
+import type { BasicStateEventDetail } from "../../types"
 import { classMap } from "lit/directives/class-map.js"
 import { darkModeListener } from "../../utils/dark-mode-listener"
 import "../donation-meter/donation-meter"
@@ -33,6 +35,10 @@ export class DonationBanner extends LitElement {
    */
   @property({ type: String, attribute: "news-url" })
   newsUrl?: string
+
+  /** Whether the meter is showing figures, not merely mounted. */
+  @state()
+  private meterHasFigures = false
 
   /**
    * Custom link/url to the donation page.
@@ -74,20 +80,39 @@ export class DonationBanner extends LitElement {
     return (new Date().getFullYear() + 1).toString()
   }
 
+  private onMeterState = (event: CustomEvent<BasicStateEventDetail>) => {
+    // A meter removed from the page keeps its in-flight request, and Lit keeps
+    // the listener bound to it, so a late answer must not speak for the banner.
+    if (!(event.target as HTMLElement).isConnected) {
+      return
+    }
+    this.meterHasFigures = event.detail.state === EventState.HAS_DATA
+  }
+
   getLinkWithQueryParams(link: string) {
     const locale = languageCode.get()
-    const url = new URL(
+    let url = new URL(
       link,
       typeof window !== "undefined" && window.location?.href
         ? window.location.href
         : "https://world.openfoodfacts.org"
     )
+    // The link is rendered into an href, which is a script sink, and the page
+    // embedding this element chooses it. `javascript:donate()//` would run in
+    // that page and comment out the parameters appended below, so anything
+    // that is not one of the two web schemes falls back to the donation page.
+    if (url.protocol !== "https:" && url.protocol !== "http:") {
+      url = new URL(this.links.default)
+    }
     const params = new URLSearchParams(url.search)
     if (!params.has("utm_source")) params.set("utm_source", "off")
     if (!params.has("utm_medium")) params.set("utm_medium", "web")
     if (!params.has("utm_campaign")) params.set("utm_campaign", `donate-${this.currentYear}-a`)
     if (!params.has("utm_term")) params.set("utm_term", `${locale || "en"}-text-button`)
-    if (this.newsUrl && !params.has("utm_content")) params.set("utm_content", "meter")
+    // A meter showing nothing leaves the banner identical to the plain one, so
+    // crediting the click to a meter that is not there would inflate the count.
+    if (this.newsUrl && this.meterHasFigures && !params.has("utm_content"))
+      params.set("utm_content", "meter")
     url.search = params.toString()
     return url.toString()
   }
@@ -438,7 +463,12 @@ export class DonationBanner extends LitElement {
                 <p>${msg("support the advancement of public health research.")}</p>
               </li>
             </ul>
-            ${this.newsUrl ? html`<donation-meter url=${this.newsUrl}></donation-meter>` : nothing}
+            ${this.newsUrl
+              ? html`<donation-meter
+                  url=${this.newsUrl}
+                  @donation-meter-state="${this.onMeterState}"
+                ></donation-meter>`
+              : nothing}
           </div>
           <div class="donation-banner-footer__actions-section">
             <div class="donation-banner-footer__actions-section__financial">
