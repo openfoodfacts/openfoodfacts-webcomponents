@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file target-language="sr-CS" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+  <file target-language="sr" source-language="en" original="lit-localize-inputs" datatype="plaintext">
     <body>
       <trans-unit id="s49730f3d5751a433">
         <source>Loading...</source>
@@ -40,7 +40,7 @@
       </trans-unit>
       <trans-unit id="sbd9a0b2293b3cd3c">
         <source>Serving size</source>
-        <target state="translated">Porcija</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Величина порције</target>
       </trans-unit>
       <trans-unit id="sbb623d6b18d966a0">
         <source>Nutrition facts are displayed on the packaging:</source>
@@ -66,10 +66,6 @@
         <source>Rotate image to the right</source>
         <target state="needs-translation">Rotate image to the right</target>
       </trans-unit>
-      <trans-unit id="s475b08749d0706ed">
-        <source>Help us inform millions of consumers around the world about what they eat</source>
-        <target state="needs-translation">Help us inform millions of consumers around the world about what they eat</target>
-      </trans-unit>
       <trans-unit id="sfc40ea3d5d5aa6f8">
         <source>Your donations fund the day-to-day operations of our non-profit association:</source>
         <target state="needs-translation">Your donations fund the day-to-day operations of our non-profit association:</target>
@@ -94,10 +90,6 @@
         <source>support the advancement of public health research.</source>
         <target state="needs-translation">support the advancement of public health research.</target>
       </trans-unit>
-      <trans-unit id="s6d7b6cdedaadfb6e">
-        <source>Each donation counts! We appreciate your support in bringing further food transparency in the world.</source>
-        <target state="needs-translation">Each donation counts! We appreciate your support in bringing further food transparency in the world.</target>
-      </trans-unit>
       <trans-unit id="s6306a31415aea913">
         <source>I SUPPORT</source>
         <target state="needs-translation">I SUPPORT</target>
@@ -105,10 +97,6 @@
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
         <target state="needs-translation">group photo donation <x id="0" equiv-text="${this.currentYear}"/></target>
-      </trans-unit>
-      <trans-unit id="s43df2e8395f6834e">
-        <source>Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</source>
-        <target state="needs-translation">Please give to our <x id="0" equiv-text="${this.currentYear}"/> Fundraiser</target>
       </trans-unit>
       <trans-unit id="s000d98595e959c1e">
         <source>Get It On Google Play</source>
@@ -144,7 +132,7 @@
       </trans-unit>
       <trans-unit id="s5e8250fb85d64c23">
         <source>Close</source>
-        <target state="translated">Zatvori</target>
+        <target state="translated">Затвори</target>
       </trans-unit>
       <trans-unit id="s976dfd19ef58a1e1">
         <source>Click to scan a barcode and find out its details (health, preferences, etc.)</source>
@@ -160,7 +148,7 @@
       </trans-unit>
       <trans-unit id="sf9aee319a006c9b4">
         <source>Add</source>
-        <target state="translated">Dodajte</target>
+        <target state="translated">Додај</target>
       </trans-unit>
       <trans-unit id="s5666afe5cd0166de">
         <source>Please fix the errors or modify the text before confirming</source>
@@ -184,7 +172,7 @@
       </trans-unit>
       <trans-unit id="s33f85f24c0f5f008">
         <source>Save</source>
-        <target state="translated">Sačuvaj</target>
+        <target state="needs-translation">Save</target>
       </trans-unit>
       <trans-unit id="s2ceb11be2290bb1b">
         <source>Cancel</source>
@@ -196,7 +184,7 @@
       </trans-unit>
       <trans-unit id="s64ef2a6c2dd1d3d1">
         <source>Edit</source>
-        <target state="translated">Izmeni</target>
+        <target state="needs-translation">Edit</target>
       </trans-unit>
       <trans-unit id="h6bdd1b427aa985a4">
         <source>This tool allows you to correct the ingredients list. You can add, remove or edit
@@ -254,7 +242,7 @@
       </trans-unit>
       <trans-unit id="sdc673e73b5c13aea">
         <source>Delete</source>
-        <target state="translated">Obriši</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Обриши</target>
       </trans-unit>
       <trans-unit id="s15d64a0a6715285a">
         <source>New key</source>
@@ -298,11 +286,11 @@
       </trans-unit>
       <trans-unit id="scb489a1a173ac3f0">
         <source>Yes</source>
-        <target state="translated">Da</target>
+        <target state="needs-translation">Yes</target>
       </trans-unit>
       <trans-unit id="s09205907b5b56cda">
         <source>No</source>
-        <target state="translated">Ne</target>
+        <target state="needs-translation">No</target>
       </trans-unit>
       <trans-unit id="s42dd66b2441566fd">
         <source>Center icon</source>
@@ -656,7 +644,7 @@
       </trans-unit>
       <trans-unit id="s9fc41f789c63b40d">
         <source>Products</source>
-        <target state="translated">Proizvodi</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Производи</target>
       </trans-unit>
       <trans-unit id="s1e00019dc454872d">
         <source>Please provide a property name using the property-name attribute.</source>
@@ -728,7 +716,7 @@
       </trans-unit>
       <trans-unit id="s5f343a43e7ea9f91">
         <source>Error</source>
-        <target state="translated">Greška</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">Грешка</target>
       </trans-unit>
       <trans-unit id="sd947a599045e9e0e">
         <source>Failed to check property conflicts. Please try again.</source>
@@ -828,7 +816,7 @@
       </trans-unit>
       <trans-unit id="s091d3d07b5b3076f">
         <source>OK</source>
-        <target state="translated">ОК</target>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">У реду</target>
       </trans-unit>
       <trans-unit id="s72c9c4e6ab4ca7ae">
         <source>Value replaced successfully!</source>
@@ -972,7 +960,7 @@
       </trans-unit>
       <trans-unit id="s39d54c8748d51877">
         <source>Barcode</source>
-        <target state="translated">Barkod</target>
+        <target state="needs-translation">Barcode</target>
       </trans-unit>
       <trans-unit id="s4fb2e52ef0c61ab3">
         <source>Image ID</source>
@@ -1001,6 +989,30 @@
       <trans-unit id="s6ffdc18b840acf30">
         <source><x id="0" equiv-text="${brands}"/> - <x id="1" equiv-text="${quantity}"/></source>
         <target state="needs-translation"><x id="0" equiv-text="${brands}"/> - <x id="1" equiv-text="${quantity}"/></target>
+      </trans-unit>
+      <trans-unit id="sb18dd702b5f51223">
+        <source><x id="0" equiv-text="${missing}"/> short</source>
+        <target state="needs-translation"><x id="0" equiv-text="${missing}"/> short</target>
+      </trans-unit>
+      <trans-unit id="s4e037fb4937e78d2">
+        <source>of <x id="0" equiv-text="${goal}"/></source>
+        <target state="needs-translation">of <x id="0" equiv-text="${goal}"/></target>
+      </trans-unit>
+      <trans-unit id="sfb6c2292955d4453">
+        <source>Fundraiser progress</source>
+        <target state="needs-translation">Fundraiser progress</target>
+      </trans-unit>
+      <trans-unit id="s8966e013dce8891f">
+        <source>We still need €120,000 to finish 2026!</source>
+        <target state="needs-translation">We still need €120,000 to finish 2026!</target>
+      </trans-unit>
+      <trans-unit id="s4b2638408d2e3aa8">
+        <source>Become an Open Food Facts patron</source>
+        <target state="needs-translation">Become an Open Food Facts patron</target>
+      </trans-unit>
+      <trans-unit id="s12b36eaac15a1c74">
+        <source>If every visitor this month clicked on Donate and gave just 1€, we'd get over 8 times our yearly budget!</source>
+        <target state="needs-translation">If every visitor this month clicked on Donate and gave just 1€, we'd get over 8 times our yearly budget!</target>
       </trans-unit>
     </body>
   </file>
