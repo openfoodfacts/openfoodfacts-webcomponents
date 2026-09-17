@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest"
 import dayjs from "dayjs/esm"
-import { findFunding, parseFunding } from "./funding"
+import {
+  findFunding,
+  findNewsItem,
+  formatAmount,
+  formatDay,
+  parseCount,
+  parseFunding,
+} from "./funding"
 import type { NewsData } from "../types/news-feed"
 
 const inDays = (days: number) => dayjs().add(days, "day").format("YYYY-MM-DD HH:mm:ss")
@@ -148,5 +155,79 @@ describe("findFunding", () => {
     expect(findFunding({ news: {}, tagline_feed: { default: { news: [null] } } } as any)).toBeNull()
     expect(findFunding({ tagline_feed: { default: { news: {} } } } as any)).toBeNull()
     expect(findFunding({ tagline_feed: { default: { news: [{ id: "gone" }] } } } as any)).toBeNull()
+  })
+})
+
+describe("findNewsItem", () => {
+  const data = feed({ raised: 44156, goal: 170000, currency: "EUR" })
+
+  it("returns the item a page named by id", () => {
+    expect(findNewsItem(data, "donation_campaign")?.raised).toBe(44156)
+  })
+
+  it("returns null for an id the feed does not carry", () => {
+    expect(findNewsItem(data, "missing")).toBeNull()
+  })
+
+  it("returns null for an item with no translations", () => {
+    ;(data.news as any).bare = { raised: 1, goal: 2, currency: "EUR" }
+    expect(findNewsItem(data, "bare")).toBeNull()
+  })
+
+  it("returns a disabled or ended item anyway - the page named it on purpose", () => {
+    const ended = feed({
+      raised: 44156,
+      goal: 170000,
+      currency: "EUR",
+      enabled: false,
+      start_date: inDays(-200),
+      end_date: inDays(-100),
+    })
+    expect(findNewsItem(ended, "donation_campaign")).not.toBeNull()
+  })
+
+  it("survives a missing feed", () => {
+    expect(findNewsItem(undefined, "x")).toBeNull()
+    expect(findNewsItem(null, "x")).toBeNull()
+    expect(findNewsItem({} as NewsData, "x")).toBeNull()
+  })
+})
+
+describe("parseCount", () => {
+  it("accepts a finite count of at least one", () => {
+    expect(parseCount(760)).toBe(760)
+    expect(parseCount(1)).toBe(1)
+  })
+
+  it("refuses zero, negative, non-finite or non-number values", () => {
+    expect(parseCount(0)).toBeNull()
+    expect(parseCount(-1)).toBeNull()
+    expect(parseCount(NaN)).toBeNull()
+    expect(parseCount(Infinity)).toBeNull()
+    expect(parseCount("5")).toBeNull()
+    expect(parseCount(undefined)).toBeNull()
+  })
+})
+
+describe("formatAmount", () => {
+  it("formats a whole amount with no decimals by default", () => {
+    expect(formatAmount(170000, "EUR", "en")).toBe("€170,000")
+  })
+
+  it("formats with the requested number of decimals", () => {
+    expect(formatAmount(1.7, "EUR", "en", 2)).toBe("€1.70")
+    expect(formatAmount(3.4, "EUR", "en", 2)).toBe("€3.40")
+  })
+})
+
+describe("formatDay", () => {
+  it("formats a valid date in the given locale and month length", () => {
+    expect(formatDay("2027-01-31 23:59:59", "en", "long")).toBe("January 31")
+    expect(formatDay("2027-01-31 23:59:59", "fr", "long")).toBe("31 janvier")
+  })
+
+  it("returns null for a missing or unparsable date", () => {
+    expect(formatDay(undefined, "en")).toBeNull()
+    expect(formatDay("x", "en")).toBeNull()
   })
 })
