@@ -28,6 +28,12 @@ import { DONATION_BANNER_VARIANTS } from "../../styles/donation-banner-variants"
 import "../donation-meter/donation-meter"
 import "../icons/cross"
 
+// A page can mount several banners (server#14521 mounts one at the top and one
+// in the footer), so the body's scroll lock and bottom padding are counted here:
+// the first sheet locks and saves the prior overflow, the last one to close
+// restores it; the padding stays until the last bar is gone.
+const page = { sheets: 0, overflow: "", bars: 0 }
+
 /**
  * Donation banner
  * @element donation-banner
@@ -123,10 +129,10 @@ export class DonationBanner extends LitElement {
     this.requestUpdate()
   }
 
-  /** The body's own `overflow` before the sheet locked it; `undefined` = not locked. */
-  private lockedOverflow?: string
+  /** Whether this element currently holds one of the page's sheet locks. */
+  private locked = false
   private previouslyFocused: HTMLElement | null = null
-  /** Whether this element is the one currently padding the body for the bar. */
+  /** Whether this element currently counts as one of the page's padding bars. */
   private padded = false
 
   override connectedCallback() {
@@ -140,6 +146,12 @@ export class DonationBanner extends LitElement {
     document.removeEventListener("keydown", this.onSheetKeyDown)
     this.clearPageEffects()
     super.disconnectedCallback()
+  }
+
+  override willUpdate(changedProperties: PropertyValues) {
+    if (changedProperties.has("variant")) {
+      this.barDismissed = false
+    }
   }
 
   override updated(changedProperties: PropertyValues) {
@@ -304,12 +316,18 @@ export class DonationBanner extends LitElement {
     const locale = this.locale
     const full = locale.replace("-", "_")
     const short = locale.split("-")[0]
-    return translations[full]?.[key] ?? translations[short]?.[key]
+    const pick = (lang: string) => {
+      const value = translations[lang]?.[key]
+      return typeof value === "string" ? value : undefined
+    }
+    return pick(full) ?? pick(short)
   }
 
   private fill(text: string, values: Record<string, string | undefined>): string {
     return text
-      .replace(/\{(\w+)\}/g, (_match, key) => values[key] ?? "")
+      .replace(/\{(\w+)\}/g, (_match, key) =>
+        Object.hasOwn(values, key) ? (values[key] ?? "") : ""
+      )
       .replace(/ {2,}/g, " ")
       .trim()
   }
@@ -418,10 +436,13 @@ export class DonationBanner extends LitElement {
     const first = focusable[0]
     const last = focusable[focusable.length - 1]
     const active = this.shadowRoot?.activeElement as HTMLElement | null
-    if (event.shiftKey && active === first) {
+    // Focus starts on the dialog itself (`tabindex="-1"`), which is neither
+    // first nor last, so anything outside the ring counts as its edge.
+    const inside = active !== null && focusable.includes(active)
+    if (event.shiftKey && (!inside || active === first)) {
       event.preventDefault()
       last.focus()
-    } else if (!event.shiftKey && active === last) {
+    } else if (!event.shiftKey && (!inside || active === last)) {
       event.preventDefault()
       first.focus()
     }
@@ -429,39 +450,60 @@ export class DonationBanner extends LitElement {
 
   private syncPageEffects() {
     const isSheet = this.view === DonationBannerVariant.SHEET
-    if (isSheet && this.lockedOverflow === undefined) {
-      this.lockedOverflow = document.body.style.overflow
-      document.body.style.overflow = "hidden"
+    if (isSheet && !this.locked) {
+      this.lock()
       this.previouslyFocused = document.activeElement as HTMLElement | null
       this.shadowRoot?.querySelector<HTMLElement>(".sheet")?.focus()
-    } else if (!isSheet && this.lockedOverflow !== undefined) {
-      document.body.style.overflow = this.lockedOverflow
-      this.lockedOverflow = undefined
+    } else if (!isSheet && this.locked) {
+      this.unlock()
       this.previouslyFocused?.focus?.()
       this.previouslyFocused = null
     }
 
     const isBarShown = this.view === DonationBannerVariant.BAR && !this.barDismissed
     if (isBarShown) {
+      // The last bar rendered sets the padding; two bars overlap anyway.
       const bar = this.shadowRoot?.querySelector<HTMLElement>(".bar")
       if (bar) {
         document.body.style.paddingBottom = `${bar.offsetHeight}px`
-        this.padded = true
+        if (!this.padded) {
+          this.padded = true
+          page.bars++
+        }
       }
     } else if (this.padded) {
+      this.unpad()
+    }
+  }
+
+  private lock() {
+    this.locked = true
+    if (page.sheets++ === 0) {
+      page.overflow = document.body.style.overflow
+      document.body.style.overflow = "hidden"
+    }
+  }
+
+  private unlock() {
+    this.locked = false
+    if (--page.sheets === 0) {
+      document.body.style.overflow = page.overflow
+    }
+  }
+
+  private unpad() {
+    this.padded = false
+    if (--page.bars === 0) {
       document.body.style.paddingBottom = ""
-      this.padded = false
     }
   }
 
   private clearPageEffects() {
-    if (this.lockedOverflow !== undefined) {
-      document.body.style.overflow = this.lockedOverflow
-      this.lockedOverflow = undefined
+    if (this.locked) {
+      this.unlock()
     }
     if (this.padded) {
-      document.body.style.paddingBottom = ""
-      this.padded = false
+      this.unpad()
     }
   }
 
@@ -875,9 +917,9 @@ export class DonationBanner extends LitElement {
   }
 
   private renderCampaignFinePrint() {
-    if (this.isFrance) {
-      const amount = formatAmount(this.amount ?? 0, this.currency, this.locale)
-      const net = formatAmount((this.amount ?? 0) * 0.34, this.currency, this.locale, 2)
+    if (this.isFrance && this.amount !== undefined) {
+      const amount = formatAmount(this.amount, this.currency, this.locale)
+      const net = formatAmount(this.amount * 0.34, this.currency, this.locale, 2)
       const builtIn = msg(
         str`Tax deductible in France: ${amount} costs you ${net}. Cancel any time.`
       )
@@ -924,10 +966,10 @@ export class DonationBanner extends LitElement {
   }
 
   private renderSheet() {
-    return html`<section class="sheet-root">
+    return html`<section class=${classMap({ "dark-mode": this.isDarkMode, "sheet-root": true })}>
       <div class="overlay" @click=${this.onMinimize}></div>
       <div
-        class=${classMap({ sheet: true, "dark-mode": this.isDarkMode })}
+        class="sheet"
         role="dialog"
         aria-modal="true"
         aria-labelledby="donation-banner-title"

@@ -14,8 +14,11 @@ export const DONATION_BANNER_VARIANTS = css`
     font-family: inherit;
   }
 
-  /* Set on the element, not :host, so the meter's shadow tree inherits it. */
-  donation-meter {
+  /* Set on the element, not :host, so the meter's shadow tree inherits it.
+     Scoped to the variants: the default render adopts this sheet too and
+     must keep its own meter colour. */
+  .campaign donation-meter,
+  .sheet donation-meter {
     display: block;
     font-size: 0.8125rem;
     --off-donation-meter-fill: #ff8714;
@@ -50,7 +53,7 @@ export const DONATION_BANNER_VARIANTS = css`
     padding: 22px 28px;
     border-radius: 12px;
     border: 1px solid #ede0db;
-    border-left: 6px solid #ff8714;
+    border-inline-start: 6px solid #ff8714;
     background: #fff;
     color: #201a17;
     box-sizing: border-box;
@@ -169,7 +172,7 @@ export const DONATION_BANNER_VARIANTS = css`
   .links {
     position: absolute;
     top: 12px;
-    right: 16px;
+    inset-inline-end: 16px;
     display: flex;
     align-items: center;
     gap: 14px;
@@ -223,7 +226,7 @@ export const DONATION_BANNER_VARIANTS = css`
   @media (max-width: 639px) {
     .strip {
       font-size: 13px;
-      padding: 10px 12px 10px 16px;
+      padding-inline: 16px 12px;
     }
 
     .strip .more {
@@ -293,7 +296,7 @@ export const DONATION_BANNER_VARIANTS = css`
   .sheet .close {
     position: absolute;
     top: 12px;
-    right: 14px;
+    inset-inline-end: 14px;
   }
 
   .sheet donation-meter {
@@ -341,7 +344,8 @@ export const DONATION_BANNER_VARIANTS = css`
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px 12px 12px 14px;
+    padding-block: 10px 12px;
+    padding-inline: 14px 12px;
     background: #fff;
     border-top: 1px solid #ede0db;
     box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.12);
@@ -383,7 +387,7 @@ export const DONATION_BANNER_VARIANTS = css`
   }
 
   .dark-mode.campaign {
-    border-left-color: #ff8714;
+    border-inline-start-color: #ff8714;
   }
 
   .dark-mode.campaign p,

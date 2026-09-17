@@ -229,5 +229,18 @@ describe("formatDay", () => {
   it("returns null for a missing or unparsable date", () => {
     expect(formatDay(undefined, "en")).toBeNull()
     expect(formatDay("x", "en")).toBeNull()
+    expect(formatDay("", "en")).toBeNull()
+  })
+
+  it("keeps the calendar day of a date-only string west of Greenwich", () => {
+    const tz = process.env.TZ
+    process.env.TZ = "America/Los_Angeles"
+    try {
+      expect(formatDay("2027-01-31", "en", "long")).toBe("January 31")
+      expect(formatDay("2027-01-31 23:59:59", "en", "short")).toBe("Jan 31")
+    } finally {
+      if (tz === undefined) delete process.env.TZ
+      else process.env.TZ = tz
+    }
   })
 })
