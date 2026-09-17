@@ -246,6 +246,53 @@ describe("donation-meter", () => {
     expect(states).toEqual(["no-data"])
   })
 
+  it("renders the mock's long line: raised of goal, supporters, until day", async () => {
+    const element = document.createElement("donation-meter") as any
+    element.funding = { raised: 47431, goal: 170000, currency: "EUR" }
+    element.line = "long"
+    element.count = 760
+    element.setAttribute("end-date", "2027-01-31 23:59:59")
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    expect(text(element)).toContain("€47,431")
+    expect(text(element)).toContain("raised of €170,000")
+    expect(text(element)).toContain("760 supporters")
+    expect(text(element)).toContain("until January 31")
+    expect(text(element)).not.toContain("short")
+    expect(bar(element)).not.toBeNull()
+  })
+
+  it("renders the short line without the 'raised' word or supporters when count is absent", async () => {
+    const element = document.createElement("donation-meter") as any
+    element.funding = { raised: 47431, goal: 170000, currency: "EUR" }
+    element.line = "short"
+    element.setAttribute("end-date", "2027-01-31 23:59:59")
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    expect(text(element)).toContain("of €170,000")
+    expect(text(element)).not.toContain("raised of")
+    expect(text(element)).not.toContain("supporters")
+  })
+
+  it("omits the 'until' part for an invalid end date", async () => {
+    const element = document.createElement("donation-meter") as any
+    element.funding = { raised: 47431, goal: 170000, currency: "EUR" }
+    element.line = "long"
+    element.setAttribute("end-date", "not-a-date")
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    expect(text(element)).not.toContain("until")
+  })
+
+  it("existing standalone tests are unaffected by 'line' being absent", async () => {
+    const element = await meterWithFigures(44156, 170000)
+    expect(text(element)).toContain("€44,156")
+    expect(text(element)).toContain("€125,844 short")
+  })
+
   it("announces the drop back to no-data when a live feed stops carrying figures", async () => {
     const element = await meterFromFeed(feedWith({ raised: 44156, goal: 170000, currency: "EUR" }))
     expect(bar(element)).not.toBeNull()
