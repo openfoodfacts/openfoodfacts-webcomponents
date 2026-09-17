@@ -8,34 +8,51 @@ export interface Funding {
 }
 
 /**
+ * One translation of a feed item, plus the optional copy slots the donation
+ * banner variants can override (`donation-proposal/specs/C2` PO decision 1).
+ */
+export interface NewsTranslation {
+  title: string
+  message: string
+  url?: string
+  image?: {
+    url: string
+  }
+  button_label?: string
+  hook?: string
+  fine_print?: string
+  tier_note?: string
+}
+
+/** The six feed keys a donation-banner slot can read. */
+export type FeedCopyKey = "title" | "message" | "hook" | "button_label" | "fine_print" | "tier_note"
+
+export interface NewsItem {
+  translations: {
+    [key: string]: NewsTranslation
+  }
+  url?: string
+  start_date?: string
+  end_date?: string
+  languages?: string[]
+  countries?: string[]
+  min_app_version?: string
+  max_app_version?: string
+  enabled?: boolean
+  message_type?: string
+  raised?: number
+  goal?: number
+  currency?: string
+  /** Supporter count for the campaign; absent on feeds that do not publish it yet. */
+  count?: number
+}
+
+/**
  * This is the format of the JSON file where data is stored
  */
 export interface NewsData {
   news: {
-    [key: string]: {
-      translations: {
-        [key: string]: {
-          title: string
-          message: string
-          url?: string
-          image?: {
-            url: string
-          }
-        }
-      }
-      url?: string
-      start_date?: string
-      end_date?: string
-      languages?: string[]
-      countries?: string[]
-      min_app_version?: string
-      max_app_version?: string
-      enabled?: boolean
-      message_type?: string
-      raised?: number
-      goal?: number
-      currency?: string
-    }
+    [key: string]: NewsItem
   }
   tagline_feed: {
     default: {
