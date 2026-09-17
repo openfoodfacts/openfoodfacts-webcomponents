@@ -535,6 +535,16 @@ describe("donation-banner variants", () => {
       expect(href).not.toContain("amount=")
       expect(href).not.toContain("interval=")
     })
+
+    it("'I already donated' fires already-donated", async () => {
+      const element = await mountVariant("campaign", { amounts: "3,5,10" })
+      const detail = bannerEvents(element)
+      Array.from(element.shadowRoot.querySelectorAll(".link"))
+        .find((btn: any) => btn.textContent.includes("I already donated"))!
+        // @ts-expect-error test DOM node
+        .click()
+      expect(detail).toEqual([{ action: "already-donated", variant: "campaign" }])
+    })
   })
 
   describe("campaign, with news-id: feed copy and figures, one fetch", () => {
@@ -1027,6 +1037,16 @@ describe("donation-banner variants", () => {
 
       expect(detail.every((entry) => entry.action === "minimize")).toBe(true)
       expect(detail).toHaveLength(4)
+    })
+
+    it("'I already donated' fires already-donated", async () => {
+      const element = await mountSheet()
+      const detail = bannerEvents(element)
+      Array.from(element.shadowRoot.querySelectorAll(".link"))
+        .find((btn: any) => btn.textContent.includes("I already donated"))!
+        // @ts-expect-error test DOM node
+        .click()
+      expect(detail).toEqual([{ action: "already-donated", variant: "sheet" }])
     })
 
     it("a click inside the sheet emits nothing", async () => {
