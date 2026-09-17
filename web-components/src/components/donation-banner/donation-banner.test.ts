@@ -306,10 +306,6 @@ describe("donation-banner", () => {
   })
 })
 
-// ---------------------------------------------------------------------------
-// C2 variants: campaign / strip / sheet / bar, feed-driven copy
-// ---------------------------------------------------------------------------
-
 /** The literal `upstream/main @ a7ddfb4` render, captured on the clean tree before this ticket's code. */
 const DEFAULT_MARKUP = (nextYear: string) => `<section class="  ">
       <div class="donation-banner-footer row">

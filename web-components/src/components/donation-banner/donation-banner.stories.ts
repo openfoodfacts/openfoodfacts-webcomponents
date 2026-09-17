@@ -22,12 +22,9 @@ export const WithCampaignFigures: Story = {
   },
 }
 
-// ---------------------------------------------------------------------------
-// C2 variants. The feed here is the live one; its `donation_campaign_2026`
-// item carries no `en` translation yet, so these render the built-in copy
-// until the sibling feed ticket adds one.
-// ---------------------------------------------------------------------------
-
+// The feed here is the live one; its `donation_campaign_2026` item carries no
+// `en` translation yet, so these render the built-in copy until the sibling
+// feed ticket adds one.
 const FEED =
   "https://raw.githubusercontent.com/openfoodfacts/smooth-app_assets/refs/heads/main/prod/tagline/web/main.json"
 

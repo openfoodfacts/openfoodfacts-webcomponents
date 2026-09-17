@@ -208,8 +208,6 @@ export class DonationBanner extends LitElement {
     return this.linkFor()
   }
 
-  // ---- Variant selection & feed reading -----------------------------------
-
   private get view(): DonationBannerVariant | null {
     return this.variant && (Object.values(DonationBannerVariant) as string[]).includes(this.variant)
       ? (this.variant as DonationBannerVariant)
@@ -285,11 +283,9 @@ export class DonationBanner extends LitElement {
     return this.count !== null ? new Intl.NumberFormat(this.locale).format(this.count) : null
   }
 
-  // ---- Feed copy: full-lang → lang wins over the built-in msg(); no fall
-  // back to `translations.default`, which is only ever English and would
-  // silently replace an already-translated built-in string on every other
-  // locale (xliff/fr.xlf alone carries 244/247 units). --------------------
-
+  // Full-lang then lang wins over the built-in msg(); never `translations.default`,
+  // which is only ever English and would silently replace an already-translated
+  // built-in string on every other locale (xliff/fr.xlf alone carries 244/247 units).
   private feedText(key: FeedCopyKey): string | undefined {
     const translations = this.newsItem?.translations
     if (!translations) {
@@ -340,8 +336,6 @@ export class DonationBanner extends LitElement {
     const amountText = formatAmount(this.amount ?? tiers[0], this.currency, this.locale)
     return this.copy("button_label", template(amountText), { amount: amountText })
   }
-
-  // ---- Events ---------------------------------------------------------
 
   private emit(
     action: DonationBannerAction,
@@ -422,8 +416,6 @@ export class DonationBanner extends LitElement {
       first.focus()
     }
   }
-
-  // ---- Sheet scroll lock / focus and bar body padding, one place --------
 
   private syncPageEffects() {
     const isSheet = this.view === DonationBannerVariant.SHEET
@@ -753,8 +745,6 @@ export class DonationBanner extends LitElement {
     `,
   ]
 
-  // ---- Shared partials --------------------------------------------------
-
   private renderFundingMeter(line: "long" | "short") {
     const funding = this.funding
     if (!funding) {
@@ -889,8 +879,6 @@ export class DonationBanner extends LitElement {
     }
     return html`<p class="fine">${msg("Cancel any time.")}<br />${msg("Receipt by email.")}</p>`
   }
-
-  // ---- Variant renders ----------------------------------------------------
 
   private renderCampaign() {
     return html`<section class=${classMap({ "dark-mode": this.isDarkMode, campaign: true })}>
