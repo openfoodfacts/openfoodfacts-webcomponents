@@ -6,7 +6,7 @@ import { languageCode } from "../../signals/app"
 import { EventState, EventType } from "../../constants"
 import type { BasicStateEventDetail } from "../../types"
 import type { Funding, NewsData } from "../../types/news-feed"
-import { findFunding, parseFunding } from "../../utils/funding"
+import { findFunding, formatDay, parseFunding } from "../../utils/funding"
 
 /**
  * `donation-meter` - how far a funding campaign has got, from the figures the
@@ -31,6 +31,13 @@ export class DonationMeter extends LitElement {
   @property({ attribute: "url" }) url?: string
 
   @property({ type: Object }) funding?: Funding
+
+  /** Renders the mock's meter line instead of the standalone figures; absent = today's markup. */
+  @property({ attribute: "line" }) line?: "long" | "short"
+
+  @property({ type: Number }) count?: number
+
+  @property({ type: String, attribute: "end-date" }) endDate?: string
 
   private lastState?: EventState
 
@@ -86,6 +93,17 @@ export class DonationMeter extends LitElement {
       height: 100%;
       border-radius: 0.25rem;
       background-color: #ff6e78;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .row .raised {
+      font-size: inherit;
     }
   `
 
@@ -154,11 +172,23 @@ export class DonationMeter extends LitElement {
     return languageCode.get() || undefined
   }
 
-  private renderMeter(funding: Funding | null) {
-    if (!funding) {
-      return nothing
-    }
+  private renderBar(progress: number, percent: string) {
+    return html`
+      <div
+        class="bar"
+        role="progressbar"
+        aria-label=${msg("Fundraiser progress")}
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow=${Math.round(progress * 100)}
+        aria-valuetext=${percent}
+      >
+        <div style="width: ${(progress * 100).toFixed(1)}%"></div>
+      </div>
+    `
+  }
 
+  private renderMeter(funding: Funding) {
     const ratio = funding.raised / funding.goal
     const progress = Math.min(Math.max(ratio, 0), 1)
     const percent = new Intl.NumberFormat(this.locale, { style: "percent" }).format(ratio)
@@ -171,17 +201,7 @@ export class DonationMeter extends LitElement {
         <span class="raised">${raised}</span>
         <span class="goal">${msg(str`of ${goal}`)} · ${percent}</span>
       </div>
-      <div
-        class="bar"
-        role="progressbar"
-        aria-label=${msg("Fundraiser progress")}
-        aria-valuemin="0"
-        aria-valuemax="100"
-        aria-valuenow=${Math.round(progress * 100)}
-        aria-valuetext=${percent}
-      >
-        <div style="width: ${(progress * 100).toFixed(1)}%"></div>
-      </div>
+      ${this.renderBar(progress, percent)}
       ${missing >= 1 ? this.renderShortfall(this.format(missing, funding.currency)) : nothing}
     `
   }
@@ -190,9 +210,37 @@ export class DonationMeter extends LitElement {
     return html`<span class="shortfall">${msg(str`${missing} short`)}</span>`
   }
 
+  /** The mocks' one-line summary: `{raised} raised of {goal} · {count} supporters · until {end_date}`. */
+  private renderLine(funding: Funding) {
+    const ratio = funding.raised / funding.goal
+    const progress = Math.min(Math.max(ratio, 0), 1)
+    const percent = new Intl.NumberFormat(this.locale, { style: "percent" }).format(ratio)
+    const raised = this.format(funding.raised, funding.currency)
+    const goal = this.format(funding.goal, funding.currency)
+    const left = this.line === "long" ? msg(str`raised of ${goal}`) : msg(str`of ${goal}`)
+    const day = formatDay(this.endDate, this.locale, this.line === "short" ? "short" : "long")
+    const fmtCount = this.count ? new Intl.NumberFormat(this.locale).format(this.count) : null
+    const parts = [
+      fmtCount ? msg(str`${fmtCount} supporters`) : null,
+      day ? msg(str`until ${day}`) : null,
+    ].filter((part): part is string => Boolean(part))
+
+    return html`
+      <div class="figures row">
+        <span><span class="raised">${raised}</span> ${left}</span>
+        ${parts.length ? html`<span class="details">${parts.join(" · ")}</span>` : nothing}
+      </div>
+      ${this.renderBar(progress, percent)}
+    `
+  }
+
   // No figures beats wrong figures: the host keeps its static donation ask.
   override render() {
-    return this.renderMeter(this.visibleFunding)
+    const funding = this.visibleFunding
+    if (!funding) {
+      return nothing
+    }
+    return this.line ? this.renderLine(funding) : this.renderMeter(funding)
   }
 }
 
