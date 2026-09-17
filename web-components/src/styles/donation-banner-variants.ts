@@ -14,6 +14,7 @@ export const DONATION_BANNER_VARIANTS = css`
     font-family: inherit;
   }
 
+  /* Set on the element, not :host, so the meter's shadow tree inherits it. */
   donation-meter {
     display: block;
     font-size: 0.8125rem;
@@ -46,9 +47,9 @@ export const DONATION_BANNER_VARIANTS = css`
     display: grid;
     grid-template-columns: 1.25fr 1fr;
     gap: 40px;
-    padding: 32px;
+    padding: 22px 28px;
     border-radius: 12px;
-    border: 1px solid #d9cfc8;
+    border: 1px solid #ede0db;
     border-left: 6px solid #ff8714;
     background: #fff;
     color: #201a17;
@@ -57,52 +58,63 @@ export const DONATION_BANNER_VARIANTS = css`
 
   .campaign h2 {
     font-size: 22px;
-    line-height: 1.25;
-    margin: 0 0 12px;
+    line-height: 1.2;
+    margin: 0 0 8px;
   }
 
   .campaign p {
     font-size: 15px;
     line-height: 1.5;
     color: #52443d;
-    margin: 0 0 16px;
+    margin: 0 0 14px;
+  }
+
+  .ask {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+    padding-top: 24px;
   }
 
   .tiers {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 16px;
+    gap: 8px;
   }
 
   .tier {
     position: relative;
-    flex: 1 1 100px;
-    min-width: 90px;
+    flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 2px;
-    padding: 10px 8px;
+    padding: 10px 6px;
     border-radius: 10px;
-    border: 1px solid #d9cfc8;
-    background: #f6f3f0;
+    border: 1.5px solid #d9cfc8;
+    background: #fff;
     color: #201a17;
     text-align: center;
     text-decoration: none;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 15px;
   }
 
   .tier small {
-    font-weight: 400;
-    font-size: 12px;
+    font-weight: 500;
+    font-size: 11px;
     color: #85746c;
   }
 
   .tier.selected {
-    border-color: #ff8714;
-    background: #fff3e8;
+    border-color: #201a17;
+    background: #201a17;
+    color: #fff;
+  }
+
+  .tier.selected small {
+    color: #ede0db;
   }
 
   .badge {
@@ -121,43 +133,68 @@ export const DONATION_BANNER_VARIANTS = css`
 
   .cta {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    align-items: flex-start;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
   }
 
   .give {
     display: inline-block;
-    background: #ff8714;
+    background: #201a17;
     color: #fff;
     font-weight: 700;
-    font-size: 16px;
-    padding: 12px 24px;
+    font-size: 15px;
+    padding: 12px 26px;
     border-radius: 999px;
     text-decoration: none;
     text-align: center;
+    white-space: nowrap;
+  }
+
+  .give:hover {
+    background: #3a322e;
   }
 
   .fine {
     font-size: 12px;
+    line-height: 1.45;
     color: #85746c;
     margin: 0;
   }
 
+  .cta .fine {
+    flex: 1 1 120px;
+  }
+
   .links {
     position: absolute;
-    top: 16px;
+    top: 12px;
     right: 16px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 13px;
+    gap: 14px;
+    font-size: 12px;
+    color: #85746c;
+  }
+
+  .links .link {
+    font-weight: 600;
+    text-decoration: underline;
   }
 
   @media (max-width: 640px) {
     .campaign {
       grid-template-columns: 1fr;
       gap: 20px;
+    }
+
+    .ask {
+      padding-top: 0;
+    }
+
+    .cta {
+      flex-direction: column;
+      align-items: stretch;
     }
   }
 
@@ -168,25 +205,36 @@ export const DONATION_BANNER_VARIANTS = css`
     justify-content: space-between;
     gap: 16px;
     padding: 10px 16px;
-    background: #201a17;
-    color: #fff;
+    background: #fff;
+    border-top: 1px solid #ede0db;
+    border-bottom: 1px solid #ede0db;
+    color: #201a17;
     font-size: 14px;
   }
 
+  .strip > span:first-child {
+    min-width: 0;
+  }
+
   .strip .more {
-    color: #d9cfc8;
+    color: #52443d;
   }
 
   @media (max-width: 639px) {
+    .strip {
+      font-size: 13px;
+      padding: 10px 12px 10px 16px;
+    }
+
     .strip .more {
       display: none;
     }
   }
 
   .strip .go {
-    color: #ff8714;
+    color: inherit;
     font-weight: 700;
-    text-decoration: none;
+    text-decoration: underline;
     white-space: nowrap;
   }
 
@@ -213,15 +261,16 @@ export const DONATION_BANNER_VARIANTS = css`
     z-index: 1000;
     background: #fff;
     color: #201a17;
-    border-radius: 16px 16px 0 0;
-    padding: 12px 24px 24px;
+    border-radius: 18px 18px 0 0;
+    padding: 12px 18px 22px;
     box-sizing: border-box;
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.2);
     max-height: 85vh;
     overflow-y: auto;
   }
 
   .sheet .grab {
-    width: 36px;
+    width: 40px;
     height: 4px;
     border-radius: 999px;
     background: #d9cfc8;
@@ -229,12 +278,14 @@ export const DONATION_BANNER_VARIANTS = css`
   }
 
   .sheet h2 {
-    font-size: 19px;
-    margin: 8px 0 8px;
+    font-size: 18px;
+    line-height: 1.25;
+    margin: 8px 0 6px;
   }
 
   .sheet p {
-    font-size: 14px;
+    font-size: 13px;
+    line-height: 1.45;
     color: #52443d;
     margin: 0 0 12px;
   }
@@ -242,7 +293,42 @@ export const DONATION_BANNER_VARIANTS = css`
   .sheet .close {
     position: absolute;
     top: 12px;
-    right: 16px;
+    right: 14px;
+  }
+
+  .sheet donation-meter {
+    margin-bottom: 14px;
+  }
+
+  .sheet .tiers {
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .sheet .tier {
+    padding: 8px 4px;
+  }
+
+  .sheet .tier small {
+    font-size: 10px;
+  }
+
+  .sheet .give {
+    display: block;
+    font-size: 14px;
+    padding: 12px;
+    margin-bottom: 8px;
+  }
+
+  .sheet .fine {
+    font-size: 11px;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .sheet .fine .link {
+    font-weight: 600;
+    text-decoration: underline;
   }
 
   /* ---- bar ---- */
@@ -254,30 +340,64 @@ export const DONATION_BANNER_VARIANTS = css`
     z-index: 1000;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 10px 16px;
-    background: #201a17;
-    color: #fff;
+    gap: 10px;
+    padding: 10px 12px 12px 14px;
+    background: #fff;
+    border-top: 1px solid #ede0db;
+    box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.12);
+    color: #52443d;
     box-sizing: border-box;
   }
 
   .bar .tx {
-    font-size: 13px;
+    flex: 1;
     min-width: 0;
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  .bar .tx b {
+    display: block;
+    color: #201a17;
+    font-size: 13px;
+  }
+
+  .bar .tx .link {
+    text-decoration: underline;
+  }
+
+  .bar .give {
+    padding: 10px 14px;
+    font-size: 13px;
+    white-space: nowrap;
   }
 
   /* ---- dark mode (matches the default variant's tokens) ---- */
   .dark-mode.campaign,
-  .dark-mode .sheet {
+  .dark-mode.strip,
+  .dark-mode .sheet,
+  .dark-mode .bar {
     background: #2d2724;
     color: #f9f7f5;
     border-color: rgba(255, 255, 255, 0.15);
   }
 
+  .dark-mode.campaign {
+    border-left-color: #ff8714;
+  }
+
   .dark-mode.campaign p,
-  .dark-mode .sheet p {
+  .dark-mode .sheet p,
+  .dark-mode.strip .more,
+  .dark-mode .bar .tx,
+  .dark-mode .fine,
+  .dark-mode .links,
+  .dark-mode .close {
     color: #d4cbc5;
+  }
+
+  .dark-mode .bar .tx b {
+    color: #f9f7f5;
   }
 
   .dark-mode .tier {
@@ -289,17 +409,16 @@ export const DONATION_BANNER_VARIANTS = css`
   .dark-mode .tier.selected,
   .dark-mode .give {
     background: #f9f7f5;
+    border-color: #f9f7f5;
     color: #201a17;
   }
 
-  .dark-mode .fine {
-    color: #d4cbc5;
+  .dark-mode .tier.selected small {
+    color: #52443d;
   }
 
-  .dark-mode.strip,
-  .dark-mode .bar {
-    background: #f9f7f5;
-    color: #201a17;
+  .dark-mode .give:hover {
+    background: #fff;
   }
 
   .dark-mode .sheet .grab {

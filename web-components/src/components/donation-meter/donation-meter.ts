@@ -92,7 +92,7 @@ export class DonationMeter extends LitElement {
       position: relative;
       height: 100%;
       border-radius: 0.25rem;
-      background-color: #ff6e78;
+      background-color: var(--off-donation-meter-fill, #ff6e78);
     }
 
     .row {
