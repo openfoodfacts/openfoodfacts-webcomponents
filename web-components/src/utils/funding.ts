@@ -73,12 +73,18 @@ export const formatAmount = (
     maximumFractionDigits: fractionDigits,
   }).format(amount)
 
-/** A campaign end date in the reader's language, or `null` when unparsable. */
+/**
+ * A campaign end date in the reader's language, or `null` when unparsable.
+ * Formats dayjs's own parse: `new Date("2027-01-31 23:59:59")` is not ISO and
+ * a date-only string would be read as UTC, shifting the day west of Greenwich.
+ */
 export const formatDay = (
   date?: string,
   locale?: string,
   month: "short" | "long" = "long"
-): string | null =>
-  date && dayjs(date).isValid()
-    ? new Intl.DateTimeFormat(locale, { day: "numeric", month }).format(new Date(date))
+): string | null => {
+  const parsed = date ? dayjs(date) : null
+  return parsed?.isValid()
+    ? new Intl.DateTimeFormat(locale, { day: "numeric", month }).format(parsed.toDate())
     : null
+}

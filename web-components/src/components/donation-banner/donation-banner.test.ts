@@ -444,6 +444,27 @@ describe("donation-banner variants", () => {
       const element = await createBanner({ variant: "foo" })
       expect(markup(element)).toBe(DEFAULT_MARKUP(nextYear()))
     })
+
+    it("keeps its own meter colour with news-url: no unscoped donation-meter rule in the adopted styles", async () => {
+      const element = await createMeteredBanner(
+        campaignFeed({ raised: 44156, goal: 170000, currency: "EUR" })
+      )
+      expect(meterOf(element).getAttribute("url")).toBe(FEED_URL)
+
+      // jsdom does not cascade custom properties, so the check is on the CSS
+      // text every variant and the default adopt into the same shadow root.
+      const cssText = element.constructor.styles
+        .map((sheet: any) => sheet.cssText)
+        .join("\n")
+        .replace(/\/\*[\s\S]*?\*\//g, "")
+      const selectors = (cssText.match(/[^{}]+(?=\{)/g) as string[])
+        .flatMap((list) => list.split(","))
+        .map((selector) => selector.trim())
+      expect(selectors.filter((selector) => selector.endsWith("donation-meter"))).not.toHaveLength(
+        0
+      )
+      expect(selectors).not.toContain("donation-meter")
+    })
   })
 
   describe("variant selection", () => {
@@ -540,6 +561,29 @@ describe("donation-banner variants", () => {
       expect(text(element)).toContain("Feed give €5")
       expect(text(element)).toContain("Feed fine print")
       expect(text(element)).toContain("unlocks €5 perks")
+    })
+
+    it("removes a placeholder that names an inherited property, not an own value", async () => {
+      const element = await mountVariant(
+        "campaign",
+        { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
+        feed({ translations: { en: { title: "Feed {constructor} headline", message: "M" } } })
+      )
+
+      expect(text(element)).toContain("Feed headline")
+      expect(text(element)).not.toContain("function")
+    })
+
+    it("ignores a feed slot that is not a string and keeps the built-in", async () => {
+      const element = await mountVariant(
+        "campaign",
+        { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
+        feed({ translations: { en: { title: 123, message: ["M"], hook: null } } })
+      )
+
+      expect(text(element)).toContain("760 people paid for it")
+      expect(text(element)).not.toContain("123")
+      expect(text(element)).toContain("4.6 million products")
     })
 
     it("falls back to built-in sentences for keys the feed omits", async () => {
@@ -862,6 +906,14 @@ describe("donation-banner variants", () => {
       expect(text(element)).toContain("€3.40")
     })
 
+    it("drops the French tax line when there are no tiers to price", async () => {
+      const element = await mountVariant("campaign", { country: "fr" })
+      expect(text(element)).toContain("To our readers in France")
+      expect(text(element)).not.toContain("Tax deductible")
+      expect(text(element)).not.toContain("€0")
+      expect(text(element)).toContain("Cancel any time.")
+    })
+
     it("shows neutral copy for any other country or none", async () => {
       const none = await mountVariant("campaign", { amounts: "5,10" })
       expect(text(none)).not.toContain("To our readers in France")
@@ -958,6 +1010,37 @@ describe("donation-banner variants", () => {
       expect(document.body.style.overflow).toBe(previous)
     })
 
+    it("two open sheets: the lock holds until the last one is gone, then the page's own value returns", async () => {
+      document.body.style.overflow = "auto"
+      const top = await mountSheet()
+      const footer = await mountSheet()
+      expect(document.body.style.overflow).toBe("hidden")
+
+      top.remove()
+      expect(document.body.style.overflow).toBe("hidden")
+
+      footer.remove()
+      expect(document.body.style.overflow).toBe("auto")
+    })
+
+    it("Shift-Tab with focus on the dialog itself lands on the last focusable", async () => {
+      const element = await mountSheet()
+      const dialog = element.shadowRoot.querySelector(".sheet") as HTMLElement
+      expect(element.shadowRoot.activeElement).toBe(dialog)
+      const focusable = Array.from(dialog.querySelectorAll("button, a[href]")) as HTMLElement[]
+
+      const shiftTab = new KeyboardEvent("keydown", {
+        key: "Tab",
+        shiftKey: true,
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+      })
+      dialog.dispatchEvent(shiftTab)
+      expect(shiftTab.defaultPrevented).toBe(true)
+      expect(element.shadowRoot.activeElement).toBe(focusable[focusable.length - 1])
+    })
+
     it("Tab from the last focusable wraps to the first, Shift-Tab reverses", async () => {
       const element = await mountSheet()
       const dialog = element.shadowRoot.querySelector(".sheet") as HTMLElement
@@ -1017,6 +1100,33 @@ describe("donation-banner variants", () => {
       expect(document.body.style.paddingBottom).toBe("")
     })
 
+    it("two bars: dismissing one keeps the padding for the other", async () => {
+      const first = await mountVariant("bar")
+      const second = await mountVariant("bar")
+      expect(document.body.style.paddingBottom).toBe("56px")
+
+      first.shadowRoot.querySelector(".close").click()
+      await first.updateComplete
+      expect(document.body.style.paddingBottom).toBe("56px")
+
+      second.remove()
+      expect(document.body.style.paddingBottom).toBe("")
+    })
+
+    it("shows the bar again after a dismiss when the variant changes and comes back", async () => {
+      const element = await mountVariant("bar")
+      element.shadowRoot.querySelector(".close").click()
+      await element.updateComplete
+      expect(element.shadowRoot.querySelector(".bar")).toBeNull()
+
+      element.setAttribute("variant", "strip")
+      await element.updateComplete
+      element.setAttribute("variant", "bar")
+      await element.updateComplete
+      expect(element.shadowRoot.querySelector(".bar")).not.toBeNull()
+      expect(document.body.style.paddingBottom).toBe("56px")
+    })
+
     it("'I already donated' fires already-donated", async () => {
       const element = await mountVariant("bar")
       const detail = bannerEvents(element)
@@ -1062,6 +1172,29 @@ describe("donation-banner variants", () => {
       expect(element.shadowRoot.querySelector(".campaign").classList.contains("dark-mode")).toBe(
         false
       )
+    })
+
+    it("puts the class where the dark selectors look for it, in all four variants", async () => {
+      // The stylesheet's own dark selectors: `.dark-mode.campaign`, `.dark-mode.strip`,
+      // `.dark-mode .sheet`, `.dark-mode .bar`.
+      const expected: Record<string, string> = {
+        campaign: ".dark-mode.campaign",
+        strip: ".dark-mode.strip",
+        sheet: ".dark-mode .sheet",
+        bar: ".dark-mode .bar",
+      }
+      for (const [variant, selector] of Object.entries(expected)) {
+        const element = await mountVariant(variant, { amounts: "3,5,10" })
+        expect(element.shadowRoot.querySelector(selector), `${variant} light`).toBeNull()
+
+        onSchemeChange({ matches: true })
+        await element.updateComplete
+        expect(element.shadowRoot.querySelector(selector), `${variant} dark`).not.toBeNull()
+
+        onSchemeChange({ matches: false })
+        await element.updateComplete
+        element.remove()
+      }
     })
   })
 })
