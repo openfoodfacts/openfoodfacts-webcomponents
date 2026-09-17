@@ -1,11 +1,5 @@
 import { css } from "lit"
 
-/**
- * Styles for the four `<donation-banner>` variants (`campaign`, `strip`,
- * `sheet`, `bar`). Palette lifted from the approved mocks
- * (`donation-proposal/visuals/mock_banner_desktop.html`, `mock_mobile.html`);
- * dark tokens reuse today's default-variant dark palette.
- */
 export const DONATION_BANNER_VARIANTS = css`
   .campaign,
   .strip,
@@ -44,7 +38,6 @@ export const DONATION_BANNER_VARIANTS = css`
     flex-shrink: 0;
   }
 
-  /* ---- campaign ---- */
   .campaign {
     position: relative;
     display: grid;
@@ -201,7 +194,6 @@ export const DONATION_BANNER_VARIANTS = css`
     }
   }
 
-  /* ---- strip ---- */
   .strip {
     display: flex;
     align-items: center;
@@ -248,7 +240,6 @@ export const DONATION_BANNER_VARIANTS = css`
     flex-shrink: 0;
   }
 
-  /* ---- sheet ---- */
   .overlay {
     position: fixed;
     inset: 0;
@@ -334,7 +325,6 @@ export const DONATION_BANNER_VARIANTS = css`
     text-decoration: underline;
   }
 
-  /* ---- bar ---- */
   .bar {
     position: fixed;
     left: 0;
@@ -376,7 +366,6 @@ export const DONATION_BANNER_VARIANTS = css`
     white-space: nowrap;
   }
 
-  /* ---- dark mode (matches the default variant's tokens) ---- */
   .dark-mode.campaign,
   .dark-mode.strip,
   .dark-mode .sheet,

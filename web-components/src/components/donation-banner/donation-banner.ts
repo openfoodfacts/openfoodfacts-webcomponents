@@ -316,7 +316,7 @@ export class DonationBanner extends LitElement {
   private fill(text: string, values: Record<string, string | undefined>): string {
     return text
       .replace(/\{(\w+)\}/g, (_match, key) =>
-        Object.hasOwn(values, key) ? (values[key] ?? "") : ""
+        values.hasOwnProperty(key) ? (values[key] ?? "") : ""
       )
       .replace(/ {2,}/g, " ")
       .trim()

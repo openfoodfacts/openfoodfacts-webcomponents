@@ -6,7 +6,7 @@ import { languageCode } from "../../signals/app"
 import { EventState, EventType } from "../../constants"
 import type { BasicStateEventDetail } from "../../types"
 import type { Funding, NewsData } from "../../types/news-feed"
-import { findFunding, formatDay, parseFunding } from "../../utils/funding"
+import { findFunding, formatAmount, formatDay, parseFunding } from "../../utils/funding"
 
 /**
  * `donation-meter` - how far a funding campaign has got, from the figures the
@@ -161,11 +161,7 @@ export class DonationMeter extends LitElement {
   }
 
   private format(amount: number, currency: string) {
-    return new Intl.NumberFormat(this.locale, {
-      style: "currency",
-      currency,
-      maximumFractionDigits: 0,
-    }).format(amount)
+    return formatAmount(amount, currency, this.locale)
   }
 
   private get locale() {
