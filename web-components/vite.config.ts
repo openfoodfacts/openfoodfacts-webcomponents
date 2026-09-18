@@ -3,7 +3,7 @@ import { dirname, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
 import { viteStaticCopy } from "vite-plugin-static-copy"
-import dts from "vite-plugin-dts"
+import dts from "unplugin-dts/vite"
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -34,7 +34,7 @@ export default defineConfig({
     }),
     dts({
       tsconfigPath: "./tsconfig.json",
-      outDir: "dist/types",
+      outDirs: "dist/types",
     }),
   ],
   define: {
