@@ -47,44 +47,14 @@ export const findFunding = (data: NewsData): Funding | null => {
 }
 
 /**
- * The item a page names explicitly by `news-id`. The page chose it, so
- * `enabled`/`start_date`/`end_date` are its business, not a filter here
- * (C2 PO decision 7) - only a `translations` object makes it usable at all.
+ * Returns the feed item with this id, or `null` when it is missing or has no
+ * `translations`. `enabled`, `start_date` and `end_date` are not checked: the
+ * page named the item on purpose, so showing it is the page's decision.
  */
 export const findNewsItem = (data: NewsData | null | undefined, id: string): NewsItem | null => {
   const item = data?.news?.[id]
   return item && typeof item.translations === "object" ? item : null
 }
 
-/** A supporter count worth showing: a finite number of at least one. */
 export const parseCount = (value: unknown): number | null =>
   typeof value === "number" && isFinite(value) && value >= 1 ? value : null
-
-export const formatAmount = (
-  amount: number,
-  currency: string,
-  locale?: string,
-  fractionDigits = 0
-): string =>
-  new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency,
-    minimumFractionDigits: fractionDigits,
-    maximumFractionDigits: fractionDigits,
-  }).format(amount)
-
-/**
- * A campaign end date in the reader's language, or `null` when unparsable.
- * Formats dayjs's own parse: `new Date("2027-01-31 23:59:59")` is not ISO and
- * a date-only string would be read as UTC, shifting the day west of Greenwich.
- */
-export const formatDay = (
-  date?: string,
-  locale?: string,
-  month: "short" | "long" = "long"
-): string | null => {
-  const parsed = date ? dayjs(date) : null
-  return parsed?.isValid()
-    ? new Intl.DateTimeFormat(locale, { day: "numeric", month }).format(parsed.toDate())
-    : null
-}

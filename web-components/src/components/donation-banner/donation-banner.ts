@@ -1,4 +1,5 @@
 import { LitElement, html, css, nothing, type PropertyValues } from "lit"
+import dayjs from "dayjs/esm"
 import { customElement, property, state } from "lit/decorators.js"
 import { localized, msg, str } from "@lit/localize"
 import { Task, TaskStatus } from "@lit/task"
@@ -13,13 +14,7 @@ import {
 } from "../../constants"
 import type { BasicStateEventDetail, DonationBannerStateEventDetail } from "../../types"
 import type { FeedCopyKey, NewsData, NewsItem } from "../../types/news-feed"
-import {
-  findNewsItem,
-  formatAmount,
-  formatDay,
-  parseCount,
-  parseFunding,
-} from "../../utils/funding"
+import { findNewsItem, parseCount, parseFunding } from "../../utils/funding"
 import { classMap } from "lit/directives/class-map.js"
 import { ifDefined } from "lit/directives/if-defined.js"
 import { darkModeListener } from "../../utils/dark-mode-listener"
@@ -27,11 +22,12 @@ import { DONATION_BANNER_VARIANTS } from "../../styles/donation-banner-variants"
 import "../donation-meter/donation-meter"
 import "../icons/cross"
 
-// A page can mount several banners (server#14521 mounts one at the top and one
-// in the footer), so the body's scroll lock and bottom padding are counted here:
-// the first sheet locks and saves the prior overflow, the last one to close
-// restores it; the padding stays until the last bar is gone.
-const page = { sheets: 0, overflow: "", bars: 0 }
+// Shared by every <donation-banner> on the page. An open `sheet` locks the
+// body's scroll and a shown `bar` pads the body's bottom so it never covers the
+// page's own content. A page can hold several banners (one at the top and one
+// in the footer), so the counters make the first sheet take the lock, the last
+// sheet to close release it, and the last bar to go remove the padding.
+const openOnPage = { sheets: 0, bars: 0, bodyOverflow: "" }
 
 /**
  * Donation banner
@@ -44,7 +40,7 @@ const page = { sheets: 0, overflow: "", bars: 0 }
  * With `variant="campaign"|"strip"|"sheet"|"bar"` and `news-id`, it reads copy
  * and figures from the tagline feed item named by `news-id` instead of the
  * built-in 2026 campaign text. No `variant` (or an unknown one) renders
- * exactly today's banner - see server#14521.
+ * exactly the banner of 1.18.0, so existing markup keeps working.
  *
  * @fires {EventType.DONATION_BANNER_STATE} - dismiss / minimize / already-donated / click
  */
@@ -283,6 +279,26 @@ export class DonationBanner extends LitElement {
     return languageCode.get() || DEFAULT_LANGUAGE_CODE
   }
 
+  private format(amount: number, currency: string, fractionDigits = 0) {
+    return new Intl.NumberFormat(this.locale, {
+      style: "currency",
+      currency,
+      minimumFractionDigits: fractionDigits,
+      maximumFractionDigits: fractionDigits,
+    }).format(amount)
+  }
+
+  // dayjs parses the feed's `2027-01-31 23:59:59`, which is not ISO, and reads a
+  // date-only string as local time, so the day does not shift west of Greenwich.
+  private formatDay(date?: string) {
+    const parsed = date ? dayjs(date) : null
+    return parsed?.isValid()
+      ? new Intl.DateTimeFormat(this.locale, { day: "numeric", month: "long" }).format(
+          parsed.toDate()
+        )
+      : null
+  }
+
   private get isFrance(): boolean {
     return (this.country ?? "").toLowerCase() === "fr"
   }
@@ -295,9 +311,12 @@ export class DonationBanner extends LitElement {
     return this.count !== null ? new Intl.NumberFormat(this.locale).format(this.count) : null
   }
 
-  // Full-lang then lang wins over the built-in msg(); never `translations.default`,
-  // which is only ever English and would silently replace an already-translated
-  // built-in string on every other locale (xliff/fr.xlf alone carries 244/247 units).
+  /**
+   * Returns the feed's copy for this slot in the page language (`fr_FR`, then
+   * `fr`), or `undefined` so the caller falls back to the built-in `msg()`.
+   * `translations.default` is never read: it is English, and would replace a
+   * string that `msg()` already translates.
+   */
   private feedText(key: FeedCopyKey): string | undefined {
     const translations = this.newsItem?.translations
     if (!translations) {
@@ -326,10 +345,10 @@ export class DonationBanner extends LitElement {
     const funding = this.funding
     return {
       count: this.countText ?? undefined,
-      raised: funding ? formatAmount(funding.raised, funding.currency, this.locale) : undefined,
-      goal: funding ? formatAmount(funding.goal, funding.currency, this.locale) : undefined,
+      raised: funding ? this.format(funding.raised, funding.currency) : undefined,
+      goal: funding ? this.format(funding.goal, funding.currency) : undefined,
       year: this.currentYear,
-      end_date: formatDay(this.newsItem?.end_date, this.locale, "long") ?? undefined,
+      end_date: this.formatDay(this.newsItem?.end_date) ?? undefined,
     }
   }
 
@@ -355,9 +374,9 @@ export class DonationBanner extends LitElement {
     return this.copy("button_label", template(amountText), { amount: amountText })
   }
 
-  /** The tier the Give button names; the hook line quotes the same one. */
+  /** The selected tier (or the first one) formatted as an amount, for the Give button and the hook line. */
   private selectedAmountText(): string {
-    return formatAmount(this.amount ?? this.tiers[0], this.currency, this.locale)
+    return this.format(this.amount ?? this.tiers[0], this.currency)
   }
 
   private emit(
@@ -431,8 +450,8 @@ export class DonationBanner extends LitElement {
     const first = focusable[0]
     const last = focusable[focusable.length - 1]
     const active = this.shadowRoot?.activeElement as HTMLElement | null
-    // Focus starts on the dialog itself (`tabindex="-1"`), which is neither
-    // first nor last, so anything outside the ring counts as its edge.
+    // Right after opening, focus is on the sheet itself (`tabindex="-1"`), not
+    // on a button, so Tab goes to the first button and Shift-Tab to the last.
     const inside = active !== null && focusable.includes(active)
     if (event.shiftKey && (!inside || active === first)) {
       event.preventDefault()
@@ -457,13 +476,13 @@ export class DonationBanner extends LitElement {
 
     const isBarShown = this.view === DonationBannerVariant.BAR && !this.barDismissed
     if (isBarShown) {
-      // The last bar rendered sets the padding; two bars overlap anyway.
+      // With two bars on the page the last one rendered sets the padding; they overlap anyway.
       const bar = this.shadowRoot?.querySelector<HTMLElement>(".bar")
       if (bar) {
         document.body.style.paddingBottom = `${bar.offsetHeight}px`
         if (!this.padded) {
           this.padded = true
-          page.bars++
+          openOnPage.bars++
         }
       }
     } else if (this.padded) {
@@ -473,22 +492,22 @@ export class DonationBanner extends LitElement {
 
   private lock() {
     this.locked = true
-    if (page.sheets++ === 0) {
-      page.overflow = document.body.style.overflow
+    if (openOnPage.sheets++ === 0) {
+      openOnPage.bodyOverflow = document.body.style.overflow
       document.body.style.overflow = "hidden"
     }
   }
 
   private unlock() {
     this.locked = false
-    if (--page.sheets === 0) {
-      document.body.style.overflow = page.overflow
+    if (--openOnPage.sheets === 0) {
+      document.body.style.overflow = openOnPage.bodyOverflow
     }
   }
 
   private unpad() {
     this.padded = false
-    if (--page.bars === 0) {
+    if (--openOnPage.bars === 0) {
       document.body.style.paddingBottom = ""
     }
   }
@@ -812,14 +831,13 @@ export class DonationBanner extends LitElement {
       return nothing
     }
     const currency = this.currency
-    const locale = this.locale
     const selectedAmount = this.amount
     const preselected = this.preselected
     return html`<div class="tiers">
       ${tiers.map((tierAmount) => {
         const isSelected = tierAmount === selectedAmount
         const isPreselected = tierAmount === preselected
-        const amountText = formatAmount(tierAmount, currency, locale)
+        const amountText = this.format(tierAmount, currency)
         const note = isPreselected ? this.copy("tier_note", "", { amount: amountText }) : ""
         return html`<button
           type="button"
@@ -905,7 +923,7 @@ export class DonationBanner extends LitElement {
 
   private campaignParagraph(): string {
     const funding = this.funding
-    const goal = funding ? formatAmount(funding.goal, funding.currency, this.locale) : null
+    const goal = funding ? this.format(funding.goal, funding.currency) : null
     const builtIn = goal
       ? msg(
           str`Open Food Facts is a non-profit. No ads, no industry money, 4.6 million products kept open by volunteers. We need ${goal} to run the servers and one engineer in ${this.currentYear}. If you looked something up today, €3 a month keeps it free for a year.`
@@ -918,8 +936,8 @@ export class DonationBanner extends LitElement {
 
   private renderCampaignFinePrint() {
     if (this.isFrance && this.amount !== undefined) {
-      const amount = formatAmount(this.amount, this.currency, this.locale)
-      const net = formatAmount(this.amount * 0.34, this.currency, this.locale, 2)
+      const amount = this.format(this.amount, this.currency)
+      const net = this.format(this.amount * 0.34, this.currency, 2)
       const builtIn = msg(
         str`Tax deductible in France: ${amount} costs you ${net}. Cancel any time.`
       )

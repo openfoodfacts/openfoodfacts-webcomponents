@@ -306,7 +306,7 @@ describe("donation-banner", () => {
   })
 })
 
-/** The literal `upstream/main @ a7ddfb4` render, captured on the clean tree before this ticket's code. */
+/** The literal 1.18.0 render, captured before the variants were added. */
 const DEFAULT_MARKUP = (nextYear: string) => `<section class="  ">
       <div class="donation-banner-footer row">
         <div class="donation-banner-footer__left-aside">
@@ -380,7 +380,7 @@ const settleTask = async (element: any) => {
   }
 }
 
-/** A feed item shaped like `donation_campaign_2026`, with the mock's figures by default. */
+/** A feed item shaped like `donation_campaign_2026`, with the fixture's figures by default. */
 const feedItem = (overrides: Record<string, unknown> = {}) => ({
   translations: { default: { title: "Campaign", message: "Give" } },
   raised: 47431,
@@ -512,7 +512,7 @@ describe("donation-banner variants", () => {
   })
 
   describe("campaign, with news-id: feed copy and figures, one fetch", () => {
-    it("renders the mock's figures and mounts the meter with .funding, no url", async () => {
+    it("renders the feed's figures and mounts the meter with .funding, no url", async () => {
       const element = await mountVariant(
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
@@ -741,7 +741,7 @@ describe("donation-banner variants", () => {
       expect(text(element)).toContain("Join the people keeping Open Food Facts free.")
     })
 
-    it("still renders a disabled or ended item's copy and figures (PO decision 7)", async () => {
+    it("still renders a disabled or ended item's copy and figures: the page named it", async () => {
       const element = await mountVariant(
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
