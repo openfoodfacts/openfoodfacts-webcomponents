@@ -43,6 +43,11 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
         font-style: italic;
         color: var(--robotoff-question-message-color, #444);
       }
+      .error-message {
+        color: var(--robotoff-question-error-color, #c0392b);
+        margin-top: 1rem;
+        font-weight: 500;
+      }
       @media (prefers-color-scheme: dark) {
         :host {
           background: var(--robotoff-question-bg-dark, #181a1b);
@@ -141,7 +146,10 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
   override render() {
     return this._questionsTask.render({
       pending: () => (this.showLoading ? html`<off-wc-loader></off-wc-loader>` : nothing),
-      error: (error) => (this.showError ? html`<div>Error: ${error}</div>` : nothing),
+      error: () =>
+        this.showError
+          ? html`<div class="error-message">${msg("Unable to load questions. Please try again later.")}</div>`
+          : nothing,
       complete: (questionsList) => {
         const index = currentQuestionIndex(this.productCode).get() ?? 0
         const question = questionsList[index]
