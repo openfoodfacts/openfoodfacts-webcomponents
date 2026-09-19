@@ -1,4 +1,5 @@
 import { LitElement, html, css, nothing, type PropertyValues } from "lit"
+import dayjs from "dayjs/esm"
 import { customElement, property } from "lit/decorators.js"
 import { localized, msg, str } from "@lit/localize"
 import { Task, TaskStatus } from "@lit/task"
@@ -6,7 +7,7 @@ import { languageCode } from "../../signals/app"
 import { EventState, EventType } from "../../constants"
 import type { BasicStateEventDetail } from "../../types"
 import type { Funding, NewsData } from "../../types/news-feed"
-import { findFunding, formatAmount, formatDay, parseFunding } from "../../utils/funding"
+import { findFunding, parseFunding } from "../../utils/funding"
 
 /**
  * `donation-meter` - how far a funding campaign has got, from the figures the
@@ -32,7 +33,7 @@ export class DonationMeter extends LitElement {
 
   @property({ type: Object }) funding?: Funding
 
-  /** Renders the mock's meter line instead of the standalone figures; absent = today's markup. */
+  /** Renders the one-line summary instead of the standalone figures; absent = the 1.18.0 markup. */
   @property({ attribute: "line" }) line?: "long" | "short"
 
   @property({ type: Number }) count?: number
@@ -161,7 +162,11 @@ export class DonationMeter extends LitElement {
   }
 
   private format(amount: number, currency: string) {
-    return formatAmount(amount, currency, this.locale)
+    return new Intl.NumberFormat(this.locale, {
+      style: "currency",
+      currency,
+      maximumFractionDigits: 0,
+    }).format(amount)
   }
 
   private get locale() {
@@ -206,7 +211,7 @@ export class DonationMeter extends LitElement {
     return html`<span class="shortfall">${msg(str`${missing} short`)}</span>`
   }
 
-  /** The mocks' one-line summary: `{raised} raised of {goal} · {count} supporters · until {end_date}`. */
+  /** The one-line summary: `{raised} raised of {goal} · {count} supporters · until {end_date}`. */
   private renderLine(funding: Funding) {
     const ratio = funding.raised / funding.goal
     const progress = Math.min(Math.max(ratio, 0), 1)
@@ -214,7 +219,15 @@ export class DonationMeter extends LitElement {
     const raised = this.format(funding.raised, funding.currency)
     const goal = this.format(funding.goal, funding.currency)
     const left = this.line === "long" ? msg(str`raised of ${goal}`) : msg(str`of ${goal}`)
-    const day = formatDay(this.endDate, this.locale, this.line === "short" ? "short" : "long")
+    // dayjs parses the feed's `2027-01-31 23:59:59`, which is not ISO, and reads a
+    // date-only string as local time, so the day does not shift west of Greenwich.
+    const endDate = this.endDate ? dayjs(this.endDate) : null
+    const day = endDate?.isValid()
+      ? new Intl.DateTimeFormat(this.locale, {
+          day: "numeric",
+          month: this.line === "short" ? "short" : "long",
+        }).format(endDate.toDate())
+      : null
     const fmtCount = this.count ? new Intl.NumberFormat(this.locale).format(this.count) : null
     const parts = [
       fmtCount ? msg(str`${fmtCount} supporters`) : null,

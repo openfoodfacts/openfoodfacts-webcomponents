@@ -22,9 +22,9 @@ export const WithCampaignFigures: Story = {
   },
 }
 
-// The variant stories read a local fixture instead of the live feed: shaped
-// like `prod/tagline/web/main.json` once the sibling feed ticket adds `count`
-// and the `en` copy slots, so the figures, the meter and the tier note render.
+// The variant stories read a local fixture instead of the live feed, shaped
+// like `prod/tagline/web/main.json` with `count` and the `en` copy slots, so
+// the figures, the meter and the tier note render.
 const FEED_URL = "feed.json"
 const FEED = {
   news: {

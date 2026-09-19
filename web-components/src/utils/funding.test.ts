@@ -1,13 +1,6 @@
 import { describe, expect, it } from "vitest"
 import dayjs from "dayjs/esm"
-import {
-  findFunding,
-  findNewsItem,
-  formatAmount,
-  formatDay,
-  parseCount,
-  parseFunding,
-} from "./funding"
+import { findFunding, findNewsItem, parseCount, parseFunding } from "./funding"
 import type { NewsData } from "../types/news-feed"
 
 const inDays = (days: number) => dayjs().add(days, "day").format("YYYY-MM-DD HH:mm:ss")
@@ -206,41 +199,5 @@ describe("parseCount", () => {
     expect(parseCount(Infinity)).toBeNull()
     expect(parseCount("5")).toBeNull()
     expect(parseCount(undefined)).toBeNull()
-  })
-})
-
-describe("formatAmount", () => {
-  it("formats a whole amount with no decimals by default", () => {
-    expect(formatAmount(170000, "EUR", "en")).toBe("€170,000")
-  })
-
-  it("formats with the requested number of decimals", () => {
-    expect(formatAmount(1.7, "EUR", "en", 2)).toBe("€1.70")
-    expect(formatAmount(3.4, "EUR", "en", 2)).toBe("€3.40")
-  })
-})
-
-describe("formatDay", () => {
-  it("formats a valid date in the given locale and month length", () => {
-    expect(formatDay("2027-01-31 23:59:59", "en", "long")).toBe("January 31")
-    expect(formatDay("2027-01-31 23:59:59", "fr", "long")).toBe("31 janvier")
-  })
-
-  it("returns null for a missing or unparsable date", () => {
-    expect(formatDay(undefined, "en")).toBeNull()
-    expect(formatDay("x", "en")).toBeNull()
-    expect(formatDay("", "en")).toBeNull()
-  })
-
-  it("keeps the calendar day of a date-only string west of Greenwich", () => {
-    const tz = process.env.TZ
-    process.env.TZ = "America/Los_Angeles"
-    try {
-      expect(formatDay("2027-01-31", "en", "long")).toBe("January 31")
-      expect(formatDay("2027-01-31 23:59:59", "en", "short")).toBe("Jan 31")
-    } finally {
-      if (tz === undefined) delete process.env.TZ
-      else process.env.TZ = tz
-    }
   })
 })

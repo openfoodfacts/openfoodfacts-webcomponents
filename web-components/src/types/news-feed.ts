@@ -9,7 +9,7 @@ export interface Funding {
 
 /**
  * One translation of a feed item, plus the optional copy slots the donation
- * banner variants can override (`donation-proposal/specs/C2` PO decision 1).
+ * banner variants can override.
  */
 export interface NewsTranslation {
   title: string

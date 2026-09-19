@@ -246,7 +246,7 @@ describe("donation-meter", () => {
     expect(states).toEqual(["no-data"])
   })
 
-  it("renders the mock's long line: raised of goal, supporters, until day", async () => {
+  it("renders the long line: raised of goal, supporters, until day", async () => {
     const element = document.createElement("donation-meter") as any
     element.funding = { raised: 47431, goal: 170000, currency: "EUR" }
     element.line = "long"
@@ -285,6 +285,24 @@ describe("donation-meter", () => {
     await element.updateComplete
 
     expect(text(element)).not.toContain("until")
+  })
+
+  it("keeps the calendar day of a date-only end date west of Greenwich", async () => {
+    const tz = process.env.TZ
+    process.env.TZ = "America/Los_Angeles"
+    try {
+      const element = document.createElement("donation-meter") as any
+      element.funding = { raised: 47431, goal: 170000, currency: "EUR" }
+      element.line = "long"
+      element.setAttribute("end-date", "2027-01-31")
+      document.body.appendChild(element)
+      await element.updateComplete
+
+      expect(text(element)).toContain("until January 31")
+    } finally {
+      if (tz === undefined) delete process.env.TZ
+      else process.env.TZ = tz
+    }
   })
 
   it("existing standalone tests are unaffected by 'line' being absent", async () => {
