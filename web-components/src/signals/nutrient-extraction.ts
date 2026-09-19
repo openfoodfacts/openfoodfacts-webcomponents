@@ -66,7 +66,9 @@ export const fetchNutrientInsights = async (
  * Annotate an insight with data
  * @param data
  */
-export const annotateNutrientsWithData = async (annotation: InsightAnnotationAnswer) => {
+export const annotateNutrientsWithData = async (
+  annotation: InsightAnnotationAnswer
+): Promise<unknown> => {
   const servingSize = annotation.data["serving_size"]?.value ?? null
   // Clone the nutrients object to avoid mutating the original annotation.data
   const clonedData = { ...annotation.data }
@@ -90,6 +92,6 @@ export const annotateNutrientsWithData = async (annotation: InsightAnnotationAns
 export const annotateNutrientWithoutData = async (
   insightId: string,
   annotation: AnnotationAnswer
-) => {
+): Promise<unknown> => {
   return await robotoff.annotateNutrients(insightId, annotation)
 }
