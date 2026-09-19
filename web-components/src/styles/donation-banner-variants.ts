@@ -346,18 +346,14 @@ export const DONATION_BANNER_VARIANTS = css`
   .bar .tx {
     flex: 1;
     min-width: 0;
-    font-size: 12px;
-    line-height: 1.35;
+    font-size: 11px;
+    line-height: 1.3;
   }
 
   .bar .tx b {
     display: block;
     color: #201a17;
-    font-size: 13px;
-  }
-
-  .bar .tx .link {
-    text-decoration: underline;
+    font-size: 12px;
   }
 
   .bar .give {

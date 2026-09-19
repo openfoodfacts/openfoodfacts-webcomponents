@@ -351,8 +351,13 @@ export class DonationBanner extends LitElement {
     if (!tiers.length) {
       return this.copy("button_label", msg("Support"))
     }
-    const amountText = formatAmount(this.amount ?? tiers[0], this.currency, this.locale)
+    const amountText = this.selectedAmountText()
     return this.copy("button_label", template(amountText), { amount: amountText })
+  }
+
+  /** The tier the Give button names; the hook line quotes the same one. */
+  private selectedAmountText(): string {
+    return formatAmount(this.amount ?? this.tiers[0], this.currency, this.locale)
   }
 
   private emit(
@@ -864,32 +869,37 @@ export class DonationBanner extends LitElement {
         ? this.copy(
             "title",
             msg(
-              str`To our readers in France: this page is free because ${count} people paid for it.`
+              str`To our readers in France: join the ${count} people keeping Open Food Facts free.`
             )
           )
         : this.copy(
             "title",
-            msg("To our readers in France: this page is free because people like you paid for it.")
+            msg("To our readers in France: join the people keeping Open Food Facts free.")
           )
     }
-    return count
-      ? this.copy("title", msg(str`This page is free because ${count} people paid for it.`))
-      : this.copy("title", msg("This page is free because people like you paid for it."))
+    return this.joinHeadline()
   }
 
-  private stripHeadline(): string {
+  private joinHeadline(): string {
     const count = this.countText
-    const builtIn = count
-      ? msg(str`Open Food Facts is free because ${count} people pay for it.`)
-      : msg("Open Food Facts is free because people like you pay for it.")
-    return this.copy("title", builtIn)
+    return count
+      ? this.copy("title", msg(str`Join the ${count} people keeping Open Food Facts free.`))
+      : this.copy("title", msg("Join the people keeping Open Food Facts free."))
+  }
+
+  private hook(): string {
+    if (!this.tiers.length) {
+      return this.copy("hook", msg("€3 a month keeps it that way."))
+    }
+    const amount = this.selectedAmountText()
+    return this.copy("hook", msg(str`${amount} a month keeps it that way.`), { amount })
   }
 
   private barHeadline(): string {
     const count = this.countText
     const builtIn = count
-      ? msg(str`Free because ${count} people paid for it.`)
-      : msg("Free because people like you paid for it.")
+      ? msg(str`Join ${count} people keeping this free.`)
+      : msg("Join the people keeping this free.")
     return this.copy("title", builtIn)
   }
 
@@ -943,8 +953,8 @@ export class DonationBanner extends LitElement {
   private renderStrip() {
     return html`<section class=${classMap({ "dark-mode": this.isDarkMode, strip: true })}>
       <span>
-        <b>${this.stripHeadline()}</b>
-        <span class="more">${this.copy("hook", msg("€3 a month keeps it that way."))}</span>
+        <b>${this.joinHeadline()}</b>
+        <span class="more">${this.hook()}</span>
       </span>
       <span>
         <a class="go" href=${this.linkFor()} @click=${this.onSupport}>
@@ -968,12 +978,7 @@ export class DonationBanner extends LitElement {
         <div class="grab"></div>
         ${this.renderClose(this.onMinimize)}
         <h2 id="donation-banner-title">${this.h2Headline()}</h2>
-        <p>
-          ${this.copy(
-            "hook",
-            msg("No ads, no industry money. €3 a month keeps it free for a year.")
-          )}
-        </p>
+        <p>${this.campaignParagraph()}</p>
         ${this.renderFundingMeter("short")} ${this.renderTiers()}
         ${this.renderGive(this.giveLabel((amount) => msg(str`Give ${amount} a month`)))}
         <p class="fine">
@@ -994,7 +999,7 @@ export class DonationBanner extends LitElement {
       <div class="bar">
         <div class="tx">
           <b>${this.barHeadline()}</b>
-          ${this.copy("hook", msg("€3 a month keeps it that way ·"))} ${this.renderAlreadyDonated()}
+          ${this.hook()}
         </div>
         ${this.renderGive(this.giveLabel((amount) => msg(str`Give ${amount}/mo`)))}
         ${this.renderClose(this.onDismiss)}
