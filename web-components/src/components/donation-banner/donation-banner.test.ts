@@ -517,7 +517,7 @@ describe("donation-banner variants", () => {
     it("renders the count-less headline, paragraph, tiers and fine print", async () => {
       const element = await mountVariant("campaign", { amounts: "3,5,10" })
 
-      expect(text(element)).toContain("This page is free because people like you paid for it.")
+      expect(text(element)).toContain("Join the people keeping Open Food Facts free.")
       expect(text(element)).toContain("4.6 million products kept open by volunteers.")
       expect(text(element)).not.toContain("We need")
       expect(text(element)).toContain("Most popular")
@@ -555,7 +555,7 @@ describe("donation-banner variants", () => {
         feed()
       )
 
-      expect(text(element)).toContain("760 people paid for it")
+      expect(text(element)).toContain("Join the 760 people keeping Open Food Facts free.")
       expect(text(element)).toContain("€170,000")
       const meter = element.shadowRoot.querySelector("donation-meter")
       const meterText = (meter.shadowRoot.textContent as string).replace(/\s+/g, " ")
@@ -627,7 +627,7 @@ describe("donation-banner variants", () => {
         feed({ translations: { en: { title: 123, message: ["M"], hook: null } } })
       )
 
-      expect(text(element)).toContain("760 people paid for it")
+      expect(text(element)).toContain("Join the 760 people keeping Open Food Facts free.")
       expect(text(element)).not.toContain("123")
       expect(text(element)).toContain("4.6 million products")
     })
@@ -651,7 +651,7 @@ describe("donation-banner variants", () => {
       )
 
       expect(text(element)).not.toContain("Default-only headline")
-      expect(text(element)).toContain("760 people paid for it")
+      expect(text(element)).toContain("Join the 760 people keeping Open Food Facts free.")
     })
 
     it("uses a translations.en title on an en page", async () => {
@@ -705,7 +705,7 @@ describe("donation-banner variants", () => {
         feed({ translations: { default: { title: "Default title", message: "M" } } })
       )
       expect(text(element)).not.toContain("Default title")
-      expect(text(element)).toContain("760 people paid for it")
+      expect(text(element)).toContain("Join the 760 people keeping Open Food Facts free.")
     })
   })
 
@@ -719,7 +719,7 @@ describe("donation-banner variants", () => {
       })
       await settleTask(element)
 
-      expect(text(element)).toContain("people like you paid for it")
+      expect(text(element)).toContain("Join the people keeping Open Food Facts free.")
       expect(element.shadowRoot.querySelector("donation-meter")).toBeNull()
       expect(console.error).not.toHaveBeenCalled()
     })
@@ -739,7 +739,7 @@ describe("donation-banner variants", () => {
       })
       await settleTask(element)
 
-      expect(text(element)).toContain("people like you paid for it")
+      expect(text(element)).toContain("Join the people keeping Open Food Facts free.")
       expect(console.error).not.toHaveBeenCalled()
     })
 
@@ -753,7 +753,7 @@ describe("donation-banner variants", () => {
       element.setAttribute("news-id", "camp2")
       await settleTask(element)
 
-      expect(text(element)).toContain("people like you paid for it")
+      expect(text(element)).toContain("Join the people keeping Open Food Facts free.")
     })
 
     it("renders built-in copy for a news-id the feed does not carry", async () => {
@@ -762,7 +762,7 @@ describe("donation-banner variants", () => {
         { "news-url": FEED_URL, "news-id": "missing", amounts: "3,5,10" },
         feed()
       )
-      expect(text(element)).toContain("people like you paid for it")
+      expect(text(element)).toContain("Join the people keeping Open Food Facts free.")
     })
 
     it("renders built-in copy when the item has no translations object", async () => {
@@ -774,7 +774,7 @@ describe("donation-banner variants", () => {
           tagline_feed: { default: { news: [{ id: "camp" }] } },
         }
       )
-      expect(text(element)).toContain("people like you paid for it")
+      expect(text(element)).toContain("Join the people keeping Open Food Facts free.")
     })
 
     it("still renders a disabled or ended item's copy and figures (PO decision 7)", async () => {
@@ -783,7 +783,7 @@ describe("donation-banner variants", () => {
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
         feed({ enabled: false, start_date: "2000-01-01", end_date: "2001-01-01" })
       )
-      expect(text(element)).toContain("760 people paid for it")
+      expect(text(element)).toContain("Join the 760 people keeping Open Food Facts free.")
       const meter = element.shadowRoot.querySelector("donation-meter")
       expect(meter.shadowRoot.textContent as string).toContain("€47,431")
     })
@@ -993,10 +993,32 @@ describe("donation-banner variants", () => {
   describe("strip", () => {
     it("renders the one-line copy, a Support link and a close button", async () => {
       const element = await mountVariant("strip")
-      expect(text(element)).toContain("Open Food Facts is free because people like you pay for it.")
+      expect(text(element)).toContain("Join the people keeping Open Food Facts free.")
       expect(text(element)).toContain("€3 a month keeps it that way.")
       expect(text(element)).toContain("Support")
       expect(element.shadowRoot.querySelector("cross-icon")).not.toBeNull()
+    })
+
+    it("fills {amount} in a feed hook from the tiers, so the strip and bar share the key", async () => {
+      const element = await mountVariant(
+        "strip",
+        { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
+        feed({ translations: { en: { title: "T", hook: "{amount} a month keeps it that way." } } })
+      )
+      expect(text(element)).toContain("€5 a month keeps it that way.")
+
+      const bar = await mountVariant(
+        "bar",
+        { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
+        feed({ translations: { en: { title: "T", hook: "Feed hook {amount}" } } })
+      )
+      expect(text(bar)).toContain("Feed hook €5")
+    })
+
+    it("keeps the neutral line for country=fr (the France opener is the campaign card's)", async () => {
+      const element = await mountVariant("strip", { country: "fr" })
+      expect(text(element)).toContain("Join the people keeping Open Food Facts free.")
+      expect(text(element)).not.toContain("To our readers in France")
     })
 
     it("dismiss emits an event", async () => {
@@ -1131,6 +1153,24 @@ describe("donation-banner variants", () => {
   })
 
   describe("bar", () => {
+    it("renders the short join line with the count and the hook, no I already donated", async () => {
+      const dated = await mountVariant(
+        "bar",
+        { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
+        feed()
+      )
+      expect(text(dated)).toContain("Join 760 people keeping this free.")
+      expect(text(dated)).toContain("€5 a month keeps it that way.")
+      expect(text(dated)).toContain("Give €5/mo")
+      expect(text(dated)).not.toContain("I already donated")
+
+      const noTiers = await mountVariant("bar", { "news-url": FEED_URL, "news-id": "camp" }, feed())
+      expect(text(noTiers)).toContain("€3 a month keeps it that way.")
+
+      const plain = await mountVariant("bar")
+      expect(text(plain)).toContain("Join the people keeping this free.")
+    })
+
     beforeEach(() => {
       vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(56)
     })
@@ -1181,16 +1221,6 @@ describe("donation-banner variants", () => {
       await element.updateComplete
       expect(element.shadowRoot.querySelector(".bar")).not.toBeNull()
       expect(document.body.style.paddingBottom).toBe("56px")
-    })
-
-    it("'I already donated' fires already-donated", async () => {
-      const element = await mountVariant("bar")
-      const detail = bannerEvents(element)
-      Array.from(element.shadowRoot.querySelectorAll(".link"))
-        .find((btn: any) => btn.textContent.includes("I already donated"))!
-        // @ts-expect-error test DOM node
-        .click()
-      expect(detail).toEqual([{ action: "already-donated", variant: "bar" }])
     })
   })
 

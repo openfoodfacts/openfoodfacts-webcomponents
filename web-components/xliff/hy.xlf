@@ -1029,30 +1029,6 @@
 <trans-unit id="s7f6106f967a3dac1">
   <source>I already donated</source>
 </trans-unit>
-<trans-unit id="sa16a6cdf308813d8">
-  <source>To our readers in France: this page is free because <x id="0" equiv-text="${count}"/> people paid for it.</source>
-</trans-unit>
-<trans-unit id="s9e0cb4593b211ac6">
-  <source>To our readers in France: this page is free because people like you paid for it.</source>
-</trans-unit>
-<trans-unit id="sc8e0bf5e22595a39">
-  <source>This page is free because <x id="0" equiv-text="${count}"/> people paid for it.</source>
-</trans-unit>
-<trans-unit id="sda7525810a510d75">
-  <source>This page is free because people like you paid for it.</source>
-</trans-unit>
-<trans-unit id="sc921940ffb354533">
-  <source>Open Food Facts is free because <x id="0" equiv-text="${count}"/> people pay for it.</source>
-</trans-unit>
-<trans-unit id="s54aa7d52319276af">
-  <source>Open Food Facts is free because people like you pay for it.</source>
-</trans-unit>
-<trans-unit id="se2810a0dbdcbc380">
-  <source>Free because <x id="0" equiv-text="${count}"/> people paid for it.</source>
-</trans-unit>
-<trans-unit id="s49f551f1bc1ca37e">
-  <source>Free because people like you paid for it.</source>
-</trans-unit>
 <trans-unit id="s1debceb76cf716af">
   <source>Open Food Facts is a non-profit. No ads, no industry money, 4.6 million products kept open by volunteers. We need <x id="0" equiv-text="${goal}"/> to run the servers and one engineer in <x id="1" equiv-text="${this.currentYear}"/>. If you looked something up today, €3 a month keeps it free for a year.</source>
 </trans-unit>
@@ -1074,17 +1050,11 @@
 <trans-unit id="sfed3132eac9cc388">
   <source>€3 a month keeps it that way.</source>
 </trans-unit>
-<trans-unit id="s7663fdd4a41774b7">
-  <source>No ads, no industry money. €3 a month keeps it free for a year.</source>
-</trans-unit>
 <trans-unit id="sab56b65357ec6222">
   <source>Cancel any time</source>
 </trans-unit>
 <trans-unit id="s275772c501fb3b2e">
   <source>Not now</source>
-</trans-unit>
-<trans-unit id="s9d66c74f4e5b3d2f">
-  <source>€3 a month keeps it that way ·</source>
 </trans-unit>
 <trans-unit id="sd95fd198ae0919ff">
   <source>Give <x id="0" equiv-text="${amount}"/>/mo</source>
@@ -1097,6 +1067,27 @@
 </trans-unit>
 <trans-unit id="sd8a0d0cc52fdaf39">
   <source>until <x id="0" equiv-text="${day}"/></source>
+</trans-unit>
+<trans-unit id="s1771e84f035dbfca">
+  <source>To our readers in France: join the <x id="0" equiv-text="${count}"/> people keeping Open Food Facts free.</source>
+</trans-unit>
+<trans-unit id="se3c369c9968fb2a4">
+  <source>To our readers in France: join the people keeping Open Food Facts free.</source>
+</trans-unit>
+<trans-unit id="s3a415c0098b6e01b">
+  <source>Join the <x id="0" equiv-text="${count}"/> people keeping Open Food Facts free.</source>
+</trans-unit>
+<trans-unit id="s535e4c52764db5ed">
+  <source>Join the people keeping Open Food Facts free.</source>
+</trans-unit>
+<trans-unit id="s984c3f4ea2027ec3">
+  <source>Join <x id="0" equiv-text="${count}"/> people keeping this free.</source>
+</trans-unit>
+<trans-unit id="s17e22985ab27800e">
+  <source>Join the people keeping this free.</source>
+</trans-unit>
+<trans-unit id="sbbbd081f048248b3">
+  <source><x id="0" equiv-text="${amount}"/> a month keeps it that way.</source>
 </trans-unit>
     </body>
   </file>
