@@ -81,9 +81,10 @@ export class DonationBanner extends LitElement {
   }
 
   private onMeterState = (event: CustomEvent<BasicStateEventDetail>) => {
+    const meter = this.renderRoot.querySelector("donation-meter")
     // A meter removed from the page keeps its in-flight request, and Lit keeps
     // the listener bound to it, so a late answer must not speak for the banner.
-    if (!(event.target as HTMLElement).isConnected) {
+    if (event.target !== meter || !(event.target as HTMLElement).isConnected) {
       return
     }
     this.meterHasFigures = event.detail.state === EventState.HAS_DATA

@@ -275,7 +275,7 @@ describe("donation-banner", () => {
     const element = await createBanner({ "donate-url": "javascript:alert(document.cookie)//" })
 
     const href = donateLink(element)
-    expect(href.startsWith("javascript:")).toBe(false)
+    expect(new URL(href).protocol).toBe("https:")
     expect(href).toContain("https://world.openfoodfacts.org/donate-to-open-food-facts")
   })
 
