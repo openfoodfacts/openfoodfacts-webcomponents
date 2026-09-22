@@ -767,6 +767,8 @@ export class RobotoffNutrientExtractionForm extends LitElement {
    * @param insightAnnotationAnswer
    */
   emitSubmitEvent(insightAnnotationAnswer: InsightAnnotationAnswer) {
+    console.log("🔥 SUBMITTING INSIGHT ANSWER:", insightAnnotationAnswer)
+
     this.dispatchEvent(
       new CustomEvent(EventType.SUBMIT, {
         bubbles: true,
@@ -1027,7 +1029,11 @@ export class RobotoffNutrientExtractionForm extends LitElement {
   onSubmit(event: SubmitEvent) {
     event.preventDefault()
     event.stopPropagation()
-    const formData = new FormData(event.target as HTMLFormElement)
+
+    const formElement = event.currentTarget as HTMLFormElement
+    if (!formElement) return
+
+    const formData = new FormData(formElement)
     this.submitFormData(formData, this.insightAnnotationSize)
   }
 
@@ -1100,7 +1106,7 @@ export class RobotoffNutrientExtractionForm extends LitElement {
    * Render the toggle nutrient button.
    */
   renderToggleNutrientButton(column: InsightAnnotationSize, nutrientKey: string) {
-    const isHidden = this.inputHiddenBySizeAndNutrientKey[column][nutrientKey]
+    const isHidden = Boolean(this.inputHiddenBySizeAndNutrientKey?.[column]?.[nutrientKey])
     return html`
       <div class="toggle-nutrient-button-wrapper">
         <button
