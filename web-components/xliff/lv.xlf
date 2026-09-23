@@ -68,35 +68,27 @@
       </trans-unit>
       <trans-unit id="sfc40ea3d5d5aa6f8" approved="yes">
         <source>Your donations fund the day-to-day operations of our non-profit association:</source>
-        <target state="final">Jūsu ziedojumi finansē mūsu bezpeļņas asociācijas ikdienas darbību:</target>
-      </trans-unit>
-      <trans-unit id="s1c5031113de500ce">
-        <source>keeping our database open &amp; available to all,</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">saglabājot mūsu datubāzi atvērtu &amp; pieejamu visiem,</target>
-      </trans-unit>
-      <trans-unit id="sebb2c6c830a44574">
-        <source>technical infrastructure (website/mobile app) &amp; a small permanent team</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">tehniskā infrastruktūra (tīmekļa vietne/mobilā lietotne) &amp; neliela pastāvīga komanda</target>
+  <target state="translated">Jūsu ziedojumi finansē mūsu bezpeļņas asociācijas ikdienas darbību:</target>
       </trans-unit>
       <trans-unit id="sd82bc2decefa621b" approved="yes">
         <source>remain independent of the food industry,</source>
-        <target state="final">saglabāt neatkarību no pārtikas rūpniecības,</target>
+  <target state="translated">palikt neatkarīgiem no pārtikas nozares,</target>
       </trans-unit>
       <trans-unit id="sb3bdd638a58d30f4" approved="yes">
         <source>engage a community of committed citizens,</source>
-        <target state="final">iesaistīt apņēmīgu pilsoņu kopienu,</target>
+  <target state="translated">iesaistīt apzinīgu pilsoņu kopienu,</target>
       </trans-unit>
       <trans-unit id="s100c4928cc74642a" approved="yes">
         <source>support the advancement of public health research.</source>
-        <target state="final">atbalstīt sabiedrības veselības pētījumu attīstību.</target>
+  <target state="translated">atbalstīt sabiedrības veselības pētniecības attīstību.</target>
       </trans-unit>
       <trans-unit id="s6306a31415aea913" approved="yes">
         <source>I SUPPORT</source>
-        <target state="final">ES ATBALSTU</target>
+  <target state="translated">ES ATBALSTU</target>
       </trans-unit>
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">grupas fotoattēlu ziedojums <x id="0" equiv-text="${this.currentYear}"/></target>
+  <target state="translated">grupas foto ziedojums <x id="0" equiv-text="${this.currentYear}"/></target>
       </trans-unit>
       <trans-unit id="s000d98595e959c1e">
         <source>Get It On Google Play</source>
@@ -992,21 +984,35 @@
       </trans-unit>
 <trans-unit id="sb18dd702b5f51223">
   <source><x id="0" equiv-text="${missing}"/> short</source>
+  <target state="translated">trūkst <x id="0" equiv-text="${missing}"/></target>
 </trans-unit>
 <trans-unit id="s4e037fb4937e78d2">
   <source>of <x id="0" equiv-text="${goal}"/></source>
+  <target state="translated">no <x id="0" equiv-text="${goal}"/></target>
 </trans-unit>
 <trans-unit id="sfb6c2292955d4453">
   <source>Fundraiser progress</source>
+  <target state="translated">Līdzekļu vākšanas progress</target>
 </trans-unit>
 <trans-unit id="s8966e013dce8891f">
   <source>We still need €120,000 to finish 2026!</source>
+  <target state="translated">Mums joprojām ir nepieciešami 120 000 €, lai pabeigtu 2026. gadu!</target>
 </trans-unit>
 <trans-unit id="s4b2638408d2e3aa8">
   <source>Become an Open Food Facts patron</source>
+  <target state="translated">Kļūstiet par Open Food Facts mecenātu</target>
 </trans-unit>
 <trans-unit id="s12b36eaac15a1c74">
   <source>If every visitor this month clicked on Donate and gave just 1€, we'd get over 8 times our yearly budget!</source>
+  <target state="translated">Ja katrs apmeklētājs šomēnes noklikšķinātu uz Ziedot un ziedotu tikai 1 €, mēs iegūtu vairāk nekā 8 reizes lielāku summu par mūsu gada budžetu!</target>
+</trans-unit>
+<trans-unit id="s9488434f64291951">
+  <source>keeping our database open and available to all,</source>
+  <target state="translated">saglabāt mūsu datubāzi atvērtu un pieejamu visiem,</target>
+</trans-unit>
+<trans-unit id="s1639c60919d39401">
+  <source>technical infrastructure (website/mobile app) and a small permanent team</source>
+  <target state="translated">tehnisko infrastruktūru (vietni/mobilo lietotni) un nelielu pastāvīgu komandu</target>
 </trans-unit>
     </body>
   </file>

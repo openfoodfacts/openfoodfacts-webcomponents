@@ -6,6 +6,7 @@ import { EventState } from "../../constants"
 import type { BasicStateEventDetail } from "../../types"
 import { classMap } from "lit/directives/class-map.js"
 import { darkModeListener } from "../../utils/dark-mode-listener"
+import { getLocalizedDonateUrl } from "./donation-links"
 import "../donation-meter/donation-meter"
 
 /**
@@ -90,7 +91,9 @@ export class DonationBanner extends LitElement {
   }
 
   getLinkWithQueryParams(link: string) {
-    const locale = languageCode.get()
+    const rawLocale = languageCode.get()
+    const locale = rawLocale?.toLowerCase()
+    const baseLocale = locale?.split(/[-_]/)[0]
     let url = new URL(
       link,
       typeof window !== "undefined" && window.location?.href
@@ -108,7 +111,7 @@ export class DonationBanner extends LitElement {
     if (!params.has("utm_source")) params.set("utm_source", "off")
     if (!params.has("utm_medium")) params.set("utm_medium", "web")
     if (!params.has("utm_campaign")) params.set("utm_campaign", `donate-${this.currentYear}-a`)
-    if (!params.has("utm_term")) params.set("utm_term", `${locale || "en"}-text-button`)
+    if (!params.has("utm_term")) params.set("utm_term", `${baseLocale || "en"}-text-button`)
     // A meter showing nothing leaves the banner identical to the plain one, so
     // crediting the click to a meter that is not there would inflate the count.
     if (this.newsUrl && this.meterHasFigures && !params.has("utm_content"))
@@ -118,17 +121,22 @@ export class DonationBanner extends LitElement {
   }
 
   get donateLink() {
-    const locale = languageCode.get()
+    const rawLocale = languageCode.get()
+    const locale = rawLocale?.toLowerCase()
+    const baseLocale = locale?.split(/[-_]/)[0]
     const customLink = this.donateUrl || this.donateLinkProp
     if (customLink) {
       return this.getLinkWithQueryParams(customLink)
     }
-    const link =
-      locale in this.links
-        ? this.links[locale as keyof typeof this.links]
-        : locale && locale !== "en"
-          ? `https://world-${locale}.openfoodfacts.org/donate-to-open-food-facts`
-          : this.links.default
+    const targetKey =
+      locale && locale in this.links
+        ? locale
+        : baseLocale && baseLocale in this.links
+          ? baseLocale
+          : undefined
+    const link = targetKey
+      ? this.links[targetKey as keyof typeof this.links]
+      : getLocalizedDonateUrl(rawLocale, this.links.default)
     return this.getLinkWithQueryParams(link)
   }
 
@@ -449,9 +457,9 @@ export class DonationBanner extends LitElement {
               ${msg("Your donations fund the day-to-day operations of our non-profit association:")}
             </p>
             <ul class="unordered-list">
-              <li>${msg("keeping our database open & available to all,")}</li>
+              <li>${msg("keeping our database open and available to all,")}</li>
               <li>
-                ${msg("technical infrastructure (website/mobile app) & a small permanent team")}
+                ${msg("technical infrastructure (website/mobile app) and a small permanent team")}
               </li>
               <li>
                 <p>${msg("remain independent of the food industry,")}</p>

@@ -68,35 +68,27 @@
       </trans-unit>
       <trans-unit id="sfc40ea3d5d5aa6f8" approved="yes">
         <source>Your donations fund the day-to-day operations of our non-profit association:</source>
-        <target state="final">Donasi Anda mendanai operasional sehari-hari asosiasi nirlaba kami:</target>
-      </trans-unit>
-      <trans-unit id="s1c5031113de500ce">
-        <source>keeping our database open &amp; available to all,</source>
-        <target state="translated">menjaga basis data kami tetap terbuka &amp; tersedia untuk semua,</target>
-      </trans-unit>
-      <trans-unit id="sebb2c6c830a44574">
-        <source>technical infrastructure (website/mobile app) &amp; a small permanent team</source>
-        <target state="translated">infrastruktur teknis (situs web/aplikasi seluler) &amp; tim kecil permanen</target>
+  <target state="translated">Donasi Anda mendanai operasional sehari-hari asosiasi nirlaba kami:</target>
       </trans-unit>
       <trans-unit id="sd82bc2decefa621b" approved="yes">
         <source>remain independent of the food industry,</source>
-        <target state="final">tetap independen pada industri makanan,</target>
+  <target state="translated">tetap independen dari industri makanan,</target>
       </trans-unit>
       <trans-unit id="sb3bdd638a58d30f4" approved="yes">
         <source>engage a community of committed citizens,</source>
-        <target state="final">melibatkan komunitas warga yang berkomitmen,</target>
+  <target state="translated">melibatkan komunitas warga yang berkomitmen,</target>
       </trans-unit>
       <trans-unit id="s100c4928cc74642a" approved="yes">
         <source>support the advancement of public health research.</source>
-        <target state="final">mendukung kemajuan penelitian kesehatan masyarakat.</target>
+  <target state="translated">mendukung kemajuan penelitian kesehatan masyarakat.</target>
       </trans-unit>
       <trans-unit id="s6306a31415aea913" approved="yes">
         <source>I SUPPORT</source>
-        <target state="final">SAYA MENDUKUNG</target>
+  <target state="translated">SAYA DUKUNG</target>
       </trans-unit>
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
-        <target state="translated">foto grup donasi <x id="0" equiv-text="${this.currentYear}"/></target>
+  <target state="translated">donasi foto grup <x id="0" equiv-text="${this.currentYear}"/></target>
       </trans-unit>
       <trans-unit id="s000d98595e959c1e">
         <source>Get It On Google Play</source>
@@ -992,21 +984,35 @@
       </trans-unit>
 <trans-unit id="sb18dd702b5f51223">
   <source><x id="0" equiv-text="${missing}"/> short</source>
+  <target state="translated">kurang <x id="0" equiv-text="${missing}"/></target>
 </trans-unit>
 <trans-unit id="s4e037fb4937e78d2">
   <source>of <x id="0" equiv-text="${goal}"/></source>
+  <target state="translated">dari <x id="0" equiv-text="${goal}"/></target>
 </trans-unit>
 <trans-unit id="sfb6c2292955d4453">
   <source>Fundraiser progress</source>
+  <target state="translated">Kemajuan penggalangan dana</target>
 </trans-unit>
 <trans-unit id="s8966e013dce8891f">
   <source>We still need €120,000 to finish 2026!</source>
+  <target state="translated">Kami masih membutuhkan €120.000 untuk menyelesaikan tahun 2026!</target>
 </trans-unit>
 <trans-unit id="s4b2638408d2e3aa8">
   <source>Become an Open Food Facts patron</source>
+  <target state="translated">Menjadi pelindung Open Food Facts</target>
 </trans-unit>
 <trans-unit id="s12b36eaac15a1c74">
   <source>If every visitor this month clicked on Donate and gave just 1€, we'd get over 8 times our yearly budget!</source>
+  <target state="translated">Jika setiap pengunjung bulan ini mengeklik Donasi dan menyumbang hanya 1 €, kami akan memperoleh lebih dari 8 kali lipat anggaran tahunan kami!</target>
+</trans-unit>
+<trans-unit id="s9488434f64291951">
+  <source>keeping our database open and available to all,</source>
+  <target state="translated">menjaga basis data kami tetap terbuka dan dapat diakses oleh semua orang,</target>
+</trans-unit>
+<trans-unit id="s1639c60919d39401">
+  <source>technical infrastructure (website/mobile app) and a small permanent team</source>
+  <target state="translated">infrastruktur teknis (situs web/aplikasi seluler) dan tim tetap yang kecil</target>
 </trans-unit>
     </body>
   </file>
