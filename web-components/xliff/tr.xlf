@@ -70,14 +70,6 @@
         <source>Your donations fund the day-to-day operations of our non-profit association:</source>
         <target state="final">Bağışlarınız, kâr amacı gütmeyen derneğimizin günlük faaliyetlerini finanse ediyor:</target>
       </trans-unit>
-      <trans-unit id="s1c5031113de500ce">
-        <source>keeping our database open &amp; available to all,</source>
-        <target state="translated">veritabanımızı açık tutarak &amp; herkesin kullanımına sunuyoruz,</target>
-      </trans-unit>
-      <trans-unit id="sebb2c6c830a44574">
-        <source>technical infrastructure (website/mobile app) &amp; a small permanent team</source>
-        <target state="translated">teknik altyapı (web sitesi/mobil uygulama) &amp; küçük ve kalıcı bir ekip</target>
-      </trans-unit>
       <trans-unit id="sd82bc2decefa621b" approved="yes">
         <source>remain independent of the food industry,</source>
         <target state="final">gıda endüstrisinden bağımsız kalmak,</target>
@@ -96,7 +88,7 @@
       </trans-unit>
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
-        <target state="translated">grup fotoğrafı bağışı <x id="0" equiv-text="${this.currentYear}"/></target>
+        <target state="translated">grup fotoğrafı bağış <x id="0" equiv-text="${this.currentYear}"/></target>
       </trans-unit>
       <trans-unit id="s000d98595e959c1e">
         <source>Get It On Google Play</source>
@@ -990,15 +982,15 @@
       </trans-unit>
       <trans-unit id="sb18dd702b5f51223">
         <source><x id="0" equiv-text="${missing}"/> short</source>
-        <target state="needs-translation"><x id="0" equiv-text="${missing}"/> short</target>
+        <target state="translated"><x id="0" equiv-text="${missing}"/> eksik</target>
       </trans-unit>
       <trans-unit id="s4e037fb4937e78d2">
         <source>of <x id="0" equiv-text="${goal}"/></source>
-        <target state="needs-translation">of <x id="0" equiv-text="${goal}"/></target>
+        <target state="translated">/ <x id="0" equiv-text="${goal}"/></target>
       </trans-unit>
       <trans-unit id="sfb6c2292955d4453">
         <source>Fundraiser progress</source>
-        <target state="needs-translation">Fundraiser progress</target>
+        <target state="translated">Bağış toplama ilerlemesi</target>
       </trans-unit>
       <trans-unit id="s8966e013dce8891f">
         <source>We still need €120,000 to finish 2026!</source>
@@ -1011,6 +1003,14 @@
       <trans-unit id="s12b36eaac15a1c74">
         <source>If every visitor this month clicked on Donate and gave just 1€, we'd get over 8 times our yearly budget!</source>
         <target state="translated">Eğer bu ay sitemizi ziyaret eden her bir ziyaretçi 1€ destek olursa yıllık bütçemizin 8 katından fazlasını toplamış oluruz!</target>
+      </trans-unit>
+      <trans-unit id="s9488434f64291951">
+        <source>keeping our database open and available to all,</source>
+        <target state="translated">veri tabanımızı herkese açık ve erişilebilir tutmak,</target>
+      </trans-unit>
+      <trans-unit id="s1639c60919d39401">
+        <source>technical infrastructure (website/mobile app) and a small permanent team</source>
+        <target state="translated">teknik altyapı (web sitesi/mobil uygulama) ve küçük bir daimi ekip</target>
       </trans-unit>
     </body>
   </file>
