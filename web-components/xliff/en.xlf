@@ -886,6 +886,12 @@
         <source>Includes Personal Information</source>
         <target state="needs-translation">Includes Personal Information</target>
       </trans-unit>
+      <trans-unit id="sa4efa3283e995ce1">
+        <source>Remaining products</source>
+      </trans-unit>
+      <trans-unit id="s2186dc7d7ece737f">
+        <source>No more products available for this filter.</source>
+      </trans-unit>
       <trans-unit id="sfac15b89e0668996">
         <source>Duplicate</source>
         <target state="needs-translation">Duplicate</target>

@@ -4,6 +4,7 @@ import {
   type NutrientsInsight,
   type InsightAnnotationAnswer,
   type InsightsRequestParams,
+  type InsightsResponse,
   type NutrientsAnnotationData,
   InsightType,
   AnnotationAnswer,
@@ -42,7 +43,7 @@ export const insight = (productCode: string) => {
 export const fetchNutrientInsights = async (
   productCode?: string,
   requestParams: InsightsRequestParams = {}
-): Promise<NutrientsInsight[]> => {
+): Promise<InsightsResponse<NutrientsInsight>> => {
   const params: InsightsRequestParams = {
     ...requestParams,
     insight_types: InsightType.nutrient_extraction,
@@ -52,6 +53,7 @@ export const fetchNutrientInsights = async (
     params["barcode"] = productCode
     insightIdByProductCode.setItem(productCode, null)
   }
+
   const response = await robotoff.insights<NutrientsInsight>(params)
 
   response.insights.forEach((insight) => {
@@ -59,7 +61,7 @@ export const fetchNutrientInsights = async (
     insightIdByProductCode.setItem(insight.barcode, insight.id)
   })
 
-  return response.insights
+  return response
 }
 
 /**
