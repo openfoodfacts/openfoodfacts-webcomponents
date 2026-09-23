@@ -6,6 +6,7 @@ import { EventState } from "../../constants"
 import type { BasicStateEventDetail } from "../../types"
 import { classMap } from "lit/directives/class-map.js"
 import { darkModeListener } from "../../utils/dark-mode-listener"
+import { getLocalizedDonateUrl } from "./donation-links"
 import "../donation-meter/donation-meter"
 
 /**
@@ -135,9 +136,7 @@ export class DonationBanner extends LitElement {
           : undefined
     const link = targetKey
       ? this.links[targetKey as keyof typeof this.links]
-      : baseLocale && baseLocale !== "en"
-        ? `https://world-${baseLocale}.openfoodfacts.org/donate-to-open-food-facts`
-        : this.links.default
+      : getLocalizedDonateUrl(rawLocale, this.links.default)
     return this.getLinkWithQueryParams(link)
   }
 
