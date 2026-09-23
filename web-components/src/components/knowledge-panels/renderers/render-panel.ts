@@ -172,18 +172,16 @@ export class PanelRenderer extends LitElement {
         <details .open=${this.panel.expanded ?? false}>
           <summary>
             <div class="panel-header">
-              ${
-                icon
-                  ? html`
-                      <img
-                        class="panel-icon panel-icon-${this.panel.title_element?.icon_size}"
-                        .src=${icon}
-                        .alt=${title}
-                      />
-                      <div>${title}</div>
-                    `
-                  : html`<div>${title}</div>`
-              }
+              ${icon
+                ? html`
+                    <img
+                      class="panel-icon panel-icon-${this.panel.title_element?.icon_size}"
+                      .src=${icon}
+                      .alt=${title}
+                    />
+                    <div>${title}</div>
+                  `
+                : html`<div>${title}</div>`}
             </div>
             <span class="arrow">▶</span>
           </summary>

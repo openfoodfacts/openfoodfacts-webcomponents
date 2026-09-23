@@ -70,17 +70,15 @@ export class PanelGroupElementRenderer extends LitElement {
 
     return html`
       <div class="panel-group">
-        ${
-          panelGroup.title
-            ? html`<heading-renderer
-                text="${panelGroup.title}"
-                class-name="panel-group-title"
-                heading-level="${this.headingLevel}"
-                offset="1"
-              >
-              </heading-renderer>`
-            : ""
-        }
+        ${panelGroup.title
+          ? html`<heading-renderer
+              text="${panelGroup.title}"
+              class-name="panel-group-title"
+              heading-level="${this.headingLevel}"
+              offset="1"
+            >
+            </heading-renderer>`
+          : ""}
         <panel-group-image-renderer .panelGroup=${panelGroup}></panel-group-image-renderer>
         ${this.renderPanelGroupPanels(panelGroup)}
       </div>

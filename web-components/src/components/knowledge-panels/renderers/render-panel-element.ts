@@ -91,17 +91,15 @@ export class PanelElementRenderer extends LitElement {
     } else if (this.element.elements && Array.isArray(this.element.elements)) {
       return html`
         <div class="sub-panel">
-          ${
-            this.element.title
-              ? html`<heading-renderer
-                  text="${this.element.title}"
-                  class-name="sub-panel-title"
-                  heading-level="${this.headingLevel}"
-                  offset="1"
-                >
-                </heading-renderer>`
-              : ""
-          }
+          ${this.element.title
+            ? html`<heading-renderer
+                text="${this.element.title}"
+                class-name="sub-panel-title"
+                heading-level="${this.headingLevel}"
+                offset="1"
+              >
+              </heading-renderer>`
+            : ""}
           <div class="elements">
             ${this.element.elements.map(
               (subElement: KnowledgePanelElement) =>
