@@ -177,11 +177,6 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
    * @type {{ imageUrl?: string, name?: string }}
    */
   @state()
-  /**
-   * The product data, including the image URL and name.
-   * @type {{ imageUrl?: string, name?: string }}
-   */
-  @state()
   private productData: {
     imageUrl?: string
     name?: string
@@ -207,12 +202,6 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
       this.requestUpdate()
     }, duration)
     this.requestUpdate()
-  }
-
-  get imageId(): string {
-    const url = this.productData.imageUrl ?? ""
-    const file = url.split("/").pop() ?? ""
-    return file.replace(/\..+$/, "")
   }
 
   /**
@@ -297,9 +286,13 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
         name: result.product?.product_name,
       }
       this._productDataCache.set(insight.barcode, data)
-      this.productData = data
+      if (this._insight?.id === insight.id) {
+        this.productData = data
+      }
     } catch {
-      this.productData = { imageUrl: undefined, name: undefined }
+      if (this._insight?.id === insight.id) {
+        this.productData = { imageUrl: undefined, name: undefined }
+      }
     }
   }
 
@@ -397,32 +390,36 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
 
     const { annotation, correction } = event.detail
     const isSkip = annotation === AnnotationAnswer.SKIP
-    this.showToast(isSkip ? msg("Skipped") : msg("Correction saved!"))
+    const isLastInsight = this._currentIndex === this._insightIds.length - 1
 
     // Send the annotation to Robotoff API in background
     void robotoff
       .annotateIngredientSpellcheck(insight.id, annotation, correction)
       .then(() => {
+        this.showToast(isSkip ? msg("Skipped") : msg("Correction saved!"))
         this.dispatchIngredientSpellcheckStateEvent({
           state: EventState.ANNOTATED,
           insightId: insight.id,
         })
+        if (isLastInsight) {
+          this.dispatchIngredientSpellcheckStateEvent({
+            state: EventState.FINISHED,
+            insightId: insight.id,
+            ...event.detail,
+          })
+        }
       })
       .catch((error) => {
         console.error("Failed to submit annotation:", error)
         this.showToast(msg("Error saving annotation"), 4000)
+        this.dispatchIngredientSpellcheckStateEvent({
+          state: EventState.ERROR,
+          insightId: insight.id,
+        })
       })
 
     // Advance to next question immediately (optimistic UI)
     this.nextInsight()
-
-    if (this.allInsightsAreAnswered) {
-      this.dispatchIngredientSpellcheckStateEvent({
-        state: EventState.FINISHED,
-        insightId: insight.id,
-        ...event.detail,
-      })
-    }
   }
 
   /**
@@ -430,19 +427,49 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
    */
   async onUnselectImage() {
     const insight = this._insight
-    if (!insight) return
+    if (
+      !insight ||
+      !confirm(msg("Are you sure you want to unselect this image for ingredients?"))
+    ) {
+      return
+    }
 
     const lang = insight.data.lang || "fr"
     const imageField = `ingredients_${lang}`
+    let isLastInsight = false
 
     try {
       await unselectProductImage(insight.barcode, imageField)
+      this._productDataCache.delete(insight.barcode)
       this.showToast(msg("Image unselected"))
-      void robotoff.annotateIngredientSpellcheck(insight.id, AnnotationAnswer.SKIP)
       this.nextInsight()
+      isLastInsight = this.allInsightsAreAnswered
     } catch (err) {
       console.error("Failed to unselect image:", err)
       this.showToast(msg("Failed to unselect image"), 4000)
+      return
+    }
+
+    try {
+      await robotoff.annotateIngredientSpellcheck(insight.id, AnnotationAnswer.SKIP)
+      this.dispatchIngredientSpellcheckStateEvent({
+        state: EventState.ANNOTATED,
+        insightId: insight.id,
+        annotation: AnnotationAnswer.SKIP,
+      })
+      if (isLastInsight) {
+        this.dispatchIngredientSpellcheckStateEvent({
+          state: EventState.FINISHED,
+          insightId: insight.id,
+        })
+      }
+    } catch (err) {
+      console.error("Failed to submit annotation:", err)
+      this.showToast(msg("Error saving annotation"), 4000)
+      this.dispatchIngredientSpellcheckStateEvent({
+        state: EventState.ERROR,
+        insightId: insight.id,
+      })
     }
   }
 
@@ -482,15 +509,17 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
             ✕ ${msg("Unselect image")}
           </button>
         </div>
-        ${insight
-          ? html`<nutripatrol-flag-form
-              .barcode=${insight.barcode}
-              type="image"
-              .imageId=${this.imageId}
-              ?open=${this._isFlagModalOpen}
-              @close=${() => (this._isFlagModalOpen = false)}
-            ></nutripatrol-flag-form>`
-          : nothing}
+        ${
+          insight
+            ? html`<nutripatrol-flag-form
+                .barcode=${insight.barcode}
+                type="image"
+                .imageId=${insight.source_image ?? ""}
+                ?open=${this._isFlagModalOpen}
+                @close=${() => (this._isFlagModalOpen = false)}
+              ></nutripatrol-flag-form>`
+            : nothing
+        }
       </div>
     `
   }
@@ -531,9 +560,11 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
                 ></text-corrector>
               </div>
             </div>
-            ${this._toastMessage
-              ? html`<div class="transient-toast">${this._toastMessage}</div>`
-              : nothing}
+            ${
+              this._toastMessage
+                ? html`<div class="transient-toast">${this._toastMessage}</div>`
+                : nothing
+            }
           </div>
         `
       },
