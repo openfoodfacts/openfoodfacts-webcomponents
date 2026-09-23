@@ -70,14 +70,6 @@
         <source>Your donations fund the day-to-day operations of our non-profit association:</source>
         <target state="final">התרומות שלך מממנות את הפעילויות היומיומיות של העמותה שלנו שאינה למטרות רווח:</target>
       </trans-unit>
-      <trans-unit id="s1c5031113de500ce">
-        <source>keeping our database open &amp; available to all,</source>
-        <target state="translated">שמירה על מסד הנתונים שלנו פתוח וזמין לכולם,</target>
-      </trans-unit>
-      <trans-unit id="sebb2c6c830a44574">
-        <source>technical infrastructure (website/mobile app) &amp; a small permanent team</source>
-        <target state="translated">תשתית טכנית (אתר/יישומון לניידים) וצוות קבוע קטן</target>
-      </trans-unit>
       <trans-unit id="sd82bc2decefa621b" approved="yes">
         <source>remain independent of the food industry,</source>
         <target state="final">להישאר בלתי תלויים בתעשיית המזון,</target>
@@ -96,7 +88,7 @@
       </trans-unit>
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
-        <target state="translated">תמונה קבוצתית שנתרמה <x id="0" equiv-text="${this.currentYear}"/></target>
+        <target state="translated">תמונת קבוצה תרומה <x id="0" equiv-text="${this.currentYear}"/></target>
       </trans-unit>
       <trans-unit id="s000d98595e959c1e">
         <source>Get It On Google Play</source>
@@ -992,7 +984,7 @@
       </trans-unit>
       <trans-unit id="sb18dd702b5f51223">
         <source><x id="0" equiv-text="${missing}"/> short</source>
-        <target state="translated">חסר <x id="0" equiv-text="${missing}"/></target>
+        <target state="translated">חסרים <x id="0" equiv-text="${missing}"/></target>
       </trans-unit>
       <trans-unit id="s4e037fb4937e78d2">
         <source>of <x id="0" equiv-text="${goal}"/></source>
@@ -1000,7 +992,7 @@
       </trans-unit>
       <trans-unit id="sfb6c2292955d4453">
         <source>Fundraiser progress</source>
-        <target state="translated">התקדמות גיוס תרומות</target>
+        <target state="translated">התקדמות גיוס התרומות</target>
       </trans-unit>
       <trans-unit id="s8966e013dce8891f">
         <source>We still need €120,000 to finish 2026!</source>
@@ -1013,6 +1005,14 @@
       <trans-unit id="s12b36eaac15a1c74">
         <source>If every visitor this month clicked on Donate and gave just 1€, we'd get over 8 times our yearly budget!</source>
         <target state="translated">אם כל מבקר או מבקרת היו לוחצים על כפתור התרומה ומעניקים רק אירו אחד, היינו מקבלים פי 8 מהתקציב השנתי שלנו!</target>
+      </trans-unit>
+      <trans-unit id="s9488434f64291951">
+        <source>keeping our database open and available to all,</source>
+        <target state="translated">שמירה על מאגר הנתונים שלנו פתוח ונגיש לכולם,</target>
+      </trans-unit>
+      <trans-unit id="s1639c60919d39401">
+        <source>technical infrastructure (website/mobile app) and a small permanent team</source>
+        <target state="translated">תשתית טכנולוגית (אתר/אפליקציה) וצוות קבוע קטן</target>
       </trans-unit>
     </body>
   </file>
