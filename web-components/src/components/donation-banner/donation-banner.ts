@@ -471,12 +471,14 @@ export class DonationBanner extends LitElement {
                 <p>${msg("support the advancement of public health research.")}</p>
               </li>
             </ul>
-            ${this.newsUrl
-              ? html`<donation-meter
-                  url=${this.newsUrl}
-                  @donation-meter-state="${this.onMeterState}"
-                ></donation-meter>`
-              : nothing}
+            ${
+              this.newsUrl
+                ? html`<donation-meter
+                    url=${this.newsUrl}
+                    @donation-meter-state="${this.onMeterState}"
+                  ></donation-meter>`
+                : nothing
+            }
           </div>
           <div class="donation-banner-footer__actions-section">
             <div class="donation-banner-footer__actions-section__financial">

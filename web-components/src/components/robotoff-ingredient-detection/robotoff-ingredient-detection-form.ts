@@ -240,8 +240,10 @@ export class RobotoffIngredientDetectionForm extends LitElement {
           <loading-button
             css-classes="button success-button"
             type="submit"
-            .loading=${this.loading === AnnotationAnswer.ACCEPT ||
-            this.loading === AnnotationAnswer.ACCEPT_AND_ADD_DATA}
+            .loading=${
+              this.loading === AnnotationAnswer.ACCEPT ||
+              this.loading === AnnotationAnswer.ACCEPT_AND_ADD_DATA
+            }
             .disabled=${this.isLoading}
             @click="${() => triggerSubmit(this.form!)}"
             label="${msg("Validate")}"

@@ -111,9 +111,11 @@ export class ImageRenderer extends LitElement {
     return html`
       <div class="panel-image">
         <img src="${this.imageUrl}" alt="${this.imageAlt}" />
-        ${this.imageCaption
-          ? html`<div class="panel-image-text">${this.imageCaption}</div>`
-          : html``}
+        ${
+          this.imageCaption
+            ? html`<div class="panel-image-text">${this.imageCaption}</div>`
+            : html``
+        }
       </div>
     `
   }

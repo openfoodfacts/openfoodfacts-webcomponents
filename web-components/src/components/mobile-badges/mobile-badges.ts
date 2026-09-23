@@ -444,15 +444,23 @@ export class MobileBadges extends LitElement {
   renderBadges() {
     const filteredBadges = this.getFilteredBadges()
 
-    return html` ${filteredBadges.length > 0
-      ? html`
-          <div class="badge-container ">
-            ${filteredBadges.map((badge) =>
-              this.generateBadgeLink(badge.href, badge.src, badge.alt, badge.id, badge.errorHandler)
-            )}
-          </div>
-        `
-      : ""}`
+    return html` ${
+      filteredBadges.length > 0
+        ? html`
+            <div class="badge-container ">
+              ${filteredBadges.map((badge) =>
+                this.generateBadgeLink(
+                  badge.href,
+                  badge.src,
+                  badge.alt,
+                  badge.id,
+                  badge.errorHandler
+                )
+              )}
+            </div>
+          `
+        : ""
+    }`
   }
 
   override render() {
