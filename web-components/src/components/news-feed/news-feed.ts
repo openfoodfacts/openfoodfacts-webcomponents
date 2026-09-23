@@ -496,9 +496,11 @@ export class NewsFeed extends LitElement {
       complete: (news) => {
         return html`
           <div class="news-container">
-            ${news.length > 0
-              ? news.map((item) => this._renderNewsItem(item))
-              : html`<div class="no-news">No relevant news available right now.</div>`}
+            ${
+              news.length > 0
+                ? news.map((item) => this._renderNewsItem(item))
+                : html`<div class="no-news">No relevant news available right now.</div>`
+            }
           </div>
         `
       },
