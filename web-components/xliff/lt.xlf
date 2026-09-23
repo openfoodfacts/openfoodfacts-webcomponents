@@ -68,35 +68,27 @@
       </trans-unit>
       <trans-unit id="sfc40ea3d5d5aa6f8" approved="yes">
         <source>Your donations fund the day-to-day operations of our non-profit association:</source>
-        <target state="final">Jūsų aukos finansuoja kasdienę mūsų ne pelno asociacijos veiklą:</target>
-      </trans-unit>
-      <trans-unit id="s1c5031113de500ce">
-        <source>keeping our database open &amp; available to all,</source>
-        <target state="needs-translation">keeping our database open &amp; available to all,</target>
-      </trans-unit>
-      <trans-unit id="sebb2c6c830a44574">
-        <source>technical infrastructure (website/mobile app) &amp; a small permanent team</source>
-        <target state="needs-translation">technical infrastructure (website/mobile app) &amp; a small permanent team</target>
+  <target state="translated">Jūsų aukos finansuoja kasdienę mūsų ne pelno asociacijos veiklą:</target>
       </trans-unit>
       <trans-unit id="sd82bc2decefa621b" approved="yes">
         <source>remain independent of the food industry,</source>
-        <target state="final">padeda išlikti nepriklausomais nuo maisto pramonės,</target>
+  <target state="translated">likti nepriklausomiems nuo maisto pramonės,</target>
       </trans-unit>
       <trans-unit id="sb3bdd638a58d30f4" approved="yes">
         <source>engage a community of committed citizens,</source>
-        <target state="final">suburti atsidavusių piliečių bendruomenę,</target>
+  <target state="translated">įtraukti neabejingų piliečių bendruomenę,</target>
       </trans-unit>
       <trans-unit id="s100c4928cc74642a" approved="yes">
         <source>support the advancement of public health research.</source>
-        <target state="final">paremti visuomenės sveikatos tyrimų pažangą.</target>
+  <target state="translated">remti visuomenės sveikatos tyrimų pažangą.</target>
       </trans-unit>
       <trans-unit id="s6306a31415aea913" approved="yes">
         <source>I SUPPORT</source>
-        <target state="final">AŠ REMIU</target>
+  <target state="translated">PALAIKAU</target>
       </trans-unit>
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
-        <target state="needs-translation">group photo donation <x id="0" equiv-text="${this.currentYear}"/></target>
+  <target state="translated">grupinė nuotrauka auka <x id="0" equiv-text="${this.currentYear}"/></target>
       </trans-unit>
       <trans-unit id="s000d98595e959c1e">
         <source>Get It On Google Play</source>
@@ -992,21 +984,35 @@
       </trans-unit>
 <trans-unit id="sb18dd702b5f51223">
   <source><x id="0" equiv-text="${missing}"/> short</source>
+  <target state="translated">trūksta <x id="0" equiv-text="${missing}"/></target>
 </trans-unit>
 <trans-unit id="s4e037fb4937e78d2">
   <source>of <x id="0" equiv-text="${goal}"/></source>
+  <target state="translated">iš <x id="0" equiv-text="${goal}"/></target>
 </trans-unit>
 <trans-unit id="sfb6c2292955d4453">
   <source>Fundraiser progress</source>
+  <target state="translated">Lėšų rinkimo eiga</target>
 </trans-unit>
 <trans-unit id="s8966e013dce8891f">
   <source>We still need €120,000 to finish 2026!</source>
+  <target state="translated">Mums vis dar reikia 120 000 €, kad užbaigtume 2026 metus!</target>
 </trans-unit>
 <trans-unit id="s4b2638408d2e3aa8">
   <source>Become an Open Food Facts patron</source>
+  <target state="translated">Tapkite Open Food Facts rėmėju</target>
 </trans-unit>
 <trans-unit id="s12b36eaac15a1c74">
   <source>If every visitor this month clicked on Donate and gave just 1€, we'd get over 8 times our yearly budget!</source>
+  <target state="translated">Jei kiekvienas lankytojas šį mėnesį spustelėtų „Aukoti“ ir paaukotų vos 1 €, surinktume daugiau nei 8 kartus didesnę sumą už mūsų metinį biudžetą!</target>
+</trans-unit>
+<trans-unit id="s9488434f64291951">
+  <source>keeping our database open and available to all,</source>
+  <target state="translated">išlaikyti mūsų duomenų bazę atvirą ir prieinamą visiems,</target>
+</trans-unit>
+<trans-unit id="s1639c60919d39401">
+  <source>technical infrastructure (website/mobile app) and a small permanent team</source>
+  <target state="translated">techninę infrastruktūrą (svetainę/programėlę) ir nedidelę nuolatinę komandą</target>
 </trans-unit>
     </body>
   </file>

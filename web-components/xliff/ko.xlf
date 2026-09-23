@@ -68,35 +68,27 @@
       </trans-unit>
       <trans-unit id="sfc40ea3d5d5aa6f8" approved="yes">
         <source>Your donations fund the day-to-day operations of our non-profit association:</source>
-        <target state="final">여러분의 기부금은 저희 비영리 단체의 일상적인 운영에 사용됩니다.</target>
-      </trans-unit>
-      <trans-unit id="s1c5031113de500ce">
-        <source>keeping our database open &amp; available to all,</source>
-        <target state="needs-translation">keeping our database open &amp; available to all,</target>
-      </trans-unit>
-      <trans-unit id="sebb2c6c830a44574">
-        <source>technical infrastructure (website/mobile app) &amp; a small permanent team</source>
-        <target state="needs-translation">technical infrastructure (website/mobile app) &amp; a small permanent team</target>
+  <target state="translated">여러분의 기부금은 비영리 단체의 일상적인 운영을 지원합니다:</target>
       </trans-unit>
       <trans-unit id="sd82bc2decefa621b" approved="yes">
         <source>remain independent of the food industry,</source>
-        <target state="final">식품 산업으로부터 독립성을 유지한다.</target>
+  <target state="translated">식품 산업으로부터의 독립성 유지,</target>
       </trans-unit>
       <trans-unit id="sb3bdd638a58d30f4" approved="yes">
         <source>engage a community of committed citizens,</source>
-        <target state="final">헌신적인 시민들로 구성된 공동체에 참여하세요.</target>
+  <target state="translated">헌신적인 시민 커뮤니티 참여 유도,</target>
       </trans-unit>
       <trans-unit id="s100c4928cc74642a" approved="yes">
         <source>support the advancement of public health research.</source>
-        <target state="final">공중보건 연구의 발전을 지원합니다.</target>
+  <target state="translated">공중 보건 연구 발전 지원.</target>
       </trans-unit>
       <trans-unit id="s6306a31415aea913" approved="yes">
         <source>I SUPPORT</source>
-        <target state="final">저는 지지합니다</target>
+  <target state="translated">후원하기</target>
       </trans-unit>
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
-        <target state="needs-review-translation" state-qualifier="leveraged-mt">단체 사진 기부 <x id="0" equiv-text="${this.currentYear}"/></target>
+  <target state="translated">단체 사진 기부 <x id="0" equiv-text="${this.currentYear}"/></target>
       </trans-unit>
       <trans-unit id="s000d98595e959c1e">
         <source>Get It On Google Play</source>
@@ -992,21 +984,35 @@
       </trans-unit>
 <trans-unit id="sb18dd702b5f51223">
   <source><x id="0" equiv-text="${missing}"/> short</source>
+  <target state="translated"><x id="0" equiv-text="${missing}"/> 부족</target>
 </trans-unit>
 <trans-unit id="s4e037fb4937e78d2">
   <source>of <x id="0" equiv-text="${goal}"/></source>
+  <target state="translated">/ <x id="0" equiv-text="${goal}"/></target>
 </trans-unit>
 <trans-unit id="sfb6c2292955d4453">
   <source>Fundraiser progress</source>
+  <target state="translated">모금 진행 상황</target>
 </trans-unit>
 <trans-unit id="s8966e013dce8891f">
   <source>We still need €120,000 to finish 2026!</source>
+  <target state="translated">2026년을 마무리하려면 아직 120,000 유로가 더 필요합니다!</target>
 </trans-unit>
 <trans-unit id="s4b2638408d2e3aa8">
   <source>Become an Open Food Facts patron</source>
+  <target state="translated">Open Food Facts의 후원자가 되어주세요</target>
 </trans-unit>
 <trans-unit id="s12b36eaac15a1c74">
   <source>If every visitor this month clicked on Donate and gave just 1€, we'd get over 8 times our yearly budget!</source>
+  <target state="translated">이번 달 모든 방문자가 '기부하기'를 클릭하고 단 1유로만 기부한다면 연간 예산의 8배가 넘는 금액을 모금할 수 있습니다!</target>
+</trans-unit>
+<trans-unit id="s9488434f64291951">
+  <source>keeping our database open and available to all,</source>
+  <target state="translated">모든 사람에게 데이터베이스를 공개하고 무료로 제공,</target>
+</trans-unit>
+<trans-unit id="s1639c60919d39401">
+  <source>technical infrastructure (website/mobile app) and a small permanent team</source>
+  <target state="translated">기술 인프라(웹사이트/모바일 앱) 및 소규모 상근 팀 운영</target>
 </trans-unit>
     </body>
   </file>

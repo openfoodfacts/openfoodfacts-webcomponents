@@ -49,24 +49,23 @@
 </trans-unit>
 <trans-unit id="sfc40ea3d5d5aa6f8">
   <source>Your donations fund the day-to-day operations of our non-profit association:</source>
-</trans-unit>
-<trans-unit id="s1c5031113de500ce">
-  <source>keeping our database open &amp; available to all,</source>
-</trans-unit>
-<trans-unit id="sebb2c6c830a44574">
-  <source>technical infrastructure (website/mobile app) &amp; a small permanent team</source>
+  <target state="translated">U skenkings finansier die daaglikse bedrywighede van ons niewinsgewende vereniging:</target>
 </trans-unit>
 <trans-unit id="sd82bc2decefa621b">
   <source>remain independent of the food industry,</source>
+  <target state="translated">om onafhanklik van die voedselbedryf te bly,</target>
 </trans-unit>
 <trans-unit id="sb3bdd638a58d30f4">
   <source>engage a community of committed citizens,</source>
+  <target state="translated">om 'n gemeenskap van toegewyde burgers te betrek,</target>
 </trans-unit>
 <trans-unit id="s100c4928cc74642a">
   <source>support the advancement of public health research.</source>
+  <target state="translated">om die bevordering van openbare gesondheidsnavorsing te ondersteun.</target>
 </trans-unit>
 <trans-unit id="s6306a31415aea913">
   <source>I SUPPORT</source>
+  <target state="translated">EK ONDERSTEUN</target>
 </trans-unit>
 <trans-unit id="sca0c3305aff570b8">
   <source>per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
@@ -88,6 +87,7 @@
 </trans-unit>
 <trans-unit id="scbab4bd737ba7934">
   <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
+  <target state="translated">groepfoto skenking <x id="0" equiv-text="${this.currentYear}"/></target>
 </trans-unit>
 <trans-unit id="h5d824b4954e56ea5">
   <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
@@ -739,21 +739,35 @@
 </trans-unit>
 <trans-unit id="sb18dd702b5f51223">
   <source><x id="0" equiv-text="${missing}"/> short</source>
+  <target state="translated">kort nog <x id="0" equiv-text="${missing}"/></target>
 </trans-unit>
 <trans-unit id="s4e037fb4937e78d2">
   <source>of <x id="0" equiv-text="${goal}"/></source>
+  <target state="translated">van <x id="0" equiv-text="${goal}"/></target>
 </trans-unit>
 <trans-unit id="sfb6c2292955d4453">
   <source>Fundraiser progress</source>
+  <target state="translated">Fondsinsamelingsvordering</target>
 </trans-unit>
 <trans-unit id="s8966e013dce8891f">
   <source>We still need €120,000 to finish 2026!</source>
+  <target state="translated">Ons benodig nog €120 000 om 2026 te voltooi!</target>
 </trans-unit>
 <trans-unit id="s4b2638408d2e3aa8">
   <source>Become an Open Food Facts patron</source>
+  <target state="translated">Word 'n beskermheer van Open Food Facts</target>
 </trans-unit>
 <trans-unit id="s12b36eaac15a1c74">
   <source>If every visitor this month clicked on Donate and gave just 1€, we'd get over 8 times our yearly budget!</source>
+  <target state="translated">As elke besoeker hierdie maand op Skenk klik en net 1 € gee, sal ons meer as 8 keer ons jaarlikse begroting kry!</target>
+</trans-unit>
+<trans-unit id="s9488434f64291951">
+  <source>keeping our database open and available to all,</source>
+  <target state="translated">om ons databasis oop en beskikbaar te hou vir almal,</target>
+</trans-unit>
+<trans-unit id="s1639c60919d39401">
+  <source>technical infrastructure (website/mobile app) and a small permanent team</source>
+  <target state="translated">tegniese infrastruktuur (webtuiste/selfoontoepassing) en 'n klein permanente span</target>
 </trans-unit>
 </body>
 </file>

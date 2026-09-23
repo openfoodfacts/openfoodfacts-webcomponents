@@ -78,8 +78,8 @@ const listItems = (element: any) =>
   Array.from(element.shadowRoot.querySelectorAll("li")).map((item: any) => item.textContent.trim())
 
 const ASK = [
-  "keeping our database open & available to all,",
-  "technical infrastructure (website/mobile app) & a small permanent team",
+  "keeping our database open and available to all,",
+  "technical infrastructure (website/mobile app) and a small permanent team",
   "remain independent of the food industry,",
   "engage a community of committed citizens,",
   "support the advancement of public health research.",
@@ -286,5 +286,23 @@ describe("donation-banner", () => {
     const href = donateLink(element)
     expect(href).toContain("https://world-ja.openfoodfacts.org/donate-to-open-food-facts")
     expect(href).toContain("utm_term=ja-text-button")
+  })
+
+  it("normalizes locale with country code such as fr-FR to French donation link", async () => {
+    languageCode.set("fr-FR")
+    const element = await createBanner()
+
+    const href = donateLink(element)
+    expect(href).toContain("https://open-food-facts.assoconnect.com")
+    expect(href).toContain("utm_term=fr-text-button")
+  })
+
+  it("normalizes locale with country code such as es-ES to world-es", async () => {
+    languageCode.set("es-ES")
+    const element = await createBanner()
+
+    const href = donateLink(element)
+    expect(href).toContain("https://world-es.openfoodfacts.org/donate-to-open-food-facts")
+    expect(href).toContain("utm_term=es-text-button")
   })
 })
