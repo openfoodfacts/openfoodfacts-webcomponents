@@ -28,6 +28,8 @@ import { EventType } from "../../constants"
 import "../shared/loading-button"
 import { triggerSubmit } from "../../utils"
 import "../shared/text-corrector-highlight"
+import { unselectProductImage } from "../../api/openfoodfacts"
+import "../nutripatrol-flag-form/nutripatrol-flag-form"
 
 @customElement("robotoff-ingredient-detection-form")
 @localized()
@@ -50,8 +52,40 @@ export class RobotoffIngredientDetectionForm extends LitElement {
 
       .crop-button-container {
         display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem;
         margin-top: 0.5rem;
         margin-bottom: 0.5rem;
+      }
+
+      .action-chip-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.35rem 0.75rem;
+        font-size: 0.82rem;
+        border-radius: 1rem;
+        border: 1px solid #ccc;
+        background: #f7f7f7;
+        color: #333;
+        cursor: pointer;
+        transition: background 0.15s ease;
+      }
+
+      .action-chip-btn:hover {
+        background: #e9e9e9;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .action-chip-btn {
+          border-color: #555;
+          background: #2b2b2b;
+          color: #ddd;
+        }
+        .action-chip-btn:hover {
+          background: #383838;
+        }
       }
     `,
     FLEX,
@@ -350,6 +384,32 @@ export class RobotoffIngredientDetectionForm extends LitElement {
     this.data.rotation = event.detail.rotation
   }
 
+  @state()
+  private _isFlagModalOpen = false
+
+  get imageId(): string {
+    const src = this.insight?.source_image ?? ""
+    const file = src.split("/").pop() ?? ""
+    return file.replace(/\..+$/, "")
+  }
+
+  async onUnselectImage() {
+    if (!this.insight) return
+    const lang = this.insight.data.lang?.lang || "fr"
+    const imageField = `ingredients_${lang}`
+
+    if (!confirm(msg("Are you sure you want to unselect this image for ingredients?"))) {
+      return
+    }
+
+    try {
+      await unselectProductImage(this.insight.barcode, imageField)
+      this.answer(AnnotationAnswer.SKIP)
+    } catch (err) {
+      console.error("Failed to unselect image:", err)
+    }
+  }
+
   /**
    * Renders an ingredient detection insight
    * @param {IngredientDetectionInsight} insight - The insight to render
@@ -375,7 +435,32 @@ export class RobotoffIngredientDetectionForm extends LitElement {
             .rotation=${rotation}
             @rotate=${this.onRotate}
           ></zoomable-image>
-          <div class="crop-button-container">${this.renderCropButtons()}</div>
+          <div class="crop-button-container">
+            ${this.renderCropButtons()}
+            <button
+              type="button"
+              class="action-chip-btn"
+              @click=${() => (this._isFlagModalOpen = true)}
+              title=${msg("Report problematic image")}
+            >
+              🚩 ${msg("Flag image")}
+            </button>
+            <button
+              type="button"
+              class="action-chip-btn"
+              @click=${() => this.onUnselectImage()}
+              title=${msg("Unselect image")}
+            >
+              ✕ ${msg("Unselect image")}
+            </button>
+          </div>
+          <nutripatrol-flag-form
+            .barcode=${insight.barcode}
+            type="image"
+            .imageId=${this.imageId}
+            ?open=${this._isFlagModalOpen}
+            @close=${() => (this._isFlagModalOpen = false)}
+          ></nutripatrol-flag-form>
         </div>
         <div>${this.renderEditIngredients(insight)}</div>
         ${this.renderCropAnswerButtons()}

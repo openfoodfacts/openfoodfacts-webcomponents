@@ -25,6 +25,7 @@ import { LanguageCodesMixin } from "../../mixins/language-codes-mixin"
 import { EventType, EventState } from "../../constants"
 import type { RobotoffIngredientsStateEventDetail } from "../../types/ingredient-spellcheck"
 import { DisplayProductLinkMixin } from "../../mixins/display-product-link-mixin"
+import { BASE } from "../../styles/base"
 
 /**
  * RobotoffIngredientDetection Component
@@ -42,11 +43,19 @@ export class RobotoffIngredientDetection extends DisplayProductLinkMixin(
   LanguageCodesMixin(LoadingWithTimeoutMixin(LitElement, undefined as AnnotationAnswer | undefined))
 ) {
   static override styles = [
+    BASE,
     css`
       :host {
         display: block;
         max-width: 800px;
         width: 100%;
+      }
+      @media (prefers-color-scheme: dark) {
+        h2,
+        h3,
+        p {
+          color: #eee;
+        }
       }
     `,
   ]

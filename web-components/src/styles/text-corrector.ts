@@ -30,4 +30,19 @@ export const TEXT_CORRECTOR = css`
   .line-through {
     text-decoration: line-through;
   }
+
+  @media (prefers-color-scheme: dark) {
+    .text-section {
+      border-bottom-color: #444;
+      box-shadow: 0 0.5rem 2px -2px rgba(255, 255, 255, 0.05);
+    }
+    .deletion {
+      background-color: #5a2323;
+      color: #ffb4b4;
+    }
+    .addition {
+      background-color: #1e4526;
+      color: #bbf7d0;
+    }
+  }
 `
