@@ -138,8 +138,7 @@ export class TextCorrectorHighlight extends TextDiffMixin(LitElement) {
       <div class="">
         ${sanitizeHtml(`<${headingTag}>${msg("Edit ingredients list")}</${headingTag}>`)}
         <textarea class="textarea" rows="6" @input=${this.handleTextareaInput}>
-${this.value}</textarea
-        >
+${this.value}</textarea>
       </div>
     `
   }
