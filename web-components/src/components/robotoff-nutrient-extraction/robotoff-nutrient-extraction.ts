@@ -20,7 +20,7 @@ import {
 import { BASE } from "../../styles/base"
 import { getRobotoffImageUrl } from "../../signals/robotoff"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
-import { FLEX } from "../../styles/utils"
+import { FLEX, RELATIVE } from "../../styles/utils"
 import { EventState, EventType } from "../../constants"
 import type { BasicStateEventDetail } from "../../types"
 import type { NutrimentsProductType } from "../../types/openfoodfacts"
@@ -35,6 +35,10 @@ import { CountryCodeMixin } from "../../mixins/country-codes-mixin"
 import { DisplayProductLinkMixin } from "../../mixins/display-product-link-mixin"
 import { localized, msg } from "@lit/localize"
 import { languageCode } from "../../signals/app"
+import { clickOutside } from "../../directives/click-outside"
+import "../shared/info-button"
+import { POPOVER } from "../../styles/popover"
+import { classMap } from "lit-html/directives/class-map.js"
 
 const IMAGE_MAX_WIDTH = 700
 /**
@@ -53,6 +57,8 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
   static override styles = [
     BASE,
     FLEX,
+    POPOVER,
+    RELATIVE,
     ...getButtonClasses([ButtonType.LINK]),
     css`
       .image-wrapper {
@@ -60,6 +66,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
         z-index: 1;
         top: 1rem;
         display: flex;
+        flex-direction: column;
         align-items: center;
         margin-bottom: 1rem;
         background-color: white;
@@ -94,6 +101,30 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
       .nutrients product-link-button {
         margin-bottom: 1rem;
       }
+
+      .info-popover {
+        z-index: 2;
+        min-width: 200px;
+      }
+
+      .info-button-wrapper {
+        display: flex;
+        justify-content: flex-start;
+        position: absolute;
+      }
+
+      .relative {
+        position: relative;
+        margin-top: 6px;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: start;
+        justify-content: end;
+        width: 100%;
+        right: 1px;
+        top: 1px;
+        z-index: 10;
+      }
     `,
   ]
 
@@ -112,6 +143,12 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
 
   @state()
   private nutrimentsData?: NutrimentsProductType
+
+  @state()
+  private uploadedDate: string | undefined
+
+  @state()
+  showInfoPopover: boolean = false
 
   get currentInsightId() {
     return this.insightsIds[this.currentInsightIndex]
@@ -170,8 +207,12 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
       return
     }
     this.currentInsightIndex = index
+    this.showInfoPopover = false
     const insight = this.currentInsight
-    await this.getProductNutriments(insight.barcode)
+    const data = await this.getProductNutriments(insight.barcode)
+
+    this.nutrimentsData = data?.product
+    this.uploadedDate = data?.uploadedDate
   }
 
   /**
@@ -180,13 +221,50 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
    * @returns {Promise<NutrimentsProductType>}
    */
   async getProductNutriments(productCode: string) {
-    this.nutrimentsData = undefined
     const result = await fetchProduct<NutrimentsProductType>(productCode, {
-      fields: [ProductFields.NUTRIMENTS],
+      fields: [ProductFields.NUTRIMENTS, ProductFields.IMAGES],
       lc: languageCode.get(),
     })
-    this.nutrimentsData = result.product
-    return result.product.nutriments
+
+    const images = result?.product?.images
+
+    const nutritionImage =
+      images?.[`nutrition_${languageCode.get()}`] ??
+      images?.nutrition ??
+      Object.entries(images ?? {}).find(([key]) => key.startsWith("nutrition_"))?.[1]
+
+    const key = nutritionImage?.imgid !== undefined ? String(nutritionImage.imgid) : undefined
+
+    const uploaded_t = key ? images?.[key]?.uploaded_t : undefined
+
+    return {
+      product: result.product,
+      uploadedDate: this.getUploadedTime(uploaded_t),
+    }
+  }
+
+  /**
+   * Toggles the info popover.
+   */
+  toggleInfoPopover() {
+    this.showInfoPopover = !this.showInfoPopover
+  }
+
+  /**
+   * Closes the info popover.
+   */
+  closeInfoPopover() {
+    this.showInfoPopover = false
+  }
+
+  getUploadedTime = (data: number | undefined) => {
+    if (!data) return undefined
+
+    return new Date(data * 1000).toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    })
   }
 
   renderImage(insight: NutrientsInsight) {
@@ -196,8 +274,15 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
     const imgUrl = getRobotoffImageUrl(insight.source_image)
     return html`
       <div class="image-wrapper">
+        <div class="relative">
+          <div class="info-button-wrapper">
+            <info-button @click=${this.toggleInfoPopover} size="sm"></info-button>
+            ${this.renderInfoPopover()}
+          </div>
+        </div>
         <zoomable-image
           src=${imgUrl}
+          customClass="justify-start"
           .size="${{
             height: "35vh",
             width: "100%",
@@ -205,6 +290,39 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
           }}"
           show-buttons
         ></zoomable-image>
+      </div>
+    `
+  }
+
+  /**
+   * Renders the info popover.
+   * @returns {TemplateResult} The rendered info popover.
+   */
+  renderInfoPopover() {
+    if (!this.showInfoPopover) {
+      return nothing
+    }
+    return html`
+      <div
+        class=${classMap({
+          popover: true,
+          "info-popover": true,
+          "popover-right": true,
+        })}
+        ${clickOutside(() => this.closeInfoPopover())}
+      >
+        <div class="popover-content">
+          <div>
+            ${this.uploadedDate
+              ? html`
+                  ${msg("Image uploaded on")}<br />
+                  <span style="margin-top:4px;">
+                    <em>${this.uploadedDate}</em>
+                  </span>
+                `
+              : msg("No information available")}
+          </div>
+        </div>
       </div>
     `
   }
@@ -272,7 +390,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
               ${this.renderImage(insight as NutrientsInsight)}
               <robotoff-nutrient-extraction-form
                 loading=${ifDefined(this.loading) as AnnotationAnswer}
-                .nutrimentsData="${this.nutrimentsData}"
+                .nutrimentsData="${this.nutrimentsData?.nutriments}"
                 .insight="${insight as NutrientsInsight}"
                 @submit="${this.onSubmit}"
                 @refuse="${this.onRefuse}"
