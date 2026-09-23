@@ -6,6 +6,7 @@ export { RobotoffIngredientSpellcheck } from "./components/robotoff-ingredient-s
 export { RobotoffContributionMessage } from "./components/robotoff-contribution-message/robotoff-contribution-message"
 export { KnowledgePanelsComponent } from "./components/knowledge-panels/knowledge-panels"
 export { DonationBanner } from "./components/donation-banner/donation-banner"
+export { DonationMeter } from "./components/donation-meter/donation-meter"
 export { MobileBadges } from "./components/mobile-badges/mobile-badges"
 export { DownloadAppQrCode } from "./components/download-app-qr-code/download-app-qr-code"
 export { BarcodeScanner } from "./components/barcode-scanner/barcode-scanner"
@@ -17,7 +18,7 @@ export { AutocompleteInput } from "./components/shared/autocomplete-input"
 export { RobotoffIngredientDetection as RobotoffCrops } from "./components/robotoff-ingredient-detection/robotoff-ingredient-detection"
 export { ProductCard } from "./components/product-card/product-card"
 export { NewsFeed } from "./components/news-feed/news-feed"
-
+export { NutriPatrolFlagForm } from "./components/nutripatrol-flag-form/nutripatrol-flag-form"
 // Will be added in the future when design is ready
 // export { KnowledgePanelsComponent } from "./components/knowledge-panels/knowledge-panels"
 

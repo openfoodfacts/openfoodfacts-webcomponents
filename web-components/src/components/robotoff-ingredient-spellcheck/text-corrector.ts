@@ -1,7 +1,7 @@
 import { LitElement, html, css, nothing } from "lit"
 import { customElement, property, query, state } from "lit/decorators.js"
 import { BASE } from "../../styles/base"
-import { msg } from "@lit/localize"
+import { msg, localized } from "@lit/localize"
 import { EventType } from "../../constants"
 import { AnnotationAnswer } from "../../types/robotoff"
 import "../icons/check"
@@ -54,6 +54,7 @@ export enum TextCorrectorKeyboardShortcut {
  * @fires submit - when the user submits the form
  * @fires skip - when the user skips the question
  */
+@localized()
 @customElement("text-corrector")
 export class TextCorrector extends TextDiffMixin(LitElement) {
   static override styles = [
@@ -277,41 +278,22 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
     }
   }
   /**
-   * Called when the component is first updated.
-   * Adds an event listener for the keydown event if keyboard mode is enabled.
-   */
-  override firstUpdated() {
-    if (this.enableKeyboardMode) {
-      this.form!.addEventListener("keydown", this.handleKeyboardShortcut.bind(this))
-    }
-  }
-
-  /**
-   * Called when the component is disconnected from the DOM.
-   * Removes the event listener for the keydown event if keyboard mode is enabled.
-   */
-  override disconnectedCallback() {
-    super.disconnectedCallback()
-    if (this.enableKeyboardMode) {
-      this.form!.removeEventListener("keydown", this.handleKeyboardShortcut.bind(this))
-    }
-  }
-
-  /**
    * Renders the component.
    * @returns {TemplateResult} The rendered component.
    */
   override render() {
     return html`
-      <form @submit=${this.confirmText}>
+      <form @submit=${this.confirmText} @keydown=${this.handleKeyboardShortcut}>
         <div>
-          ${this.isEditMode
-            ? html`<text-corrector-highlight
-                .value=${this.value}
-                original=${this.original}
-                focus-on-first-updated
-              ></text-corrector-highlight>`
-            : this.renderSpellCheck()}
+          ${
+            this.isEditMode
+              ? html`<text-corrector-highlight
+                  .value=${this.value}
+                  original=${this.original}
+                  focus-on-first-updated
+                ></text-corrector-highlight>`
+              : this.renderSpellCheck()
+          }
         </div>
         <div class="submit-buttons-wrapper">${this.renderButtons()}</div>
       </form>
@@ -981,7 +963,7 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
    * Handles the keyboard shortcuts.
    * @param {KeyboardEvent} event - The keyboard event.
    */
-  private handleKeyboardShortcut(event: KeyboardEvent) {
+  private handleKeyboardShortcut = (event: KeyboardEvent) => {
     if (!this.enableKeyboardMode || this.isEditMode) {
       return
     }

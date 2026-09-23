@@ -88,6 +88,7 @@ export class ProductCard extends LitElement {
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
     }
 
     @media (min-width: 640px) {
@@ -147,6 +148,24 @@ export class ProductCard extends LitElement {
       border-bottom-left-radius: 1rem;
     }
 
+    .image-wrapper {
+      position: relative;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .image-wrapper .loading-ring {
+      position: absolute;
+      z-index: 1;
+    }
+
+    .product-image.image-loading {
+      visibility: hidden;
+    }
+
     .placeholder-container {
       display: flex;
       height: 100%;
@@ -162,7 +181,7 @@ export class ProductCard extends LitElement {
       width: 100%;
       border-radius: 0.5rem;
       background-color: transparent;
-      object-fit: cover;
+      object-fit: contain;
       opacity: 0.7;
       overflow: hidden;
     }
@@ -345,6 +364,12 @@ export class ProductCard extends LitElement {
   @state()
   greenscoreSrc = ""
 
+  @state()
+  private imageLoading = false
+
+  @state()
+  private imageFailed = false
+
   /**
    * Placeholder image URL for products without an image
    */
@@ -368,6 +393,20 @@ export class ProductCard extends LitElement {
   override disconnectedCallback() {
     darkModeListener.unsubscribe(this._darkModeCb)
     super.disconnectedCallback()
+  }
+
+  override willUpdate(changedProperties: Map<string, any>) {
+    super.willUpdate(changedProperties)
+
+    if (changedProperties.has("product")) {
+      const previousProduct = changedProperties.get("product") as Product | undefined
+      const imageUrl = this.product.image_front_small_url
+
+      if (imageUrl !== previousProduct?.image_front_small_url) {
+        this.imageLoading = Boolean(imageUrl)
+        this.imageFailed = false
+      }
+    }
   }
 
   /**
@@ -436,10 +475,35 @@ export class ProductCard extends LitElement {
     }
   }
 
+  private handleImageLoad = () => {
+    this.imageLoading = false
+  }
+
+  private handleImageError = () => {
+    this.imageLoading = false
+    this.imageFailed = true
+  }
+
   override render() {
     const isNavigatingToProduct = this.navigating.to?.params?.barcode === this.product.code
     const hasProductImage = Boolean(this.product.image_front_small_url)
+    const shouldShowProductImage = hasProductImage && !this.imageFailed
     const matchTagInfo = this.getMatchTagInfo()
+
+    const brands = this.product.brands?.trim()
+    const quantity = this.product.quantity?.trim()
+
+    let brandQuantityStr = msg("Unknown Brand/Quantity")
+    if (brands && quantity) {
+      // Use localized template for combined brand and quantity so the separator
+      // can be translated if needed.
+      brandQuantityStr = msg(str`${brands} - ${quantity}`)
+    } else if (brands) {
+      brandQuantityStr = brands
+    } else if (quantity) {
+      brandQuantityStr = quantity
+    }
+
     const cardClasses = {
       "card-container": true,
       "dark-mode": this.isDarkMode,
@@ -447,36 +511,50 @@ export class ProductCard extends LitElement {
 
     return html`
       <div class=${classMap(cardClasses)}>
-        ${this.showMatchTag
-          ? html`<div class="match-tag ${matchTagInfo.cssClass}">${matchTagInfo.text}</div>`
-          : nothing}
+        ${
+          this.showMatchTag
+            ? html`<div class="match-tag ${matchTagInfo.cssClass}">${matchTagInfo.text}</div>`
+            : nothing
+        }
         <div class="card-content">
-          <div class="image-container">
-            ${isNavigatingToProduct
-              ? html`
-                  <div class="loading-container">
-                    <span class="loading-ring"></span>
-                  </div>
-                `
-              : hasProductImage
+          <div class="image-container" aria-busy=${this.imageLoading}>
+            ${
+              isNavigatingToProduct
                 ? html`
                     <div class="loading-container">
-                      <img
-                        src=${this.product.image_front_small_url}
-                        class="product-image"
-                        alt="Product front"
-                      />
+                      <span class="loading-ring"></span>
                     </div>
                   `
-                : html`
-                    <div class="placeholder-container">
-                      <img
-                        src=${this.placeholderImage}
-                        class="placeholder-image"
-                        alt="Product front"
-                      />
-                    </div>
-                  `}
+                : shouldShowProductImage
+                  ? html`
+                      <div class="image-wrapper">
+                        ${
+                          this.imageLoading
+                            ? html`<span class="loading-ring" aria-hidden="true"></span>`
+                            : nothing
+                        }
+                        <img
+                          src=${this.product.image_front_small_url}
+                          class=${classMap({
+                            "product-image": true,
+                            "image-loading": this.imageLoading,
+                          })}
+                          alt="Product front"
+                          @load=${this.handleImageLoad}
+                          @error=${this.handleImageError}
+                        />
+                      </div>
+                    `
+                  : html`
+                      <div class="placeholder-container">
+                        <img
+                          src=${this.placeholderImage}
+                          class="placeholder-image"
+                          alt="Product front"
+                        />
+                      </div>
+                    `
+            }
           </div>
           <div class="content-container">
             <div
@@ -487,26 +565,26 @@ export class ProductCard extends LitElement {
             </div>
 
             <div class="brand-quantity">
-              <p title="${this.product.brands} - ${this.product.quantity}">
-                ${this.product.brands} - ${this.product.quantity}
-              </p>
+              <p title="${brandQuantityStr}">${brandQuantityStr}</p>
             </div>
 
-            ${this.product.product_type === "food"
-              ? html`
-                  <div class="scores-container">
-                    <div class="score-item">
-                      <img src=${this.nutriscoreSrc} alt="nutriscore" class="score-image" />
+            ${
+              this.product.product_type === "food"
+                ? html`
+                    <div class="scores-container">
+                      <div class="score-item">
+                        <img src=${this.nutriscoreSrc} alt="nutriscore" class="score-image" />
+                      </div>
+                      <div class="score-item">
+                        <img src=${this.novaSrc} alt="nova" class="score-image" />
+                      </div>
+                      <div class="score-item">
+                        <img src=${this.greenscoreSrc} alt="greenscore" class="score-image" />
+                      </div>
                     </div>
-                    <div class="score-item">
-                      <img src=${this.novaSrc} alt="nova" class="score-image" />
-                    </div>
-                    <div class="score-item">
-                      <img src=${this.greenscoreSrc} alt="greenscore" class="score-image" />
-                    </div>
-                  </div>
-                `
-              : nothing}
+                  `
+                : nothing
+            }
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { msg } from "@lit/localize"
+import { localized, msg } from "@lit/localize"
 import { LitElement, html, css } from "lit-element"
 import { customElement, state } from "lit/decorators.js"
 import { getButtonClasses, ButtonType } from "../../styles/buttons"
@@ -11,6 +11,7 @@ import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme"
  * @element delete-modal
  * @description A modal dialog for confirming deletion of an item.
  */
+@localized()
 @customElement("delete-modal")
 export class DeleteModal extends LitElement {
   @state() open = true
@@ -157,7 +158,7 @@ export class DeleteModal extends LitElement {
     this.open = false
   }
 
-  private handleKeyDown(event: KeyboardEvent) {
+  private handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === "Escape") {
       this.handleCancel(event)
     }
@@ -165,12 +166,12 @@ export class DeleteModal extends LitElement {
 
   override connectedCallback() {
     super.connectedCallback()
-    document.addEventListener("keydown", this.handleKeyDown.bind(this))
+    document.addEventListener("keydown", this.handleKeyDown)
   }
 
   override disconnectedCallback() {
+    document.removeEventListener("keydown", this.handleKeyDown)
     super.disconnectedCallback()
-    document.removeEventListener("keydown", this.handleKeyDown.bind(this))
   }
 
   override render() {

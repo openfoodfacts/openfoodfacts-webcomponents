@@ -23,6 +23,7 @@ A set of web components for Open Food Facts to help build edition interfaces
 
 #### Display elements
 - [Donation Banner](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#donation-banner)
+- [Donation Meter](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#donation-meter)
 - [Mobile Badges](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#mobile-badges)
 - [Barcode Scanner](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#barcode-scanner)
 - [Autocomplete Input](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#autocomplete-input)
@@ -172,7 +173,7 @@ To have it, you need to follow these steps:
 
 You can find the documentation [here](https://openfoodfacts.github.io/openfoodfacts-webcomponents)
 
-To work on documentation let see [this](web-components/docs/README.md)
+To work on documentation ,you can edit [web-components/README.md](./web-components/README.md)
 
 ## Rules
 

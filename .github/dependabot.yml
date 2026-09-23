@@ -28,7 +28,6 @@ updates:
           - "rollup*"
           - "@web*"
           - "@types*"
-          - "rollup*"
           - "concurrently"
           - "dotenv"
           - "eslint*"
@@ -38,6 +37,8 @@ updates:
           - "rimraf"
           - "ts-node"
           - "typescript*"
+          - "@vitest*"
+          - "vitest*"
         update-types:
           - "minor"
           - "patch"

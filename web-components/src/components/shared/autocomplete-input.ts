@@ -326,36 +326,38 @@ export class AutocompleteInput extends LitElement {
           aria-autocomplete="list"
           aria-controls=${this.suggestionId}
           aria-expanded=${this.showSuggestions}
-          aria-activedescendant=${this.highlightedIndex >= 0
-            ? this.getSuggestionItemId(this.highlightedIndex)
-            : ""}
+          aria-activedescendant=${
+            this.highlightedIndex >= 0 ? this.getSuggestionItemId(this.highlightedIndex) : ""
+          }
           part="autocomplete-input"
         />
-        ${this.showSuggestions
-          ? html`<ul
-              class="autocomplete-list"
-              id=${this.suggestionId}
-              role="listbox"
-              part="autocomplete-input-list"
-            >
-              ${this.suggestionsWithNotFound.map(
-                (s, index) =>
-                  html`<li
-                    class="autocomplete-item ${classMap({
-                      highlighted: index === this.highlightedIndex,
-                      "not-found": s.isNotFound === true,
-                    })}"
-                    role="option"
-                    id=${this.getSuggestionItemId(index)}
-                    @mousedown=${() => this.selectSuggestion(this.suggestionsWithNotFound[index])}
-                    @mouseenter=${() => (this.highlightedIndex = index)}
-                    aria-selected=${index === this.highlightedIndex}
-                  >
-                    ${s.label ?? s.value}
-                  </li>`
-              )}
-            </ul>`
-          : null}
+        ${
+          this.showSuggestions
+            ? html`<ul
+                class="autocomplete-list"
+                id=${this.suggestionId}
+                role="listbox"
+                part="autocomplete-input-list"
+              >
+                ${this.suggestionsWithNotFound.map(
+                  (s, index) =>
+                    html`<li
+                      class="autocomplete-item ${classMap({
+                        highlighted: index === this.highlightedIndex,
+                        "not-found": s.isNotFound === true,
+                      })}"
+                      role="option"
+                      id=${this.getSuggestionItemId(index)}
+                      @mousedown=${() => this.selectSuggestion(this.suggestionsWithNotFound[index])}
+                      @mouseenter=${() => (this.highlightedIndex = index)}
+                      aria-selected=${index === this.highlightedIndex}
+                    >
+                      ${s.label ?? s.value}
+                    </li>`
+                )}
+              </ul>`
+            : null
+        }
       </div>
     `
   }

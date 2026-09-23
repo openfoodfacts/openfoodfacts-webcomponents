@@ -853,8 +853,10 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
             <button
               class="modal-btn modal-btn-primary"
               @click="${this.handleCheckClash}"
-              ?disabled="${!this.renameModalData.newProperty.trim() ||
-              this.renameModalData.newProperty.trim() === this.renameModalData.property}"
+              ?disabled="${
+                !this.renameModalData.newProperty.trim() ||
+                this.renameModalData.newProperty.trim() === this.renameModalData.property
+              }"
             >
               ${msg("Check Conflicts")}
             </button>
@@ -973,9 +975,11 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
           <th class="doc">${msg("Documentation")}</th>
           <th class="count">${msg("Count")}</th>
           <th class="values">${msg("Values")}</th>
-          ${this.canModerateProperties
-            ? html`<th class="actions-column">${msg("Actions")}</th>`
-            : ""}
+          ${
+            this.canModerateProperties
+              ? html`<th class="actions-column">${msg("Actions")}</th>`
+              : ""
+          }
         </tr>
         <tr class="filter-row">
           <td></td>

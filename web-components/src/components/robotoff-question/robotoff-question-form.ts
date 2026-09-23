@@ -115,13 +115,18 @@ export class RobotoffQuestionForm extends SignalWatcher(
           @click="${this.expandImage}"
           ?show-buttons="${this.isImageExpanded}"
         ></zoomable-image>
-        ${this.isImageExpanded
-          ? nothing
-          : html`<div>
-              <button class="expand-button button white-button small" @click="${this.expandImage}">
-                ${msg("Expand image")}
-              </button>
-            </div>`}
+        ${
+          this.isImageExpanded
+            ? nothing
+            : html`<div>
+                <button
+                  class="expand-button button white-button small"
+                  @click="${this.expandImage}"
+                >
+                  ${msg("Expand image")}
+                </button>
+              </div>`
+        }
       </div>
     `
   }

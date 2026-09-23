@@ -13,10 +13,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: ".nvmrc"
           cache: "npm"
@@ -38,4 +38,15 @@ jobs:
       - name: Run Linter
         if: failure() || success()
         run: npm run lint
+        working-directory: ./web-components
+
+      - name: Check missing translations
+        if: failure() || success()
+        run: |
+          npm run translations:extract
+          if [[ -n $(git status --porcelain xliff/ lit-localize.json) ]]; then
+            echo "Translation files are not up-to-date. Please run 'npm run translations:extract' locally and commit the changes."
+            git status --porcelain xliff/ lit-localize.json
+            exit 1
+          fi
         working-directory: ./web-components

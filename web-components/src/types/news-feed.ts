@@ -1,4 +1,13 @@
 /**
+ * Figures a funding campaign publishes in the feed.
+ */
+export interface Funding {
+  raised: number
+  goal: number
+  currency: string
+}
+
+/**
  * This is the format of the JSON file where data is stored
  */
 export interface NewsData {
@@ -23,6 +32,9 @@ export interface NewsData {
       max_app_version?: string
       enabled?: boolean
       message_type?: string
+      raised?: number
+      goal?: number
+      currency?: string
     }
   }
   tagline_feed: {
@@ -52,4 +64,5 @@ export interface ProcessedNewsItem {
   max_app_version?: string
   enabled: boolean
   message_type: string
+  funding?: Funding
 }

@@ -1,7 +1,7 @@
 import { html, css, type PropertyValues } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { BASE } from "../../styles/base"
-import { msg } from "@lit/localize"
+import { msg, localized } from "@lit/localize"
 import "../icons/check"
 import "../icons/cross"
 import "../icons/skip"
@@ -30,6 +30,7 @@ import { sanitizeHtml } from "../../utils/html"
  * @element text-corrector-highlight
  * @fires input - when the user types in the textarea
  */
+@localized()
 @customElement("text-corrector-highlight")
 export class TextCorrectorHighlight extends TextDiffMixin(LitElement) {
   static override styles = [
@@ -137,8 +138,7 @@ export class TextCorrectorHighlight extends TextDiffMixin(LitElement) {
       <div class="">
         ${sanitizeHtml(`<${headingTag}>${msg("Edit ingredients list")}</${headingTag}>`)}
         <textarea class="textarea" rows="6" @input=${this.handleTextareaInput}>
-${this.value}</textarea
-        >
+${this.value}</textarea>
       </div>
     `
   }
