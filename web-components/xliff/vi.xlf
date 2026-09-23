@@ -68,35 +68,27 @@
       </trans-unit>
       <trans-unit id="sfc40ea3d5d5aa6f8" approved="yes">
         <source>Your donations fund the day-to-day operations of our non-profit association:</source>
-        <target state="final">Những khoản đóng góp của quý vị tài trợ cho các hoạt động hàng ngày của hiệp hội phi lợi nhuận của chúng tôi:</target>
-      </trans-unit>
-      <trans-unit id="s1c5031113de500ce">
-        <source>keeping our database open &amp; available to all,</source>
-        <target state="needs-translation">keeping our database open &amp; available to all,</target>
-      </trans-unit>
-      <trans-unit id="sebb2c6c830a44574">
-        <source>technical infrastructure (website/mobile app) &amp; a small permanent team</source>
-        <target state="needs-translation">technical infrastructure (website/mobile app) &amp; a small permanent team</target>
+  <target state="translated">Các khoản đóng góp của bạn tài trợ cho hoạt động hằng ngày của hiệp hội phi lợi nhuận chúng tôi:</target>
       </trans-unit>
       <trans-unit id="sd82bc2decefa621b" approved="yes">
         <source>remain independent of the food industry,</source>
-        <target state="final">vẫn độc lập với ngành công nghiệp thực phẩm,</target>
+  <target state="translated">giữ tính độc lập khỏi ngành công nghiệp thực phẩm,</target>
       </trans-unit>
       <trans-unit id="sb3bdd638a58d30f4" approved="yes">
         <source>engage a community of committed citizens,</source>
-        <target state="final">Thu hút một cộng đồng công dân tận tâm,</target>
+  <target state="translated">gắn kết cộng đồng công dân tâm huyết,</target>
       </trans-unit>
       <trans-unit id="s100c4928cc74642a" approved="yes">
         <source>support the advancement of public health research.</source>
-        <target state="final">Hỗ trợ sự phát triển của nghiên cứu y tế công cộng.</target>
+  <target state="translated">hỗ trợ sự tiến bộ của nghiên cứu y tế công cộng.</target>
       </trans-unit>
       <trans-unit id="s6306a31415aea913" approved="yes">
         <source>I SUPPORT</source>
-        <target state="final">TÔI ỦNG HỘ</target>
+  <target state="translated">TÔI ỦNG HỘ</target>
       </trans-unit>
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
-        <target state="needs-translation">group photo donation <x id="0" equiv-text="${this.currentYear}"/></target>
+  <target state="translated">ảnh nhóm quyên góp <x id="0" equiv-text="${this.currentYear}"/></target>
       </trans-unit>
       <trans-unit id="s000d98595e959c1e">
         <source>Get It On Google Play</source>
@@ -992,21 +984,35 @@
       </trans-unit>
 <trans-unit id="sb18dd702b5f51223">
   <source><x id="0" equiv-text="${missing}"/> short</source>
+  <target state="translated">còn thiếu <x id="0" equiv-text="${missing}"/></target>
 </trans-unit>
 <trans-unit id="s4e037fb4937e78d2">
   <source>of <x id="0" equiv-text="${goal}"/></source>
+  <target state="translated">trên <x id="0" equiv-text="${goal}"/></target>
 </trans-unit>
 <trans-unit id="sfb6c2292955d4453">
   <source>Fundraiser progress</source>
+  <target state="translated">Tiến độ gây quỹ</target>
 </trans-unit>
 <trans-unit id="s8966e013dce8891f">
   <source>We still need €120,000 to finish 2026!</source>
+  <target state="translated">Chúng tôi vẫn cần 120.000 € để hoàn thành năm 2026!</target>
 </trans-unit>
 <trans-unit id="s4b2638408d2e3aa8">
   <source>Become an Open Food Facts patron</source>
+  <target state="translated">Trở thành người bảo trợ của Open Food Facts</target>
 </trans-unit>
 <trans-unit id="s12b36eaac15a1c74">
   <source>If every visitor this month clicked on Donate and gave just 1€, we'd get over 8 times our yearly budget!</source>
+  <target state="translated">Nếu mỗi người truy cập tháng này nhấp vào Quyên góp và ủng hộ chỉ 1 €, chúng tôi sẽ nhận được hơn 8 lần ngân sách hằng năm!</target>
+</trans-unit>
+<trans-unit id="s9488434f64291951">
+  <source>keeping our database open and available to all,</source>
+  <target state="translated">duy trì cơ sở dữ liệu mở và miễn phí cho mọi người,</target>
+</trans-unit>
+<trans-unit id="s1639c60919d39401">
+  <source>technical infrastructure (website/mobile app) and a small permanent team</source>
+  <target state="translated">hạ tầng kỹ thuật (trang web/ứng dụng di động) và đội ngũ thường trực tinh gọn</target>
 </trans-unit>
     </body>
   </file>

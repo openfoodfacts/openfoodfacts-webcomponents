@@ -78,8 +78,8 @@ const listItems = (element: any) =>
   Array.from(element.shadowRoot.querySelectorAll("li")).map((item: any) => item.textContent.trim())
 
 const ASK = [
-  "keeping our database open & available to all,",
-  "technical infrastructure (website/mobile app) & a small permanent team",
+  "keeping our database open and available to all,",
+  "technical infrastructure (website/mobile app) and a small permanent team",
   "remain independent of the food industry,",
   "engage a community of committed citizens,",
   "support the advancement of public health research.",
@@ -279,12 +279,48 @@ describe("donation-banner", () => {
     expect(href).toContain("https://world.openfoodfacts.org/donate-to-open-food-facts")
   })
 
-  it("localizes the fallback donation link and utm_term for Japanese", async () => {
+  it("localizes the donation link and utm_term for Japanese (/kifu)", async () => {
     languageCode.set("ja")
     const element = await createBanner()
 
     const href = donateLink(element)
-    expect(href).toContain("https://world-ja.openfoodfacts.org/donate-to-open-food-facts")
+    expect(href).toContain("https://world-ja.openfoodfacts.org/kifu")
     expect(href).toContain("utm_term=ja-text-button")
+  })
+
+  it("normalizes locale with country code such as fr-FR to French donation link", async () => {
+    languageCode.set("fr-FR")
+    const element = await createBanner()
+
+    const href = donateLink(element)
+    expect(href).toContain("https://open-food-facts.assoconnect.com")
+    expect(href).toContain("utm_term=fr-text-button")
+  })
+
+  it("normalizes locale with country code such as es-ES to localized Spanish link (/donar-a-open-food-facts)", async () => {
+    languageCode.set("es-ES")
+    const element = await createBanner()
+
+    const href = donateLink(element)
+    expect(href).toContain("https://world-es.openfoodfacts.org/donar-a-open-food-facts")
+    expect(href).toContain("utm_term=es-text-button")
+  })
+
+  it("supports localized Finnish donation link (/lahjoita-open-food-factsille)", async () => {
+    languageCode.set("fi")
+    const element = await createBanner()
+
+    const href = donateLink(element)
+    expect(href).toContain("https://world-fi.openfoodfacts.org/lahjoita-open-food-factsille")
+    expect(href).toContain("utm_term=fi-text-button")
+  })
+
+  it("falls back to generic world-<locale> donate url when no localized slug exists", async () => {
+    languageCode.set("ch")
+    const element = await createBanner()
+
+    const href = donateLink(element)
+    expect(href).toContain("https://world-ch.openfoodfacts.org/donate-to-open-food-facts")
+    expect(href).toContain("utm_term=ch-text-button")
   })
 })

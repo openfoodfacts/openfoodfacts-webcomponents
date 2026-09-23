@@ -68,35 +68,27 @@
       </trans-unit>
       <trans-unit id="sfc40ea3d5d5aa6f8" approved="yes">
         <source>Your donations fund the day-to-day operations of our non-profit association:</source>
-        <target state="final">Ваші пожертви фінансують щоденні операції з нашої неприбуткової асоціації:</target>
-      </trans-unit>
-      <trans-unit id="s1c5031113de500ce">
-        <source>keeping our database open &amp; available to all,</source>
-        <target state="translated">підтримуючи нашу базу даних відкритою &amp; доступною для всіх,</target>
-      </trans-unit>
-      <trans-unit id="sebb2c6c830a44574">
-        <source>technical infrastructure (website/mobile app) &amp; a small permanent team</source>
-        <target state="translated">технічна інфраструктура (веб-сайт/мобільний додаток) &amp; невелика постійна команда</target>
+  <target state="translated">Ваші пожертви фінансують щоденну діяльність нашої некомерційної асоціації:</target>
       </trans-unit>
       <trans-unit id="sd82bc2decefa621b" approved="yes">
         <source>remain independent of the food industry,</source>
-        <target state="final">залишаємося незалежними від харчової промисловості,</target>
+  <target state="translated">залишатися незалежними від харчової промисловості,</target>
       </trans-unit>
       <trans-unit id="sb3bdd638a58d30f4" approved="yes">
         <source>engage a community of committed citizens,</source>
-        <target state="final">залучаємо спільноту відданих громадян,</target>
+  <target state="translated">залучати спільноту небайдужих громадян,</target>
       </trans-unit>
       <trans-unit id="s100c4928cc74642a" approved="yes">
         <source>support the advancement of public health research.</source>
-        <target state="final">підтримуємо розвиток досліджень громадського здоров'я.</target>
+  <target state="translated">підтримувати розвиток досліджень у галузі громадського здоров'я.</target>
       </trans-unit>
       <trans-unit id="s6306a31415aea913" approved="yes">
         <source>I SUPPORT</source>
-        <target state="final">Я ПІДТРИМУЮ</target>
+  <target state="translated">Я ПІДТРИМУЮ</target>
       </trans-unit>
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
-        <target state="translated">групове фото пожертвуваннь <x id="0" equiv-text="${this.currentYear}"/></target>
+  <target state="translated">пожертва групове фото <x id="0" equiv-text="${this.currentYear}"/></target>
       </trans-unit>
       <trans-unit id="s000d98595e959c1e">
         <source>Get It On Google Play</source>
@@ -992,21 +984,35 @@
       </trans-unit>
 <trans-unit id="sb18dd702b5f51223">
   <source><x id="0" equiv-text="${missing}"/> short</source>
+  <target state="translated">не вистачає <x id="0" equiv-text="${missing}"/></target>
 </trans-unit>
 <trans-unit id="s4e037fb4937e78d2">
   <source>of <x id="0" equiv-text="${goal}"/></source>
+  <target state="translated">з <x id="0" equiv-text="${goal}"/></target>
 </trans-unit>
 <trans-unit id="sfb6c2292955d4453">
   <source>Fundraiser progress</source>
+  <target state="translated">Хід збору коштів</target>
 </trans-unit>
 <trans-unit id="s8966e013dce8891f">
   <source>We still need €120,000 to finish 2026!</source>
+  <target state="translated">Нам усе ще потрібно 120 000 €, щоб завершити 2026 рік!</target>
 </trans-unit>
 <trans-unit id="s4b2638408d2e3aa8">
   <source>Become an Open Food Facts patron</source>
+  <target state="translated">Станьте патроном Open Food Facts</target>
 </trans-unit>
 <trans-unit id="s12b36eaac15a1c74">
   <source>If every visitor this month clicked on Donate and gave just 1€, we'd get over 8 times our yearly budget!</source>
+  <target state="translated">Якби кожен відвідувач цього місяця натиснув «Підтримати» і зробив внесок лише в 1 €, ми б отримали у 8 разів більше за наш річний бюджет!</target>
+</trans-unit>
+<trans-unit id="s9488434f64291951">
+  <source>keeping our database open and available to all,</source>
+  <target state="translated">підтримку нашої бази даних відкритою та доступною для всіх,</target>
+</trans-unit>
+<trans-unit id="s1639c60919d39401">
+  <source>technical infrastructure (website/mobile app) and a small permanent team</source>
+  <target state="translated">технічну інфраструктуру (веб-сайт/мобільний додаток) та невелику постійну команду</target>
 </trans-unit>
     </body>
   </file>

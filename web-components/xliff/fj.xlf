@@ -49,24 +49,23 @@
 </trans-unit>
 <trans-unit id="sfc40ea3d5d5aa6f8">
   <source>Your donations fund the day-to-day operations of our non-profit association:</source>
-</trans-unit>
-<trans-unit id="s1c5031113de500ce">
-  <source>keeping our database open &amp; available to all,</source>
-</trans-unit>
-<trans-unit id="sebb2c6c830a44574">
-  <source>technical infrastructure (website/mobile app) &amp; a small permanent team</source>
+  <target state="translated">Na nomuni soli e vukea na cakacaka ni veisiga ni neimami soqosoqo sega ni tubu:</target>
 </trans-unit>
 <trans-unit id="sd82bc2decefa621b">
   <source>remain independent of the food industry,</source>
+  <target state="translated">me keimami tu vakai keimami mai na kabani ni kakana,</target>
 </trans-unit>
 <trans-unit id="sb3bdd638a58d30f4">
   <source>engage a community of committed citizens,</source>
+  <target state="translated">vakaitavitaki ni lewenivanua gugumatua,</target>
 </trans-unit>
 <trans-unit id="s100c4928cc74642a">
   <source>support the advancement of public health research.</source>
+  <target state="translated">tokona na toso ki liu ni vakadidike ni bula raraba.</target>
 </trans-unit>
 <trans-unit id="s6306a31415aea913">
   <source>I SUPPORT</source>
+  <target state="translated">AU TOKONA</target>
 </trans-unit>
 <trans-unit id="sca0c3305aff570b8">
   <source>per specified serving "<x id="0" equiv-text="${this._servingSizeValue}"/>"</source>
@@ -88,6 +87,7 @@
 </trans-unit>
 <trans-unit id="scbab4bd737ba7934">
   <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
+  <target state="translated">itaba ni soqoni soli ka <x id="0" equiv-text="${this.currentYear}"/></target>
 </trans-unit>
 <trans-unit id="h5d824b4954e56ea5">
   <source>Scan your <x id="0" equiv-text="&lt;span class=&quot;everyday&quot;&gt;"/>everyday<x id="1" equiv-text="&lt;/span&gt; &lt;span class=&quot;foods&quot;&gt;"/>foods<x id="2" equiv-text="&lt;/span&gt;"/></source>
@@ -739,21 +739,35 @@
 </trans-unit>
 <trans-unit id="sb18dd702b5f51223">
   <source><x id="0" equiv-text="${missing}"/> short</source>
+  <target state="translated">se lailai tiko e <x id="0" equiv-text="${missing}"/></target>
 </trans-unit>
 <trans-unit id="s4e037fb4937e78d2">
   <source>of <x id="0" equiv-text="${goal}"/></source>
+  <target state="translated">mai na <x id="0" equiv-text="${goal}"/></target>
 </trans-unit>
 <trans-unit id="sfb6c2292955d4453">
   <source>Fundraiser progress</source>
+  <target state="translated">Toso ni kumuni ilavo</target>
 </trans-unit>
 <trans-unit id="s8966e013dce8891f">
   <source>We still need €120,000 to finish 2026!</source>
+  <target state="translated">Keimami se gadreva tiko ga e €120,000 me vakaoti kina na yabaki 2026!</target>
 </trans-unit>
 <trans-unit id="s4b2638408d2e3aa8">
   <source>Become an Open Food Facts patron</source>
+  <target state="translated">Mo dua na dauveisolisoli vei Open Food Facts</target>
 </trans-unit>
 <trans-unit id="s12b36eaac15a1c74">
   <source>If every visitor this month clicked on Donate and gave just 1€, we'd get over 8 times our yearly budget!</source>
+  <target state="translated">Kevaka e dua na vulagi ena vula oqo e kilikitaka na Soli Ka ka solia ga e 1 €, keimami na rawata vakasivia e 8 na kena levu ni neimami ilavo ni yabaki!</target>
+</trans-unit>
+<trans-unit id="s9488434f64291951">
+  <source>keeping our database open and available to all,</source>
+  <target state="translated">maroroi ni noda itukutuku me dola tu ka rawa ni vakayagataka o koya yadua,</target>
+</trans-unit>
+<trans-unit id="s1639c60919d39401">
+  <source>technical infrastructure (website/mobile app) and a small permanent team</source>
+  <target state="translated">veika vaka-tekinolaji (mataveilawa/app ni talevoni) kei na dua na timi lailai tudei</target>
 </trans-unit>
 </body>
 </file>

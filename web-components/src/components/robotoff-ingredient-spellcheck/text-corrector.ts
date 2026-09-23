@@ -285,15 +285,13 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
     return html`
       <form @submit=${this.confirmText} @keydown=${this.handleKeyboardShortcut}>
         <div>
-          ${
-            this.isEditMode
-              ? html`<text-corrector-highlight
-                  .value=${this.value}
-                  original=${this.original}
-                  focus-on-first-updated
-                ></text-corrector-highlight>`
-              : this.renderSpellCheck()
-          }
+          ${this.isEditMode
+            ? html`<text-corrector-highlight
+                .value=${this.value}
+                original=${this.original}
+                focus-on-first-updated
+              ></text-corrector-highlight>`
+            : this.renderSpellCheck()}
         </div>
         <div class="submit-buttons-wrapper">${this.renderButtons()}</div>
       </form>
