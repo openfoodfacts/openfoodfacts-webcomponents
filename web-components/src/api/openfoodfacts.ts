@@ -54,3 +54,24 @@ export async function fetchNutrientsOrder(params: NutrientsParams) {
   }
   return (await response.json()) as NutrientsOrderRequest
 }
+
+/**
+ * Unselect an image field for a product
+ * @param productCode The barcode of the product
+ * @param imageField The image field to unselect (e.g., "ingredients_fr", "nutrition")
+ */
+export async function unselectProductImage(productCode: string, imageField: string) {
+  const url = getUrl(`${ApiBaseUrl.CGI}/product_image_unselect.pl`)
+  const formData = new FormData()
+  formData.append("code", productCode)
+  formData.append("id", imageField)
+  const response = await fetch(url, {
+    method: "POST",
+    body: formData,
+    credentials: "include",
+  })
+  if (!response.ok) {
+    throw new Error("Failed to unselect image")
+  }
+  return await response.json()
+}

@@ -12,11 +12,11 @@ export const TEXTAREA = css`
   .textarea {
     width: 100%;
     min-height: 10px;
-    background-color: ${SAFE_DARKER_WHITE};
+    background-color: var(--off-input-bg, ${SAFE_DARKER_WHITE});
     border-style: solid;
     border-width: 1px;
-    border-color: ${SAFE_GREY};
-    color: ${SAFE_LIGHT_BLACK};
+    border-color: var(--off-input-border, ${SAFE_GREY});
+    color: var(--off-input-color, ${SAFE_LIGHT_BLACK});
     line-height: 1.5;
     padding: 0.5rem;
     border-radius: 4px;
@@ -31,6 +31,14 @@ export const TEXTAREA = css`
     border-color: ${SAFE_BLUE};
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
   }
+
+  @media (prefers-color-scheme: dark) {
+    .textarea {
+      background-color: var(--off-input-bg, #2b2b2b);
+      border-color: var(--off-input-border, #555);
+      color: var(--off-input-color, #eee);
+    }
+  }
 `
 
 export const SELECT = css`
@@ -40,13 +48,13 @@ export const SELECT = css`
     appearance: none;
     -webkit-appearance: none !important;
     -moz-appearance: none !important;
-    background-color: ${SAFE_DARKER_WHITE};
+    background-color: var(--off-input-bg, ${SAFE_DARKER_WHITE});
     background-position: 100% center;
     background-repeat: no-repeat;
     border-style: solid;
     border-width: 1px;
-    border-color: ${SAFE_GREY};
-    color: ${SAFE_LIGHT_BLACK};
+    border-color: var(--off-input-border, ${SAFE_GREY});
+    color: var(--off-input-color, ${SAFE_LIGHT_BLACK});
     line-height: normal;
     padding: 0.25rem 0.5rem;
     border-radius: 1rem;
@@ -59,17 +67,25 @@ export const SELECT = css`
     font-weight: bold;
     padding-right: 2rem;
   }
+
+  @media (prefers-color-scheme: dark) {
+    .select {
+      background-color: var(--off-input-bg, #2b2b2b);
+      border-color: var(--off-input-border, #555);
+      color: var(--off-input-color, #eee);
+    }
+  }
 `
 
 export const INPUT = css`
   .input,
   .input-number {
     width: 100%;
-    background-color: ${SAFE_DARKER_WHITE};
+    background-color: var(--off-input-bg, ${SAFE_DARKER_WHITE});
     border-style: solid;
     border-width: 1px;
-    border-color: ${SAFE_GREY};
-    color: ${SAFE_LIGHT_BLACK};
+    border-color: var(--off-input-border, ${SAFE_GREY});
+    color: var(--off-input-color, ${SAFE_LIGHT_BLACK});
     line-height: normal;
     padding: 0.25rem 0.5rem;
     border-radius: 5px;
@@ -103,6 +119,24 @@ export const INPUT = css`
     background-color: ${SAFE_GREY};
     color: ${SAFE_LIGHT_BLACK};
     cursor: not-allowed;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .input,
+    .input-number {
+      background-color: var(--off-input-bg, #2b2b2b);
+      border-color: var(--off-input-border, #555);
+      color: var(--off-input-color, #eee);
+    }
+    .input.cappucino {
+      background-color: #3e3228;
+      color: #f5ede6;
+    }
+    .input:disabled,
+    .input-number:disabled {
+      background-color: #3a3a3a;
+      color: #888;
+    }
   }
 `
 
