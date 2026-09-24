@@ -42,6 +42,10 @@ export type AutocompleteSuggestionSelectEvent = CustomEvent<AutocompleteSuggesti
 export type AutocompleteSuggestion = {
   label?: string
   value: string
+  /**
+   * Optional number of uses, shown in parentheses after the label.
+   */
+  count?: number
   isNotFound?: boolean
 }
 

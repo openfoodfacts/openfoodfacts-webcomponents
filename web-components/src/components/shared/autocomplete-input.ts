@@ -352,7 +352,7 @@ export class AutocompleteInput extends LitElement {
                       @mouseenter=${() => (this.highlightedIndex = index)}
                       aria-selected=${index === this.highlightedIndex}
                     >
-                      ${s.label ?? s.value}
+                      ${s.label ?? s.value}${s.count !== undefined ? ` (${s.count})` : ""}
                     </li>`
                 )}
               </ul>`
