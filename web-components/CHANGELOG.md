@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.2](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.18.1...v1.18.2) (2026-09-24)
+
+
+### Bug Fixes
+
+* Update it.xlf ([5b117e0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/5b117e0264615229d196ba1d2fa1c8b827a3c0ac))
+
 ## [1.18.1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.18.0...v1.18.1) (2026-09-24)
 
 
