@@ -10,7 +10,8 @@ import { RobotoffContributionType } from "../../constants.js"
 import { CONTAINER } from "../../styles/responsive.js"
 import "../robotoff-modal/robotoff-modal"
 import { SignalWatcher } from "@lit-labs/signals"
-import robotoff from "../../api/robotoff.js"
+import { fetchProduct } from "../../api/openfoodfacts.js"
+import { ProductFields } from "../../utils/openfoodfacts.js"
 import { InsightType } from "../../types/robotoff.js"
 import { LanguageCodesMixin } from "../../mixins/language-codes-mixin.js"
 
@@ -94,6 +95,12 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
   }
 
   /**
+   * Whether the product has nutrition data.
+   */
+  @state()
+  private hasNutriments = true
+
+  /**
    * Returns the messages to be displayed based on the `showMessages` state.
    *
    * This correspond to the various type of contribution.
@@ -114,7 +121,9 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
       },
       {
         type: RobotoffContributionType.NUTRIENT_EXTRACTION,
-        message: msg("Help us correct the nutritional information."),
+        message: this.hasNutriments
+          ? msg("Help us correct the nutritional information.")
+          : msg("Help us complete the nutritional information."),
       },
       {
         type: RobotoffContributionType.INGREDIENT_DETECTION,
@@ -142,7 +151,7 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
       }
 
       // Check if it need contributions. If not, don't show the message. If request fails, hide the message but do not crash all requests
-      const [questions, insights] = await Promise.allSettled([
+      const [questions, insights, product] = await Promise.allSettled([
         fetchQuestionsByProductCode(productCode),
         ...(this.isLoggedIn
           ? [
@@ -152,6 +161,10 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
               }),
             ]
           : []),
+        fetchProduct(productCode, {
+          fields: [ProductFields.NUTRIMENTS],
+          lc: this._languageCodes[0] ?? "en",
+        }),
       ])
       const insightValues = {
         [InsightType.ingredient_spellcheck]: false,
@@ -167,6 +180,13 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
             break
           }
         }
+      }
+
+
+      if (product?.status === "fulfilled") {
+        this.hasNutriments =
+          product.value.product?.nutriments &&
+          Object.keys(product.value.product.nutriments).length > 0
       }
 
       this.showMessages = {
