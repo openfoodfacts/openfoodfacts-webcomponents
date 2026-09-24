@@ -4,6 +4,7 @@
 
 A set of web components for Open Food Facts to help build edition interfaces
 
+
 - Currently, we have Search webcomponents (coded in Lit) in https://github.com/openfoodfacts/openfoodfacts-search
 - Under development are components for nutrition editing, and Robotoff questions
 - Projects/features that could benefit from having webcomponents: nutripatrol (display & input), folksonomy_api (display & input), knowledge panels (display), ingredients (display & input), photo upload, open prices (display & input), photo gallery/editing
