@@ -21,6 +21,7 @@ jobs:
         with:
           node-version: "24.x"
           registry-url: "https://registry.npmjs.org"
+          cache-dependency-path: "./web-components/package-lock.json"
       - name: Publish on NPM
         run: |
           cd web-components
@@ -32,6 +33,7 @@ jobs:
           node-version: "24.x"
           registry-url: 'https://npm.pkg.github.com'
           scope: "@openfoodfacts"
+          cache-dependency-path: "./web-components/package-lock.json"
       - name: Publish on Github registry
         run: |
           cd web-components
@@ -39,4 +41,4 @@ jobs:
           npm run publish:package
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          continue-on-error: true
+        continue-on-error: true
