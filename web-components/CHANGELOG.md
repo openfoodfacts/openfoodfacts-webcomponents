@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.18.1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.18.0...v1.18.1) (2026-09-24)
+
+
+### Bug Fixes
+
+* align API types and upgrade Open Food Facts SDK ([#583](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/583)) ([2b40858](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/2b40858ab1039e58e1747f47732f3cf49760e33a))
+* boost translations of the donation banner ([#644](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/644)) ([bec7054](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/bec705459e4b66402e9bc0a1bee6cba817686aff))
+* **deps:** bump cropperjs from 2.0.1 to 2.2.0 in /web-components ([#619](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/619)) ([4575368](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/4575368f278c16af3e5c8941628ce9d4e6a8740f))
+* **deps:** bump dompurify from 3.4.14 to 3.4.15 in /web-components ([#623](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/623)) ([61dbdae](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/61dbdae5b250deee119ca2cb3ea89edd7ee2324d))
+* **deps:** bump marked from 18.0.11 to 18.0.13 in /web-components ([#637](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/637)) ([dfb31f3](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/dfb31f31dda1ee82b5d9157025e979d18766fd5d))
+
 ## [1.18.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.17.0...v1.18.0) (2026-09-16)
 
 ### Features
