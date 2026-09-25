@@ -366,7 +366,7 @@ export class RobotoffNutrientExtractionForm extends LitElement {
           nutrients.servingSize = value?.value
           return
         } else {
-          console.log("Unknown nutrient key", key, value)
+
           return
         }
         keysSet.add(nutrientKey)
@@ -401,7 +401,7 @@ export class RobotoffNutrientExtractionForm extends LitElement {
     nutrimentsData: NutrimentsProductType
   ): Set<string> {
     const nutrientsOrder = this.nutrientsOrder
-    console.log("nutrientsOrder", nutrientsOrder)
+
     const keySet = new Set<string>()
 
     // Check if nutriments data is available
@@ -636,17 +636,21 @@ export class RobotoffNutrientExtractionForm extends LitElement {
    * @param nutrients - The nutrients to render
    * @returns
    */
+  /**
+   * Render the table with the nutrients data.
+   */
   renderRows() {
     const nutrients = this.nutrients!
     return nutrients.keys.map((key) => {
+      const currentNutrientData = nutrients[this.insightAnnotationSize]?.[key]
       return html`
         <div>
           <div>
             ${this.renderInputs(
-              key,
-              this.insightAnnotationSize,
-              nutrients[this.insightAnnotationSize][key]
-            )}
+        key,
+        this.insightAnnotationSize,
+        currentNutrientData
+      )}
           </div>
 
           <div>${this.renderRobotoffSuggestionForNutrient(key, this.insightAnnotationSize)}</div>
@@ -682,9 +686,9 @@ export class RobotoffNutrientExtractionForm extends LitElement {
           ?disabled=${disabled}
         >
           ${possibleUnits.map(
-            (unit) =>
-              html`<option value="${unit}" ?selected=${unit === currentUnit}>${unit}</option>`
-          )}
+        (unit) =>
+          html`<option value="${unit}" ?selected=${unit === currentUnit}>${unit}</option>`
+      )}
         </select>
       `
     } else if (possibleUnits[0]) {
@@ -720,35 +724,33 @@ export class RobotoffNutrientExtractionForm extends LitElement {
     nutrient: { value: number | string; unit: string } | undefined
   ) {
     const inputName = this.getInputValueName(key, column)
-    const value = nutrient?.value.toString() ?? ""
+    const value = nutrient?.value != null ? nutrient.value.toString() : ""
     const label = getTaxonomyNameByIdAndLang(key, languageCode.get())
-    const isHidden = this.inputHiddenBySizeAndNutrientKey[column][key]
+    const isHidden = Boolean(this.inputHiddenBySizeAndNutrientKey?.[column]?.[key])
 
     return html`
       <div class="inputs-wrapper">
         <div>
           <label class="input-label">
             <div>${label}</div>
-            ${
-              isHidden
-                ? html`
-                    <input type="hidden" name="${inputName}" value="-" />
-                    <input
-                      type="text"
-                      value="-"
-                      title="${msg("value")}"
-                      class="input input-nutritional-value cappucino"
-                      disabled
-                    />
-                  `
-                : html`<input
+            ${isHidden
+        ? html`
+                  <input type="hidden" name="${inputName}" value="-" />
+                  <input
                     type="text"
-                    name="${inputName}"
-                    .value="${value}"
+                    value="-"
                     title="${msg("value")}"
                     class="input input-nutritional-value cappucino"
-                  />`
-            }
+                    disabled
+                  />
+                `
+        : html`<input
+                  type="text"
+                  name="${inputName}"
+                  .value="${value}"
+                  title="${msg("value")}"
+                  class="input input-nutritional-value cappucino"
+                />`}
           </label>
         </div>
 
@@ -757,20 +759,19 @@ export class RobotoffNutrientExtractionForm extends LitElement {
         </div>
         ${this.renderToggleNutrientButton(column, key)}
       </div>
-      ${
-        this.errors[inputName]
-          ? html`<span class="input-error-message" role="alert">${this.errors[inputName]}</span>`
-          : nothing
-      }
+      ${this.errors[inputName]
+        ? html`<span class="input-error-message" role="alert">${this.errors[inputName]}</span>`
+        : nothing}
     `
   }
-
   /**
    * Emit a custom submit event to submit the form data well formatted.
    *
    * @param insightAnnotationAnswer
    */
   emitSubmitEvent(insightAnnotationAnswer: InsightAnnotationAnswer) {
+
+
     this.dispatchEvent(
       new CustomEvent(EventType.SUBMIT, {
         bubbles: true,
@@ -851,7 +852,7 @@ export class RobotoffNutrientExtractionForm extends LitElement {
     const nutrientAnotationForm: InsightAnnotatationData = {}
     const formValues = formData.entries()
 
-    const servingSizeInputValue = this.servingSizeInput!.value!
+    const servingSizeInputValue = this.servingSizeInput?.value ?? ""
 
     // Add servingSize
     nutrientAnotationForm[NUTRIENT_SERVING_SIZE_KEY] = {
@@ -1031,7 +1032,11 @@ export class RobotoffNutrientExtractionForm extends LitElement {
   onSubmit(event: SubmitEvent) {
     event.preventDefault()
     event.stopPropagation()
-    const formData = new FormData(event.target as HTMLFormElement)
+
+    const formElement = event.currentTarget as HTMLFormElement
+    if (!formElement) return
+
+    const formData = new FormData(formElement)
     this.submitFormData(formData, this.insightAnnotationSize)
   }
 
@@ -1093,7 +1098,11 @@ export class RobotoffNutrientExtractionForm extends LitElement {
    * Toggle the nutrient visibility.
    */
   toggleNutrient(column: InsightAnnotationSize, nutrientKey: string) {
-    // Implement the logic to toggle the nutrient visibility
+    // Check and initialize the column object if missing
+    if (!this.inputHiddenBySizeAndNutrientKey[column]) {
+      this.inputHiddenBySizeAndNutrientKey[column] = {}
+    }
+
     this.inputHiddenBySizeAndNutrientKey[column][nutrientKey] =
       !this.inputHiddenBySizeAndNutrientKey[column][nutrientKey]
 
@@ -1104,7 +1113,7 @@ export class RobotoffNutrientExtractionForm extends LitElement {
    * Render the toggle nutrient button.
    */
   renderToggleNutrientButton(column: InsightAnnotationSize, nutrientKey: string) {
-    const isHidden = this.inputHiddenBySizeAndNutrientKey[column][nutrientKey]
+    const isHidden = Boolean(this.inputHiddenBySizeAndNutrientKey?.[column]?.[nutrientKey])
     return html`
       <div class="toggle-nutrient-button-wrapper">
         <button
@@ -1112,11 +1121,9 @@ export class RobotoffNutrientExtractionForm extends LitElement {
           class="button chocolate-button"
           @click=${() => this.toggleNutrient(column, nutrientKey)}
         >
-          ${
-            isHidden
-              ? html`<eye-invisible-icon size="18px"></eye-invisible-icon>`
-              : html` <eye-visible-icon size="18px"></eye-visible-icon>`
-          }
+          ${isHidden
+        ? html`<eye-invisible-icon size="18px"></eye-invisible-icon>`
+        : html` <eye-visible-icon size="18px"></eye-visible-icon>`}
         </button>
       </div>
     `
