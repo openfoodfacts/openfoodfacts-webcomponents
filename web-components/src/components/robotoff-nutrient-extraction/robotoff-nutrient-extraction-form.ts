@@ -366,7 +366,7 @@ export class RobotoffNutrientExtractionForm extends LitElement {
           nutrients.servingSize = value?.value
           return
         } else {
-          console.log("Unknown nutrient key", key, value)
+
           return
         }
         keysSet.add(nutrientKey)
@@ -401,7 +401,7 @@ export class RobotoffNutrientExtractionForm extends LitElement {
     nutrimentsData: NutrimentsProductType
   ): Set<string> {
     const nutrientsOrder = this.nutrientsOrder
-    console.log("nutrientsOrder", nutrientsOrder)
+
     const keySet = new Set<string>()
 
     // Check if nutriments data is available
@@ -643,10 +643,10 @@ export class RobotoffNutrientExtractionForm extends LitElement {
         <div>
           <div>
             ${this.renderInputs(
-              key,
-              this.insightAnnotationSize,
-              nutrients[this.insightAnnotationSize][key]
-            )}
+        key,
+        this.insightAnnotationSize,
+        nutrients[this.insightAnnotationSize][key]
+      )}
           </div>
 
           <div>${this.renderRobotoffSuggestionForNutrient(key, this.insightAnnotationSize)}</div>
@@ -682,9 +682,9 @@ export class RobotoffNutrientExtractionForm extends LitElement {
           ?disabled=${disabled}
         >
           ${possibleUnits.map(
-            (unit) =>
-              html`<option value="${unit}" ?selected=${unit === currentUnit}>${unit}</option>`
-          )}
+        (unit) =>
+          html`<option value="${unit}" ?selected=${unit === currentUnit}>${unit}</option>`
+      )}
         </select>
       `
     } else if (possibleUnits[0]) {
@@ -730,7 +730,7 @@ export class RobotoffNutrientExtractionForm extends LitElement {
           <label class="input-label">
             <div>${label}</div>
             ${isHidden
-              ? html`
+        ? html`
                   <input type="hidden" name="${inputName}" value="-" />
                   <input
                     type="text"
@@ -740,7 +740,7 @@ export class RobotoffNutrientExtractionForm extends LitElement {
                     disabled
                   />
                 `
-              : html`<input
+        : html`<input
                   type="text"
                   name="${inputName}"
                   .value="${value}"
@@ -767,7 +767,6 @@ export class RobotoffNutrientExtractionForm extends LitElement {
    * @param insightAnnotationAnswer
    */
   emitSubmitEvent(insightAnnotationAnswer: InsightAnnotationAnswer) {
-    console.log("🔥 SUBMITTING INSIGHT ANSWER:", insightAnnotationAnswer)
 
     this.dispatchEvent(
       new CustomEvent(EventType.SUBMIT, {
@@ -1115,8 +1114,8 @@ export class RobotoffNutrientExtractionForm extends LitElement {
           @click=${() => this.toggleNutrient(column, nutrientKey)}
         >
           ${isHidden
-            ? html`<eye-invisible-icon size="18px"></eye-invisible-icon>`
-            : html` <eye-visible-icon size="18px"></eye-visible-icon>`}
+        ? html`<eye-invisible-icon size="18px"></eye-invisible-icon>`
+        : html` <eye-visible-icon size="18px"></eye-visible-icon>`}
         </button>
       </div>
     `
