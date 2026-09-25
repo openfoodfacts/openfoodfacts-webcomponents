@@ -192,6 +192,10 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
 
   private _productDataCache = new Map<string, { imageUrl?: string; name?: string }>()
 
+  private productDataCacheKey(insight: IngredientSpellcheckInsight) {
+    return `${insight.barcode}:${insight.data.lang}`
+  }
+
   showToast(message: string, duration = 2500) {
     this._toastMessage = message
     if (this._toastTimer) {
@@ -270,8 +274,9 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
       return
     }
 
-    if (this._productDataCache.has(insight.barcode)) {
-      this.productData = this._productDataCache.get(insight.barcode)!
+    const cacheKey = this.productDataCacheKey(insight)
+    if (this._productDataCache.has(cacheKey)) {
+      this.productData = this._productDataCache.get(cacheKey)!
       return
     }
 
@@ -285,7 +290,7 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
         imageUrl: result.product?.image_ingredients_url,
         name: result.product?.product_name,
       }
-      this._productDataCache.set(insight.barcode, data)
+      this._productDataCache.set(cacheKey, data)
       if (this._insight?.id === insight.id) {
         this.productData = data
       }
@@ -302,7 +307,9 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
       const id = this._insightIds[idx]
       if (!id) continue
       const nextInsight = ingredientSpellcheckInsights.getItem(id)
-      if (!nextInsight || this._productDataCache.has(nextInsight.barcode)) continue
+      if (!nextInsight) continue
+      const cacheKey = this.productDataCacheKey(nextInsight)
+      if (this._productDataCache.has(cacheKey)) continue
 
       void fetchProduct<ImageIngredientsProductType>(nextInsight.barcode, {
         lc: nextInsight.data.lang,
@@ -313,7 +320,7 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
             imageUrl: result.product?.image_ingredients_url,
             name: result.product?.product_name,
           }
-          this._productDataCache.set(nextInsight.barcode, data)
+          this._productDataCache.set(cacheKey, data)
           if (data.imageUrl) {
             const fullUrl = getFullImageUrl(data.imageUrl) ?? data.imageUrl
             const img = new Image()
@@ -440,10 +447,12 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
 
     try {
       await unselectProductImage(insight.barcode, imageField)
-      this._productDataCache.delete(insight.barcode)
+      this._productDataCache.delete(this.productDataCacheKey(insight))
       this.showToast(msg("Image unselected"))
-      this.nextInsight()
-      isLastInsight = this.allInsightsAreAnswered
+      if (this._insight?.id === insight.id) {
+        isLastInsight = this._currentIndex === this._insightIds.length - 1
+        this.nextInsight()
+      }
     } catch (err) {
       console.error("Failed to unselect image:", err)
       this.showToast(msg("Failed to unselect image"), 4000)
@@ -529,7 +538,7 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
    * @returns {TemplateResult} The rendered component.
    */
   override render() {
-    return this._spellcheckTask.render({
+    return html`${this._spellcheckTask.render({
       pending: () => html`<slot name="pending"><off-wc-loader></off-wc-loader></slot>`,
       complete: () => {
         const insight = this._insight
@@ -560,15 +569,12 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
                 ></text-corrector>
               </div>
             </div>
-            ${
-              this._toastMessage
-                ? html`<div class="transient-toast">${this._toastMessage}</div>`
-                : nothing
-            }
           </div>
         `
       },
-    })
+    })}${
+      this._toastMessage ? html`<div class="transient-toast">${this._toastMessage}</div>` : nothing
+    }`
   }
 }
 

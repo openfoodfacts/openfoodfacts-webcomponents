@@ -31,6 +31,10 @@ const secondInsight = {
   source_image: "another-raw-id",
   data: { lang: "en" },
 } as IngredientSpellcheckInsight
+const translatedInsight = {
+  ...secondInsight,
+  barcode: firstInsight.barcode,
+} as IngredientSpellcheckInsight
 
 function makeElement(insights = [firstInsight]) {
   const element = new RobotoffIngredientSpellcheck()
@@ -97,7 +101,39 @@ describe("robotoff-ingredient-spellcheck", () => {
     await fetchOld
 
     expect((element as any).productData.imageUrl).toBe("current.jpg")
-    expect((element as any)._productDataCache.get(firstInsight.barcode).imageUrl).toBe("old.jpg")
+    expect((element as any)._productDataCache.get("123:fr").imageUrl).toBe("old.jpg")
+  })
+
+  it("keeps product data for different languages of the same barcode", async () => {
+    const element = makeElement([firstInsight, translatedInsight])
+    vi.mocked(fetchProduct)
+      .mockResolvedValueOnce({ product: { image_ingredients_url: "fr.jpg" } } as never)
+      .mockResolvedValueOnce({ product: { image_ingredients_url: "en.jpg" } } as never)
+
+    await element.updateIngredientsImageUrl(firstInsight)
+    ;(element as any)._currentIndex = 1
+    await element.updateIngredientsImageUrl(translatedInsight)
+    expect((element as any).productData.imageUrl).toBe("en.jpg")
+    expect((element as any)._productDataCache.get("123:fr").imageUrl).toBe("fr.jpg")
+    expect((element as any)._productDataCache.get("123:en").imageUrl).toBe("en.jpg")
+
+    ;(element as any)._currentIndex = 0
+    await element.updateIngredientsImageUrl(firstInsight)
+    expect((element as any).productData.imageUrl).toBe("fr.jpg")
+    expect(fetchProduct).toHaveBeenCalledTimes(2)
+  })
+
+  it("prefetches another language even when the barcode is cached", async () => {
+    const element = makeElement([firstInsight, translatedInsight])
+    ;(element as any)._productDataCache.set("123:fr", { imageUrl: "fr.jpg" })
+    vi.mocked(fetchProduct).mockResolvedValueOnce({ product: {} } as never)
+
+    element.prefetchNextInsights()
+    await vi.waitFor(() => expect((element as any)._productDataCache.has("123:en")).toBe(true))
+    expect(fetchProduct).toHaveBeenCalledWith(
+      firstInsight.barcode,
+      expect.objectContaining({ lc: "en" })
+    )
   })
 
   it("does not clear the current insight's product data when a stale fetch fails", async () => {
@@ -167,7 +203,8 @@ describe("robotoff-ingredient-spellcheck", () => {
   it("invalidates image data and reports a successful skip before completion", async () => {
     const element = makeElement()
     const states = collectStates(element)
-    ;(element as any)._productDataCache.set(firstInsight.barcode, { imageUrl: "stale.jpg" })
+    ;(element as any)._productDataCache.set("123:fr", { imageUrl: "stale.jpg" })
+    ;(element as any)._productDataCache.set("123:en", { imageUrl: "english.jpg" })
     vi.stubGlobal(
       "confirm",
       vi.fn(() => true)
@@ -178,13 +215,51 @@ describe("robotoff-ingredient-spellcheck", () => {
     await element.onUnselectImage()
 
     expect(unselectProductImage).toHaveBeenCalledWith(firstInsight.barcode, "ingredients_fr")
-    expect((element as any)._productDataCache.has(firstInsight.barcode)).toBe(false)
+    expect((element as any)._productDataCache.has("123:fr")).toBe(false)
+    expect((element as any)._productDataCache.get("123:en").imageUrl).toBe("english.jpg")
     expect(robotoff.annotateIngredientSpellcheck).toHaveBeenCalledWith(
       firstInsight.id,
       AnnotationAnswer.SKIP
     )
     expect(states.map(({ state }) => state)).toEqual([EventState.ANNOTATED, EventState.FINISHED])
     expect(states[1].insightId).toBe(firstInsight.id)
+  })
+
+  it("keeps the next insight current when image unselection resolves late", async () => {
+    const element = makeElement([firstInsight, secondInsight])
+    const request = pendingRequest<never>()
+    vi.stubGlobal(
+      "confirm",
+      vi.fn(() => true)
+    )
+    vi.mocked(unselectProductImage).mockReturnValueOnce(request.promise)
+    vi.mocked(robotoff.annotateIngredientSpellcheck).mockResolvedValueOnce({} as never)
+
+    const unselect = element.onUnselectImage()
+    ;(element as any)._currentIndex = 1
+    request.resolve({} as never)
+    await unselect
+
+    expect((element as any)._currentIndex).toBe(1)
+    expect((element as any)._insight?.id).toBe(secondInsight.id)
+    expect(robotoff.annotateIngredientSpellcheck).toHaveBeenCalledWith(
+      firstInsight.id,
+      AnnotationAnswer.SKIP
+    )
+  })
+
+  it("shows the toast alongside the completion view", () => {
+    const element = makeElement()
+    ;(element as any)._currentIndex = 1
+    ;(element as any)._toastMessage = "Image unselected"
+    ;(element as any)._spellcheckTask = { render: ({ complete }: any) => complete() }
+    const container = document.createElement("div")
+
+    render(element.render(), container)
+
+    expect(container.querySelector("slot[name=complete]")).not.toBeNull()
+    expect(container.querySelectorAll(".transient-toast")).toHaveLength(1)
+    expect(container.querySelector(".transient-toast")?.textContent).toBe("Image unselected")
   })
 
   it("catches skip annotation failures without reporting completion", async () => {

@@ -30,10 +30,13 @@ import { triggerSubmit } from "../../utils"
 import "../shared/text-corrector-highlight"
 import { unselectProductImage } from "../../api/openfoodfacts"
 import "../nutripatrol-flag-form/nutripatrol-flag-form"
+import { SignalWatcher } from "@lit-labs/signals"
+import { userInfo } from "../../signals/folksonomy"
+import folksonomyApi from "../../api/folksonomy"
 
 @customElement("robotoff-ingredient-detection-form")
 @localized()
-export class RobotoffIngredientDetectionForm extends LitElement {
+export class RobotoffIngredientDetectionForm extends SignalWatcher(LitElement) {
   static override styles = [
     css`
       .button-container {
@@ -194,6 +197,7 @@ export class RobotoffIngredientDetectionForm extends LitElement {
     this.loadImage()
 
     this.isEditingIngredients = false
+    this._isFlagModalOpen = false
     this.cropMode = ZoomableImage.CropMode.CROP_READ
     // Set the data from the insight
     this.data = {
@@ -211,6 +215,7 @@ export class RobotoffIngredientDetectionForm extends LitElement {
     super.connectedCallback()
     // Ensure the image is loaded when the component is connected to the DOM
     this.loadImage()
+    void folksonomyApi.fetchUserInfo()
   }
 
   /**
@@ -440,6 +445,7 @@ export class RobotoffIngredientDetectionForm extends LitElement {
             <button
               type="button"
               class="action-chip-btn"
+              ?disabled=${this.isLoading}
               @click=${() => (this._isFlagModalOpen = true)}
               title=${msg("Report problematic image")}
             >
@@ -456,6 +462,7 @@ export class RobotoffIngredientDetectionForm extends LitElement {
           </div>
           <nutripatrol-flag-form
             .barcode=${insight.barcode}
+            .userId=${userInfo.get()?.user_id ?? ""}
             type="image"
             .imageId=${this.imageId}
             ?open=${this._isFlagModalOpen}
