@@ -462,9 +462,11 @@ export class NewsFeed extends LitElement {
         <p class="message">
           ${sanitizeHtml(item.parsedMessage) || item.message || "No message content."}
         </p>
-        ${item.funding
-          ? html`<donation-meter class="funding" .funding=${item.funding}></donation-meter>`
-          : ""}
+        ${
+          item.funding
+            ? html`<donation-meter class="funding" .funding=${item.funding}></donation-meter>`
+            : ""
+        }
       </div>
     `
 
@@ -496,9 +498,11 @@ export class NewsFeed extends LitElement {
       complete: (news) => {
         return html`
           <div class="news-container">
-            ${news.length > 0
-              ? news.map((item) => this._renderNewsItem(item))
-              : html`<div class="no-news">No relevant news available right now.</div>`}
+            ${
+              news.length > 0
+                ? news.map((item) => this._renderNewsItem(item))
+                : html`<div class="no-news">No relevant news available right now.</div>`
+            }
           </div>
         `
       },

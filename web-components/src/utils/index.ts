@@ -100,7 +100,7 @@ export const randomIdGenerator = () => Math.random().toString(36).substring(2, 1
  * @returns () => void - the debounced function
  */
 export const initDebounce = (callback: () => any, debounceTime: number = 500) => {
-  let timeout: number | undefined
+  let timeout: ReturnType<typeof setTimeout> | undefined
   return () => {
     clearTimeout(timeout)
     timeout = setTimeout(() => {

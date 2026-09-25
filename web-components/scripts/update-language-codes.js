@@ -31,7 +31,7 @@ export const updateLitLocalizeJsonFile = async () => {
   const litLocalizeJsonParsed = JSON.parse(litLocalizeJson)
   litLocalizeJsonParsed.targetLocales = languageCodes
   // overwrite lit-localize.json file
-  fs.writeFileSync("./lit-localize.json", JSON.stringify(litLocalizeJsonParsed, null, 2))
+  fs.writeFileSync("./lit-localize.json", JSON.stringify(litLocalizeJsonParsed, null, 2) + "\n")
 }
 
 updateLitLocalizeJsonFile()

@@ -483,9 +483,11 @@ export class FolksonomyEditorRow extends LitElement {
             </div>
           </td>
         </tr>
-        ${this.showNewKeyModal
-          ? html`<new-key-modal @close-modal=${this.handleCloseNewKeyModal}></new-key-modal>`
-          : null}
+        ${
+          this.showNewKeyModal
+            ? html`<new-key-modal @close-modal=${this.handleCloseNewKeyModal}></new-key-modal>`
+            : null
+        }
       `
     }
 
@@ -499,52 +501,60 @@ export class FolksonomyEditorRow extends LitElement {
           >
         </td>
         <td>
-          ${this.editable
-            ? html`<input
-                type="text"
-                class="input"
-                .value=${this.tempValue}
-                @input=${this.handleInputChange}
-              />`
-            : this.isUrl(this.value)
-              ? html`
-                  <a
-                    href=${this.value}
-                    target="_blank"
-                    rel="noopener noreferrer nofollow"
-                    @click=${this.confirmExternalNavigation}
-                    @auxclick=${this.confirmExternalNavigation}
-                  >
-                    ${this.value}
-                  </a>
-                `
-              : this.value}
+          ${
+            this.editable
+              ? html`<input
+                  type="text"
+                  class="input"
+                  .value=${this.tempValue}
+                  @input=${this.handleInputChange}
+                />`
+              : this.isUrl(this.value)
+                ? html`
+                    <a
+                      href=${this.value}
+                      target="_blank"
+                      rel="noopener noreferrer nofollow"
+                      @click=${this.confirmExternalNavigation}
+                      @auxclick=${this.confirmExternalNavigation}
+                    >
+                      ${this.value}
+                    </a>
+                  `
+                : this.value
+          }
         </td>
-        ${this.pageType == "edit"
-          ? html`<td>
-              <div class="button-container">
-                ${this.editable
-                  ? html`
-                      <button class="button chocolate-button" @click=${this.handleSave}>
-                        ${msg("Save")}
-                      </button>
-                      <button class="button chocolate-button" @click=${this.handleCancel}>
-                        ${msg("Cancel")}
-                      </button>
-                    `
-                  : html`<button class="button chocolate-button" @click=${this.handleEdit}>
-                      ${msg("Edit")}
-                    </button>`}
-                <button class="button chocolate-button" @click=${this.handleDelete}>
-                  ${msg("Delete")}
-                </button>
-              </div>
-            </td>`
-          : null}
+        ${
+          this.pageType == "edit"
+            ? html`<td>
+                <div class="button-container">
+                  ${
+                    this.editable
+                      ? html`
+                          <button class="button chocolate-button" @click=${this.handleSave}>
+                            ${msg("Save")}
+                          </button>
+                          <button class="button chocolate-button" @click=${this.handleCancel}>
+                            ${msg("Cancel")}
+                          </button>
+                        `
+                      : html`<button class="button chocolate-button" @click=${this.handleEdit}>
+                          ${msg("Edit")}
+                        </button>`
+                  }
+                  <button class="button chocolate-button" @click=${this.handleDelete}>
+                    ${msg("Delete")}
+                  </button>
+                </div>
+              </td>`
+            : null
+        }
       </tr>
-      ${this.showNewKeyModal
-        ? html`<new-key-modal @close-modal=${this.handleCloseNewKeyModal}></new-key-modal>`
-        : null}
+      ${
+        this.showNewKeyModal
+          ? html`<new-key-modal @close-modal=${this.handleCloseNewKeyModal}></new-key-modal>`
+          : null
+      }
     `
   }
 }

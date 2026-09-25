@@ -6,7 +6,7 @@ describe("Signal Utilities", () => {
     let signalObject: SignalObject<{ key1: string; key2: number; key3: boolean }>
 
     beforeEach(() => {
-      signalObject = new SignalObject({
+      signalObject = new SignalObject<{ key1: string; key2: number; key3: boolean }>({
         key1: "initial",
         key2: 42,
         key3: true,
@@ -120,8 +120,9 @@ describe("Signal Utilities", () => {
           regex: /test/g,
         }
 
-        signalObject.setItem("complex", complexValue)
-        expect(signalObject.getItem("complex")).toEqual(complexValue)
+        const complexSignal = new SignalObject<Record<string, unknown>>({})
+        complexSignal.setItem("complex", complexValue)
+        expect(complexSignal.getItem("complex")).toEqual(complexValue)
       })
 
       it("should trigger reactivity", () => {
@@ -168,7 +169,7 @@ describe("Signal Utilities", () => {
       })
 
       it("should preserve nested object structure", () => {
-        const nestedSignal = new SignalObject({
+        const nestedSignal = new SignalObject<Record<string, unknown>>({
           user: { name: "John", settings: { theme: "dark" } },
         })
 
@@ -358,7 +359,7 @@ describe("Signal Utilities", () => {
         ;(largeObject as any)[`key${i}`] = `value${i}`
       }
 
-      const signal = new SignalObject({ large: null })
+      const signal = new SignalObject<Record<string, unknown>>({ large: null })
 
       expect(() => {
         signal.setItem("large", largeObject)
@@ -368,7 +369,7 @@ describe("Signal Utilities", () => {
     })
 
     it("should handle prototype pollution attempts", () => {
-      const signal = new SignalObject({})
+      const signal = new SignalObject<Record<string, unknown>>({})
 
       // Attempt prototype pollution
       signal.setItem("__proto__", { malicious: true })

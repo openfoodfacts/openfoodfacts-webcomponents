@@ -636,16 +636,20 @@ export class RobotoffNutrientExtractionForm extends LitElement {
    * @param nutrients - The nutrients to render
    * @returns
    */
+  /**
+   * Render the table with the nutrients data.
+   */
   renderRows() {
     const nutrients = this.nutrients!
     return nutrients.keys.map((key) => {
+      const currentNutrientData = nutrients[this.insightAnnotationSize]?.[key]
       return html`
         <div>
           <div>
             ${this.renderInputs(
         key,
         this.insightAnnotationSize,
-        nutrients[this.insightAnnotationSize][key]
+        currentNutrientData
       )}
           </div>
 
@@ -720,9 +724,9 @@ export class RobotoffNutrientExtractionForm extends LitElement {
     nutrient: { value: number | string; unit: string } | undefined
   ) {
     const inputName = this.getInputValueName(key, column)
-    const value = nutrient?.value.toString() ?? ""
+    const value = nutrient?.value != null ? nutrient.value.toString() : ""
     const label = getTaxonomyNameByIdAndLang(key, languageCode.get())
-    const isHidden = this.inputHiddenBySizeAndNutrientKey[column][key]
+    const isHidden = Boolean(this.inputHiddenBySizeAndNutrientKey?.[column]?.[key])
 
     return html`
       <div class="inputs-wrapper">
@@ -760,13 +764,13 @@ export class RobotoffNutrientExtractionForm extends LitElement {
         : nothing}
     `
   }
-
   /**
    * Emit a custom submit event to submit the form data well formatted.
    *
    * @param insightAnnotationAnswer
    */
   emitSubmitEvent(insightAnnotationAnswer: InsightAnnotationAnswer) {
+
 
     this.dispatchEvent(
       new CustomEvent(EventType.SUBMIT, {
@@ -848,7 +852,7 @@ export class RobotoffNutrientExtractionForm extends LitElement {
     const nutrientAnotationForm: InsightAnnotatationData = {}
     const formValues = formData.entries()
 
-    const servingSizeInputValue = this.servingSizeInput!.value!
+    const servingSizeInputValue = this.servingSizeInput?.value ?? ""
 
     // Add servingSize
     nutrientAnotationForm[NUTRIENT_SERVING_SIZE_KEY] = {
@@ -1094,7 +1098,11 @@ export class RobotoffNutrientExtractionForm extends LitElement {
    * Toggle the nutrient visibility.
    */
   toggleNutrient(column: InsightAnnotationSize, nutrientKey: string) {
-    // Implement the logic to toggle the nutrient visibility
+    // Check and initialize the column object if missing
+    if (!this.inputHiddenBySizeAndNutrientKey[column]) {
+      this.inputHiddenBySizeAndNutrientKey[column] = {}
+    }
+
     this.inputHiddenBySizeAndNutrientKey[column][nutrientKey] =
       !this.inputHiddenBySizeAndNutrientKey[column][nutrientKey]
 

@@ -23,7 +23,27 @@ export enum EventType {
   INGREDIENT_SPELLCHECK_STATE = "ingredient-spellcheck-state",
   INGREDIENT_DETECTION_STATE = "ingredient-detection-state",
   DONATION_METER_STATE = "donation-meter-state",
+  DONATION_BANNER_STATE = "donation-banner-state",
   INPUT = "INPUT",
+}
+
+export enum DonationBannerVariant {
+  CAMPAIGN = "campaign",
+  STRIP = "strip",
+  SHEET = "sheet",
+  BAR = "bar",
+}
+
+export enum DonationBannerAction {
+  DISMISS = "dismiss",
+  MINIMIZE = "minimize",
+  ALREADY_DONATED = "already-donated",
+  CLICK = "click",
+}
+
+export enum DonationInterval {
+  MONTHLY = "1M",
+  ONE_TIME = "1T",
 }
 
 export enum LoadingState {
