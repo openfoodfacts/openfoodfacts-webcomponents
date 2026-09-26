@@ -68,27 +68,27 @@
       </trans-unit>
       <trans-unit id="sfc40ea3d5d5aa6f8" approved="yes">
         <source>Your donations fund the day-to-day operations of our non-profit association:</source>
-  <target state="translated">თქვენი შემოწირულობები აფინანსებს ჩვენი არაკომერციული ასოციაციის ყოველდღიურ საქმიანობას:</target>
+        <target state="final">თქვენი შემოწირულობები აფინანსებს ჩვენი არაკომერციული ასოციაციის ყოველდღიურ საქმიანობას:</target>
       </trans-unit>
       <trans-unit id="sd82bc2decefa621b" approved="yes">
         <source>remain independent of the food industry,</source>
-  <target state="translated">კვების ინდუსტრიისგან დამოუკიდებლობის შენარჩუნება,</target>
+        <target state="final">დარჩეს დამოუკიდებელი კვების ინდუსტრიისგან,</target>
       </trans-unit>
       <trans-unit id="sb3bdd638a58d30f4" approved="yes">
         <source>engage a community of committed citizens,</source>
-  <target state="translated">ერთგული მოქალაქეების საზოგადოების ჩართვა,</target>
+        <target state="final">ჩაერთონ ერთგული მოქალაქეების საზოგადოებაში,</target>
       </trans-unit>
       <trans-unit id="s100c4928cc74642a" approved="yes">
         <source>support the advancement of public health research.</source>
-  <target state="translated">საზოგადოებრივი ჯანდაცვის კვლევების წინსვლის მხარდაჭერა.</target>
+        <target state="final">საზოგადოებრივი ჯანდაცვის კვლევის წინსვლის მხარდაჭერა.</target>
       </trans-unit>
       <trans-unit id="s6306a31415aea913" approved="yes">
         <source>I SUPPORT</source>
-  <target state="translated">მხარს ვუჭერ</target>
+        <target state="final">მე მხარს ვუჭერ</target>
       </trans-unit>
       <trans-unit id="scbab4bd737ba7934">
         <source>group photo donation <x id="0" equiv-text="${this.currentYear}"/></source>
-  <target state="translated">ჯგუფური ფოტო შემოწირულობა <x id="0" equiv-text="${this.currentYear}"/></target>
+        <target state="translated">ჯგუფური ფოტო შემოწირულობა <x id="0" equiv-text="${this.currentYear}"/></target>
       </trans-unit>
       <trans-unit id="s000d98595e959c1e">
         <source>Get It On Google Play</source>
@@ -982,113 +982,138 @@
         <source><x id="0" equiv-text="${brands}"/> - <x id="1" equiv-text="${quantity}"/></source>
         <target state="needs-translation"><x id="0" equiv-text="${brands}"/> - <x id="1" equiv-text="${quantity}"/></target>
       </trans-unit>
-<trans-unit id="sb18dd702b5f51223">
-  <source><x id="0" equiv-text="${missing}"/> short</source>
-  <target state="translated">აკლია <x id="0" equiv-text="${missing}"/></target>
-</trans-unit>
-<trans-unit id="s4e037fb4937e78d2">
-  <source>of <x id="0" equiv-text="${goal}"/></source>
-  <target state="translated">-დან <x id="0" equiv-text="${goal}"/></target>
-</trans-unit>
-<trans-unit id="sfb6c2292955d4453">
-  <source>Fundraiser progress</source>
-  <target state="translated">თანხის შეგროვების პროგრესი</target>
-</trans-unit>
-<trans-unit id="s8966e013dce8891f">
-  <source>We still need €120,000 to finish 2026!</source>
-  <target state="translated">2026 წლის დასასრულებლად ჯერ კიდევ გვჭირდება 120,000 €!</target>
-</trans-unit>
-<trans-unit id="s4b2638408d2e3aa8">
-  <source>Become an Open Food Facts patron</source>
-  <target state="translated">გახდით Open Food Facts-ის მხარდამჭერი</target>
-</trans-unit>
-<trans-unit id="s12b36eaac15a1c74">
-  <source>If every visitor this month clicked on Donate and gave just 1€, we'd get over 8 times our yearly budget!</source>
-  <target state="translated">ამ თვეში ყველა ვიზიტორს რომ დაეჭირა „დონაცია“ და გაეღო მხოლოდ 1 €, ჩვენ მივიღებდით ჩვენს წლიურ ბიუჯეტზე 8-ჯერ მეტს!</target>
-</trans-unit>
-<trans-unit id="s9488434f64291951">
-  <source>keeping our database open and available to all,</source>
-  <target state="translated">ჩვენი მონაცემთა ბაზის ღიად და ყველასთვის ხელმისაწვდომად შენარჩუნება,</target>
-</trans-unit>
-<trans-unit id="s1639c60919d39401">
-  <source>technical infrastructure (website/mobile app) and a small permanent team</source>
-  <target state="translated">ტექნიკური ინფრასტრუქტურა (ვებსაიტი/აპლიკაცია) და მცირე მუდმივი გუნდი</target>
-</trans-unit>
-<trans-unit id="s3736464cf8d6fa08">
-  <source>Support</source>
-</trans-unit>
-<trans-unit id="sfaf54e55dd9b80b7">
-  <source>Most popular</source>
-</trans-unit>
-<trans-unit id="sfdff91b6efc539f8">
-  <source>/month</source>
-</trans-unit>
-<trans-unit id="s6d4996ed9ab0a5ff">
-  <source>one-time</source>
-</trans-unit>
-<trans-unit id="s7f6106f967a3dac1">
-  <source>I already donated</source>
-</trans-unit>
-<trans-unit id="s1debceb76cf716af">
-  <source>Open Food Facts is a non-profit. No ads, no industry money, 4.6 million products kept open by volunteers. We need <x id="0" equiv-text="${goal}"/> to run the servers and one engineer in <x id="1" equiv-text="${this.currentYear}"/>. If you looked something up today, €3 a month keeps it free for a year.</source>
-</trans-unit>
-<trans-unit id="saacde229bac011db">
-  <source>Open Food Facts is a non-profit. No ads, no industry money, 4.6 million products kept open by volunteers. If you looked something up today, €3 a month keeps it free for a year.</source>
-</trans-unit>
-<trans-unit id="sa94fa9a46d59932d">
-  <source>Tax deductible in France: <x id="0" equiv-text="${amount}"/> costs you <x id="1" equiv-text="${net}"/>. Cancel any time.</source>
-</trans-unit>
-<trans-unit id="s10b9db9e66aa9a64">
-  <source>Cancel any time.</source>
-</trans-unit>
-<trans-unit id="sea6fd3b4b51e554a">
-  <source>Receipt by email.</source>
-</trans-unit>
-<trans-unit id="s4c5003adba051cb7">
-  <source>Give <x id="0" equiv-text="${amount}"/> a month</source>
-</trans-unit>
-<trans-unit id="sfed3132eac9cc388">
-  <source>€3 a month keeps it that way.</source>
-</trans-unit>
-<trans-unit id="sab56b65357ec6222">
-  <source>Cancel any time</source>
-</trans-unit>
-<trans-unit id="s275772c501fb3b2e">
-  <source>Not now</source>
-</trans-unit>
-<trans-unit id="sd95fd198ae0919ff">
-  <source>Give <x id="0" equiv-text="${amount}"/>/mo</source>
-</trans-unit>
-<trans-unit id="s8fb2185efea4d4e8">
-  <source>raised of <x id="0" equiv-text="${goal}"/></source>
-</trans-unit>
-<trans-unit id="s8a0df9cb3907a58e">
-  <source><x id="0" equiv-text="${fmtCount}"/> supporters</source>
-</trans-unit>
-<trans-unit id="sd8a0d0cc52fdaf39">
-  <source>until <x id="0" equiv-text="${day}"/></source>
-</trans-unit>
-<trans-unit id="s1771e84f035dbfca">
-  <source>To our readers in France: join the <x id="0" equiv-text="${count}"/> people keeping Open Food Facts free.</source>
-</trans-unit>
-<trans-unit id="se3c369c9968fb2a4">
-  <source>To our readers in France: join the people keeping Open Food Facts free.</source>
-</trans-unit>
-<trans-unit id="s3a415c0098b6e01b">
-  <source>Join the <x id="0" equiv-text="${count}"/> people keeping Open Food Facts free.</source>
-</trans-unit>
-<trans-unit id="s535e4c52764db5ed">
-  <source>Join the people keeping Open Food Facts free.</source>
-</trans-unit>
-<trans-unit id="s984c3f4ea2027ec3">
-  <source>Join <x id="0" equiv-text="${count}"/> people keeping this free.</source>
-</trans-unit>
-<trans-unit id="s17e22985ab27800e">
-  <source>Join the people keeping this free.</source>
-</trans-unit>
-<trans-unit id="sbbbd081f048248b3">
-  <source><x id="0" equiv-text="${amount}"/> a month keeps it that way.</source>
-</trans-unit>
+      <trans-unit id="sb18dd702b5f51223">
+        <source><x id="0" equiv-text="${missing}"/> short</source>
+        <target state="translated">აკლია <x id="0" equiv-text="${missing}"/></target>
+      </trans-unit>
+      <trans-unit id="s4e037fb4937e78d2">
+        <source>of <x id="0" equiv-text="${goal}"/></source>
+        <target state="translated">-დან <x id="0" equiv-text="${goal}"/></target>
+      </trans-unit>
+      <trans-unit id="sfb6c2292955d4453">
+        <source>Fundraiser progress</source>
+        <target state="translated">თანხის შეგროვების პროგრესი</target>
+      </trans-unit>
+      <trans-unit id="s8966e013dce8891f">
+        <source>We still need €120,000 to finish 2026!</source>
+        <target state="needs-translation">We still need €120,000 to finish 2026!</target>
+      </trans-unit>
+      <trans-unit id="s4b2638408d2e3aa8">
+        <source>Become an Open Food Facts patron</source>
+        <target state="needs-translation">Become an Open Food Facts patron</target>
+      </trans-unit>
+      <trans-unit id="s12b36eaac15a1c74">
+        <source>If every visitor this month clicked on Donate and gave just 1€, we'd get over 8 times our yearly budget!</source>
+        <target state="needs-translation">If every visitor this month clicked on Donate and gave just 1€, we'd get over 8 times our yearly budget!</target>
+      </trans-unit>
+      <trans-unit id="s9488434f64291951">
+        <source>keeping our database open and available to all,</source>
+        <target state="translated">ჩვენი მონაცემთა ბაზის ღიად და ყველასთვის ხელმისაწვდომად შენარჩუნება,</target>
+      </trans-unit>
+      <trans-unit id="s1639c60919d39401">
+        <source>technical infrastructure (website/mobile app) and a small permanent team</source>
+        <target state="translated">ტექნიკური ინფრასტრუქტურა (ვებსაიტი/აპლიკაცია) და მცირე მუდმივი გუნდი</target>
+      </trans-unit>
+      <trans-unit id="s3736464cf8d6fa08">
+        <source>Support</source>
+        <target state="needs-review-translation" state-qualifier="leveraged-mt">მხარდაჭერა</target>
+      </trans-unit>
+      <trans-unit id="sfaf54e55dd9b80b7">
+        <source>Most popular</source>
+        <target state="needs-translation">Most popular</target>
+      </trans-unit>
+      <trans-unit id="sfdff91b6efc539f8">
+        <source>/month</source>
+        <target state="needs-translation">/month</target>
+      </trans-unit>
+      <trans-unit id="s6d4996ed9ab0a5ff">
+        <source>one-time</source>
+        <target state="needs-translation">one-time</target>
+      </trans-unit>
+      <trans-unit id="s7f6106f967a3dac1">
+        <source>I already donated</source>
+        <target state="needs-translation">I already donated</target>
+      </trans-unit>
+      <trans-unit id="s1debceb76cf716af">
+        <source>Open Food Facts is a non-profit. No ads, no industry money, 4.6 million products kept open by volunteers. We need <x id="0" equiv-text="${goal}"/> to run the servers and one engineer in <x id="1" equiv-text="${this.currentYear}"/>. If you looked something up today, €3 a month keeps it free for a year.</source>
+        <target state="needs-translation">Open Food Facts is a non-profit. No ads, no industry money, 4.6 million products kept open by volunteers. We need <x id="0" equiv-text="${goal}"/> to run the servers and one engineer in <x id="1" equiv-text="${this.currentYear}"/>. If you looked something up today, €3 a month keeps it free for a year.</target>
+      </trans-unit>
+      <trans-unit id="saacde229bac011db">
+        <source>Open Food Facts is a non-profit. No ads, no industry money, 4.6 million products kept open by volunteers. If you looked something up today, €3 a month keeps it free for a year.</source>
+        <target state="needs-translation">Open Food Facts is a non-profit. No ads, no industry money, 4.6 million products kept open by volunteers. If you looked something up today, €3 a month keeps it free for a year.</target>
+      </trans-unit>
+      <trans-unit id="sa94fa9a46d59932d">
+        <source>Tax deductible in France: <x id="0" equiv-text="${amount}"/> costs you <x id="1" equiv-text="${net}"/>. Cancel any time.</source>
+        <target state="needs-translation">Tax deductible in France: <x id="0" equiv-text="${amount}"/> costs you <x id="1" equiv-text="${net}"/>. Cancel any time.</target>
+      </trans-unit>
+      <trans-unit id="s10b9db9e66aa9a64">
+        <source>Cancel any time.</source>
+        <target state="needs-translation">Cancel any time.</target>
+      </trans-unit>
+      <trans-unit id="sea6fd3b4b51e554a">
+        <source>Receipt by email.</source>
+        <target state="needs-translation">Receipt by email.</target>
+      </trans-unit>
+      <trans-unit id="s4c5003adba051cb7">
+        <source>Give <x id="0" equiv-text="${amount}"/> a month</source>
+        <target state="needs-translation">Give <x id="0" equiv-text="${amount}"/> a month</target>
+      </trans-unit>
+      <trans-unit id="sfed3132eac9cc388">
+        <source>€3 a month keeps it that way.</source>
+        <target state="needs-translation">€3 a month keeps it that way.</target>
+      </trans-unit>
+      <trans-unit id="sab56b65357ec6222">
+        <source>Cancel any time</source>
+        <target state="needs-translation">Cancel any time</target>
+      </trans-unit>
+      <trans-unit id="s275772c501fb3b2e">
+        <source>Not now</source>
+        <target state="needs-translation">Not now</target>
+      </trans-unit>
+      <trans-unit id="sd95fd198ae0919ff">
+        <source>Give <x id="0" equiv-text="${amount}"/>/mo</source>
+        <target state="needs-translation">Give <x id="0" equiv-text="${amount}"/>/mo</target>
+      </trans-unit>
+      <trans-unit id="s8fb2185efea4d4e8">
+        <source>raised of <x id="0" equiv-text="${goal}"/></source>
+        <target state="needs-translation">raised of <x id="0" equiv-text="${goal}"/></target>
+      </trans-unit>
+      <trans-unit id="s8a0df9cb3907a58e">
+        <source><x id="0" equiv-text="${fmtCount}"/> supporters</source>
+        <target state="needs-translation"><x id="0" equiv-text="${fmtCount}"/> supporters</target>
+      </trans-unit>
+      <trans-unit id="sd8a0d0cc52fdaf39">
+        <source>until <x id="0" equiv-text="${day}"/></source>
+        <target state="needs-translation">until <x id="0" equiv-text="${day}"/></target>
+      </trans-unit>
+      <trans-unit id="s1771e84f035dbfca">
+        <source>To our readers in France: join the <x id="0" equiv-text="${count}"/> people keeping Open Food Facts free.</source>
+        <target state="needs-translation">To our readers in France: join the <x id="0" equiv-text="${count}"/> people keeping Open Food Facts free.</target>
+      </trans-unit>
+      <trans-unit id="se3c369c9968fb2a4">
+        <source>To our readers in France: join the people keeping Open Food Facts free.</source>
+        <target state="needs-translation">To our readers in France: join the people keeping Open Food Facts free.</target>
+      </trans-unit>
+      <trans-unit id="s3a415c0098b6e01b">
+        <source>Join the <x id="0" equiv-text="${count}"/> people keeping Open Food Facts free.</source>
+        <target state="needs-translation">Join the <x id="0" equiv-text="${count}"/> people keeping Open Food Facts free.</target>
+      </trans-unit>
+      <trans-unit id="s535e4c52764db5ed">
+        <source>Join the people keeping Open Food Facts free.</source>
+        <target state="needs-translation">Join the people keeping Open Food Facts free.</target>
+      </trans-unit>
+      <trans-unit id="s984c3f4ea2027ec3">
+        <source>Join <x id="0" equiv-text="${count}"/> people keeping this free.</source>
+        <target state="needs-translation">Join <x id="0" equiv-text="${count}"/> people keeping this free.</target>
+      </trans-unit>
+      <trans-unit id="s17e22985ab27800e">
+        <source>Join the people keeping this free.</source>
+        <target state="needs-translation">Join the people keeping this free.</target>
+      </trans-unit>
+      <trans-unit id="sbbbd081f048248b3">
+        <source><x id="0" equiv-text="${amount}"/> a month keeps it that way.</source>
+        <target state="needs-translation"><x id="0" equiv-text="${amount}"/> a month keeps it that way.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
