@@ -43,9 +43,7 @@ function createRobotoff(fetch: typeof window.fetch) {
     let request: Request
     if (url instanceof Request) {
       const body =
-        url.method === "GET" || url.method === "HEAD"
-          ? undefined
-          : await url.arrayBuffer()
+        url.method === "GET" || url.method === "HEAD" ? undefined : await url.arrayBuffer()
       request = new Request(requestUrl, {
         method: url.method,
         headers: url.headers,
