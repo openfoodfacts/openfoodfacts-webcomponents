@@ -86,16 +86,14 @@ export class TableElementRenderer extends LitElement {
 
     return html`
       <div class="table_element">
-        ${
-          tableData.title
-            ? html`<heading-renderer
-                text="${tableData.title}"
-                class-name="table-title"
-                heading-level="${this.headingLevel}"
-              >
-              </heading-renderer>`
-            : ""
-        }
+        ${tableData.title
+          ? html`<heading-renderer
+              text="${tableData.title}"
+              class-name="table-title"
+              heading-level="${this.headingLevel}"
+            >
+            </heading-renderer>`
+          : ""}
         <table>
           <thead>
             <tr>

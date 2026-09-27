@@ -366,7 +366,6 @@ export class RobotoffNutrientExtractionForm extends LitElement {
           nutrients.servingSize = value?.value
           return
         } else {
-
           return
         }
         keysSet.add(nutrientKey)
@@ -645,13 +644,7 @@ export class RobotoffNutrientExtractionForm extends LitElement {
       const currentNutrientData = nutrients[this.insightAnnotationSize]?.[key]
       return html`
         <div>
-          <div>
-            ${this.renderInputs(
-        key,
-        this.insightAnnotationSize,
-        currentNutrientData
-      )}
-          </div>
+          <div>${this.renderInputs(key, this.insightAnnotationSize, currentNutrientData)}</div>
 
           <div>${this.renderRobotoffSuggestionForNutrient(key, this.insightAnnotationSize)}</div>
         </div>
@@ -686,9 +679,9 @@ export class RobotoffNutrientExtractionForm extends LitElement {
           ?disabled=${disabled}
         >
           ${possibleUnits.map(
-        (unit) =>
-          html`<option value="${unit}" ?selected=${unit === currentUnit}>${unit}</option>`
-      )}
+            (unit) =>
+              html`<option value="${unit}" ?selected=${unit === currentUnit}>${unit}</option>`
+          )}
         </select>
       `
     } else if (possibleUnits[0]) {
@@ -734,7 +727,7 @@ export class RobotoffNutrientExtractionForm extends LitElement {
           <label class="input-label">
             <div>${label}</div>
             ${isHidden
-        ? html`
+              ? html`
                   <input type="hidden" name="${inputName}" value="-" />
                   <input
                     type="text"
@@ -744,7 +737,7 @@ export class RobotoffNutrientExtractionForm extends LitElement {
                     disabled
                   />
                 `
-        : html`<input
+              : html`<input
                   type="text"
                   name="${inputName}"
                   .value="${value}"
@@ -770,8 +763,6 @@ export class RobotoffNutrientExtractionForm extends LitElement {
    * @param insightAnnotationAnswer
    */
   emitSubmitEvent(insightAnnotationAnswer: InsightAnnotationAnswer) {
-
-
     this.dispatchEvent(
       new CustomEvent(EventType.SUBMIT, {
         bubbles: true,
@@ -1122,8 +1113,8 @@ export class RobotoffNutrientExtractionForm extends LitElement {
           @click=${() => this.toggleNutrient(column, nutrientKey)}
         >
           ${isHidden
-        ? html`<eye-invisible-icon size="18px"></eye-invisible-icon>`
-        : html` <eye-visible-icon size="18px"></eye-visible-icon>`}
+            ? html`<eye-invisible-icon size="18px"></eye-invisible-icon>`
+            : html` <eye-visible-icon size="18px"></eye-visible-icon>`}
         </button>
       </div>
     `
