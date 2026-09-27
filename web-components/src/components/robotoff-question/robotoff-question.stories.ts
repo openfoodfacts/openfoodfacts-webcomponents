@@ -21,3 +21,18 @@ export const Basic: Story = {
     showImage: true,
   },
 }
+
+export const Inline: Story = {
+  args: {
+    productCode: "5000354922848",
+    variant: "inline",
+  },
+}
+
+export const InlineWithReload: Story = {
+  args: {
+    productCode: "5000354922848",
+    variant: "inline",
+    "reload-on-finish": true,
+  },
+}

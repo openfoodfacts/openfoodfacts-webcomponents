@@ -6,12 +6,14 @@ import { ALERT } from "../../styles/alert.js"
 import { fetchQuestionsByProductCode } from "../../signals/questions"
 import { localized, msg } from "@lit/localize"
 import { ButtonType, getButtonClasses } from "../../styles/buttons.js"
-import { RobotoffContributionType } from "../../constants.js"
+import { EventState, EventType, RobotoffContributionType } from "../../constants.js"
 import { CONTAINER } from "../../styles/responsive.js"
 import "../robotoff-modal/robotoff-modal"
+import "../robotoff-question/robotoff-question"
 import { SignalWatcher } from "@lit-labs/signals"
 import robotoff from "../../api/robotoff.js"
 import { InsightType } from "../../types/robotoff.js"
+import type { QuestionStateEventDetail } from "../../types/index.js"
 import { LanguageCodesMixin } from "../../mixins/language-codes-mixin.js"
 
 /**
@@ -24,6 +26,7 @@ import { LanguageCodesMixin } from "../../mixins/language-codes-mixin.js"
  * @example
  * ```html
  * <robotoff-contribution-message product-code="123456789"></robotoff-contribution-message>
+ * <robotoff-contribution-message product-code="123456789" variant="inline" reload-on-finish></robotoff-contribution-message>
  * ```
  */
 @customElement("robotoff-contribution-message")
@@ -44,6 +47,9 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
         text-align: left;
         box-sizing: border-box;
       }
+      .robotoff-contribution-message.robotoff-inline {
+        text-align: center;
+      }
       .robotoff-contribution-message p {
         margin-top: 0;
       }
@@ -57,6 +63,21 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
       }
       .robotoff-contribution-message li {
         text-align: left;
+      }
+      .other-contributions {
+        margin-top: 1rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+      }
+      .other-contributions-title {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        text-align: left;
+      }
+      @media (prefers-color-scheme: dark) {
+        .other-contributions {
+          border-top-color: rgba(255, 255, 255, 0.15);
+        }
       }
     `,
   ]
@@ -75,6 +96,48 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
     attribute: "is-logged-in",
   })
   isLoggedIn = false
+
+  /**
+   * Display variant: 'modal' (default) or 'inline'.
+   * In inline variant, questions are displayed directly without the pre-warning prompt.
+   */
+  @property({ type: String, reflect: true })
+  variant: "modal" | "inline" = "modal"
+
+  /**
+   * Shorthand boolean attribute to enable inline display.
+   */
+  @property({ type: Boolean, reflect: true })
+  inline = false
+
+  /**
+   * Whether to reload the page when all questions have been answered.
+   */
+  @property({ type: Boolean, attribute: "reload-on-finish" })
+  reloadOnFinish = false
+
+  @property({ type: Boolean, attribute: "reload-on-finished" })
+  reloadOnFinished = false
+
+  /**
+   * Delay in milliseconds before reloading the page after questions are finished.
+   */
+  @property({ type: Number, attribute: "reload-delay" })
+  reloadDelay = 1200
+
+  get isInline(): boolean {
+    return this.variant === "inline" || this.inline
+  }
+
+  get shouldReloadOnFinish(): boolean {
+    return this.reloadOnFinish || this.reloadOnFinished
+  }
+
+  /**
+   * Whether questions have been finished in inline mode.
+   */
+  @state()
+  private questionsFinished = false
 
   /**
    * The type of contribution being made.
@@ -200,6 +263,28 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
     this.requestUpdate()
   }
 
+  private onInlineQuestionState = (event: CustomEvent<QuestionStateEventDetail>): void => {
+    if (event.detail.state === EventState.FINISHED) {
+      this.questionsFinished = true
+      this.dispatchEvent(
+        new CustomEvent(EventType.SUCCESS, {
+          bubbles: true,
+          composed: true,
+          detail: { type: RobotoffContributionType.QUESTIONS },
+        })
+      )
+      if (!this.shouldReloadOnFinish) {
+        setTimeout(() => {
+          this.showMessages[RobotoffContributionType.QUESTIONS] = false
+          this.requestUpdate()
+        }, 2000)
+      }
+    } else if (event.detail.state === EventState.NO_DATA) {
+      this.showMessages[RobotoffContributionType.QUESTIONS] = false
+      this.requestUpdate()
+    }
+  }
+
   /**
    * Renders the component.
    * @returns {TemplateResult} The rendered template.
@@ -208,17 +293,71 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
     return this._fetchDataTask.render({
       complete: () => {
         const messagesToShow = this.messagesToShow
+        const hasQuestions = this.showMessages[RobotoffContributionType.QUESTIONS]
+
+        if (!messagesToShow.length && !this.questionsFinished) {
+          return nothing
+        }
+
+        const modal = html`<robotoff-modal
+          product-code=${this.productCode}
+          .robotoffContributionType=${this.robotoffContributionType}
+          @close=${this.closeModal}
+          @success=${this.onSave}
+        ></robotoff-modal>`
+
+        if (this.isInline && (hasQuestions || this.questionsFinished)) {
+          const otherMessages = messagesToShow.filter(
+            (item) => item.type !== RobotoffContributionType.QUESTIONS
+          )
+
+          return html`<div>
+            ${modal}
+            <div class="robotoff-contribution-message robotoff-inline alert info">
+              <div class="container">
+                <robotoff-question
+                  product-code=${this.productCode}
+                  variant="inline"
+                  ?reload-on-finish=${this.shouldReloadOnFinish}
+                  .reloadDelay=${this.reloadDelay}
+                  @question-state=${this.onInlineQuestionState}
+                ></robotoff-question>
+                ${
+                  otherMessages.length > 0
+                    ? html`
+                        <div class="other-contributions">
+                          <p class="other-contributions-title">
+                            ${msg("You can also help us improve other parts:")}
+                          </p>
+                          <ul>
+                            ${otherMessages.map(
+                              (item) => html`
+                                <li>
+                                  <button
+                                    class="button white-button small"
+                                    @click=${() => this.openModal(item.type)}
+                                  >
+                                    ${item.message}
+                                  </button>
+                                </li>
+                              `
+                            )}
+                          </ul>
+                        </div>
+                      `
+                    : nothing
+                }
+              </div>
+            </div>
+          </div>`
+        }
 
         if (!messagesToShow.length) {
           return nothing
         }
+
         return html` <div>
-          <robotoff-modal
-            product-code=${this.productCode}
-            .robotoffContributionType=${this.robotoffContributionType}
-            @close=${this.closeModal}
-            @success=${this.onSave}
-          ></robotoff-modal>
+          ${modal}
           <div class="robotoff-contribution-message alert info">
             <div class="container">
               <p>
@@ -227,7 +366,7 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
                 )}
               </p>
               <ul>
-                ${this.messagesToShow.map(
+                ${messagesToShow.map(
                   (item) =>
                     html`<li>
                       <button

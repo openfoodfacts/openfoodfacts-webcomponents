@@ -24,3 +24,18 @@ export const LoggedIn: Story = {
     "is-logged-in": true,
   },
 }
+
+export const Inline: Story = {
+  args: {
+    "product-code": "5000354922848",
+    variant: "inline",
+  },
+}
+
+export const InlineWithReload: Story = {
+  args: {
+    "product-code": "5000354922848",
+    variant: "inline",
+    "reload-on-finish": true,
+  },
+}

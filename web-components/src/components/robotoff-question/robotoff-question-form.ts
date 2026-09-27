@@ -57,6 +57,10 @@ export class RobotoffQuestionForm extends SignalWatcher(
       }
       .buttons-row {
         margin-top: 1rem;
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        flex-wrap: wrap;
       }
     `,
   ]
