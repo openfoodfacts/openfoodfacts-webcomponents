@@ -25,8 +25,9 @@ export class AutocompleteInput extends LitElement {
 
       .autocomplete-list {
         position: absolute;
-        background: #fff;
-        border: 1px solid #ccc;
+        background: var(--off-folksonomy-bg, #fff);
+        color: var(--off-folksonomy-text, #333);
+        border: 1px solid var(--off-folksonomy-border, #ccc);
         border-top: none;
         list-style-type: none;
         padding: 0;
@@ -40,32 +41,31 @@ export class AutocompleteInput extends LitElement {
       .autocomplete-item {
         padding: 10px;
         cursor: pointer;
+        color: var(--off-folksonomy-text, #333);
+        background-color: transparent;
       }
 
       .autocomplete-item:hover {
-        background-color: #f0f0f0;
+        background-color: var(--off-folksonomy-table-header-bg, #f0f0f0);
+        color: var(--off-folksonomy-text, #333);
       }
 
       .autocomplete-item.highlighted {
-        background-color: #e0e0e0;
+        background-color: var(--off-folksonomy-table-header-bg, #e0e0e0);
+        color: var(--off-folksonomy-text, #333);
         font-weight: bold;
       }
 
       .autocomplete-item.not-found {
-        background-color: #f8f9fa;
-        border-top: 1px solid #ddd;
-        color: #007bff;
+        background-color: var(--off-folksonomy-bg, #f8f9fa);
+        border-top: 1px solid var(--off-folksonomy-border, #ddd);
+        color: var(--off-folksonomy-text, #007bff);
         font-style: italic;
         padding: 12px 10px;
       }
 
       .autocomplete-item.not-found:hover {
-        background-color: #e7f3ff;
-      }
-
-      .autocomplete-item.not-found.highlighted {
-        background-color: #d4ebff;
-        font-weight: normal;
+        background-color: var(--off-folksonomy-table-header-bg, #e7f3ff);
       }
 
       .autocomplete-input:focus {

@@ -417,8 +417,27 @@ export class FolksonomyEditorRow extends LitElement {
           padding: 0.4rem 0.5rem;
         }
       }
+      autocomplete-input {
+        --off-folksonomy-bg: #1e1e24;
+        --off-folksonomy-text: #fff;
+        --off-folksonomy-border: #444;
+      }
+
       autocomplete-input::part(autocomplete-input-list) {
         position: relative !important;
+        background-color: var(--off-folksonomy-bg, #1e1e24) !important;
+        color: var(--off-folksonomy-text, #fff) !important;
+        border: 1px solid var(--off-folksonomy-border, #444) !important;
+      }
+
+      autocomplete-input::part(autocomplete-input-item) {
+        color: var(--off-folksonomy-text, #fff) !important;
+        background-color: transparent !important;
+      }
+
+      autocomplete-input::part(autocomplete-input-item):hover {
+        background-color: var(--off-folksonomy-table-header-bg, #333) !important;
+        color: var(--off-folksonomy-text, #fff) !important;
       }
     `,
   ]
