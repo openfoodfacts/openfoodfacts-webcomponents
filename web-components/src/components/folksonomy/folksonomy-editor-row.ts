@@ -419,9 +419,9 @@ export class FolksonomyEditorRow extends LitElement {
       }
       autocomplete-input::part(autocomplete-input-list) {
         position: relative !important;
-        background-color: var(--off-folksonomy-bg, #1e1e24) !important;
-        color: var(--off-folksonomy-text, #fff) !important;
-        border: 1px solid var(--off-folksonomy-border, #444) !important;
+        background-color: var(--off-folksonomy-bg, #fff) !important;
+        color: var(--off-folksonomy-text, #333) !important;
+        border: 1px solid var(--off-folksonomy-border, #ccc) !important;
       }
 
       autocomplete-input::part(autocomplete-input-item) {
