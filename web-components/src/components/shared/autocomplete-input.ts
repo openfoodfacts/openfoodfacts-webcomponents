@@ -63,14 +63,12 @@ export class AutocompleteInput extends LitElement {
         font-style: italic;
         padding: 12px 10px;
       }
-
+      .autocomplete-item.not-found.highlighted {
+        background-color: var(--off-folksonomy-table-header-bg, #d4ebff);
+        font-weight: normal;
+      }
       .autocomplete-item.not-found:hover {
         background-color: var(--off-folksonomy-table-header-bg, #e7f3ff);
-      }
-
-      .autocomplete-input:focus {
-        outline: none;
-        border-color: ${SAFE_BLUE};
       }
     `,
   ]

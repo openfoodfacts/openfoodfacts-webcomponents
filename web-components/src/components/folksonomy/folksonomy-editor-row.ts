@@ -417,12 +417,6 @@ export class FolksonomyEditorRow extends LitElement {
           padding: 0.4rem 0.5rem;
         }
       }
-      autocomplete-input {
-        --off-folksonomy-bg: #1e1e24;
-        --off-folksonomy-text: #fff;
-        --off-folksonomy-border: #444;
-      }
-
       autocomplete-input::part(autocomplete-input-list) {
         position: relative !important;
         background-color: var(--off-folksonomy-bg, #1e1e24) !important;
