@@ -109,6 +109,10 @@ export class RobotoffIngredientDetectionForm extends LitElement {
    */
   @state()
   isEditingIngredients = false
+  @state()
+  isRecropped = false
+  @state()
+  shouldReOcr = true
 
   private imageSize = { height: "500px", width: "100%" }
 
@@ -129,10 +133,10 @@ export class RobotoffIngredientDetectionForm extends LitElement {
     const boundingBox =
       robotoffBoundingBox && this.image
         ? robotoffBoundingBoxToCropImageBoundingBox(
-            robotoffBoundingBox,
-            this.image.naturalWidth,
-            this.image.naturalHeight
-          )
+          robotoffBoundingBox,
+          this.image.naturalWidth,
+          this.image.naturalHeight
+        )
         : { x: 0, y: 0, width: 0, height: 0 }
 
     return boundingBox
@@ -161,6 +165,8 @@ export class RobotoffIngredientDetectionForm extends LitElement {
 
     this.isEditingIngredients = false
     this.cropMode = ZoomableImage.CropMode.CROP_READ
+    this.isRecropped = false
+    this.shouldReOcr = true
     // Set the data from the insight
     this.data = {
       bounding_box: this.insight?.data.bounding_box,
@@ -207,7 +213,7 @@ export class RobotoffIngredientDetectionForm extends LitElement {
             css-classes="button success-button"
             type="submit"
             .loading=${this.loading === AnnotationAnswer.ACCEPT ||
-            this.loading === AnnotationAnswer.ACCEPT_AND_ADD_DATA}
+      this.loading === AnnotationAnswer.ACCEPT_AND_ADD_DATA}
             .disabled=${this.isLoading}
             @click="${() => triggerSubmit(this.form!)}"
             label="${msg("Validate")}"
@@ -257,12 +263,14 @@ export class RobotoffIngredientDetectionForm extends LitElement {
       this.data.annotation !== text ||
       this.data.bounding_box !== bounding_box ||
       this.data.rotation !== rotation
+    this.isRecropped
 
     if (hasChanges) {
       this.answer(AnnotationAnswer.ACCEPT_AND_ADD_DATA, {
         annotation: this.data.annotation ?? text,
         bounding_box: this.data.bounding_box ?? bounding_box,
         rotation: this.data.rotation ?? rotation,
+        ...(this.isRecropped && this.shouldReOcr ? { re_ocr: true } : {}),
       })
     } else {
       this.answer(AnnotationAnswer.ACCEPT)
@@ -333,9 +341,25 @@ export class RobotoffIngredientDetectionForm extends LitElement {
       `
     }
 
+    const reOcrProposalHtml = this.isRecropped
+      ? html`
+          <div style="margin-top: 1rem;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input
+                type="checkbox"
+                .checked="${this.shouldReOcr}"
+                @change="${(e: Event) => (this.shouldReOcr = (e.target as HTMLInputElement).checked)}"
+              />
+              <span>${msg("Propose to re-OCR the ingredients with this new crop")}</span>
+            </label>
+          </div>
+        `
+      : nothing
+
     return html`
       <h3>${msg("Ingredients :")}</h3>
       ${content}
+      ${reOcrProposalHtml}
     `
   }
 
@@ -413,6 +437,7 @@ export class RobotoffIngredientDetectionForm extends LitElement {
     )
 
     this.updateData({ bounding_box: robotoffBoundingBox, rotation: event.detail.rotation })
+    this.isRecropped = true
     this.toggleCropMode()
   }
 
