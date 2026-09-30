@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.3](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.18.2...v1.18.3) (2026-09-30)
+
+
+### Bug Fixes
+
+* **robotoff:** buffer request body to prevent net::ERR_ALPN_NEGOTIATION_FAILED ([#653](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/653)) ([#655](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/655)) ([1dd8205](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/1dd82057c54c5f68f7894621517257a98a75bf88))
+
 ## [1.18.2](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.18.1...v1.18.2) (2026-09-24)
 
 
