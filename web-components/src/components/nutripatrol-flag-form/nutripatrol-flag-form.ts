@@ -427,86 +427,78 @@ export class NutriPatrolFlagForm extends LitElement {
         </div>
 
         <div class="modal-body">
-          ${
-            this.success
-              ? html`
-                  <div class="message success">
-                    ${msg("Thank you for reporting. Your flag has been submitted successfully.")}
+          ${this.success
+            ? html`
+                <div class="message success">
+                  ${msg("Thank you for reporting. Your flag has been submitted successfully.")}
+                </div>
+              `
+            : html`
+                <form @submit=${this.handleSubmit}>
+                  ${this.type === "image" && this.url
+                    ? html`
+                        <div class="form-group image-preview">
+                          <img
+                            src=${this.url}
+                            alt=${msg("Image to flag")}
+                            style="max-width: 100%; max-height: 200px; object-fit: contain; border: 1px solid #e0e0e0; border-radius: 4px;"
+                          />
+                        </div>
+                      `
+                    : nothing}
+                  ${this.barcode && this.type !== "search"
+                    ? html`
+                        <div class="form-group">
+                          <label for="barcode">${msg("Barcode")} *</label>
+                          <input type="text" id="barcode" .value=${this.barcode} disabled />
+                        </div>
+                      `
+                    : nothing}
+                  ${this.type === "image" && this.imageId
+                    ? html`
+                        <div class="form-group">
+                          <label for="image-id">${msg("Image ID")} *</label>
+                          <input type="text" id="image-id" .value=${this.imageId} disabled />
+                        </div>
+                      `
+                    : nothing}
+
+                  <div class="form-group">
+                    <label for="reason">${msg("Reason")} *</label>
+                    <select
+                      id="reason"
+                      .value=${this.reason}
+                      @change=${(e: Event) => (this.reason = (e.target as HTMLSelectElement).value)}
+                      required
+                    >
+                      ${this.reasonOptions.map(
+                        (opt) => html`
+                          <option value="${opt.value}" ?selected=${this.reason === opt.value}>
+                            ${opt.label}
+                          </option>
+                        `
+                      )}
+                    </select>
                   </div>
-                `
-              : html`
-                  <form @submit=${this.handleSubmit}>
-                    ${
-                      this.type === "image" && this.url
-                        ? html`
-                            <div class="form-group image-preview">
-                              <img
-                                src=${this.url}
-                                alt=${msg("Image to flag")}
-                                style="max-width: 100%; max-height: 200px; object-fit: contain; border: 1px solid #e0e0e0; border-radius: 4px;"
-                              />
-                            </div>
-                          `
-                        : nothing
-                    }
-                    ${
-                      this.barcode && this.type !== "search"
-                        ? html`
-                            <div class="form-group">
-                              <label for="barcode">${msg("Barcode")} *</label>
-                              <input type="text" id="barcode" .value=${this.barcode} disabled />
-                            </div>
-                          `
-                        : nothing
-                    }
-                    ${
-                      this.type === "image" && this.imageId
-                        ? html`
-                            <div class="form-group">
-                              <label for="image-id">${msg("Image ID")} *</label>
-                              <input type="text" id="image-id" .value=${this.imageId} disabled />
-                            </div>
-                          `
-                        : nothing
-                    }
 
-                    <div class="form-group">
-                      <label for="reason">${msg("Reason")} *</label>
-                      <select
-                        id="reason"
-                        .value=${this.reason}
-                        @change=${(e: Event) => (this.reason = (e.target as HTMLSelectElement).value)}
-                        required
-                      >
-                        ${this.reasonOptions.map(
-                          (opt) => html`
-                            <option value="${opt.value}" ?selected=${this.reason === opt.value}>
-                              ${opt.label}
-                            </option>
-                          `
-                        )}
-                      </select>
-                    </div>
+                  <div class="form-group">
+                    <label for="comment">${msg("Comment")}</label>
+                    <textarea
+                      id="comment"
+                      .value=${this.comment}
+                      @input=${(e: Event) =>
+                        (this.comment = (e.target as HTMLTextAreaElement).value)}
+                      placeholder=${msg("Optional details")}
+                    ></textarea>
+                  </div>
 
-                    <div class="form-group">
-                      <label for="comment">${msg("Comment")}</label>
-                      <textarea
-                        id="comment"
-                        .value=${this.comment}
-                        @input=${(e: Event) =>
-                          (this.comment = (e.target as HTMLTextAreaElement).value)}
-                        placeholder=${msg("Optional details")}
-                      ></textarea>
-                    </div>
+                  ${this.error ? html`<div class="message error">${this.error}</div>` : nothing}
 
-                    ${this.error ? html`<div class="message error">${this.error}</div>` : nothing}
-
-                    <button type="submit" class="submit-btn" ?disabled=${this.loading}>
-                      ${this.loading ? msg("Submitting...") : this.submitLabel}
-                    </button>
-                  </form>
-                `
-          }
+                  <button type="submit" class="submit-btn" ?disabled=${this.loading}>
+                    ${this.loading ? msg("Submitting...") : this.submitLabel}
+                  </button>
+                </form>
+              `}
         </div>
       </dialog>
     `

@@ -511,50 +511,44 @@ export class ProductCard extends LitElement {
 
     return html`
       <div class=${classMap(cardClasses)}>
-        ${
-          this.showMatchTag
-            ? html`<div class="match-tag ${matchTagInfo.cssClass}">${matchTagInfo.text}</div>`
-            : nothing
-        }
+        ${this.showMatchTag
+          ? html`<div class="match-tag ${matchTagInfo.cssClass}">${matchTagInfo.text}</div>`
+          : nothing}
         <div class="card-content">
           <div class="image-container" aria-busy=${this.imageLoading}>
-            ${
-              isNavigatingToProduct
+            ${isNavigatingToProduct
+              ? html`
+                  <div class="loading-container">
+                    <span class="loading-ring"></span>
+                  </div>
+                `
+              : shouldShowProductImage
                 ? html`
-                    <div class="loading-container">
-                      <span class="loading-ring"></span>
+                    <div class="image-wrapper">
+                      ${this.imageLoading
+                        ? html`<span class="loading-ring" aria-hidden="true"></span>`
+                        : nothing}
+                      <img
+                        src=${this.product.image_front_small_url}
+                        class=${classMap({
+                          "product-image": true,
+                          "image-loading": this.imageLoading,
+                        })}
+                        alt="Product front"
+                        @load=${this.handleImageLoad}
+                        @error=${this.handleImageError}
+                      />
                     </div>
                   `
-                : shouldShowProductImage
-                  ? html`
-                      <div class="image-wrapper">
-                        ${
-                          this.imageLoading
-                            ? html`<span class="loading-ring" aria-hidden="true"></span>`
-                            : nothing
-                        }
-                        <img
-                          src=${this.product.image_front_small_url}
-                          class=${classMap({
-                            "product-image": true,
-                            "image-loading": this.imageLoading,
-                          })}
-                          alt="Product front"
-                          @load=${this.handleImageLoad}
-                          @error=${this.handleImageError}
-                        />
-                      </div>
-                    `
-                  : html`
-                      <div class="placeholder-container">
-                        <img
-                          src=${this.placeholderImage}
-                          class="placeholder-image"
-                          alt="Product front"
-                        />
-                      </div>
-                    `
-            }
+                : html`
+                    <div class="placeholder-container">
+                      <img
+                        src=${this.placeholderImage}
+                        class="placeholder-image"
+                        alt="Product front"
+                      />
+                    </div>
+                  `}
           </div>
           <div class="content-container">
             <div
@@ -568,23 +562,21 @@ export class ProductCard extends LitElement {
               <p title="${brandQuantityStr}">${brandQuantityStr}</p>
             </div>
 
-            ${
-              this.product.product_type === "food"
-                ? html`
-                    <div class="scores-container">
-                      <div class="score-item">
-                        <img src=${this.nutriscoreSrc} alt="nutriscore" class="score-image" />
-                      </div>
-                      <div class="score-item">
-                        <img src=${this.novaSrc} alt="nova" class="score-image" />
-                      </div>
-                      <div class="score-item">
-                        <img src=${this.greenscoreSrc} alt="greenscore" class="score-image" />
-                      </div>
+            ${this.product.product_type === "food"
+              ? html`
+                  <div class="scores-container">
+                    <div class="score-item">
+                      <img src=${this.nutriscoreSrc} alt="nutriscore" class="score-image" />
                     </div>
-                  `
-                : nothing
-            }
+                    <div class="score-item">
+                      <img src=${this.novaSrc} alt="nova" class="score-image" />
+                    </div>
+                    <div class="score-item">
+                      <img src=${this.greenscoreSrc} alt="greenscore" class="score-image" />
+                    </div>
+                  </div>
+                `
+              : nothing}
           </div>
         </div>
       </div>
