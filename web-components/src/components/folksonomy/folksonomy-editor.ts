@@ -302,24 +302,20 @@ export class FolksonomyEditor extends LitElement {
                 page-type=${this.viewOnly ? "view" : this.pageType}
               ></folksonomy-editor-row>`
           )}
-          ${
-            this.pageType == "edit" && !this.viewOnly
-              ? html`<folksonomy-editor-row
-                  product-code=${this.productCode}
-                  page-type=${this.pageType}
-                  row-number=${this.properties.length + 1}
-                  empty
-                ></folksonomy-editor-row>`
-              : null
-          }
+          ${this.pageType == "edit" && !this.viewOnly
+            ? html`<folksonomy-editor-row
+                product-code=${this.productCode}
+                page-type=${this.pageType}
+                row-number=${this.properties.length + 1}
+                empty
+              ></folksonomy-editor-row>`
+            : null}
         </table>
-        ${
-          this.viewOnly
-            ? html`<p class="login-message">
-                ${msg(html`Please <a href="${this.loginUrl}">log in</a> to edit or add properties.`)}
-              </p>`
-            : null
-        }
+        ${this.viewOnly
+          ? html`<p class="login-message">
+              ${msg(html`Please <a href="${this.loginUrl}">log in</a> to edit or add properties.`)}
+            </p>`
+          : null}
       </form>
     `
   }
