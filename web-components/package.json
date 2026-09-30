@@ -21,14 +21,14 @@
     "dist"
   ],
   "scripts": {
-    "build": "MODE=prod npm run translations:build && vite build",
+    "build": "npm run translations:build && vite build",
     "build:watch": "vite build --watch",
     "build:doc": "npm run translations:build && npm run analyze && npm x storybook build",
     "clean": "rimraf dist && rimraf my-element.{d.ts,d.ts.map,js,js.map} test/my-element.{d.ts,d.ts.map,js,js.map} test/my-element_test.{d.ts,d.ts.map,js,js.map}",
     "lint": "npm run lint:eslint",
     "lint:eslint": "eslint --config eslint.config.js",
     "lint:eslint:fix": "eslint --config eslint.config.js --fix",
-    "translations:update-language-codes": "NODE_PATH=. node scripts/update-language-codes.js",
+    "translations:update-language-codes": "node scripts/update-language-codes.js",
     "translations:build": "lit-localize build && node scripts/fix-locale-strings.js",
     "translations:extract": "npm run translations:update-language-codes && lit-localize extract",
     "format": "prettier \"**/*.{cjs,html,js,json,md,ts}\" --ignore-path ./.eslintignore --write",
