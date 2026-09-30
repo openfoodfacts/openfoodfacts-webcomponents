@@ -108,6 +108,9 @@ describe("Robotoff API", () => {
         text: async () => {
           throw new Error("Invalid JSON")
         },
+        json: async () => {
+          throw new Error("Invalid JSON")
+        },
       })
 
       await expect(robotoff.questionsByProductCode("123")).rejects.toThrow("Invalid JSON")
