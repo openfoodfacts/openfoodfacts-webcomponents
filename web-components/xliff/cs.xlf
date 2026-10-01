@@ -804,7 +804,7 @@
       </trans-unit>
       <trans-unit id="s3b3fe4e829af3e8e">
         <source>This action cannot be undone.</source>
-        <target state="needs-translation">This action cannot be undone.</target>
+        <target state="translated">Tuto akci nelze vrátit zpět.</target>
       </trans-unit>
       <trans-unit id="s091d3d07b5b3076f">
         <source>OK</source>
