@@ -80,7 +80,7 @@
     "@vitest/coverage-v8": "^4.1.11",
     "@webcomponents/webcomponentsjs": "^2.8.0",
     "concurrently": "^10.0.3",
-    "dotenv": "^17.4.2",
+    "dotenv": "^18.0.4",
     "eslint": "^9.28.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-lit": "^2.1.1",
