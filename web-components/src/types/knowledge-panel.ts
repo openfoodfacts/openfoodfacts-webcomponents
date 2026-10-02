@@ -79,6 +79,8 @@ export interface TitleElement {
   grade?: string
   icon_url?: string
   icon_size?: "small" | "medium" | "large"
+  /** True when the icon is a monochrome SVG meant to be recoloured by the host */
+  icon_color_from_evaluation?: boolean
   type?: string
 }
 
