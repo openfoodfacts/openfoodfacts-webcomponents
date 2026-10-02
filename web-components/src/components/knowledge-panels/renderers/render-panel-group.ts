@@ -24,7 +24,7 @@ export class PanelGroupElementRenderer extends LitElement {
       font-size: 1.15rem;
       font-weight: 600;
       padding-bottom: 0.5rem;
-      border-bottom: 1px solid #f0f0f0;
+      border-bottom: 1px solid var(--off-kp-border, #f0f0f0);
       text-align: left;
       word-wrap: break-word;
     }
@@ -34,9 +34,9 @@ export class PanelGroupElementRenderer extends LitElement {
       margin-bottom: 1rem;
       border: 1px solid transparent;
       border-radius: 0.25rem;
-      color: #856404;
-      background-color: #fff3cd;
-      border-color: #ffeeba;
+      color: var(--off-kp-warning-text, #856404);
+      background-color: var(--off-kp-warning-bg, #fff3cd);
+      border-color: var(--off-kp-warning-border, #ffeeba);
     }
   `
 

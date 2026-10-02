@@ -20,9 +20,9 @@ export class PanelGroupImageRenderer extends LitElement {
       max-width: 100%;
       height: auto;
       border-radius: 20px;
-      border: 1px solid #efefef;
+      border: 1px solid var(--off-kp-border, #efefef);
       display: block;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 2px 8px var(--off-kp-shadow, rgba(0, 0, 0, 0.04));
     }
 
     .panel-image-text {
@@ -78,9 +78,9 @@ export class ImageRenderer extends LitElement {
       max-width: 100%;
       height: auto;
       border-radius: 20px;
-      border: 1px solid #efefef;
+      border: 1px solid var(--off-kp-border, #efefef);
       display: block;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 2px 8px var(--off-kp-shadow, rgba(0, 0, 0, 0.04));
     }
 
     .panel-image-text {
@@ -138,7 +138,7 @@ export class NutritionImageRenderer extends LitElement {
       max-width: 100%;
       height: auto;
       border-radius: 20px;
-      border: 1px solid #eee;
+      border: 1px solid var(--off-kp-border, #eee);
       display: block;
       margin: 0;
     }
