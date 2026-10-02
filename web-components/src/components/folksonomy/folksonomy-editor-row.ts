@@ -420,6 +420,19 @@ export class FolksonomyEditorRow extends LitElement {
       }
       autocomplete-input::part(autocomplete-input-list) {
         position: relative !important;
+        background-color: var(--off-folksonomy-bg, #fff) !important;
+        color: var(--off-folksonomy-text, #333) !important;
+        border: 1px solid var(--off-folksonomy-border, #ccc) !important;
+      }
+
+      autocomplete-input::part(autocomplete-input-item) {
+        color: var(--off-folksonomy-text, #fff) !important;
+        background-color: transparent !important;
+      }
+
+      autocomplete-input::part(autocomplete-input-item):hover {
+        background-color: var(--off-folksonomy-table-header-bg, #333) !important;
+        color: var(--off-folksonomy-text, #fff) !important;
       }
     `,
   ]
