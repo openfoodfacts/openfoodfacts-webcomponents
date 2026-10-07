@@ -1,0 +1,1 @@
+cd web-components && npx lint-staged

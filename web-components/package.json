@@ -41,7 +41,15 @@
     "dev": "concurrently \"npm run storybook\" \"npm run analyze:watch\"",
     "test": "vitest",
     "storybook": "storybook dev -p 6006",
-    "storybook:build": "storybook build"
+    "storybook:build": "storybook build",
+    "prepare": "cd .. && husky web-components/.husky"
+  },
+  "lint-staged": {
+    "*.{ts,js}": [
+      "eslint --fix --no-warn-ignored",
+      "prettier --write"
+    ],
+    "*.{cjs,mjs,json,md,html,css,yml,yaml}": "prettier --write"
   },
   "keywords": [
     "web-components",
@@ -86,7 +94,9 @@
     "eslint-plugin-lit": "^2.1.1",
     "eslint-plugin-storybook": "^10.5.10",
     "glob": "^11.0.2",
+    "husky": "^9.1.7",
     "jsdom": "^30.0.1",
+    "lint-staged": "^17.6.0",
     "playwright": "^1.55.0",
     "prettier": "^3.5.3",
     "rimraf": "^6.0.1",
