@@ -152,6 +152,13 @@ export class ZoomableImage extends MessageDisplayMixinElement {
   @property({ type: String, attribute: "crop-mode", reflect: true })
   cropMode: CropMode = CropMode.IMAGE_ONLY
 
+  /**
+   * Hide the built-in crop buttons (reset / show / validate),
+   * to let the parent drive the validation with getCropSelection()
+   */
+  @property({ type: Boolean, attribute: "hide-crop-actions" })
+  hideCropActions = false
+
   @property({ type: Object, attribute: "size", reflect: true })
   size: {
     width: string
@@ -506,6 +513,20 @@ export class ZoomableImage extends MessageDisplayMixinElement {
     }
 
     return { x, y, width, height }
+  }
+
+  /**
+   * Gets the current crop selection, in natural image pixels (unrotated frame).
+   * @returns The bounding box and rotation, or null if there is no selection.
+   */
+  getCropSelection(): { boundingBox: CropperImageBoundingBox; rotation: number } | null {
+    if (!this.hasSelection()) {
+      return null
+    }
+    return {
+      boundingBox: this.getBoundingBoxFromSelectionElement(),
+      rotation: this.currentRotation,
+    }
   }
 
   /**
@@ -992,7 +1013,11 @@ export class ZoomableImage extends MessageDisplayMixinElement {
             ${this.renderCropperControls()}
           </cropper-canvas>
         </div>
-        ${this.cropMode === CropMode.CROP ? html` ${this.renderCropMode()} ` : nothing}
+        ${
+          this.cropMode === CropMode.CROP && !this.hideCropActions
+            ? html` ${this.renderCropMode()} `
+            : nothing
+        }
       </div>
     `
   }
