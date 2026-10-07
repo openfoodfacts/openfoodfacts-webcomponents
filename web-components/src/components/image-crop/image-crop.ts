@@ -5,19 +5,19 @@ import "../shared/zoomable-image"
 import { CropMode, type ZoomableImage } from "../shared/zoomable-image"
 import { EventType } from "../../constants"
 import type { CropperImageBoundingBox } from "../../types"
-import type { ImageCropperResult } from "../../types/crops"
+import type { ImageCropResult } from "../../types/crops"
 import { cropImageToBlob, normalizeBoundingBox } from "../../utils/crop"
 
 /**
- * ImageCropper is a generic component to crop (and rotate) an image.
+ * ImageCrop is a generic component to crop (and rotate) an image.
  * The selection can be validated either with the built-in buttons (fires a `crop` event),
  * or by the parent calling `getCrop()` (e.g. from its own "Save" button, with `hide-actions`).
- * @element image-cropper
- * @fires crop - When the user validates the crop with the built-in buttons. Detail: ImageCropperResult
+ * @element image-crop
+ * @fires crop - When the user validates the crop with the built-in buttons. Detail: ImageCropResult
  */
-@customElement("image-cropper")
+@customElement("image-crop")
 @localized()
-export class ImageCropper extends LitElement {
+export class ImageCrop extends LitElement {
   static override styles = css`
     :host {
       display: block;
@@ -71,7 +71,7 @@ export class ImageCropper extends LitElement {
    * Gets the cropped image from the current selection.
    * @returns The crop result, or null if there is no selection.
    */
-  async getCrop(): Promise<ImageCropperResult | null> {
+  async getCrop(): Promise<ImageCropResult | null> {
     const selection = this.zoomableImage?.getCropSelection()
     if (!selection) {
       return null
@@ -85,7 +85,7 @@ export class ImageCropper extends LitElement {
   private async buildResult(
     boundingBox: CropperImageBoundingBox,
     rotation: number
-  ): Promise<ImageCropperResult> {
+  ): Promise<ImageCropResult> {
     const image = this.zoomableImage.imageElement.$image
     const blob = await cropImageToBlob(
       image,
@@ -119,7 +119,7 @@ export class ImageCropper extends LitElement {
     }
     const result = await this.buildResult(newBoundingBox, rotation)
     this.dispatchEvent(
-      new CustomEvent<ImageCropperResult>(EventType.CROP, {
+      new CustomEvent<ImageCropResult>(EventType.CROP, {
         detail: result,
         bubbles: true,
         composed: true,
@@ -143,6 +143,6 @@ export class ImageCropper extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "image-cropper": ImageCropper
+    "image-crop": ImageCrop
   }
 }

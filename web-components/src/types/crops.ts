@@ -13,9 +13,9 @@ export type NormalizedBoundingBox = {
 }
 
 /**
- * Result of the image-cropper component.
+ * Result of the image-crop component.
  */
-export type ImageCropperResult = {
+export type ImageCropResult = {
   // the cropped (and rotated) image
   blob: Blob
   // the crop area, in natural image pixels (unrotated frame)

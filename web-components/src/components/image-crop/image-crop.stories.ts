@@ -1,13 +1,13 @@
-import "./image-cropper"
+import "./image-crop"
 
 import { html } from "lit"
 import type { Meta, StoryObj } from "@storybook/web-components-vite"
-import type { ImageCropper } from "./image-cropper"
-import type { ImageCropperResult } from "../../types/crops"
+import type { ImageCrop } from "./image-crop"
+import type { ImageCropResult } from "../../types/crops"
 
 const SAMPLE_IMAGE = "https://images.openfoodfacts.org/images/products/301/762/042/2003/1.jpg"
 
-const showResult = (story: HTMLElement, result: ImageCropperResult | null) => {
+const showResult = (story: HTMLElement, result: ImageCropResult | null) => {
   const output = story.querySelector("#crop-output")!
   if (!result) {
     output.textContent = "No selection"
@@ -27,8 +27,8 @@ const showResult = (story: HTMLElement, result: ImageCropperResult | null) => {
 }
 
 const meta: Meta = {
-  title: "Components/Image Cropper",
-  component: "image-cropper",
+  title: "Components/Image Crop",
+  component: "image-crop",
   args: {
     src: SAMPLE_IMAGE,
     "show-buttons": true,
@@ -44,12 +44,12 @@ type Story = StoryObj
 export const Basic: Story = {
   render: (args) => html`
     <div>
-      <image-cropper
+      <image-crop
         src=${args.src}
         ?show-buttons=${args["show-buttons"]}
-        @crop=${(event: CustomEvent<ImageCropperResult>) =>
+        @crop=${(event: CustomEvent<ImageCropResult>) =>
           showResult((event.target as HTMLElement).parentElement!, event.detail)}
-      ></image-cropper>
+      ></image-crop>
       <div id="crop-output"></div>
     </div>
   `,
@@ -61,15 +61,11 @@ export const Basic: Story = {
 export const HiddenActions: Story = {
   render: (args) => html`
     <div>
-      <image-cropper
-        src=${args.src}
-        ?show-buttons=${args["show-buttons"]}
-        hide-actions
-      ></image-cropper>
+      <image-crop src=${args.src} ?show-buttons=${args["show-buttons"]} hide-actions></image-crop>
       <button
         @click=${async (event: Event) => {
           const story = (event.target as HTMLElement).parentElement!
-          const cropper = story.querySelector("image-cropper") as ImageCropper
+          const cropper = story.querySelector("image-crop") as ImageCrop
           showResult(story, await cropper.getCrop())
         }}
       >
