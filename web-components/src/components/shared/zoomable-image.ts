@@ -30,6 +30,8 @@ export enum CropMode {
   CROP_READ = "crop-read",
   // redefining the crop
   CROP = "crop",
+  // drawing multiple boxes to hide (no rotation)
+  REDACT = "redact",
 }
 
 const MessageDisplayMixinElement = MessageDisplayMixin(LitElement)
@@ -77,6 +79,14 @@ export class ZoomableImage extends MessageDisplayMixinElement {
       }
       .crop-result-buttons {
         margin-top: 0.5rem;
+      }
+
+      /* REDACT mode: boxes are plain black, the active one lets the image show through */
+      cropper-selection[multiple] {
+        background-color: black;
+      }
+      cropper-selection[multiple][active] {
+        background-color: rgba(0, 0, 0, 0.6);
       }
 
       .toolbar .checkbox {
@@ -158,6 +168,20 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    */
   @property({ type: Boolean, attribute: "hide-crop-actions" })
   hideCropActions = false
+
+  // REDACT mode: a re-sync of the boxes with the image is scheduled
+  private pendingRedactSync = false
+
+  // REDACT mode: skip the "inside the image" check when we move the boxes ourselves
+  private isMovingSelectionsProgrammatically = false
+
+  // REDACT mode: current canvas action (e.g. "select" when drawing), and whether the pointer moved
+  private redactAction = ""
+  private redactActionMoved = false
+
+  // REDACT mode: watches the boxes to tell the parent if one is selected
+  private redactSelectionObserver = new MutationObserver(() => this.notifyRedactSelectionChange())
+  private lastRedactSelectionState = ""
 
   @property({ type: Object, attribute: "size", reflect: true })
   size: {
@@ -246,6 +270,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
     // firstUpdated() is only called once; reconnecting needs to restore the listener.
     if (this.canvasElement) {
       this.initZoomLimit()
+      this.observeRedactSelections()
     }
   }
 
@@ -255,6 +280,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    */
   override disconnectedCallback(): void {
     this.canvasElement?.removeEventListener("action", this.handleCropperCanvasAction)
+    this.redactSelectionObserver.disconnect()
     super.disconnectedCallback()
   }
 
@@ -290,6 +316,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
     CropperShade.$define()
 
     this.initZoomLimit()
+    this.observeRedactSelections()
     // Reset the rotation when the image is ready to be displayed
     this.imageElement.$ready(() => {
       this.resetRotatation()
@@ -448,17 +475,18 @@ export class ZoomableImage extends MessageDisplayMixinElement {
 
   /**
    * Gets the bounding box from the selection element.
+   * @param selection - The selection element (defaults to the main one).
    * @returns The bounding box coordinates.
    */
-  getBoundingBoxFromSelectionElement() {
+  getBoundingBoxFromSelectionElement(selection: CropperSelection = this.selectionElement) {
     const { x: offsetX, y: offsetY } = this.getOffset()
     const scale = this.getScale()
 
     // Get the selection coordinates relative to the image
-    let x = (this.selectionElement.x - offsetX) / scale
-    let y = (this.selectionElement.y - offsetY) / scale
-    let width = this.selectionElement.width / scale
-    let height = this.selectionElement.height / scale
+    let x = (selection.x - offsetX) / scale
+    let y = (selection.y - offsetY) / scale
+    let width = selection.width / scale
+    let height = selection.height / scale
 
     // Handle rotation if the image is rotated
     if (this.currentRotation !== 0) {
@@ -527,6 +555,194 @@ export class ZoomableImage extends MessageDisplayMixinElement {
       boundingBox: this.getBoundingBoxFromSelectionElement(),
       rotation: this.currentRotation,
     }
+  }
+
+  /**
+   * Gets all the visible (non-empty) selection elements.
+   * In REDACT mode, cropperjs creates a new selection element for each box drawn.
+   */
+  getVisibleSelectionElements(): CropperSelection[] {
+    const selections = Array.from(
+      this.renderRoot.querySelectorAll<CropperSelection>("cropper-selection")
+    )
+    return selections.filter(
+      (selection) => !selection.hidden && selection.width > 0 && selection.height > 0
+    )
+  }
+
+  /**
+   * Gets the redact boxes, in natural image pixels.
+   * @returns The bounding boxes.
+   */
+  getRedactBoxes(): CropperImageBoundingBox[] {
+    return this.getVisibleSelectionElements().map((selection) =>
+      this.getBoundingBoxFromSelectionElement(selection)
+    )
+  }
+
+  /**
+   * Replaces the redact boxes.
+   * @param boxes - The bounding boxes, in natural image pixels.
+   */
+  setRedactBoxes(boxes: CropperImageBoundingBox[]) {
+    this.clearRedactBoxes()
+    let selection = this.selectionElement
+    boxes.forEach((box, index) => {
+      if (index > 0) {
+        // the new selection is inserted right after the given one
+        selection = (
+          selection as unknown as { $createSelection(): CropperSelection }
+        ).$createSelection()
+      }
+      this.moveSelectionToImageBoundingBox(selection, box)
+    })
+    // start with no box selected (after cropperjs activated the last created one, on its next tick)
+    requestAnimationFrame(() => this.unselectRedactBoxes())
+  }
+
+  /**
+   * Removes the active redact box (the one the user clicked on).
+   */
+  removeActiveRedactBox() {
+    const activeSelection = this.getVisibleSelectionElements().find((selection) => selection.active)
+    if (!activeSelection) {
+      return
+    }
+    // removes the element, or clears it if it is the last one
+    ;(activeSelection as unknown as { $removeSelection(): void }).$removeSelection()
+    // cropperjs selects the next box: unselect it, to avoid removing it by mistake
+    this.unselectRedactBoxes()
+  }
+
+  /**
+   * Unselects all the redact boxes.
+   */
+  unselectRedactBoxes() {
+    this.renderRoot.querySelectorAll<CropperSelection>("cropper-selection").forEach((selection) => {
+      selection.active = false
+    })
+  }
+
+  /**
+   * Starts watching the boxes (added, removed, selected...).
+   */
+  private observeRedactSelections() {
+    this.redactSelectionObserver.observe(this.canvasElement, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["active", "hidden"],
+    })
+  }
+
+  /**
+   * Tells the parent how many boxes there are, and if one is selected.
+   * @fires redact-selection-change
+   */
+  private notifyRedactSelectionChange() {
+    if (this.cropMode !== CropMode.REDACT) {
+      return
+    }
+    const selections = this.getVisibleSelectionElements()
+    const detail = {
+      boxCount: selections.length,
+      hasSelectedBox: selections.some((selection) => selection.active),
+    }
+    const state = JSON.stringify(detail)
+    if (state === this.lastRedactSelectionState) {
+      return
+    }
+    this.lastRedactSelectionState = state
+    this.dispatchEvent(new CustomEvent(EventType.REDACT_SELECTION_CHANGE, { detail }))
+  }
+
+  /**
+   * REDACT mode: cropperjs only draws a new box from an active (selected) one.
+   * When the user starts drawing while no box is selected, select one behind the scenes.
+   * @param event - The canvas actionstart event.
+   */
+  onRedactActionStart(event: CustomEvent<{ action: string }>) {
+    if (this.cropMode !== CropMode.REDACT) {
+      return
+    }
+    this.redactAction = event.detail.action
+    this.redactActionMoved = false
+    if (this.redactAction !== "select") {
+      return
+    }
+    const selections = Array.from(
+      this.renderRoot.querySelectorAll<CropperSelection>("cropper-selection")
+    )
+    if (!selections.some((selection) => selection.active)) {
+      selections[selections.length - 1].active = true
+    }
+  }
+
+  onRedactAction() {
+    this.redactActionMoved = true
+  }
+
+  /**
+   * REDACT mode: a click (without moving) outside of the boxes unselects them.
+   */
+  onRedactActionEnd() {
+    if (this.cropMode !== CropMode.REDACT) {
+      return
+    }
+    if (this.redactAction === "select" && !this.redactActionMoved) {
+      this.unselectRedactBoxes()
+    }
+    this.redactAction = ""
+  }
+
+  /**
+   * Removes all the redact boxes.
+   */
+  clearRedactBoxes() {
+    const selections = Array.from(
+      this.renderRoot.querySelectorAll<CropperSelection>("cropper-selection")
+    )
+    selections.slice(1).forEach((selection) => selection.remove())
+    selections[0]?.$clear()
+  }
+
+  /**
+   * Moves a selection element over a bounding box of the image.
+   * @param selection - The selection element.
+   * @param box - The bounding box, in natural image pixels.
+   */
+  private moveSelectionToImageBoundingBox(
+    selection: CropperSelection,
+    box: CropperImageBoundingBox
+  ) {
+    const { x, y, width, height } = this.getBoundingBoxDependOnImageSize(box)!
+    this.isMovingSelectionsProgrammatically = true
+    selection.$change(x, y, width, height)
+    this.isMovingSelectionsProgrammatically = false
+  }
+
+  /**
+   * In REDACT mode, keeps the boxes over the same part of the image when it is zoomed or moved.
+   * The transform event is fired before the image moves: we save the boxes (image pixels)
+   * and move the selections back over them once the new transform is applied.
+   */
+  private syncRedactBoxesWithImageTransform() {
+    if (this.pendingRedactSync) {
+      // keep the boxes saved before the first of the batched transforms
+      return
+    }
+    const selections = this.getVisibleSelectionElements()
+    if (!selections.length) {
+      return
+    }
+    const boxes = selections.map((selection) => this.getBoundingBoxFromSelectionElement(selection))
+    this.pendingRedactSync = true
+    requestAnimationFrame(() => {
+      this.pendingRedactSync = false
+      selections.forEach((selection, index) => {
+        this.moveSelectionToImageBoundingBox(selection, boxes[index])
+      })
+    })
   }
 
   /**
@@ -697,20 +913,23 @@ export class ZoomableImage extends MessageDisplayMixinElement {
 
   /**
    * Gets the bounding box depending on the image size.
+   * @param imageBoundingBox - The bounding box in image pixels (defaults to the boundingBox property).
    * @returns The bounding box coordinates.
    */
-  getBoundingBoxDependOnImageSize() {
+  getBoundingBoxDependOnImageSize(
+    imageBoundingBox: CropperImageBoundingBox | undefined = this.boundingBox
+  ) {
     const image = this.imageElement?.$image
-    if (!this.boundingBox) {
+    if (!imageBoundingBox) {
       console.error("No bounding box")
     }
     if (!image) {
-      return this.boundingBox
+      return imageBoundingBox
     }
     const { x: offsetX, y: offsetY } = this.getOffset()
     const scale = this.getScale()
 
-    let boundingBox = { ...this.boundingBox! }
+    let boundingBox = { ...imageBoundingBox! }
 
     // Handle rotation - transform the bounding box coordinates
     if (this.currentRotation !== 0) {
@@ -767,6 +986,40 @@ export class ZoomableImage extends MessageDisplayMixinElement {
           aria-label=${msg("Selection area")}
         >
           <cropper-handle action="move" plain aria-label=${msg("Move selection")}></cropper-handle>
+        </cropper-selection>
+      `
+    } else if (this.cropMode === CropMode.REDACT) {
+      // multiple selections: cropperjs clones this element for each new box,
+      // (the clones don't get the Lit listeners: the change event is handled on the canvas)
+      // - not "dynamic": dragging must move the box, not the image (boxes follow the image via syncRedactBoxesWithImageTransform)
+      // - action="move": a single drag on an inactive box selects it and moves it
+      return html`
+        <cropper-handle action="select" plain aria-label=${msg("Select area")}></cropper-handle>
+        <cropper-selection
+          action="move"
+          multiple
+          keyboard
+          precise
+          movable
+          resizable
+          hidden
+          aria-label=${msg("Area to hide")}
+        >
+          <cropper-handle action="move" plain aria-label=${msg("Move selection")}></cropper-handle>
+          <cropper-handle action="n-resize" aria-label=${msg("Resize top")}></cropper-handle>
+          <cropper-handle action="e-resize" aria-label=${msg("Resize right")}></cropper-handle>
+          <cropper-handle action="s-resize" aria-label=${msg("Resize bottom")}></cropper-handle>
+          <cropper-handle action="w-resize" aria-label=${msg("Resize left")}></cropper-handle>
+          <cropper-handle action="ne-resize" aria-label=${msg("Resize top right")}></cropper-handle>
+          <cropper-handle action="nw-resize" aria-label=${msg("Resize top left")}></cropper-handle>
+          <cropper-handle
+            action="se-resize"
+            aria-label=${msg("Resize bottom right")}
+          ></cropper-handle>
+          <cropper-handle
+            action="sw-resize"
+            aria-label=${msg("Resize bottom left")}
+          ></cropper-handle>
         </cropper-selection>
       `
     }
@@ -829,6 +1082,10 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    * @param event - The transform event.
    */
   onCropperImageTransform(event: CustomEvent<{ matrix: number[] }>) {
+    if (this.cropMode === CropMode.REDACT) {
+      this.syncRedactBoxesWithImageTransform()
+      return
+    }
     // If the crop mode is not CROP and you have a selection, you need to update the selection.
     if (this.cropMode !== CropMode.CROP) {
       return
@@ -879,7 +1136,10 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    * @param event - The selection change event.
    */
   onCropperSelectionChange(event: CustomEvent) {
-    if (this.cropMode !== CropMode.CROP) {
+    if (this.cropMode !== CropMode.CROP && this.cropMode !== CropMode.REDACT) {
+      return
+    }
+    if (this.isMovingSelectionsProgrammatically) {
       return
     }
     const cropperCanvas = this.canvasElement
@@ -903,6 +1163,23 @@ export class ZoomableImage extends MessageDisplayMixinElement {
     if (!this.inSelection(selection, maxSelection)) {
       event.preventDefault()
     }
+  }
+
+  /**
+   * Handles the change events bubbling from the selections to the canvas.
+   * Only used in REDACT mode, where most selections are created by cropperjs (without listeners).
+   * @param event - The selection change event.
+   */
+  onCropperCanvasSelectionChange(event: CustomEvent) {
+    if (this.cropMode !== CropMode.REDACT || !(event.target instanceof CropperSelection)) {
+      return
+    }
+    const { width, height } = event.detail as Selection
+    if (width === 0 && height === 0) {
+      // the selection is being cleared (e.g. last box removed)
+      return
+    }
+    this.onCropperSelectionChange(event)
   }
 
   /**
@@ -940,7 +1217,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
     return html`
       <div class="toolbar flex justify-end" role="toolbar" aria-label=${msg("Image controls")}>
         ${this.renderMobileCanvasToggle()} ${this.renderCenterButton()}
-        ${this.renderRotateButtons()}
+        ${this.cropMode !== CropMode.REDACT ? this.renderRotateButtons() : nothing}
       </div>
     `
   }
@@ -999,6 +1276,10 @@ export class ZoomableImage extends MessageDisplayMixinElement {
             scale-step=${this.scaleStep}
             aria-label=${msg("Image canvas")}
             ?disabled=${this.isCanvasDisabled}
+            @change=${this.onCropperCanvasSelectionChange}
+            @actionstart=${this.onRedactActionStart}
+            @action=${this.onRedactAction}
+            @actionend=${this.onRedactActionEnd}
           >
             <cropper-image
               src=${this.src}
