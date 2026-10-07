@@ -1,5 +1,10 @@
 import { describe, it, expect } from "vitest"
-import { cropImageToBlob, denormalizeBoundingBox, getRotatedSize, normalizeBoundingBox } from "./crop"
+import {
+  cropImageToBlob,
+  denormalizeBoundingBox,
+  getRotatedSize,
+  normalizeBoundingBox,
+} from "./crop"
 
 describe("crop utils", () => {
   describe("getRotatedSize", () => {
