@@ -39,6 +39,8 @@ updates:
           - "typescript*"
           - "@vitest*"
           - "vitest*"
+          - "@storybook/*"
+          - "storybook"
         update-types:
           - "minor"
           - "patch"
