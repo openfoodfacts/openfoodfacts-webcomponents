@@ -15,6 +15,7 @@ import { denormalizeBoundingBox, normalizeBoundingBox, redactImageToBlob } from 
  * (fires a `redact` event), or by the parent calling `getRedaction()` (e.g. with `hide-actions`).
  * @element image-redact
  * @fires redact - When the user validates with the built-in button. Detail: ImageRedactResult
+ * @fires redact-error - When the redaction validated with the built-in button could not be generated. Detail: { error }
  */
 @customElement("image-redact")
 @localized()
@@ -90,6 +91,8 @@ export class ImageRedact extends LitElement {
   @state()
   private hasSelectedBox = false
 
+  private loadToken = 0
+
   private onSelectionChange(event: CustomEvent<{ boxCount: number; hasSelectedBox: boolean }>) {
     this.boxCount = event.detail.boxCount
     this.hasSelectedBox = event.detail.hasSelectedBox
@@ -105,6 +108,8 @@ export class ImageRedact extends LitElement {
    * Draws the initial boxes, once the image is loaded and displayed.
    */
   private async loadInitialBoxes() {
+    // src & boxes can change in separate updates: only the latest load applies its boxes
+    const loadToken = ++this.loadToken
     await this.zoomableImage.updateComplete
     const imageElement = this.zoomableImage.imageElement
     if (!imageElement || !this.src) {
@@ -113,6 +118,9 @@ export class ImageRedact extends LitElement {
     const image = await imageElement.$ready()
     // wait for the image to be centered in the canvas
     await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+    if (loadToken !== this.loadToken) {
+      return
+    }
     this.zoomableImage.setRedactBoxes(
       this.boxes.map((box) => denormalizeBoundingBox(box, image.naturalWidth, image.naturalHeight))
     )
@@ -124,6 +132,9 @@ export class ImageRedact extends LitElement {
    */
   async getRedaction(): Promise<ImageRedactResult> {
     const image = this.zoomableImage.imageElement.$image
+    if (!image?.naturalWidth || !image?.naturalHeight) {
+      throw new Error("Image is not loaded")
+    }
     const boxes = this.zoomableImage.getRedactBoxes()
     const blob = await redactImageToBlob(image, boxes, this.outputType, this.outputQuality)
     return {
@@ -136,7 +147,20 @@ export class ImageRedact extends LitElement {
   }
 
   private async onValidate() {
-    const result = await this.getRedaction()
+    let result: ImageRedactResult
+    try {
+      result = await this.getRedaction()
+    } catch (error) {
+      // e.g. image not loaded yet, or canvas export failure: let the parent show some feedback
+      this.dispatchEvent(
+        new CustomEvent<{ error: unknown }>(EventType.REDACT_ERROR, {
+          detail: { error },
+          bubbles: true,
+          composed: true,
+        })
+      )
+      return
+    }
     this.dispatchEvent(
       new CustomEvent<ImageRedactResult>(EventType.REDACT, {
         detail: result,

@@ -597,7 +597,12 @@ export class ZoomableImage extends MessageDisplayMixinElement {
       this.moveSelectionToImageBoundingBox(selection, box)
     })
     // start with no box selected (after cropperjs activated the last created one, on its next tick)
-    requestAnimationFrame(() => this.unselectRedactBoxes())
+    requestAnimationFrame(() => {
+      // unless the user already started drawing / moving a box
+      if (!this.redactAction) {
+        this.unselectRedactBoxes()
+      }
+    })
   }
 
   /**
@@ -673,8 +678,9 @@ export class ZoomableImage extends MessageDisplayMixinElement {
     const selections = Array.from(
       this.renderRoot.querySelectorAll<CropperSelection>("cropper-selection")
     )
-    if (!selections.some((selection) => selection.active)) {
-      selections[selections.length - 1].active = true
+    const lastSelection = selections[selections.length - 1]
+    if (lastSelection && !selections.some((selection) => selection.active)) {
+      lastSelection.active = true
     }
   }
 

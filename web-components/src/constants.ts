@@ -18,6 +18,7 @@ export enum EventType {
   CROP = "crop",
   CROP_ERROR = "crop-error",
   REDACT = "redact",
+  REDACT_ERROR = "redact-error",
   REDACT_SELECTION_CHANGE = "redact-selection-change",
   REFUSE = "refuse",
   SKIP = "skip",
