@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { getRotatedSize, normalizeBoundingBox } from "./crop"
+import { cropImageToBlob, getRotatedSize, normalizeBoundingBox } from "./crop"
 
 describe("crop utils", () => {
   describe("getRotatedSize", () => {
@@ -33,6 +33,18 @@ describe("crop utils", () => {
         x_max: 1,
         y_max: 1,
       })
+    })
+  })
+
+  describe("cropImageToBlob", () => {
+    it("should reject a crop area smaller than 1 image pixel", async () => {
+      const image = document.createElement("img")
+      await expect(
+        cropImageToBlob(image, { x: 10, y: 10, width: 0.4, height: 50 })
+      ).rejects.toThrow("Crop area is too small")
+      await expect(
+        cropImageToBlob(image, { x: 10, y: 10, width: 50, height: 0.2 })
+      ).rejects.toThrow("Crop area is too small")
     })
   })
 })

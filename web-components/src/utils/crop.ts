@@ -100,6 +100,10 @@ export const cropImageToBlob = (
   const y = Math.round(boundingBox.y)
   const width = Math.round(boundingBox.width)
   const height = Math.round(boundingBox.height)
+  if (width < 1 || height < 1) {
+    // a selection smaller than 1 image pixel would give an empty canvas (toBlob returns null)
+    return Promise.reject(new Error("Crop area is too small"))
+  }
   const outputSize = getRotatedSize(width, height, rotation)
 
   const canvas = document.createElement("canvas")

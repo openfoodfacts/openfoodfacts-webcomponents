@@ -14,6 +14,7 @@ import { cropImageToBlob, normalizeBoundingBox } from "../../utils/crop"
  * or by the parent calling `getCrop()` (e.g. from its own "Save" button, with `hide-actions`).
  * @element image-crop
  * @fires crop - When the user validates the crop with the built-in buttons. Detail: ImageCropResult
+ * @fires crop-error - When the crop validated with the built-in buttons could not be generated. Detail: { error }
  */
 @customElement("image-crop")
 @localized()
@@ -117,7 +118,20 @@ export class ImageCrop extends LitElement {
     if (!newBoundingBox) {
       return
     }
-    const result = await this.buildResult(newBoundingBox, rotation)
+    let result: ImageCropResult
+    try {
+      result = await this.buildResult(newBoundingBox, rotation)
+    } catch (error) {
+      // e.g. crop area too small, or canvas export failure: let the parent show some feedback
+      this.dispatchEvent(
+        new CustomEvent<{ error: unknown }>(EventType.CROP_ERROR, {
+          detail: { error },
+          bubbles: true,
+          composed: true,
+        })
+      )
+      return
+    }
     this.dispatchEvent(
       new CustomEvent<ImageCropResult>(EventType.CROP, {
         detail: result,

@@ -16,6 +16,7 @@ export enum EventType {
   SAVE = "save",
   SUBMIT = "submit",
   CROP = "crop",
+  CROP_ERROR = "crop-error",
   REFUSE = "refuse",
   SKIP = "skip",
   QUESTION_STATE = "question-state",
