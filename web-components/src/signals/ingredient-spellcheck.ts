@@ -1,34 +1,35 @@
-import { SignalMap } from "../utils/signals"
-import robotoff from "../api/robotoff"
+import { SignalMap } from "../utils/signals";
+import robotoff from "../api/robotoff";
 import {
   InsightType,
   type IngredientSpellcheckInsight,
   type InsightsRequestParams,
-} from "../types/robotoff"
+} from "../types/robotoff";
 
-export const ingredientSpellcheckInsights = new SignalMap<IngredientSpellcheckInsight>({})
+export const ingredientSpellcheckInsights =
+  new SignalMap<IngredientSpellcheckInsight>({});
 
 export async function fetchSpellcheckInsights(
   productCode?: string,
-  requestParams: InsightsRequestParams = {}
+  requestParams: InsightsRequestParams = {},
 ): Promise<IngredientSpellcheckInsight[]> {
-  let result
+  let result;
   const params: InsightsRequestParams = {
     ...requestParams,
     insight_types: InsightType.ingredient_spellcheck,
     annotated: false,
-  }
+  };
   if (productCode) {
-    params["barcode"] = productCode
+    params["barcode"] = productCode;
   }
   try {
-    result = await robotoff.insights<IngredientSpellcheckInsight>(params)
+    result = await robotoff.insights<IngredientSpellcheckInsight>(params);
     result.insights.forEach((insight: IngredientSpellcheckInsight) => {
-      ingredientSpellcheckInsights.setItem(insight.id, insight)
-    })
+      ingredientSpellcheckInsights.setItem(insight.id, insight);
+    });
   } catch (error) {
-    console.error("Error fetching spellcheck insights:", error)
-    return []
+    console.error("Error fetching spellcheck insights:", error);
+    return [];
   }
-  return result.insights
+  return result.insights;
 }

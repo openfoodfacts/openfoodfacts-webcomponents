@@ -8,13 +8,15 @@
  */
 export const paramToString = (value: unknown): string => {
   if (isNullOrUndefined(value)) {
-    return ""
+    return "";
   }
   if (Array.isArray(value)) {
-    return value.map((item) => encodeURIComponent(item)).join(",")
+    return value.map((item) => encodeURIComponent(item)).join(",");
   }
-  return encodeURIComponent(typeof value === "object" ? JSON.stringify(value) : String(value))
-}
+  return encodeURIComponent(
+    typeof value === "object" ? JSON.stringify(value) : String(value),
+  );
+};
 
 /**
  * Converts a record of params to a URLSearchParams string.
@@ -22,15 +24,18 @@ export const paramToString = (value: unknown): string => {
  * @returns string - the URLSearchParams string
  */
 export const paramsToUrl = (params: Record<string, unknown>) => {
-  const paramsToStringRecord = Object.entries(params).reduce((acc, [key, value]) => {
-    if (acc) {
-      acc += "&"
-    }
-    acc += `${key}=${paramToString(value)}`
-    return acc
-  }, "")
-  return paramsToStringRecord
-}
+  const paramsToStringRecord = Object.entries(params).reduce(
+    (acc, [key, value]) => {
+      if (acc) {
+        acc += "&";
+      }
+      acc += `${key}=${paramToString(value)}`;
+      return acc;
+    },
+    "",
+  );
+  return paramsToStringRecord;
+};
 
 /**
  * Adds params to a URL.
@@ -39,22 +44,26 @@ export const paramsToUrl = (params: Record<string, unknown>) => {
  * @param params
  * @returns string - the url with the params appended
  */
-export const addParamsToUrl = (url: string, params: Record<string, unknown>) => {
+export const addParamsToUrl = (
+  url: string,
+  params: Record<string, unknown>,
+) => {
   if (url.includes("?")) {
-    return `${url}&${paramsToUrl(params)}`
+    return `${url}&${paramsToUrl(params)}`;
   }
-  return `${url}?${paramsToUrl(params)}`
-}
+  return `${url}?${paramsToUrl(params)}`;
+};
 
 // Function to delay the execution of a function
-export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
+export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
 /**
  * Checks if a value is null or undefined.
  * @param value
  * @returns boolean - true if the value is null or undefined, false otherwise
  */
-export const isNullOrUndefined = (value: unknown) => value === null || value === undefined
+export const isNullOrUndefined = (value: unknown) =>
+  value === null || value === undefined;
 
 /**
  * Given a key with dot inside representing nested objects,
@@ -65,44 +74,48 @@ export const isNullOrUndefined = (value: unknown) => value === null || value ===
 export const setValueAndParentsObjectIfNotExists = (
   obj: Record<string, unknown>,
   key: string,
-  value: unknown
+  value: unknown,
 ) => {
-  const keys = key.split(".")
-  const lastKey = keys.pop() as string
-  let lastObject: Record<string, unknown> = {}
+  const keys = key.split(".");
+  const lastKey = keys.pop() as string;
+  let lastObject: Record<string, unknown> = {};
 
   keys.reduce((acc, key) => {
     if (!acc[key]) {
-      acc[key] = {}
+      acc[key] = {};
     }
-    lastObject = acc[key] as Record<string, unknown>
-    return lastObject
-  }, obj)
+    lastObject = acc[key] as Record<string, unknown>;
+    return lastObject;
+  }, obj);
 
-  lastObject[lastKey] = value
-  return obj
-}
+  lastObject[lastKey] = value;
+  return obj;
+};
 
 /**
  * Generates a random ID.
  * @returns string - a random ID
  */
-export const randomIdGenerator = () => Math.random().toString(36).substring(2, 15)
+export const randomIdGenerator = () =>
+  Math.random().toString(36).substring(2, 15);
 
 /**
  * Initializes a debounce function.
  * @param callback - the function to debounce
  * @returns () => void - the debounced function
  */
-export const initDebounce = (callback: () => unknown, debounceTime: number = 500) => {
-  let timeout: ReturnType<typeof setTimeout> | undefined
+export const initDebounce = (
+  callback: () => unknown,
+  debounceTime: number = 500,
+) => {
+  let timeout: ReturnType<typeof setTimeout> | undefined;
   return () => {
-    clearTimeout(timeout)
+    clearTimeout(timeout);
     timeout = setTimeout(() => {
-      callback()
-    }, debounceTime)
-  }
-}
+      callback();
+    }, debounceTime);
+  };
+};
 
 /**
  * Creates a debounce utility that can be used with class methods
@@ -110,26 +123,26 @@ export const initDebounce = (callback: () => unknown, debounceTime: number = 500
  * @returns object with debounce method and clear method
  */
 export const createDebounce = (debounceTime: number = 500) => {
-  let timeout: number | null = null
+  let timeout: number | null = null;
 
   return {
     debounce: (callback: () => void) => {
       if (timeout) {
-        clearTimeout(timeout)
+        clearTimeout(timeout);
       }
       timeout = window.setTimeout(() => {
-        callback()
-        timeout = null
-      }, debounceTime)
+        callback();
+        timeout = null;
+      }, debounceTime);
     },
     clear: () => {
       if (timeout) {
-        clearTimeout(timeout)
-        timeout = null
+        clearTimeout(timeout);
+        timeout = null;
       }
     },
-  }
-}
+  };
+};
 
 /**
  * Downloads data as a CSV file
@@ -140,31 +153,34 @@ export const createDebounce = (debounceTime: number = 500) => {
 export const downloadCSV = (
   rows: Array<Array<unknown>>,
   filename: string,
-  headers: Array<string>
+  headers: Array<string>,
 ) => {
   if (rows.length === 0) {
-    return
+    return;
   }
 
-  const csvContent = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n")
+  const csvContent = [
+    headers.join(","),
+    ...rows.map((row) => row.join(",")),
+  ].join("\n");
 
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
-  const link = document.createElement("a")
-  const url = URL.createObjectURL(blob)
-  const today = new Date().toISOString().split("T")[0]
-  const finalFilename = `${filename}_${today}.csv`
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const link = document.createElement("a");
+  const url = URL.createObjectURL(blob);
+  const today = new Date().toISOString().split("T")[0];
+  const finalFilename = `${filename}_${today}.csv`;
 
-  link.setAttribute("href", url)
-  link.setAttribute("download", finalFilename)
-  link.style.visibility = "hidden"
+  link.setAttribute("href", url);
+  link.setAttribute("download", finalFilename);
+  link.style.visibility = "hidden";
 
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 
   // Clean up the URL object
-  URL.revokeObjectURL(url)
-}
+  URL.revokeObjectURL(url);
+};
 
 /**
  * Removes useless zeros from a string.
@@ -175,16 +191,16 @@ export const downloadCSV = (
  * @example removeUselessZeros("1.0010") => "1,001"
  */
 export const removeUselessZeros = (value: string) => {
-  return value.replace(/(\.\d*?[1-9])0+$|\.0+$/, "$1")
-}
+  return value.replace(/(\.\d*?[1-9])0+$|\.0+$/, "$1");
+};
 
 /**
  * Triggers a form submit event.
  * @param form - the form to submit
  */
 export const triggerSubmit = (form: HTMLFormElement) => {
-  form.requestSubmit()
-}
+  form.requestSubmit();
+};
 
 /**
  * Returns the rotation between 0 and 360.
@@ -192,9 +208,11 @@ export const triggerSubmit = (form: HTMLFormElement) => {
  * @returns number - the normalized rotation
  */
 export const normalizeRotation = (rotation: number) => {
-  return (rotation % 360) + (rotation < 0 ? 360 : 0)
-}
+  return (rotation % 360) + (rotation < 0 ? 360 : 0);
+};
 
-export const OpenFoodFactsSlackLink = "https://openfoodfacts.slack.com"
-export const FolksnomyEngineDocumentationLink = "https://wiki.openfoodfacts.org/Folksonomy_Engine"
-export const FolksnomyEnginePropertyLink = "https://wiki.openfoodfacts.org/Folksonomy/Property"
+export const OpenFoodFactsSlackLink = "https://openfoodfacts.slack.com";
+export const FolksnomyEngineDocumentationLink =
+  "https://wiki.openfoodfacts.org/Folksonomy_Engine";
+export const FolksnomyEnginePropertyLink =
+  "https://wiki.openfoodfacts.org/Folksonomy/Property";

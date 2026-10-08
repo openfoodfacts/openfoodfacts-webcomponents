@@ -1,34 +1,35 @@
-export { setLocale, getLocale } from "./localization"
-export { OffWebcomponentsConfiguration } from "./components/shared/off-webcomponents-configuration"
-export { RobotoffQuestion } from "./components/robotoff-question/robotoff-question"
-export { RobotoffNutrientExtraction } from "./components/robotoff-nutrient-extraction/robotoff-nutrient-extraction"
-export { RobotoffIngredientSpellcheck } from "./components/robotoff-ingredient-spellcheck/robotoff-ingredient-spellcheck"
-export { RobotoffContributionMessage } from "./components/robotoff-contribution-message/robotoff-contribution-message"
-export { KnowledgePanelsComponent } from "./components/knowledge-panels/knowledge-panels"
-export { DonationBanner } from "./components/donation-banner/donation-banner"
-export { DonationMeter } from "./components/donation-meter/donation-meter"
-export { MobileBadges } from "./components/mobile-badges/mobile-badges"
-export { DownloadAppQrCode } from "./components/download-app-qr-code/download-app-qr-code"
-export { BarcodeScanner } from "./components/barcode-scanner/barcode-scanner"
-export { DeleteModal } from "./components/folksonomy/delete-modal"
-export { FolksonomyEditor } from "./components/folksonomy/folksonomy-editor"
-export { FolksonomyProperties } from "./components/folksonomy/folksonomy-properties"
-export { FolksonomyPropertyProducts } from "./components/folksonomy/folksonomy-property-products"
-export { AutocompleteInput } from "./components/shared/autocomplete-input"
-export { RobotoffIngredientDetection as RobotoffCrops } from "./components/robotoff-ingredient-detection/robotoff-ingredient-detection"
-export { ProductCard } from "./components/product-card/product-card"
-export { NewsFeed } from "./components/news-feed/news-feed"
-export { NutriPatrolFlagForm } from "./components/nutripatrol-flag-form/nutripatrol-flag-form"
-export { ImageCrop } from "./components/image-crop/image-crop"
+export { setLocale, getLocale } from "./localization";
+export { OffWebcomponentsConfiguration } from "./components/shared/off-webcomponents-configuration";
+export { RobotoffQuestion } from "./components/robotoff-question/robotoff-question";
+export { RobotoffNutrientExtraction } from "./components/robotoff-nutrient-extraction/robotoff-nutrient-extraction";
+export { RobotoffIngredientSpellcheck } from "./components/robotoff-ingredient-spellcheck/robotoff-ingredient-spellcheck";
+export { RobotoffContributionMessage } from "./components/robotoff-contribution-message/robotoff-contribution-message";
+export { KnowledgePanelsComponent } from "./components/knowledge-panels/knowledge-panels";
+export { DonationBanner } from "./components/donation-banner/donation-banner";
+export { DonationMeter } from "./components/donation-meter/donation-meter";
+export { MobileBadges } from "./components/mobile-badges/mobile-badges";
+export { DownloadAppQrCode } from "./components/download-app-qr-code/download-app-qr-code";
+export { BarcodeScanner } from "./components/barcode-scanner/barcode-scanner";
+export { DeleteModal } from "./components/folksonomy/delete-modal";
+export { FolksonomyEditor } from "./components/folksonomy/folksonomy-editor";
+export { FolksonomyProperties } from "./components/folksonomy/folksonomy-properties";
+export { FolksonomyPropertyProducts } from "./components/folksonomy/folksonomy-property-products";
+export { AutocompleteInput } from "./components/shared/autocomplete-input";
+export { RobotoffIngredientDetection as RobotoffCrops } from "./components/robotoff-ingredient-detection/robotoff-ingredient-detection";
+export { ProductCard } from "./components/product-card/product-card";
+export { NewsFeed } from "./components/news-feed/news-feed";
+export { NutriPatrolFlagForm } from "./components/nutripatrol-flag-form/nutripatrol-flag-form";
+export { ImageCrop } from "./components/image-crop/image-crop";
 // Will be added in the future when design is ready
 // export { KnowledgePanelsComponent } from "./components/knowledge-panels/knowledge-panels"
 
 type Global = typeof globalThis & {
-  OFF_WEBCOMPONENTS_VERSION?: string
-}
+  OFF_WEBCOMPONENTS_VERSION?: string;
+};
 
 if (window) {
-  ;(window as Global).OFF_WEBCOMPONENTS_VERSION = __OFF_WEBCOMPONENTS_VERSION__
+  (window as Global).OFF_WEBCOMPONENTS_VERSION = __OFF_WEBCOMPONENTS_VERSION__;
 } else if (globalThis) {
-  ;(globalThis as Global).OFF_WEBCOMPONENTS_VERSION = __OFF_WEBCOMPONENTS_VERSION__
+  (globalThis as Global).OFF_WEBCOMPONENTS_VERSION =
+    __OFF_WEBCOMPONENTS_VERSION__;
 }

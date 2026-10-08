@@ -1,4 +1,4 @@
-import { css } from "lit"
+import { css } from "lit";
 import {
   SAFE_BLUE,
   SAFE_CAPPUCINO,
@@ -6,7 +6,7 @@ import {
   SAFE_DARKER_WHITE,
   SAFE_GREY,
   SAFE_LIGHT_BLACK,
-} from "../utils/colors"
+} from "../utils/colors";
 
 export const TEXTAREA = css`
   .textarea {
@@ -31,7 +31,7 @@ export const TEXTAREA = css`
     border-color: ${SAFE_BLUE};
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
   }
-`
+`;
 
 export const SELECT = css`
   .select {
@@ -59,7 +59,7 @@ export const SELECT = css`
     font-weight: bold;
     padding-right: 2rem;
   }
-`
+`;
 
 export const INPUT = css`
   .input,
@@ -104,7 +104,7 @@ export const INPUT = css`
     color: ${SAFE_LIGHT_BLACK};
     cursor: not-allowed;
   }
-`
+`;
 
 export const CHECKBOX = css`
   .checkbox {
@@ -145,4 +145,4 @@ export const CHECKBOX = css`
     outline: none;
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
   }
-`
+`;

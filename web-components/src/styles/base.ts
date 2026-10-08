@@ -1,4 +1,4 @@
-import { css } from "lit"
+import { css } from "lit";
 
 /**
  * Base styles for all components
@@ -6,12 +6,19 @@ import { css } from "lit"
  */
 export const BASE = css`
   :host {
-    font-family: var(--font-family, "Public Sans", Helvetica, Roboto, Arial, sans-serif);
+    font-family: var(
+      --font-family,
+      "Public Sans",
+      Helvetica,
+      Roboto,
+      Arial,
+      sans-serif
+    );
   }
-`
+`;
 
 export const ICON_BASE = css`
   :host {
     display: inline-flex;
   }
-`
+`;

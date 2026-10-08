@@ -1,14 +1,14 @@
-import { localized, msg } from "@lit/localize"
-import { LitElement, html, css } from "lit"
-import { customElement, property, query, state } from "lit/decorators.js"
-import { BASE } from "../../styles/base"
-import "../icons/barcode"
-import "../icons/search"
-import "../icons/close"
-import { ButtonType, getButtonClasses } from "../../styles/buttons"
-import { EventType } from "../../constants"
-import { type StyleInfo, styleMap } from "lit-html/directives/style-map.js"
-import { ConsoleLogMixin } from "../../mixins/console-log-mixin"
+import { localized, msg } from "@lit/localize";
+import { LitElement, html, css } from "lit";
+import { customElement, property, query, state } from "lit/decorators.js";
+import { BASE } from "../../styles/base";
+import "../icons/barcode";
+import "../icons/search";
+import "../icons/close";
+import { ButtonType, getButtonClasses } from "../../styles/buttons";
+import { EventType } from "../../constants";
+import { type StyleInfo, styleMap } from "lit-html/directives/style-map.js";
+import { ConsoleLogMixin } from "../../mixins/console-log-mixin";
 
 export enum BarcodeScannerState {
   EXITED = "exited",
@@ -20,13 +20,13 @@ export enum BarcodeScannerState {
 }
 
 interface BarcodeDetector {
-  detect(video: ImageBitmap): Promise<{ rawValue: string }[]>
+  detect(video: ImageBitmap): Promise<{ rawValue: string }[]>;
 }
 
 declare const BarcodeDetector: {
-  prototype: BarcodeDetector
-  new (options?: { formats: string[] }): BarcodeDetector
-}
+  prototype: BarcodeDetector;
+  new (options?: { formats: string[] }): BarcodeDetector;
+};
 
 /**
  * BarcodeScanner is a custom web component that allows users to scan barcodes using their device's camera.
@@ -172,7 +172,7 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
         border-radius: 0 8px 0 0;
       }
     `,
-  ]
+  ];
 
   /**
    * The style information for the wrapper element of the BarcodeScanner component.
@@ -183,14 +183,14 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
     height: "300px",
     width: "100%",
     "max-width": "100%",
-  }
+  };
 
   /**
    * A boolean property that indicates whether the barcode scanner should be running.
    * When set to true, the component will attempt to start the camera and detect barcodes.
    */
   @property({ type: Boolean, attribute: "run-scanner", reflect: true })
-  runScanner = false
+  runScanner = false;
 
   /**
    * The barcode detected by the scanner
@@ -200,46 +200,46 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
    * This state property is updated whenever a barcode is successfully detected.
    */
   @state()
-  barcode = ""
+  barcode = "";
 
   /**
    * A reference to the video element used for displaying the camera feed.
    * This query selector is used to access the video element within the component's template.
    */
   @query("video")
-  private video!: HTMLVideoElement
+  private video!: HTMLVideoElement;
 
   /**
    * The media stream used for the camera feed.
    * This state property is updated when the camera is started and cleared when the camera is stopped.
    */
   @state()
-  private stream: MediaStream | null = null
+  private stream: MediaStream | null = null;
 
   /**
    * The BarcodeDetector instance used for detecting barcodes.
    * This state property is initialized when the component is constructed and used for barcode detection.
    */
   @state()
-  private codeReader: BarcodeDetector | null = null
+  private codeReader: BarcodeDetector | null = null;
 
   /**
    * A function that detects barcodes in an image bitmap.
    * This state property is updated when the BarcodeDetector is available and used for barcode detection.
    */
   @state()
-  private detectFn?: (imageData: ImageBitmap) => Promise<string | undefined>
+  private detectFn?: (imageData: ImageBitmap) => Promise<string | undefined>;
 
   /**
    * A getter that returns whether the video is currently playing.
    * This getter is used to determine the state of the video element and update the component's UI accordingly.
    */
   get isVideoPlaying() {
-    return this.stream !== null
+    return this.stream !== null;
   }
 
   get canDetect() {
-    return this.detectFn !== undefined
+    return this.detectFn !== undefined;
   }
 
   /**
@@ -247,8 +247,8 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
    * This constructor initializes the BarcodeDetector and sets up the component's state.
    */
   constructor() {
-    super()
-    this.setupBarcodeDetector()
+    super();
+    this.setupBarcodeDetector();
   }
 
   /**
@@ -256,7 +256,7 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
    */
   override async firstUpdated() {
     if (this.runScanner) {
-      await this.askPermission()
+      await this.askPermission();
     }
   }
 
@@ -264,17 +264,21 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
    * A lifecycle method that is called when an attribute on the component is changed.
    * This method is used to handle changes to the run-scanner attribute and start or stop the barcode scanner accordingly.
    */
-  override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
-    super.attributeChangedCallback(name, _old, value)
+  override attributeChangedCallback(
+    name: string,
+    _old: string | null,
+    value: string | null,
+  ): void {
+    super.attributeChangedCallback(name, _old, value);
     // if first update not run yet, do nothing
     if (!this.hasUpdated) {
-      return
+      return;
     }
     if (name === "run-scanner") {
       if (this.runScanner) {
-        this.askPermission()
+        this.askPermission();
       } else if (this.stream) {
-        this.stopVideo()
+        this.stopVideo();
       }
     }
   }
@@ -286,14 +290,20 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
   private setupBarcodeDetector() {
     try {
       if (!("BarcodeDetector" in globalThis)) {
-        throw new Error("BarcodeDetector API is not supported in this browser.")
+        throw new Error(
+          "BarcodeDetector API is not supported in this browser.",
+        );
       }
-      this.codeReader = new BarcodeDetector({ formats: ["ean_13", "ean_8"] })
-      this.detectFn = this.detectWithBarcodeDetector
-      this.sendBarcodeStateEvent({ state: BarcodeScannerState.DETECTOR_AVAILABLE })
+      this.codeReader = new BarcodeDetector({ formats: ["ean_13", "ean_8"] });
+      this.detectFn = this.detectWithBarcodeDetector;
+      this.sendBarcodeStateEvent({
+        state: BarcodeScannerState.DETECTOR_AVAILABLE,
+      });
     } catch (error) {
-      this.sendBarcodeStateEvent({ state: BarcodeScannerState.DETECTOR_NOT_AVAILABLE })
-      console.warn("BarcodeDetector not available:", error)
+      this.sendBarcodeStateEvent({
+        state: BarcodeScannerState.DETECTOR_NOT_AVAILABLE,
+      });
+      console.warn("BarcodeDetector not available:", error);
     }
   }
 
@@ -301,20 +311,22 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
    * A private method that detects barcodes in an image bitmap using the BarcodeDetector.
    * This method is called when a video frame is captured and used to detect barcodes in the frame.
    */
-  private async detectWithBarcodeDetector(imageData: ImageBitmap): Promise<string | undefined> {
+  private async detectWithBarcodeDetector(
+    imageData: ImageBitmap,
+  ): Promise<string | undefined> {
     try {
       // Type assertion for BarcodeDetector
-      const detector = this.codeReader
+      const detector = this.codeReader;
       if (detector) {
-        const barcodes = await detector.detect(imageData)
+        const barcodes = await detector.detect(imageData);
         if (barcodes.length > 0) {
-          return barcodes[0].rawValue
+          return barcodes[0].rawValue;
         }
       }
     } catch (error) {
-      console.error("Error detecting barcode:", error)
+      console.error("Error detecting barcode:", error);
     }
-    return undefined
+    return undefined;
   }
 
   /**
@@ -326,25 +338,29 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
     if (!this.canDetect) {
       this.sendBarcodeStateEvent({
         state: BarcodeScannerState.DETECTOR_NOT_AVAILABLE,
-      })
-      return
+      });
+      return;
     }
     try {
-      const permissionStatus = await navigator.permissions.query({ name: "camera" })
+      const permissionStatus = await navigator.permissions.query({
+        name: "camera",
+      });
 
       if (["granted", "prompt"].includes(permissionStatus.state)) {
-        await this.startCamera()
-        return
+        await this.startCamera();
+        return;
       } else {
-        console.warn("Camera permission denied. Please enable it in your browser settings.")
+        console.warn(
+          "Camera permission denied. Please enable it in your browser settings.",
+        );
       }
     } catch (error) {
-      console.error("Permission query error:", error)
+      console.error("Permission query error:", error);
     }
     this.sendBarcodeStateEvent({
       barcode: this.barcode,
       state: BarcodeScannerState.NO_PERMISSION,
-    })
+    });
   }
 
   /**
@@ -360,21 +376,21 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
           width: { ideal: 640, max: 1280 },
           height: { ideal: 480, max: 720 },
         },
-      })
+      });
 
       // Set the video source to the camera stream and play the video
       if (this.video) {
-        this.video.srcObject = this.stream
-        await this.video.play()
+        this.video.srcObject = this.stream;
+        await this.video.play();
         this.sendBarcodeStateEvent({
           state: BarcodeScannerState.STARTED,
-        })
+        });
 
         // Set up video frame capture
-        this.setupFrameCapture()
+        this.setupFrameCapture();
       }
     } catch (err) {
-      console.error("Error accessing camera: ", err)
+      console.error("Error accessing camera: ", err);
     }
   }
 
@@ -384,10 +400,10 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
    */
   private stopVideo() {
     if (this.stream) {
-      this.stream.getTracks().forEach((track) => track.stop())
+      this.stream.getTracks().forEach((track) => track.stop());
       // clean video
-      this.video.srcObject = null
-      this.stream = null
+      this.video.srcObject = null;
+      this.stream = null;
     }
   }
 
@@ -395,8 +411,13 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
    * A private method that sends a custom event with the barcode scanner's state.
    * This method is called whenever the barcode scanner's state changes and used to notify other components of the state change.
    */
-  private sendBarcodeStateEvent(detail: { barcode?: string; state: BarcodeScannerState }) {
-    this.dispatchEvent(new CustomEvent(EventType.BARCODE_SCANNER_STATE, { detail }))
+  private sendBarcodeStateEvent(detail: {
+    barcode?: string;
+    state: BarcodeScannerState;
+  }) {
+    this.dispatchEvent(
+      new CustomEvent(EventType.BARCODE_SCANNER_STATE, { detail }),
+    );
   }
 
   /**
@@ -404,11 +425,11 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
    * This method is called when the user clicks the exit button and used to stop the barcode scanner and clear the video element.
    */
   private exit(event: Event) {
-    event.stopPropagation()
-    this.stopVideo()
+    event.stopPropagation();
+    this.stopVideo();
     this.sendBarcodeStateEvent({
       state: BarcodeScannerState.EXITED,
-    })
+    });
   }
 
   /**
@@ -416,48 +437,54 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
    * This method is called when the camera is started and used to capture video frames and detect barcodes in the frames.
    */
   private setupFrameCapture() {
-    const video = this.video
+    const video = this.video;
     // Process video frames for barcode detection
     const processFrame = async () => {
       // Check if the video is paused or ended
       if (video.paused || video.ended) {
-        requestAnimationFrame(processFrame)
-        return
+        requestAnimationFrame(processFrame);
+        return;
       }
 
-      let imageBitmap: ImageBitmap | undefined
+      let imageBitmap: ImageBitmap | undefined;
       try {
         // Create an image bitmap from the current video frame
-        imageBitmap = await createImageBitmap(video, 0, 0, video.videoWidth, video.videoHeight)
+        imageBitmap = await createImageBitmap(
+          video,
+          0,
+          0,
+          video.videoWidth,
+          video.videoHeight,
+        );
       } catch (e) {
-        this.logToConsole("image-bitmap", `Error creating image bitmap: ${e}`)
+        this.logToConsole("image-bitmap", `Error creating image bitmap: ${e}`);
       }
 
       if (imageBitmap) {
         try {
           // Detect barcodes in the image bitmap
-          const result = await this.detectFn!(imageBitmap)
+          const result = await this.detectFn!(imageBitmap);
           if (result) {
-            this.barcode = result
+            this.barcode = result;
             this.sendBarcodeStateEvent({
               barcode: this.barcode,
               state: BarcodeScannerState.DETECTED,
-            })
+            });
 
             // Stop the video after detecting a barcode
-            this.stopVideo()
-            return
+            this.stopVideo();
+            return;
           }
         } catch (error) {
-          console.error("Barcode detection error:", error)
+          console.error("Barcode detection error:", error);
         }
       }
 
       // Continue processing frames if no barcode is detected
-      requestAnimationFrame(processFrame)
-    }
+      requestAnimationFrame(processFrame);
+    };
 
-    requestAnimationFrame(processFrame)
+    requestAnimationFrame(processFrame);
   }
 
   /**
@@ -465,8 +492,8 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
    * This method is used to stop the barcode scanner and clear the video element when the component is removed from the DOM.
    */
   override disconnectedCallback() {
-    super.disconnectedCallback()
-    this.stopVideo()
+    super.disconnectedCallback();
+    this.stopVideo();
   }
 
   /**
@@ -483,7 +510,7 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
             </div>
           </div>
         </div>
-      </div>`
+      </div>`;
     }
     if (this.isVideoPlaying) {
       return html`
@@ -507,7 +534,7 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
             </div>
           </div>
         </div>
-      `
+      `;
     }
     return html`
       <div class="cta-overlay-wrapper" @click=${this.askPermission}>
@@ -521,14 +548,14 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
             <div class="cta-overlay-text">
               <slot name="message-before-scanning">
                 ${msg(
-                  "Click to scan a barcode and find out its details (health, preferences, etc.)"
+                  "Click to scan a barcode and find out its details (health, preferences, etc.)",
                 )}
               </slot>
             </div>
           </div>
         </div>
       </div>
-    `
+    `;
   }
 
   /**
@@ -541,12 +568,12 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
         <video width="100%"></video>
         <div class="overlay-wrapper">${this.renderOverlay()}</div>
       </div>
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "barcode-scanner": BarcodeScanner
+    "barcode-scanner": BarcodeScanner;
   }
 }

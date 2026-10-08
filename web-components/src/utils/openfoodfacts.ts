@@ -1,4 +1,4 @@
-import { STATIC_HOST } from "../constants"
+import { STATIC_HOST } from "../constants";
 
 export enum ProductFields {
   IMAGE_INGREDIENTS_URL = "image_ingredients_url",
@@ -12,9 +12,10 @@ export enum ProductFields {
  */
 export const getFullImageUrl = (imageUrl?: string): string | undefined => {
   if (!imageUrl) {
-    return undefined
+    return undefined;
   }
-  return imageUrl.replace(/400.jpg$/, "full.jpg")
-}
+  return imageUrl.replace(/400.jpg$/, "full.jpg");
+};
 
-export const KP_ATTRIBUTE_IMG = (img: string) => `${STATIC_HOST}/images/attributes/dist/${img}`
+export const KP_ATTRIBUTE_IMG = (img: string) =>
+  `${STATIC_HOST}/images/attributes/dist/${img}`;

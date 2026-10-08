@@ -1,9 +1,9 @@
-﻿import { LitElement, html, css } from "lit"
-import { customElement, property, state } from "lit/decorators.js"
-import { localized, msg } from "@lit/localize"
-import "./folksonomy-editor-row"
-import folksonomyApi from "../../api/folksonomy"
-import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme"
+﻿import { LitElement, html, css } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
+import { localized, msg } from "@lit/localize";
+import "./folksonomy-editor-row";
+import folksonomyApi from "../../api/folksonomy";
+import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme";
 
 /**
  * Folksonomy Editor
@@ -18,49 +18,50 @@ export class FolksonomyEditor extends LitElement {
    * @type {string}
    */
   @property({ type: String, attribute: "product-code" })
-  productCode = ""
+  productCode = "";
 
   /**
    * The type of page being displayed (e.g., "view", "edit")
    * @type {string}
    */
   @property({ type: String, attribute: "page-type" })
-  pageType = "view"
+  pageType = "view";
 
   /**
    * Disables editing and adding properties for non-logged-in users.
    * @type {boolean}
    */
   @property({ type: Boolean, attribute: "view-only" })
-  viewOnly = false
+  viewOnly = false;
 
   /**
    * The base URL for properties listing (e.g., "https://world.openfoodfacts.org/properties")
    * @type {string}
    */
   @property({ type: String, attribute: "properties-base-url" })
-  propertiesBaseUrl = "/properties"
+  propertiesBaseUrl = "/properties";
 
   /**
    * The URL for the login page
    * @type {string}
    */
   @property({ type: String, attribute: "login-url" })
-  loginUrl = "/cgi/login.pl"
+  loginUrl = "/cgi/login.pl";
 
   /**
    * The URL for properties documentation (e.g., "https://wiki.openfoodfacts.org/Folksonomy/Property")
    * @type {string}
    */
   @property({ type: String, attribute: "properties-documentation-url" })
-  propertiesDocumentationUrl = "https://wiki.openfoodfacts.org/Folksonomy/Property"
+  propertiesDocumentationUrl =
+    "https://wiki.openfoodfacts.org/Folksonomy/Property";
 
   /**
    * The URL for the Folksonomy Engine project (e.g., "https://wiki.openfoodfacts.org/Folksonomy_Engine")
    * @type {string}
    */
   @property({ type: String, attribute: "folksonomy-engine-url" })
-  folksonomyEngineUrl = "https://wiki.openfoodfacts.org/Folksonomy_Engine"
+  folksonomyEngineUrl = "https://wiki.openfoodfacts.org/Folksonomy_Engine";
 
   static override styles = [
     FOLKSONOMY_THEME,
@@ -159,100 +160,112 @@ export class FolksonomyEditor extends LitElement {
         }
       }
     `,
-  ]
+  ];
 
   /**
    * State representing all the properties and values
    */
   @state()
-  properties: Array<{ key: string; value: string; version: number }> = []
+  properties: Array<{ key: string; value: string; version: number }> = [];
 
   @state()
-  private sortColumn: "key" | "value" = "key"
+  private sortColumn: "key" | "value" = "key";
 
   @state()
-  private sortDirection: "asc" | "desc" = "asc"
+  private sortDirection: "asc" | "desc" = "asc";
 
   private handleRowDelete(event: CustomEvent) {
-    const { key } = event.detail
-    this.properties = this.properties.filter((property) => property.key !== key)
+    const { key } = event.detail;
+    this.properties = this.properties.filter(
+      (property) => property.key !== key,
+    );
   }
 
   private handleRowAdd(event: CustomEvent) {
-    const { key, value } = event.detail
+    const { key, value } = event.detail;
     if (key && value) {
-      this.properties = [...this.properties, { key, value, version: 1 }]
-      this.sortProperties()
+      this.properties = [...this.properties, { key, value, version: 1 }];
+      this.sortProperties();
     } else {
-      console.error("Key or value is missing in the event detail.")
+      console.error("Key or value is missing in the event detail.");
     }
   }
 
   private handleRowUpdate(event: CustomEvent) {
-    const { key, value, version } = event.detail
+    const { key, value, version } = event.detail;
     this.properties = this.properties.map((property) =>
-      property.key === key ? { ...property, value, version } : property
-    )
-    this.sortProperties()
+      property.key === key ? { ...property, value, version } : property,
+    );
+    this.sortProperties();
   }
 
   private handleSort(column: "key" | "value") {
     if (this.sortColumn === column) {
-      this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc"
+      this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc";
     } else {
-      this.sortColumn = column
-      this.sortDirection = "asc"
+      this.sortColumn = column;
+      this.sortDirection = "asc";
     }
-    this.sortProperties()
+    this.sortProperties();
   }
 
   private sortProperties() {
-    const column = this.sortColumn
-    const direction = this.sortDirection === "asc" ? 1 : -1
+    const column = this.sortColumn;
+    const direction = this.sortDirection === "asc" ? 1 : -1;
     this.properties = [...this.properties].sort((a, b) => {
       // Use localeCompare for better, locale-aware sorting
-      const valueA = a[column]?.toString().toLowerCase() ?? ""
-      const valueB = b[column]?.toString().toLowerCase() ?? ""
-      return valueA.localeCompare(valueB, undefined, { numeric: true }) * direction
-    })
+      const valueA = a[column]?.toString().toLowerCase() ?? "";
+      const valueB = b[column]?.toString().toLowerCase() ?? "";
+      return (
+        valueA.localeCompare(valueB, undefined, { numeric: true }) * direction
+      );
+    });
   }
 
   override connectedCallback() {
-    super.connectedCallback()
+    super.connectedCallback();
 
-    this.fetchAndLogFolksonomyKeys()
+    this.fetchAndLogFolksonomyKeys();
 
-    this.addEventListener("add-row", this.handleRowAdd as EventListener)
-    this.addEventListener("update-row", this.handleRowUpdate as EventListener)
-    this.addEventListener("delete-row", this.handleRowDelete as EventListener)
+    this.addEventListener("add-row", this.handleRowAdd as EventListener);
+    this.addEventListener("update-row", this.handleRowUpdate as EventListener);
+    this.addEventListener("delete-row", this.handleRowDelete as EventListener);
   }
 
   override disconnectedCallback() {
-    super.disconnectedCallback()
+    super.disconnectedCallback();
 
-    this.removeEventListener("add-row", this.handleRowAdd as EventListener)
-    this.removeEventListener("update-row", this.handleRowUpdate as EventListener)
-    this.removeEventListener("delete-row", this.handleRowDelete as EventListener)
+    this.removeEventListener("add-row", this.handleRowAdd as EventListener);
+    this.removeEventListener(
+      "update-row",
+      this.handleRowUpdate as EventListener,
+    );
+    this.removeEventListener(
+      "delete-row",
+      this.handleRowDelete as EventListener,
+    );
   }
 
   private async fetchAndLogFolksonomyKeys() {
     try {
-      const product_properties = await folksonomyApi.fetchProductProperties(this.productCode)
+      const product_properties = await folksonomyApi.fetchProductProperties(
+        this.productCode,
+      );
 
       // update the state with the fetched properties
       this.properties = product_properties.map((item) => ({
         key: item.k,
         value: item.v,
         version: item.version,
-      }))
-      this.sortProperties()
+      }));
+      this.sortProperties();
     } catch (error) {
-      console.error("Error fetching folksonomy keys:", error)
+      console.error("Error fetching folksonomy keys:", error);
     }
   }
 
   private renderSortIcon(column: "key" | "value") {
-    const isActive = this.sortColumn === column
+    const isActive = this.sortColumn === column;
     return html`
       <span class="sort-icon">
         <svg
@@ -269,7 +282,7 @@ export class FolksonomyEditor extends LitElement {
           <polygon points="5,0 10,6 0,6" />
         </svg>
       </span>
-    `
+    `;
   }
 
   private renderForm() {
@@ -281,13 +294,17 @@ export class FolksonomyEditor extends LitElement {
               @click=${() => this.handleSort("key")}
               class=${`sortable ${this.sortColumn === "key" ? `sort-${this.sortDirection}` : ""}`}
             >
-              <span class="sort-header"> ${msg("Property")} ${this.renderSortIcon("key")} </span>
+              <span class="sort-header">
+                ${msg("Property")} ${this.renderSortIcon("key")}
+              </span>
             </th>
             <th
               @click=${() => this.handleSort("value")}
               class=${`sortable ${this.sortColumn === "value" ? `sort-${this.sortDirection}` : ""}`}
             >
-              <span class="sort-header"> ${msg("Value")} ${this.renderSortIcon("value")} </span>
+              <span class="sort-header">
+                ${msg("Value")} ${this.renderSortIcon("value")}
+              </span>
             </th>
             ${this.pageType == "edit" && !this.viewOnly ? html`<th>${msg("Actions")}</th>` : null}
           </tr>
@@ -300,7 +317,7 @@ export class FolksonomyEditor extends LitElement {
                 version=${item.version}
                 row-number=${index + 1}
                 page-type=${this.viewOnly ? "view" : this.pageType}
-              ></folksonomy-editor-row>`
+              ></folksonomy-editor-row>`,
           )}
           ${
             this.pageType == "edit" && !this.viewOnly
@@ -321,7 +338,7 @@ export class FolksonomyEditor extends LitElement {
             : null
         }
       </form>
-    `
+    `;
   }
 
   override render() {
@@ -342,6 +359,8 @@ export class FolksonomyEditor extends LitElement {
               </h2>
               <p>
                 ${msg(
+                  // keep as-is: reformatting the template would change its translation message id
+                  // prettier-ignore
                   html`These properties are created and filed by users for any kind of usages. Feel
                     free to add your own. The properties and values you create
                     <strong>must be factual</strong>. You can dive into
@@ -351,15 +370,19 @@ export class FolksonomyEditor extends LitElement {
                     or explore the
                     <a href="${this.propertiesDocumentationUrl}"
                       >properties' documentation and its search engine</a
-                    >.`
+                    >.`,
                 )}
               </p>
-              <p>${msg("Be aware the data model might be modified. Use at your own risk.")}</p>
+              <p>
+                ${msg("Be aware the data model might be modified. Use at your own risk.")}
+              </p>
               <p>
                 ${msg(
+                  // keep as-is: reformatting the template would change its translation message id
+                  // prettier-ignore
                   html`This is brought by the
                     <a href="${this.folksonomyEngineUrl}">Folksonomy Engine project</a>. Don't
-                    hesitate to participate or give feedback`
+                    hesitate to participate or give feedback`,
                 )}
               </p>
               ${this.renderForm()}
@@ -367,12 +390,12 @@ export class FolksonomyEditor extends LitElement {
           </div>
         </div>
       </section>
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "folksonomy-editor": FolksonomyEditor
+    "folksonomy-editor": FolksonomyEditor;
   }
 }

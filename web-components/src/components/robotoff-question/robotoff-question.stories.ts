@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/web-components-vite"
-import "./robotoff-question"
+import type { Meta, StoryObj } from "@storybook/web-components-vite";
+import "./robotoff-question";
 
 const meta: Meta = {
   title: "Components/Robotoff/Question",
@@ -7,10 +7,10 @@ const meta: Meta = {
   parameters: {
     layout: "centered",
   },
-}
-export default meta
+};
+export default meta;
 
-type Story = StoryObj
+type Story = StoryObj;
 
 export const Basic: Story = {
   args: {
@@ -20,4 +20,4 @@ export const Basic: Story = {
     showError: true,
     showImage: true,
   },
-}
+};

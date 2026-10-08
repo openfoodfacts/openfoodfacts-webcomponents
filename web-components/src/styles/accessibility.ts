@@ -1,4 +1,4 @@
-import { css } from "lit"
+import { css } from "lit";
 
 /**
  * Class to hide elements visually but keep them accessible for screen readers
@@ -17,4 +17,4 @@ export const VISUALLY_HIDDEN = css`
     white-space: nowrap !important;
     border: 0 !important;
   }
-`
+`;

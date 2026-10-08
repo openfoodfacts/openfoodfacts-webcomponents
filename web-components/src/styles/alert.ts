@@ -1,5 +1,5 @@
-import { css } from "lit"
-import { SAFE_GREEN, SAFE_LIGHT_GREEN } from "../utils/colors"
+import { css } from "lit";
+import { SAFE_GREEN, SAFE_LIGHT_GREEN } from "../utils/colors";
 
 export const ALERT = css`
   .alert {
@@ -56,4 +56,4 @@ export const ALERT = css`
     align-items: center;
     gap: 0.5rem;
   }
-`
+`;

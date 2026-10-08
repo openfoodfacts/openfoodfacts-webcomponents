@@ -1,76 +1,79 @@
-import { EventState } from "../constants"
-import type { RobotoffConfigurationOptions } from "./robotoff"
-import type { FolksonomyConfigurationOptions } from "./folksonomy"
+import { EventState } from "../constants";
+import type { RobotoffConfigurationOptions } from "./robotoff";
+import type { FolksonomyConfigurationOptions } from "./folksonomy";
 
 export type OffWebcomponentConfigurationOptions = {
-  robotoffConfiguration: RobotoffConfigurationOptions
-  languageCode: string
-  countryCode: string
-  assetsImagesPath: string
-  folksonomyConfiguration: FolksonomyConfigurationOptions
-  openfoodfactsApiUrl: string
-}
+  robotoffConfiguration: RobotoffConfigurationOptions;
+  languageCode: string;
+  countryCode: string;
+  assetsImagesPath: string;
+  folksonomyConfiguration: FolksonomyConfigurationOptions;
+  openfoodfactsApiUrl: string;
+};
 
 export type Product = {
-  name: string
-  price: number
-  description: string
-  imgUrl: string
-}
+  name: string;
+  price: number;
+  description: string;
+  imgUrl: string;
+};
 
 export type BasicStateEventDetail = {
-  state: EventState
-}
+  state: EventState;
+};
 
 export type QuestionStateEventDetail = {
-  index?: number
-  numberOfQuestions?: number
-} & BasicStateEventDetail
+  index?: number;
+  numberOfQuestions?: number;
+} & BasicStateEventDetail;
 
-export type QuestionStateEvent = CustomEvent<QuestionStateEventDetail>
+export type QuestionStateEvent = CustomEvent<QuestionStateEventDetail>;
 
 export type DonationBannerStateEventDetail = {
-  action: "dismiss" | "minimize" | "already-donated" | "click"
-  variant: string | null
-  amount?: number
-  interval?: "1M" | "1T"
-}
+  action: "dismiss" | "minimize" | "already-donated" | "click";
+  variant: string | null;
+  amount?: number;
+  interval?: "1M" | "1T";
+};
 
-export type DonationBannerStateEvent = CustomEvent<DonationBannerStateEventDetail>
+export type DonationBannerStateEvent =
+  CustomEvent<DonationBannerStateEventDetail>;
 
 export type AutocompleteInputChangeEventDetail = {
-  value: string
-  filteredSuggestions: AutocompleteSuggestion[]
-  matching?: AutocompleteSuggestion
-}
+  value: string;
+  filteredSuggestions: AutocompleteSuggestion[];
+  matching?: AutocompleteSuggestion;
+};
 
-export type AutocompleteInputChangeEvent = CustomEvent<AutocompleteInputChangeEventDetail>
+export type AutocompleteInputChangeEvent =
+  CustomEvent<AutocompleteInputChangeEventDetail>;
 
-export type AutocompleteSuggestionSelectEvent = CustomEvent<AutocompleteSuggestion>
+export type AutocompleteSuggestionSelectEvent =
+  CustomEvent<AutocompleteSuggestion>;
 
 export type AutocompleteSuggestion = {
-  label?: string
-  value: string
+  label?: string;
+  value: string;
   /**
    * Optional number of uses, shown in parentheses after the label.
    */
-  count?: number
-  isNotFound?: boolean
-}
+  count?: number;
+  isNotFound?: boolean;
+};
 
 export type CropperImageBoundingBox = {
-  x: number
-  y: number
-  width: number
-  height: number
-}
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
 
 export type CropResult = {
-  newBoundingBox: CropperImageBoundingBox
-  oldBoundingBox?: CropperImageBoundingBox
-  rotation: number
-}
+  newBoundingBox: CropperImageBoundingBox;
+  oldBoundingBox?: CropperImageBoundingBox;
+  rotation: number;
+};
 
 export type TextCorrectorHighlightInput = {
-  value: string
-}
+  value: string;
+};

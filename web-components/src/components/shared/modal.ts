@@ -1,10 +1,10 @@
-import { LitElement, html, nothing } from "lit"
-import { customElement, property } from "lit/decorators.js"
-import { MODAL } from "../../styles/modal"
-import "./loader"
-import { EventType } from "../../constants"
-import "../icons/cross"
-import { localized, msg } from "@lit/localize"
+import { LitElement, html, nothing } from "lit";
+import { customElement, property } from "lit/decorators.js";
+import { MODAL } from "../../styles/modal";
+import "./loader";
+import { EventType } from "../../constants";
+import "../icons/cross";
+import { localized, msg } from "@lit/localize";
 
 /**
  * The `modal-component` is a reusable web component that displays a modal dialog.
@@ -25,7 +25,7 @@ import { localized, msg } from "@lit/localize"
 @customElement("modal-component")
 @localized()
 class ModalComponent extends LitElement {
-  static override styles = [MODAL]
+  static override styles = [MODAL];
 
   /**
    * Indicates whether the modal is open.
@@ -35,31 +35,35 @@ class ModalComponent extends LitElement {
     reflect: true,
     attribute: "is-open",
   })
-  isOpen = false
+  isOpen = false;
 
   /**
    * Indicates whether the modal is in a loading state.
    */
   @property({ type: Boolean, attribute: "is-loading" })
-  isLoading = false
+  isLoading = false;
 
   /**
    * Closes the modal and dispatches a close event.
    */
   closeModal() {
-    this.dispatchEvent(new CustomEvent(EventType.CLOSE))
+    this.dispatchEvent(new CustomEvent(EventType.CLOSE));
   }
 
   override render() {
     if (!this.isOpen) {
-      return nothing
+      return nothing;
     }
     return html`
       <div class="overlay" @click="${this.closeModal}" aria-hidden="true"></div>
       <div class="modal">
         <div class="modal-content">
           <div class="modal-header">
-            <button class="close-icon" @click="${this.closeModal}" aria-label=${msg("Close modal")}>
+            <button
+              class="close-icon"
+              @click="${this.closeModal}"
+              aria-label=${msg("Close modal")}
+            >
               <cross-icon></cross-icon>
             </button>
           </div>
@@ -68,12 +72,12 @@ class ModalComponent extends LitElement {
           </div>
         </div>
       </div>
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "modal-component": ModalComponent
+    "modal-component": ModalComponent;
   }
 }

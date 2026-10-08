@@ -1,22 +1,22 @@
-import { html, css, type PropertyValues } from "lit"
-import { customElement, property } from "lit/decorators.js"
-import { BASE } from "../../styles/base"
-import { msg, localized } from "@lit/localize"
-import "../icons/check"
-import "../icons/cross"
-import "../icons/skip"
-import "../icons/edit"
-import "../shared/info-button"
-import { ButtonType, getButtonClasses } from "../../styles/buttons"
-import { TEXTAREA } from "../../styles/form"
-import { POPOVER } from "../../styles/popover"
-import { TEXT_CORRECTOR } from "../../styles/text-corrector"
-import { RELATIVE } from "../../styles/utils"
-import "../shared/loading-button"
-import { TextDiffMixin } from "../../mixins/text-diff-mixin"
-import { LitElement } from "lit"
-import { getValidHeadingLevel } from "../../utils/knowledge-panels/heading-utils"
-import { sanitizeHtml } from "../../utils/html"
+import { html, css, type PropertyValues } from "lit";
+import { customElement, property } from "lit/decorators.js";
+import { BASE } from "../../styles/base";
+import { msg, localized } from "@lit/localize";
+import "../icons/check";
+import "../icons/cross";
+import "../icons/skip";
+import "../icons/edit";
+import "../shared/info-button";
+import { ButtonType, getButtonClasses } from "../../styles/buttons";
+import { TEXTAREA } from "../../styles/form";
+import { POPOVER } from "../../styles/popover";
+import { TEXT_CORRECTOR } from "../../styles/text-corrector";
+import { RELATIVE } from "../../styles/utils";
+import "../shared/loading-button";
+import { TextDiffMixin } from "../../mixins/text-diff-mixin";
+import { LitElement } from "lit";
+import { getValidHeadingLevel } from "../../utils/knowledge-panels/heading-utils";
+import { sanitizeHtml } from "../../utils/html";
 
 /**
  * TextCorrectorHighlight component
@@ -52,49 +52,57 @@ export class TextCorrectorHighlight extends TextDiffMixin(LitElement) {
         margin-top: 1rem;
       }
     `,
-  ]
+  ];
 
   /**
    * The original text to be corrected.
    * @type {string}
    */
   @property({ type: String, reflect: true })
-  original = ""
+  original = "";
 
   /**
    * The value of the text input.
    * @type {string}
    */
   @property({ type: String, reflect: true })
-  value?: string = ""
+  value?: string = "";
 
   /**
    * The value of the text input.
    * @type {string}
    */
   @property({ type: String, reflect: true, attribute: "heading-level" })
-  headingLevel = "h2"
+  headingLevel = "h2";
 
   /**
    * Focuses on the first updated element when the component is first updated.
    * @type {boolean}
    */
-  @property({ type: Boolean, reflect: true, attribute: "focus-on-first-updated" })
-  focusOnFirstUpdated = false
+  @property({
+    type: Boolean,
+    reflect: true,
+    attribute: "focus-on-first-updated",
+  })
+  focusOnFirstUpdated = false;
 
   protected override firstUpdated(_changedProperties: PropertyValues): void {
-    super.firstUpdated(_changedProperties)
+    super.firstUpdated(_changedProperties);
     if (this.focusOnFirstUpdated) {
-      this.shadowRoot!.querySelector("textarea")!.focus()
+      this.shadowRoot!.querySelector("textarea")!.focus();
     }
   }
 
-  override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
-    super.attributeChangedCallback(name, _old, value)
+  override attributeChangedCallback(
+    name: string,
+    _old: string | null,
+    value: string | null,
+  ): void {
+    super.attributeChangedCallback(name, _old, value);
     if (name === "original" || name === "value") {
       requestAnimationFrame(() => {
-        this.computeDiffResult(this.original, this.value ?? "")
-      })
+        this.computeDiffResult(this.original, this.value ?? "");
+      });
     }
   }
 
@@ -105,13 +113,13 @@ export class TextCorrectorHighlight extends TextDiffMixin(LitElement) {
   renderHighlightedDiff() {
     return html`${this.diffResult.map((part) => {
       if (part.added) {
-        return html`<span class="addition">${part.value}</span>`
+        return html`<span class="addition">${part.value}</span>`;
       } else if (part.removed) {
-        return html`<span class="deletion line-through">${part.value}</span>`
+        return html`<span class="deletion line-through">${part.value}</span>`;
       } else {
-        return html`<span>${part.value}</span>`
+        return html`<span>${part.value}</span>`;
       }
-    })}`
+    })}`;
   }
 
   /**
@@ -119,9 +127,9 @@ export class TextCorrectorHighlight extends TextDiffMixin(LitElement) {
    * @param {Event} e - The change event.
    */
   handleTextareaInput(e: Event) {
-    e.preventDefault()
-    const textarea = e.target as HTMLTextAreaElement
-    this.value = textarea.value
+    e.preventDefault();
+    const textarea = e.target as HTMLTextAreaElement;
+    this.value = textarea.value;
   }
 
   /**
@@ -129,7 +137,7 @@ export class TextCorrectorHighlight extends TextDiffMixin(LitElement) {
    * @returns {TemplateResult} The rendered textarea.
    */
   override render() {
-    const headingTag = getValidHeadingLevel(this.headingLevel)
+    const headingTag = getValidHeadingLevel(this.headingLevel);
     return html`
       <div class="text-section">
         ${sanitizeHtml(`<${headingTag}>${msg("Preview")}</${headingTag}>`)}
@@ -140,13 +148,13 @@ export class TextCorrectorHighlight extends TextDiffMixin(LitElement) {
         <textarea class="textarea" rows="6" @input=${this.handleTextareaInput}>
 ${this.value}</textarea>
       </div>
-    `
+    `;
   }
 }
 
 // Define the custom element
 declare global {
   interface HTMLElementTagNameMap {
-    "text-corrector-highlight": TextCorrectorHighlight
+    "text-corrector-highlight": TextCorrectorHighlight;
   }
 }

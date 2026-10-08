@@ -1,6 +1,6 @@
-import type { CropperImageBoundingBox } from "../types"
-import type { RobotoffBoundingBox } from "../types/robotoff"
-import type { NormalizedBoundingBox } from "../types/crops"
+import type { CropperImageBoundingBox } from "../types";
+import type { RobotoffBoundingBox } from "../types/robotoff";
+import type { NormalizedBoundingBox } from "../types/crops";
 
 /**
  * Converts a bounding box from the robotoff format to the crop image format.
@@ -11,17 +11,17 @@ import type { NormalizedBoundingBox } from "../types/crops"
 export const robotoffBoundingBoxToCropImageBoundingBox = (
   boundingBox: RobotoffBoundingBox,
   imageWidth: number,
-  imageHeight: number
+  imageHeight: number,
 ): CropperImageBoundingBox => {
-  const [xMin, yMin, xMax, yMax] = boundingBox // values is a value between 0 and 1
+  const [xMin, yMin, xMax, yMax] = boundingBox; // values is a value between 0 and 1
 
   return {
     x: yMin * imageWidth,
     y: xMin * imageHeight,
     width: (yMax - yMin) * imageWidth,
     height: (xMax - xMin) * imageHeight,
-  }
-}
+  };
+};
 
 /**
  * Converts a bounding box from the crop image format to the robotoff format.
@@ -31,15 +31,15 @@ export const robotoffBoundingBoxToCropImageBoundingBox = (
 export const cropImageBoundingBoxToRobotoffBoundingBox = (
   boundingBox: CropperImageBoundingBox,
   imageWidth: number,
-  imageHeight: number
+  imageHeight: number,
 ): RobotoffBoundingBox => {
-  const { x, y, width, height } = boundingBox
-  const xMin = y / imageHeight
-  const yMin = x / imageWidth
-  const xMax = (y + height) / imageHeight
-  const yMax = (x + width) / imageWidth
-  return [xMin, yMin, xMax, yMax]
-}
+  const { x, y, width, height } = boundingBox;
+  const xMin = y / imageHeight;
+  const yMin = x / imageWidth;
+  const xMax = (y + height) / imageHeight;
+  const yMax = (x + width) / imageWidth;
+  return [xMin, yMin, xMax, yMax];
+};
 
 /**
  * Size of an image (or crop) once rotated by a multiple of 90°.
@@ -51,14 +51,14 @@ export const cropImageBoundingBoxToRobotoffBoundingBox = (
 export const getRotatedSize = (
   width: number,
   height: number,
-  rotation: number
+  rotation: number,
 ): { width: number; height: number } => {
-  const normalizedRotation = ((rotation % 360) + 360) % 360
+  const normalizedRotation = ((rotation % 360) + 360) % 360;
   if (normalizedRotation === 90 || normalizedRotation === 270) {
-    return { width: height, height: width }
+    return { width: height, height: width };
   }
-  return { width, height }
-}
+  return { width, height };
+};
 
 /**
  * Converts a bounding box in image pixels to a normalized one (values between 0 and 1).
@@ -69,16 +69,16 @@ export const getRotatedSize = (
 export const normalizeBoundingBox = (
   boundingBox: CropperImageBoundingBox,
   imageWidth: number,
-  imageHeight: number
+  imageHeight: number,
 ): NormalizedBoundingBox => {
-  const { x, y, width, height } = boundingBox
+  const { x, y, width, height } = boundingBox;
   return {
     x_min: x / imageWidth,
     y_min: y / imageHeight,
     x_max: (x + width) / imageWidth,
     y_max: (y + height) / imageHeight,
-  }
-}
+  };
+};
 
 /**
  * Crops an image, then rotates the result.
@@ -94,35 +94,48 @@ export const cropImageToBlob = (
   boundingBox: CropperImageBoundingBox,
   rotation = 0,
   type = "image/webp",
-  quality?: number
+  quality?: number,
 ): Promise<Blob> => {
-  const x = Math.round(boundingBox.x)
-  const y = Math.round(boundingBox.y)
-  const width = Math.round(boundingBox.width)
-  const height = Math.round(boundingBox.height)
+  const x = Math.round(boundingBox.x);
+  const y = Math.round(boundingBox.y);
+  const width = Math.round(boundingBox.width);
+  const height = Math.round(boundingBox.height);
   if (width < 1 || height < 1) {
     // a selection smaller than 1 image pixel would give an empty canvas (toBlob returns null)
-    return Promise.reject(new Error("Crop area is too small"))
+    return Promise.reject(new Error("Crop area is too small"));
   }
-  const outputSize = getRotatedSize(width, height, rotation)
+  const outputSize = getRotatedSize(width, height, rotation);
 
-  const canvas = document.createElement("canvas")
-  canvas.width = outputSize.width
-  canvas.height = outputSize.height
-  const ctx = canvas.getContext("2d")
+  const canvas = document.createElement("canvas");
+  canvas.width = outputSize.width;
+  canvas.height = outputSize.height;
+  const ctx = canvas.getContext("2d");
   if (!ctx) {
-    return Promise.reject(new Error("Canvas 2D context not available"))
+    return Promise.reject(new Error("Canvas 2D context not available"));
   }
   // rotate around the center of the output canvas, then draw the cropped area centered
-  ctx.translate(outputSize.width / 2, outputSize.height / 2)
-  ctx.rotate((rotation * Math.PI) / 180)
-  ctx.drawImage(image, x, y, width, height, -width / 2, -height / 2, width, height)
+  ctx.translate(outputSize.width / 2, outputSize.height / 2);
+  ctx.rotate((rotation * Math.PI) / 180);
+  ctx.drawImage(
+    image,
+    x,
+    y,
+    width,
+    height,
+    -width / 2,
+    -height / 2,
+    width,
+    height,
+  );
 
   return new Promise((resolve, reject) => {
     canvas.toBlob(
-      (blob) => (blob ? resolve(blob) : reject(new Error("Failed to export cropped image"))),
+      (blob) =>
+        blob
+          ? resolve(blob)
+          : reject(new Error("Failed to export cropped image")),
       type,
-      quality
-    )
-  })
-}
+      quality,
+    );
+  });
+};

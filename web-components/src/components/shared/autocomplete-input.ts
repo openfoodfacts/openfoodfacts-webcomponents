@@ -1,10 +1,13 @@
-import { LitElement, html, css } from "lit"
-import { customElement, property, state } from "lit/decorators.js"
-import { FOLKSONOMY_INPUT } from "../../styles/folksonomy-input"
-import { classMap } from "lit/directives/class-map.js"
-import type { AutocompleteSuggestion, AutocompleteInputChangeEventDetail } from "../../types"
-import { SAFE_BLUE } from "../../utils/colors"
-import { randomIdGenerator } from "../../utils"
+import { LitElement, html, css } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
+import { FOLKSONOMY_INPUT } from "../../styles/folksonomy-input";
+import { classMap } from "lit/directives/class-map.js";
+import type {
+  AutocompleteSuggestion,
+  AutocompleteInputChangeEventDetail,
+} from "../../types";
+import { SAFE_BLUE } from "../../utils/colors";
+import { randomIdGenerator } from "../../utils";
 
 /**
  * AutocompleteInput Component
@@ -73,73 +76,75 @@ export class AutocompleteInput extends LitElement {
         border-color: ${SAFE_BLUE};
       }
     `,
-  ]
+  ];
 
   /**
    * Placeholder text for the input field.
    */
-  @property({ type: String }) placeholder = ""
+  @property({ type: String }) placeholder = "";
 
   /**
    * Current value of the input field.
    */
   @property({ type: String })
   get value() {
-    return this._inputValue ?? ""
+    return this._inputValue ?? "";
   }
   set value(newValue: string) {
-    this._inputValue = newValue
-    this.requestUpdate()
+    this._inputValue = newValue;
+    this.requestUpdate();
   }
 
   /**
    * List of suggestions to display in the autocomplete dropdown.
    * Each suggestion can be a string or an object with label and value properties.
    */
-  @property({ type: Array }) suggestions: AutocompleteSuggestion[] = []
+  @property({ type: Array }) suggestions: AutocompleteSuggestion[] = [];
 
   /**
    * Whether to show a "not found" option when no suggestions match.
    */
-  @property({ type: Boolean, attribute: "show-not-found-option" }) showNotFoundOption = false
+  @property({ type: Boolean, attribute: "show-not-found-option" })
+  showNotFoundOption = false;
 
   /**
    * Text to display for the "not found" option.
    */
-  @property({ type: String, attribute: "not-found-text" }) notFoundText = "Not found"
+  @property({ type: String, attribute: "not-found-text" }) notFoundText =
+    "Not found";
 
   /**
    * Whether to show the suggestions dropdown.
    * @private
    */
-  @state() private showSuggestions = false
+  @state() private showSuggestions = false;
 
   /**
    * Index of the currently highlighted suggestion.
    * @private
    */
-  @state() private highlightedIndex = -1
+  @state() private highlightedIndex = -1;
 
   /**
    * Unique ID for the input field.
    * @private
    */
   @state()
-  private _id: string = ""
+  private _id: string = "";
 
   @state()
-  private _inputValue: string = ""
+  private _inputValue: string = "";
 
   /**
    * ID for the suggestions list.
    * @private
    */
   get suggestionId() {
-    return `autocomplete-list-${this._id}`
+    return `autocomplete-list-${this._id}`;
   }
 
   getSuggestionItemId(index: number) {
-    return `autocomplete-item-${this._id}-${index}`
+    return `autocomplete-item-${this._id}-${index}`;
   }
 
   /**
@@ -147,7 +152,7 @@ export class AutocompleteInput extends LitElement {
    * @private
    */
   get filteredSuggestions() {
-    return this.filterSuggestions(this.value)
+    return this.filterSuggestions(this.value);
   }
 
   /**
@@ -155,22 +160,26 @@ export class AutocompleteInput extends LitElement {
    * @private
    */
   get suggestionsWithNotFound() {
-    const filtered = this.filteredSuggestions
-    if (this.showNotFoundOption && filtered.length === 0 && this.value.trim().length > 0) {
+    const filtered = this.filteredSuggestions;
+    if (
+      this.showNotFoundOption &&
+      filtered.length === 0 &&
+      this.value.trim().length > 0
+    ) {
       return [
         {
           value: "__NOT_FOUND__",
           label: this.notFoundText.replace("{value}", this.value),
           isNotFound: true,
         },
-      ]
+      ];
     }
-    return filtered
+    return filtered;
   }
 
   override connectedCallback() {
-    super.connectedCallback()
-    this._id = randomIdGenerator()
+    super.connectedCallback();
+    this._id = randomIdGenerator();
   }
   /**
    * Filters suggestions based on the input value.
@@ -178,17 +187,17 @@ export class AutocompleteInput extends LitElement {
    * @returns Filtered suggestions that match the input value.
    */
   private filterSuggestions(inputValue: string): AutocompleteSuggestion[] {
-    if (!inputValue) return this.suggestions
+    if (!inputValue) return this.suggestions;
 
     return this.suggestions.filter((suggestion) => {
-      const suggestionText = this.getSuggestionTextToFilter(suggestion)
-      return suggestionText.includes(inputValue.toLowerCase())
-    })
+      const suggestionText = this.getSuggestionTextToFilter(suggestion);
+      return suggestionText.includes(inputValue.toLowerCase());
+    });
   }
 
   getSuggestionTextToFilter(suggestion: AutocompleteSuggestion) {
-    const suggestionText = suggestion.label ?? suggestion.value
-    return suggestionText.toLowerCase()
+    const suggestionText = suggestion.label ?? suggestion.value;
+    return suggestionText.toLowerCase();
   }
 
   /**
@@ -196,18 +205,18 @@ export class AutocompleteInput extends LitElement {
    * @param e - The input event.
    */
   private onInput(e: Event) {
-    const inputValue = (e.target as HTMLInputElement).value
-    this.value = inputValue
-    this.highlightedIndex = -1
-    const filteredSuggestions = this.filteredSuggestions
-    const suggestionsToShow = this.suggestionsWithNotFound
-    this.showSuggestions = suggestionsToShow.length > 0
+    const inputValue = (e.target as HTMLInputElement).value;
+    this.value = inputValue;
+    this.highlightedIndex = -1;
+    const filteredSuggestions = this.filteredSuggestions;
+    const suggestionsToShow = this.suggestionsWithNotFound;
+    this.showSuggestions = suggestionsToShow.length > 0;
     // If there is only one suggestion and it matches the input value, consider it a notable match
     const matching =
       filteredSuggestions.length === 1 &&
       this.getSuggestionTextToFilter(filteredSuggestions[0]) === this.value
         ? filteredSuggestions[0]
-        : undefined
+        : undefined;
     this.dispatchEvent(
       new CustomEvent<AutocompleteInputChangeEventDetail>("input-change", {
         detail: {
@@ -217,8 +226,8 @@ export class AutocompleteInput extends LitElement {
         },
         bubbles: true,
         composed: true,
-      })
-    )
+      }),
+    );
   }
 
   /**
@@ -228,16 +237,16 @@ export class AutocompleteInput extends LitElement {
   private selectSuggestion(suggestion: AutocompleteSuggestion) {
     // Don't change the input value for the "not found" special case
     if (suggestion.value !== "__NOT_FOUND__") {
-      this._inputValue = suggestion.value
+      this._inputValue = suggestion.value;
     }
-    this.showSuggestions = false
+    this.showSuggestions = false;
     this.dispatchEvent(
       new CustomEvent<AutocompleteSuggestion>("suggestion-select", {
         detail: suggestion,
         bubbles: true,
         composed: true,
-      })
-    )
+      }),
+    );
   }
 
   /**
@@ -246,12 +255,12 @@ export class AutocompleteInput extends LitElement {
    **/
   selectMatchingSuggestion() {
     const suggestion = this.filteredSuggestions.find(
-      (suggestion) => this.getSuggestionTextToFilter(suggestion) === this.value
-    )
+      (suggestion) => this.getSuggestionTextToFilter(suggestion) === this.value,
+    );
     if (suggestion) {
-      this.selectSuggestion(suggestion)
+      this.selectSuggestion(suggestion);
     }
-    return suggestion
+    return suggestion;
   }
 
   /**
@@ -259,55 +268,58 @@ export class AutocompleteInput extends LitElement {
    * @param e - The keyboard event.
    */
   private onKeyDown(e: KeyboardEvent) {
-    const suggestionsToShow = this.suggestionsWithNotFound
-    if (suggestionsToShow.length === 0) return
+    const suggestionsToShow = this.suggestionsWithNotFound;
+    if (suggestionsToShow.length === 0) return;
 
     // Do it before check if we show suggestions because we want to be able to
     if (!this.showSuggestions) {
       if (e.key === "Enter") {
-        e.preventDefault()
+        e.preventDefault();
 
         // return selected Suggestion if it matches the input value
-        this.selectMatchingSuggestion()
+        this.selectMatchingSuggestion();
       }
-      return
+      return;
     }
     switch (e.key) {
       case "ArrowDown":
-        e.preventDefault()
-        this.highlightedIndex = Math.min(this.highlightedIndex + 1, suggestionsToShow.length - 1)
-        break
+        e.preventDefault();
+        this.highlightedIndex = Math.min(
+          this.highlightedIndex + 1,
+          suggestionsToShow.length - 1,
+        );
+        break;
       case "ArrowUp":
-        e.preventDefault()
-        this.highlightedIndex = Math.max(this.highlightedIndex - 1, -1)
-        break
+        e.preventDefault();
+        this.highlightedIndex = Math.max(this.highlightedIndex - 1, -1);
+        break;
       case "Enter":
-        e.preventDefault()
+        e.preventDefault();
 
         // If a suggestion is highlighted, select it
         if (this.highlightedIndex >= 0) {
-          this.selectSuggestion(suggestionsToShow[this.highlightedIndex])
+          this.selectSuggestion(suggestionsToShow[this.highlightedIndex]);
           // If no suggestion is highlighted, check if the input match exactly with one suggestion
         } else {
-          this.selectMatchingSuggestion()
+          this.selectMatchingSuggestion();
         }
-        break
+        break;
       case "Escape":
-        e.preventDefault()
-        this.showSuggestions = false
-        break
+        e.preventDefault();
+        this.showSuggestions = false;
+        break;
       case "Tab":
         if (this.highlightedIndex >= 0) {
-          e.preventDefault()
-          this.selectSuggestion(suggestionsToShow[this.highlightedIndex])
+          e.preventDefault();
+          this.selectSuggestion(suggestionsToShow[this.highlightedIndex]);
         }
-        break
+        break;
     }
   }
 
   onFocus() {
-    this.showSuggestions = this.suggestions.length > 0
-    this.highlightedIndex = -1
+    this.showSuggestions = this.suggestions.length > 0;
+    this.highlightedIndex = -1;
   }
 
   override render() {
@@ -327,7 +339,9 @@ export class AutocompleteInput extends LitElement {
           aria-controls=${this.suggestionId}
           aria-expanded=${this.showSuggestions}
           aria-activedescendant=${
-            this.highlightedIndex >= 0 ? this.getSuggestionItemId(this.highlightedIndex) : ""
+            this.highlightedIndex >= 0
+              ? this.getSuggestionItemId(this.highlightedIndex)
+              : ""
           }
           part="autocomplete-input"
         />
@@ -353,18 +367,18 @@ export class AutocompleteInput extends LitElement {
                       aria-selected=${index === this.highlightedIndex}
                     >
                       ${s.label ?? s.value}${s.count !== undefined ? ` (${s.count})` : ""}
-                    </li>`
+                    </li>`,
                 )}
               </ul>`
             : null
         }
       </div>
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "autocomplete-input": AutocompleteInput
+    "autocomplete-input": AutocompleteInput;
   }
 }

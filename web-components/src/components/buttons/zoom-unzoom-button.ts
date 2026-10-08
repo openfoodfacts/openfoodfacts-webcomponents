@@ -1,9 +1,9 @@
-import { localized, msg } from "@lit/localize"
-import { LitElement, html, css } from "lit"
-import { customElement, property } from "lit/decorators.js"
-import { SAFE_LIGHT_GREY } from "../../utils/colors"
-import "../icons/zoom"
-import "../icons/unzoom"
+import { localized, msg } from "@lit/localize";
+import { LitElement, html, css } from "lit";
+import { customElement, property } from "lit/decorators.js";
+import { SAFE_LIGHT_GREY } from "../../utils/colors";
+import "../icons/zoom";
+import "../icons/unzoom";
 
 /**
  * @element zoom-unzoom-button
@@ -30,22 +30,22 @@ export class ZoomUnzoomButton extends LitElement {
     button:hover {
       background-color: ${SAFE_LIGHT_GREY};
     }
-  `
+  `;
 
   @property({ type: Boolean })
-  zoomed = false
+  zoomed = false;
 
   override render() {
     return html`
       <button title=${this.zoomed ? msg("Unzoom") : msg("Zoom")}>
         ${this.zoomed ? html`<unzoom-icon></unzoom-icon>` : html`<zoom-icon></zoom-icon>`}
       </button>
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "zoom-unzoom-button": ZoomUnzoomButton
+    "zoom-unzoom-button": ZoomUnzoomButton;
   }
 }

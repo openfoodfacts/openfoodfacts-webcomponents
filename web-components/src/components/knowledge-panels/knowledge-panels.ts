@@ -1,18 +1,21 @@
-import { LitElement, html, css, type TemplateResult } from "lit"
-import { customElement, property, state } from "lit/decorators.js"
-import { fetchKnowledgePanels } from "../../api/knowledgepanel"
-import { Task } from "@lit/task"
-import "../../components/shared/loader" // Import the loader component
-import { BASE } from "../../styles/base"
-import { ALERT } from "../../styles/alert"
-import { ButtonType, getButtonClasses } from "../../styles/buttons"
+import { LitElement, html, css, type TemplateResult } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
+import { fetchKnowledgePanels } from "../../api/knowledgepanel";
+import { Task } from "@lit/task";
+import "../../components/shared/loader"; // Import the loader component
+import { BASE } from "../../styles/base";
+import { ALERT } from "../../styles/alert";
+import { ButtonType, getButtonClasses } from "../../styles/buttons";
 
-import type { KnowledgePanel, KnowledgePanelsData } from "../../types/knowledge-panel"
+import type {
+  KnowledgePanel,
+  KnowledgePanelsData,
+} from "../../types/knowledge-panel";
 
 // Import all renderer components
-import "./renderers"
-import "../../utils/knowledge-panels/heading-utils" // Import heading renderer component
-import { extractImages } from "../../utils/knowledge-panels/extract-images"
+import "./renderers";
+import "../../utils/knowledge-panels/heading-utils"; // Import heading renderer component
+import { extractImages } from "../../utils/knowledge-panels/extract-images";
 
 /**
  * `knowledge-panels` - A web component to display knowledge panels from any source
@@ -70,34 +73,34 @@ export class KnowledgePanelsComponent extends LitElement {
         padding: 2rem;
       }
     `,
-  ]
+  ];
 
   @property({
     type: String,
     reflect: true,
     attribute: "heading-level", // Explicitly match the attribute name
   })
-  headingLevel = "h3" // Set a default value
+  headingLevel = "h3"; // Set a default value
 
   /** Array of top panel keys to render */
   @property({ type: Array, attribute: "top-panels" })
-  panels: string[] = ["root"]
+  panels: string[] = ["root"];
 
   /** If true, the top panels will be rendered within a frame */
   @property({ type: Boolean, attribute: "top-frame" })
-  topFrame = false
+  topFrame = false;
 
   @property({ type: String })
-  url = ""
+  url = "";
 
   @property({ type: String })
-  path = ""
+  path = "";
 
   @state()
-  private knowledgePanels: KnowledgePanelsData | null = null
+  private knowledgePanels: KnowledgePanelsData | null = null;
 
   @state()
-  private nutritionImages: string[] = []
+  private nutritionImages: string[] = [];
 
   /**
    * Task to fetch knowledge panels
@@ -105,12 +108,12 @@ export class KnowledgePanelsComponent extends LitElement {
   private _knowledgePanelsTask = new Task(this, {
     task: async ([url, path]: [string, string]) => {
       if (!url || !path) {
-        return null
+        return null;
       }
-      return await fetchKnowledgePanels(url, path)
+      return await fetchKnowledgePanels(url, path);
     },
     args: () => [this.url, this.path] as [string, string],
-  })
+  });
 
   /**
    * Handle errors in a more user-friendly way
@@ -118,8 +121,8 @@ export class KnowledgePanelsComponent extends LitElement {
    * @returns Template result for the error display
    */
   renderError(error: unknown): TemplateResult {
-    console.error("Task error:", error)
-    const errorMessage = error instanceof Error ? error.message : String(error)
+    console.error("Task error:", error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
 
     return html`
       <slot name="error">
@@ -130,9 +133,11 @@ export class KnowledgePanelsComponent extends LitElement {
         >
         </heading-renderer>
         <p>${errorMessage}</p>
-        <button class="button cappucino-button" @click=${this._retryLoad}>Retry</button>
+        <button class="button cappucino-button" @click=${this._retryLoad}>
+          Retry
+        </button>
       </slot>
-    `
+    `;
   }
 
   /**
@@ -140,7 +145,7 @@ export class KnowledgePanelsComponent extends LitElement {
    * @private
    */
   private _retryLoad(): void {
-    this._knowledgePanelsTask.run()
+    this._knowledgePanelsTask.run();
   }
 
   /**
@@ -149,11 +154,12 @@ export class KnowledgePanelsComponent extends LitElement {
    */
   override render(): TemplateResult {
     return this._knowledgePanelsTask.render({
-      initial: () => html`<div class="info">Ready to load knowledge panels.</div>`,
+      initial: () =>
+        html`<div class="info">Ready to load knowledge panels.</div>`,
       pending: () => html`<off-wc-loader></off-wc-loader>`,
       complete: (result) => this.renderPanelsResult(result),
       error: (error: unknown) => this.renderError(error),
-    })
+    });
   }
 
   /**
@@ -162,17 +168,17 @@ export class KnowledgePanelsComponent extends LitElement {
    * @returns Template result for the panels
    */
   renderPanelsResult(result: unknown): TemplateResult {
-    const panels = result as KnowledgePanelsData
-    console.log("Panels received:", panels)
+    const panels = result as KnowledgePanelsData;
+    console.log("Panels received:", panels);
 
     if (!panels || typeof panels !== "object") {
-      console.error("Invalid panels data:", panels)
-      return html`<slot name="error">Invalid data format received</slot>`
+      console.error("Invalid panels data:", panels);
+      return html`<slot name="error">Invalid data format received</slot>`;
     }
 
     if (Object.keys(panels).length === 0) {
       // Use a heading for the empty state message
-      const emptyHeading = "No Knowledge Panels Available"
+      const emptyHeading = "No Knowledge Panels Available";
       return html`
         <div class="info">
           <heading-renderer
@@ -183,18 +189,18 @@ export class KnowledgePanelsComponent extends LitElement {
           </heading-renderer>
           <p>No knowledge panels were found for this request.</p>
         </div>
-      `
+      `;
     }
 
     // Store panels in the instance for reference
-    this.knowledgePanels = panels
+    this.knowledgePanels = panels;
 
     // Extract all nutrition-related images
-    this.nutritionImages = extractImages(panels)
+    this.nutritionImages = extractImages(panels);
 
     const panelsToRender = Object.entries(panels)
       .filter(([key]) => this.panels.includes(key))
-      .map(([, panel]) => panel)
+      .map(([, panel]) => panel);
 
     return html`
       <div class="knowledge-panels-container">
@@ -208,10 +214,10 @@ export class KnowledgePanelsComponent extends LitElement {
                 .headingLevel=${this.headingLevel}
               >
               </panel-renderer>`
-            : html``
+            : html``,
         )}
       </div>
-    `
+    `;
   }
 
   /**
@@ -219,18 +225,18 @@ export class KnowledgePanelsComponent extends LitElement {
    * @param changedProperties - Map of changed properties
    */
   override updated(changedProperties: Map<string, unknown>): void {
-    super.updated(changedProperties)
+    super.updated(changedProperties);
 
     if (changedProperties.has("url") || changedProperties.has("path")) {
       // Reset state when URL or path changes
-      this.knowledgePanels = null
-      this.nutritionImages = []
+      this.knowledgePanels = null;
+      this.nutritionImages = [];
     }
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "knowledge-panels": KnowledgePanelsComponent
+    "knowledge-panels": KnowledgePanelsComponent;
   }
 }

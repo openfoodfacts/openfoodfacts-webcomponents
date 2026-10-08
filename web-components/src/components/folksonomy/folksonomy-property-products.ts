@@ -1,11 +1,11 @@
-import { LitElement, html, css } from "lit"
-import { customElement, property, state } from "lit/decorators.js"
-import { downloadCSV } from "../../utils"
-import { localized, msg, str } from "@lit/localize"
-import { SignalWatcher } from "@lit-labs/signals"
-import folksonomyApi from "../../api/folksonomy"
-import { userInfo } from "../../signals/folksonomy"
-import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme"
+import { LitElement, html, css } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
+import { downloadCSV } from "../../utils";
+import { localized, msg, str } from "@lit/localize";
+import { SignalWatcher } from "@lit-labs/signals";
+import folksonomyApi from "../../api/folksonomy";
+import { userInfo } from "../../signals/folksonomy";
+import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme";
 
 /**
  * Folksonomy Property Products Viewer
@@ -544,148 +544,152 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
         }
       }
     `,
-  ]
+  ];
 
   /**
    * The property name for which we will display barcodes and values
    */
   @property({ type: String, attribute: "property-name" })
-  propertyName = ""
+  propertyName = "";
 
   /**
    * The base URL for properties listing (e.g., "https://world.openfoodfacts.org/properties")
    * @type {string}
    */
   @property({ type: String, attribute: "properties-url" })
-  propertiesUrl = "/properties"
+  propertiesUrl = "/properties";
 
   @state()
-  private products: Array<{ product: string; v: string }> = []
+  private products: Array<{ product: string; v: string }> = [];
 
   @state()
-  private filteredProducts: Array<{ product: string; v: string }> = []
+  private filteredProducts: Array<{ product: string; v: string }> = [];
 
   @state()
-  private groupedValues: Array<{ value: string; count: number }> = []
+  private groupedValues: Array<{ value: string; count: number }> = [];
 
   @state()
-  private filteredValues: Array<{ value: string; count: number }> = []
+  private filteredValues: Array<{ value: string; count: number }> = [];
 
   @state()
-  private viewMode: "products" | "values" = "products"
+  private viewMode: "products" | "values" = "products";
 
   @state()
-  private loading = false
+  private loading = false;
 
   @state()
-  private error: string | null = null
+  private error: string | null = null;
 
   @state()
   private filters = {
     barcode: "",
     value: "",
-  }
+  };
 
   @state()
-  private showReplaceModal = false
+  private showReplaceModal = false;
 
   @state()
-  private showDeleteModal = false
+  private showDeleteModal = false;
 
   @state()
-  private showMessageModal = false
+  private showMessageModal = false;
 
   @state()
   private replaceModalData = {
     value: "",
     newValue: "",
-  }
+  };
 
   @state()
-  private deleteModalValue = ""
+  private deleteModalValue = "";
 
   @state()
   private messageModalData = {
     title: "",
     message: "",
     type: "success" as "success" | "error",
-  }
+  };
 
-  private filterTimeout: number | null = null
+  private filterTimeout: number | null = null;
 
   override async connectedCallback() {
-    super.connectedCallback()
+    super.connectedCallback();
     if (this.propertyName) {
-      await this.fetchProductsPropertiesMain()
+      await this.fetchProductsPropertiesMain();
     }
-    await folksonomyApi.fetchUserInfo()
+    await folksonomyApi.fetchUserInfo();
   }
 
   override disconnectedCallback() {
-    super.disconnectedCallback()
+    super.disconnectedCallback();
     // Clean up filter timeout
     if (this.filterTimeout) {
-      clearTimeout(this.filterTimeout)
-      this.filterTimeout = null
+      clearTimeout(this.filterTimeout);
+      this.filterTimeout = null;
     }
   }
 
   private async fetchProductsPropertiesMain() {
-    this.loading = true
-    this.error = null
+    this.loading = true;
+    this.error = null;
 
     try {
-      const data = await folksonomyApi.fetchProductsProperties(this.propertyName)
+      const data = await folksonomyApi.fetchProductsProperties(
+        this.propertyName,
+      );
 
-      this.products = data || []
-      this.filteredProducts = [...this.products]
+      this.products = data || [];
+      this.filteredProducts = [...this.products];
 
       // Also prepare grouped data
-      const valueCountMap = new Map<string, number>()
+      const valueCountMap = new Map<string, number>();
       this.products.forEach((product) => {
-        const value = product.v
-        valueCountMap.set(value, (valueCountMap.get(value) || 0) + 1)
-      })
+        const value = product.v;
+        valueCountMap.set(value, (valueCountMap.get(value) || 0) + 1);
+      });
 
       this.groupedValues = Array.from(valueCountMap.entries())
         .map(([value, count]) => ({ value, count }))
-        .sort((a, b) => b.count - a.count)
+        .sort((a, b) => b.count - a.count);
 
-      this.filteredValues = [...this.groupedValues]
+      this.filteredValues = [...this.groupedValues];
     } catch (error) {
-      console.error("Error fetching property products:", error)
-      this.error = "Failed to load products. Please try again later."
+      console.error("Error fetching property products:", error);
+      this.error = "Failed to load products. Please try again later.";
     } finally {
-      this.loading = false
+      this.loading = false;
     }
   }
 
   private get canModerateValues(): boolean {
-    const currentUserInfo = userInfo.get()
-    return currentUserInfo?.admin === true || currentUserInfo?.moderator === true
+    const currentUserInfo = userInfo.get();
+    return (
+      currentUserInfo?.admin === true || currentUserInfo?.moderator === true
+    );
   }
 
   private openReplaceModal(value: string) {
     this.replaceModalData = {
       value,
       newValue: "",
-    }
-    this.showReplaceModal = true
+    };
+    this.showReplaceModal = true;
   }
 
   private closeReplaceModal() {
-    this.showReplaceModal = false
+    this.showReplaceModal = false;
     this.replaceModalData = {
       value: "",
       newValue: "",
-    }
+    };
   }
 
   private async handleReplaceValue() {
-    const { value, newValue } = this.replaceModalData
+    const { value, newValue } = this.replaceModalData;
 
     if (!newValue.trim() || newValue.trim() === value) {
-      return
+      return;
     }
 
     try {
@@ -693,25 +697,33 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
         property: this.propertyName,
         old_value: value,
         new_value: newValue.trim(),
-      })
+      });
 
-      this.closeReplaceModal()
-      await this.fetchProductsPropertiesMain()
-      this.showMessage("success", msg("Success"), msg("Value replaced successfully!"))
+      this.closeReplaceModal();
+      await this.fetchProductsPropertiesMain();
+      this.showMessage(
+        "success",
+        msg("Success"),
+        msg("Value replaced successfully!"),
+      );
     } catch (error) {
-      console.error("Error replacing value:", error)
-      this.showMessage("error", msg("Error"), msg("Failed to replace value. Please try again."))
+      console.error("Error replacing value:", error);
+      this.showMessage(
+        "error",
+        msg("Error"),
+        msg("Failed to replace value. Please try again."),
+      );
     }
   }
 
   private openDeleteModal(value: string) {
-    this.deleteModalValue = value
-    this.showDeleteModal = true
+    this.deleteModalValue = value;
+    this.showDeleteModal = true;
   }
 
   private closeDeleteModal() {
-    this.showDeleteModal = false
-    this.deleteModalValue = ""
+    this.showDeleteModal = false;
+    this.deleteModalValue = "";
   }
 
   private async handleDeleteValue() {
@@ -719,33 +731,45 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
       await folksonomyApi.deleteValue({
         property: this.propertyName,
         value: this.deleteModalValue,
-      })
+      });
 
-      this.closeDeleteModal()
-      await this.fetchProductsPropertiesMain()
-      this.showMessage("success", msg("Success"), msg("Value deleted successfully!"))
+      this.closeDeleteModal();
+      await this.fetchProductsPropertiesMain();
+      this.showMessage(
+        "success",
+        msg("Success"),
+        msg("Value deleted successfully!"),
+      );
     } catch (error) {
-      console.error("Error deleting value:", error)
-      this.showMessage("error", msg("Error"), msg("Failed to delete value. Please try again."))
+      console.error("Error deleting value:", error);
+      this.showMessage(
+        "error",
+        msg("Error"),
+        msg("Failed to delete value. Please try again."),
+      );
     }
   }
 
-  private showMessage(type: "success" | "error", title: string, message: string) {
-    this.messageModalData = { type, title, message }
-    this.showMessageModal = true
+  private showMessage(
+    type: "success" | "error",
+    title: string,
+    message: string,
+  ) {
+    this.messageModalData = { type, title, message };
+    this.showMessageModal = true;
   }
 
   private closeMessageModal() {
-    this.showMessageModal = false
+    this.showMessageModal = false;
     this.messageModalData = {
       title: "",
       message: "",
       type: "success",
-    }
+    };
   }
 
   private renderReplaceModal() {
-    if (!this.showReplaceModal) return ""
+    if (!this.showReplaceModal) return "";
 
     return html`
       <div class="modal-overlay" @click="${this.closeReplaceModal}">
@@ -756,7 +780,7 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
           <div class="modal-body">
             <div class="modal-text">
               ${msg(
-                str`Replace all instances of '${this.replaceModalData.value}' with a new value:`
+                str`Replace all instances of '${this.replaceModalData.value}' with a new value:`,
               )}
             </div>
             <label for="new-value">${msg("New value:")}</label>
@@ -769,13 +793,13 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
                 this.replaceModalData = {
                   ...this.replaceModalData,
                   newValue: (e.target as HTMLInputElement).value,
-                }
+                };
               }}"
               @keydown="${(e: KeyboardEvent) => {
                 if (e.key === "Enter") {
-                  this.handleReplaceValue()
+                  this.handleReplaceValue();
                 } else if (e.key === "Escape") {
-                  this.closeReplaceModal()
+                  this.closeReplaceModal();
                 }
               }}"
               placeholder="${msg("Enter new value...")}"
@@ -783,7 +807,10 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
             />
           </div>
           <div class="modal-footer">
-            <button class="modal-btn modal-btn-secondary" @click="${this.closeReplaceModal}">
+            <button
+              class="modal-btn modal-btn-secondary"
+              @click="${this.closeReplaceModal}"
+            >
               ${msg("Cancel")}
             </button>
             <button
@@ -791,7 +818,8 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
               @click="${this.handleReplaceValue}"
               ?disabled="${
                 !this.replaceModalData.newValue.trim() ||
-                this.replaceModalData.newValue.trim() === this.replaceModalData.value
+                this.replaceModalData.newValue.trim() ===
+                  this.replaceModalData.value
               }"
             >
               ${msg("Replace")}
@@ -799,11 +827,11 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
           </div>
         </div>
       </div>
-    `
+    `;
   }
 
   private renderDeleteModal() {
-    if (!this.showDeleteModal) return ""
+    if (!this.showDeleteModal) return "";
 
     return html`
       <div class="modal-overlay" @click="${this.closeDeleteModal}">
@@ -814,7 +842,7 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
           <div class="modal-body">
             <div class="modal-text">
               ${msg(
-                str`Are you sure you want to delete all instances of the value '${this.deleteModalValue}'?`
+                str`Are you sure you want to delete all instances of the value '${this.deleteModalValue}'?`,
               )}
             </div>
             <div class="modal-text">
@@ -822,20 +850,26 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
             </div>
           </div>
           <div class="modal-footer">
-            <button class="modal-btn modal-btn-secondary" @click="${this.closeDeleteModal}">
+            <button
+              class="modal-btn modal-btn-secondary"
+              @click="${this.closeDeleteModal}"
+            >
               ${msg("Cancel")}
             </button>
-            <button class="modal-btn modal-btn-danger" @click="${this.handleDeleteValue}">
+            <button
+              class="modal-btn modal-btn-danger"
+              @click="${this.handleDeleteValue}"
+            >
               ${msg("Delete")}
             </button>
           </div>
         </div>
       </div>
-    `
+    `;
   }
 
   private renderMessageModal() {
-    if (!this.showMessageModal) return ""
+    if (!this.showMessageModal) return "";
 
     return html`
       <div class="modal-overlay" @click="${this.closeMessageModal}">
@@ -847,13 +881,16 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
             <div class="modal-text">${this.messageModalData.message}</div>
           </div>
           <div class="modal-footer">
-            <button class="modal-btn modal-btn-primary" @click="${this.closeMessageModal}">
+            <button
+              class="modal-btn modal-btn-primary"
+              @click="${this.closeMessageModal}"
+            >
               ${msg("OK")}
             </button>
           </div>
         </div>
       </div>
-    `
+    `;
   }
 
   private renderValueActions(valueItem: { value: string; count: number }) {
@@ -876,84 +913,87 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
           </button>
         </div>
       </td>
-    `
+    `;
   }
 
   private applyFilters() {
-    const { barcode, value } = this.filters
+    const { barcode, value } = this.filters;
 
     // Filter products view
     this.filteredProducts = this.products.filter((item) => {
-      const matchesBarcode = !barcode || item.product.toLowerCase().includes(barcode.toLowerCase())
-      const matchesValue = !value || item.v.toLowerCase().includes(value.toLowerCase())
-      return matchesBarcode && matchesValue
-    })
+      const matchesBarcode =
+        !barcode || item.product.toLowerCase().includes(barcode.toLowerCase());
+      const matchesValue =
+        !value || item.v.toLowerCase().includes(value.toLowerCase());
+      return matchesBarcode && matchesValue;
+    });
 
     // Filter values view (only value filter applies)
     this.filteredValues = this.groupedValues.filter((item) => {
-      const matchesValue = !value || item.value.toLowerCase().includes(value.toLowerCase())
-      return matchesValue
-    })
+      const matchesValue =
+        !value || item.value.toLowerCase().includes(value.toLowerCase());
+      return matchesValue;
+    });
   }
 
   private handleFilterInput(field: "barcode" | "value", value: string) {
     this.filters = {
       ...this.filters,
       [field]: value,
-    }
+    };
 
     // Debounce filtering with 300ms delay for live filtering
     if (this.filterTimeout) {
-      clearTimeout(this.filterTimeout)
+      clearTimeout(this.filterTimeout);
     }
 
     this.filterTimeout = window.setTimeout(() => {
-      this.applyFilters()
-    }, 300)
+      this.applyFilters();
+    }, 300);
   }
 
   private resetFilters() {
     this.filters = {
       barcode: "",
       value: "",
-    }
-    this.filteredProducts = [...this.products]
-    this.filteredValues = [...this.groupedValues]
+    };
+    this.filteredProducts = [...this.products];
+    this.filteredValues = [...this.groupedValues];
   }
 
   private switchViewMode(mode: "products" | "values") {
-    this.viewMode = mode
+    this.viewMode = mode;
   }
 
   private handleDownloadCSV() {
     // Create CSV content based on current view mode
-    const isProductsView = this.viewMode === "products"
+    const isProductsView = this.viewMode === "products";
     const headers = isProductsView
       ? [msg("Product Barcode"), msg("Corresponding Value")]
-      : [msg("Value"), msg("Product Count")]
+      : [msg("Value"), msg("Product Count")];
 
     const rows = isProductsView
       ? this.filteredProducts.map((item) => [item.product, item.v])
-      : this.filteredValues.map((item) => [item.value, item.count])
+      : this.filteredValues.map((item) => [item.value, item.count]);
 
-    const today = new Date().toISOString().split("T")[0]
+    const today = new Date().toISOString().split("T")[0];
     const filename = isProductsView
       ? `folksonomy_property_${today}_${this.propertyName}_products.csv`
-      : `folksonomy_property_${today}_${this.propertyName}_values.csv`
+      : `folksonomy_property_${today}_${this.propertyName}_values.csv`;
 
-    downloadCSV(rows, filename, headers)
+    downloadCSV(rows, filename, headers);
   }
 
   private getProductUrl(productCode: string) {
-    return `/product/${productCode}`
+    return `/product/${productCode}`;
   }
 
   private getPropertyValueUrl(value: string) {
-    return `/property/${this.propertyName}/value/${value}`
+    return `/property/${this.propertyName}/value/${value}`;
   }
 
   private getDocumentationUrl() {
-    return `https://wiki.openfoodfacts.org/Folksonomy/Property/${this.propertyName}`
+    return `https://wiki.openfoodfacts.org/Folksonomy/Property/${this.propertyName}`;
   }
 
   private renderTableHeader() {
@@ -971,7 +1011,10 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
               placeholder="${msg("Filter barcodes...")}"
               .value="${this.filters.barcode}"
               @input="${(e: Event) =>
-                this.handleFilterInput("barcode", (e.target as HTMLInputElement).value)}"
+                this.handleFilterInput(
+                  "barcode",
+                  (e.target as HTMLInputElement).value,
+                )}"
             />
           </td>
           <td>
@@ -981,12 +1024,15 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
               placeholder="${msg("Filter values...")}"
               .value="${this.filters.value}"
               @input="${(e: Event) =>
-                this.handleFilterInput("value", (e.target as HTMLInputElement).value)}"
+                this.handleFilterInput(
+                  "value",
+                  (e.target as HTMLInputElement).value,
+                )}"
             />
           </td>
         </tr>
       </thead>
-    `
+    `;
   }
 
   private renderProductRow(product: { product: string; v: string }) {
@@ -998,24 +1044,32 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
           </a>
         </td>
         <td class="property-value">
-          <a href="${this.getPropertyValueUrl(product.v)}" class="property-value"> ${product.v} </a>
+          <a
+            href="${this.getPropertyValueUrl(product.v)}"
+            class="property-value"
+          >
+            ${product.v}
+          </a>
         </td>
       </tr>
-    `
+    `;
   }
 
   private renderValueRow(valueItem: { value: string; count: number }) {
     return html`
       <tr>
         <td class="property-value">
-          <a href="${this.getPropertyValueUrl(valueItem.value)}" class="property-value">
+          <a
+            href="${this.getPropertyValueUrl(valueItem.value)}"
+            class="property-value"
+          >
             ${valueItem.value}
           </a>
         </td>
         <td class="count">${valueItem.count}</td>
         ${this.canModerateValues ? this.renderValueActions(valueItem) : ""}
       </tr>
-    `
+    `;
   }
 
   private renderGroupedTableHeader() {
@@ -1034,32 +1088,39 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
               placeholder="${msg("Filter values...")}"
               .value="${this.filters.value}"
               @input="${(e: Event) =>
-                this.handleFilterInput("value", (e.target as HTMLInputElement).value)}"
+                this.handleFilterInput(
+                  "value",
+                  (e.target as HTMLInputElement).value,
+                )}"
             />
           </td>
           <td></td>
           ${this.canModerateValues ? html`<td></td>` : ""}
         </tr>
       </thead>
-    `
+    `;
   }
 
   private renderContent() {
     if (this.loading) {
-      return html`<div class="loading">${msg("Loading products...")}</div>`
+      return html`<div class="loading">${msg("Loading products...")}</div>`;
     }
 
     if (this.error) {
-      return html`<div class="error">${this.error}</div>`
+      return html`<div class="error">${this.error}</div>`;
     }
 
     if (this.products.length === 0) {
-      return html`<div class="empty-state">${msg("No products found for this property.")}</div>`
+      return html`<div class="empty-state">
+        ${msg("No products found for this property.")}
+      </div>`;
     }
 
-    const isProductsView = this.viewMode === "products"
-    const currentData = isProductsView ? this.filteredProducts : this.filteredValues
-    const totalData = isProductsView ? this.products : this.groupedValues
+    const isProductsView = this.viewMode === "products";
+    const currentData = isProductsView
+      ? this.filteredProducts
+      : this.filteredValues;
+    const totalData = isProductsView ? this.products : this.groupedValues;
 
     return html`
       <div class="table-container">
@@ -1091,7 +1152,9 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
             <button class="download-btn" @click="${this.handleDownloadCSV}">
               ${msg("Download CSV")}
             </button>
-            <button class="reset-btn" @click="${this.resetFilters}">${msg("Reset")}</button>
+            <button class="reset-btn" @click="${this.resetFilters}">
+              ${msg("Reset")}
+            </button>
           </div>
         </div>
         <table class="products-table" id="products-table">
@@ -1099,13 +1162,17 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
           <tbody>
             ${
               isProductsView
-                ? this.filteredProducts.map((product) => this.renderProductRow(product))
-                : this.filteredValues.map((valueItem) => this.renderValueRow(valueItem))
+                ? this.filteredProducts.map((product) =>
+                    this.renderProductRow(product),
+                  )
+                : this.filteredValues.map((valueItem) =>
+                    this.renderValueRow(valueItem),
+                  )
             }
           </tbody>
         </table>
       </div>
-    `
+    `;
   }
 
   override render() {
@@ -1116,7 +1183,7 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
             ${msg("Please provide a property name using the property-name attribute.")}
           </div>
         </div>
-      `
+      `;
     }
 
     return html`
@@ -1125,7 +1192,9 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
           <div class="main-content">
             <div class="header-section">
               <div class="property-title-container">
-                <h2 id="property_title">${msg("Folksonomy property")}: ${this.propertyName}</h2>
+                <h2 id="property_title">
+                  ${msg("Folksonomy property")}: ${this.propertyName}
+                </h2>
 
                 <div id="fe_infobox" class="info-box">
                   ${msg("Tip: you can also find the")}
@@ -1157,13 +1226,14 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
         </div>
       </div>
 
-      ${this.renderReplaceModal()} ${this.renderDeleteModal()} ${this.renderMessageModal()}
-    `
+      ${this.renderReplaceModal()} ${this.renderDeleteModal()}
+      ${this.renderMessageModal()}
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "folksonomy-property-products": FolksonomyPropertyProducts
+    "folksonomy-property-products": FolksonomyPropertyProducts;
   }
 }

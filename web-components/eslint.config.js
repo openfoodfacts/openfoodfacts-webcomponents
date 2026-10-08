@@ -1,9 +1,9 @@
-import js from "@eslint/js"
-import globals from "globals"
-import tseslint from "typescript-eslint"
-import storybook from "eslint-plugin-storybook"
-import lit from "eslint-plugin-lit"
-import prettierConfig from "eslint-config-prettier"
+import js from "@eslint/js";
+import globals from "globals";
+import tseslint from "typescript-eslint";
+import storybook from "eslint-plugin-storybook";
+import lit from "eslint-plugin-lit";
+import prettierConfig from "eslint-config-prettier";
 
 export default [
   // global ignores
@@ -50,4 +50,4 @@ export default [
   ...storybook.configs["flat/recommended"],
   // must be last: turns off rules that conflict with Prettier (formatting is handled by Prettier)
   prettierConfig,
-]
+];

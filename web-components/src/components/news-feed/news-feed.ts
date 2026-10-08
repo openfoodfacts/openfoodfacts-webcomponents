@@ -1,12 +1,12 @@
-import { marked } from "marked"
-import { LitElement, html, css } from "lit"
-import { customElement, property } from "lit/decorators.js"
-import type { NewsData, ProcessedNewsItem } from "../../types/news-feed"
-import { Task } from "@lit/task"
-import { sanitizeHtml } from "../../utils/html"
-import dayjs from "dayjs/esm"
-import { parseFunding } from "../../utils/funding"
-import "../donation-meter/donation-meter"
+import { marked } from "marked";
+import { LitElement, html, css } from "lit";
+import { customElement, property } from "lit/decorators.js";
+import type { NewsData, ProcessedNewsItem } from "../../types/news-feed";
+import { Task } from "@lit/task";
+import { sanitizeHtml } from "../../utils/html";
+import dayjs from "dayjs/esm";
+import { parseFunding } from "../../utils/funding";
+import "../donation-meter/donation-meter";
 
 /**
  * `news-feed` - A web component that displays news items from a JSON feed.
@@ -23,10 +23,10 @@ import "../donation-meter/donation-meter"
  */
 @customElement("news-feed")
 export class NewsFeed extends LitElement {
-  @property({ attribute: "url" }) url?: string
-  @property({ attribute: "lang" }) languageCode?: string
-  @property({ attribute: "country" }) countryCode?: string
-  @property({ attribute: "app-version" }) appVersion?: string
+  @property({ attribute: "url" }) url?: string;
+  @property({ attribute: "lang" }) languageCode?: string;
+  @property({ attribute: "country" }) countryCode?: string;
+  @property({ attribute: "app-version" }) appVersion?: string;
 
   static override styles = css`
     :host {
@@ -216,17 +216,17 @@ export class NewsFeed extends LitElement {
         border-left: 4px solid #f87171;
       }
     }
-  `
+  `;
 
   // --- Helper Methods ---
 
   private getLang(lang: string | undefined) {
-    return lang || navigator.language?.split("-")[0] || "en"
+    return lang || navigator.language?.split("-")[0] || "en";
   }
 
   private getFullLang(lang: string | undefined) {
     // Get the full language code if available (e.g., 'fr-FR')
-    return lang || navigator.language || "en"
+    return lang || navigator.language || "en";
   }
 
   /**
@@ -234,46 +234,51 @@ export class NewsFeed extends LitElement {
    */
   private processNewsData(
     rawData: NewsData,
-    { lang: currentLang, fullLang: currentFullLang }: { lang: string; fullLang: string }
+    {
+      lang: currentLang,
+      fullLang: currentFullLang,
+    }: { lang: string; fullLang: string },
   ): ProcessedNewsItem[] {
-    const processedItems = []
-    const newsDetailsMap = rawData.news || {}
-    const feedIds = rawData.tagline_feed?.default?.news || [] // Safely access nested properties
+    const processedItems = [];
+    const newsDetailsMap = rawData.news || {};
+    const feedIds = rawData.tagline_feed?.default?.news || []; // Safely access nested properties
 
     if (!rawData.news) {
-      console.warn("[NewsFeed] 'news' object missing in raw data.")
-      return []
+      console.warn("[NewsFeed] 'news' object missing in raw data.");
+      return [];
     }
 
     if (!rawData.tagline_feed?.default?.news) {
-      console.warn("[NewsFeed] 'tagline_feed.default.news' array missing in raw data.")
-      return []
+      console.warn(
+        "[NewsFeed] 'tagline_feed.default.news' array missing in raw data.",
+      );
+      return [];
     }
 
     for (const feedItem of feedIds) {
-      const id = feedItem.id
-      const details = newsDetailsMap[id]
+      const id = feedItem.id;
+      const details = newsDetailsMap[id];
 
       if (!details) {
-        console.warn(`[NewsFeed] Details not found for news ID: ${id}`)
-        continue // Skip if details are missing for this ID
+        console.warn(`[NewsFeed] Details not found for news ID: ${id}`);
+        continue; // Skip if details are missing for this ID
       }
 
       // --- Translation Selection ---
-      let translation = details.translations?.default || {} // Start with default
+      let translation = details.translations?.default || {}; // Start with default
       // Check for exact full language match (e.g., fr_FR) - adjust key format if needed
-      const fullLangKey = currentFullLang.replace("-", "_") // e.g., en-US -> en_US
+      const fullLangKey = currentFullLang.replace("-", "_"); // e.g., en-US -> en_US
       if (details.translations && details.translations[fullLangKey]) {
-        translation = details.translations[fullLangKey]
+        translation = details.translations[fullLangKey];
       }
       // Else, check for primary language match (e.g., fr)
       else if (details.translations && details.translations[currentLang]) {
-        translation = details.translations[currentLang]
+        translation = details.translations[currentLang];
       }
 
       // --- Create Processed Item ---
       // Ensure we have fallbacks if translation or default is incomplete
-      const defaultTranslation = details.translations?.default || {}
+      const defaultTranslation = details.translations?.default || {};
 
       processedItems.push({
         id: id, // Keep the original ID
@@ -291,32 +296,34 @@ export class NewsFeed extends LitElement {
         min_app_version: details.min_app_version,
         max_app_version: details.max_app_version,
         enabled: details.enabled !== false, // Default to true if not explicitly false
-        funding: parseFunding(details.raised, details.goal, details.currency) ?? undefined,
+        funding:
+          parseFunding(details.raised, details.goal, details.currency) ??
+          undefined,
         message_type: (details.message_type || "info").toLowerCase(), // Default to 'info'
         // Add other fields from 'details' if needed for filtering later
-      })
+      });
     }
 
-    return processedItems
+    return processedItems;
   }
 
   private versionCompare(v1: string | undefined, v2: string | undefined) {
-    const parts1 = (v1 || "").split(/[.-]/)
-    const parts2 = (v2 || "").split(/[.-]/)
+    const parts1 = (v1 || "").split(/[.-]/);
+    const parts2 = (v2 || "").split(/[.-]/);
     for (let i = 0; i < Math.max(parts1.length, parts2.length); i++) {
-      const p1Str = parts1[i] || "0"
-      const p2Str = parts2[i] || "0"
-      const p1Num = parseInt(p1Str, 10)
-      const p2Num = parseInt(p2Str, 10)
+      const p1Str = parts1[i] || "0";
+      const p2Str = parts2[i] || "0";
+      const p1Num = parseInt(p1Str, 10);
+      const p2Num = parseInt(p2Str, 10);
       if (!isNaN(p1Num) && !isNaN(p2Num)) {
-        if (p1Num > p2Num) return 1
-        if (p1Num < p2Num) return -1
+        if (p1Num > p2Num) return 1;
+        if (p1Num < p2Num) return -1;
       } else {
-        if (p1Str > p2Str) return 1
-        if (p1Str < p2Str) return -1
+        if (p1Str > p2Str) return 1;
+        if (p1Str < p2Str) return -1;
       }
     }
-    return 0
+    return 0;
   }
 
   // --- Filtering Logic ---
@@ -326,23 +333,30 @@ export class NewsFeed extends LitElement {
       lang: currentLang,
       country: currentCountry,
       appVersion: currentAppVersion,
-    }: { lang: string; country?: string; appVersion?: string }
+    }: { lang: string; country?: string; appVersion?: string },
   ): ProcessedNewsItem[] {
-    const now = dayjs()
+    const now = dayjs();
 
     return processedNewsItems.filter((item) => {
       // 1. Check if explicitly disabled (already handled in processing, but double check)
       if (item.enabled === false) {
-        return false
+        return false;
       }
 
       // 2. Check dates (using processed item properties)
       // Ensure date strings are valid before creating Date objects
-      const startDate = dayjs(item.start_date).isValid() ? dayjs(item.start_date) : null
-      const endDate = dayjs(item.end_date).isValid() ? dayjs(item.end_date) : null
+      const startDate = dayjs(item.start_date).isValid()
+        ? dayjs(item.start_date)
+        : null;
+      const endDate = dayjs(item.end_date).isValid()
+        ? dayjs(item.end_date)
+        : null;
 
-      if ((startDate && now.isBefore(startDate)) || (endDate && now.isAfter(endDate))) {
-        return false // Not started yet or already ended
+      if (
+        (startDate && now.isBefore(startDate)) ||
+        (endDate && now.isAfter(endDate))
+      ) {
+        return false; // Not started yet or already ended
       }
 
       // 3. Check language (using original 'languages' array if present on item)
@@ -350,21 +364,21 @@ export class NewsFeed extends LitElement {
         const langMatch = item.languages.some(
           (lang) =>
             currentLang.toLowerCase() === lang.toLowerCase() ||
-            currentLang.startsWith(lang.toLowerCase() + "-")
-        )
+            currentLang.startsWith(lang.toLowerCase() + "-"),
+        );
         if (!langMatch) {
-          return false
+          return false;
         }
       }
 
       // 4. Check country (using original 'countries' array if present on item)
       if (currentCountry && item.countries && item.countries.length > 0) {
         const countryMatch = item.countries.some(
-          (country) => currentCountry.toLowerCase() === country.toLowerCase()
-        )
+          (country) => currentCountry.toLowerCase() === country.toLowerCase(),
+        );
 
         if (!countryMatch) {
-          return false
+          return false;
         }
       }
 
@@ -374,65 +388,73 @@ export class NewsFeed extends LitElement {
           item.min_app_version &&
           this.versionCompare(currentAppVersion, item.min_app_version) < 0
         ) {
-          return false
+          return false;
         }
         if (
           item.max_app_version &&
           this.versionCompare(currentAppVersion, item.max_app_version) > 0
         ) {
-          return false
+          return false;
         }
       }
 
       // If all checks pass
-      return true
-    })
+      return true;
+    });
   }
 
   private _newsTask = new Task(this, {
-    args: () => [this.url, this.languageCode, this.countryCode, this.appVersion],
+    args: () => [
+      this.url,
+      this.languageCode,
+      this.countryCode,
+      this.appVersion,
+    ],
     task: async ([url, lang, country, appVersion]) => {
       if (!url) {
-        throw new Error("No data URL provided.")
+        throw new Error("No data URL provided.");
       }
 
-      const response = await fetch(url)
+      const response = await fetch(url);
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const currentLang = this.getLang(lang)
-      const currentFullLang = this.getFullLang(lang)
+      const currentLang = this.getLang(lang);
+      const currentFullLang = this.getFullLang(lang);
 
-      const rawData = (await response.json()) as NewsData
-      const items = this.processNewsData(rawData, { lang: currentLang, fullLang: currentFullLang })
+      const rawData = (await response.json()) as NewsData;
+      const items = this.processNewsData(rawData, {
+        lang: currentLang,
+        fullLang: currentFullLang,
+      });
 
       const filteredItems = this.filterNews(items, {
         lang: currentLang,
         country: country,
         appVersion: appVersion,
-      })
+      });
 
       const parsedNews = Promise.all(
         filteredItems.map(async (item) => ({
           ...item,
           parsedMessage: item.message ? await marked.parse(item.message) : "",
-        }))
-      )
+        })),
+      );
 
-      return parsedNews
+      return parsedNews;
     },
-  })
+  });
 
   // --- Lit Render Methods ---
 
   _renderNewsItem(item: ProcessedNewsItem & { parsedMessage: string }) {
-    const hasUrl = item.url && item.url.trim() !== ""
-    const placeholderId = `placeholder-${item.id || Math.random().toString(36).substring(7)}`
+    const hasUrl = item.url && item.url.trim() !== "";
+    const placeholderId = `placeholder-${item.id || Math.random().toString(36).substring(7)}`;
 
     // Create placeholder icon content
-    const placeholderContent = item.id ? item.id.substring(0, 3) : "NWS"
+    const placeholderContent = item.id ? item.id.substring(0, 3) : "NWS";
 
     // Create the icon html - either image with fallback or just placeholder
     const iconTemplate = item.icon_url
@@ -442,18 +464,26 @@ export class NewsFeed extends LitElement {
             alt=""
             class="icon"
             @error=${(e: Event) => {
-              const target = e.target as HTMLImageElement
-              target.style.display = "none"
+              const target = e.target as HTMLImageElement;
+              target.style.display = "none";
 
-              const element = this.shadowRoot!.querySelector(`#${placeholderId}`)! as HTMLElement
-              element.style.display = "flex"
+              const element = this.shadowRoot!.querySelector(
+                `#${placeholderId}`,
+              )! as HTMLElement;
+              element.style.display = "flex";
             }}
           />
-          <div id=${placeholderId} class="placeholder-icon" style="display: none;">
+          <div
+            id=${placeholderId}
+            class="placeholder-icon"
+            style="display: none;"
+          >
             ${placeholderContent}
           </div>
         `
-      : html`<div id=${placeholderId} class="placeholder-icon">${placeholderContent}</div>`
+      : html`<div id=${placeholderId} class="placeholder-icon">
+          ${placeholderContent}
+        </div>`;
 
     // Content template - always the same
     const contentTemplate = html`
@@ -464,18 +494,23 @@ export class NewsFeed extends LitElement {
         </p>
         ${
           item.funding
-            ? html`<donation-meter class="funding" .funding=${item.funding}></donation-meter>`
+            ? html`<donation-meter
+                class="funding"
+                .funding=${item.funding}
+              ></donation-meter>`
             : ""
         }
       </div>
-    `
+    `;
 
     if (!hasUrl) {
       return html`
         <div class="news-item-wrapper" data-news-id=${item.id}>
-          <div class="news-item ${item.message_type}">${iconTemplate} ${contentTemplate}</div>
+          <div class="news-item ${item.message_type}">
+            ${iconTemplate} ${contentTemplate}
+          </div>
         </div>
-      `
+      `;
     }
 
     return html`
@@ -486,9 +521,11 @@ export class NewsFeed extends LitElement {
         class="news-item-wrapper"
         data-news-id=${item.id}
       >
-        <div class="news-item ${item.message_type}">${iconTemplate} ${contentTemplate}</div>
+        <div class="news-item ${item.message_type}">
+          ${iconTemplate} ${contentTemplate}
+        </div>
       </a>
-    `
+    `;
   }
 
   override render() {
@@ -501,17 +538,19 @@ export class NewsFeed extends LitElement {
             ${
               news.length > 0
                 ? news.map((item) => this._renderNewsItem(item))
-                : html`<div class="no-news">No relevant news available right now.</div>`
+                : html`<div class="no-news">
+                    No relevant news available right now.
+                  </div>`
             }
           </div>
-        `
+        `;
       },
-    })
+    });
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "news-feed": NewsFeed
+    "news-feed": NewsFeed;
   }
 }

@@ -1,11 +1,11 @@
-import { LitElement, html, css, type TemplateResult } from "lit"
-import { customElement, property } from "lit/decorators.js"
+import { LitElement, html, css, type TemplateResult } from "lit";
+import { customElement, property } from "lit/decorators.js";
 import type {
   KnowledgePanelElement,
   KnowledgePanelsData,
   PanelGroupElement,
-} from "../../../types/knowledge-panel"
-import "../../../utils/knowledge-panels/heading-utils"
+} from "../../../types/knowledge-panel";
+import "../../../utils/knowledge-panels/heading-utils";
 
 /**
  * Panel group element renderer component
@@ -42,23 +42,23 @@ export class PanelGroupElementRenderer extends LitElement {
       background-color: #fff3cd;
       border-color: #ffeeba;
     }
-  `
+  `;
 
   @property({ type: Object })
-  element?: KnowledgePanelElement
+  element?: KnowledgePanelElement;
 
   @property({ type: Object })
-  knowledgePanels: KnowledgePanelsData | null = null
+  knowledgePanels: KnowledgePanelsData | null = null;
 
   @property({ type: String })
-  headingLevel = "h3"
+  headingLevel = "h3";
 
   override render(): TemplateResult {
     if (!this.element) {
-      return html``
+      return html``;
     }
 
-    const panelGroup = this.element.panel_group_element
+    const panelGroup = this.element.panel_group_element;
     if (!panelGroup) {
       return html`<div class="warning">
         <heading-renderer
@@ -69,7 +69,7 @@ export class PanelGroupElementRenderer extends LitElement {
         >
         </heading-renderer>
         <p>Panel group without data</p>
-      </div>`
+      </div>`;
     }
 
     return html`
@@ -85,10 +85,12 @@ export class PanelGroupElementRenderer extends LitElement {
               </heading-renderer>`
             : ""
         }
-        <panel-group-image-renderer .panelGroup=${panelGroup}></panel-group-image-renderer>
+        <panel-group-image-renderer
+          .panelGroup=${panelGroup}
+        ></panel-group-image-renderer>
         ${this.renderPanelGroupPanels(panelGroup)}
       </div>
-    `
+    `;
   }
 
   /**
@@ -98,23 +100,25 @@ export class PanelGroupElementRenderer extends LitElement {
    */
   renderPanelGroupPanels(panelGroup: PanelGroupElement): TemplateResult[] {
     return (panelGroup.panel_ids || []).map((panelId: string) => {
-      const panel = this.knowledgePanels?.[panelId]
+      const panel = this.knowledgePanels?.[panelId];
       if (panel) {
         return html`<panel-renderer
           .panel=${panel}
           .knowledgePanels=${this.knowledgePanels}
           headingLevel=${this.headingLevel}
         >
-        </panel-renderer>`
+        </panel-renderer>`;
       } else {
-        return html`<div class="warning">Referenced panel not found: ${panelId}</div>`
+        return html`<div class="warning">
+          Referenced panel not found: ${panelId}
+        </div>`;
       }
-    })
+    });
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "panel-group-element-renderer": PanelGroupElementRenderer
+    "panel-group-element-renderer": PanelGroupElementRenderer;
   }
 }

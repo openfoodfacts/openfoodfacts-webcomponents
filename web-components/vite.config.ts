@@ -1,13 +1,13 @@
-import { defineConfig } from "vite"
-import { dirname, resolve } from "node:path"
-import { fileURLToPath } from "node:url"
+import { defineConfig } from "vite";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
-import { viteStaticCopy } from "vite-plugin-static-copy"
-import dts from "unplugin-dts/vite"
+import { viteStaticCopy } from "vite-plugin-static-copy";
+import dts from "unplugin-dts/vite";
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const languagesRegex = /src\/localization\/dist\/locales\/(.*)\.ts$/
+const languagesRegex = /src\/localization\/dist\/locales\/(.*)\.ts$/;
 
 export default defineConfig({
   build: {
@@ -20,9 +20,9 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          const match = id.match(languagesRegex)
+          const match = id.match(languagesRegex);
           if (match) {
-            return `lang/${match[1]}`
+            return `lang/${match[1]}`;
           }
         },
       },
@@ -38,6 +38,8 @@ export default defineConfig({
     }),
   ],
   define: {
-    __OFF_WEBCOMPONENTS_VERSION__: JSON.stringify(process.env.npm_package_version),
+    __OFF_WEBCOMPONENTS_VERSION__: JSON.stringify(
+      process.env.npm_package_version,
+    ),
   },
-})
+});

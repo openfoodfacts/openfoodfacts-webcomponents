@@ -1,7 +1,7 @@
-import { css, LitElement } from "lit"
-import { html } from "lit-html"
-import { styleMap } from "lit-html/directives/style-map.js"
-import { customElement, property } from "lit/decorators.js"
+import { css, LitElement } from "lit";
+import { html } from "lit-html";
+import { styleMap } from "lit-html/directives/style-map.js";
+import { customElement, property } from "lit/decorators.js";
 
 /**
  * @element info-icon
@@ -18,10 +18,10 @@ export class InfoIcon extends LitElement {
       width: 100%;
       height: 100%;
     }
-  `
+  `;
 
   @property({ type: Object, attribute: "custom-styles" })
-  customStyles = {}
+  customStyles = {};
 
   override render() {
     return html`
@@ -44,6 +44,6 @@ export class InfoIcon extends LitElement {
           d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"
         />
       </svg>
-    `
+    `;
   }
 }

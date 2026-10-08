@@ -1,5 +1,5 @@
-import { LitElement, html, css } from "lit"
-import { customElement, property } from "lit/decorators.js"
+import { LitElement, html, css } from "lit";
+import { customElement, property } from "lit/decorators.js";
 
 /**
  * Dual Range Slider Component
@@ -179,30 +179,30 @@ export class DualRangeSlider extends LitElement {
         font-size: 0.7rem;
       }
     }
-  `
+  `;
 
   @property({ type: Number })
-  min = 0
+  min = 0;
 
   @property({ type: Number })
-  max = 100
+  max = 100;
 
   @property({ type: Number })
-  minValue = 0
+  minValue = 0;
 
   @property({ type: Number })
-  maxValue = 100
+  maxValue = 100;
 
   @property({ type: String })
-  type = "range"
+  type = "range";
 
   private handleMinInput(value: string) {
-    const numValue = parseInt(value, 10)
-    if (isNaN(numValue)) return
+    const numValue = parseInt(value, 10);
+    if (isNaN(numValue)) return;
 
     // Ensure min doesn't go below absolute min or above current max
-    let newMinValue = Math.max(this.min, numValue)
-    newMinValue = Math.min(newMinValue, this.maxValue)
+    let newMinValue = Math.max(this.min, numValue);
+    newMinValue = Math.min(newMinValue, this.maxValue);
 
     this.dispatchEvent(
       new CustomEvent("range-change", {
@@ -211,17 +211,17 @@ export class DualRangeSlider extends LitElement {
           field: "min",
           value: newMinValue,
         },
-      })
-    )
+      }),
+    );
   }
 
   private handleMaxInput(value: string) {
-    const numValue = parseInt(value, 10)
-    if (isNaN(numValue)) return
+    const numValue = parseInt(value, 10);
+    if (isNaN(numValue)) return;
 
     // Ensure max doesn't go above absolute max or below current min
-    let newMaxValue = Math.min(this.max, numValue)
-    newMaxValue = Math.max(newMaxValue, this.minValue)
+    let newMaxValue = Math.min(this.max, numValue);
+    newMaxValue = Math.max(newMaxValue, this.minValue);
 
     this.dispatchEvent(
       new CustomEvent("range-change", {
@@ -230,8 +230,8 @@ export class DualRangeSlider extends LitElement {
           field: "max",
           value: newMaxValue,
         },
-      })
-    )
+      }),
+    );
   }
 
   override render() {
@@ -259,11 +259,11 @@ export class DualRangeSlider extends LitElement {
             />
           </div>
         </div>
-      `
+      `;
     }
 
-    const percent1 = ((this.minValue - this.min) / (this.max - this.min)) * 100
-    const percent2 = ((this.maxValue - this.min) / (this.max - this.min)) * 100
+    const percent1 = ((this.minValue - this.min) / (this.max - this.min)) * 100;
+    const percent2 = ((this.maxValue - this.min) / (this.max - this.min)) * 100;
 
     return html`
       <div class="range-filter-container">
@@ -309,12 +309,12 @@ export class DualRangeSlider extends LitElement {
           </div>
         </div>
       </div>
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "dual-range-slider": DualRangeSlider
+    "dual-range-slider": DualRangeSlider;
   }
 }

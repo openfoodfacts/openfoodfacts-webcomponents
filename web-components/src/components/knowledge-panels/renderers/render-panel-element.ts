@@ -1,7 +1,10 @@
-import { LitElement, html, css, type TemplateResult } from "lit"
-import { customElement, property } from "lit/decorators.js"
-import type { KnowledgePanelElement, KnowledgePanelsData } from "../../../types/knowledge-panel"
-import "../../../utils/knowledge-panels/heading-utils" // Import heading renderer component
+import { LitElement, html, css, type TemplateResult } from "lit";
+import { customElement, property } from "lit/decorators.js";
+import type {
+  KnowledgePanelElement,
+  KnowledgePanelsData,
+} from "../../../types/knowledge-panel";
+import "../../../utils/knowledge-panels/heading-utils"; // Import heading renderer component
 
 /**
  * Panel element renderer component
@@ -57,36 +60,38 @@ export class PanelElementRenderer extends LitElement {
       width: 100%;
       overflow-x: hidden; /* Prevent horizontal overflow in nested elements */
     }
-  `
+  `;
 
   @property({ type: Object })
-  element?: KnowledgePanelElement
+  element?: KnowledgePanelElement;
 
   @property({ type: Object })
-  knowledgePanels: KnowledgePanelsData | null = null
+  knowledgePanels: KnowledgePanelsData | null = null;
 
   @property({ type: String })
-  headingLevel = "h3"
+  headingLevel = "h3";
 
   override render(): TemplateResult {
     if (!this.element) {
-      return html``
+      return html``;
     }
 
     // For panel elements, we either render the referenced panel or its own content
     if (this.element.panel_element?.panel_id) {
-      const panelId = this.element.panel_element.panel_id
+      const panelId = this.element.panel_element.panel_id;
       // We need to get the actual panel from the panels data
-      const referencedPanel = this.knowledgePanels?.[panelId]
+      const referencedPanel = this.knowledgePanels?.[panelId];
       if (referencedPanel) {
         return html`<panel-renderer
           .panel=${referencedPanel}
           .knowledgePanels=${this.knowledgePanels}
           headingLevel=${this.headingLevel}
         >
-        </panel-renderer>`
+        </panel-renderer>`;
       } else {
-        return html`<div class="warning">Referenced panel not found: ${panelId}</div>`
+        return html`<div class="warning">
+          Referenced panel not found: ${panelId}
+        </div>`;
       }
     } else if (this.element.elements && Array.isArray(this.element.elements)) {
       return html`
@@ -110,18 +115,18 @@ export class PanelElementRenderer extends LitElement {
                   .knowledgePanels=${this.knowledgePanels}
                   headingLevel=${this.headingLevel}
                 >
-                </element-renderer>`
+                </element-renderer>`,
             )}
           </div>
         </div>
-      `
+      `;
     }
-    return html`<div class="warning">Panel without elements</div>`
+    return html`<div class="warning">Panel without elements</div>`;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "panel-element-renderer": PanelElementRenderer
+    "panel-element-renderer": PanelElementRenderer;
   }
 }

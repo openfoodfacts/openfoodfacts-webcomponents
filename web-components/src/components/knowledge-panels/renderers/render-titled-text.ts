@@ -1,6 +1,6 @@
-import { LitElement, html, css, type TemplateResult } from "lit"
-import { customElement, property } from "lit/decorators.js"
-import type { KnowledgePanelElement } from "../../../types/knowledge-panel"
+import { LitElement, html, css, type TemplateResult } from "lit";
+import { customElement, property } from "lit/decorators.js";
+import type { KnowledgePanelElement } from "../../../types/knowledge-panel";
 
 /**
  * Titled text element renderer component
@@ -41,14 +41,14 @@ export class TitledTextElementRenderer extends LitElement {
       word-wrap: break-word;
       line-height: 1.6;
     }
-  `
+  `;
 
   @property({ type: Object })
-  element?: KnowledgePanelElement
+  element?: KnowledgePanelElement;
 
   override render(): TemplateResult {
     if (!this.element) {
-      return html``
+      return html``;
     }
 
     return html`
@@ -56,12 +56,12 @@ export class TitledTextElementRenderer extends LitElement {
         <div class="element-title">${this.element.title || ""}</div>
         <div class="element-value">${this.element.text || ""}</div>
       </div>
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "titled-text-element-renderer": TitledTextElementRenderer
+    "titled-text-element-renderer": TitledTextElementRenderer;
   }
 }

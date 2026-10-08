@@ -1,5 +1,5 @@
-import { LitElement, html, css } from "lit-element"
-import { customElement } from "lit/decorators.js"
+import { LitElement, html, css } from "lit-element";
+import { customElement } from "lit/decorators.js";
 
 /**
  * Component that displays a zoom icon.
@@ -17,10 +17,10 @@ export class ZoomIcon extends LitElement {
       width: 100%;
       height: 100%;
     }
-  `
+  `;
 
   override connectedCallback() {
-    super.connectedCallback()
+    super.connectedCallback();
   }
 
   override render() {
@@ -61,12 +61,12 @@ export class ZoomIcon extends LitElement {
           stroke-linejoin="round"
         />
       </svg>
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "zoom-icon": ZoomIcon
+    "zoom-icon": ZoomIcon;
   }
 }

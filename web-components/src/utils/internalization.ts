@@ -1,4 +1,4 @@
-import { getLocale } from "../localization"
+import { getLocale } from "../localization";
 
 /**
  *
@@ -12,16 +12,16 @@ import { getLocale } from "../localization"
 export const getTranslationsByQuantity = (
   quantity: number,
   translations: { singular: string; plural: string },
-  languageCode?: string
+  languageCode?: string,
 ) => {
   if (!languageCode) {
-    languageCode = getLocale()
+    languageCode = getLocale();
   }
   if (quantity === 1) {
-    return translations.singular
+    return translations.singular;
   }
   if (languageCode === "fr" && !quantity) {
-    return translations.singular
+    return translations.singular;
   }
-  return translations.plural
-}
+  return translations.plural;
+};

@@ -1,22 +1,22 @@
-import { directive, type ElementPart, type PartInfo } from "lit/directive.js"
-import { AsyncDirective } from "lit/async-directive.js"
+import { directive, type ElementPart, type PartInfo } from "lit/directive.js";
+import { AsyncDirective } from "lit/async-directive.js";
 
 /**
  * A Lit directive that detects clicks outside a specified element and triggers a callback function.
  */
 class ClickOutsideDirective extends AsyncDirective {
-  private element: HTMLElement | null = null
-  private callback: (() => void) | null = null
-  private animationFrameId: number | null = null
+  private element: HTMLElement | null = null;
+  private callback: (() => void) | null = null;
+  private animationFrameId: number | null = null;
 
   /**
    * Initializes the ClickOutsideDirective.
    * @param {PartInfo} part - The part information.
    */
   constructor(part: PartInfo) {
-    super(part)
-    this.element = (part as ElementPart).element as HTMLElement
-    this.addEventListener()
+    super(part);
+    this.element = (part as ElementPart).element as HTMLElement;
+    this.addEventListener();
   }
 
   /**
@@ -25,8 +25,8 @@ class ClickOutsideDirective extends AsyncDirective {
    * @returns {HTMLElement | null} The element to which the directive is applied.
    */
   override render(callback: () => void) {
-    this.callback = callback
-    return this.element
+    this.callback = callback;
+    return this.element;
   }
 
   /**
@@ -36,22 +36,22 @@ class ClickOutsideDirective extends AsyncDirective {
    * @returns {HTMLElement | null} The element to which the directive is applied.
    */
   override update(part: ElementPart, [callback]: [() => void]) {
-    this.element = part.element as HTMLElement
-    return this.render(callback)
+    this.element = part.element as HTMLElement;
+    return this.render(callback);
   }
 
   /**
    * Cleans up the directive when it is disconnected.
    */
   override disconnected() {
-    this.removeEventListener()
+    this.removeEventListener();
   }
 
   /**
    * Reattach the document listener when Lit reconnects the directive.
    */
   override reconnected() {
-    this.addEventListener()
+    this.addEventListener();
   }
 
   /**
@@ -60,9 +60,9 @@ class ClickOutsideDirective extends AsyncDirective {
   private addEventListener() {
     // Add a small delay to ensure the event listener is added after the initial render
     this.animationFrameId = requestAnimationFrame(() => {
-      this.animationFrameId = null
-      document.addEventListener("click", this.handleClick)
-    })
+      this.animationFrameId = null;
+      document.addEventListener("click", this.handleClick);
+    });
   }
 
   /**
@@ -70,10 +70,10 @@ class ClickOutsideDirective extends AsyncDirective {
    */
   private removeEventListener() {
     if (this.animationFrameId !== null) {
-      cancelAnimationFrame(this.animationFrameId)
-      this.animationFrameId = null
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
     }
-    document.removeEventListener("click", this.handleClick)
+    document.removeEventListener("click", this.handleClick);
   }
 
   /**
@@ -83,14 +83,14 @@ class ClickOutsideDirective extends AsyncDirective {
   private handleClick = (event: MouseEvent) => {
     // composedPath() also works when the clicked element is inside a shadow root.
     if (this.element && event.composedPath().includes(this.element)) {
-      return
+      return;
     }
-    this.callback?.()
-  }
+    this.callback?.();
+  };
 }
 
 /**
  * Creates a Lit directive that detects clicks outside a specified element and triggers a callback function.
  * @returns {Directive} The clickOutside directive.
  */
-export const clickOutside = directive(ClickOutsideDirective)
+export const clickOutside = directive(ClickOutsideDirective);

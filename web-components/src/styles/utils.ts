@@ -1,10 +1,10 @@
-import { css } from "lit"
+import { css } from "lit";
 
 export const RELATIVE = css`
   .relative {
     position: relative;
   }
-`
+`;
 export const FLEX = css`
   .flex {
     display: flex;
@@ -33,16 +33,16 @@ export const FLEX = css`
   .gap-1 {
     gap: 1rem;
   }
-`
+`;
 
 export const IS_HIDDEN = css`
   .is-hidden {
     display: none;
   }
-`
+`;
 
 export const FULL_WIDTH = css`
   .full-width {
     width: 100%;
   }
-`
+`;

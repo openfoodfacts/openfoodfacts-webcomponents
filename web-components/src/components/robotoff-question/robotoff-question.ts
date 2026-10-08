@@ -1,5 +1,5 @@
-import { LitElement, html, css, nothing, type TemplateResult } from "lit"
-import { customElement, property, state } from "lit/decorators.js"
+import { LitElement, html, css, nothing, type TemplateResult } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
 import {
   currentQuestionIndex,
   fetchQuestionsByProductCode,
@@ -8,15 +8,15 @@ import {
   questions,
   hasQuestions,
   numberOfQuestions,
-} from "../../signals/questions"
-import { Task } from "@lit/task"
-import { localized, msg } from "@lit/localize"
-import { EventState, EventType } from "../../constants"
-import type { QuestionStateEventDetail } from "../../types"
-import { SignalWatcher } from "@lit-labs/signals"
-import "../shared/loader"
-import "./robotoff-question-form"
-import { BASE } from "../../styles/base"
+} from "../../signals/questions";
+import { Task } from "@lit/task";
+import { localized, msg } from "@lit/localize";
+import { EventState, EventType } from "../../constants";
+import type { QuestionStateEventDetail } from "../../types";
+import { SignalWatcher } from "@lit-labs/signals";
+import "../shared/loader";
+import "./robotoff-question-form";
+import { BASE } from "../../styles/base";
 
 /**
  * Robotoff question component
@@ -53,46 +53,48 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
         }
       }
     `,
-  ]
+  ];
 
   @property({ type: Boolean, attribute: "show-message" })
-  showMessage = true
+  showMessage = true;
 
   @property({ type: Boolean, attribute: "show-loading" })
-  showLoading = true
+  showLoading = true;
 
   @property({ type: Boolean, attribute: "show-error" })
-  showError = true
+  showError = true;
 
   @property({ type: Boolean, attribute: "image-expanded" })
-  isImageExpanded = false
+  isImageExpanded = false;
 
   /** Product code to fetch questions for */
   @property({ type: String, attribute: "product-code" })
-  productCode: string = ""
+  productCode: string = "";
 
   /** Insight types to filter questions, comma-separated */
   @property({ type: String, attribute: "insight-types" })
-  insightTypes: string = ""
+  insightTypes: string = "";
 
   /** Whether the user has answered the question */
   @state()
-  private hasAnswered: boolean = false
+  private hasAnswered: boolean = false;
 
   /** Task to fetch questions for the given product code */
   private _questionsTask = new Task(this, {
     task: async ([productCode, insightTypes]) => {
-      this.hasAnswered = false
-      if (!productCode) return []
-      const params = insightTypes ? { insight_types: insightTypes } : {}
-      this._emitQuestionStateEvent(EventState.LOADING)
-      await fetchQuestionsByProductCode(productCode, params)
-      const value = questions(productCode).get()
-      this._emitQuestionStateEvent(value?.length > 0 ? EventState.HAS_DATA : EventState.NO_DATA)
-      return value
+      this.hasAnswered = false;
+      if (!productCode) return [];
+      const params = insightTypes ? { insight_types: insightTypes } : {};
+      this._emitQuestionStateEvent(EventState.LOADING);
+      await fetchQuestionsByProductCode(productCode, params);
+      const value = questions(productCode).get();
+      this._emitQuestionStateEvent(
+        value?.length > 0 ? EventState.HAS_DATA : EventState.NO_DATA,
+      );
+      return value;
     },
     args: () => [this.productCode, this.insightTypes],
-  })
+  });
 
   /** Emit a custom event when the question state changes */
   private _emitQuestionStateEvent(state: EventState): void {
@@ -103,50 +105,57 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
             state,
             index: currentQuestionIndex(this.productCode).get(),
             numberOfQuestions: numberOfQuestions(this.productCode).get(),
-          }
+          };
     this.dispatchEvent(
       new CustomEvent(EventType.QUESTION_STATE, {
         detail,
         bubbles: true,
         composed: true,
-      })
-    )
+      }),
+    );
   }
 
   private onQuestionAnswered = (): void => {
-    this.hasAnswered = true
-    nextQuestionByProductCode(this.productCode)
-    this.requestUpdate()
-    this._emitQuestionStateEvent(EventState.ANNOTATED)
+    this.hasAnswered = true;
+    nextQuestionByProductCode(this.productCode);
+    this.requestUpdate();
+    this._emitQuestionStateEvent(EventState.ANNOTATED);
     if (isQuestionsFinished(this.productCode).get()) {
-      this._emitQuestionStateEvent(EventState.FINISHED)
+      this._emitQuestionStateEvent(EventState.FINISHED);
     }
-  }
+  };
 
   /** Render the message to display to the user */
   private renderMessage(): TemplateResult | typeof nothing {
-    const getMessageWrapper = (message: string) => html`<div class="message">${message}</div>`
+    const getMessageWrapper = (message: string) =>
+      html`<div class="message">${message}</div>`;
     if (isQuestionsFinished(this.productCode).get()) {
-      return getMessageWrapper(msg("Thank you for your assistance!"))
+      return getMessageWrapper(msg("Thank you for your assistance!"));
     }
     if (!this.showMessage) {
-      return nothing
+      return nothing;
     }
     if (!this.hasAnswered) {
-      return getMessageWrapper(msg("Open Food Facts needs your help with this product."))
+      return getMessageWrapper(
+        msg("Open Food Facts needs your help with this product."),
+      );
     }
-    return html`<div>${msg("Thanks for your help! Can you assist with another question?")}</div>`
+    return html`<div>
+      ${msg("Thanks for your help! Can you assist with another question?")}
+    </div>`;
   }
 
   override render() {
     return this._questionsTask.render({
-      pending: () => (this.showLoading ? html`<off-wc-loader></off-wc-loader>` : nothing),
-      error: (error) => (this.showError ? html`<div>Error: ${error}</div>` : nothing),
+      pending: () =>
+        this.showLoading ? html`<off-wc-loader></off-wc-loader>` : nothing,
+      error: (error) =>
+        this.showError ? html`<div>Error: ${error}</div>` : nothing,
       complete: (questionsList) => {
-        const index = currentQuestionIndex(this.productCode).get() ?? 0
-        const question = questionsList[index]
+        const index = currentQuestionIndex(this.productCode).get() ?? 0;
+        const question = questionsList[index];
         if (!hasQuestions(this.productCode).get()) {
-          return html`<slot></slot>`
+          return html`<slot></slot>`;
         }
         return html`
           <div class="question-wrapper">
@@ -163,14 +172,14 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
                   `
             }
           </div>
-        `
+        `;
       },
-    })
+    });
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "robotoff-question": RobotoffQuestion
+    "robotoff-question": RobotoffQuestion;
   }
 }

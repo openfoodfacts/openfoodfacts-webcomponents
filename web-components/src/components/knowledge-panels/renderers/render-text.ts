@@ -1,7 +1,7 @@
-import { LitElement, html, css, type TemplateResult } from "lit"
-import { customElement, property } from "lit/decorators.js"
-import type { KnowledgePanelElement } from "../../../types/knowledge-panel"
-import { sanitizeHtml } from "../../../utils/html"
+import { LitElement, html, css, type TemplateResult } from "lit";
+import { customElement, property } from "lit/decorators.js";
+import type { KnowledgePanelElement } from "../../../types/knowledge-panel";
+import { sanitizeHtml } from "../../../utils/html";
 
 /**
  * Text element renderer component
@@ -29,28 +29,28 @@ export class TextElementRenderer extends LitElement {
       margin-top: 0;
       margin-bottom: 0.85rem;
     }
-  `
+  `;
 
   @property({ type: Object })
-  element?: KnowledgePanelElement
+  element?: KnowledgePanelElement;
 
   override render(): TemplateResult {
     const textContent =
       this.element?.text_element?.html ||
       this.element?.text_element?.text ||
       this.element?.text ||
-      ""
+      "";
 
     // Sanitize the HTML first
-    const sanitizedContent = sanitizeHtml(textContent)
+    const sanitizedContent = sanitizeHtml(textContent);
 
     // Then use it with unsafeHTML
-    return html`<div class="text_element">${sanitizedContent}</div>`
+    return html`<div class="text_element">${sanitizedContent}</div>`;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "text-element-renderer": TextElementRenderer
+    "text-element-renderer": TextElementRenderer;
   }
 }

@@ -1,9 +1,9 @@
-import { css, LitElement } from "lit"
-import { html } from "lit-html"
-import { customElement } from "lit/decorators.js"
-import { SAFE_BLUE } from "../../utils/colors"
-import "../icons/info"
-import { Breakpoints } from "../../utils/breakpoints"
+import { css, LitElement } from "lit";
+import { html } from "lit-html";
+import { customElement } from "lit/decorators.js";
+import { SAFE_BLUE } from "../../utils/colors";
+import "../icons/info";
+import { Breakpoints } from "../../utils/breakpoints";
 
 /**
  * @element info-button
@@ -33,13 +33,13 @@ export class InfoButton extends LitElement {
     button:hover {
       opacity: 0.8;
     }
-  `
+  `;
 
   override render() {
     return html`
       <button class="info-button">
         <info-icon .custom-styles="${{ fill: "white" }}"></info-icon>
       </button>
-    `
+    `;
   }
 }

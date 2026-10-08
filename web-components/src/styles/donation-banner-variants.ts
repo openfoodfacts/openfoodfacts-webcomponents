@@ -1,4 +1,4 @@
-import { css } from "lit"
+import { css } from "lit";
 
 export const DONATION_BANNER_VARIANTS = css`
   .campaign,
@@ -413,4 +413,4 @@ export const DONATION_BANNER_VARIANTS = css`
   .dark-mode .sheet .grab {
     background: rgba(255, 255, 255, 0.3);
   }
-`
+`;

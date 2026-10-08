@@ -1,5 +1,5 @@
-import { LitElement, html, css } from "lit"
-import { customElement } from "lit/decorators.js"
+import { LitElement, html, css } from "lit";
+import { customElement } from "lit/decorators.js";
 /**
  * Component that displays a unzoom icon.
  * @element unzoom-icon
@@ -16,7 +16,7 @@ export class UnzoomIcon extends LitElement {
       width: 100%;
       height: 100%;
     }
-  `
+  `;
 
   override render() {
     return html`
@@ -49,12 +49,12 @@ export class UnzoomIcon extends LitElement {
           stroke-linejoin="round"
         />
       </svg>
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "unzoom-icon": UnzoomIcon
+    "unzoom-icon": UnzoomIcon;
   }
 }

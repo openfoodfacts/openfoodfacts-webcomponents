@@ -1,9 +1,9 @@
-import { LitElement, html, css, nothing } from "lit"
-import { customElement, property } from "lit/decorators.js"
-import { msg, localized } from "@lit/localize"
-import { openfoodfactsApiUrl } from "../../signals/openfoodfacts"
-import { ButtonType, getButtonClasses } from "../../styles/buttons"
-import "../icons/external-link"
+import { LitElement, html, css, nothing } from "lit";
+import { customElement, property } from "lit/decorators.js";
+import { msg, localized } from "@lit/localize";
+import { openfoodfactsApiUrl } from "../../signals/openfoodfacts";
+import { ButtonType, getButtonClasses } from "../../styles/buttons";
+import "../icons/external-link";
 
 /**
  * A button component that displays as a link with a link icon.
@@ -23,22 +23,22 @@ export class ProductLinkButton extends LitElement {
         text-decoration: none;
       }
     `,
-  ]
+  ];
 
   /**
    * The product code to link to
    */
   @property({ type: String, attribute: "product-code", reflect: true })
-  productCode: string | undefined
+  productCode: string | undefined;
 
   get productUrl() {
-    return `${openfoodfactsApiUrl.get()}/product/${this.productCode}`
+    return `${openfoodfactsApiUrl.get()}/product/${this.productCode}`;
   }
 
   override render() {
     if (!this.productCode) {
-      console.error("Product code is required")
-      return nothing
+      console.error("Product code is required");
+      return nothing;
     }
 
     return html`
@@ -48,12 +48,12 @@ export class ProductLinkButton extends LitElement {
           <span>${msg("View Product")}</span>
         </button>
       </a>
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "product-link-button": ProductLinkButton
+    "product-link-button": ProductLinkButton;
   }
 }

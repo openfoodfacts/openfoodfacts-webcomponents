@@ -12,7 +12,7 @@
 export const getPluralTranslation = (
   value: number | undefined | null,
   singleTranslation: string,
-  pluralTranslation: string
+  pluralTranslation: string,
 ) => {
-  return (value ?? 0) <= 1 ? singleTranslation : pluralTranslation
-}
+  return (value ?? 0) <= 1 ? singleTranslation : pluralTranslation;
+};

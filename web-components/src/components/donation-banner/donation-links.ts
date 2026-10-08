@@ -157,7 +157,7 @@ export const LOCALIZED_DONATE_PATHS: Record<string, string> = {
   "zh-hk": "/juanzhu-open-food-facts-hk",
   "zh-tw": "/juanzeng-dao-open-food-facts",
   zu: "/nikela-ku-open-food-facts",
-}
+};
 
 /**
  * Returns the localized donation URL for a given locale, falling back to
@@ -165,22 +165,23 @@ export const LOCALIZED_DONATE_PATHS: Record<string, string> = {
  */
 export function getLocalizedDonateUrl(
   rawLocale?: string,
-  defaultUrl = "https://world.openfoodfacts.org/donate-to-open-food-facts"
+  defaultUrl = "https://world.openfoodfacts.org/donate-to-open-food-facts",
 ): string {
-  const locale = rawLocale?.toLowerCase()
-  const baseLocale = locale?.split(/[-_]/)[0]
+  const locale = rawLocale?.toLowerCase();
+  const baseLocale = locale?.split(/[-_]/)[0];
   if (!locale && !baseLocale) {
-    return defaultUrl
+    return defaultUrl;
   }
 
   const path =
-    (locale && LOCALIZED_DONATE_PATHS[locale]) || (baseLocale && LOCALIZED_DONATE_PATHS[baseLocale])
+    (locale && LOCALIZED_DONATE_PATHS[locale]) ||
+    (baseLocale && LOCALIZED_DONATE_PATHS[baseLocale]);
 
   if (baseLocale && baseLocale !== "en") {
     return path
       ? `https://world-${baseLocale}.openfoodfacts.org${path}`
-      : `https://world-${baseLocale}.openfoodfacts.org/donate-to-open-food-facts`
+      : `https://world-${baseLocale}.openfoodfacts.org/donate-to-open-food-facts`;
   }
 
-  return path ? `https://world.openfoodfacts.org${path}` : defaultUrl
+  return path ? `https://world.openfoodfacts.org${path}` : defaultUrl;
 }

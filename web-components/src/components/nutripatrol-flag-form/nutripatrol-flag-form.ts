@@ -1,14 +1,14 @@
-import { LitElement, html, css, nothing } from "lit"
-import { customElement, property, state, query } from "lit/decorators.js"
-import { localized, msg } from "@lit/localize"
-import { NutriPatrol } from "@openfoodfacts/openfoodfacts-nodejs"
-import { BASE } from "../../styles/base"
+import { LitElement, html, css, nothing } from "lit";
+import { customElement, property, state, query } from "lit/decorators.js";
+import { localized, msg } from "@lit/localize";
+import { NutriPatrol } from "@openfoodfacts/openfoodfacts-nodejs";
+import { BASE } from "../../styles/base";
 
-const VALID_TYPES = ["product", "image", "search"] as const
-const VALID_FLAVORS = ["off", "obf", "opff", "opf", "off-pro"] as const
+const VALID_TYPES = ["product", "image", "search"] as const;
+const VALID_FLAVORS = ["off", "obf", "opff", "opf", "off-pro"] as const;
 
-type FlagType = (typeof VALID_TYPES)[number]
-type FlagFlavor = (typeof VALID_FLAVORS)[number]
+type FlagType = (typeof VALID_TYPES)[number];
+type FlagFlavor = (typeof VALID_FLAVORS)[number];
 
 /**
  * Interface mimicking the NutriPatrol API's FlagCreate schema.
@@ -16,15 +16,15 @@ type FlagFlavor = (typeof VALID_FLAVORS)[number]
  * does not export the type directly.
  */
 interface FlagCreatePayload {
-  type: FlagType
-  url: string
-  user_id: string
-  source: "web" | "mobile" | "robotoff"
-  flavor: FlagFlavor
-  barcode?: string
-  image_id?: string
-  reason?: string
-  comment?: string
+  type: FlagType;
+  url: string;
+  user_id: string;
+  source: "web" | "mobile" | "robotoff";
+  flavor: FlagFlavor;
+  barcode?: string;
+  image_id?: string;
+  reason?: string;
+  comment?: string;
 }
 
 /**
@@ -218,58 +218,58 @@ export class NutriPatrolFlagForm extends LitElement {
         }
       }
     `,
-  ]
+  ];
 
   @property({ type: String })
-  barcode = ""
+  barcode = "";
 
   @property({ type: String })
-  type: FlagType = "product"
+  type: FlagType = "product";
 
   @property({ type: String, attribute: "image-id" })
-  imageId = ""
+  imageId = "";
 
   @property({ type: String })
-  flavor: FlagFlavor = "off"
+  flavor: FlagFlavor = "off";
 
   @property({ type: String, attribute: "user-id" })
-  userId = ""
+  userId = "";
 
   @property({ type: String })
-  url = ""
+  url = "";
 
   @property({ type: Boolean, reflect: true })
-  open = false
+  open = false;
 
   @state()
-  private loading = false
+  private loading = false;
 
   @state()
-  private error: string | null = null
+  private error: string | null = null;
 
   @state()
-  private success = false
+  private success = false;
 
   @state()
-  private reason = "wrong_data"
+  private reason = "wrong_data";
 
   @state()
-  private comment = ""
+  private comment = "";
 
   @query("dialog")
-  private dialog!: HTMLDialogElement
+  private dialog!: HTMLDialogElement;
 
-  private client = new NutriPatrol(globalThis.fetch)
-  private autoCloseTimer?: ReturnType<typeof setTimeout>
+  private client = new NutriPatrol(globalThis.fetch);
+  private autoCloseTimer?: ReturnType<typeof setTimeout>;
 
   private get modalTitle(): string {
     switch (this.type) {
       case "image":
-        return msg("Flag an image")
+        return msg("Flag an image");
       case "search":
-        return msg("Flag a search result")
+        return msg("Flag a search result");
       default:
-        return msg("Flag a product")
+        return msg("Flag a product");
     }
   }
 
@@ -279,30 +279,33 @@ export class NutriPatrolFlagForm extends LitElement {
         return [
           { value: "inappropriate", label: msg("Inappropriate") },
           { value: "outdated", label: msg("Outdated") },
-          { value: "includes_personal_infos", label: msg("Includes Personal Information") },
+          {
+            value: "includes_personal_infos",
+            label: msg("Includes Personal Information"),
+          },
           { value: "duplicate", label: msg("Duplicate") },
           { value: "other", label: msg("Other") },
-        ]
+        ];
       case "search":
-        return [{ value: "other", label: msg("Other") }]
+        return [{ value: "other", label: msg("Other") }];
       default:
         return [
           { value: "wrong_barcode", label: msg("Wrong Barcode") },
           { value: "missing_data", label: msg("Missing Data") },
           { value: "wrong_data", label: msg("Wrong Data") },
           { value: "other", label: msg("Other") },
-        ]
+        ];
     }
   }
 
   private get submitLabel(): string {
     switch (this.type) {
       case "image":
-        return msg("FLAG IMAGE")
+        return msg("FLAG IMAGE");
       case "search":
-        return msg("FLAG SEARCH")
+        return msg("FLAG SEARCH");
       default:
-        return msg("FLAG PRODUCT")
+        return msg("FLAG PRODUCT");
     }
   }
 
@@ -310,72 +313,74 @@ export class NutriPatrolFlagForm extends LitElement {
     if (changedProperties.has("open")) {
       if (this.open) {
         if (this.dialog && !this.dialog.open) {
-          this.dialog.showModal()
+          this.dialog.showModal();
         }
-        this.resetForm()
+        this.resetForm();
       } else {
-        this.dialog?.close()
+        this.dialog?.close();
       }
     }
 
     if (changedProperties.has("type")) {
-      this.reason = this.reasonOptions[0].value
+      this.reason = this.reasonOptions[0].value;
     }
   }
 
   private resetForm() {
-    this.success = false
-    this.error = null
-    this.loading = false
+    this.success = false;
+    this.error = null;
+    this.loading = false;
     // Reset reason to the first valid option for the current type
-    this.reason = this.reasonOptions[0].value
-    this.comment = ""
+    this.reason = this.reasonOptions[0].value;
+    this.comment = "";
   }
 
   private handleClose() {
-    if (!this.open) return
+    if (!this.open) return;
 
     if (this.autoCloseTimer) {
-      clearTimeout(this.autoCloseTimer)
-      this.autoCloseTimer = undefined
+      clearTimeout(this.autoCloseTimer);
+      this.autoCloseTimer = undefined;
     }
-    this.open = false
-    this.dispatchEvent(new CustomEvent("close", { bubbles: true, composed: true }))
+    this.open = false;
+    this.dispatchEvent(
+      new CustomEvent("close", { bubbles: true, composed: true }),
+    );
   }
 
   override disconnectedCallback() {
-    super.disconnectedCallback()
+    super.disconnectedCallback();
     if (this.autoCloseTimer) {
-      clearTimeout(this.autoCloseTimer)
-      this.autoCloseTimer = undefined
+      clearTimeout(this.autoCloseTimer);
+      this.autoCloseTimer = undefined;
     }
   }
 
   private async handleSubmit(e: Event) {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!VALID_TYPES.includes(this.type as FlagType)) {
-      this.error = msg("Invalid flag type.")
-      return
+      this.error = msg("Invalid flag type.");
+      return;
     }
 
     if (!VALID_FLAVORS.includes(this.flavor as FlagFlavor)) {
-      this.error = msg("Invalid flavor.")
-      return
+      this.error = msg("Invalid flavor.");
+      return;
     }
 
     if (!this.userId) {
-      this.error = msg("User ID is required to submit a flag. Please log in.")
-      return
+      this.error = msg("User ID is required to submit a flag. Please log in.");
+      return;
     }
 
     if (this.type === "image" && !this.imageId) {
-      this.error = msg("Image ID is required to flag an image.")
-      return
+      this.error = msg("Image ID is required to flag an image.");
+      return;
     }
 
-    this.loading = true
-    this.error = null
+    this.loading = true;
+    this.error = null;
 
     // As per the SDK types, url, user_id, source, flavor, and type are required
     const payload: FlagCreatePayload = {
@@ -386,32 +391,32 @@ export class NutriPatrolFlagForm extends LitElement {
       flavor: this.flavor as FlagCreatePayload["flavor"],
       reason: this.reason,
       comment: this.comment || undefined,
-    }
+    };
 
     if (this.barcode && this.type !== "search") {
-      payload.barcode = this.barcode
+      payload.barcode = this.barcode;
     }
 
     if (this.type === "image") {
-      payload.image_id = this.imageId
+      payload.image_id = this.imageId;
     }
 
     try {
       // Temporary bypass until the SDK version is bumped and types align
-      const { error } = await this.client.createFlag(payload)
+      const { error } = await this.client.createFlag(payload);
       if (error) {
-        console.error("Failed to create flag:", error)
-        this.error = msg("Failed to submit flag. Please try again later.")
+        console.error("Failed to create flag:", error);
+        this.error = msg("Failed to submit flag. Please try again later.");
       } else {
-        this.success = true
+        this.success = true;
         // Close modal automatically after delay
-        this.autoCloseTimer = setTimeout(() => this.handleClose(), 3000)
+        this.autoCloseTimer = setTimeout(() => this.handleClose(), 3000);
       }
     } catch (err) {
-      console.error("Flag API submission error:", err)
-      this.error = msg("An unexpected error occurred.")
+      console.error("Flag API submission error:", err);
+      this.error = msg("An unexpected error occurred.");
     } finally {
-      this.loading = false
+      this.loading = false;
     }
   }
 
@@ -421,7 +426,11 @@ export class NutriPatrolFlagForm extends LitElement {
         <div class="modal-header">
           <h2 class="modal-title">${this.modalTitle}</h2>
           <!-- Close button -->
-          <button class="close-btn" @click=${this.handleClose} aria-label="${msg("Close")}">
+          <button
+            class="close-btn"
+            @click=${this.handleClose}
+            aria-label="${msg("Close")}"
+          >
             &times;
           </button>
         </div>
@@ -454,7 +463,12 @@ export class NutriPatrolFlagForm extends LitElement {
                         ? html`
                             <div class="form-group">
                               <label for="barcode">${msg("Barcode")} *</label>
-                              <input type="text" id="barcode" .value=${this.barcode} disabled />
+                              <input
+                                type="text"
+                                id="barcode"
+                                .value=${this.barcode}
+                                disabled
+                              />
                             </div>
                           `
                         : nothing
@@ -464,7 +478,12 @@ export class NutriPatrolFlagForm extends LitElement {
                         ? html`
                             <div class="form-group">
                               <label for="image-id">${msg("Image ID")} *</label>
-                              <input type="text" id="image-id" .value=${this.imageId} disabled />
+                              <input
+                                type="text"
+                                id="image-id"
+                                .value=${this.imageId}
+                                disabled
+                              />
                             </div>
                           `
                         : nothing
@@ -480,10 +499,13 @@ export class NutriPatrolFlagForm extends LitElement {
                       >
                         ${this.reasonOptions.map(
                           (opt) => html`
-                            <option value="${opt.value}" ?selected=${this.reason === opt.value}>
+                            <option
+                              value="${opt.value}"
+                              ?selected=${this.reason === opt.value}
+                            >
                               ${opt.label}
                             </option>
-                          `
+                          `,
                         )}
                       </select>
                     </div>
@@ -494,14 +516,20 @@ export class NutriPatrolFlagForm extends LitElement {
                         id="comment"
                         .value=${this.comment}
                         @input=${(e: Event) =>
-                          (this.comment = (e.target as HTMLTextAreaElement).value)}
+                          (this.comment = (
+                            e.target as HTMLTextAreaElement
+                          ).value)}
                         placeholder=${msg("Optional details")}
                       ></textarea>
                     </div>
 
                     ${this.error ? html`<div class="message error">${this.error}</div>` : nothing}
 
-                    <button type="submit" class="submit-btn" ?disabled=${this.loading}>
+                    <button
+                      type="submit"
+                      class="submit-btn"
+                      ?disabled=${this.loading}
+                    >
                       ${this.loading ? msg("Submitting...") : this.submitLabel}
                     </button>
                   </form>
@@ -509,12 +537,12 @@ export class NutriPatrolFlagForm extends LitElement {
           }
         </div>
       </dialog>
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "nutripatrol-flag-form": NutriPatrolFlagForm
+    "nutripatrol-flag-form": NutriPatrolFlagForm;
   }
 }

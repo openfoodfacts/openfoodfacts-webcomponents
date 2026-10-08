@@ -1,42 +1,42 @@
-import { LitElement, html, css, nothing, type PropertyValues } from "lit"
-import { customElement, property, state } from "lit/decorators.js"
-import { classMap } from "lit/directives/class-map.js"
-import { localized, msg, str } from "@lit/localize"
-import { KP_ATTRIBUTE_IMG } from "../../utils/openfoodfacts"
-import { getImageUrl } from "../../signals/app"
-import { darkModeListener } from "../../utils/dark-mode-listener"
+import { LitElement, html, css, nothing, type PropertyValues } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
+import { localized, msg, str } from "@lit/localize";
+import { KP_ATTRIBUTE_IMG } from "../../utils/openfoodfacts";
+import { getImageUrl } from "../../signals/app";
+import { darkModeListener } from "../../utils/dark-mode-listener";
 
 interface NavigationState {
   to: {
     params: {
-      barcode: string
-    }
-  } | null
+      barcode: string;
+    };
+  } | null;
 }
 
 interface PersonalScore {
-  score: number
+  score: number;
   matchStatus:
     | "very_good_match"
     | "good_match"
     | "poor_match"
     | "does_not_match"
     | "may_not_match"
-    | "unknown_match"
-  totalWeights: number
-  totalWeightedScore: number
+    | "unknown_match";
+  totalWeights: number;
+  totalWeightedScore: number;
 }
 
 interface Product {
-  code: string
-  product_name: string
-  brands: string
-  quantity: string
-  image_front_small_url: string
-  product_type: string
-  nutriscore_grade?: string
-  nova_group?: number
-  greenscore_grade?: string // Assuming this is the name of the ecoscore attribute (need to confirm with actual data, when available)
+  code: string;
+  product_name: string;
+  brands: string;
+  quantity: string;
+  image_front_small_url: string;
+  product_type: string;
+  nutriscore_grade?: string;
+  nova_group?: number;
+  greenscore_grade?: string; // Assuming this is the name of the ecoscore attribute (need to confirm with actual data, when available)
 }
 
 /**
@@ -317,7 +317,7 @@ export class ProductCard extends LitElement {
     .match-tag-unknown-match {
       background-color: #6b7280; /* Gray */
     }
-  `
+  `;
 
   /**
    * The product object containing product details
@@ -333,19 +333,19 @@ export class ProductCard extends LitElement {
     nutriscore_grade: undefined,
     nova_group: undefined,
     greenscore_grade: undefined,
-  }
+  };
 
   /**
    * The personal score object containing match scoring information
    */
   @property({ type: Object })
-  personalScore: PersonalScore | undefined = undefined
+  personalScore: PersonalScore | undefined = undefined;
 
   /**
    * Whether to show the match score tag on the product card
    */
   @property({ type: Boolean })
-  showMatchTag: boolean = false
+  showMatchTag: boolean = false;
 
   /**
    * Indicates if we're currently navigating to this product
@@ -353,58 +353,59 @@ export class ProductCard extends LitElement {
   @property({ type: Object })
   navigating: NavigationState = {
     to: null,
-  }
+  };
 
   @state()
-  nutriscoreSrc = ""
+  nutriscoreSrc = "";
 
   @state()
-  novaSrc = ""
+  novaSrc = "";
 
   @state()
-  greenscoreSrc = ""
+  greenscoreSrc = "";
 
   @state()
-  private imageLoading = false
+  private imageLoading = false;
 
   @state()
-  private imageFailed = false
+  private imageFailed = false;
 
   /**
    * Placeholder image URL for products without an image
    */
   @property({ type: String })
-  placeholderImage = getImageUrl("Placeholder.svg")
+  placeholderImage = getImageUrl("Placeholder.svg");
 
   /**
    * Whether to apply dark mode styling (auto-detected from prefers-color-scheme)
    */
-  isDarkMode = darkModeListener.darkMode
+  isDarkMode = darkModeListener.darkMode;
   private _darkModeCb = (isDark: boolean) => {
-    this.isDarkMode = isDark
-    this.requestUpdate()
-  }
+    this.isDarkMode = isDark;
+    this.requestUpdate();
+  };
 
   override connectedCallback() {
-    super.connectedCallback()
-    darkModeListener.subscribe(this._darkModeCb)
+    super.connectedCallback();
+    darkModeListener.subscribe(this._darkModeCb);
   }
 
   override disconnectedCallback() {
-    darkModeListener.unsubscribe(this._darkModeCb)
-    super.disconnectedCallback()
+    darkModeListener.unsubscribe(this._darkModeCb);
+    super.disconnectedCallback();
   }
 
   override willUpdate(changedProperties: PropertyValues) {
-    super.willUpdate(changedProperties)
+    super.willUpdate(changedProperties);
 
     if (changedProperties.has("product")) {
-      const previousProduct = changedProperties.get("product") as Product | undefined
-      const imageUrl = this.product.image_front_small_url
+      const previousProduct = changedProperties.get("product") as
+        Product | undefined;
+      const imageUrl = this.product.image_front_small_url;
 
       if (imageUrl !== previousProduct?.image_front_small_url) {
-        this.imageLoading = Boolean(imageUrl)
-        this.imageFailed = false
+        this.imageLoading = Boolean(imageUrl);
+        this.imageFailed = false;
       }
     }
   }
@@ -413,14 +414,16 @@ export class ProductCard extends LitElement {
    * Updates score image URLs based on the product's nutrition grades, nova group, and greenscore
    */
   override updated(changedProperties: PropertyValues) {
-    super.updated(changedProperties)
+    super.updated(changedProperties);
     this.nutriscoreSrc = KP_ATTRIBUTE_IMG(
-      `nutriscore-${this.product.nutriscore_grade?.toLowerCase() || "unknown"}.svg`
-    )
-    this.novaSrc = KP_ATTRIBUTE_IMG(`nova-group-${this.product.nova_group || "unknown"}.svg`)
+      `nutriscore-${this.product.nutriscore_grade?.toLowerCase() || "unknown"}.svg`,
+    );
+    this.novaSrc = KP_ATTRIBUTE_IMG(
+      `nova-group-${this.product.nova_group || "unknown"}.svg`,
+    );
     this.greenscoreSrc = KP_ATTRIBUTE_IMG(
-      `green-score-${this.product.greenscore_grade?.toLowerCase() || "unknown"}.svg`
-    )
+      `green-score-${this.product.greenscore_grade?.toLowerCase() || "unknown"}.svg`,
+    );
   }
 
   /**
@@ -428,43 +431,43 @@ export class ProductCard extends LitElement {
    */
   private getMatchTagInfo(): { text: string; cssClass: string } {
     if (this.personalScore) {
-      const { score, matchStatus } = this.personalScore
+      const { score, matchStatus } = this.personalScore;
       switch (matchStatus) {
         case "very_good_match":
           return {
             text: msg(str`Very Good Match ${score}%`),
             cssClass: "match-tag-very-good-match",
-          }
+          };
         case "good_match":
           return {
             text: msg(str`Good Match ${score}%`),
             cssClass: "match-tag-good-match",
-          }
+          };
         case "poor_match":
           return {
             text: msg(str`Poor Match ${score}%`),
             cssClass: "match-tag-poor-match",
-          }
+          };
         case "does_not_match":
           return {
             text: msg("Does Not Match"),
             cssClass: "match-tag-does-not-match",
-          }
+          };
         case "may_not_match":
           return {
             text: msg("May Not Match"),
             cssClass: "match-tag-may-not-match",
-          }
+          };
         case "unknown_match":
           return {
             text: msg("Unknown Match"),
             cssClass: "match-tag-unknown-match",
-          }
+          };
         default:
           return {
             text: msg("Unknown Match"),
             cssClass: "match-tag-unknown-match",
-          }
+          };
       }
     }
 
@@ -472,48 +475,51 @@ export class ProductCard extends LitElement {
     return {
       text: msg("No Score Available"),
       cssClass: "match-tag-unknown-match",
-    }
+    };
   }
 
   private handleImageLoad = () => {
-    this.imageLoading = false
-  }
+    this.imageLoading = false;
+  };
 
   private handleImageError = () => {
-    this.imageLoading = false
-    this.imageFailed = true
-  }
+    this.imageLoading = false;
+    this.imageFailed = true;
+  };
 
   override render() {
-    const isNavigatingToProduct = this.navigating.to?.params?.barcode === this.product.code
-    const hasProductImage = Boolean(this.product.image_front_small_url)
-    const shouldShowProductImage = hasProductImage && !this.imageFailed
-    const matchTagInfo = this.getMatchTagInfo()
+    const isNavigatingToProduct =
+      this.navigating.to?.params?.barcode === this.product.code;
+    const hasProductImage = Boolean(this.product.image_front_small_url);
+    const shouldShowProductImage = hasProductImage && !this.imageFailed;
+    const matchTagInfo = this.getMatchTagInfo();
 
-    const brands = this.product.brands?.trim()
-    const quantity = this.product.quantity?.trim()
+    const brands = this.product.brands?.trim();
+    const quantity = this.product.quantity?.trim();
 
-    let brandQuantityStr = msg("Unknown Brand/Quantity")
+    let brandQuantityStr = msg("Unknown Brand/Quantity");
     if (brands && quantity) {
       // Use localized template for combined brand and quantity so the separator
       // can be translated if needed.
-      brandQuantityStr = msg(str`${brands} - ${quantity}`)
+      brandQuantityStr = msg(str`${brands} - ${quantity}`);
     } else if (brands) {
-      brandQuantityStr = brands
+      brandQuantityStr = brands;
     } else if (quantity) {
-      brandQuantityStr = quantity
+      brandQuantityStr = quantity;
     }
 
     const cardClasses = {
       "card-container": true,
       "dark-mode": this.isDarkMode,
-    }
+    };
 
     return html`
       <div class=${classMap(cardClasses)}>
         ${
           this.showMatchTag
-            ? html`<div class="match-tag ${matchTagInfo.cssClass}">${matchTagInfo.text}</div>`
+            ? html`<div class="match-tag ${matchTagInfo.cssClass}">
+                ${matchTagInfo.text}
+              </div>`
             : nothing
         }
         <div class="card-content">
@@ -530,7 +536,10 @@ export class ProductCard extends LitElement {
                       <div class="image-wrapper">
                         ${
                           this.imageLoading
-                            ? html`<span class="loading-ring" aria-hidden="true"></span>`
+                            ? html`<span
+                                class="loading-ring"
+                                aria-hidden="true"
+                              ></span>`
                             : nothing
                         }
                         <img
@@ -573,13 +582,25 @@ export class ProductCard extends LitElement {
                 ? html`
                     <div class="scores-container">
                       <div class="score-item">
-                        <img src=${this.nutriscoreSrc} alt="nutriscore" class="score-image" />
+                        <img
+                          src=${this.nutriscoreSrc}
+                          alt="nutriscore"
+                          class="score-image"
+                        />
                       </div>
                       <div class="score-item">
-                        <img src=${this.novaSrc} alt="nova" class="score-image" />
+                        <img
+                          src=${this.novaSrc}
+                          alt="nova"
+                          class="score-image"
+                        />
                       </div>
                       <div class="score-item">
-                        <img src=${this.greenscoreSrc} alt="greenscore" class="score-image" />
+                        <img
+                          src=${this.greenscoreSrc}
+                          alt="greenscore"
+                          class="score-image"
+                        />
                       </div>
                     </div>
                   `
@@ -588,12 +609,12 @@ export class ProductCard extends LitElement {
           </div>
         </div>
       </div>
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "product-card": ProductCard
+    "product-card": ProductCard;
   }
 }

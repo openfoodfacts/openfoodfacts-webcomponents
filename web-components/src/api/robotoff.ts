@@ -10,67 +10,73 @@ import {
   type IngredientDetectionInsight,
   type IngredientDetectionAnnotationData,
   InsightType,
-} from "../types/robotoff"
-import { robotoffConfiguration } from "../signals/robotoff"
-import { languageCode } from "../signals/app"
+} from "../types/robotoff";
+import { robotoffConfiguration } from "../signals/robotoff";
+import { languageCode } from "../signals/app";
 
 import {
   Robotoff,
   type RobotoffAnnotateBody,
   type RobotoffInsightQuery as SDKRobotoffInsightQuery,
-} from "@openfoodfacts/openfoodfacts-nodejs"
+} from "@openfoodfacts/openfoodfacts-nodejs";
 
-const ROBOTOFF_API_PATH = "/api/v1"
+const ROBOTOFF_API_PATH = "/api/v1";
 
 function createRobotoff(fetch: typeof window.fetch) {
   const configuredBaseUrl = new URL(
     robotoffConfiguration.getItem("apiUrl") as string,
-    window.location.href
-  )
-  const configuredBasePath = configuredBaseUrl.pathname.replace(/\/+$/, "")
+    window.location.href,
+  );
+  const configuredBasePath = configuredBaseUrl.pathname.replace(/\/+$/, "");
 
   // ensure that any user account credentials get used in Robotoff
   const fetchWithCredentials: typeof window.fetch = async (url, options) => {
-    const requestUrl = new URL(url instanceof Request ? url.url : url.toString())
-    const requestPath = requestUrl.pathname
+    const requestUrl = new URL(
+      url instanceof Request ? url.url : url.toString(),
+    );
+    const requestPath = requestUrl.pathname;
     if (
       requestUrl.origin === configuredBaseUrl.origin &&
-      (requestPath === ROBOTOFF_API_PATH || requestPath.startsWith(`${ROBOTOFF_API_PATH}/`))
+      (requestPath === ROBOTOFF_API_PATH ||
+        requestPath.startsWith(`${ROBOTOFF_API_PATH}/`))
     ) {
-      requestUrl.pathname = configuredBasePath + requestPath.slice(ROBOTOFF_API_PATH.length)
+      requestUrl.pathname =
+        configuredBasePath + requestPath.slice(ROBOTOFF_API_PATH.length);
     }
 
-    let request: Request
+    let request: Request;
     if (url instanceof Request) {
       const body =
-        url.method === "GET" || url.method === "HEAD" ? undefined : await url.arrayBuffer()
+        url.method === "GET" || url.method === "HEAD"
+          ? undefined
+          : await url.arrayBuffer();
       request = new Request(requestUrl, {
         method: url.method,
         headers: url.headers,
         body,
-      })
+      });
     } else {
-      request = new Request(requestUrl)
+      request = new Request(requestUrl);
     }
 
-    return fetch(request, { ...options, credentials: "include" })
-  }
+    return fetch(request, { ...options, credentials: "include" });
+  };
   return new Robotoff(fetchWithCredentials, {
     // The SDK always normalizes its base URL to /api/v1. The fetch adapter above
     // restores the configured path prefix after that normalization.
     baseUrl: new URL(ROBOTOFF_API_PATH, configuredBaseUrl.origin).toString(),
-  })
+  });
 }
 
 const toRobotoffInsightQuery = (
-  requestParams: InsightsRequestParams
+  requestParams: InsightsRequestParams,
 ): NonNullable<SDKRobotoffInsightQuery> => {
-  const { barcode, ...query } = requestParams
+  const { barcode, ...query } = requestParams;
   return {
     ...query,
     ...(barcode === undefined ? {} : { barcode: Number(barcode) }),
-  }
-}
+  };
+};
 
 /**
  * Annotate an insight
@@ -78,33 +84,40 @@ const toRobotoffInsightQuery = (
  */
 const annotate = async (body: RobotoffAnnotateBody): Promise<unknown> => {
   if (robotoffConfiguration.getItem("dryRun")) {
-    console.log("Annotated :", body)
-    return undefined
+    console.log("Annotated :", body);
+    return undefined;
   }
 
   const result = (await createRobotoff(fetch).annotate(body)) as unknown as {
-    data?: unknown
-    error?: unknown
-  }
+    data?: unknown;
+    error?: unknown;
+  };
   if (result.error) {
-    throw result.error
+    throw result.error;
   }
-  return result.data
-}
+  return result.data;
+};
 
 /**
  * Robotoff API
  */
 const robotoff = {
-  annotateQuestion(insightId: string, annotation: AnnotationAnswer): Promise<unknown> {
-    return annotate({ insight_id: insightId, annotation: annotation })
+  annotateQuestion(
+    insightId: string,
+    annotation: AnnotationAnswer,
+  ): Promise<unknown> {
+    return annotate({ insight_id: insightId, annotation: annotation });
   },
   annotateNutrients(
     insightId: string,
     annotation: AnnotationAnswer,
-    data?: NutrientsAnnotationData
+    data?: NutrientsAnnotationData,
   ): Promise<unknown> {
-    return annotate({ insight_id: insightId, annotation: annotation, data: data })
+    return annotate({
+      insight_id: insightId,
+      annotation: annotation,
+      data: data,
+    });
   },
 
   /**
@@ -117,13 +130,13 @@ const robotoff = {
   annotateIngredientSpellcheck(
     insightId: string,
     annotation: AnnotationAnswer,
-    correction?: string
+    correction?: string,
   ): Promise<unknown> {
     return annotate({
       insight_id: insightId,
       annotation: annotation,
       ...(correction ? { data: { annotation: correction } } : {}),
-    })
+    });
   },
 
   /**
@@ -135,13 +148,13 @@ const robotoff = {
   annotateIngredientDetection(
     insightId: string,
     annotation: AnnotationAnswer,
-    data?: IngredientDetectionAnnotationData
+    data?: IngredientDetectionAnnotationData,
   ): Promise<unknown> {
     return annotate({
       insight_id: insightId,
       annotation: annotation,
       ...(data ? { data: data } : {}),
-    })
+    });
   },
 
   /**
@@ -152,16 +165,19 @@ const robotoff = {
    */
   async questionsByProductCode(
     code: string,
-    questionRequestParams: QuestionRequestParams = {}
+    questionRequestParams: QuestionRequestParams = {},
   ): Promise<QuestionsResponse> {
-    const result = (await createRobotoff(fetch).questionsByProductCode(code as unknown as number, {
-      ...questionRequestParams,
-      lang: questionRequestParams.lang ?? languageCode.get(),
-    })) as unknown as { data?: QuestionsResponse; error?: unknown }
+    const result = (await createRobotoff(fetch).questionsByProductCode(
+      code as unknown as number,
+      {
+        ...questionRequestParams,
+        lang: questionRequestParams.lang ?? languageCode.get(),
+      },
+    )) as unknown as { data?: QuestionsResponse; error?: unknown };
     if (result.error) {
-      throw result.error
+      throw result.error;
     }
-    return result.data as QuestionsResponse
+    return result.data as QuestionsResponse;
   },
 
   /**
@@ -171,18 +187,21 @@ const robotoff = {
    * nutrients insights are supported
    */
   async insights<
-    T extends NutrientsInsight | IngredientSpellcheckInsight | IngredientDetectionInsight,
+    T extends
+      | NutrientsInsight
+      | IngredientSpellcheckInsight
+      | IngredientDetectionInsight,
   >(requestParams: InsightsRequestParams = {}): Promise<InsightsResponse<T>> {
     const result = (await createRobotoff(fetch).insights(
-      toRobotoffInsightQuery(requestParams)
+      toRobotoffInsightQuery(requestParams),
     )) as unknown as {
-      data?: InsightsResponse<T>
-      error?: unknown
-    }
+      data?: InsightsResponse<T>;
+      error?: unknown;
+    };
     if (result.error) {
-      throw result.error
+      throw result.error;
     }
-    return result.data as InsightsResponse<T>
+    return result.data as InsightsResponse<T>;
   },
 
   /**
@@ -193,10 +212,18 @@ const robotoff = {
    * ingredients and nutrients insights are supported
    */
   async fetchRobotoffContributionMessageInsights(
-    requestParams: InsightsRequestParams = {}
-  ): Promise<Array<NutrientsInsight | IngredientSpellcheckInsight | IngredientDetectionInsight>> {
+    requestParams: InsightsRequestParams = {},
+  ): Promise<
+    Array<
+      | NutrientsInsight
+      | IngredientSpellcheckInsight
+      | IngredientDetectionInsight
+    >
+  > {
     const result = await this.insights<
-      NutrientsInsight | IngredientSpellcheckInsight | IngredientDetectionInsight
+      | NutrientsInsight
+      | IngredientSpellcheckInsight
+      | IngredientDetectionInsight
     >({
       ...requestParams,
       annotated: false,
@@ -205,9 +232,9 @@ const robotoff = {
         InsightType.ingredient_spellcheck,
         InsightType.ingredient_detection,
       ].join(","),
-    })
-    return result.insights
+    });
+    return result.insights;
   },
-}
+};
 
-export default robotoff
+export default robotoff;

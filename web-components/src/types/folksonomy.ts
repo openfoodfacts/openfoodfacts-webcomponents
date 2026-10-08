@@ -1,81 +1,81 @@
 export type FolksonomyConfigurationOptions = {
-  apiUrl: string
-}
+  apiUrl: string;
+};
 
 export interface AuthByCookieResponse {
-  access_token: string
-  token_type: string
+  access_token: string;
+  token_type: string;
 }
 
 export interface ProductProperty {
-  k: string
-  v: string
-  owner: string
-  version: number
-  product: string
-  editor: string
-  last_edit: string
-  comment: string
+  k: string;
+  v: string;
+  owner: string;
+  version: number;
+  product: string;
+  editor: string;
+  last_edit: string;
+  comment: string;
 }
 
-export type FetchProductPropertiesResponse = ProductProperty[]
+export type FetchProductPropertiesResponse = ProductProperty[];
 
 export interface AddProductPropertyResponse {
-  key: string
-  value: string
-  version: number
+  key: string;
+  value: string;
+  version: number;
 }
 
 export interface DeleteProductPropertyResponse {
-  success: boolean
+  success: boolean;
 }
 
 export interface UpdateProductPropertyResponse {
-  key: string
-  value: string
-  version: number
+  key: string;
+  value: string;
+  version: number;
 }
 
 export interface ErrorDetail {
-  loc: [string, number]
-  msg: string
-  type: string
+  loc: [string, number];
+  msg: string;
+  type: string;
 }
 
 export interface ErrorResponse {
-  detail: ErrorDetail[]
+  detail: ErrorDetail[];
 }
 
 export interface ValueRenameRequest {
-  property: string
-  old_value: string
-  new_value: string
+  property: string;
+  old_value: string;
+  new_value: string;
 }
 
 export interface ValueDeleteRequest {
-  property: string
-  value: string
+  property: string;
+  value: string;
 }
 
 export interface UserInfo {
-  user_id: string
-  admin: boolean
-  moderator: boolean
-  user: boolean
+  user_id: string;
+  admin: boolean;
+  moderator: boolean;
+  user: boolean;
 }
 
 export interface PropertyRenameRequest {
-  old_property: string
-  new_property: string
+  old_property: string;
+  new_property: string;
 }
 
 export interface PropertyDeleteRequest {
-  property: string
+  property: string;
 }
 
 export interface PropertyClashCheck {
-  products_with_both: number
-  products_with_old_only: number
-  products_with_new_only: number
-  conflicting_products: string[]
+  products_with_both: number;
+  products_with_old_only: number;
+  products_with_new_only: number;
+  conflicting_products: string[];
 }

@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/web-components-vite"
-import "./knowledge-panels"
+import type { Meta, StoryObj } from "@storybook/web-components-vite";
+import "./knowledge-panels";
 
 const meta: Meta = {
   title: "Components/Knowledge Panels",
   component: "knowledge-panels",
-}
-export default meta
+};
+export default meta;
 
-type Story = StoryObj
+type Story = StoryObj;
 
 export const Basic: Story = {
   args: {
@@ -16,4 +16,4 @@ export const Basic: Story = {
     panel: ["root"],
     topFrame: false,
   },
-}
+};

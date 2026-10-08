@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/web-components-vite"
-import { html } from "lit"
-import { ref, createRef } from "lit/directives/ref.js"
-import "./nutripatrol-flag-form"
-import type { NutriPatrolFlagForm } from "./nutripatrol-flag-form"
+import type { Meta, StoryObj } from "@storybook/web-components-vite";
+import { html } from "lit";
+import { ref, createRef } from "lit/directives/ref.js";
+import "./nutripatrol-flag-form";
+import type { NutriPatrolFlagForm } from "./nutripatrol-flag-form";
 
 const meta: Meta<NutriPatrolFlagForm> = {
   title: "Components/Nutri Patrol",
@@ -22,10 +22,10 @@ const meta: Meta<NutriPatrolFlagForm> = {
     url: { control: "text" },
     imageId: { control: "text" },
   },
-}
-export default meta
+};
+export default meta;
 
-type Story = StoryObj<NutriPatrolFlagForm>
+type Story = StoryObj<NutriPatrolFlagForm>;
 
 export const FlagProduct: Story = {
   args: {
@@ -37,10 +37,12 @@ export const FlagProduct: Story = {
     url: "https://world.openfoodfacts.org/product/6410405143648",
   },
   render: (args) => {
-    const formRef = createRef<NutriPatrolFlagForm>()
+    const formRef = createRef<NutriPatrolFlagForm>();
 
     return html`
-      <button @click=${() => formRef.value?.setAttribute("open", "")}>Open Flag Form</button>
+      <button @click=${() => formRef.value?.setAttribute("open", "")}>
+        Open Flag Form
+      </button>
       <nutripatrol-flag-form
         ${ref(formRef)}
         .barcode=${args.barcode}
@@ -51,9 +53,9 @@ export const FlagProduct: Story = {
         .url=${args.url}
         .imageId=${args.imageId ?? ""}
       ></nutripatrol-flag-form>
-    `
+    `;
   },
-}
+};
 
 export const FlagImage: Story = {
   args: {
@@ -64,7 +66,7 @@ export const FlagImage: Story = {
     url: "https://image.openfoodfacts.org/images/products/301/762/042/2003/149.400.jpg",
   },
   render: FlagProduct.render,
-}
+};
 
 export const FlagSearch: Story = {
   args: {
@@ -73,4 +75,4 @@ export const FlagSearch: Story = {
     url: "https://world.openfoodfacts.org/cgi/search.pl?search_terms=nutella",
   },
   render: FlagProduct.render,
-}
+};

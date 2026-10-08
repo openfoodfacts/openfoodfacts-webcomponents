@@ -1,18 +1,18 @@
-import { LitElement, css, html, nothing } from "lit"
-import { customElement, property, state } from "lit/decorators.js"
-import { Task } from "@lit/task"
-import { ALERT } from "../../styles/alert.js"
+import { LitElement, css, html, nothing } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
+import { Task } from "@lit/task";
+import { ALERT } from "../../styles/alert.js";
 
-import { fetchQuestionsByProductCode } from "../../signals/questions"
-import { localized, msg } from "@lit/localize"
-import { ButtonType, getButtonClasses } from "../../styles/buttons.js"
-import { RobotoffContributionType } from "../../constants.js"
-import { CONTAINER } from "../../styles/responsive.js"
-import "../robotoff-modal/robotoff-modal"
-import { SignalWatcher } from "@lit-labs/signals"
-import robotoff from "../../api/robotoff.js"
-import { InsightType } from "../../types/robotoff.js"
-import { LanguageCodesMixin } from "../../mixins/language-codes-mixin.js"
+import { fetchQuestionsByProductCode } from "../../signals/questions";
+import { localized, msg } from "@lit/localize";
+import { ButtonType, getButtonClasses } from "../../styles/buttons.js";
+import { RobotoffContributionType } from "../../constants.js";
+import { CONTAINER } from "../../styles/responsive.js";
+import "../robotoff-modal/robotoff-modal";
+import { SignalWatcher } from "@lit-labs/signals";
+import robotoff from "../../api/robotoff.js";
+import { InsightType } from "../../types/robotoff.js";
+import { LanguageCodesMixin } from "../../mixins/language-codes-mixin.js";
 
 /**
  * The `robotoff-contribution-message` component is a web component that displays messages prompting users to contribute to improving product information.
@@ -28,7 +28,9 @@ import { LanguageCodesMixin } from "../../mixins/language-codes-mixin.js"
  */
 @customElement("robotoff-contribution-message")
 @localized()
-export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatcher(LitElement)) {
+export class RobotoffContributionMessage extends LanguageCodesMixin(
+  SignalWatcher(LitElement),
+) {
   static override styles = [
     ALERT,
     CONTAINER,
@@ -59,13 +61,13 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
         text-align: left;
       }
     `,
-  ]
+  ];
 
   /**
    * The product code for which the contribution messages are displayed.
    */
   @property({ type: String, attribute: "product-code", reflect: true })
-  productCode = ""
+  productCode = "";
 
   /**
    * Whether the user is logged in.
@@ -74,13 +76,13 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
     type: Boolean,
     attribute: "is-logged-in",
   })
-  isLoggedIn = false
+  isLoggedIn = false;
 
   /**
    * The type of contribution being made.
    */
   @state()
-  robotoffContributionType?: RobotoffContributionType
+  robotoffContributionType?: RobotoffContributionType;
 
   /**
    * A record indicating which messages should be shown.
@@ -91,7 +93,7 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
     [RobotoffContributionType.NUTRIENT_EXTRACTION]: false,
     [RobotoffContributionType.INGREDIENT_DETECTION]: false,
     [RobotoffContributionType.QUESTIONS]: false,
-  }
+  };
 
   /**
    * Returns the messages to be displayed based on the `showMessages` state.
@@ -101,8 +103,8 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
    */
   get messagesToShow() {
     const items: {
-      type: RobotoffContributionType
-      message: string
+      type: RobotoffContributionType;
+      message: string;
     }[] = [
       {
         type: RobotoffContributionType.QUESTIONS,
@@ -120,9 +122,9 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
         type: RobotoffContributionType.INGREDIENT_DETECTION,
         message: msg("Help us correct the ingredient detection"),
       },
-    ].filter((item) => this.showMessages[item.type])
+    ].filter((item) => this.showMessages[item.type]);
 
-    return items
+    return items;
   }
 
   /**
@@ -133,13 +135,17 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
    */
   private _fetchDataTask = new Task(this, {
     task: async ([productCode]) => {
-      console.log("Fetching data for product code", productCode, this._languageCodes)
+      console.log(
+        "Fetching data for product code",
+        productCode,
+        this._languageCodes,
+      );
       this.showMessages = {
         [RobotoffContributionType.QUESTIONS]: false,
         [RobotoffContributionType.INGREDIENT_SPELLCHECK]: false,
         [RobotoffContributionType.NUTRIENT_EXTRACTION]: false,
         [RobotoffContributionType.INGREDIENT_DETECTION]: false,
-      }
+      };
 
       // Check if it need contributions. If not, don't show the message. If request fails, hide the message but do not crash all requests
       const [questions, insights] = await Promise.allSettled([
@@ -152,52 +158,53 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
               }),
             ]
           : []),
-      ])
+      ]);
       const insightValues = {
         [InsightType.ingredient_spellcheck]: false,
         [InsightType.nutrient_extraction]: false,
         [InsightType.ingredient_detection]: false,
-      }
+      };
 
       if (insights?.status === "fulfilled") {
         for (const insight of insights.value) {
-          insightValues[insight.type as InsightType] = true
+          insightValues[insight.type as InsightType] = true;
           // If all insights are true, break the loop
           if (Object.values(insightValues).every((value) => value)) {
-            break
+            break;
           }
         }
       }
 
       this.showMessages = {
-        questions: questions?.status === "fulfilled" && questions.value.length > 0,
+        questions:
+          questions?.status === "fulfilled" && questions.value.length > 0,
         ...insightValues,
-      }
+      };
     },
     args: () => [this.productCode, ...this._languageCodes],
-  })
+  });
 
   /**
    * Opens the modal for the specified contribution type.
    * @param {RobotoffContributionType} type - The type of contribution.
    */
   openModal(type: RobotoffContributionType) {
-    this.robotoffContributionType = type
+    this.robotoffContributionType = type;
   }
   /**
    * Closes the modal.
    */
   closeModal() {
-    this.robotoffContributionType = undefined
+    this.robotoffContributionType = undefined;
   }
   /**
    * Handles the save event when a contribution is made.
    * @param {CustomEvent<{ type: RobotoffContributionType }>} event - The event containing the contribution type.
    */
   onSave(event: CustomEvent<{ type: RobotoffContributionType }>) {
-    this.showMessages[event.detail.type!] = false
-    this.closeModal()
-    this.requestUpdate()
+    this.showMessages[event.detail.type!] = false;
+    this.closeModal();
+    this.requestUpdate();
   }
 
   /**
@@ -207,10 +214,10 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
   override render() {
     return this._fetchDataTask.render({
       complete: () => {
-        const messagesToShow = this.messagesToShow
+        const messagesToShow = this.messagesToShow;
 
         if (!messagesToShow.length) {
-          return nothing
+          return nothing;
         }
         return html` <div>
           <robotoff-modal
@@ -223,7 +230,7 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
             <div class="container">
               <p>
                 ${msg(
-                  "Hey! You can help us improve the product information by answering the following parts:"
+                  "Hey! You can help us improve the product information by answering the following parts:",
                 )}
               </p>
               <ul>
@@ -236,21 +243,21 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
                       >
                         ${item.message}
                       </button>
-                    </li>`
+                    </li>`,
                 )}
               </ul>
             </div>
           </div>
-        </div>`
+        </div>`;
       },
       pending: () => nothing,
       error: () => nothing,
-    })
+    });
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "robotoff-contribution-message": RobotoffContributionMessage
+    "robotoff-contribution-message": RobotoffContributionMessage;
   }
 }
