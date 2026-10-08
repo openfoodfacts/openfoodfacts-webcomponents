@@ -26,6 +26,7 @@ describe("folksonomy-editor-row", () => {
     const td = element.shadowRoot.querySelector(".value-cell")
     expect(td).toBeTruthy()
     expect(td.textContent.trim()).toBe("line 1\nline 2")
+    expect(getComputedStyle(td).whiteSpace).toBe("pre-wrap")
   })
 
   it("uses a textarea for editing to support multiline values", async () => {
