@@ -23,7 +23,7 @@ interface BarcodeDetector {
   detect(video: ImageBitmap): Promise<{ rawValue: string }[]>
 }
 
-declare var BarcodeDetector: {
+declare const BarcodeDetector: {
   prototype: BarcodeDetector
   new (options?: { formats: string[] }): BarcodeDetector
 }
