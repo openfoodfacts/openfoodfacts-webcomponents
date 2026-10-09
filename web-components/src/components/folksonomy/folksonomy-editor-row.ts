@@ -114,6 +114,7 @@ export class FolksonomyEditorRow extends LitElement {
       .then((keys) => {
         this.keySuggestions = keys.map((key) => ({
           value: key.k,
+          count: key.count,
         }))
       })
       .catch((error) => console.error("Error fetching keys:", error))

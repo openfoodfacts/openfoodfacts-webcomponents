@@ -30,7 +30,7 @@ function createRobotoff(fetch: typeof window.fetch) {
   const configuredBasePath = configuredBaseUrl.pathname.replace(/\/+$/, "")
 
   // ensure that any user account credentials get used in Robotoff
-  const fetchWithCredentials: typeof window.fetch = (url, options) => {
+  const fetchWithCredentials: typeof window.fetch = async (url, options) => {
     const requestUrl = new URL(url instanceof Request ? url.url : url.toString())
     const requestPath = requestUrl.pathname
     if (
@@ -39,16 +39,20 @@ function createRobotoff(fetch: typeof window.fetch) {
     ) {
       requestUrl.pathname = configuredBasePath + requestPath.slice(ROBOTOFF_API_PATH.length)
     }
-    const request =
-      url instanceof Request
-        ? new Request(requestUrl, {
-            method: url.method,
-            headers: url.headers,
-            ...(url.method === "GET" || url.method === "HEAD"
-              ? {}
-              : { body: url.body, duplex: "half" as const }),
-          })
-        : requestUrl
+
+    let request: Request
+    if (url instanceof Request) {
+      const body =
+        url.method === "GET" || url.method === "HEAD" ? undefined : await url.arrayBuffer()
+      request = new Request(requestUrl, {
+        method: url.method,
+        headers: url.headers,
+        body,
+      })
+    } else {
+      request = new Request(requestUrl)
+    }
+
     return fetch(request, { ...options, credentials: "include" })
   }
   return new Robotoff(fetchWithCredentials, {

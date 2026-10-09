@@ -1,8 +1,8 @@
 import tseslint from "@typescript-eslint/eslint-plugin"
 import tsparser from "@typescript-eslint/parser"
-import prettierPlugin from "eslint-plugin-prettier"
 import storybook from "eslint-plugin-storybook"
 import lit from "eslint-plugin-lit"
+import prettierConfig from "eslint-config-prettier"
 
 export default [
   // global ignores
@@ -31,16 +31,14 @@ export default [
     files: ["**/*.ts", "**/*.tsx"],
     plugins: {
       "@typescript-eslint": tseslint,
-      prettier: prettierPlugin,
     },
     rules: {
-      semi: ["error", "never"],
-      quotes: ["error", "double"],
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": ["error"],
-      "prettier/prettier": ["error"],
     },
   },
   lit.configs["flat/recommended"],
   ...storybook.configs["flat/recommended"],
+  // must be last: turns off rules that conflict with Prettier (formatting is handled by Prettier)
+  prettierConfig,
 ]
