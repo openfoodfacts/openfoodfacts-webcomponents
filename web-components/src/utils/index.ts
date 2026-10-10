@@ -57,6 +57,13 @@ export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
 export const isNullOrUndefined = (value: unknown) => value === null || value === undefined
 
 /**
+ * Returns true if running in a browser environment with the required APIs.
+ * Used to guard browser-only APIs (document, URL) against SSR contexts.
+ */
+export const isBrowser = (): boolean =>
+  typeof document !== "undefined" && typeof URL !== "undefined"
+
+/**
  * Given a key with dot inside representing nested objects,
  * create inner object and set value on leaf node
  *
@@ -144,6 +151,10 @@ export const downloadCSV = (
 ) => {
   if (rows.length === 0) {
     return
+  }
+
+  if (!isBrowser()) {
+    throw new Error("downloadCSV: browser APIs not available (SSR environment).")
   }
 
   const csvContent = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n")
