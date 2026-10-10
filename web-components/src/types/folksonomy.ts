@@ -18,7 +18,7 @@ export interface ProductProperty {
   comment: string
 }
 
-export interface FetchProductPropertiesResponse extends Array<ProductProperty> {}
+export type FetchProductPropertiesResponse = ProductProperty[]
 
 export interface AddProductPropertyResponse {
   key: string

@@ -75,8 +75,8 @@ export class ActionElementRenderer extends LitElement {
       return html``
     }
 
-    const actionText = (actionElement as any).action_text || "Default Action"
-    const actionDescription = (actionElement as any).description || ""
+    const actionText = actionElement.action_text || "Default Action"
+    const actionDescription = actionElement.description || ""
     const sanitizedHTML = sanitizeHtml(actionElement.html || "")
 
     return html`

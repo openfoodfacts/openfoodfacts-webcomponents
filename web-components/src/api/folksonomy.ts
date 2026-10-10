@@ -252,7 +252,7 @@ async function fetchProductsProperties(
   propertyName: string
 ): Promise<{ k: string; v: string; product: string }[]> {
   try {
-    let url = `/products?k=${propertyName}`
+    const url = `/products?k=${propertyName}`
 
     const response = await fetch(getApiUrl(url), {
       method: "GET",

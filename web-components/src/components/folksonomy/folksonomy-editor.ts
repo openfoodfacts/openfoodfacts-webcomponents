@@ -240,7 +240,7 @@ export class FolksonomyEditor extends LitElement {
       const product_properties = await folksonomyApi.fetchProductProperties(this.productCode)
 
       // update the state with the fetched properties
-      this.properties = product_properties.map((item: any) => ({
+      this.properties = product_properties.map((item) => ({
         key: item.k,
         value: item.v,
         version: item.version,
