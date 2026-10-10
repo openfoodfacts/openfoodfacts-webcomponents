@@ -1,7 +1,7 @@
-import { LitElement, html, css, type TemplateResult } from "lit"
-import { customElement, property } from "lit/decorators.js"
-import type { KnowledgePanelElement } from "../../../types/knowledge-panel"
-import { sanitizeHtml } from "../../../utils/html"
+import { LitElement, html, css, type TemplateResult } from "lit";
+import { customElement, property } from "lit/decorators.js";
+import type { KnowledgePanelElement } from "../../../types/knowledge-panel";
+import { sanitizeHtml } from "../../../utils/html";
 
 /**
  * Action element renderer component
@@ -60,38 +60,40 @@ export class ActionElementRenderer extends LitElement {
       background-color: #60412b;
       border-color: #4d3422;
     }
-  `
+  `;
 
   @property({ type: Object })
-  element?: KnowledgePanelElement
+  element?: KnowledgePanelElement;
 
   override render(): TemplateResult {
     if (!this.element) {
-      return html``
+      return html``;
     }
 
-    const actionElement = this.element.action_element
+    const actionElement = this.element.action_element;
     if (!actionElement) {
-      return html``
+      return html``;
     }
 
-    const actionText = actionElement.action_text || "Default Action"
-    const actionDescription = actionElement.description || ""
-    const sanitizedHTML = sanitizeHtml(actionElement.html || "")
+    const actionText = actionElement.action_text || "Default Action";
+    const actionDescription = actionElement.description || "";
+    const sanitizedHTML = sanitizeHtml(actionElement.html || "");
 
     return html`
       <div class="action">
         <div>${sanitizedHTML}</div>
         <button class="button chocolate-button" disabled>${actionText}</button>
         ${actionDescription ? html`<small>${actionDescription}</small>` : ""}
-        <small>(Actions are displayed but not functional in this version)</small>
+        <small
+          >(Actions are displayed but not functional in this version)</small
+        >
       </div>
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "action-element-renderer": ActionElementRenderer
+    "action-element-renderer": ActionElementRenderer;
   }
 }

@@ -1,14 +1,14 @@
-import { LitElement } from "lit"
-import type { Constructor } from "."
-import { property } from "lit/decorators.js"
-import { countryCode } from "../signals/app"
+import { LitElement } from "lit";
+import type { Constructor } from ".";
+import { property } from "lit/decorators.js";
+import { countryCode } from "../signals/app";
 
 /**
  * Interface for the CountryCodeMixin.
  */
 export interface CountryCodeMixinInterface {
-  countryCode?: string
-  _countryCode: string
+  countryCode?: string;
+  _countryCode: string;
 }
 
 /**
@@ -17,7 +17,7 @@ export interface CountryCodeMixinInterface {
  * @mixin CountryCodesMixin
  */
 export const CountryCodeMixin = <T extends Constructor<LitElement>>(
-  superClass: T
+  superClass: T,
 ): Constructor<CountryCodeMixinInterface> & T => {
   class CountryCodeMixin extends superClass {
     /**
@@ -25,16 +25,16 @@ export const CountryCodeMixin = <T extends Constructor<LitElement>>(
      * @type {string | undefined}
      */
     @property({ type: String, attribute: "country-codes", reflect: true })
-    countryCode?: string
+    countryCode?: string;
 
     /**
      * Gets the country code, defaulting to the current locale if not set.
      * @returns {string} The country code.
      */
     get _countryCode() {
-      return this.countryCode || countryCode.get()
+      return this.countryCode || countryCode.get();
     }
   }
 
-  return CountryCodeMixin as Constructor<CountryCodeMixinInterface> & T
-}
+  return CountryCodeMixin as Constructor<CountryCodeMixinInterface> & T;
+};

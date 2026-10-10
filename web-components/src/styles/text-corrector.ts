@@ -1,5 +1,9 @@
-import { css } from "lit"
-import { SAFE_LIGHT_GREEN, SAFE_LIGHT_GREY, SAFE_LIGHT_RED } from "../utils/colors"
+import { css } from "lit";
+import {
+  SAFE_LIGHT_GREEN,
+  SAFE_LIGHT_GREY,
+  SAFE_LIGHT_RED,
+} from "../utils/colors";
 
 export const TEXT_CORRECTOR = css`
   .text-section {
@@ -30,4 +34,4 @@ export const TEXT_CORRECTOR = css`
   .line-through {
     text-decoration: line-through;
   }
-`
+`;

@@ -1,14 +1,14 @@
-import { LitElement } from "lit"
-import type { Constructor } from "."
-import { property } from "lit/decorators.js"
-import { languageCode } from "../signals/app"
+import { LitElement } from "lit";
+import type { Constructor } from ".";
+import { property } from "lit/decorators.js";
+import { languageCode } from "../signals/app";
 
 /**
  * Interface for the LanguageCodesMixin.
  */
 export interface LanguageCodesMixinInterface {
-  languageCodes?: string[]
-  _languageCodes: string[]
+  languageCodes?: string[];
+  _languageCodes: string[];
 }
 
 /**
@@ -17,7 +17,7 @@ export interface LanguageCodesMixinInterface {
  * @mixin LanguageCodesMixin
  */
 export const LanguageCodesMixin = <T extends Constructor<LitElement>>(
-  superClass: T
+  superClass: T,
 ): Constructor<LanguageCodesMixinInterface> & T => {
   class LanguageCodesMixin extends superClass {
     /**
@@ -25,16 +25,16 @@ export const LanguageCodesMixin = <T extends Constructor<LitElement>>(
      * @type {string[] | undefined}
      */
     @property({ type: Array, attribute: "language-codes", reflect: true })
-    languageCodes?: string[]
+    languageCodes?: string[];
 
     /**
      * Gets the language codes, defaulting to the current locale if not set.
      * @returns {string[]} The language codes.
      */
     get _languageCodes() {
-      return this.languageCodes || [languageCode.get()]
+      return this.languageCodes || [languageCode.get()];
     }
   }
 
-  return LanguageCodesMixin as Constructor<LanguageCodesMixinInterface> & T
-}
+  return LanguageCodesMixin as Constructor<LanguageCodesMixinInterface> & T;
+};

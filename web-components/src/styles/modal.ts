@@ -1,4 +1,4 @@
-import { css } from "lit"
+import { css } from "lit";
 
 export const MODAL = css`
   :host {
@@ -83,4 +83,4 @@ export const MODAL = css`
       opacity: 1;
     }
   }
-`
+`;

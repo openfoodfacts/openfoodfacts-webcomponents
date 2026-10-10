@@ -1,13 +1,13 @@
-import type { Preview } from "@storybook/web-components-vite"
+import type { Preview } from "@storybook/web-components-vite";
 
-import { setCustomElementsManifest } from "@storybook/web-components-vite"
+import { setCustomElementsManifest } from "@storybook/web-components-vite";
 
-import customElements from "../custom-elements.json"
-setCustomElementsManifest(customElements)
+import customElements from "../custom-elements.json";
+setCustomElementsManifest(customElements);
 
-import { assetsImagesPath } from "../src/signals/app"
+import { assetsImagesPath } from "../src/signals/app";
 
-assetsImagesPath.set(import.meta.env.BASE_URL + "assets/images")
+assetsImagesPath.set(import.meta.env.BASE_URL + "assets/images");
 
 const preview: Preview = {
   parameters: {
@@ -18,6 +18,6 @@ const preview: Preview = {
       },
     },
   },
-}
+};
 
-export default preview
+export default preview;

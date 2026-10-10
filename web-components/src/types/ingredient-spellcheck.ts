@@ -1,6 +1,6 @@
-import type { Change } from "diff"
-import { AnnotationAnswer } from "./robotoff"
-import { EventState } from "../constants"
+import type { Change } from "diff";
+import { AnnotationAnswer } from "./robotoff";
+import { EventState } from "../constants";
 
 /**
  * Enum for the type of change in the text
@@ -14,7 +14,7 @@ export enum ChangeType {
 /**
  * Type for a change in the text with its index
  */
-export type IndexedChange = Change & { index: number }
+export type IndexedChange = Change & { index: number };
 
 /**
  * Type for a grouped change in the text
@@ -24,35 +24,35 @@ export type IndexedChange = Change & { index: number }
  * instead of remove "world" and add "universe" separately
  */
 export type IndexedGroupedChange = {
-  type: ChangeType
-  value?: string
-  oldValue?: string
-  newValue?: string
-  indexes: number[]
-  position: number
-}
+  type: ChangeType;
+  value?: string;
+  oldValue?: string;
+  newValue?: string;
+  indexes: number[];
+  position: number;
+};
 
 /**
  * Type for the event detail of the text corrector
  */
 export type TextCorrectorEventDetail = {
-  correction?: string
-  annotation: AnnotationAnswer
-}
+  correction?: string;
+  annotation: AnnotationAnswer;
+};
 
 /**
  * Type for the event of the text corrector
  *
  * It is a custom event with the detail of the text corrector
  */
-export type TextCorrectorEvent = CustomEvent<TextCorrectorEventDetail>
+export type TextCorrectorEvent = CustomEvent<TextCorrectorEventDetail>;
 
 /**
  * Type for the event detail of the robotoff ingredients state
  *  It is a custom event with the detail of the robotoff ingredients state
  */
 export type RobotoffIngredientsStateEventDetail = {
-  state: EventState
-  insightId?: string
-  productCode?: string
-} & Partial<TextCorrectorEventDetail>
+  state: EventState;
+  insightId?: string;
+  productCode?: string;
+} & Partial<TextCorrectorEventDetail>;

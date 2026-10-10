@@ -1,9 +1,9 @@
-import { localized, msg } from "@lit/localize"
-import { LitElement, html, css } from "lit-element"
-import { customElement, state } from "lit/decorators.js"
-import { getButtonClasses, ButtonType } from "../../styles/buttons"
-import { MODAL } from "../../styles/modal"
-import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme"
+import { localized, msg } from "@lit/localize";
+import { LitElement, html, css } from "lit-element";
+import { customElement, state } from "lit/decorators.js";
+import { getButtonClasses, ButtonType } from "../../styles/buttons";
+import { MODAL } from "../../styles/modal";
+import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme";
 
 /**
  * @customElement("delete-modal")
@@ -14,7 +14,7 @@ import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme"
 @localized()
 @customElement("delete-modal")
 export class DeleteModal extends LitElement {
-  @state() open = true
+  @state() open = true;
 
   static override styles = [
     FOLKSONOMY_THEME,
@@ -140,48 +140,53 @@ export class DeleteModal extends LitElement {
         }
       }
     `,
-  ]
+  ];
 
   private handleDelete(event: Event) {
-    event.preventDefault()
+    event.preventDefault();
     this.dispatchEvent(
       new CustomEvent("confirm-delete", {
         bubbles: true,
         composed: true,
-      })
-    )
-    this.open = false
+      }),
+    );
+    this.open = false;
   }
 
   private handleCancel(event: Event) {
-    event.preventDefault()
-    this.open = false
+    event.preventDefault();
+    this.open = false;
   }
 
   private handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === "Escape") {
-      this.handleCancel(event)
+      this.handleCancel(event);
     }
-  }
+  };
 
   override connectedCallback() {
-    super.connectedCallback()
-    document.addEventListener("keydown", this.handleKeyDown)
+    super.connectedCallback();
+    document.addEventListener("keydown", this.handleKeyDown);
   }
 
   override disconnectedCallback() {
-    document.removeEventListener("keydown", this.handleKeyDown)
-    super.disconnectedCallback()
+    document.removeEventListener("keydown", this.handleKeyDown);
+    super.disconnectedCallback();
   }
 
   override render() {
     if (!this.open) {
-      return null
+      return null;
     }
 
     return html`
       <div class="overlay" @click="${this.handleCancel}"></div>
-      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+      >
         <h2 id="modal-title" class="modal-title">${msg("Confirm Delete")}</h2>
         <div class="modal-content">
           <p class="modal-message">
@@ -206,6 +211,6 @@ export class DeleteModal extends LitElement {
           </button>
         </div>
       </div>
-    `
+    `;
   }
 }

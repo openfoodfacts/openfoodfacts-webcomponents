@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/web-components-vite"
-import "./robotoff-contribution-message"
+import type { Meta, StoryObj } from "@storybook/web-components-vite";
+import "./robotoff-contribution-message";
 
 const meta: Meta = {
   title: "Components/Robotoff/Contribution Message",
@@ -7,20 +7,20 @@ const meta: Meta = {
   parameters: {
     layout: "centered",
   },
-}
-export default meta
+};
+export default meta;
 
-type Story = StoryObj
+type Story = StoryObj;
 
 export const Basic: Story = {
   args: {
     "product-code": "5000354922848",
   },
-}
+};
 
 export const LoggedIn: Story = {
   args: {
     "product-code": "5000354922848",
     "is-logged-in": true,
   },
-}
+};

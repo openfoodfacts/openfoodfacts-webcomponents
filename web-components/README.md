@@ -29,8 +29,8 @@ More details can be found in the [Lit web components polyfill documentation](htt
 #### Via ES6 modules
 
 ```js
-import "@webcomponents/webcomponentsjs/webcomponents-loader.js"
-import "@openfoodfacts/openfoodfacts-webcomponents"
+import "@webcomponents/webcomponentsjs/webcomponents-loader.js";
+import "@openfoodfacts/openfoodfacts-webcomponents";
 ```
 
 Then you have to copy the localization files to your project.
@@ -41,8 +41,8 @@ npm install vite-plugin-static-copy
 ```
 
 ```javascript
-import copy from "rollup-plugin-copy"
-import path from "path"
+import copy from "rollup-plugin-copy";
+import path from "path";
 export default defineConfig({
   // ...
   plugins: [
@@ -52,7 +52,7 @@ export default defineConfig({
         {
           src: path.resolve(
             __dirname,
-            "node_modules/@openfoodfacts/openfoodfacts-webcomponents/dist/localization/locales/*.js"
+            "node_modules/@openfoodfacts/openfoodfacts-webcomponents/dist/localization/locales/*.js",
           ),
           dest: "assets/localization/locales",
         },
@@ -60,7 +60,7 @@ export default defineConfig({
     }),
   ],
   // ...
-})
+});
 ```
 
 #### Via script tag

@@ -1,12 +1,12 @@
-import { localized } from "@lit/localize"
-import { LitElement, html, css } from "lit"
-import { customElement, property, query } from "lit/decorators.js"
-import "../shared/zoomable-image"
-import { CropMode, type ZoomableImage } from "../shared/zoomable-image"
-import { EventType } from "../../constants"
-import type { CropperImageBoundingBox } from "../../types"
-import type { ImageCropResult } from "../../types/crops"
-import { cropImageToBlob, normalizeBoundingBox } from "../../utils/crop"
+import { localized } from "@lit/localize";
+import { LitElement, html, css } from "lit";
+import { customElement, property, query } from "lit/decorators.js";
+import "../shared/zoomable-image";
+import { CropMode, type ZoomableImage } from "../shared/zoomable-image";
+import { EventType } from "../../constants";
+import type { CropperImageBoundingBox } from "../../types";
+import type { ImageCropResult } from "../../types/crops";
+import { cropImageToBlob, normalizeBoundingBox } from "../../utils/crop";
 
 /**
  * ImageCrop is a generic component to crop (and rotate) an image.
@@ -24,13 +24,13 @@ export class ImageCrop extends LitElement {
       display: block;
       width: 100%;
     }
-  `
+  `;
 
   /**
    * Image source url (can be an object url, e.g. from URL.createObjectURL(file))
    */
   @property({ type: String })
-  src = ""
+  src = "";
 
   /**
    * Size of the image container
@@ -39,45 +39,45 @@ export class ImageCrop extends LitElement {
   size: ZoomableImage["size"] = {
     width: "100%",
     height: "60vh",
-  }
+  };
 
   /**
    * Show the toolbar (rotate, center buttons)
    */
   @property({ type: Boolean, attribute: "show-buttons" })
-  showButtons = false
+  showButtons = false;
 
   /**
    * Hide the built-in crop buttons, to validate the crop with getCrop()
    */
   @property({ type: Boolean, attribute: "hide-actions" })
-  hideActions = false
+  hideActions = false;
 
   /**
    * Type of the cropped image
    */
   @property({ type: String, attribute: "output-type" })
-  outputType = "image/webp"
+  outputType = "image/webp";
 
   /**
    * Quality of the cropped image (between 0 and 1), for lossy types
    */
   @property({ type: Number, attribute: "output-quality" })
-  outputQuality?: number
+  outputQuality?: number;
 
   @query("zoomable-image")
-  zoomableImage!: ZoomableImage
+  zoomableImage!: ZoomableImage;
 
   /**
    * Gets the cropped image from the current selection.
    * @returns The crop result, or null if there is no selection.
    */
   async getCrop(): Promise<ImageCropResult | null> {
-    const selection = this.zoomableImage?.getCropSelection()
+    const selection = this.zoomableImage?.getCropSelection();
     if (!selection) {
-      return null
+      return null;
     }
-    return this.buildResult(selection.boundingBox, selection.rotation)
+    return this.buildResult(selection.boundingBox, selection.rotation);
   }
 
   /**
@@ -85,42 +85,45 @@ export class ImageCrop extends LitElement {
    */
   private async buildResult(
     boundingBox: CropperImageBoundingBox,
-    rotation: number
+    rotation: number,
   ): Promise<ImageCropResult> {
-    const image = this.zoomableImage.imageElement.$image
+    const image = this.zoomableImage.imageElement.$image;
     const blob = await cropImageToBlob(
       image,
       boundingBox,
       rotation,
       this.outputType,
-      this.outputQuality
-    )
+      this.outputQuality,
+    );
     return {
       blob,
       boundingBox,
       normalizedBoundingBox: normalizeBoundingBox(
         boundingBox,
         image.naturalWidth,
-        image.naturalHeight
+        image.naturalHeight,
       ),
       rotation,
-    }
+    };
   }
 
   /**
    * Re-emits the zoomable-image submit (built-in "Validate crop" button) as a crop event.
    */
   private async onSubmit(
-    event: CustomEvent<{ newBoundingBox?: CropperImageBoundingBox; rotation: number }>
+    event: CustomEvent<{
+      newBoundingBox?: CropperImageBoundingBox;
+      rotation: number;
+    }>,
   ) {
-    event.stopPropagation()
-    const { newBoundingBox, rotation } = event.detail
+    event.stopPropagation();
+    const { newBoundingBox, rotation } = event.detail;
     if (!newBoundingBox) {
-      return
+      return;
     }
-    let result: ImageCropResult
+    let result: ImageCropResult;
     try {
-      result = await this.buildResult(newBoundingBox, rotation)
+      result = await this.buildResult(newBoundingBox, rotation);
     } catch (error) {
       // e.g. crop area too small, or canvas export failure: let the parent show some feedback
       this.dispatchEvent(
@@ -128,17 +131,17 @@ export class ImageCrop extends LitElement {
           detail: { error },
           bubbles: true,
           composed: true,
-        })
-      )
-      return
+        }),
+      );
+      return;
     }
     this.dispatchEvent(
       new CustomEvent<ImageCropResult>(EventType.CROP, {
         detail: result,
         bubbles: true,
         composed: true,
-      })
-    )
+      }),
+    );
   }
 
   override render() {
@@ -151,12 +154,12 @@ export class ImageCrop extends LitElement {
         ?hide-crop-actions=${this.hideActions}
         @submit=${this.onSubmit}
       ></zoomable-image>
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "image-crop": ImageCrop
+    "image-crop": ImageCrop;
   }
 }

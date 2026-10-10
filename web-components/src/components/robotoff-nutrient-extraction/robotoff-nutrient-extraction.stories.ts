@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/web-components-vite"
-import "./robotoff-nutrient-extraction"
+import type { Meta, StoryObj } from "@storybook/web-components-vite";
+import "./robotoff-nutrient-extraction";
 
 const meta: Meta = {
   title: "Components/Robotoff/Nutrient Extraction",
@@ -7,11 +7,11 @@ const meta: Meta = {
   parameters: {
     layout: "centered",
   },
-}
-export default meta
+};
+export default meta;
 
-type Story = StoryObj
+type Story = StoryObj;
 
 export const Basic: Story = {
   args: {},
-}
+};

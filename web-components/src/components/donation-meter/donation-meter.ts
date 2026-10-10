@@ -1,13 +1,13 @@
-import { LitElement, html, css, nothing, type PropertyValues } from "lit"
-import dayjs from "dayjs/esm"
-import { customElement, property } from "lit/decorators.js"
-import { localized, msg, str } from "@lit/localize"
-import { Task, TaskStatus } from "@lit/task"
-import { languageCode } from "../../signals/app"
-import { EventState, EventType } from "../../constants"
-import type { BasicStateEventDetail } from "../../types"
-import type { Funding, NewsData } from "../../types/news-feed"
-import { findFunding, parseFunding } from "../../utils/funding"
+import { LitElement, html, css, nothing, type PropertyValues } from "lit";
+import dayjs from "dayjs/esm";
+import { customElement, property } from "lit/decorators.js";
+import { localized, msg, str } from "@lit/localize";
+import { Task, TaskStatus } from "@lit/task";
+import { languageCode } from "../../signals/app";
+import { EventState, EventType } from "../../constants";
+import type { BasicStateEventDetail } from "../../types";
+import type { Funding, NewsData } from "../../types/news-feed";
+import { findFunding, parseFunding } from "../../utils/funding";
 
 /**
  * `donation-meter` - how far a funding campaign has got, from the figures the
@@ -29,18 +29,18 @@ export class DonationMeter extends LitElement {
    * News feed to read the figures from. Omit it when the figures are set
    * directly on the `funding` property.
    */
-  @property({ attribute: "url" }) url?: string
+  @property({ attribute: "url" }) url?: string;
 
-  @property({ type: Object }) funding?: Funding
+  @property({ type: Object }) funding?: Funding;
 
   /** Renders the one-line summary instead of the standalone figures; absent = the 1.18.0 markup. */
-  @property({ attribute: "line" }) line?: "long" | "short"
+  @property({ attribute: "line" }) line?: "long" | "short";
 
-  @property({ type: Number }) count?: number
+  @property({ type: Number }) count?: number;
 
-  @property({ type: String, attribute: "end-date" }) endDate?: string
+  @property({ type: String, attribute: "end-date" }) endDate?: string;
 
-  private lastState?: EventState
+  private lastState?: EventState;
 
   static override styles = css`
     :host {
@@ -106,59 +106,63 @@ export class DonationMeter extends LitElement {
     .row .raised {
       font-size: inherit;
     }
-  `
+  `;
 
   private _fundingTask = new Task(this, {
     args: () => [this.url] as const,
     task: async ([url]) => {
       if (!url) {
-        return null
+        return null;
       }
-      const response = await fetch(url)
+      const response = await fetch(url);
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-      return findFunding((await response.json()) as NewsData)
+      return findFunding((await response.json()) as NewsData);
     },
-  })
+  });
 
   override connectedCallback() {
-    super.connectedCallback()
+    super.connectedCallback();
     // An announcement made while the host was detached never reached it, so the
     // element has to say where it stands again rather than dedupe against it.
-    this.lastState = undefined
-    this.requestUpdate()
+    this.lastState = undefined;
+    this.requestUpdate();
   }
 
   private get visibleFunding(): Funding | null {
     if (this.funding) {
-      const { raised, goal, currency } = this.funding
-      return parseFunding(raised, goal, currency)
+      const { raised, goal, currency } = this.funding;
+      return parseFunding(raised, goal, currency);
     }
     if (this._fundingTask.status !== TaskStatus.COMPLETE) {
-      return null
+      return null;
     }
-    return this._fundingTask.value ?? null
+    return this._fundingTask.value ?? null;
   }
 
   private get state(): EventState {
     if (!this.funding && this._fundingTask.status === TaskStatus.PENDING) {
-      return EventState.LOADING
+      return EventState.LOADING;
     }
-    return this.visibleFunding ? EventState.HAS_DATA : EventState.NO_DATA
+    return this.visibleFunding ? EventState.HAS_DATA : EventState.NO_DATA;
   }
 
   override updated(changedProperties: PropertyValues) {
-    super.updated(changedProperties)
-    const state = this.state
+    super.updated(changedProperties);
+    const state = this.state;
     if (state === this.lastState) {
-      return
+      return;
     }
-    this.lastState = state
-    const detail: BasicStateEventDetail = { state }
+    this.lastState = state;
+    const detail: BasicStateEventDetail = { state };
     this.dispatchEvent(
-      new CustomEvent(EventType.DONATION_METER_STATE, { detail, bubbles: true, composed: true })
-    )
+      new CustomEvent(EventType.DONATION_METER_STATE, {
+        detail,
+        bubbles: true,
+        composed: true,
+      }),
+    );
   }
 
   private format(amount: number, currency: string) {
@@ -166,11 +170,11 @@ export class DonationMeter extends LitElement {
       style: "currency",
       currency,
       maximumFractionDigits: 0,
-    }).format(amount)
+    }).format(amount);
   }
 
   private get locale() {
-    return languageCode.get() || undefined
+    return languageCode.get() || undefined;
   }
 
   private renderBar(progress: number, percent: string) {
@@ -186,16 +190,18 @@ export class DonationMeter extends LitElement {
       >
         <div style="width: ${(progress * 100).toFixed(1)}%"></div>
       </div>
-    `
+    `;
   }
 
   private renderMeter(funding: Funding) {
-    const ratio = funding.raised / funding.goal
-    const progress = Math.min(Math.max(ratio, 0), 1)
-    const percent = new Intl.NumberFormat(this.locale, { style: "percent" }).format(ratio)
-    const raised = this.format(funding.raised, funding.currency)
-    const goal = this.format(funding.goal, funding.currency)
-    const missing = funding.goal - funding.raised
+    const ratio = funding.raised / funding.goal;
+    const progress = Math.min(Math.max(ratio, 0), 1);
+    const percent = new Intl.NumberFormat(this.locale, {
+      style: "percent",
+    }).format(ratio);
+    const raised = this.format(funding.raised, funding.currency);
+    const goal = this.format(funding.goal, funding.currency);
+    const missing = funding.goal - funding.raised;
 
     return html`
       <div class="figures">
@@ -204,35 +210,40 @@ export class DonationMeter extends LitElement {
       </div>
       ${this.renderBar(progress, percent)}
       ${missing >= 1 ? this.renderShortfall(this.format(missing, funding.currency)) : nothing}
-    `
+    `;
   }
 
   private renderShortfall(missing: string) {
-    return html`<span class="shortfall">${msg(str`${missing} short`)}</span>`
+    return html`<span class="shortfall">${msg(str`${missing} short`)}</span>`;
   }
 
   /** The one-line summary: `{raised} raised of {goal} · {count} supporters · until {end_date}`. */
   private renderLine(funding: Funding) {
-    const ratio = funding.raised / funding.goal
-    const progress = Math.min(Math.max(ratio, 0), 1)
-    const percent = new Intl.NumberFormat(this.locale, { style: "percent" }).format(ratio)
-    const raised = this.format(funding.raised, funding.currency)
-    const goal = this.format(funding.goal, funding.currency)
-    const left = this.line === "long" ? msg(str`raised of ${goal}`) : msg(str`of ${goal}`)
+    const ratio = funding.raised / funding.goal;
+    const progress = Math.min(Math.max(ratio, 0), 1);
+    const percent = new Intl.NumberFormat(this.locale, {
+      style: "percent",
+    }).format(ratio);
+    const raised = this.format(funding.raised, funding.currency);
+    const goal = this.format(funding.goal, funding.currency);
+    const left =
+      this.line === "long" ? msg(str`raised of ${goal}`) : msg(str`of ${goal}`);
     // dayjs parses the feed's `2027-01-31 23:59:59`, which is not ISO, and reads a
     // date-only string as local time, so the day does not shift west of Greenwich.
-    const endDate = this.endDate ? dayjs(this.endDate) : null
+    const endDate = this.endDate ? dayjs(this.endDate) : null;
     const day = endDate?.isValid()
       ? new Intl.DateTimeFormat(this.locale, {
           day: "numeric",
           month: this.line === "short" ? "short" : "long",
         }).format(endDate.toDate())
-      : null
-    const fmtCount = this.count ? new Intl.NumberFormat(this.locale).format(this.count) : null
+      : null;
+    const fmtCount = this.count
+      ? new Intl.NumberFormat(this.locale).format(this.count)
+      : null;
     const parts = [
       fmtCount ? msg(str`${fmtCount} supporters`) : null,
       day ? msg(str`until ${day}`) : null,
-    ].filter((part): part is string => Boolean(part))
+    ].filter((part): part is string => Boolean(part));
 
     return html`
       <div class="figures row">
@@ -240,21 +251,21 @@ export class DonationMeter extends LitElement {
         ${parts.length ? html`<span class="details">${parts.join(" · ")}</span>` : nothing}
       </div>
       ${this.renderBar(progress, percent)}
-    `
+    `;
   }
 
   // No figures beats wrong figures: the host keeps its static donation ask.
   override render() {
-    const funding = this.visibleFunding
+    const funding = this.visibleFunding;
     if (!funding) {
-      return nothing
+      return nothing;
     }
-    return this.line ? this.renderLine(funding) : this.renderMeter(funding)
+    return this.line ? this.renderLine(funding) : this.renderMeter(funding);
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "donation-meter": DonationMeter
+    "donation-meter": DonationMeter;
   }
 }

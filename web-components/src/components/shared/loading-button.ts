@@ -1,7 +1,7 @@
-import { html, css, LitElement, nothing } from "lit"
-import { customElement, property } from "lit/decorators.js"
-import "../icons/loading-spin"
-import { ButtonType, getButtonClasses } from "../../styles/buttons"
+import { html, css, LitElement, nothing } from "lit";
+import { customElement, property } from "lit/decorators.js";
+import "../icons/loading-spin";
+import { ButtonType, getButtonClasses } from "../../styles/buttons";
 
 /**
  * A button component that shows a loading spinner when in a loading state.
@@ -24,37 +24,37 @@ export class LoadingButton extends LitElement {
       }
     `,
     ...getButtonClasses(Object.values(ButtonType)),
-  ]
+  ];
 
   /**
    * The text to display on the button
    */
   @property({ type: String, reflect: true })
-  label = ""
+  label = "";
 
   /**
    * Whether the button is in a loading state
    */
   @property({ type: Boolean, reflect: true })
-  loading = false
+  loading = false;
 
   /**
    * Whether the button is disabled
    */
   @property({ type: Boolean, reflect: true })
-  disabled = false
+  disabled = false;
 
   /**
    * Additional CSS classes to apply to the button
    */
   @property({ type: String, attribute: "css-classes" })
-  cssClasses = ""
+  cssClasses = "";
 
   /**
    * The type of the button (button, submit, reset)
    */
   @property({ type: String })
-  type: "button" | "submit" | "reset" = "button"
+  type: "button" | "submit" | "reset" = "button";
 
   override render() {
     return html`
@@ -67,12 +67,12 @@ export class LoadingButton extends LitElement {
         ${this.loading ? html`<loading-spin size="15px"></loading-spin>` : nothing}
         <slot><span>${this.label}</span></slot>
       </button>
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "loading-button": LoadingButton
+    "loading-button": LoadingButton;
   }
 }

@@ -47,11 +47,11 @@ This document describes the comprehensive test suite implemented for the Open Fo
 ```typescript
 // URL building with special characters
 expect(addParamsToUrl("https://api.com", { key: "value&special" })).toBe(
-  "https://api.com?key=value%26special"
-)
+  "https://api.com?key=value%26special",
+);
 
 // Nested object creation
-setValueAndParentsObjectIfNotExists({}, "a.b.c", "value")
+setValueAndParentsObjectIfNotExists({}, "a.b.c", "value");
 // -> { a: { b: { c: "value" } } }
 ```
 

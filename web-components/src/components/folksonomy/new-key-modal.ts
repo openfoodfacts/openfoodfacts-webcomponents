@@ -1,12 +1,12 @@
-import { LitElement, html, css } from "lit"
-import { customElement, state } from "lit/decorators.js"
-import { localized, msg } from "@lit/localize"
+import { LitElement, html, css } from "lit";
+import { customElement, state } from "lit/decorators.js";
+import { localized, msg } from "@lit/localize";
 import {
   OpenFoodFactsSlackLink,
   FolksnomyEngineDocumentationLink,
   FolksnomyEnginePropertyLink,
-} from "../../utils"
-import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme"
+} from "../../utils";
+import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme";
 
 /**
  * New Key Modal Component
@@ -17,7 +17,7 @@ import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme"
 @localized()
 export class NewKeyModal extends LitElement {
   @state()
-  private propertyName = ""
+  private propertyName = "";
   static override styles = [
     FOLKSONOMY_THEME,
     css`
@@ -51,7 +51,8 @@ export class NewKeyModal extends LitElement {
         align-items: center;
         margin-bottom: 1.5rem;
         padding-bottom: 1rem;
-        border-bottom: 1px solid var(--off-folksonomy-modal-header-border, #e0e0e0);
+        border-bottom: 1px solid
+          var(--off-folksonomy-modal-header-border, #e0e0e0);
       }
 
       .modal-title {
@@ -199,28 +200,28 @@ export class NewKeyModal extends LitElement {
         }
       }
     `,
-  ]
+  ];
 
   private handleClose() {
     this.dispatchEvent(
       new CustomEvent("close-modal", {
         bubbles: true,
         composed: true,
-      })
-    )
+      }),
+    );
   }
 
   private handlePropertyNameInput(e: Event) {
-    const input = e.target as HTMLInputElement
-    this.propertyName = input.value.trim()
+    const input = e.target as HTMLInputElement;
+    this.propertyName = input.value.trim();
   }
 
   private handleCreateWikiPage() {
-    if (!this.propertyName) return
+    if (!this.propertyName) return;
 
-    const encodedPropertyName = encodeURIComponent(this.propertyName)
-    const wikiUrl = `https://wiki.openfoodfacts.org/Folksonomy/Property/${encodedPropertyName}?action=edit&section=new&nosummary=true&preload=Folksonomy/Property/property_template`
-    window.open(wikiUrl, "_blank")
+    const encodedPropertyName = encodeURIComponent(this.propertyName);
+    const wikiUrl = `https://wiki.openfoodfacts.org/Folksonomy/Property/${encodedPropertyName}?action=edit&section=new&nosummary=true&preload=Folksonomy/Property/property_template`;
+    window.open(wikiUrl, "_blank");
   }
 
   override render() {
@@ -234,17 +235,25 @@ export class NewKeyModal extends LitElement {
 
           <div class="instruction-list">
             <div class="instruction-item">
-              <div class="instruction-title">1. ${msg("Check if a property already exists")}</div>
+              <div class="instruction-title">
+                1. ${msg("Check if a property already exists")}
+              </div>
               <div class="instruction-description">
                 ${msg("Search for your property concept in the existing properties database:")}
               </div>
-              <a href=${FolksnomyEnginePropertyLink} target="_blank" class="instruction-link">
+              <a
+                href=${FolksnomyEnginePropertyLink}
+                target="_blank"
+                class="instruction-link"
+              >
                 ${msg("Browse and search existing properties")}
               </a>
             </div>
 
             <div class="instruction-item">
-              <div class="instruction-title">2. ${msg("Ask the community first")}</div>
+              <div class="instruction-title">
+                2. ${msg("Ask the community first")}
+              </div>
               <div class="instruction-description">
                 ${msg("Before creating a new property, discuss it with the community:")}
               </div>
@@ -252,17 +261,23 @@ export class NewKeyModal extends LitElement {
                 ${msg("I would like to create a property to [describe your use case]...")}
               </div>
               <div class="join-slack-discussion">
-                <a class="instruction-button" href=${OpenFoodFactsSlackLink} target="_blank">
+                <a
+                  class="instruction-button"
+                  href=${OpenFoodFactsSlackLink}
+                  target="_blank"
+                >
                   ${msg("Join Slack Discussion")}
                 </a>
               </div>
             </div>
 
             <div class="instruction-item">
-              <div class="instruction-title">3. ${msg("Document the New Property")}</div>
+              <div class="instruction-title">
+                3. ${msg("Document the New Property")}
+              </div>
               <div class="instruction-description">
                 ${msg(
-                  "Once you've verified that your property doesn't exist and the community agrees it's useful, you need to first document it in the wiki."
+                  "Once you've verified that your property doesn't exist and the community agrees it's useful, you need to first document it in the wiki.",
                 )}
               </div>
               <div class="property-input-section">
@@ -289,23 +304,29 @@ export class NewKeyModal extends LitElement {
             </div>
 
             <div class="instruction-item">
-              <div class="instruction-title">4. ${msg("Documentation and Guidelines")}</div>
+              <div class="instruction-title">
+                4. ${msg("Documentation and Guidelines")}
+              </div>
               <div class="instruction-description">
                 ${msg("Learn more about property creation and guidelines:")}
               </div>
-              <a href=${FolksnomyEngineDocumentationLink} target="_blank" class="instruction-link">
+              <a
+                href=${FolksnomyEngineDocumentationLink}
+                target="_blank"
+                class="instruction-link"
+              >
                 ${msg("Folksonomy Engine Documentation")}
               </a>
             </div>
           </div>
         </div>
       </div>
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "new-key-modal": NewKeyModal
+    "new-key-modal": NewKeyModal;
   }
 }

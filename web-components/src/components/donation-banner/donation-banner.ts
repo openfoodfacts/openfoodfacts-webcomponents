@@ -1,9 +1,9 @@
-import { LitElement, html, css, nothing, type PropertyValues } from "lit"
-import dayjs from "dayjs/esm"
-import { customElement, property, state } from "lit/decorators.js"
-import { localized, msg, str } from "@lit/localize"
-import { Task, TaskStatus } from "@lit/task"
-import { getImageUrl, languageCode } from "../../signals/app"
+import { LitElement, html, css, nothing, type PropertyValues } from "lit";
+import dayjs from "dayjs/esm";
+import { customElement, property, state } from "lit/decorators.js";
+import { localized, msg, str } from "@lit/localize";
+import { Task, TaskStatus } from "@lit/task";
+import { getImageUrl, languageCode } from "../../signals/app";
 import {
   DEFAULT_LANGUAGE_CODE,
   DonationBannerAction,
@@ -11,24 +11,27 @@ import {
   DonationInterval,
   EventState,
   EventType,
-} from "../../constants"
-import type { BasicStateEventDetail, DonationBannerStateEventDetail } from "../../types"
-import type { FeedCopyKey, NewsData, NewsItem } from "../../types/news-feed"
-import { findNewsItem, parseCount, parseFunding } from "../../utils/funding"
-import { classMap } from "lit/directives/class-map.js"
-import { ifDefined } from "lit/directives/if-defined.js"
-import { darkModeListener } from "../../utils/dark-mode-listener"
-import { getLocalizedDonateUrl } from "./donation-links"
-import { DONATION_BANNER_VARIANTS } from "../../styles/donation-banner-variants"
-import "../donation-meter/donation-meter"
-import "../icons/cross"
+} from "../../constants";
+import type {
+  BasicStateEventDetail,
+  DonationBannerStateEventDetail,
+} from "../../types";
+import type { FeedCopyKey, NewsData, NewsItem } from "../../types/news-feed";
+import { findNewsItem, parseCount, parseFunding } from "../../utils/funding";
+import { classMap } from "lit/directives/class-map.js";
+import { ifDefined } from "lit/directives/if-defined.js";
+import { darkModeListener } from "../../utils/dark-mode-listener";
+import { getLocalizedDonateUrl } from "./donation-links";
+import { DONATION_BANNER_VARIANTS } from "../../styles/donation-banner-variants";
+import "../donation-meter/donation-meter";
+import "../icons/cross";
 
 // Shared by every <donation-banner> on the page. An open `sheet` locks the
 // body's scroll and a shown `bar` pads the body's bottom so it never covers the
 // page's own content. A page can hold several banners (one at the top and one
 // in the footer), so the counters make the first sheet take the lock, the last
 // sheet to close release it, and the last bar to go remove the padding.
-const openOnPage = { sheets: 0, bars: 0, bodyOverflow: "" }
+const openOnPage = { sheets: 0, bars: 0, bodyOverflow: "" };
 
 /**
  * Donation banner
@@ -56,237 +59,243 @@ export class DonationBanner extends LitElement {
   links = {
     fr: "https://open-food-facts.assoconnect.com/collect/description/476750-c-faire-un-don-a-open-food-facts",
     default: "https://world.openfoodfacts.org/donate-to-open-food-facts",
-  }
+  };
 
   /**
    * News feed carrying the campaign figures.
    * @type {String}
    */
   @property({ type: String, attribute: "news-url" })
-  newsUrl?: string
+  newsUrl?: string;
 
   /** Which feed item to read copy and figures from, for the four variants. */
   @property({ type: String, attribute: "news-id" })
-  newsId?: string
+  newsId?: string;
 
   /** `campaign` | `strip` | `sheet` | `bar`. Absent or unknown = today's banner. */
   @property({ type: String })
-  variant?: string
+  variant?: string;
 
   /** Comma-separated monthly tiers, e.g. `"3,5,10"`. Absent = no tiers. */
   @property({ type: String })
-  amounts?: string
+  amounts?: string;
 
   /** Which tier is preselected; defaults to the middle of `amounts`. */
   @property({ type: Number })
-  selected?: number
+  selected?: number;
 
   /** ISO country code; only `"fr"` (case-insensitive) changes any copy. */
   @property({ type: String })
-  country?: string
+  country?: string;
 
   /** Overrides the automatic `utm_content=meter` tag. */
   @property({ type: String, attribute: "utm-content" })
-  utmContent?: string
+  utmContent?: string;
 
   @state()
-  private pickedAmount?: number
+  private pickedAmount?: number;
 
   @state()
-  private barDismissed = false
+  private barDismissed = false;
 
   /** Whether the meter is showing figures, not merely mounted. */
   @state()
-  private meterHasFigures = false
+  private meterHasFigures = false;
 
   /**
    * Custom link/url to the donation page.
    * @type {String}
    */
   @property({ type: String, attribute: "donate-url" })
-  donateUrl?: string
+  donateUrl?: string;
 
   @property({ type: String, attribute: "donate-link" })
-  donateLinkProp?: string
+  donateLinkProp?: string;
 
   /**
    * The fundraiser year (next year)
    * @type {String}
    */
   @property({ type: String, reflect: true, attribute: "current-year" })
-  currentYear: string = this.getDefaultYear()
+  currentYear: string = this.getDefaultYear();
 
   /**
    * Whether to apply dark mode styling (auto-detected from prefers-color-scheme)
    */
-  isDarkMode = darkModeListener.darkMode
+  isDarkMode = darkModeListener.darkMode;
   private _darkModeCb = (isDark: boolean) => {
-    this.isDarkMode = isDark
-    this.requestUpdate()
-  }
+    this.isDarkMode = isDark;
+    this.requestUpdate();
+  };
 
   /** Whether this element currently holds one of the page's sheet locks. */
-  private locked = false
-  private previouslyFocused: HTMLElement | null = null
+  private locked = false;
+  private previouslyFocused: HTMLElement | null = null;
   /** Whether this element currently counts as one of the page's padding bars. */
-  private padded = false
+  private padded = false;
 
   override connectedCallback() {
-    super.connectedCallback()
-    darkModeListener.subscribe(this._darkModeCb)
-    document.addEventListener("keydown", this.onSheetKeyDown)
+    super.connectedCallback();
+    darkModeListener.subscribe(this._darkModeCb);
+    document.addEventListener("keydown", this.onSheetKeyDown);
   }
 
   override disconnectedCallback() {
-    darkModeListener.unsubscribe(this._darkModeCb)
-    document.removeEventListener("keydown", this.onSheetKeyDown)
-    this.clearPageEffects()
-    super.disconnectedCallback()
+    darkModeListener.unsubscribe(this._darkModeCb);
+    document.removeEventListener("keydown", this.onSheetKeyDown);
+    this.clearPageEffects();
+    super.disconnectedCallback();
   }
 
   override willUpdate(changedProperties: PropertyValues) {
     if (changedProperties.has("variant")) {
-      this.barDismissed = false
+      this.barDismissed = false;
     }
   }
 
   override updated(changedProperties: PropertyValues) {
-    super.updated(changedProperties)
-    this.syncPageEffects()
+    super.updated(changedProperties);
+    this.syncPageEffects();
   }
 
   getDefaultYear() {
-    return (new Date().getFullYear() + 1).toString()
+    return (new Date().getFullYear() + 1).toString();
   }
 
   private onMeterState = (event: CustomEvent<BasicStateEventDetail>) => {
     // A meter removed from the page keeps its in-flight request, and Lit keeps
     // the listener bound to it, so a late answer must not speak for the banner.
     if (!(event.target as HTMLElement).isConnected) {
-      return
+      return;
     }
-    this.meterHasFigures = event.detail.state === EventState.HAS_DATA
-  }
+    this.meterHasFigures = event.detail.state === EventState.HAS_DATA;
+  };
 
   getLinkWithQueryParams(link: string, extra: Record<string, string> = {}) {
-    const rawLocale = languageCode.get()
-    const locale = rawLocale?.toLowerCase()
-    const baseLocale = locale?.split(/[-_]/)[0]
+    const rawLocale = languageCode.get();
+    const locale = rawLocale?.toLowerCase();
+    const baseLocale = locale?.split(/[-_]/)[0];
     let url = new URL(
       link,
       typeof window !== "undefined" && window.location?.href
         ? window.location.href
-        : "https://world.openfoodfacts.org"
-    )
+        : "https://world.openfoodfacts.org",
+    );
     // The link is rendered into an href, which is a script sink, and the page
     // embedding this element chooses it. `javascript:donate()//` would run in
     // that page and comment out the parameters appended below, so anything
     // that is not one of the two web schemes falls back to the donation page.
     if (url.protocol !== "https:" && url.protocol !== "http:") {
-      url = new URL(this.links.default)
+      url = new URL(this.links.default);
     }
-    const params = new URLSearchParams(url.search)
-    if (!params.has("utm_source")) params.set("utm_source", "off")
-    if (!params.has("utm_medium")) params.set("utm_medium", "web")
-    if (!params.has("utm_campaign")) params.set("utm_campaign", `donate-${this.currentYear}-a`)
-    if (!params.has("utm_term")) params.set("utm_term", `${baseLocale || "en"}-text-button`)
-    if (this.utmContent && !params.has("utm_content")) params.set("utm_content", this.utmContent)
+    const params = new URLSearchParams(url.search);
+    if (!params.has("utm_source")) params.set("utm_source", "off");
+    if (!params.has("utm_medium")) params.set("utm_medium", "web");
+    if (!params.has("utm_campaign"))
+      params.set("utm_campaign", `donate-${this.currentYear}-a`);
+    if (!params.has("utm_term"))
+      params.set("utm_term", `${baseLocale || "en"}-text-button`);
+    if (this.utmContent && !params.has("utm_content"))
+      params.set("utm_content", this.utmContent);
     // A meter showing nothing leaves the banner identical to the plain one, so
     // crediting the click to a meter that is not there would inflate the count.
     if (this.newsUrl && this.meterHasFigures && !params.has("utm_content"))
-      params.set("utm_content", "meter")
+      params.set("utm_content", "meter");
     for (const [key, value] of Object.entries(extra)) {
-      params.set(key, value)
+      params.set(key, value);
     }
-    url.search = params.toString()
-    return url.toString()
+    url.search = params.toString();
+    return url.toString();
   }
 
   private linkFor(extra: Record<string, string> = {}) {
-    const rawLocale = languageCode.get()
-    const locale = rawLocale?.toLowerCase()
-    const baseLocale = locale?.split(/[-_]/)[0]
-    const customLink = this.donateUrl || this.donateLinkProp
+    const rawLocale = languageCode.get();
+    const locale = rawLocale?.toLowerCase();
+    const baseLocale = locale?.split(/[-_]/)[0];
+    const customLink = this.donateUrl || this.donateLinkProp;
     if (customLink) {
-      return this.getLinkWithQueryParams(customLink, extra)
+      return this.getLinkWithQueryParams(customLink, extra);
     }
     const targetKey =
       locale && locale in this.links
         ? locale
         : baseLocale && baseLocale in this.links
           ? baseLocale
-          : undefined
+          : undefined;
     const link = targetKey
       ? this.links[targetKey as keyof typeof this.links]
-      : getLocalizedDonateUrl(rawLocale, this.links.default)
-    return this.getLinkWithQueryParams(link, extra)
+      : getLocalizedDonateUrl(rawLocale, this.links.default);
+    return this.getLinkWithQueryParams(link, extra);
   }
 
   get donateLink() {
-    return this.linkFor()
+    return this.linkFor();
   }
 
   private get view(): DonationBannerVariant | null {
-    return this.variant && (Object.values(DonationBannerVariant) as string[]).includes(this.variant)
+    return this.variant &&
+      (Object.values(DonationBannerVariant) as string[]).includes(this.variant)
       ? (this.variant as DonationBannerVariant)
-      : null
+      : null;
   }
 
   private get tiers(): number[] {
     return (this.amounts ?? "")
       .split(",")
       .map((entry) => Number(entry.trim()))
-      .filter((amount) => isFinite(amount) && amount > 0)
+      .filter((amount) => isFinite(amount) && amount > 0);
   }
 
   private get preselected(): number | undefined {
-    const tiers = this.tiers
+    const tiers = this.tiers;
     if (tiers.length === 0) {
-      return undefined
+      return undefined;
     }
     if (this.selected !== undefined && tiers.includes(this.selected)) {
-      return this.selected
+      return this.selected;
     }
-    return tiers[Math.floor((tiers.length - 1) / 2)]
+    return tiers[Math.floor((tiers.length - 1) / 2)];
   }
 
   private get amount(): number | undefined {
-    const tiers = this.tiers
+    const tiers = this.tiers;
     if (this.pickedAmount !== undefined && tiers.includes(this.pickedAmount)) {
-      return this.pickedAmount
+      return this.pickedAmount;
     }
-    return this.preselected
+    return this.preselected;
   }
 
   private _feedTask = new Task(this, {
     args: () => [this.newsUrl, this.view ? this.newsId : undefined] as const,
     task: async ([url, id]) => {
       if (!url || !id) {
-        return null
+        return null;
       }
-      const response = await fetch(url)
+      const response = await fetch(url);
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-      return findNewsItem((await response.json()) as NewsData, id)
+      return findNewsItem((await response.json()) as NewsData, id);
     },
-  })
+  });
 
   private get newsItem(): NewsItem | null {
-    return this._feedTask.status === TaskStatus.COMPLETE ? (this._feedTask.value ?? null) : null
+    return this._feedTask.status === TaskStatus.COMPLETE
+      ? (this._feedTask.value ?? null)
+      : null;
   }
 
   private get funding() {
-    const item = this.newsItem
-    return item ? parseFunding(item.raised, item.goal, item.currency) : null
+    const item = this.newsItem;
+    return item ? parseFunding(item.raised, item.goal, item.currency) : null;
   }
 
   private get count(): number | null {
-    return parseCount(this.newsItem?.count)
+    return parseCount(this.newsItem?.count);
   }
 
   private get locale(): string {
-    return languageCode.get() || DEFAULT_LANGUAGE_CODE
+    return languageCode.get() || DEFAULT_LANGUAGE_CODE;
   }
 
   private format(amount: number, currency: string, fractionDigits = 0) {
@@ -295,30 +304,33 @@ export class DonationBanner extends LitElement {
       currency,
       minimumFractionDigits: fractionDigits,
       maximumFractionDigits: fractionDigits,
-    }).format(amount)
+    }).format(amount);
   }
 
   // dayjs parses the feed's `2027-01-31 23:59:59`, which is not ISO, and reads a
   // date-only string as local time, so the day does not shift west of Greenwich.
   private formatDay(date?: string) {
-    const parsed = date ? dayjs(date) : null
+    const parsed = date ? dayjs(date) : null;
     return parsed?.isValid()
-      ? new Intl.DateTimeFormat(this.locale, { day: "numeric", month: "long" }).format(
-          parsed.toDate()
-        )
-      : null
+      ? new Intl.DateTimeFormat(this.locale, {
+          day: "numeric",
+          month: "long",
+        }).format(parsed.toDate())
+      : null;
   }
 
   private get isFrance(): boolean {
-    return (this.country ?? "").toLowerCase() === "fr"
+    return (this.country ?? "").toLowerCase() === "fr";
   }
 
   private get currency(): string {
-    return this.funding?.currency ?? "EUR"
+    return this.funding?.currency ?? "EUR";
   }
 
   private get countText(): string | null {
-    return this.count !== null ? new Intl.NumberFormat(this.locale).format(this.count) : null
+    return this.count !== null
+      ? new Intl.NumberFormat(this.locale).format(this.count)
+      : null;
   }
 
   /**
@@ -328,206 +340,226 @@ export class DonationBanner extends LitElement {
    * string that `msg()` already translates.
    */
   private feedText(key: FeedCopyKey): string | undefined {
-    const translations = this.newsItem?.translations
+    const translations = this.newsItem?.translations;
     if (!translations) {
-      return undefined
+      return undefined;
     }
-    const locale = this.locale
-    const full = locale.replace("-", "_")
-    const short = locale.split("-")[0]
+    const locale = this.locale;
+    const full = locale.replace("-", "_");
+    const short = locale.split("-")[0];
     const pick = (lang: string) => {
-      const value = translations[lang]?.[key]
-      return typeof value === "string" ? value : undefined
-    }
-    return pick(full) ?? pick(short)
+      const value = translations[lang]?.[key];
+      return typeof value === "string" ? value : undefined;
+    };
+    return pick(full) ?? pick(short);
   }
 
-  private fill(text: string, values: Record<string, string | undefined>): string {
+  private fill(
+    text: string,
+    values: Record<string, string | undefined>,
+  ): string {
     return text
       .replace(/\{(\w+)\}/g, (_match, key) =>
-        Object.hasOwn(values, key) ? (values[key] ?? "") : ""
+        Object.hasOwn(values, key) ? (values[key] ?? "") : "",
       )
       .replace(/ {2,}/g, " ")
-      .trim()
+      .trim();
   }
 
   private get baseCopyValues(): Record<string, string | undefined> {
-    const funding = this.funding
+    const funding = this.funding;
     return {
       count: this.countText ?? undefined,
-      raised: funding ? this.format(funding.raised, funding.currency) : undefined,
+      raised: funding
+        ? this.format(funding.raised, funding.currency)
+        : undefined,
       goal: funding ? this.format(funding.goal, funding.currency) : undefined,
       year: this.currentYear,
       end_date: this.formatDay(this.newsItem?.end_date) ?? undefined,
-    }
+    };
   }
 
   private copy(
     key: FeedCopyKey,
     builtIn: string,
-    extra: Record<string, string | undefined> = {}
+    extra: Record<string, string | undefined> = {},
   ): string {
-    const feed = this.feedText(key)
+    const feed = this.feedText(key);
     if (!feed) {
-      return builtIn
+      return builtIn;
     }
-    return this.fill(feed, { ...this.baseCopyValues, ...extra })
+    return this.fill(feed, { ...this.baseCopyValues, ...extra });
   }
 
   /** The Give button's label: feed `button_label`, or a built-in template filled with the tier amount. */
   private giveLabel(template: (amount: string) => string): string {
-    const tiers = this.tiers
+    const tiers = this.tiers;
     if (!tiers.length) {
-      return this.copy("button_label", msg("Support"))
+      return this.copy("button_label", msg("Support"));
     }
-    const amountText = this.selectedAmountText()
-    return this.copy("button_label", template(amountText), { amount: amountText })
+    const amountText = this.selectedAmountText();
+    return this.copy("button_label", template(amountText), {
+      amount: amountText,
+    });
   }
 
   /** The selected tier (or the first one) formatted as an amount, for the Give button and the hook line. */
   private selectedAmountText(): string {
-    return this.format(this.amount ?? this.tiers[0], this.currency)
+    return this.format(this.amount ?? this.tiers[0], this.currency);
   }
 
   private emit(
     action: DonationBannerAction,
-    extra: { amount?: number; interval?: DonationInterval } = {}
+    extra: { amount?: number; interval?: DonationInterval } = {},
   ) {
-    const detail: DonationBannerStateEventDetail = { action, variant: this.view, ...extra }
+    const detail: DonationBannerStateEventDetail = {
+      action,
+      variant: this.view,
+      ...extra,
+    };
     this.dispatchEvent(
-      new CustomEvent(EventType.DONATION_BANNER_STATE, { detail, bubbles: true, composed: true })
-    )
+      new CustomEvent(EventType.DONATION_BANNER_STATE, {
+        detail,
+        bubbles: true,
+        composed: true,
+      }),
+    );
   }
 
   private onDismiss = () => {
-    this.emit(DonationBannerAction.DISMISS)
+    this.emit(DonationBannerAction.DISMISS);
     if (this.view === DonationBannerVariant.BAR) {
-      this.barDismissed = true
+      this.barDismissed = true;
     }
-  }
+  };
 
   private onMinimize = () => {
-    this.emit(DonationBannerAction.MINIMIZE)
-  }
+    this.emit(DonationBannerAction.MINIMIZE);
+  };
 
   private onAlreadyDonated = () => {
-    this.emit(DonationBannerAction.ALREADY_DONATED)
-  }
+    this.emit(DonationBannerAction.ALREADY_DONATED);
+  };
 
   private onTier = (amount: number) => {
-    this.pickedAmount = amount
-  }
+    this.pickedAmount = amount;
+  };
 
   private onGive = () => {
     if (this.tiers.length) {
       this.emit(DonationBannerAction.CLICK, {
         amount: this.amount,
         interval: DonationInterval.MONTHLY,
-      })
+      });
     } else {
-      this.emit(DonationBannerAction.CLICK)
+      this.emit(DonationBannerAction.CLICK);
     }
-  }
+  };
 
   private onOther = () => {
-    this.emit(DonationBannerAction.CLICK, { interval: DonationInterval.ONE_TIME })
-  }
+    this.emit(DonationBannerAction.CLICK, {
+      interval: DonationInterval.ONE_TIME,
+    });
+  };
 
   private onSupport = () => {
-    this.emit(DonationBannerAction.CLICK)
-  }
+    this.emit(DonationBannerAction.CLICK);
+  };
 
   /** Escape closes the sheet; Tab/Shift-Tab wrap inside it while it is open. */
   private onSheetKeyDown = (event: KeyboardEvent) => {
     if (this.view !== DonationBannerVariant.SHEET) {
-      return
+      return;
     }
     if (event.key === "Escape") {
-      this.onMinimize()
-      return
+      this.onMinimize();
+      return;
     }
     if (event.key !== "Tab") {
-      return
+      return;
     }
-    const root = this.shadowRoot?.querySelector<HTMLElement>(".sheet")
+    const root = this.shadowRoot?.querySelector<HTMLElement>(".sheet");
     if (!root) {
-      return
+      return;
     }
-    const focusable = Array.from(root.querySelectorAll<HTMLElement>("button, a[href]"))
+    const focusable = Array.from(
+      root.querySelectorAll<HTMLElement>("button, a[href]"),
+    );
     if (!focusable.length) {
-      return
+      return;
     }
-    const first = focusable[0]
-    const last = focusable[focusable.length - 1]
-    const active = this.shadowRoot?.activeElement as HTMLElement | null
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const active = this.shadowRoot?.activeElement as HTMLElement | null;
     // Right after opening, focus is on the sheet itself (`tabindex="-1"`), not
     // on a button, so Tab goes to the first button and Shift-Tab to the last.
-    const inside = active !== null && focusable.includes(active)
+    const inside = active !== null && focusable.includes(active);
     if (event.shiftKey && (!inside || active === first)) {
-      event.preventDefault()
-      last.focus()
+      event.preventDefault();
+      last.focus();
     } else if (!event.shiftKey && (!inside || active === last)) {
-      event.preventDefault()
-      first.focus()
+      event.preventDefault();
+      first.focus();
     }
-  }
+  };
 
   private syncPageEffects() {
-    const isSheet = this.view === DonationBannerVariant.SHEET
+    const isSheet = this.view === DonationBannerVariant.SHEET;
     if (isSheet && !this.locked) {
-      this.lock()
-      this.previouslyFocused = document.activeElement as HTMLElement | null
-      this.shadowRoot?.querySelector<HTMLElement>(".sheet")?.focus()
+      this.lock();
+      this.previouslyFocused = document.activeElement as HTMLElement | null;
+      this.shadowRoot?.querySelector<HTMLElement>(".sheet")?.focus();
     } else if (!isSheet && this.locked) {
-      this.unlock()
-      this.previouslyFocused?.focus?.()
-      this.previouslyFocused = null
+      this.unlock();
+      this.previouslyFocused?.focus?.();
+      this.previouslyFocused = null;
     }
 
-    const isBarShown = this.view === DonationBannerVariant.BAR && !this.barDismissed
+    const isBarShown =
+      this.view === DonationBannerVariant.BAR && !this.barDismissed;
     if (isBarShown) {
       // With two bars on the page the last one rendered sets the padding; they overlap anyway.
-      const bar = this.shadowRoot?.querySelector<HTMLElement>(".bar")
+      const bar = this.shadowRoot?.querySelector<HTMLElement>(".bar");
       if (bar) {
-        document.body.style.paddingBottom = `${bar.offsetHeight}px`
+        document.body.style.paddingBottom = `${bar.offsetHeight}px`;
         if (!this.padded) {
-          this.padded = true
-          openOnPage.bars++
+          this.padded = true;
+          openOnPage.bars++;
         }
       }
     } else if (this.padded) {
-      this.unpad()
+      this.unpad();
     }
   }
 
   private lock() {
-    this.locked = true
+    this.locked = true;
     if (openOnPage.sheets++ === 0) {
-      openOnPage.bodyOverflow = document.body.style.overflow
-      document.body.style.overflow = "hidden"
+      openOnPage.bodyOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
     }
   }
 
   private unlock() {
-    this.locked = false
+    this.locked = false;
     if (--openOnPage.sheets === 0) {
-      document.body.style.overflow = openOnPage.bodyOverflow
+      document.body.style.overflow = openOnPage.bodyOverflow;
     }
   }
 
   private unpad() {
-    this.padded = false
+    this.padded = false;
     if (--openOnPage.bars === 0) {
-      document.body.style.paddingBottom = ""
+      document.body.style.paddingBottom = "";
     }
   }
 
   private clearPageEffects() {
     if (this.locked) {
-      this.unlock()
+      this.unlock();
     }
     if (this.padded) {
-      this.unpad()
+      this.unpad();
     }
   }
 
@@ -606,7 +638,8 @@ export class DonationBanner extends LitElement {
       }
       .donation-banner__hook-section p,
       .donation-banner-footer__hook-section p {
-        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+        font-family:
+          "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
         font-size: 25px;
         font-weight: 700;
         line-height: 1.2;
@@ -673,7 +706,8 @@ export class DonationBanner extends LitElement {
       }
       .donation-banner__actions-section__financial p,
       .donation-banner-footer__actions-section__financial p {
-        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+        font-family:
+          "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
         font-size: 15px;
         color: #008c8c;
         font-weight: bolder;
@@ -819,12 +853,12 @@ export class DonationBanner extends LitElement {
         }
       }
     `,
-  ]
+  ];
 
   private renderFundingMeter(line: "long" | "short") {
-    const funding = this.funding
+    const funding = this.funding;
     if (!funding) {
-      return nothing
+      return nothing;
     }
     return html`<donation-meter
       .funding=${funding}
@@ -832,23 +866,25 @@ export class DonationBanner extends LitElement {
       .count=${this.count ?? undefined}
       end-date=${ifDefined(this.newsItem?.end_date)}
       @donation-meter-state=${this.onMeterState}
-    ></donation-meter>`
+    ></donation-meter>`;
   }
 
   private renderTiers() {
-    const tiers = this.tiers
+    const tiers = this.tiers;
     if (!tiers.length) {
-      return nothing
+      return nothing;
     }
-    const currency = this.currency
-    const selectedAmount = this.amount
-    const preselected = this.preselected
+    const currency = this.currency;
+    const selectedAmount = this.amount;
+    const preselected = this.preselected;
     return html`<div class="tiers">
       ${tiers.map((tierAmount) => {
-        const isSelected = tierAmount === selectedAmount
-        const isPreselected = tierAmount === preselected
-        const amountText = this.format(tierAmount, currency)
-        const note = isPreselected ? this.copy("tier_note", "", { amount: amountText }) : ""
+        const isSelected = tierAmount === selectedAmount;
+        const isPreselected = tierAmount === preselected;
+        const amountText = this.format(tierAmount, currency);
+        const note = isPreselected
+          ? this.copy("tier_note", "", { amount: amountText })
+          : "";
         return html`<button
           type="button"
           class=${classMap({ tier: true, selected: isSelected })}
@@ -858,7 +894,7 @@ export class DonationBanner extends LitElement {
           ${isPreselected ? html`<span class="badge">${msg("Most popular")}</span>` : nothing}
           ${amountText}
           <small>${msg("/month")}${note ? html` ${note}` : nothing}</small>
-        </button>`
+        </button>`;
       })}
       <a
         class="tier other"
@@ -868,100 +904,130 @@ export class DonationBanner extends LitElement {
         ${msg("Other")}
         <small>${msg("one-time")}</small>
       </a>
-    </div>`
+    </div>`;
   }
 
   private renderGive(label: string) {
     const href = this.tiers.length
-      ? this.linkFor({ amount: String(this.amount), interval: DonationInterval.MONTHLY })
-      : this.linkFor()
-    return html`<a class="give" href=${href} @click=${this.onGive}>${label}</a>`
+      ? this.linkFor({
+          amount: String(this.amount),
+          interval: DonationInterval.MONTHLY,
+        })
+      : this.linkFor();
+    return html`<a class="give" href=${href} @click=${this.onGive}
+      >${label}</a
+    >`;
   }
 
   private renderClose(handler: () => void) {
-    return html`<button type="button" class="close" aria-label=${msg("Close")} @click=${handler}>
+    return html`<button
+      type="button"
+      class="close"
+      aria-label=${msg("Close")}
+      @click=${handler}
+    >
       <cross-icon></cross-icon>
-    </button>`
+    </button>`;
   }
 
   private renderAlreadyDonated() {
-    return html`<button type="button" class="link" @click=${this.onAlreadyDonated}>
+    return html`<button
+      type="button"
+      class="link"
+      @click=${this.onAlreadyDonated}
+    >
       ${msg("I already donated")}
-    </button>`
+    </button>`;
   }
 
   private h2Headline(): string {
-    const count = this.countText
+    const count = this.countText;
     if (this.isFrance) {
       return count
         ? this.copy(
             "title",
             msg(
-              str`To our readers in France: join the ${count} people keeping Open Food Facts free.`
-            )
+              str`To our readers in France: join the ${count} people keeping Open Food Facts free.`,
+            ),
           )
         : this.copy(
             "title",
-            msg("To our readers in France: join the people keeping Open Food Facts free.")
-          )
+            msg(
+              "To our readers in France: join the people keeping Open Food Facts free.",
+            ),
+          );
     }
-    return this.joinHeadline()
+    return this.joinHeadline();
   }
 
   private joinHeadline(): string {
-    const count = this.countText
+    const count = this.countText;
     return count
-      ? this.copy("title", msg(str`Join the ${count} people keeping Open Food Facts free.`))
-      : this.copy("title", msg("Join the people keeping Open Food Facts free."))
+      ? this.copy(
+          "title",
+          msg(str`Join the ${count} people keeping Open Food Facts free.`),
+        )
+      : this.copy(
+          "title",
+          msg("Join the people keeping Open Food Facts free."),
+        );
   }
 
   private hook(): string {
     if (!this.tiers.length) {
-      return this.copy("hook", msg("€3 a month keeps it that way."))
+      return this.copy("hook", msg("€3 a month keeps it that way."));
     }
-    const amount = this.selectedAmountText()
-    return this.copy("hook", msg(str`${amount} a month keeps it that way.`), { amount })
+    const amount = this.selectedAmountText();
+    return this.copy("hook", msg(str`${amount} a month keeps it that way.`), {
+      amount,
+    });
   }
 
   private barHeadline(): string {
-    const count = this.countText
+    const count = this.countText;
     const builtIn = count
       ? msg(str`Join ${count} people keeping this free.`)
-      : msg("Join the people keeping this free.")
-    return this.copy("title", builtIn)
+      : msg("Join the people keeping this free.");
+    return this.copy("title", builtIn);
   }
 
   private campaignParagraph(): string {
-    const funding = this.funding
-    const goal = funding ? this.format(funding.goal, funding.currency) : null
+    const funding = this.funding;
+    const goal = funding ? this.format(funding.goal, funding.currency) : null;
     const builtIn = goal
       ? msg(
-          str`Open Food Facts is a non-profit. No ads, no industry money, 4.6 million products kept open by volunteers. We need ${goal} to run the servers and one engineer in ${this.currentYear}. If you looked something up today, €3 a month keeps it free for a year.`
+          str`Open Food Facts is a non-profit. No ads, no industry money, 4.6 million products kept open by volunteers. We need ${goal} to run the servers and one engineer in ${this.currentYear}. If you looked something up today, €3 a month keeps it free for a year.`,
         )
       : msg(
-          "Open Food Facts is a non-profit. No ads, no industry money, 4.6 million products kept open by volunteers. If you looked something up today, €3 a month keeps it free for a year."
-        )
-    return this.copy("message", builtIn)
+          "Open Food Facts is a non-profit. No ads, no industry money, 4.6 million products kept open by volunteers. If you looked something up today, €3 a month keeps it free for a year.",
+        );
+    return this.copy("message", builtIn);
   }
 
   private renderCampaignFinePrint() {
     if (this.isFrance && this.amount !== undefined) {
-      const amount = this.format(this.amount, this.currency)
-      const net = this.format(this.amount * 0.34, this.currency, 2)
+      const amount = this.format(this.amount, this.currency);
+      const net = this.format(this.amount * 0.34, this.currency, 2);
       const builtIn = msg(
-        str`Tax deductible in France: ${amount} costs you ${net}. Cancel any time.`
-      )
-      return html`<p class="fine">${this.copy("fine_print", builtIn, { amount, net })}</p>`
+        str`Tax deductible in France: ${amount} costs you ${net}. Cancel any time.`,
+      );
+      return html`<p class="fine">
+        ${this.copy("fine_print", builtIn, { amount, net })}
+      </p>`;
     }
-    const feed = this.feedText("fine_print")
+    const feed = this.feedText("fine_print");
     if (feed) {
-      return html`<p class="fine">${this.fill(feed, this.baseCopyValues)}</p>`
+      return html`<p class="fine">${this.fill(feed, this.baseCopyValues)}</p>`;
     }
-    return html`<p class="fine">${msg("Cancel any time.")}<br />${msg("Receipt by email.")}</p>`
+    return html`<p class="fine">
+      ${msg("Cancel any time.")}<br />${msg("Receipt by email.")}
+    </p>`;
   }
 
   private renderCampaign() {
-    return html`<section class=${classMap({ "dark-mode": this.isDarkMode, campaign: true })}>
+    return html`<section
+      class=${classMap({ "dark-mode": this.isDarkMode, campaign: true })}
+    >
       <div class="text">
         <h2 id="donation-banner-title">${this.h2Headline()}</h2>
         <p>${this.campaignParagraph()}</p>
@@ -974,12 +1040,16 @@ export class DonationBanner extends LitElement {
           ${this.renderCampaignFinePrint()}
         </div>
       </div>
-      <div class="links">${this.renderAlreadyDonated()} ${this.renderClose(this.onDismiss)}</div>
-    </section>`
+      <div class="links">
+        ${this.renderAlreadyDonated()} ${this.renderClose(this.onDismiss)}
+      </div>
+    </section>`;
   }
 
   private renderStrip() {
-    return html`<section class=${classMap({ "dark-mode": this.isDarkMode, strip: true })}>
+    return html`<section
+      class=${classMap({ "dark-mode": this.isDarkMode, strip: true })}
+    >
       <span>
         <b>${this.joinHeadline()}</b>
         <span class="more">${this.hook()}</span>
@@ -990,11 +1060,13 @@ export class DonationBanner extends LitElement {
         </a>
         ${this.renderClose(this.onDismiss)}
       </span>
-    </section>`
+    </section>`;
   }
 
   private renderSheet() {
-    return html`<section class=${classMap({ "dark-mode": this.isDarkMode, "sheet-root": true })}>
+    return html`<section
+      class=${classMap({ "dark-mode": this.isDarkMode, "sheet-root": true })}
+    >
       <div class="overlay" @click=${this.onMinimize}></div>
       <div
         class="sheet"
@@ -1010,20 +1082,25 @@ export class DonationBanner extends LitElement {
         ${this.renderFundingMeter("short")} ${this.renderTiers()}
         ${this.renderGive(this.giveLabel((amount) => msg(str`Give ${amount} a month`)))}
         <p class="fine">
-          ${this.copy("fine_print", msg("Cancel any time"))} · ${this.renderAlreadyDonated()} ·
-          <button type="button" class="link" @click=${this.onMinimize}>${msg("Not now")}</button>
+          ${this.copy("fine_print", msg("Cancel any time"))} ·
+          ${this.renderAlreadyDonated()} ·
+          <button type="button" class="link" @click=${this.onMinimize}>
+            ${msg("Not now")}
+          </button>
         </p>
       </div>
-    </section>`
+    </section>`;
   }
 
   private renderBarVariant() {
     if (this.barDismissed) {
       return html`<section
         class=${classMap({ "dark-mode": this.isDarkMode, "bar-root": true })}
-      ></section>`
+      ></section>`;
     }
-    return html`<section class=${classMap({ "dark-mode": this.isDarkMode, "bar-root": true })}>
+    return html`<section
+      class=${classMap({ "dark-mode": this.isDarkMode, "bar-root": true })}
+    >
       <div class="bar">
         <div class="tx">
           <b>${this.barHeadline()}</b>
@@ -1032,11 +1109,13 @@ export class DonationBanner extends LitElement {
         ${this.renderGive(this.giveLabel((amount) => msg(str`Give ${amount}/mo`)))}
         ${this.renderClose(this.onDismiss)}
       </div>
-    </section>`
+    </section>`;
   }
 
   private renderDefault() {
-    const rootClasses = { "dark-mode": this.isDarkMode }
+    const rootClasses = { "dark-mode": this.isDarkMode };
+    // keep as-is: the default markup is pinned byte-for-byte by donation-banner.test.ts
+    // prettier-ignore
     return html`<section class=${classMap(rootClasses)}>
       <div class="donation-banner-footer row">
         <div class="donation-banner-footer__left-aside">
@@ -1111,21 +1190,21 @@ export class DonationBanner extends LitElement {
   override render() {
     switch (this.view) {
       case DonationBannerVariant.CAMPAIGN:
-        return this.renderCampaign()
+        return this.renderCampaign();
       case DonationBannerVariant.STRIP:
-        return this.renderStrip()
+        return this.renderStrip();
       case DonationBannerVariant.SHEET:
-        return this.renderSheet()
+        return this.renderSheet();
       case DonationBannerVariant.BAR:
-        return this.renderBarVariant()
+        return this.renderBarVariant();
       default:
-        return this.renderDefault()
+        return this.renderDefault();
     }
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "donation-banner": DonationBanner
+    "donation-banner": DonationBanner;
   }
 }

@@ -1,23 +1,23 @@
-import { css, html, LitElement, nothing, type TemplateResult } from "lit"
-import { state } from "lit/decorators.js"
-import type { Constructor } from "."
-import { ALERT } from "../styles/alert"
+import { css, html, LitElement, nothing, type TemplateResult } from "lit";
+import { state } from "lit/decorators.js";
+import type { Constructor } from ".";
+import { ALERT } from "../styles/alert";
 
 export declare class MessageDisplayMixinInterface {
   messageToDisplay?: {
-    message: string
-    type: "success" | "error" | "info"
-  }
+    message: string;
+    type: "success" | "error" | "info";
+  };
 
-  resetMessage(): void
-  setErrorMessage(message: string): void
-  setSuccessMessage(message: string): void
-  setInfoMessage(message: string): void
-  renderMessage(): typeof nothing | TemplateResult
+  resetMessage(): void;
+  setErrorMessage(message: string): void;
+  setSuccessMessage(message: string): void;
+  setInfoMessage(message: string): void;
+  renderMessage(): typeof nothing | TemplateResult;
 }
 
 export const MessageDisplayMixin = <T extends Constructor<LitElement>>(
-  superClass: T
+  superClass: T,
 ): Constructor<MessageDisplayMixinInterface> & T => {
   class MessageDisplayMixinClass extends superClass {
     static styles = [
@@ -30,37 +30,37 @@ export const MessageDisplayMixin = <T extends Constructor<LitElement>>(
           font-weight: 700;
         }
       `,
-    ]
+    ];
 
     @state()
     messageToDisplay?: {
-      message: string
-      type: "success" | "error" | "info"
-    }
+      message: string;
+      type: "success" | "error" | "info";
+    };
 
     resetMessage() {
-      this.messageToDisplay = undefined
+      this.messageToDisplay = undefined;
     }
 
     setErrorMessage(message: string) {
       this.messageToDisplay = {
         message,
         type: "error",
-      }
+      };
     }
 
     setSuccessMessage(message: string) {
       this.messageToDisplay = {
         message,
         type: "success",
-      }
+      };
     }
 
     setInfoMessage(message: string) {
       this.messageToDisplay = {
         message,
         type: "info",
-      }
+      };
     }
 
     renderMessage(): typeof nothing | TemplateResult {
@@ -68,8 +68,9 @@ export const MessageDisplayMixin = <T extends Constructor<LitElement>>(
         ? html`<div class="alert ${this.messageToDisplay.type}">
             ${this.messageToDisplay.message}
           </div>`
-        : nothing
+        : nothing;
     }
   }
-  return MessageDisplayMixinClass as unknown as Constructor<MessageDisplayMixinInterface> & T
-}
+  return MessageDisplayMixinClass as unknown as Constructor<MessageDisplayMixinInterface> &
+    T;
+};

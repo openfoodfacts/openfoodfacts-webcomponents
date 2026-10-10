@@ -1,6 +1,6 @@
-import "./barcode-scanner"
+import "./barcode-scanner";
 
-import type { Meta, StoryObj } from "@storybook/web-components-vite"
+import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
 const meta: Meta = {
   title: "Components/Barcode Scanner",
@@ -8,11 +8,11 @@ const meta: Meta = {
   parameters: {
     layout: "centered",
   },
-}
-export default meta
+};
+export default meta;
 
-type Story = StoryObj
+type Story = StoryObj;
 
 export const Basic: Story = {
   args: {},
-}
+};

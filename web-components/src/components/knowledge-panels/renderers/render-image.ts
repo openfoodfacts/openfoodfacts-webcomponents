@@ -1,6 +1,6 @@
-import { LitElement, html, css, type TemplateResult } from "lit"
-import { customElement, property } from "lit/decorators.js"
-import type { PanelGroupElement } from "../../../types/knowledge-panel"
+import { LitElement, html, css, type TemplateResult } from "lit";
+import { customElement, property } from "lit/decorators.js";
+import type { PanelGroupElement } from "../../../types/knowledge-panel";
 
 /**
  * Panel group image renderer component
@@ -35,28 +35,31 @@ export class PanelGroupImageRenderer extends LitElement {
       font-style: italic;
       word-wrap: break-word;
     }
-  `
+  `;
 
   @property({ type: Object })
-  panelGroup?: PanelGroupElement
+  panelGroup?: PanelGroupElement;
 
   override render(): TemplateResult {
     if (!this.panelGroup || !this.panelGroup.image) {
-      return html``
+      return html``;
     }
 
     const imageUrl =
-      this.panelGroup.image.sizes?.["400"]?.url || this.panelGroup.image.sizes?.["full"]?.url || ""
+      this.panelGroup.image.sizes?.["400"]?.url ||
+      this.panelGroup.image.sizes?.["full"]?.url ||
+      "";
 
-    const imageAlt = this.panelGroup.image.alt || "Panel image"
-    const imageCaption = this.panelGroup.image.caption || this.panelGroup.image.description || ""
+    const imageAlt = this.panelGroup.image.alt || "Panel image";
+    const imageCaption =
+      this.panelGroup.image.caption || this.panelGroup.image.description || "";
 
     return html`
       <div class="panel-image">
         <img src="${imageUrl}" alt="${imageAlt}" />
         ${imageCaption ? html`<div class="panel-image-text">${imageCaption}</div>` : html``}
       </div>
-    `
+    `;
   }
 }
 
@@ -93,20 +96,20 @@ export class ImageRenderer extends LitElement {
       font-style: italic;
       word-wrap: break-word;
     }
-  `
+  `;
 
   @property({ type: String })
-  imageUrl = ""
+  imageUrl = "";
 
   @property({ type: String })
-  imageAlt = "Image"
+  imageAlt = "Image";
 
   @property({ type: String })
-  imageCaption = ""
+  imageCaption = "";
 
   override render(): TemplateResult {
     if (!this.imageUrl) {
-      return html``
+      return html``;
     }
 
     return html`
@@ -118,7 +121,7 @@ export class ImageRenderer extends LitElement {
             : html``
         }
       </div>
-    `
+    `;
   }
 }
 
@@ -153,30 +156,30 @@ export class NutritionImageRenderer extends LitElement {
       font-style: italic;
       word-wrap: break-word;
     }
-  `
+  `;
 
   @property({ type: String })
-  imageUrl = ""
+  imageUrl = "";
 
   @property({ type: String })
-  subtitle = ""
+  subtitle = "";
 
   override render(): TemplateResult {
     if (!this.imageUrl) {
-      return html``
+      return html``;
     }
 
     return html`
       <img src="${this.imageUrl}" alt="Nutrition Information" />
       ${this.subtitle ? html`<div class="panel-image-text">${this.subtitle}</div>` : ""}
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "panel-group-image-renderer": PanelGroupImageRenderer
-    "image-renderer": ImageRenderer
-    "nutrition-image-renderer": NutritionImageRenderer
+    "panel-group-image-renderer": PanelGroupImageRenderer;
+    "image-renderer": ImageRenderer;
+    "nutrition-image-renderer": NutritionImageRenderer;
   }
 }

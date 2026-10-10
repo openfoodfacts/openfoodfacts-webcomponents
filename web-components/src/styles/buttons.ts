@@ -1,4 +1,4 @@
-import { css, type CSSResult } from "lit-element"
+import { css, type CSSResult } from "lit-element";
 import {
   SAFE_CAPPUCINO,
   SAFE_CHOCOLATE,
@@ -6,7 +6,7 @@ import {
   SAFE_LIGHT_GREEN,
   SAFE_LIGHT_RED,
   SAFE_SUCCESS,
-} from "../utils/colors"
+} from "../utils/colors";
 
 export enum ButtonType {
   Chocolate = "chocolate",
@@ -66,8 +66,8 @@ export const getDefaultButtonClasses = (): CSSResult => {
       cursor: not-allowed;
       opacity: 0.5;
     }
-  `
-}
+  `;
+};
 
 export const BUTTON_CLASS_BY_TYPE: Record<ButtonType, CSSResult> = {
   [ButtonType.Chocolate]: css`
@@ -176,13 +176,13 @@ export const BUTTON_CLASS_BY_TYPE: Record<ButtonType, CSSResult> = {
       border-color: ${SAFE_SUCCESS};
     }
   `,
-}
+};
 
 export const getButtonClasses = (types: ButtonType[]): CSSResult[] => {
-  const buttonClasses = [getDefaultButtonClasses()]
+  const buttonClasses = [getDefaultButtonClasses()];
 
   types.forEach((type) => {
-    buttonClasses.push(BUTTON_CLASS_BY_TYPE[type])
-  })
-  return buttonClasses
-}
+    buttonClasses.push(BUTTON_CLASS_BY_TYPE[type]);
+  });
+  return buttonClasses;
+};

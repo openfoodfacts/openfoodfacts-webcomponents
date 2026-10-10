@@ -1,37 +1,41 @@
-import { LitElement, html, css, nothing } from "lit"
-import { customElement, property, query, state } from "lit/decorators.js"
-import { BASE } from "../../styles/base"
-import { msg, localized } from "@lit/localize"
-import { EventType } from "../../constants"
-import { AnnotationAnswer } from "../../types/robotoff"
-import "../icons/check"
-import "../icons/cross"
-import "../icons/skip"
-import "../icons/edit"
-import "../shared/info-button"
-import { ButtonType, getButtonClasses } from "../../styles/buttons"
-import { TEXTAREA } from "../../styles/form"
-import { POPOVER } from "../../styles/popover"
-import { SAFE_LIGHT_BLACK, SAFE_GREY, SAFE_LIGHT_GREY } from "../../utils/colors"
-import { TEXT_CORRECTOR } from "../../styles/text-corrector"
-import { clickOutside } from "../../directives/click-outside"
+import { LitElement, html, css, nothing } from "lit";
+import { customElement, property, query, state } from "lit/decorators.js";
+import { BASE } from "../../styles/base";
+import { msg, localized } from "@lit/localize";
+import { EventType } from "../../constants";
+import { AnnotationAnswer } from "../../types/robotoff";
+import "../icons/check";
+import "../icons/cross";
+import "../icons/skip";
+import "../icons/edit";
+import "../shared/info-button";
+import { ButtonType, getButtonClasses } from "../../styles/buttons";
+import { TEXTAREA } from "../../styles/form";
+import { POPOVER } from "../../styles/popover";
+import {
+  SAFE_LIGHT_BLACK,
+  SAFE_GREY,
+  SAFE_LIGHT_GREY,
+} from "../../utils/colors";
+import { TEXT_CORRECTOR } from "../../styles/text-corrector";
+import { clickOutside } from "../../directives/click-outside";
 import {
   ChangeType,
   type IndexedGroupedChange,
   type TextCorrectorEventDetail,
-} from "../../types/ingredient-spellcheck"
-import { RELATIVE } from "../../styles/utils"
-import { sanitizeHtml } from "../../utils/html"
-import { Breakpoints } from "../../utils/breakpoints"
+} from "../../types/ingredient-spellcheck";
+import { RELATIVE } from "../../styles/utils";
+import { sanitizeHtml } from "../../utils/html";
+import { Breakpoints } from "../../utils/breakpoints";
 
-import "../shared/loading-button"
-import "../shared/text-corrector-highlight"
-import { triggerSubmit } from "../../utils"
-import { TextDiffMixin } from "../../mixins/text-diff-mixin"
+import "../shared/loading-button";
+import "../shared/text-corrector-highlight";
+import { triggerSubmit } from "../../utils";
+import { TextDiffMixin } from "../../mixins/text-diff-mixin";
 
 // key is the index of the change in the groupedChanges array
 // value is boolean indicating if the change is validated or not
-export type ValidationChangeResult = Record<number, boolean>
+export type ValidationChangeResult = Record<number, boolean>;
 
 export enum TextCorrectorKeyboardShortcut {
   ACCEPT_FIRST_SUGGESTION = "f",
@@ -63,7 +67,11 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
     POPOVER,
     RELATIVE,
     TEXT_CORRECTOR,
-    getButtonClasses([ButtonType.Cappucino, ButtonType.LightRed, ButtonType.LightGreen]),
+    getButtonClasses([
+      ButtonType.Cappucino,
+      ButtonType.LightRed,
+      ButtonType.LightGreen,
+    ]),
     css`
       .text {
         line-height: 1.4rem;
@@ -167,76 +175,76 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
         right: 0;
       }
     `,
-  ]
+  ];
   /**
    * The original text to be corrected.
    * @type {string}
    */
   @property({ type: String })
-  original = ""
+  original = "";
 
   /**
    * The corrected text.
    * @type {string}
    */
   @property({ type: String })
-  correction = ""
+  correction = "";
 
   /**
    * Enables keyboard mode for the component.
    * @type {boolean}
    */
   @property({ type: Boolean, attribute: "enable-keyboard-mode" })
-  enableKeyboardMode = false
+  enableKeyboardMode = false;
 
   @state()
-  validateChangeResult: ValidationChangeResult = {}
+  validateChangeResult: ValidationChangeResult = {};
 
   @state()
-  currentAnsweredIndex: number = 0
+  currentAnsweredIndex: number = 0;
 
   /**
    * The grouped changes based on the diff result.
    * @type {IndexedGroupedChange[]}
    */
   @state()
-  groupedChanges: IndexedGroupedChange[] = []
+  groupedChanges: IndexedGroupedChange[] = [];
 
   /**
    * The current value of the text being edited.
    * @type {string}
    */
   @state()
-  value = ""
+  value = "";
 
   /**
    * The text to compare against the current value.
    * @type {string}
    */
   @state()
-  textToCompare = ""
+  textToCompare = "";
 
   /**
    * Loading state for buttons
    */
   @property({ type: Number, reflect: true })
-  loading?: AnnotationAnswer
+  loading?: AnnotationAnswer;
 
   /**
    * Indicates whether the component is in edit mode.
    * @type {boolean}
    */
   @state()
-  isEditMode = false
+  isEditMode = false;
 
   @state()
-  showInfoPopover: boolean = false
+  showInfoPopover: boolean = false;
 
   @state()
-  resetAutoFocus: boolean = false
+  resetAutoFocus: boolean = false;
 
   @query("form")
-  form!: HTMLFormElement
+  form!: HTMLFormElement;
 
   /**
    * Checks if the confirm button should be disabled.
@@ -245,8 +253,10 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
   get isConfirmDisabled() {
     return (
       !this.isEditMode &&
-      this.groupedChanges.some((_, index) => this.validateChangeResult[index] === undefined)
-    )
+      this.groupedChanges.some(
+        (_, index) => this.validateChangeResult[index] === undefined,
+      )
+    );
   }
 
   /**
@@ -254,13 +264,13 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
    * @returns {string} The message to display.
    */
   get updateTextMsg() {
-    return msg("Please fix the errors or modify the text before confirming")
+    return msg("Please fix the errors or modify the text before confirming");
   }
 
   get filteredNotAnsweredChanges() {
     return this.groupedChanges.filter((_, index) => {
-      return this.validateChangeResult[index] === undefined
-    })
+      return this.validateChangeResult[index] === undefined;
+    });
   }
 
   /**
@@ -269,12 +279,16 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
    * @param {string | null} _old - The old value of the attribute.
    * @param {string | null} value - The new value of the attribute.
    */
-  override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
-    super.attributeChangedCallback(name, _old, value)
+  override attributeChangedCallback(
+    name: string,
+    _old: string | null,
+    value: string | null,
+  ): void {
+    super.attributeChangedCallback(name, _old, value);
     if (name === "original" || name === "correction") {
-      this.updateValues()
-      this.computeWordDiff(true)
-      this.resetAutoFocus = true
+      this.updateValues();
+      this.computeWordDiff(true);
+      this.resetAutoFocus = true;
     }
   }
   /**
@@ -297,7 +311,7 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
         </div>
         <div class="submit-buttons-wrapper">${this.renderButtons()}</div>
       </form>
-    `
+    `;
   }
 
   /**
@@ -306,7 +320,7 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
    * @returns {string} The data-id attribute value.
    */
   getAcceptSuggestionButtonDataId(index: number) {
-    return `accept-suggestion-${index}`
+    return `accept-suggestion-${index}`;
   }
 
   /**
@@ -316,16 +330,16 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
    */
   getKeyboardShortcutText(shortcut: TextCorrectorKeyboardShortcut): string {
     if (!this.enableKeyboardMode || this.isEditMode) {
-      return ""
+      return "";
     }
-    return ` (${shortcut.toUpperCase()})`
+    return ` (${shortcut.toUpperCase()})`;
   }
   /**
    * Updates the values of the component.
    */
   updateValues() {
-    this.value = this.original
-    this.textToCompare = this.correction
+    this.value = this.original;
+    this.textToCompare = this.correction;
   }
 
   /**
@@ -333,14 +347,14 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
    */
   focusFirstButton() {
     if (!this.enableKeyboardMode) {
-      return
+      return;
     }
     requestAnimationFrame(() => {
       const button = this.shadowRoot!.querySelector(
-        `[data-id^="${this.getAcceptSuggestionButtonDataId(0)}"]`
-      ) as HTMLButtonElement
-      button.focus()
-    })
+        `[data-id^="${this.getAcceptSuggestionButtonDataId(0)}"]`,
+      ) as HTMLButtonElement;
+      button.focus();
+    });
   }
 
   /**
@@ -348,17 +362,19 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
    */
   focusSaveButton() {
     if (!this.enableKeyboardMode) {
-      return
+      return;
     }
     requestAnimationFrame(() => {
       const loadingButton = this.shadowRoot!.querySelector(
-        "loading-button[type='submit']"
-      ) as HTMLElement
+        "loading-button[type='submit']",
+      ) as HTMLElement;
       if (loadingButton && loadingButton.shadowRoot) {
-        const button = loadingButton.shadowRoot.querySelector("button") as HTMLButtonElement
-        button?.focus()
+        const button = loadingButton.shadowRoot.querySelector(
+          "button",
+        ) as HTMLButtonElement;
+        button?.focus();
       }
-    })
+    });
   }
 
   /**
@@ -367,10 +383,10 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
    *
    */
   override updated(changedProperties: Map<string, unknown>) {
-    super.updated(changedProperties)
+    super.updated(changedProperties);
     if (this.resetAutoFocus) {
-      this.resetAutoFocus = false
-      this.focusFirstButton()
+      this.resetAutoFocus = false;
+      this.focusFirstButton();
     }
   }
 
@@ -382,23 +398,23 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
    * instead of remove "world" and add "universe" separately
    */
   computeGroupedChanges(): void {
-    this.groupedChanges = []
-    this.currentAnsweredIndex = 0
+    this.groupedChanges = [];
+    this.currentAnsweredIndex = 0;
 
-    const changes = this.diffResult
+    const changes = this.diffResult;
     if (changes.length === 0) {
-      return
+      return;
     }
 
     for (let i = 0; i < changes.length; i++) {
-      const current = changes[i]
+      const current = changes[i];
 
       if (!current.added && !current.removed) {
-        continue
+        continue;
       }
-      const nextIndex = i + 1
-      const next = nextIndex < changes.length ? changes[nextIndex] : null
-      const position = this.groupedChanges.length
+      const nextIndex = i + 1;
+      const next = nextIndex < changes.length ? changes[nextIndex] : null;
+      const position = this.groupedChanges.length;
 
       if (current.removed && next && next.added) {
         // This is a "changed" item (something was removed and something else was added)
@@ -408,9 +424,9 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
           newValue: next.value,
           indexes: [i, nextIndex],
           position,
-        })
+        });
 
-        i++ // Skip the next item as we've already processed it
+        i++; // Skip the next item as we've already processed it
       } else if (current.removed) {
         // This is a pure removal
         this.groupedChanges.push({
@@ -418,7 +434,7 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
           value: current.value,
           indexes: [i],
           position,
-        })
+        });
       } else if (current.added) {
         // This is a pure addition
         this.groupedChanges.push({
@@ -426,7 +442,7 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
           value: current.value,
           indexes: [i],
           position,
-        })
+        });
       }
     }
   }
@@ -437,104 +453,113 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
    */
   computeWordDiff(reset: boolean = false) {
     // Compute the diff result
-    this.computeDiffResult(this.value, this.textToCompare)
+    this.computeDiffResult(this.value, this.textToCompare);
     if (reset) {
-      this.validateChangeResult = {}
+      this.validateChangeResult = {};
     }
     // Group changes to identify "changed" items (adjacent removed and added)
-    this.computeGroupedChanges()
+    this.computeGroupedChanges();
 
-    return this.diffResult
+    return this.diffResult;
   }
 
   goToSuggestion(index: number) {
-    this.currentAnsweredIndex = index
+    this.currentAnsweredIndex = index;
     // unanswered the question if it was answered
-    this.unansweredChange(index)
+    this.unansweredChange(index);
   }
 
   unansweredChange(index: number) {
-    delete this.validateChangeResult[index]
-    this.requestUpdate()
+    delete this.validateChangeResult[index];
+    this.requestUpdate();
   }
 
   renderChange(value: string, index: number, className: string) {
     // Replace newlines with <br/> for HTML rendering
-    let cleanedValue = value.replace(/\n/g, "↩︎<br/>")
+    let cleanedValue = value.replace(/\n/g, "↩︎<br/>");
     // for other clean value like the suggestions
-    cleanedValue = this.cleanSuggestion(cleanedValue)
+    cleanedValue = this.cleanSuggestion(cleanedValue);
 
-    const isCurrent = this.currentAnsweredIndex === index
+    const isCurrent = this.currentAnsweredIndex === index;
 
     return html`<span
       class="${className} spellcheck ${isCurrent ? "current" : ""}"
       @click=${() => this.goToSuggestion(index)}
       >${sanitizeHtml(cleanedValue)}</span
-    >`
+    >`;
   }
 
   renderUnansweredChange(value: string, index: number) {
-    return this.renderChange(value, index, "deletion")
+    return this.renderChange(value, index, "deletion");
   }
 
   renderAnsweredChange(value: string, index: number) {
-    return this.renderChange(value, index, "answered-change")
+    return this.renderChange(value, index, "answered-change");
   }
 
   renderSpellCheckDiff() {
-    let indexedGroupedChangeIndex = 0
+    let indexedGroupedChangeIndex = 0;
 
     return html`${this.diffResult.map((part) => {
-      const indexedGroupedChange = this.groupedChanges[indexedGroupedChangeIndex]
+      const indexedGroupedChange =
+        this.groupedChanges[indexedGroupedChangeIndex];
 
       // If the part is the second index of a grouped change, we will increment the change index
       if (indexedGroupedChange?.indexes[1] === part.index) {
-        indexedGroupedChangeIndex++
-        return nothing
+        indexedGroupedChangeIndex++;
+        return nothing;
         // If the part is part of a grouped change
       } else if (indexedGroupedChange?.indexes[0] === part.index) {
-        const currentIndex = indexedGroupedChangeIndex
-        const isValidate = this.validateChangeResult[indexedGroupedChangeIndex]
+        const currentIndex = indexedGroupedChangeIndex;
+        const isValidate = this.validateChangeResult[indexedGroupedChangeIndex];
         // We will increment change index with the second index of the grouped change
         if (indexedGroupedChange.type !== ChangeType.CHANGED) {
-          indexedGroupedChangeIndex++
+          indexedGroupedChangeIndex++;
         }
 
         switch (indexedGroupedChange.type) {
           case ChangeType.ADDED:
             if (isValidate === undefined) {
-              return this.renderUnansweredChange("", currentIndex)
+              return this.renderUnansweredChange("", currentIndex);
             }
             return this.renderAnsweredChange(
               isValidate ? indexedGroupedChange.value! : "",
-              currentIndex
-            )
+              currentIndex,
+            );
           case ChangeType.REMOVED:
             if (isValidate === undefined) {
-              return this.renderUnansweredChange(indexedGroupedChange.value!, currentIndex)
+              return this.renderUnansweredChange(
+                indexedGroupedChange.value!,
+                currentIndex,
+              );
             }
             return this.renderAnsweredChange(
               isValidate ? "" : indexedGroupedChange.value!,
-              currentIndex
-            )
+              currentIndex,
+            );
           case ChangeType.CHANGED:
             if (isValidate === undefined) {
-              return this.renderUnansweredChange(indexedGroupedChange.oldValue!, currentIndex)
+              return this.renderUnansweredChange(
+                indexedGroupedChange.oldValue!,
+                currentIndex,
+              );
             }
             return this.renderAnsweredChange(
-              isValidate ? indexedGroupedChange.newValue! : indexedGroupedChange.oldValue!,
-              currentIndex
-            )
+              isValidate
+                ? indexedGroupedChange.newValue!
+                : indexedGroupedChange.oldValue!,
+              currentIndex,
+            );
         }
       }
       // If the part is not part of a grouped change
-      return html`<span>${part.value}</span>`
-    })}`
+      return html`<span>${part.value}</span>`;
+    })}`;
   }
 
   // Renders the empty suggestion when value is empty
   renderEmptySuggestion() {
-    return ""
+    return "";
   }
 
   /**
@@ -544,15 +569,15 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
    */
   cleanSuggestion(suggestion: string): string {
     if (!suggestion) {
-      return this.renderEmptySuggestion()
+      return this.renderEmptySuggestion();
     }
-    let value = suggestion
+    let value = suggestion;
     // Check if value contains only spaces or newlines
     if (value.match(/^( |\u00A0|\n)+$/)) {
-      value = value.replace(/( |\u00A0)/g, "␣")
+      value = value.replace(/( |\u00A0)/g, "␣");
     }
     // Replace newlines with ↩︎
-    return value.replace(/\n/g, "↩︎")
+    return value.replace(/\n/g, "↩︎");
   }
 
   /**
@@ -562,18 +587,18 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
    * @returns {TemplateResult} The rendered button.
    */
   renderAcceptSuggestionButton(item: IndexedGroupedChange, index: number) {
-    let text
-    let keyboardShortcutText
+    let text;
+    let keyboardShortcutText;
     switch (item.type) {
       case ChangeType.CHANGED:
-        text = `${this.cleanSuggestion(item.newValue!)}`
-        break
+        text = `${this.cleanSuggestion(item.newValue!)}`;
+        break;
       case ChangeType.ADDED:
-        text = `${this.cleanSuggestion(item.value!)}`
-        break
+        text = `${this.cleanSuggestion(item.value!)}`;
+        break;
       case ChangeType.REMOVED:
-        text = this.renderEmptySuggestion()
-        break
+        text = this.renderEmptySuggestion();
+        break;
     }
     return html`
       <button
@@ -585,7 +610,7 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
       >
         ${text}${keyboardShortcutText}
       </button>
-    `
+    `;
   }
 
   /**
@@ -595,19 +620,19 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
    * @returns {TemplateResult} The rendered button.
    */
   renderRejectSuggestionButton(item: IndexedGroupedChange) {
-    let text
-    let keyboardShortcutText
+    let text;
+    let keyboardShortcutText;
     switch (item.type) {
       case ChangeType.CHANGED:
         // replace espace and espace insecable with a visible character
-        text = `${this.cleanSuggestion(item.oldValue!)}`
-        break
+        text = `${this.cleanSuggestion(item.oldValue!)}`;
+        break;
       case ChangeType.ADDED:
-        text = this.renderEmptySuggestion()
-        break
+        text = this.renderEmptySuggestion();
+        break;
       case ChangeType.REMOVED:
-        text = this.cleanSuggestion(item.value!)
-        break
+        text = this.cleanSuggestion(item.value!);
+        break;
     }
     return html`<button
       class="suggestion-button button light-red-button small"
@@ -616,7 +641,7 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
       title="${text}"
     >
       ${text}${keyboardShortcutText}
-    </button>`
+    </button>`;
   }
 
   /**
@@ -632,23 +657,24 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
   renderSummaryItemContent(item: IndexedGroupedChange, index: number) {
     return html`
       <div class="summary-item">
-        ${this.renderRejectSuggestionButton(item)} ${this.renderAcceptSuggestionButton(item, index)}
+        ${this.renderRejectSuggestionButton(item)}
+        ${this.renderAcceptSuggestionButton(item, index)}
       </div>
-    `
+    `;
   }
 
   /**
    * Toggles the info popover.
    */
   toggleInfoPopover() {
-    this.showInfoPopover = !this.showInfoPopover
+    this.showInfoPopover = !this.showInfoPopover;
   }
 
   /**
    * Closes the info popover.
    */
   closeInfoPopover() {
-    this.showInfoPopover = false
+    this.showInfoPopover = false;
   }
 
   /**
@@ -656,19 +682,21 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
    * @returns {TemplateResult} The rendered summary content.
    */
   renderSummary() {
-    const filteredNotAnsweredChanges = this.filteredNotAnsweredChanges
+    const filteredNotAnsweredChanges = this.filteredNotAnsweredChanges;
     if (filteredNotAnsweredChanges.length === 0) {
-      return nothing
+      return nothing;
     }
 
     const notAnsweredChanges = [
       // Get next items from currentAnsweredIndex first
       ...filteredNotAnsweredChanges.filter(
-        (change) => change.position >= this.currentAnsweredIndex
+        (change) => change.position >= this.currentAnsweredIndex,
       ),
       // Then add items before currentAnsweredIndex
-      ...filteredNotAnsweredChanges.filter((change) => change.position < this.currentAnsweredIndex),
-    ]
+      ...filteredNotAnsweredChanges.filter(
+        (change) => change.position < this.currentAnsweredIndex,
+      ),
+    ];
 
     return html`<div class="summary">
       <div class="relative">
@@ -681,21 +709,21 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
         <div class="summary-item">
           <div class="suggestion-button-title">
             ${msg("Original")}${this.getKeyboardShortcutText(
-              TextCorrectorKeyboardShortcut.REJECT_FIRST_SUGGESTION
+              TextCorrectorKeyboardShortcut.REJECT_FIRST_SUGGESTION,
             )}
           </div>
           <div class="suggestion-button-title">
             ${msg("Suggested fix")}${this.getKeyboardShortcutText(
-              TextCorrectorKeyboardShortcut.ACCEPT_FIRST_SUGGESTION
+              TextCorrectorKeyboardShortcut.ACCEPT_FIRST_SUGGESTION,
             )}
           </div>
         </div>
 
         ${notAnsweredChanges.map((item, index) => {
-          return this.renderSummaryItemContent(item, index)
+          return this.renderSummaryItemContent(item, index);
         })}
       </div>
-    </div>`
+    </div>`;
   }
 
   /**
@@ -707,30 +735,30 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
   updateNextAnsweredIndex() {
     // If the current change is not answered, we don't update the index
     if (this.validateChangeResult[this.currentAnsweredIndex] === undefined) {
-      return
+      return;
     }
 
-    const filteredNotAnsweredChanges = this.filteredNotAnsweredChanges
+    const filteredNotAnsweredChanges = this.filteredNotAnsweredChanges;
     // If there are no unanswered changes, we reset the index to 0
     if (filteredNotAnsweredChanges.length === 0) {
-      this.currentAnsweredIndex = 0
+      this.currentAnsweredIndex = 0;
       // focus on the save button to allow the user to save the result when all changes are answered
-      this.focusSaveButton()
-      return
+      this.focusSaveButton();
+      return;
     }
     // get the next unanswered change after the current one
     const nextFilteredNotAnsweredChanges = filteredNotAnsweredChanges.filter(
-      (change) => change.position > this.currentAnsweredIndex
-    )
+      (change) => change.position > this.currentAnsweredIndex,
+    );
 
     // If there are no unanswered changes after the current one, we take the first one
     this.currentAnsweredIndex =
       nextFilteredNotAnsweredChanges.length > 0
         ? nextFilteredNotAnsweredChanges[0].position
-        : filteredNotAnsweredChanges[0].position
+        : filteredNotAnsweredChanges[0].position;
 
     // focus on the next unanswered change
-    this.focusFirstButton()
+    this.focusFirstButton();
   }
 
   /**
@@ -741,14 +769,14 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
   updateResult(validate: boolean, items: IndexedGroupedChange[]) {
     // Do this if keyboard shortcut is used but all changes are answered
     if (this.filteredNotAnsweredChanges.length === 0) {
-      return
+      return;
     }
 
     items.forEach((item) => {
-      this.validateChangeResult[item.position] = validate
-    })
-    this.updateNextAnsweredIndex()
-    this.requestUpdate()
+      this.validateChangeResult[item.position] = validate;
+    });
+    this.updateNextAnsweredIndex();
+    this.requestUpdate();
   }
 
   /**
@@ -758,7 +786,9 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
    * @param {AnnotationAnswer} detail.type - The type of the event.
    */
   dispatchSubmitEvent(detail: TextCorrectorEventDetail) {
-    this.dispatchEvent(new CustomEvent<TextCorrectorEventDetail>(EventType.SAVE, { detail }))
+    this.dispatchEvent(
+      new CustomEvent<TextCorrectorEventDetail>(EventType.SAVE, { detail }),
+    );
   }
 
   /**
@@ -770,38 +800,38 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
    */
   getValueOfGroupedChange(groupedChange: IndexedGroupedChange): string {
     // get value of grouped change based on the validateChangeResult
-    const result = this.validateChangeResult[groupedChange.position]
+    const result = this.validateChangeResult[groupedChange.position];
     switch (groupedChange.type) {
       case ChangeType.ADDED:
-        return result ? groupedChange.value! : ""
+        return result ? groupedChange.value! : "";
       case ChangeType.REMOVED:
-        return result ? "" : groupedChange.value!
+        return result ? "" : groupedChange.value!;
       case ChangeType.CHANGED:
-        return result ? groupedChange.newValue! : groupedChange.oldValue!
+        return result ? groupedChange.newValue! : groupedChange.oldValue!;
       default:
-        return ""
+        return "";
     }
   }
 
   buildValueWithAnsweredChanges() {
-    let value = ""
-    let groupedChangesIndex = 0
+    let value = "";
+    let groupedChangesIndex = 0;
     for (let index = 0; index < this.diffResult.length; index++) {
-      const item = this.diffResult[index]
-      const indexedGroupedChange = this.groupedChanges[groupedChangesIndex]
+      const item = this.diffResult[index];
+      const indexedGroupedChange = this.groupedChanges[groupedChangesIndex];
       if (indexedGroupedChange?.indexes.includes(index)) {
-        value += this.getValueOfGroupedChange(indexedGroupedChange)
+        value += this.getValueOfGroupedChange(indexedGroupedChange);
         // Go to next grouped change
-        groupedChangesIndex++
+        groupedChangesIndex++;
         if (indexedGroupedChange.type === ChangeType.CHANGED) {
           // Skip next part of the diff result because changed type is composed of two parts
-          index++
+          index++;
         }
       } else {
-        value += item.value
+        value += item.value;
       }
     }
-    return value
+    return value;
   }
 
   /**
@@ -811,69 +841,69 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
     this.dispatchSubmitEvent({
       correction: this.value,
       annotation: AnnotationAnswer.ACCEPT_AND_ADD_DATA,
-    })
+    });
   }
   /**
    * Accepts the text.
    */
   acceptText() {
-    this.dispatchSubmitEvent({ annotation: AnnotationAnswer.ACCEPT })
+    this.dispatchSubmitEvent({ annotation: AnnotationAnswer.ACCEPT });
   }
   /**
    * Confirms the text.
    */
   confirmText(event?: SubmitEvent) {
-    event?.preventDefault()
+    event?.preventDefault();
     // If there are answered changes, we don't want to submit the form
     if (!this.isEditMode && this.filteredNotAnsweredChanges.length) {
-      return
+      return;
     }
     // Build the value with the answered changes if we are not in edit mode
     if (!this.isEditMode) {
-      this.value = this.buildValueWithAnsweredChanges()
+      this.value = this.buildValueWithAnsweredChanges();
     }
-    this.isEditMode = false
+    this.isEditMode = false;
 
     if (this.correction === this.value) {
-      this.acceptText()
+      this.acceptText();
     } else if (this.original === this.value) {
-      this.rejectText()
+      this.rejectText();
     } else {
-      this.acceptTextWithCorrection()
+      this.acceptTextWithCorrection();
     }
   }
   /**
    * Rejects the text.
    */
   rejectText() {
-    this.dispatchSubmitEvent({ annotation: AnnotationAnswer.REFUSE })
+    this.dispatchSubmitEvent({ annotation: AnnotationAnswer.REFUSE });
   }
   /**
    * Skips the text.
    */
   skip() {
-    this.dispatchSubmitEvent({ annotation: AnnotationAnswer.SKIP })
+    this.dispatchSubmitEvent({ annotation: AnnotationAnswer.SKIP });
   }
 
   /**
    * Enters edit mode.
    */
   enterEditMode() {
-    this.isEditMode = true
-    this.value = this.buildValueWithAnsweredChanges()
+    this.isEditMode = true;
+    this.value = this.buildValueWithAnsweredChanges();
   }
 
   /**
    * Cancels edit mode.
    */
   cancelEditMode() {
-    this.updateValues()
-    this.isEditMode = false
-    this.computeWordDiff()
+    this.updateValues();
+    this.isEditMode = false;
+    this.computeWordDiff();
     if (this.filteredNotAnsweredChanges.length) {
-      this.focusFirstButton()
+      this.focusFirstButton();
     } else {
-      this.focusSaveButton()
+      this.focusSaveButton();
     }
   }
 
@@ -882,14 +912,14 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
    * @returns {TemplateResult} The rendered buttons.
    */
   renderButtons() {
-    const confirmTitle = this.isConfirmDisabled ? this.updateTextMsg : ""
+    const confirmTitle = this.isConfirmDisabled ? this.updateTextMsg : "";
 
-    const isLoading = Boolean(this.loading)
+    const isLoading = Boolean(this.loading);
     const isSuccessLoading = [
       AnnotationAnswer.ACCEPT,
       AnnotationAnswer.ACCEPT_AND_ADD_DATA,
       AnnotationAnswer.REFUSE,
-    ].includes(this.loading!)
+    ].includes(this.loading!);
     const successButton = html` <loading-button
       ?loading=${isSuccessLoading}
       ?disabled=${isLoading || this.isConfirmDisabled}
@@ -900,11 +930,11 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
     >
       <span
         >${msg("Save")}${this.getKeyboardShortcutText(
-          TextCorrectorKeyboardShortcut.VALIDATE_CORRECTION
+          TextCorrectorKeyboardShortcut.VALIDATE_CORRECTION,
         )}</span
       >
       <check-icon></check-icon>
-    </loading-button>`
+    </loading-button>`;
 
     if (this.isEditMode) {
       return html`
@@ -918,7 +948,7 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
           </button>
           ${successButton}
         </div>
-      `
+      `;
     }
 
     return html`
@@ -931,17 +961,17 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
         >
           <span
             >${msg("Skip")}${this.getKeyboardShortcutText(
-              TextCorrectorKeyboardShortcut.SKIP_TEXT_CORRECTION
+              TextCorrectorKeyboardShortcut.SKIP_TEXT_CORRECTION,
             )}</span
           ><skip-icon></skip-icon>
         </loading-button>
         ${successButton}
       </div>
-    `
+    `;
   }
 
   renderSpellCheck() {
-    const isLoading = Boolean(this.loading)
+    const isLoading = Boolean(this.loading);
     return html`
       <div class="text-section">
         <p class="text">${this.renderSpellCheckDiff()}</p>
@@ -953,14 +983,14 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
           >
             <span
               >${msg("Edit")}${this.getKeyboardShortcutText(
-                TextCorrectorKeyboardShortcut.EDIT_TEXT
+                TextCorrectorKeyboardShortcut.EDIT_TEXT,
               )}</span
             ><edit-icon></edit-icon>
           </button>
         </div>
       </div>
       ${this.renderSummary()}
-    `
+    `;
   }
 
   /**
@@ -969,27 +999,31 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
    */
   private handleKeyboardShortcut = (event: KeyboardEvent) => {
     if (!this.enableKeyboardMode || this.isEditMode) {
-      return
+      return;
     }
     switch (event.key) {
       case TextCorrectorKeyboardShortcut.ACCEPT_FIRST_SUGGESTION:
-        this.updateResult(true, [this.groupedChanges[this.currentAnsweredIndex]])
-        break
+        this.updateResult(true, [
+          this.groupedChanges[this.currentAnsweredIndex],
+        ]);
+        break;
       case TextCorrectorKeyboardShortcut.REJECT_FIRST_SUGGESTION:
-        this.updateResult(false, [this.groupedChanges[this.currentAnsweredIndex]])
-        break
+        this.updateResult(false, [
+          this.groupedChanges[this.currentAnsweredIndex],
+        ]);
+        break;
       case TextCorrectorKeyboardShortcut.SKIP_TEXT_CORRECTION:
-        this.skip()
-        break
+        this.skip();
+        break;
       case TextCorrectorKeyboardShortcut.EDIT_TEXT:
-        this.enterEditMode()
-        event.preventDefault()
-        break
+        this.enterEditMode();
+        event.preventDefault();
+        break;
       case TextCorrectorKeyboardShortcut.VALIDATE_CORRECTION:
-        this.confirmText()
-        break
+        this.confirmText();
+        break;
     }
-  }
+  };
 
   /**
    * Renders the info popover.
@@ -997,30 +1031,35 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
    */
   renderInfoPopover() {
     if (!this.showInfoPopover) {
-      return nothing
+      return nothing;
     }
     return html`
-      <div class="popover popover-left info-popover" ${clickOutside(() => this.closeInfoPopover())}>
+      <div
+        class="popover popover-left info-popover"
+        ${clickOutside(() => this.closeInfoPopover())}
+      >
         <div class="popover-content">
           <p>
             ${msg(
+              // keep as-is: reformatting the template would change its translation message id
+              // prettier-ignore
               html`This tool allows you to correct the ingredients list. You can add, remove or edit
                 ingredients list.
                 <br />
                 This character <span class="highlight">␣</span> represents a space.
                 <br />
-                This character <span class="highlight">↩︎</span> represents a line break. `
+                This character <span class="highlight">↩︎</span> represents a line break. `,
             )}
           </p>
         </div>
       </div>
-    `
+    `;
   }
 }
 
 // Define the custom element
 declare global {
   interface HTMLElementTagNameMap {
-    "text-corrector": TextCorrector
+    "text-corrector": TextCorrector;
   }
 }

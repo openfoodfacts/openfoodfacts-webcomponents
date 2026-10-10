@@ -1,13 +1,13 @@
-import { LitElement, html, css } from "lit"
-import { customElement, property, state } from "lit/decorators.js"
-import { localized, msg, str } from "@lit/localize"
-import { SignalWatcher } from "@lit-labs/signals"
-import folksonomyApi from "../../api/folksonomy"
-import { createDebounce, downloadCSV } from "../../utils"
-import "../shared/dual-range-slider"
-import type { PropertyClashCheck } from "../../types/folksonomy"
-import { userInfo } from "../../signals/folksonomy"
-import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme"
+import { LitElement, html, css } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
+import { localized, msg, str } from "@lit/localize";
+import { SignalWatcher } from "@lit-labs/signals";
+import folksonomyApi from "../../api/folksonomy";
+import { createDebounce, downloadCSV } from "../../utils";
+import "../shared/dual-range-slider";
+import type { PropertyClashCheck } from "../../types/folksonomy";
+import { userInfo } from "../../signals/folksonomy";
+import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme";
 
 /**
  * Folksonomy Properties Viewer
@@ -464,26 +464,30 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
         }
       }
     `,
-  ]
+  ];
 
   /**
    * Path to single property, the property name is appended to the end.
    * It can be a full URL, a relative or absolute path
    */
   @property({ attribute: "property-base-path" })
-  propertyBasePath = "/property/"
+  propertyBasePath = "/property/";
 
   @state()
-  private properties: Array<{ k: string; count: number; values: number }> = []
+  private properties: Array<{ k: string; count: number; values: number }> = [];
 
   @state()
-  private filteredProperties: Array<{ k: string; count: number; values: number }> = []
+  private filteredProperties: Array<{
+    k: string;
+    count: number;
+    values: number;
+  }> = [];
 
   @state()
-  private loading = false
+  private loading = false;
 
   @state()
-  private error: string | null = null
+  private error: string | null = null;
 
   @state()
   private filters = {
@@ -492,7 +496,7 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
     countMax: 0,
     valuesMin: 0,
     valuesMax: 0,
-  }
+  };
 
   @state()
   private ranges = {
@@ -500,73 +504,73 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
     countMax: 0,
     valuesMin: 0,
     valuesMax: 0,
-  }
+  };
 
   @state()
-  private showRenameModal = false
+  private showRenameModal = false;
 
   @state()
-  private showDeleteModal = false
+  private showDeleteModal = false;
 
   @state()
-  private showClashModal = false
+  private showClashModal = false;
 
   @state()
-  private showMessageModal = false
+  private showMessageModal = false;
 
   @state()
   private renameModalData = {
     property: "",
     newProperty: "",
-  }
+  };
 
   @state()
-  private deleteModalProperty = ""
+  private deleteModalProperty = "";
 
   @state()
-  private clashData: PropertyClashCheck | null = null
+  private clashData: PropertyClashCheck | null = null;
 
   @state()
   private messageModalData = {
     title: "",
     message: "",
     type: "success" as "success" | "error",
-  }
+  };
 
-  private filterDebounce = createDebounce(1100)
+  private filterDebounce = createDebounce(1100);
 
   override async connectedCallback() {
-    super.connectedCallback()
-    await this.fetchProperties()
-    await folksonomyApi.fetchUserInfo()
+    super.connectedCallback();
+    await this.fetchProperties();
+    await folksonomyApi.fetchUserInfo();
   }
 
   override disconnectedCallback() {
-    super.disconnectedCallback()
+    super.disconnectedCallback();
     // Clean up filter debounce
-    this.filterDebounce.clear()
+    this.filterDebounce.clear();
   }
 
   private async fetchProperties() {
-    this.loading = true
-    this.error = null
+    this.loading = true;
+    this.error = null;
 
     try {
-      const data = await folksonomyApi.fetchKeys()
+      const data = await folksonomyApi.fetchKeys();
 
       // Sort by count (descending order)
-      this.properties = data.sort((a, b) => a.k.localeCompare(b.k))
-      this.filteredProperties = [...this.properties]
+      this.properties = data.sort((a, b) => a.k.localeCompare(b.k));
+      this.filteredProperties = [...this.properties];
 
       // Calculate min/max ranges for sliders
       if (this.properties.length > 0) {
-        const counts = this.properties.map((p) => p.count)
-        const values = this.properties.map((p) => p.values)
+        const counts = this.properties.map((p) => p.count);
+        const values = this.properties.map((p) => p.values);
 
-        const countMin = Math.min(...counts)
-        const countMax = Math.max(...counts)
-        const valuesMin = Math.min(...values)
-        const valuesMax = Math.max(...values)
+        const countMin = Math.min(...counts);
+        const countMax = Math.max(...counts);
+        const valuesMin = Math.min(...values);
+        const valuesMax = Math.max(...values);
 
         // Ensure minimum range of 1 to prevent overlapping handles
         this.ranges = {
@@ -574,7 +578,7 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
           countMax: Math.max(countMax, countMin + 1),
           valuesMin: valuesMin,
           valuesMax: Math.max(valuesMax, valuesMin + 1),
-        }
+        };
 
         // Initialize filters with full range
         this.filters = {
@@ -583,70 +587,74 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
           countMax: this.ranges.countMax,
           valuesMin: this.ranges.valuesMin,
           valuesMax: this.ranges.valuesMax,
-        }
+        };
       }
     } catch (error) {
-      console.error("Error fetching folksonomy properties:", error)
-      this.error = "error"
+      console.error("Error fetching folksonomy properties:", error);
+      this.error = "error";
     } finally {
-      this.loading = false
+      this.loading = false;
     }
   }
 
   private get canModerateProperties(): boolean {
-    const currentUserInfo = userInfo.get()
-    return currentUserInfo?.admin === true || currentUserInfo?.moderator === true
+    const currentUserInfo = userInfo.get();
+    return (
+      currentUserInfo?.admin === true || currentUserInfo?.moderator === true
+    );
   }
 
   private getPropertyUrl(propertyName: string) {
-    return `${this.propertyBasePath}${propertyName}`
+    return `${this.propertyBasePath}${propertyName}`;
   }
 
   private getDocumentationUrl(propertyName: string) {
-    return `https://wiki.openfoodfacts.org/Folksonomy/Property/${propertyName}`
+    return `https://wiki.openfoodfacts.org/Folksonomy/Property/${propertyName}`;
   }
 
   private applyFilters() {
-    const { property, countMin, countMax, valuesMin, valuesMax } = this.filters
+    const { property, countMin, countMax, valuesMin, valuesMax } = this.filters;
 
     this.filteredProperties = this.properties.filter((item) => {
-      const matchesProperty = !property || item.k.toLowerCase().includes(property.toLowerCase())
-      const matchesCount = item.count >= countMin && item.count <= countMax
-      const matchesValues = item.values >= valuesMin && item.values <= valuesMax
+      const matchesProperty =
+        !property || item.k.toLowerCase().includes(property.toLowerCase());
+      const matchesCount = item.count >= countMin && item.count <= countMax;
+      const matchesValues =
+        item.values >= valuesMin && item.values <= valuesMax;
 
-      return matchesProperty && matchesCount && matchesValues
-    })
+      return matchesProperty && matchesCount && matchesValues;
+    });
   }
 
   private handleFilterInput(field: "property", value: string) {
     this.filters = {
       ...this.filters,
       [field]: value,
-    }
+    };
 
     // Debounce filtering with 1100ms delay (as specified in original config)
     this.filterDebounce.debounce(() => {
-      this.applyFilters()
-    })
+      this.applyFilters();
+    });
   }
 
   private handleRangeChange(event: CustomEvent) {
-    const { type, field, value } = event.detail
+    const { type, field, value } = event.detail;
 
-    let filterField: keyof typeof this.filters
+    let filterField: keyof typeof this.filters;
     if (type === "count") {
-      filterField = field === "min" ? "countMin" : "countMax"
+      filterField = field === "min" ? "countMin" : "countMax";
     } else {
-      filterField = field === "min" ? "valuesMin" : "valuesMax"
+      filterField = field === "min" ? "valuesMin" : "valuesMax";
     }
 
     this.filters = {
       ...this.filters,
       [filterField]: value,
-    }
+    };
 
     // Immediate filtering for range inputs
-    this.applyFilters()
+    this.applyFilters();
   }
 
   private resetFilters() {
@@ -656,17 +664,21 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
       countMax: this.ranges.countMax,
       valuesMin: this.ranges.valuesMin,
       valuesMax: this.ranges.valuesMax,
-    }
-    this.filteredProperties = [...this.properties]
+    };
+    this.filteredProperties = [...this.properties];
   }
 
   private handleDownloadCSV() {
-    const headers = [msg("Property"), msg("Count"), msg("Values")]
-    const rows = this.filteredProperties.map((item) => [item.k, item.count, item.values])
-    const today = new Date().toISOString().split("T")[0]
-    const filename = `folksonomy_properties_${today}.csv`
+    const headers = [msg("Property"), msg("Count"), msg("Values")];
+    const rows = this.filteredProperties.map((item) => [
+      item.k,
+      item.count,
+      item.values,
+    ]);
+    const today = new Date().toISOString().split("T")[0];
+    const filename = `folksonomy_properties_${today}.csv`;
 
-    downloadCSV(rows, filename, headers)
+    downloadCSV(rows, filename, headers);
   }
 
   // Property moderation methods
@@ -674,101 +686,113 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
     this.renameModalData = {
       property,
       newProperty: "",
-    }
-    this.showRenameModal = true
+    };
+    this.showRenameModal = true;
   }
 
   private closeRenameModal() {
-    this.showRenameModal = false
+    this.showRenameModal = false;
     this.renameModalData = {
       property: "",
       newProperty: "",
-    }
+    };
   }
 
   private openDeleteModal(property: string) {
-    this.deleteModalProperty = property
-    this.showDeleteModal = true
+    this.deleteModalProperty = property;
+    this.showDeleteModal = true;
   }
 
   private closeDeleteModal() {
-    this.showDeleteModal = false
-    this.deleteModalProperty = ""
+    this.showDeleteModal = false;
+    this.deleteModalProperty = "";
   }
 
   private closeClashModal() {
-    this.showClashModal = false
-    this.clashData = null
+    this.showClashModal = false;
+    this.clashData = null;
     // Clear rename data when clash modal is closed (canceled)
     this.renameModalData = {
       property: "",
       newProperty: "",
-    }
+    };
   }
 
-  private showMessage(type: "success" | "error", title: string, message: string) {
-    this.messageModalData = { type, title, message }
-    this.showMessageModal = true
+  private showMessage(
+    type: "success" | "error",
+    title: string,
+    message: string,
+  ) {
+    this.messageModalData = { type, title, message };
+    this.showMessageModal = true;
   }
 
   private closeMessageModal() {
-    this.showMessageModal = false
+    this.showMessageModal = false;
     this.messageModalData = {
       title: "",
       message: "",
       type: "success",
-    }
+    };
   }
 
   private async handleCheckClash() {
-    const { property, newProperty } = this.renameModalData
+    const { property, newProperty } = this.renameModalData;
 
     if (!newProperty.trim() || newProperty.trim() === property) {
-      return
+      return;
     }
 
     try {
       const clashData = await folksonomyApi.checkPropertyClash({
         old_property: property,
         new_property: newProperty.trim(),
-      })
+      });
 
-      this.clashData = clashData
+      this.clashData = clashData;
       // Don't clear the rename data yet - we need it for the actual rename
-      this.showRenameModal = false
-      this.showClashModal = true
+      this.showRenameModal = false;
+      this.showClashModal = true;
     } catch (error) {
-      console.error("Error checking property clash:", error)
+      console.error("Error checking property clash:", error);
       this.showMessage(
         "error",
         msg("Error"),
-        msg("Failed to check property conflicts. Please try again.")
-      )
+        msg("Failed to check property conflicts. Please try again."),
+      );
     }
   }
 
   private async handleRenameProperty() {
-    const { property, newProperty } = this.renameModalData
+    const { property, newProperty } = this.renameModalData;
 
     try {
       await folksonomyApi.renameProperty({
         old_property: property,
         new_property: newProperty.trim(),
-      })
+      });
 
       // Clear all modal states after successful rename
-      this.showClashModal = false
-      this.clashData = null
+      this.showClashModal = false;
+      this.clashData = null;
       this.renameModalData = {
         property: "",
         newProperty: "",
-      }
+      };
 
-      await this.fetchProperties()
-      this.showMessage("success", msg("Success"), msg("Property renamed successfully!"))
+      await this.fetchProperties();
+      this.showMessage(
+        "success",
+        msg("Success"),
+        msg("Property renamed successfully!"),
+      );
     } catch (error) {
-      console.error("Error renaming property:", error)
-      this.showMessage("error", msg("Error"), msg("Failed to rename property. Please try again."))
+      console.error("Error renaming property:", error);
+      this.showMessage(
+        "error",
+        msg("Error"),
+        msg("Failed to rename property. Please try again."),
+      );
     }
   }
 
@@ -776,18 +800,30 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
     try {
       await folksonomyApi.deleteProperty({
         property: this.deleteModalProperty,
-      })
+      });
 
-      this.closeDeleteModal()
-      await this.fetchProperties()
-      this.showMessage("success", msg("Success"), msg("Property deleted successfully!"))
+      this.closeDeleteModal();
+      await this.fetchProperties();
+      this.showMessage(
+        "success",
+        msg("Success"),
+        msg("Property deleted successfully!"),
+      );
     } catch (error) {
-      console.error("Error deleting property:", error)
-      this.showMessage("error", msg("Error"), msg("Failed to delete property. Please try again."))
+      console.error("Error deleting property:", error);
+      this.showMessage(
+        "error",
+        msg("Error"),
+        msg("Failed to delete property. Please try again."),
+      );
     }
   }
 
-  private renderPropertyActions(property: { k: string; count: number; values: number }) {
+  private renderPropertyActions(property: {
+    k: string;
+    count: number;
+    values: number;
+  }) {
     return html`
       <td class="actions-column">
         <div class="actions-buttons">
@@ -807,11 +843,11 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
           </button>
         </div>
       </td>
-    `
+    `;
   }
 
   private renderRenameModal() {
-    if (!this.showRenameModal) return ""
+    if (!this.showRenameModal) return "";
 
     return html`
       <div class="modal-overlay" @click="${this.closeRenameModal}">
@@ -833,13 +869,13 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
                 this.renameModalData = {
                   ...this.renameModalData,
                   newProperty: (e.target as HTMLInputElement).value,
-                }
+                };
               }}"
               @keydown="${(e: KeyboardEvent) => {
                 if (e.key === "Enter") {
-                  this.handleCheckClash()
+                  this.handleCheckClash();
                 } else if (e.key === "Escape") {
-                  this.closeRenameModal()
+                  this.closeRenameModal();
                 }
               }}"
               placeholder="${msg("Enter new property name...")}"
@@ -847,7 +883,10 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
             />
           </div>
           <div class="modal-footer">
-            <button class="modal-btn modal-btn-secondary" @click="${this.closeRenameModal}">
+            <button
+              class="modal-btn modal-btn-secondary"
+              @click="${this.closeRenameModal}"
+            >
               ${msg("Cancel")}
             </button>
             <button
@@ -855,7 +894,8 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
               @click="${this.handleCheckClash}"
               ?disabled="${
                 !this.renameModalData.newProperty.trim() ||
-                this.renameModalData.newProperty.trim() === this.renameModalData.property
+                this.renameModalData.newProperty.trim() ===
+                  this.renameModalData.property
               }"
             >
               ${msg("Check Conflicts")}
@@ -863,11 +903,11 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
           </div>
         </div>
       </div>
-    `
+    `;
   }
 
   private renderClashModal() {
-    if (!this.showClashModal || !this.clashData) return ""
+    if (!this.showClashModal || !this.clashData) return "";
 
     return html`
       <div class="modal-overlay" @click="${this.closeClashModal}">
@@ -878,21 +918,33 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
           <div class="modal-body">
             <div class="modal-text">
               ${msg(
-                str`Renaming '${this.renameModalData.property}' to '${this.renameModalData.newProperty}' will affect:`
+                str`Renaming '${this.renameModalData.property}' to '${this.renameModalData.newProperty}' will affect:`,
               )}
             </div>
             <div class="clash-info">
               <div class="clash-stat">
-                <span class="clash-stat-label">${msg("Products with both properties:")}</span>
-                <span class="clash-stat-value">${this.clashData.products_with_both}</span>
+                <span class="clash-stat-label"
+                  >${msg("Products with both properties:")}</span
+                >
+                <span class="clash-stat-value"
+                  >${this.clashData.products_with_both}</span
+                >
               </div>
               <div class="clash-stat">
-                <span class="clash-stat-label">${msg("Products with old property only:")}</span>
-                <span class="clash-stat-value">${this.clashData.products_with_old_only}</span>
+                <span class="clash-stat-label"
+                  >${msg("Products with old property only:")}</span
+                >
+                <span class="clash-stat-value"
+                  >${this.clashData.products_with_old_only}</span
+                >
               </div>
               <div class="clash-stat">
-                <span class="clash-stat-label">${msg("Products with new property only:")}</span>
-                <span class="clash-stat-value">${this.clashData.products_with_new_only}</span>
+                <span class="clash-stat-label"
+                  >${msg("Products with new property only:")}</span
+                >
+                <span class="clash-stat-value"
+                  >${this.clashData.products_with_new_only}</span
+                >
               </div>
             </div>
             <div class="modal-text">
@@ -900,20 +952,26 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
             </div>
           </div>
           <div class="modal-footer">
-            <button class="modal-btn modal-btn-secondary" @click="${this.closeClashModal}">
+            <button
+              class="modal-btn modal-btn-secondary"
+              @click="${this.closeClashModal}"
+            >
               ${msg("Cancel")}
             </button>
-            <button class="modal-btn modal-btn-danger" @click="${this.handleRenameProperty}">
+            <button
+              class="modal-btn modal-btn-danger"
+              @click="${this.handleRenameProperty}"
+            >
               ${msg("Proceed with Rename")}
             </button>
           </div>
         </div>
       </div>
-    `
+    `;
   }
 
   private renderDeleteModal() {
-    if (!this.showDeleteModal) return ""
+    if (!this.showDeleteModal) return "";
 
     return html`
       <div class="modal-overlay" @click="${this.closeDeleteModal}">
@@ -924,7 +982,7 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
           <div class="modal-body">
             <div class="modal-text">
               ${msg(
-                str`Are you sure you want to delete the property '${this.deleteModalProperty}'?`
+                str`Are you sure you want to delete the property '${this.deleteModalProperty}'?`,
               )}
             </div>
             <div class="modal-text">
@@ -932,20 +990,26 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
             </div>
           </div>
           <div class="modal-footer">
-            <button class="modal-btn modal-btn-secondary" @click="${this.closeDeleteModal}">
+            <button
+              class="modal-btn modal-btn-secondary"
+              @click="${this.closeDeleteModal}"
+            >
               ${msg("Cancel")}
             </button>
-            <button class="modal-btn modal-btn-danger" @click="${this.handleDeleteProperty}">
+            <button
+              class="modal-btn modal-btn-danger"
+              @click="${this.handleDeleteProperty}"
+            >
               ${msg("Delete")}
             </button>
           </div>
         </div>
       </div>
-    `
+    `;
   }
 
   private renderMessageModal() {
-    if (!this.showMessageModal) return ""
+    if (!this.showMessageModal) return "";
 
     return html`
       <div class="modal-overlay" @click="${this.closeMessageModal}">
@@ -957,13 +1021,16 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
             <div class="modal-text">${this.messageModalData.message}</div>
           </div>
           <div class="modal-footer">
-            <button class="modal-btn modal-btn-primary" @click="${this.closeMessageModal}">
+            <button
+              class="modal-btn modal-btn-primary"
+              @click="${this.closeMessageModal}"
+            >
               ${msg("OK")}
             </button>
           </div>
         </div>
       </div>
-    `
+    `;
   }
 
   private renderTableHeader() {
@@ -990,7 +1057,10 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
               placeholder="${msg("Filter properties...")}"
               .value="${this.filters.property}"
               @input="${(e: Event) =>
-                this.handleFilterInput("property", (e.target as HTMLInputElement).value)}"
+                this.handleFilterInput(
+                  "property",
+                  (e.target as HTMLInputElement).value,
+                )}"
             />
           </td>
           <td></td>
@@ -1017,15 +1087,21 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
           ${this.canModerateProperties ? html`<td></td>` : ""}
         </tr>
       </thead>
-    `
+    `;
   }
 
-  private renderPropertyRow(property: { k: string; count: number; values: number }) {
+  private renderPropertyRow(property: {
+    k: string;
+    count: number;
+    values: number;
+  }) {
     return html`
       <tr class="property">
         <td></td>
         <td>
-          <a href="${this.getPropertyUrl(property.k)}" class="property-name"> ${property.k} </a>
+          <a href="${this.getPropertyUrl(property.k)}" class="property-name">
+            ${property.k}
+          </a>
         </td>
         <td>
           <a
@@ -1042,34 +1118,39 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
         <td class="values">${property.values}</td>
         ${this.canModerateProperties ? this.renderPropertyActions(property) : ""}
       </tr>
-    `
+    `;
   }
 
   private renderContent() {
     if (this.loading) {
-      return html`<div class="loading">${msg("Loading properties...")}</div>`
+      return html`<div class="loading">${msg("Loading properties...")}</div>`;
     }
 
     if (this.error) {
       return html`<div class="error">
         ${msg("Failed to load properties. Please try again later.")}
-      </div>`
+      </div>`;
     }
 
     if (this.properties.length === 0) {
-      return html` <div class="empty-state">${msg("No properties found.")}</div> `
+      return html`
+        <div class="empty-state">${msg("No properties found.")}</div>
+      `;
     }
 
     return html`
       <div class="filter-controls">
         <div class="rows-counter">
-          ${msg("Rows")}: ${this.filteredProperties.length} / ${this.properties.length}
+          ${msg("Rows")}: ${this.filteredProperties.length} /
+          ${this.properties.length}
         </div>
         <div class="button-group">
           <button class="download-btn" @click="${this.handleDownloadCSV}">
             ${msg("Download CSV")}
           </button>
-          <button class="reset-btn" @click="${this.resetFilters}">${msg("Reset")}</button>
+          <button class="reset-btn" @click="${this.resetFilters}">
+            ${msg("Reset")}
+          </button>
         </div>
       </div>
       <table class="properties-table" id="folksonomy-properties-table">
@@ -1078,7 +1159,7 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
           ${this.filteredProperties.map((property) => this.renderPropertyRow(property))}
         </tbody>
       </table>
-    `
+    `;
   }
 
   override render() {
@@ -1088,21 +1169,21 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
           <h2 id="property_title">${msg("Folksonomy Properties")}</h2>
           <p>
             ${msg(
-              "Explore all contributed properties from the Folksonomy Engine project. These properties provide additional metadata and insights about products in the Open Food Facts database."
+              "Explore all contributed properties from the Folksonomy Engine project. These properties provide additional metadata and insights about products in the Open Food Facts database.",
             )}
           </p>
         </slot>
         ${this.renderContent()}
       </div>
 
-      ${this.renderRenameModal()} ${this.renderClashModal()} ${this.renderDeleteModal()}
-      ${this.renderMessageModal()}
-    `
+      ${this.renderRenameModal()} ${this.renderClashModal()}
+      ${this.renderDeleteModal()} ${this.renderMessageModal()}
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "folksonomy-properties": FolksonomyProperties
+    "folksonomy-properties": FolksonomyProperties;
   }
 }

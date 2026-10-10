@@ -1,10 +1,10 @@
-import { LitElement, html, css } from "lit"
-import { customElement, property } from "lit/decorators.js"
+import { LitElement, html, css } from "lit";
+import { customElement, property } from "lit/decorators.js";
 
 @customElement("loading-spin")
 export class LoadingSpin extends LitElement {
-  @property({ type: String }) size: string = "24px"
-  @property({ type: String }) color: string = "currentColor"
+  @property({ type: String }) size: string = "24px";
+  @property({ type: String }) color: string = "currentColor";
 
   static override styles = css`
     :host {
@@ -23,7 +23,7 @@ export class LoadingSpin extends LitElement {
         transform: rotate(360deg);
       }
     }
-  `
+  `;
 
   override render() {
     return html`
@@ -46,12 +46,12 @@ export class LoadingSpin extends LitElement {
           />
         </g>
       </svg>
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "loading-spin": LoadingSpin
+    "loading-spin": LoadingSpin;
   }
 }

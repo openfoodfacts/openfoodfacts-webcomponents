@@ -1,16 +1,16 @@
-import { LitElement, html, css, nothing } from "lit"
-import { customElement, property } from "lit/decorators.js"
-import { type Question, AnnotationAnswer } from "../../types/robotoff"
-import { EventType } from "../../constants"
-import { answerQuestion } from "../../signals/questions"
-import { SignalWatcher } from "@lit-labs/signals"
-import { localized, msg } from "@lit/localize"
-import { ButtonType, getButtonClasses } from "../../styles/buttons"
-import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin"
-import { FULL_WIDTH } from "../../styles/utils"
-import "../shared/loading-button"
-import "../buttons/zoom-unzoom-button"
-import "../shared/zoomable-image"
+import { LitElement, html, css, nothing } from "lit";
+import { customElement, property } from "lit/decorators.js";
+import { type Question, AnnotationAnswer } from "../../types/robotoff";
+import { EventType } from "../../constants";
+import { answerQuestion } from "../../signals/questions";
+import { SignalWatcher } from "@lit-labs/signals";
+import { localized, msg } from "@lit/localize";
+import { ButtonType, getButtonClasses } from "../../styles/buttons";
+import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin";
+import { FULL_WIDTH } from "../../styles/utils";
+import "../shared/loading-button";
+import "../buttons/zoom-unzoom-button";
+import "../shared/zoomable-image";
 
 /**
  * RobotoffQuestionForm component
@@ -21,7 +21,10 @@ import "../shared/zoomable-image"
 @customElement("robotoff-question-form")
 @localized()
 export class RobotoffQuestionForm extends SignalWatcher(
-  LoadingWithTimeoutMixin(LitElement, undefined as AnnotationAnswer | undefined)
+  LoadingWithTimeoutMixin(
+    LitElement,
+    undefined as AnnotationAnswer | undefined,
+  ),
 ) {
   static override styles = [
     ...getButtonClasses([ButtonType.White]),
@@ -59,20 +62,20 @@ export class RobotoffQuestionForm extends SignalWatcher(
         margin-top: 1rem;
       }
     `,
-  ]
+  ];
 
   /** The question to display. */
   @property({ type: Object, reflect: true })
-  question?: Question
+  question?: Question;
 
   /** True if the image is expanded (and zoomable). */
   @property({ type: Boolean, attribute: "is-image-expanded" })
-  isImageExpanded: boolean = false
+  isImageExpanded: boolean = false;
 
   get imageSize() {
     return this.isImageExpanded
       ? { height: "350px", width: "100%", "max-width": "350px" }
-      : { height: "200px", width: "200px" }
+      : { height: "200px", width: "200px" };
   }
 
   /**
@@ -80,31 +83,31 @@ export class RobotoffQuestionForm extends SignalWatcher(
    * It stops the propagation of the event to avoid the click event on the parent.
    */
   private emitEventClick = (event: Event, value: AnnotationAnswer) => {
-    event.stopPropagation()
+    event.stopPropagation();
     const click = new CustomEvent(EventType.SUBMIT, {
       detail: { value },
       bubbles: true,
       composed: true,
-    })
+    });
 
-    this.dispatchEvent(click)
-  }
+    this.dispatchEvent(click);
+  };
 
   private _annotateProduct = async (event: Event, value: AnnotationAnswer) => {
-    this.showLoading(value)
-    await answerQuestion(this.question?.insight_id as string, value)
+    this.showLoading(value);
+    await answerQuestion(this.question?.insight_id as string, value);
 
-    this.hideLoading()
-    this.emitEventClick(event, value)
-  }
+    this.hideLoading();
+    this.emitEventClick(event, value);
+  };
 
   expandImage() {
-    this.isImageExpanded = true
+    this.isImageExpanded = true;
   }
 
   private _renderImage() {
     if (!this.question?.source_image_url) {
-      return nothing
+      return nothing;
     }
 
     return html`
@@ -128,11 +131,11 @@ export class RobotoffQuestionForm extends SignalWatcher(
               </div>`
         }
       </div>
-    `
+    `;
   }
 
   private renderButtons() {
-    const isLoading = Boolean(this.loading)
+    const isLoading = Boolean(this.loading);
     return html`
       <div class="buttons-row">
         <loading-button
@@ -157,26 +160,28 @@ export class RobotoffQuestionForm extends SignalWatcher(
           label="${msg("Skip")}"
         ></loading-button>
       </div>
-    `
+    `;
   }
 
   override render() {
     if (!this.question) {
-      return html`<div>No question</div>`
+      return html`<div>No question</div>`;
     }
 
     return html`
       <div class="question-form">
-        <p>${this.question.question} <strong> ${this.question.value} </strong></p>
+        <p>
+          ${this.question.question} <strong> ${this.question.value} </strong>
+        </p>
         <div>${this._renderImage()}</div>
         ${this.renderButtons()}
       </div>
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "robotoff-question-form": RobotoffQuestionForm
+    "robotoff-question-form": RobotoffQuestionForm;
   }
 }

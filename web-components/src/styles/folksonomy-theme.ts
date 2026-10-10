@@ -1,4 +1,4 @@
-import { css } from "lit"
+import { css } from "lit";
 
 /**
  * Shared CSS custom properties for theming all Folksonomy Engine components.
@@ -73,4 +73,4 @@ export const FOLKSONOMY_THEME = css`
       --off-folksonomy-modal-message: #bbb;
     }
   }
-`
+`;

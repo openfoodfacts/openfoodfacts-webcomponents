@@ -1,14 +1,14 @@
-import { LitElement, html, css, type TemplateResult } from "lit"
-import { customElement, property } from "lit/decorators.js"
+import { LitElement, html, css, type TemplateResult } from "lit";
+import { customElement, property } from "lit/decorators.js";
 import type {
   KnowledgePanelElement,
   TableColumn,
   TableRow,
   TableCell,
   TableElement,
-} from "../../../types/knowledge-panel"
-import "../../../utils/knowledge-panels/heading-utils" // Import heading renderer component
-import { sanitizeHtml } from "../../../utils/html"
+} from "../../../types/knowledge-panel";
+import "../../../utils/knowledge-panels/heading-utils"; // Import heading renderer component
+import { sanitizeHtml } from "../../../utils/html";
 
 /**
  * Table element renderer component
@@ -56,32 +56,35 @@ export class TableElementRenderer extends LitElement {
     .table_element tr:hover {
       background-color: #f7f7f7;
     }
-  `
+  `;
 
   @property({ type: Object })
-  element?: KnowledgePanelElement
+  element?: KnowledgePanelElement;
 
   @property({ type: String })
-  headingLevel = "h3"
+  headingLevel = "h3";
 
   override render(): TemplateResult {
     if (!this.element) {
-      return html`<slot name="error">Missing element data</slot>`
+      return html`<slot name="error">Missing element data</slot>`;
     }
 
-    const tableData = this.element.table_element || ({} as TableElement)
+    const tableData = this.element.table_element || ({} as TableElement);
 
     if (!tableData) {
-      console.error("Invalid table element - missing table_element:", this.element)
-      return html`<slot name="error">Invalid table format</slot>`
+      console.error(
+        "Invalid table element - missing table_element:",
+        this.element,
+      );
+      return html`<slot name="error">Invalid table format</slot>`;
     }
 
-    const columns = tableData.columns || []
-    const rows = tableData.rows || []
+    const columns = tableData.columns || [];
+    const rows = tableData.rows || [];
 
     if (!Array.isArray(columns) || !Array.isArray(rows)) {
-      console.error("Invalid table structure:", tableData)
-      return html`<slot name="error">Invalid table structure</slot>`
+      console.error("Invalid table structure:", tableData);
+      return html`<slot name="error">Invalid table structure</slot>`;
     }
 
     return html`
@@ -101,7 +104,9 @@ export class TableElementRenderer extends LitElement {
             <tr>
               ${columns.map(
                 (column: TableColumn) =>
-                  html`<th>${sanitizeHtml(column.text || column.id || "")}</th>`
+                  html`<th>
+                    ${sanitizeHtml(column.text || column.id || "")}
+                  </th>`,
               )}
             </tr>
           </thead>
@@ -110,20 +115,21 @@ export class TableElementRenderer extends LitElement {
               (row: TableRow) => html`
                 <tr>
                   ${(row.cells || []).map(
-                    (cell: TableCell) => html`<td>${cell.text || cell.value || ""}</td>`
+                    (cell: TableCell) =>
+                      html`<td>${cell.text || cell.value || ""}</td>`,
                   )}
                 </tr>
-              `
+              `,
             )}
           </tbody>
         </table>
       </div>
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "table-element-renderer": TableElementRenderer
+    "table-element-renderer": TableElementRenderer;
   }
 }

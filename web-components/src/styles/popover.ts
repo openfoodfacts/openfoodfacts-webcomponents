@@ -1,5 +1,5 @@
-import { css } from "lit"
-import { SAFE_DARKER_WHITE, SAFE_GREY } from "../utils/colors"
+import { css } from "lit";
+import { SAFE_DARKER_WHITE, SAFE_GREY } from "../utils/colors";
 
 export const POPOVER = css`
   .popover-wrapper {
@@ -124,4 +124,4 @@ export const POPOVER = css`
   .popover .button {
     display: flex;
   }
-`
+`;

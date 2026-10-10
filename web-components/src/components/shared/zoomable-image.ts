@@ -1,27 +1,27 @@
-import { css, html, LitElement, nothing } from "lit"
-import { styleMap } from "lit/directives/style-map.js"
-import { customElement, property, query, state } from "lit/decorators.js"
-import { ButtonType, getButtonClasses } from "../../styles/buttons"
-import "../icons/rotate-left"
-import "../icons/rotate-right"
-import { localized, msg } from "@lit/localize"
-import { mobileAndTabletCheck } from "../../utils/breakpoints"
+import { css, html, LitElement, nothing } from "lit";
+import { styleMap } from "lit/directives/style-map.js";
+import { customElement, property, query, state } from "lit/decorators.js";
+import { ButtonType, getButtonClasses } from "../../styles/buttons";
+import "../icons/rotate-left";
+import "../icons/rotate-right";
+import { localized, msg } from "@lit/localize";
+import { mobileAndTabletCheck } from "../../utils/breakpoints";
 
-import CropperCanvas from "@cropper/element-canvas"
-import CropperImage from "@cropper/element-image"
-import CropperHandle from "@cropper/element-handle"
-import CropperSelection from "@cropper/element-selection"
-import CropperCrosshair from "@cropper/element-crosshair"
-import CropperShade from "@cropper/element-shade"
-import type { Selection } from "@cropper/element-selection"
-import { FLEX } from "../../styles/utils"
-import type { CropperImageBoundingBox } from "../../types"
-import { EventType } from "../../constants"
-import "../icons/arrows-center"
-import type { CropperActionEvent } from "../../types/crops"
-import { CHECKBOX } from "../../styles/form"
-import { normalizeRotation } from "../../utils"
-import { MessageDisplayMixin } from "../../mixins/message-display-mixin"
+import CropperCanvas from "@cropper/element-canvas";
+import CropperImage from "@cropper/element-image";
+import CropperHandle from "@cropper/element-handle";
+import CropperSelection from "@cropper/element-selection";
+import CropperCrosshair from "@cropper/element-crosshair";
+import CropperShade from "@cropper/element-shade";
+import type { Selection } from "@cropper/element-selection";
+import { FLEX } from "../../styles/utils";
+import type { CropperImageBoundingBox } from "../../types";
+import { EventType } from "../../constants";
+import "../icons/arrows-center";
+import type { CropperActionEvent } from "../../types/crops";
+import { CHECKBOX } from "../../styles/form";
+import { normalizeRotation } from "../../utils";
+import { MessageDisplayMixin } from "../../mixins/message-display-mixin";
 
 export enum CropMode {
   // no crop, just display image
@@ -32,7 +32,7 @@ export enum CropMode {
   CROP = "crop",
 }
 
-const MessageDisplayMixinElement = MessageDisplayMixin(LitElement)
+const MessageDisplayMixinElement = MessageDisplayMixin(LitElement);
 
 /**
  * A simple zoomable image component.
@@ -93,28 +93,28 @@ export class ZoomableImage extends MessageDisplayMixinElement {
         }
       }
     `,
-  ]
+  ];
 
   @query("cropper-canvas")
-  canvasElement!: CropperCanvas
+  canvasElement!: CropperCanvas;
 
   @query("cropper-image")
-  imageElement!: CropperImage
+  imageElement!: CropperImage;
 
   @query("cropper-selection")
-  selectionElement!: CropperSelection
+  selectionElement!: CropperSelection;
 
   /*
    * cropperjs instance
    */
   @state()
-  image!: HTMLImageElement
+  image!: HTMLImageElement;
 
   /*
    * Image source url
    */
   @property({ type: String, attribute: "src", reflect: true })
-  src = ""
+  src = "";
 
   @property({ type: Object, attribute: "bounding-box", reflect: true })
   boundingBox?: CropperImageBoundingBox = {
@@ -122,114 +122,118 @@ export class ZoomableImage extends MessageDisplayMixinElement {
     y: 0,
     width: 100,
     height: 100,
-  }
+  };
 
   /**
    * Fallback image source url
    * If the image fails to load, this image will be displayed instead
    */
   @property({ type: String, attribute: "fallback-src", reflect: true })
-  fallbackSrc = ""
+  fallbackSrc = "";
 
   @state()
-  currentZoom = 1
+  currentZoom = 1;
 
   @property({ type: Number, attribute: "scale-size" })
-  scaleStep = 0.25
+  scaleStep = 0.25;
 
   @property({ type: Number, attribute: "max-zoom" })
-  maxZoom = 10
+  maxZoom = 10;
 
   @property({ type: Number, attribute: "min-zoom" })
-  minZoom = 0.3
+  minZoom = 0.3;
 
   @property({ type: Boolean, attribute: "show-buttons", reflect: true })
-  showButtons = false
+  showButtons = false;
 
   /**
    * The crop mode for the image
    */
   @property({ type: String, attribute: "crop-mode", reflect: true })
-  cropMode: CropMode = CropMode.IMAGE_ONLY
+  cropMode: CropMode = CropMode.IMAGE_ONLY;
 
   /**
    * Hide the built-in crop buttons (reset / show / validate),
    * to let the parent drive the validation with getCropSelection()
    */
   @property({ type: Boolean, attribute: "hide-crop-actions" })
-  hideCropActions = false
+  hideCropActions = false;
 
   @property({ type: Object, attribute: "size", reflect: true })
   size: {
-    width: string
-    height?: string
-    "max-width"?: string
-    "max-height"?: string
+    width: string;
+    height?: string;
+    "max-width"?: string;
+    "max-height"?: string;
   } = {
     width: "100%",
     height: "30vh",
-  }
+  };
 
   // original rotation of the image
   @property({ type: Number, reflect: true })
   get rotation() {
-    return this._rotation ?? 0
+    return this._rotation ?? 0;
   }
   set rotation(value) {
-    this._rotation = value
-    this.resetRotatation()
+    this._rotation = value;
+    this.resetRotatation();
   }
 
   @state()
-  private _rotation = 0
+  private _rotation = 0;
 
   @state()
-  private currentRotation = 0
+  private currentRotation = 0;
 
   @state()
-  private cropResult: string = ""
+  private cropResult: string = "";
 
   @state()
-  private resultBoundingBox?: CropperImageBoundingBox
+  private resultBoundingBox?: CropperImageBoundingBox;
 
   @state()
-  private isCanvasEnabledInMobile = false
+  private isCanvasEnabledInMobile = false;
 
   get isMobileOrTablet() {
-    return mobileAndTabletCheck()
+    return mobileAndTabletCheck();
   }
 
   get isCanvasDisabled() {
-    return this.isMobileOrTablet && !this.isCanvasEnabledInMobile
+    return this.isMobileOrTablet && !this.isCanvasEnabledInMobile;
   }
   /**
    * The last transform applied to the image.
    * Used to reset the image to its original position.
    */
   @state()
-  lastTransform: number[] = []
+  lastTransform: number[] = [];
 
   get canZoom() {
-    return !mobileAndTabletCheck()
+    return !mobileAndTabletCheck();
   }
 
   /**
    * Called when an attribute is changed.
    * Allows to fit the image to the container when the src attribute is changed.
    */
-  override attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
-    super.attributeChangedCallback(name, _old, value)
+  override attributeChangedCallback(
+    name: string,
+    _old: string | null,
+    value: string | null,
+  ): void {
+    super.attributeChangedCallback(name, _old, value);
 
     switch (name) {
       case "src":
-        this.resetRotatation()
-        break
+        this.resetRotatation();
+        break;
       case "size":
-        this.fitImageToContainer()
-        break
+        this.fitImageToContainer();
+        break;
       case "crop-mode":
-        this.resetMessage()
-        break
+        this.resetMessage();
+        break;
     }
   }
 
@@ -238,14 +242,14 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    * Used to initialize the cropper.
    */
   override firstUpdated() {
-    this.initCropper()
+    this.initCropper();
   }
 
   override connectedCallback() {
-    super.connectedCallback()
+    super.connectedCallback();
     // firstUpdated() is only called once; reconnecting needs to restore the listener.
     if (this.canvasElement) {
-      this.initZoomLimit()
+      this.initZoomLimit();
     }
   }
 
@@ -254,8 +258,11 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    * Used to remove the event listener from the cropper canvas.
    */
   override disconnectedCallback(): void {
-    this.canvasElement?.removeEventListener("action", this.handleCropperCanvasAction)
-    super.disconnectedCallback()
+    this.canvasElement?.removeEventListener(
+      "action",
+      this.handleCropperCanvasAction,
+    );
+    super.disconnectedCallback();
   }
 
   /**
@@ -263,17 +270,20 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    * This is used to prevent the user from zooming in or out too much.
    */
   initZoomLimit() {
-    this.canvasElement.addEventListener("action", this.handleCropperCanvasAction)
+    this.canvasElement.addEventListener(
+      "action",
+      this.handleCropperCanvasAction,
+    );
   }
 
   private handleCropperCanvasAction = (event: Event) => {
-    this.onCropperCanvasAction(event as CropperActionEvent)
-  }
+    this.onCropperCanvasAction(event as CropperActionEvent);
+  };
 
   resetRotatation() {
-    this.currentRotation = 0
-    this.imageElement?.$resetTransform()
-    this.rotateImage(this.rotation)
+    this.currentRotation = 0;
+    this.imageElement?.$resetTransform();
+    this.rotateImage(this.rotation);
   }
 
   /**
@@ -281,19 +291,19 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    * (add them to the CustomElementRegistry)
    */
   initCropper() {
-    CropperCanvas.$define()
-    CropperImage.$define()
-    CropperHandle.$define()
+    CropperCanvas.$define();
+    CropperImage.$define();
+    CropperHandle.$define();
 
-    CropperSelection.$define()
-    CropperCrosshair.$define()
-    CropperShade.$define()
+    CropperSelection.$define();
+    CropperCrosshair.$define();
+    CropperShade.$define();
 
-    this.initZoomLimit()
+    this.initZoomLimit();
     // Reset the rotation when the image is ready to be displayed
     this.imageElement.$ready(() => {
-      this.resetRotatation()
-    })
+      this.resetRotatation();
+    });
   }
 
   /**
@@ -301,7 +311,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    * This is used to rollback the image if user zooms out too much.
    */
   updateLastTransform() {
-    this.lastTransform = this.imageElement?.$getTransform()
+    this.lastTransform = this.imageElement?.$getTransform();
   }
 
   /**
@@ -310,18 +320,18 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    */
   fitImageToContainer() {
     if (!this.imageElement && this.src) {
-      return
+      return;
     }
 
     // Use requestAnimationFrame instead of setTimeout for better performance
     requestAnimationFrame(() => {
       try {
-        this.imageElement.$center("contain")
-        this.updateLastTransform()
+        this.imageElement.$center("contain");
+        this.updateLastTransform();
       } catch (error) {
-        console.error("Error fitting image to container:", error)
+        console.error("Error fitting image to container:", error);
       }
-    })
+    });
   }
 
   /**
@@ -329,25 +339,29 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    * @param rotation - The angle to rotate the image by.
    */
   rotateImage(rotation: number) {
-    if (!this.imageElement) return
+    if (!this.imageElement) return;
     try {
       // Reset the selection before rotating the image
-      this.resetSelection()
+      this.resetSelection();
 
       if (!this.imageElement.rotatable) {
         // Enable rotation if it's not already enabled (bug fix)
-        this.imageElement.rotatable = true
+        this.imageElement.rotatable = true;
       }
 
-      this.imageElement.$rotate(`${rotation}deg`)
+      this.imageElement.$rotate(`${rotation}deg`);
       // Update the rotation property
-      this.currentRotation = normalizeRotation(this.currentRotation + rotation)
+      this.currentRotation = normalizeRotation(this.currentRotation + rotation);
 
-      this.dispatchEvent(new CustomEvent("rotate", { detail: { rotation: this.currentRotation } }))
+      this.dispatchEvent(
+        new CustomEvent("rotate", {
+          detail: { rotation: this.currentRotation },
+        }),
+      );
 
-      this.fitImageToContainer()
+      this.fitImageToContainer();
     } catch (error) {
-      console.error("Error rotating image:", error)
+      console.error("Error rotating image:", error);
     }
   }
   /**
@@ -364,7 +378,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
       >
         <arrows-center-icon size="20px" aria-hidden="true"></arrows-center-icon>
       </button>
-    `
+    `;
   }
 
   /**
@@ -389,7 +403,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
       >
         <rotate-right-icon aria-hidden="true"></rotate-right-icon>
       </button>
-    `
+    `;
   }
 
   /**
@@ -410,10 +424,10 @@ export class ZoomableImage extends MessageDisplayMixinElement {
     height: number,
     imageWidth: number,
     imageHeight: number,
-    rotation: number
+    rotation: number,
   ) {
     // Normalize rotation to 0, 90, 180, or 270 degrees
-    const normalizedRotation = ((rotation % 360) + 360) % 360
+    const normalizedRotation = ((rotation % 360) + 360) % 360;
 
     switch (normalizedRotation) {
       case 90:
@@ -423,7 +437,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
           y: imageWidth - x - width,
           width: height,
           height: width,
-        }
+        };
       case 180:
         // 180° rotation: (x,y) -> (imageWidth-x-width, imageHeight-y-height)
         return {
@@ -431,7 +445,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
           y: imageHeight - y - height,
           width: width,
           height: height,
-        }
+        };
       case 270:
         // 270° clockwise rotation: (x,y) -> (imageHeight-y-height, x)
         return {
@@ -439,10 +453,10 @@ export class ZoomableImage extends MessageDisplayMixinElement {
           y: x,
           width: height,
           height: width,
-        }
+        };
       default:
         // No rotation or 0°
-        return { x, y, width, height }
+        return { x, y, width, height };
     }
   }
 
@@ -451,31 +465,31 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    * @returns The bounding box coordinates.
    */
   getBoundingBoxFromSelectionElement() {
-    const { x: offsetX, y: offsetY } = this.getOffset()
-    const scale = this.getScale()
+    const { x: offsetX, y: offsetY } = this.getOffset();
+    const scale = this.getScale();
 
     // Get the selection coordinates relative to the image
-    let x = (this.selectionElement.x - offsetX) / scale
-    let y = (this.selectionElement.y - offsetY) / scale
-    let width = this.selectionElement.width / scale
-    let height = this.selectionElement.height / scale
+    let x = (this.selectionElement.x - offsetX) / scale;
+    let y = (this.selectionElement.y - offsetY) / scale;
+    let width = this.selectionElement.width / scale;
+    let height = this.selectionElement.height / scale;
 
     // Handle rotation if the image is rotated
     if (this.currentRotation !== 0) {
-      const image = this.imageElement?.$image
+      const image = this.imageElement?.$image;
       if (image) {
-        const imageWidth = image.naturalWidth
-        const imageHeight = image.naturalHeight
+        const imageWidth = image.naturalWidth;
+        const imageHeight = image.naturalHeight;
 
         // For 90° and 270° rotations, we need to adjust the coordinates
         // because the image dimensions are swapped in the display
-        const normalizedRotation = ((this.currentRotation % 360) + 360) % 360
+        const normalizedRotation = ((this.currentRotation % 360) + 360) % 360;
 
         if (normalizedRotation === 90 || normalizedRotation === 270) {
           // When rotated 90° or 270°, the displayed image has swapped dimensions
           // We need to account for this when calculating the relative coordinates
-          const displayedImageWidth = imageHeight
-          const displayedImageHeight = imageWidth
+          const displayedImageWidth = imageHeight;
+          const displayedImageHeight = imageWidth;
 
           // Transform coordinates based on rotation using the correct dimensions
           const rotatedCoords = this.transformCoordsForRotation(
@@ -485,13 +499,13 @@ export class ZoomableImage extends MessageDisplayMixinElement {
             height,
             displayedImageWidth,
             displayedImageHeight,
-            this.currentRotation
-          )
+            this.currentRotation,
+          );
 
-          x = rotatedCoords.x
-          y = rotatedCoords.y
-          width = rotatedCoords.width
-          height = rotatedCoords.height
+          x = rotatedCoords.x;
+          y = rotatedCoords.y;
+          width = rotatedCoords.width;
+          height = rotatedCoords.height;
         } else {
           // 180° rotations, use original dimensions
           const rotatedCoords = this.transformCoordsForRotation(
@@ -501,64 +515,67 @@ export class ZoomableImage extends MessageDisplayMixinElement {
             height,
             imageWidth,
             imageHeight,
-            this.currentRotation
-          )
+            this.currentRotation,
+          );
 
-          x = rotatedCoords.x
-          y = rotatedCoords.y
-          width = rotatedCoords.width
-          height = rotatedCoords.height
+          x = rotatedCoords.x;
+          y = rotatedCoords.y;
+          width = rotatedCoords.width;
+          height = rotatedCoords.height;
         }
       }
     }
 
-    return { x, y, width, height }
+    return { x, y, width, height };
   }
 
   /**
    * Gets the current crop selection, in natural image pixels (unrotated frame).
    * @returns The bounding box and rotation, or null if there is no selection.
    */
-  getCropSelection(): { boundingBox: CropperImageBoundingBox; rotation: number } | null {
+  getCropSelection(): {
+    boundingBox: CropperImageBoundingBox;
+    rotation: number;
+  } | null {
     if (!this.hasSelection()) {
-      return null
+      return null;
     }
     return {
       boundingBox: this.getBoundingBoxFromSelectionElement(),
       rotation: this.currentRotation,
-    }
+    };
   }
 
   /**
    * Shows the cropped image.
    */
   async showCrop() {
-    this.resetMessage()
+    this.resetMessage();
     if (!this.hasSelection()) {
-      this.setErrorMessage(msg("Please select a region to crop."))
-      return
+      this.setErrorMessage(msg("Please select a region to crop."));
+      return;
     }
-    this.resultBoundingBox = this.getBoundingBoxFromSelectionElement()
+    this.resultBoundingBox = this.getBoundingBoxFromSelectionElement();
 
-    const result = await this.selectionElement.$toCanvas()
-    this.cropResult = result.toDataURL()
+    const result = await this.selectionElement.$toCanvas();
+    this.cropResult = result.toDataURL();
   }
 
   /**
    * Resets the selection.
    */
   resetSelection() {
-    this.resetMessage()
-    this.selectionElement?.$clear()
+    this.resetMessage();
+    this.selectionElement?.$clear();
   }
 
   /**
    * Resets the crop.
    */
   resetCrop() {
-    this.cropResult = ""
-    this.resultBoundingBox = undefined
-    this.resetSelection()
+    this.cropResult = "";
+    this.resultBoundingBox = undefined;
+    this.resetSelection();
   }
 
   /**
@@ -572,9 +589,9 @@ export class ZoomableImage extends MessageDisplayMixinElement {
           oldBoundingBox: this.boundingBox,
           rotation: this.currentRotation,
         },
-      })
-    )
-    this.resetCrop()
+      }),
+    );
+    this.resetCrop();
   }
 
   /**
@@ -604,7 +621,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
 
         ${this.renderCropImageBoundingBox()}
       </div>
-    `
+    `;
   }
 
   /**
@@ -613,7 +630,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    */
   renderCropImageBoundingBox() {
     if (!this.cropResult) {
-      return nothing
+      return nothing;
     }
     return html`
       <div>
@@ -638,7 +655,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
           </button>
         </div>
       </div>
-    `
+    `;
   }
 
   /**
@@ -646,12 +663,12 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    * @returns The offset coordinates.
    */
   getOffset() {
-    const cropperImageRect = this.imageElement.getBoundingClientRect()
-    const cropperCanvasRect = this.canvasElement.getBoundingClientRect()
+    const cropperImageRect = this.imageElement.getBoundingClientRect();
+    const cropperCanvasRect = this.canvasElement.getBoundingClientRect();
     return {
       x: cropperImageRect.left - cropperCanvasRect.left,
       y: cropperImageRect.top - cropperCanvasRect.top,
-    }
+    };
   }
 
   /**
@@ -659,10 +676,10 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    * @returns The scale coordinates.
    */
   getScale() {
-    const transformValue = this.imageElement.$getTransform()
+    const transformValue = this.imageElement.$getTransform();
 
-    const index = (this.currentRotation / 90) % 2
-    return Math.abs(transformValue[index])
+    const index = (this.currentRotation / 90) % 2;
+    return Math.abs(transformValue[index]);
   }
   /**
    * Calculates the scale of the image relative to the canvas size using current image width.
@@ -670,29 +687,29 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    */
   getImageScaleRelativeToCanvas(): number {
     if (!this.imageElement || !this.canvasElement) {
-      return 1
+      return 1;
     }
 
-    const image = this.imageElement.$image
-    const canvas = this.canvasElement
+    const image = this.imageElement.$image;
+    const canvas = this.canvasElement;
 
     if (!image || !canvas) {
-      return 1
+      return 1;
     }
 
     // Get the current width and height of the image as displayed in the canvas
-    const imageRect = this.imageElement.getBoundingClientRect()
-    const imageWidth = imageRect.width
-    const imageHeight = imageRect.height
-    const canvasWidth = canvas.clientWidth
-    const canvasHeight = canvas.clientHeight
+    const imageRect = this.imageElement.getBoundingClientRect();
+    const imageWidth = imageRect.width;
+    const imageHeight = imageRect.height;
+    const canvasWidth = canvas.clientWidth;
+    const canvasHeight = canvas.clientHeight;
 
     // Calculate the scale factor based on width and height
-    const widthScale = imageWidth / canvasWidth
-    const heightScale = imageHeight / canvasHeight
+    const widthScale = imageWidth / canvasWidth;
+    const heightScale = imageHeight / canvasHeight;
 
     // Return the larger scale factor to ensure the image fits within the canvas
-    return Math.max(widthScale, heightScale)
+    return Math.max(widthScale, heightScale);
   }
 
   /**
@@ -700,25 +717,25 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    * @returns The bounding box coordinates.
    */
   getBoundingBoxDependOnImageSize() {
-    const image = this.imageElement?.$image
+    const image = this.imageElement?.$image;
     if (!this.boundingBox) {
-      console.error("No bounding box")
+      console.error("No bounding box");
     }
     if (!image) {
-      return this.boundingBox
+      return this.boundingBox;
     }
-    const { x: offsetX, y: offsetY } = this.getOffset()
-    const scale = this.getScale()
+    const { x: offsetX, y: offsetY } = this.getOffset();
+    const scale = this.getScale();
 
-    let boundingBox = { ...this.boundingBox! }
+    let boundingBox = { ...this.boundingBox! };
 
     // Handle rotation - transform the bounding box coordinates
     if (this.currentRotation !== 0) {
-      const imageWidth = image.naturalWidth
-      const imageHeight = image.naturalHeight
+      const imageWidth = image.naturalWidth;
+      const imageHeight = image.naturalHeight;
 
       // Apply inverse rotation to get the correct position for the rotated image
-      const inverseRotation = (360 - this.currentRotation) % 360
+      const inverseRotation = (360 - this.currentRotation) % 360;
       const rotatedCoords = this.transformCoordsForRotation(
         boundingBox.x,
         boundingBox.y,
@@ -726,10 +743,10 @@ export class ZoomableImage extends MessageDisplayMixinElement {
         boundingBox.height,
         imageWidth,
         imageHeight,
-        inverseRotation
-      )
+        inverseRotation,
+      );
 
-      boundingBox = rotatedCoords
+      boundingBox = rotatedCoords;
     }
 
     return {
@@ -737,7 +754,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
       y: boundingBox.y * scale + offsetY,
       width: boundingBox.width * scale,
       height: boundingBox.height * scale,
-    }
+    };
   }
 
   /**
@@ -747,13 +764,21 @@ export class ZoomableImage extends MessageDisplayMixinElement {
   renderCropperControls() {
     if (this.cropMode === CropMode.IMAGE_ONLY) {
       return html`
-        <cropper-handle action="move" plain aria-label=${msg("Move image")}></cropper-handle>
-      `
+        <cropper-handle
+          action="move"
+          plain
+          aria-label=${msg("Move image")}
+        ></cropper-handle>
+      `;
     } else if (this.cropMode === CropMode.CROP_READ) {
-      const boundingBox = this.getBoundingBoxDependOnImageSize()
+      const boundingBox = this.getBoundingBoxDependOnImageSize();
       return html`
         <cropper-shade aria-hidden="true"></cropper-shade>
-        <cropper-handle action="move" plain aria-label=${msg("Move image")}></cropper-handle>
+        <cropper-handle
+          action="move"
+          plain
+          aria-label=${msg("Move image")}
+        ></cropper-handle>
         <cropper-selection
           outlined
           @change="${this.onCropperSelectionChange}"
@@ -766,14 +791,22 @@ export class ZoomableImage extends MessageDisplayMixinElement {
           resizable
           aria-label=${msg("Selection area")}
         >
-          <cropper-handle action="move" plain aria-label=${msg("Move selection")}></cropper-handle>
+          <cropper-handle
+            action="move"
+            plain
+            aria-label=${msg("Move selection")}
+          ></cropper-handle>
         </cropper-selection>
-      `
+      `;
     }
 
     return html`
       <cropper-shade hidden aria-hidden="true"></cropper-shade>
-      <cropper-handle action="select" plain aria-label=${msg("Select area")}></cropper-handle>
+      <cropper-handle
+        action="select"
+        plain
+        aria-label=${msg("Select area")}
+      ></cropper-handle>
       <cropper-selection
         dynamic
         movable
@@ -783,20 +816,45 @@ export class ZoomableImage extends MessageDisplayMixinElement {
         @change="${this.onCropperSelectionChange}"
         aria-label=${msg("Selection area")}
       >
-        <cropper-handle action="move" plain aria-label=${msg("Move selection")}></cropper-handle>
-        <cropper-handle action="n-resize" aria-label=${msg("Resize top")}></cropper-handle>
-        <cropper-handle action="e-resize" aria-label=${msg("Resize right")}></cropper-handle>
-        <cropper-handle action="s-resize" aria-label=${msg("Resize bottom")}></cropper-handle>
-        <cropper-handle action="w-resize" aria-label=${msg("Resize left")}></cropper-handle>
-        <cropper-handle action="ne-resize" aria-label=${msg("Resize top right")}></cropper-handle>
-        <cropper-handle action="nw-resize" aria-label=${msg("Resize top left")}></cropper-handle>
+        <cropper-handle
+          action="move"
+          plain
+          aria-label=${msg("Move selection")}
+        ></cropper-handle>
+        <cropper-handle
+          action="n-resize"
+          aria-label=${msg("Resize top")}
+        ></cropper-handle>
+        <cropper-handle
+          action="e-resize"
+          aria-label=${msg("Resize right")}
+        ></cropper-handle>
+        <cropper-handle
+          action="s-resize"
+          aria-label=${msg("Resize bottom")}
+        ></cropper-handle>
+        <cropper-handle
+          action="w-resize"
+          aria-label=${msg("Resize left")}
+        ></cropper-handle>
+        <cropper-handle
+          action="ne-resize"
+          aria-label=${msg("Resize top right")}
+        ></cropper-handle>
+        <cropper-handle
+          action="nw-resize"
+          aria-label=${msg("Resize top left")}
+        ></cropper-handle>
         <cropper-handle
           action="se-resize"
           aria-label=${msg("Resize bottom right")}
         ></cropper-handle>
-        <cropper-handle action="sw-resize" aria-label=${msg("Resize bottom left")}></cropper-handle>
+        <cropper-handle
+          action="sw-resize"
+          aria-label=${msg("Resize bottom left")}
+        ></cropper-handle>
       </cropper-selection>
-    `
+    `;
   }
 
   /**
@@ -811,7 +869,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
       selection.y >= maxSelection.y &&
       selection.x + selection.width <= maxSelection.x + maxSelection.width &&
       selection.y + selection.height <= maxSelection.y + maxSelection.height
-    )
+    );
   }
 
   /**
@@ -819,9 +877,10 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    * @returns True if there is a selection, false otherwise.
    */
   hasSelection() {
-    const isSelectionHidden = this.selectionElement?.hidden ?? true
-    const hasNoSize = this.selectionElement?.width === 0 || this.selectionElement?.height === 0
-    return !isSelectionHidden && !hasNoSize
+    const isSelectionHidden = this.selectionElement?.hidden ?? true;
+    const hasNoSize =
+      this.selectionElement?.width === 0 || this.selectionElement?.height === 0;
+    return !isSelectionHidden && !hasNoSize;
   }
 
   /**
@@ -831,46 +890,46 @@ export class ZoomableImage extends MessageDisplayMixinElement {
   onCropperImageTransform(event: CustomEvent<{ matrix: number[] }>) {
     // If the crop mode is not CROP and you have a selection, you need to update the selection.
     if (this.cropMode !== CropMode.CROP) {
-      return
+      return;
     }
 
-    const cropperCanvas = this.canvasElement
+    const cropperCanvas = this.canvasElement;
 
     if (!cropperCanvas || !this.hasSelection()) {
-      return
+      return;
     }
 
-    const cropperSelection = this.selectionElement
-    const cropperCanvasRect = cropperCanvas.getBoundingClientRect()
+    const cropperSelection = this.selectionElement;
+    const cropperCanvasRect = cropperCanvas.getBoundingClientRect();
 
     // 1. Clone the cropper image.
-    const cropperImageClone = this.imageElement.cloneNode() as CropperImage
+    const cropperImageClone = this.imageElement.cloneNode() as CropperImage;
 
     // 2. Apply the new matrix to the cropper image clone.
-    cropperImageClone.style.transform = `matrix(${event.detail.matrix.join(", ")})`
+    cropperImageClone.style.transform = `matrix(${event.detail.matrix.join(", ")})`;
 
     // 3. Make the cropper image clone invisible.
-    cropperImageClone.style.opacity = "0"
+    cropperImageClone.style.opacity = "0";
 
     // 4. Append the cropper image clone to the cropper canvas.
-    cropperCanvas.appendChild(cropperImageClone)
+    cropperCanvas.appendChild(cropperImageClone);
 
     // 5. Compute the boundaries of the cropper image clone.
-    const cropperImageRect = cropperImageClone.getBoundingClientRect()
+    const cropperImageRect = cropperImageClone.getBoundingClientRect();
 
     // 6. Remove the cropper image clone.
-    cropperCanvas.removeChild(cropperImageClone)
+    cropperCanvas.removeChild(cropperImageClone);
 
-    const selection = cropperSelection as Selection
+    const selection = cropperSelection as Selection;
     const maxSelection: Selection = {
       x: cropperImageRect.left - cropperCanvasRect.left,
       y: cropperImageRect.top - cropperCanvasRect.top,
       width: cropperImageRect.width,
       height: cropperImageRect.height,
-    }
+    };
 
     if (!this.inSelection(selection, maxSelection)) {
-      event.preventDefault()
+      event.preventDefault();
     }
   }
 
@@ -880,28 +939,28 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    */
   onCropperSelectionChange(event: CustomEvent) {
     if (this.cropMode !== CropMode.CROP) {
-      return
+      return;
     }
-    const cropperCanvas = this.canvasElement
+    const cropperCanvas = this.canvasElement;
 
     if (!cropperCanvas) {
-      return
+      return;
     }
 
-    const cropperCanvasRect = cropperCanvas.getBoundingClientRect()
-    const selection = event.detail as Selection
+    const cropperCanvasRect = cropperCanvas.getBoundingClientRect();
+    const selection = event.detail as Selection;
 
-    const cropperImage = this.imageElement
-    const cropperImageRect = cropperImage.getBoundingClientRect()
+    const cropperImage = this.imageElement;
+    const cropperImageRect = cropperImage.getBoundingClientRect();
     const maxSelection: Selection = {
       x: cropperImageRect.left - cropperCanvasRect.left,
       y: cropperImageRect.top - cropperCanvasRect.top,
       width: cropperImageRect.width,
       height: cropperImageRect.height,
-    }
+    };
 
     if (!this.inSelection(selection, maxSelection)) {
-      event.preventDefault()
+      event.preventDefault();
     }
   }
 
@@ -911,7 +970,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    */
   renderMobileCanvasToggle() {
     if (!this.isMobileOrTablet) {
-      return nothing
+      return nothing;
     }
 
     return html`
@@ -920,12 +979,14 @@ export class ZoomableImage extends MessageDisplayMixinElement {
           type="checkbox"
           .checked=${this.isCanvasEnabledInMobile}
           @change=${(e: Event) => {
-            this.isCanvasEnabledInMobile = (e.target as HTMLInputElement).checked
+            this.isCanvasEnabledInMobile = (
+              e.target as HTMLInputElement
+            ).checked;
           }}
         />
         <span> ${msg("Move image")} </span>
       </label>
-    `
+    `;
   }
 
   /**
@@ -934,15 +995,19 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    */
   renderTopPanel() {
     if (!this.showButtons) {
-      return nothing
+      return nothing;
     }
 
     return html`
-      <div class="toolbar flex justify-end" role="toolbar" aria-label=${msg("Image controls")}>
+      <div
+        class="toolbar flex justify-end"
+        role="toolbar"
+        aria-label=${msg("Image controls")}
+      >
         ${this.renderMobileCanvasToggle()} ${this.renderCenterButton()}
         ${this.renderRotateButtons()}
       </div>
-    `
+    `;
   }
 
   /**
@@ -951,7 +1016,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    * @returns True if zoom is allowed, false otherwise.
    */
   allowZoomChange(zoom: number): boolean {
-    return zoom <= this.maxZoom && zoom >= this.minZoom
+    return zoom <= this.maxZoom && zoom >= this.minZoom;
   }
 
   /**
@@ -960,18 +1025,20 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    */
   onCropperCanvasAction(event: CropperActionEvent) {
     try {
-      const { action } = event.detail
+      const { action } = event.detail;
       if (action === "scale") {
-        const isAllowed = this.allowZoomChange(this.getImageScaleRelativeToCanvas())
+        const isAllowed = this.allowZoomChange(
+          this.getImageScaleRelativeToCanvas(),
+        );
         if (!isAllowed) {
-          event.preventDefault()
+          event.preventDefault();
           // rollback the scale
-          this.imageElement.$setTransform(this.lastTransform)
+          this.imageElement.$setTransform(this.lastTransform);
         }
       }
-      this.updateLastTransform()
+      this.updateLastTransform();
     } catch (error) {
-      console.error("Error in cropper canvas action:", error)
+      console.error("Error in cropper canvas action:", error);
     }
   }
 
@@ -980,7 +1047,8 @@ export class ZoomableImage extends MessageDisplayMixinElement {
    * @returns The component UI.
    */
   override render() {
-    const crossorigin = this.cropMode !== CropMode.IMAGE_ONLY ? "anonymous" : undefined
+    const crossorigin =
+      this.cropMode !== CropMode.IMAGE_ONLY ? "anonymous" : undefined;
     return html`
       <div
         class="zoomable-image"
@@ -1019,12 +1087,12 @@ export class ZoomableImage extends MessageDisplayMixinElement {
             : nothing
         }
       </div>
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "zoomable-image": ZoomableImage
+    "zoomable-image": ZoomableImage;
   }
 }

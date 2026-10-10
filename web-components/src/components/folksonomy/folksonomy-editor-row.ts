@@ -1,18 +1,18 @@
-import { LitElement, html, css } from "lit"
-import { customElement, property, state } from "lit/decorators.js"
-import "./delete-modal"
-import "./new-key-modal"
-import "../shared/autocomplete-input"
-import folksonomyApi from "../../api/folksonomy"
-import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme"
-import { msg, localized } from "@lit/localize"
-import { getButtonClasses, ButtonType } from "../../styles/buttons"
-import { FOLKSONOMY_INPUT } from "../../styles/folksonomy-input"
+import { LitElement, html, css } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
+import "./delete-modal";
+import "./new-key-modal";
+import "../shared/autocomplete-input";
+import folksonomyApi from "../../api/folksonomy";
+import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme";
+import { msg, localized } from "@lit/localize";
+import { getButtonClasses, ButtonType } from "../../styles/buttons";
+import { FOLKSONOMY_INPUT } from "../../styles/folksonomy-input";
 import type {
   AutocompleteSuggestion,
   AutocompleteInputChangeEvent,
   AutocompleteSuggestionSelectEvent,
-} from "../../types"
+} from "../../types";
 
 /**
  * FolksonomyEditorRow Component
@@ -29,84 +29,84 @@ export class FolksonomyEditorRow extends LitElement {
    * Input value for the key field.
    * @private
    */
-  @state() private keyInput = ""
+  @state() private keyInput = "";
 
   /**
    * Input value for the value field.
    * @private
    */
-  @state() private valueInput = ""
+  @state() private valueInput = "";
 
   /**
    * Suggestions for the key field.
    * @private
    */
-  @state() private keySuggestions: AutocompleteSuggestion[] = []
+  @state() private keySuggestions: AutocompleteSuggestion[] = [];
 
   /**
    * Suggestions for the value field.
    * @private
    */
-  @state() private valueSuggestions: AutocompleteSuggestion[] = []
+  @state() private valueSuggestions: AutocompleteSuggestion[] = [];
 
   /**
    * Temporary value used during editing.
    * @private
    */
-  @state() private tempValue = ""
+  @state() private tempValue = "";
 
   /**
    * Product code associated with the row.
    */
-  @property({ type: String, attribute: "product-code" }) productCode = ""
+  @property({ type: String, attribute: "product-code" }) productCode = "";
 
   /**
    * Version number of the product property.
    */
-  @property({ type: Number }) version = 1
+  @property({ type: Number }) version = 1;
 
   /**
    * Row number in the table.
    */
-  @property({ type: Number, attribute: "row-number" }) rowNumber = 1
+  @property({ type: Number, attribute: "row-number" }) rowNumber = 1;
 
   /**
    * Key of the product property.
    */
-  @property({ type: String }) key = ""
+  @property({ type: String }) key = "";
 
   /**
    * Value of the product property.
    */
-  @property({ type: String }) value = ""
+  @property({ type: String }) value = "";
 
   /**
    * Page type (e.g., view or edit).
    */
-  @property({ type: String, attribute: "page-type" }) pageType = "view"
+  @property({ type: String, attribute: "page-type" }) pageType = "view";
 
   /**
    * Indicates whether the row is empty.
    */
-  @property({ type: Boolean }) empty = false
+  @property({ type: Boolean }) empty = false;
 
   /**
    * Indicates whether the row is editable.
    * @private
    */
-  @state() editable = false
+  @state() editable = false;
 
   /**
    * Indicates whether the new key modal is open.
    * @private
    */
-  @state() showNewKeyModal = false
+  @state() showNewKeyModal = false;
 
   override connectedCallback() {
-    super.connectedCallback()
+    super.connectedCallback();
     if (this.pageType === "edit") {
-      this.editable = true
-      this.tempValue = this.value
+      this.editable = true;
+      this.tempValue = this.value;
     }
 
     folksonomyApi
@@ -115,9 +115,9 @@ export class FolksonomyEditorRow extends LitElement {
         this.keySuggestions = keys.map((key) => ({
           value: key.k,
           count: key.count,
-        }))
+        }));
       })
-      .catch((error) => console.error("Error fetching keys:", error))
+      .catch((error) => console.error("Error fetching keys:", error));
   }
 
   /**
@@ -127,12 +127,12 @@ export class FolksonomyEditorRow extends LitElement {
    */
   private async fetchValuesForKey(key: string) {
     try {
-      const values = await folksonomyApi.fetchValues(key)
+      const values = await folksonomyApi.fetchValues(key);
       this.valueSuggestions = values.map((value) => ({
         value: value.v,
-      }))
+      }));
     } catch (error) {
-      console.error("Error fetching values for key:", error)
+      console.error("Error fetching values for key:", error);
     }
   }
 
@@ -142,12 +142,12 @@ export class FolksonomyEditorRow extends LitElement {
    * @private
    */
   private onKeyInput(e: AutocompleteInputChangeEvent) {
-    const value = (e.target as HTMLInputElement).value
-    this.keyInput = value
-    this.key = value
+    const value = (e.target as HTMLInputElement).value;
+    this.keyInput = value;
+    this.key = value;
 
     if (e.detail.matching) {
-      this.fetchValuesForKey(value)
+      this.fetchValuesForKey(value);
     }
   }
 
@@ -157,13 +157,13 @@ export class FolksonomyEditorRow extends LitElement {
    * @private
    */
   private onValueInput(e: AutocompleteInputChangeEvent) {
-    const value = e.detail.value
-    this.valueInput = value
-    this.value = value
+    const value = e.detail.value;
+    this.valueInput = value;
+    this.value = value;
 
     // In case of input value match exactly with only one suggestion, fetch values for the key
     if (e.detail.matching) {
-      this.fetchValuesForKey(this.keyInput)
+      this.fetchValuesForKey(this.keyInput);
     }
   }
 
@@ -175,20 +175,20 @@ export class FolksonomyEditorRow extends LitElement {
   private selectKeySuggestion(suggestion: string) {
     // Check if this is the "not found" option
     if (suggestion === "__NOT_FOUND__") {
-      this.showNewKeyModal = true
-      return
+      this.showNewKeyModal = true;
+      return;
     }
 
-    const hasChanged = this.keyInput !== suggestion
+    const hasChanged = this.keyInput !== suggestion;
     // Avoid calling fetchValuesForKey if the key has not changed
     if (!hasChanged) {
-      return
+      return;
     }
-    this.keyInput = suggestion
-    this.key = suggestion
-    this.valueInput = ""
-    this.value = ""
-    this.fetchValuesForKey(suggestion)
+    this.keyInput = suggestion;
+    this.key = suggestion;
+    this.valueInput = "";
+    this.value = "";
+    this.fetchValuesForKey(suggestion);
   }
 
   /**
@@ -197,8 +197,8 @@ export class FolksonomyEditorRow extends LitElement {
    * @private
    */
   private selectValueSuggestion(suggestion: string) {
-    this.valueInput = suggestion
-    this.value = suggestion
+    this.valueInput = suggestion;
+    this.value = suggestion;
   }
 
   /**
@@ -206,8 +206,8 @@ export class FolksonomyEditorRow extends LitElement {
    * @private
    */
   private handleEdit() {
-    this.editable = true
-    this.tempValue = this.value
+    this.editable = true;
+    this.tempValue = this.value;
   }
 
   /**
@@ -220,9 +220,9 @@ export class FolksonomyEditorRow extends LitElement {
         this.productCode,
         this.key,
         this.tempValue,
-        this.version
-      )
-      this.editable = false
+        this.version,
+      );
+      this.editable = false;
 
       this.dispatchEvent(
         new CustomEvent("update-row", {
@@ -233,10 +233,10 @@ export class FolksonomyEditorRow extends LitElement {
           },
           bubbles: true,
           composed: true,
-        })
-      )
+        }),
+      );
     } catch (error) {
-      console.error("Failed to update property", error)
+      console.error("Failed to update property", error);
     }
   }
 
@@ -245,8 +245,8 @@ export class FolksonomyEditorRow extends LitElement {
    * @private
    */
   private handleCancel() {
-    this.editable = false
-    this.tempValue = this.value
+    this.editable = false;
+    this.tempValue = this.value;
   }
 
   /**
@@ -254,24 +254,28 @@ export class FolksonomyEditorRow extends LitElement {
    * @private
    */
   private async handleDelete() {
-    const deleteModal = document.createElement("delete-modal")
+    const deleteModal = document.createElement("delete-modal");
     deleteModal.addEventListener("confirm-delete", async () => {
       try {
-        await folksonomyApi.deleteProductProperty(this.productCode, this.key, this.version)
+        await folksonomyApi.deleteProductProperty(
+          this.productCode,
+          this.key,
+          this.version,
+        );
         this.dispatchEvent(
           new CustomEvent("delete-row", {
             detail: { key: this.key },
             bubbles: true,
             composed: true,
-          })
-        )
+          }),
+        );
       } catch (error) {
-        console.error("Failed to delete property", error)
+        console.error("Failed to delete property", error);
       } finally {
-        deleteModal.remove()
+        deleteModal.remove();
       }
-    })
-    document.body.appendChild(deleteModal)
+    });
+    document.body.appendChild(deleteModal);
   }
 
   /**
@@ -285,19 +289,19 @@ export class FolksonomyEditorRow extends LitElement {
           this.productCode,
           this.keyInput,
           this.valueInput,
-          this.version
-        )
+          this.version,
+        );
         this.dispatchEvent(
           new CustomEvent("add-row", {
             detail: { key: newProperty.key, value: newProperty.value },
             bubbles: true,
             composed: true,
-          })
-        )
-        this.keyInput = ""
-        this.valueInput = ""
+          }),
+        );
+        this.keyInput = "";
+        this.valueInput = "";
       } catch (error) {
-        console.error("Failed to add custom key and value", error)
+        console.error("Failed to add custom key and value", error);
       }
     }
   }
@@ -308,7 +312,7 @@ export class FolksonomyEditorRow extends LitElement {
    * @private
    */
   private handleInputChange(e: Event) {
-    this.tempValue = (e.target as HTMLInputElement).value
+    this.tempValue = (e.target as HTMLInputElement).value;
   }
 
   /**
@@ -316,7 +320,7 @@ export class FolksonomyEditorRow extends LitElement {
    * @private
    */
   private handleCloseNewKeyModal() {
-    this.showNewKeyModal = false
+    this.showNewKeyModal = false;
   }
 
   static override styles = [
@@ -422,34 +426,38 @@ export class FolksonomyEditorRow extends LitElement {
         position: relative !important;
       }
     `,
-  ]
+  ];
 
   private isUrl(value: string): boolean {
-    const trimmedValue = value.trim()
+    const trimmedValue = value.trim();
     if (!trimmedValue) {
-      return false
+      return false;
     }
 
     try {
-      const url = new URL(trimmedValue)
-      return url.protocol === "http:" || url.protocol === "https:"
+      const url = new URL(trimmedValue);
+      return url.protocol === "http:" || url.protocol === "https:";
     } catch {
-      return false
+      return false;
     }
   }
 
   private confirmExternalNavigation(e: Event) {
-    const confirmed = confirm(msg("You are about to visit an external website. Continue?"))
+    const confirmed = confirm(
+      msg("You are about to visit an external website. Continue?"),
+    );
     if (!confirmed) {
-      e.preventDefault()
-      e.stopPropagation()
+      e.preventDefault();
+      e.stopPropagation();
     }
   }
 
   override render() {
     if (this.empty) {
       return html`
-        <tr class="empty-row ${this.rowNumber % 2 === 0 ? "even-row" : "odd-row"}">
+        <tr
+          class="empty-row ${this.rowNumber % 2 === 0 ? "even-row" : "odd-row"}"
+        >
           <td>
             <autocomplete-input
               placeholder=${msg("New key")}
@@ -486,10 +494,12 @@ export class FolksonomyEditorRow extends LitElement {
         </tr>
         ${
           this.showNewKeyModal
-            ? html`<new-key-modal @close-modal=${this.handleCloseNewKeyModal}></new-key-modal>`
+            ? html`<new-key-modal
+                @close-modal=${this.handleCloseNewKeyModal}
+              ></new-key-modal>`
             : null
         }
-      `
+      `;
     }
 
     return html`
@@ -532,18 +542,30 @@ export class FolksonomyEditorRow extends LitElement {
                   ${
                     this.editable
                       ? html`
-                          <button class="button chocolate-button" @click=${this.handleSave}>
+                          <button
+                            class="button chocolate-button"
+                            @click=${this.handleSave}
+                          >
                             ${msg("Save")}
                           </button>
-                          <button class="button chocolate-button" @click=${this.handleCancel}>
+                          <button
+                            class="button chocolate-button"
+                            @click=${this.handleCancel}
+                          >
                             ${msg("Cancel")}
                           </button>
                         `
-                      : html`<button class="button chocolate-button" @click=${this.handleEdit}>
+                      : html`<button
+                          class="button chocolate-button"
+                          @click=${this.handleEdit}
+                        >
                           ${msg("Edit")}
                         </button>`
                   }
-                  <button class="button chocolate-button" @click=${this.handleDelete}>
+                  <button
+                    class="button chocolate-button"
+                    @click=${this.handleDelete}
+                  >
                     ${msg("Delete")}
                   </button>
                 </div>
@@ -553,15 +575,17 @@ export class FolksonomyEditorRow extends LitElement {
       </tr>
       ${
         this.showNewKeyModal
-          ? html`<new-key-modal @close-modal=${this.handleCloseNewKeyModal}></new-key-modal>`
+          ? html`<new-key-modal
+              @close-modal=${this.handleCloseNewKeyModal}
+            ></new-key-modal>`
           : null
       }
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "folksonomy-editor-row": FolksonomyEditorRow
+    "folksonomy-editor-row": FolksonomyEditorRow;
   }
 }

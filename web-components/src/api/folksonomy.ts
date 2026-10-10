@@ -10,13 +10,17 @@ import type {
   PropertyRenameRequest,
   PropertyDeleteRequest,
   PropertyClashCheck,
-} from "../types/folksonomy"
+} from "../types/folksonomy";
 
-import { folksonomyConfiguration, userInfo, userInfoLoading } from "../signals/folksonomy"
+import {
+  folksonomyConfiguration,
+  userInfo,
+  userInfoLoading,
+} from "../signals/folksonomy";
 
 // Constants for localStorage
-const FOLKSONOMY_BEARER_TOKEN_KEY = "folksonomy-bearer-token"
-const FOLKSONOMY_BEARER_DATE_KEY = "folksonomy-token-date"
+const FOLKSONOMY_BEARER_TOKEN_KEY = "folksonomy-bearer-token";
+const FOLKSONOMY_BEARER_DATE_KEY = "folksonomy-token-date";
 
 /**
  * Get the API URL for a given path with the current configuration
@@ -25,15 +29,15 @@ const FOLKSONOMY_BEARER_DATE_KEY = "folksonomy-token-date"
  */
 
 const getApiUrl = (path: string) => {
-  return `${folksonomyConfiguration.getItem("apiUrl")}${path}`
-}
+  return `${folksonomyConfiguration.getItem("apiUrl")}${path}`;
+};
 
 /**
  * Get stored token from localStorage
  * @returns {string | null}
  */
 function getStoredToken(): string | null {
-  return localStorage.getItem(FOLKSONOMY_BEARER_TOKEN_KEY)
+  return localStorage.getItem(FOLKSONOMY_BEARER_TOKEN_KEY);
 }
 
 /**
@@ -41,16 +45,19 @@ function getStoredToken(): string | null {
  * @param token
  */
 function saveTokenToStorage(token: string) {
-  localStorage.setItem(FOLKSONOMY_BEARER_TOKEN_KEY, token)
-  localStorage.setItem(FOLKSONOMY_BEARER_DATE_KEY, new Date().getTime().toString())
+  localStorage.setItem(FOLKSONOMY_BEARER_TOKEN_KEY, token);
+  localStorage.setItem(
+    FOLKSONOMY_BEARER_DATE_KEY,
+    new Date().getTime().toString(),
+  );
 }
 
 /**
  * Clear token from localStorage
  */
 function clearStoredToken() {
-  localStorage.removeItem(FOLKSONOMY_BEARER_TOKEN_KEY)
-  localStorage.removeItem(FOLKSONOMY_BEARER_DATE_KEY)
+  localStorage.removeItem(FOLKSONOMY_BEARER_TOKEN_KEY);
+  localStorage.removeItem(FOLKSONOMY_BEARER_DATE_KEY);
 }
 
 /**
@@ -65,22 +72,22 @@ async function authByCookie(): Promise<AuthByCookieResponse> {
         "Content-Type": "application/json",
       } as HeadersInit,
       credentials: "include",
-    })
+    });
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const data: AuthByCookieResponse = await response.json()
+    const data: AuthByCookieResponse = await response.json();
 
     // Save token to localStorage
     if (data.access_token) {
-      saveTokenToStorage(data.access_token)
+      saveTokenToStorage(data.access_token);
     }
 
-    return data
+    return data;
   } catch (error) {
-    console.error("Error authenticating by cookie:", error)
-    clearStoredToken()
-    throw error
+    console.error("Error authenticating by cookie:", error);
+    clearStoredToken();
+    throw error;
   }
 }
 
@@ -89,13 +96,13 @@ async function authByCookie(): Promise<AuthByCookieResponse> {
  * @returns {Promise<string>}
  */
 async function getValidToken(): Promise<string> {
-  const storedToken = getStoredToken()
+  const storedToken = getStoredToken();
   if (storedToken) {
-    return storedToken
+    return storedToken;
   }
 
-  const authResponse = await authByCookie()
-  return authResponse.access_token
+  const authResponse = await authByCookie();
+  return authResponse.access_token;
 }
 
 /**
@@ -104,8 +111,11 @@ async function getValidToken(): Promise<string> {
  * @param options
  * @returns {Promise<Response>}
  */
-async function makeAuthenticatedRequest(url: string, options: RequestInit = {}): Promise<Response> {
-  const token = await getValidToken()
+async function makeAuthenticatedRequest(
+  url: string,
+  options: RequestInit = {},
+): Promise<Response> {
+  const token = await getValidToken();
 
   const requestOptions = {
     ...options,
@@ -113,15 +123,15 @@ async function makeAuthenticatedRequest(url: string, options: RequestInit = {}):
       ...options.headers,
       Authorization: `Bearer ${token}`,
     },
-  }
+  };
 
-  const response = await fetch(url, requestOptions)
+  const response = await fetch(url, requestOptions);
 
   // If auth fails (401/403), try once more with fresh token
   if (response.status === 401 || response.status === 403) {
-    console.error("Auth failed, retrying with fresh token...")
-    clearStoredToken()
-    const newToken = await getValidToken()
+    console.error("Auth failed, retrying with fresh token...");
+    clearStoredToken();
+    const newToken = await getValidToken();
 
     const retryOptions = {
       ...options,
@@ -129,25 +139,27 @@ async function makeAuthenticatedRequest(url: string, options: RequestInit = {}):
         ...options.headers,
         Authorization: `Bearer ${newToken}`,
       },
-    }
+    };
 
-    return fetch(url, retryOptions)
+    return fetch(url, retryOptions);
   }
 
-  return response
+  return response;
 }
 
-async function fetchProductProperties(product: string): Promise<FetchProductPropertiesResponse> {
+async function fetchProductProperties(
+  product: string,
+): Promise<FetchProductPropertiesResponse> {
   try {
-    const response = await fetch(getApiUrl(`/product/${product}`))
+    const response = await fetch(getApiUrl(`/product/${product}`));
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const data: FetchProductPropertiesResponse = await response.json()
-    return data
+    const data: FetchProductPropertiesResponse = await response.json();
+    return data;
   } catch (error) {
-    console.error("Error fetching product properties:", error)
-    throw error
+    console.error("Error fetching product properties:", error);
+    throw error;
   }
 }
 
@@ -155,7 +167,7 @@ async function addProductProperty(
   product: string,
   k: string,
   v: string,
-  version: number
+  version: number,
 ): Promise<AddProductPropertyResponse> {
   try {
     const response = await makeAuthenticatedRequest(getApiUrl("/product"), {
@@ -164,22 +176,22 @@ async function addProductProperty(
         "Content-Type": "application/json",
       } as HeadersInit,
       body: JSON.stringify({ product, ...{ k, v, version } }),
-    })
+    });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-    return { key: k, value: v, version: 1 }
+    return { key: k, value: v, version: 1 };
   } catch (error) {
-    console.error("Error adding product property:", error)
-    throw error
+    console.error("Error adding product property:", error);
+    throw error;
   }
 }
 
 async function deleteProductProperty(
   product: string,
   k: string,
-  version: number
+  version: number,
 ): Promise<DeleteProductPropertyResponse> {
   try {
     const response = await makeAuthenticatedRequest(
@@ -189,16 +201,16 @@ async function deleteProductProperty(
         headers: {
           "Content-Type": "application/json",
         } as HeadersInit,
-      }
-    )
+      },
+    );
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-    return { success: true }
+    return { success: true };
   } catch (error) {
-    console.error("Error deleting product property:", error)
-    throw error
+    console.error("Error deleting product property:", error);
+    throw error;
   }
 }
 
@@ -206,7 +218,7 @@ async function updateProductProperty(
   product: string,
   k: string,
   v: string,
-  version: number
+  version: number,
 ): Promise<UpdateProductPropertyResponse> {
   try {
     const response = await makeAuthenticatedRequest(getApiUrl("/product"), {
@@ -215,82 +227,87 @@ async function updateProductProperty(
         "Content-Type": "application/json",
       } as HeadersInit,
       body: JSON.stringify({ product, ...{ k, v, version: version + 1 } }),
-    })
+    });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-    return { key: k, value: v, version: version + 1 }
+    return { key: k, value: v, version: version + 1 };
   } catch (error) {
-    console.error("Error updating product property:", error)
-    throw error
+    console.error("Error updating product property:", error);
+    throw error;
   }
 }
 
-async function fetchKeys(): Promise<{ k: string; count: number; values: number }[]> {
+async function fetchKeys(): Promise<
+  { k: string; count: number; values: number }[]
+> {
   try {
     const response = await fetch(getApiUrl("/keys"), {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       } as HeadersInit,
-    })
+    });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data: { k: string; count: number; values: number }[] = await response.json()
-    return data
+    const data: { k: string; count: number; values: number }[] =
+      await response.json();
+    return data;
   } catch (error) {
-    console.error("Error fetching keys:", error)
-    throw error
+    console.error("Error fetching keys:", error);
+    throw error;
   }
 }
 
 async function fetchProductsProperties(
-  propertyName: string
+  propertyName: string,
 ): Promise<{ k: string; v: string; product: string }[]> {
   try {
-    const url = `/products?k=${propertyName}`
+    const url = `/products?k=${propertyName}`;
 
     const response = await fetch(getApiUrl(url), {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       } as HeadersInit,
-    })
+    });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data = await response.json()
-    return data || []
+    const data = await response.json();
+    return data || [];
   } catch (error) {
-    console.error("Error fetching property products:", error)
-    throw error
+    console.error("Error fetching property products:", error);
+    throw error;
   }
 }
 
-async function fetchValues(key: string): Promise<{ v: string; product_count: number }[]> {
+async function fetchValues(
+  key: string,
+): Promise<{ v: string; product_count: number }[]> {
   try {
     const response = await fetch(getApiUrl(`/values/${key}`), {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       } as HeadersInit,
-    })
+    });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data: { v: string; product_count: number }[] = await response.json()
-    return data
+    const data: { v: string; product_count: number }[] = await response.json();
+    return data;
   } catch (error) {
-    console.error("Error fetching values:", error)
-    throw error
+    console.error("Error fetching values:", error);
+    throw error;
   }
 }
 
@@ -301,17 +318,17 @@ async function getUserInfo(): Promise<UserInfo> {
       headers: {
         "Content-Type": "application/json",
       } as HeadersInit,
-    })
+    });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data: UserInfo = await response.json()
-    return data
+    const data: UserInfo = await response.json();
+    return data;
   } catch (error) {
-    console.error("Error fetching user info:", error)
-    throw error
+    console.error("Error fetching user info:", error);
+    throw error;
   }
 }
 
@@ -322,27 +339,27 @@ async function getUserInfo(): Promise<UserInfo> {
 async function fetchUserInfo(force: boolean = false): Promise<UserInfo | null> {
   // Don't fetch if already loading (unless forced)
   if (userInfoLoading.get() && !force) {
-    return userInfo.get()
+    return userInfo.get();
   }
 
   // Don't fetch if we already have user info (unless forced)
   if (userInfo.get() && !force) {
-    return userInfo.get()
+    return userInfo.get();
   }
 
-  userInfoLoading.set(true)
+  userInfoLoading.set(true);
 
   try {
-    const fetchedUserInfo = await getUserInfo()
-    userInfo.set(fetchedUserInfo)
-    return fetchedUserInfo
+    const fetchedUserInfo = await getUserInfo();
+    userInfo.set(fetchedUserInfo);
+    return fetchedUserInfo;
   } catch (error) {
-    console.error("Error fetching user info:", error)
+    console.error("Error fetching user info:", error);
     // User might not be authenticated, which is fine
-    userInfo.set(null)
-    return null
+    userInfo.set(null);
+    return null;
   } finally {
-    userInfoLoading.set(false)
+    userInfoLoading.set(false);
   }
 }
 
@@ -350,32 +367,39 @@ async function fetchUserInfo(force: boolean = false): Promise<UserInfo | null> {
  * Clear user info (useful for logout)
  */
 export function clearUserInfo() {
-  userInfo.set(null)
-  userInfoLoading.set(false)
+  userInfo.set(null);
+  userInfoLoading.set(false);
 }
 
-async function replaceValue(request: ValueRenameRequest): Promise<{ success: boolean }> {
+async function replaceValue(
+  request: ValueRenameRequest,
+): Promise<{ success: boolean }> {
   try {
-    const response = await makeAuthenticatedRequest(getApiUrl("/admin/value/replace"), {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      } as HeadersInit,
-      body: JSON.stringify(request),
-    })
+    const response = await makeAuthenticatedRequest(
+      getApiUrl("/admin/value/replace"),
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        } as HeadersInit,
+        body: JSON.stringify(request),
+      },
+    );
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    return { success: true }
+    return { success: true };
   } catch (error) {
-    console.error("Error replacing value:", error)
-    throw error
+    console.error("Error replacing value:", error);
+    throw error;
   }
 }
 
-async function deleteValue(request: ValueDeleteRequest): Promise<{ success: boolean }> {
+async function deleteValue(
+  request: ValueDeleteRequest,
+): Promise<{ success: boolean }> {
   try {
     const response = await makeAuthenticatedRequest(getApiUrl("/admin/value"), {
       method: "DELETE",
@@ -383,80 +407,95 @@ async function deleteValue(request: ValueDeleteRequest): Promise<{ success: bool
         "Content-Type": "application/json",
       } as HeadersInit,
       body: JSON.stringify(request),
-    })
+    });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    return { success: true }
+    return { success: true };
   } catch (error) {
-    console.error("Error deleting value:", error)
-    throw error
+    console.error("Error deleting value:", error);
+    throw error;
   }
 }
 
-async function checkPropertyClash(request: PropertyRenameRequest): Promise<PropertyClashCheck> {
+async function checkPropertyClash(
+  request: PropertyRenameRequest,
+): Promise<PropertyClashCheck> {
   try {
-    const response = await makeAuthenticatedRequest(getApiUrl("/admin/property/check-clash"), {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      } as HeadersInit,
-      body: JSON.stringify(request),
-    })
+    const response = await makeAuthenticatedRequest(
+      getApiUrl("/admin/property/check-clash"),
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        } as HeadersInit,
+        body: JSON.stringify(request),
+      },
+    );
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data: PropertyClashCheck = await response.json()
-    return data
+    const data: PropertyClashCheck = await response.json();
+    return data;
   } catch (error) {
-    console.error("Error checking property clash:", error)
-    throw error
+    console.error("Error checking property clash:", error);
+    throw error;
   }
 }
 
-async function renameProperty(request: PropertyRenameRequest): Promise<{ success: boolean }> {
+async function renameProperty(
+  request: PropertyRenameRequest,
+): Promise<{ success: boolean }> {
   try {
-    const response = await makeAuthenticatedRequest(getApiUrl("/admin/property/rename"), {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      } as HeadersInit,
-      body: JSON.stringify(request),
-    })
+    const response = await makeAuthenticatedRequest(
+      getApiUrl("/admin/property/rename"),
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        } as HeadersInit,
+        body: JSON.stringify(request),
+      },
+    );
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    return { success: true }
+    return { success: true };
   } catch (error) {
-    console.error("Error renaming property:", error)
-    throw error
+    console.error("Error renaming property:", error);
+    throw error;
   }
 }
 
-async function deleteProperty(request: PropertyDeleteRequest): Promise<{ success: boolean }> {
+async function deleteProperty(
+  request: PropertyDeleteRequest,
+): Promise<{ success: boolean }> {
   try {
-    const response = await makeAuthenticatedRequest(getApiUrl("/admin/property"), {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      } as HeadersInit,
-      body: JSON.stringify(request),
-    })
+    const response = await makeAuthenticatedRequest(
+      getApiUrl("/admin/property"),
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        } as HeadersInit,
+        body: JSON.stringify(request),
+      },
+    );
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    return { success: true }
+    return { success: true };
   } catch (error) {
-    console.error("Error deleting property:", error)
-    throw error
+    console.error("Error deleting property:", error);
+    throw error;
   }
 }
 
@@ -476,4 +515,4 @@ export default {
   checkPropertyClash,
   renameProperty,
   deleteProperty,
-}
+};

@@ -1,95 +1,104 @@
-import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest"
-import { languageCode, countryCode } from "../../signals/app"
-import { DEFAULT_LANGUAGE_CODE } from "../../constants"
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { languageCode, countryCode } from "../../signals/app";
+import { DEFAULT_LANGUAGE_CODE } from "../../constants";
 
 /** Set by the matchMedia mock below; flips `darkModeListener`'s subscribers. */
-let onSchemeChange: (event: { matches: boolean }) => void = () => {}
+let onSchemeChange: (event: { matches: boolean }) => void = () => {};
 
 beforeAll(async () => {
   Object.defineProperty(window, "matchMedia", {
     writable: true,
     value: vi.fn().mockImplementation(() => ({
       matches: false,
-      addEventListener: (_event: string, cb: (event: { matches: boolean }) => void) => {
-        onSchemeChange = cb
+      addEventListener: (
+        _event: string,
+        cb: (event: { matches: boolean }) => void,
+      ) => {
+        onSchemeChange = cb;
       },
       removeEventListener: vi.fn(),
     })),
-  })
+  });
 
-  await import("./donation-banner")
+  await import("./donation-banner");
 
   // jsdom does not implement navigation; a real anchor click would otherwise log noise.
   // `composedPath()` is needed because a shadow-DOM click retargets `event.target`.
   document.addEventListener("click", (event) => {
-    const origin = event.composedPath()[0] as HTMLElement
+    const origin = event.composedPath()[0] as HTMLElement;
     if (origin?.closest?.("a[href]")) {
-      event.preventDefault()
+      event.preventDefault();
     }
-  })
-})
+  });
+});
 
-const FEED_URL = "https://example.org/main.json"
+const FEED_URL = "https://example.org/main.json";
 
 const createBanner = async (attributes: Record<string, string> = {}) => {
-  const element = document.createElement("donation-banner") as any
+  const element = document.createElement("donation-banner") as any;
   for (const [key, value] of Object.entries(attributes)) {
-    element.setAttribute(key, value)
+    element.setAttribute(key, value);
   }
-  document.body.appendChild(element)
-  await element.updateComplete
-  return element
-}
+  document.body.appendChild(element);
+  await element.updateComplete;
+  return element;
+};
 
-const donateLink = (element: any) => element.shadowRoot.querySelector("a").getAttribute("href")
+const donateLink = (element: any) =>
+  element.shadowRoot.querySelector("a").getAttribute("href");
 
-const meterOf = (element: any) => element.shadowRoot.querySelector("donation-meter")
+const meterOf = (element: any) =>
+  element.shadowRoot.querySelector("donation-meter");
 
 const meterStates = (element: any) => {
-  const states: string[] = []
-  element.addEventListener("donation-meter-state", (event: any) => states.push(event.detail.state))
-  return states
-}
+  const states: string[] = [];
+  element.addEventListener("donation-meter-state", (event: any) =>
+    states.push(event.detail.state),
+  );
+  return states;
+};
 
 /** `loading` is announced before the feed answers, so waiting on the link alone proves nothing. */
 const settle = async (element: any, states: string[]) => {
   for (let attempt = 0; attempt < 20; attempt++) {
-    await element.updateComplete
+    await element.updateComplete;
     if (states.length > 0 && states.at(-1) !== "loading") {
-      break
+      break;
     }
-    await new Promise((resolve) => setTimeout(resolve, 5))
+    await new Promise((resolve) => setTimeout(resolve, 5));
   }
-}
+};
 
 const campaignFeed = (campaign: Record<string, unknown>) => ({
   news: { donation_campaign: campaign },
   tagline_feed: { default: { news: [{ id: "donation_campaign" }] } },
-})
+});
 
 const mountMeteredBanner = async () => {
-  const element = document.createElement("donation-banner") as any
-  const states = meterStates(element)
-  element.setAttribute("news-url", FEED_URL)
-  document.body.appendChild(element)
-  await element.updateComplete
-  return { element, states }
-}
+  const element = document.createElement("donation-banner") as any;
+  const states = meterStates(element);
+  element.setAttribute("news-url", FEED_URL);
+  document.body.appendChild(element);
+  await element.updateComplete;
+  return { element, states };
+};
 
 const createMeteredBanner = async (body: unknown) => {
   vi.mocked(global.fetch).mockResolvedValue({
     ok: true,
     status: 200,
     json: async () => body,
-  } as Response)
+  } as Response);
 
-  const { element, states } = await mountMeteredBanner()
-  await settle(element, states)
-  return element
-}
+  const { element, states } = await mountMeteredBanner();
+  await settle(element, states);
+  return element;
+};
 
 const listItems = (element: any) =>
-  Array.from(element.shadowRoot.querySelectorAll("li")).map((item: any) => item.textContent.trim())
+  Array.from(element.shadowRoot.querySelectorAll("li")).map((item: any) =>
+    item.textContent.trim(),
+  );
 
 const ASK = [
   "keeping our database open and available to all,",
@@ -97,250 +106,278 @@ const ASK = [
   "remain independent of the food industry,",
   "engage a community of committed citizens,",
   "support the advancement of public health research.",
-]
+];
 
 beforeEach(() => {
-  vi.mocked(global.fetch).mockReset()
-  languageCode.set(DEFAULT_LANGUAGE_CODE)
-  countryCode.set("fr")
-  document.body.style.overflow = ""
-  document.body.style.paddingBottom = ""
-  document.body.innerHTML = ""
-})
+  vi.mocked(global.fetch).mockReset();
+  languageCode.set(DEFAULT_LANGUAGE_CODE);
+  countryCode.set("fr");
+  document.body.style.overflow = "";
+  document.body.style.paddingBottom = "";
+  document.body.innerHTML = "";
+});
 
 describe("donation-banner", () => {
   it("shows no meter and no extra tracking without a news feed", async () => {
-    const element = await createBanner()
+    const element = await createBanner();
 
-    expect(element.shadowRoot.querySelector("donation-meter")).toBeNull()
-    expect(donateLink(element)).not.toContain("utm_content")
-  })
+    expect(element.shadowRoot.querySelector("donation-meter")).toBeNull();
+    expect(donateLink(element)).not.toContain("utm_content");
+  });
 
   it("shows the meter and marks the donate link once the feed carries figures", async () => {
     const element = await createMeteredBanner(
-      campaignFeed({ raised: 44156, goal: 170000, currency: "EUR" })
-    )
+      campaignFeed({ raised: 44156, goal: 170000, currency: "EUR" }),
+    );
 
-    expect(meterOf(element).getAttribute("url")).toBe(FEED_URL)
-    expect(meterOf(element).shadowRoot.querySelector(".bar")).not.toBeNull()
-    expect(donateLink(element)).toContain("utm_content=meter")
-  })
+    expect(meterOf(element).getAttribute("url")).toBe(FEED_URL);
+    expect(meterOf(element).shadowRoot.querySelector(".bar")).not.toBeNull();
+    expect(donateLink(element)).toContain("utm_content=meter");
+  });
 
   it("leaves the link untagged when the feed carries no figures to show", async () => {
-    const element = await createMeteredBanner(campaignFeed({ raised: 44156, currency: "EUR" }))
+    const element = await createMeteredBanner(
+      campaignFeed({ raised: 44156, currency: "EUR" }),
+    );
 
-    expect(meterOf(element)).not.toBeNull()
-    expect(meterOf(element).shadowRoot.querySelector(".bar")).toBeNull()
-    expect(donateLink(element)).not.toContain("utm_content")
-  })
+    expect(meterOf(element)).not.toBeNull();
+    expect(meterOf(element).shadowRoot.querySelector(".bar")).toBeNull();
+    expect(donateLink(element)).not.toContain("utm_content");
+  });
 
   it("leaves the link untagged when the feed request fails", async () => {
-    vi.mocked(global.fetch).mockRejectedValue(new Error("the feed is unreachable"))
+    vi.mocked(global.fetch).mockRejectedValue(
+      new Error("the feed is unreachable"),
+    );
 
-    const { element, states } = await mountMeteredBanner()
-    await settle(element, states)
+    const { element, states } = await mountMeteredBanner();
+    await settle(element, states);
 
-    expect(meterOf(element)).not.toBeNull()
-    expect(meterOf(element).shadowRoot.querySelector(".bar")).toBeNull()
-    expect(donateLink(element)).not.toContain("utm_content")
-  })
+    expect(meterOf(element)).not.toBeNull();
+    expect(meterOf(element).shadowRoot.querySelector(".bar")).toBeNull();
+    expect(donateLink(element)).not.toContain("utm_content");
+  });
 
   it("drops the tag when the feed is taken away at runtime", async () => {
     const element = await createMeteredBanner(
-      campaignFeed({ raised: 44156, goal: 170000, currency: "EUR" })
-    )
-    expect(donateLink(element)).toContain("utm_content=meter")
+      campaignFeed({ raised: 44156, goal: 170000, currency: "EUR" }),
+    );
+    expect(donateLink(element)).toContain("utm_content=meter");
 
-    element.removeAttribute("news-url")
-    await element.updateComplete
+    element.removeAttribute("news-url");
+    await element.updateComplete;
 
-    expect(meterOf(element)).toBeNull()
-    expect(donateLink(element)).not.toContain("utm_content")
-  })
+    expect(meterOf(element)).toBeNull();
+    expect(donateLink(element)).not.toContain("utm_content");
+  });
 
   it("does not tag the link while the feed is still in flight", async () => {
-    let answer: (response: Response) => void = () => {}
+    let answer: (response: Response) => void = () => {};
     vi.mocked(global.fetch).mockReturnValue(
       new Promise<Response>((resolve) => {
-        answer = resolve
-      })
-    )
+        answer = resolve;
+      }),
+    );
 
-    const { element, states } = await mountMeteredBanner()
+    const { element, states } = await mountMeteredBanner();
     for (let attempt = 0; attempt < 20 && states.length === 0; attempt++) {
-      await element.updateComplete
-      await new Promise((resolve) => setTimeout(resolve, 5))
+      await element.updateComplete;
+      await new Promise((resolve) => setTimeout(resolve, 5));
     }
 
-    expect(states).toEqual(["loading"])
-    expect(donateLink(element)).not.toContain("utm_content")
+    expect(states).toEqual(["loading"]);
+    expect(donateLink(element)).not.toContain("utm_content");
 
     answer({
       ok: true,
       status: 200,
-      json: async () => campaignFeed({ raised: 44156, goal: 170000, currency: "EUR" }),
-    } as Response)
-    await settle(element, states)
+      json: async () =>
+        campaignFeed({ raised: 44156, goal: 170000, currency: "EUR" }),
+    } as Response);
+    await settle(element, states);
 
-    expect(donateLink(element)).toContain("utm_content=meter")
-  })
+    expect(donateLink(element)).toContain("utm_content=meter");
+  });
 
   it("ignores a late answer from a meter that has already left the page", async () => {
     const element = await createMeteredBanner(
-      campaignFeed({ raised: 44156, goal: 170000, currency: "EUR" })
-    )
-    const ghost = meterOf(element)
+      campaignFeed({ raised: 44156, goal: 170000, currency: "EUR" }),
+    );
+    const ghost = meterOf(element);
 
-    element.removeAttribute("news-url")
-    await element.updateComplete
-    const states = meterStates(element)
-    element.setAttribute("news-url", "https://example.org/other.json")
+    element.removeAttribute("news-url");
+    await element.updateComplete;
+    const states = meterStates(element);
+    element.setAttribute("news-url", "https://example.org/other.json");
     vi.mocked(global.fetch).mockResolvedValue({
       ok: true,
       status: 200,
       json: async () => campaignFeed({ raised: 44156, currency: "EUR" }),
-    } as Response)
-    await settle(element, states)
+    } as Response);
+    await settle(element, states);
 
-    expect(meterOf(element)).not.toBe(ghost)
-    expect(ghost.isConnected).toBe(false)
-    expect(donateLink(element)).not.toContain("utm_content")
+    expect(meterOf(element)).not.toBe(ghost);
+    expect(ghost.isConnected).toBe(false);
+    expect(donateLink(element)).not.toContain("utm_content");
 
     ghost.dispatchEvent(
       new CustomEvent("donation-meter-state", {
         detail: { state: "has-data" },
         bubbles: true,
         composed: true,
-      })
-    )
-    await element.updateComplete
+      }),
+    );
+    await element.updateComplete;
 
-    expect(donateLink(element)).not.toContain("utm_content")
-  })
+    expect(donateLink(element)).not.toContain("utm_content");
+  });
 
   it("still tags the link when the feed answers while the banner is off the page", async () => {
-    let answer: (response: Response) => void = () => {}
+    let answer: (response: Response) => void = () => {};
     vi.mocked(global.fetch).mockReturnValue(
       new Promise<Response>((resolve) => {
-        answer = resolve
-      })
-    )
+        answer = resolve;
+      }),
+    );
 
-    const { element } = await mountMeteredBanner()
-    element.remove()
+    const { element } = await mountMeteredBanner();
+    element.remove();
     answer({
       ok: true,
       status: 200,
-      json: async () => campaignFeed({ raised: 44156, goal: 170000, currency: "EUR" }),
-    } as Response)
-    await new Promise((resolve) => setTimeout(resolve, 5))
+      json: async () =>
+        campaignFeed({ raised: 44156, goal: 170000, currency: "EUR" }),
+    } as Response);
+    await new Promise((resolve) => setTimeout(resolve, 5));
 
-    const states = meterStates(element)
-    document.body.appendChild(element)
-    await settle(element, states)
+    const states = meterStates(element);
+    document.body.appendChild(element);
+    await settle(element, states);
 
-    expect(meterOf(element).shadowRoot.querySelector(".bar")).not.toBeNull()
-    expect(donateLink(element)).toContain("utm_content=meter")
-  })
+    expect(meterOf(element).shadowRoot.querySelector(".bar")).not.toBeNull();
+    expect(donateLink(element)).toContain("utm_content=meter");
+  });
 
   it("keeps the donation ask itself unchanged either way", async () => {
-    const plain = await createBanner()
-    const metered = await createBanner({ "news-url": FEED_URL })
+    const plain = await createBanner();
+    const metered = await createBanner({ "news-url": FEED_URL });
 
-    expect(listItems(plain)).toEqual(ASK)
-    expect(listItems(metered)).toEqual(ASK)
-    expect(plain.shadowRoot.querySelector("button").textContent.trim()).toBe("I SUPPORT")
-    expect(metered.shadowRoot.querySelector("button").textContent.trim()).toBe("I SUPPORT")
-  })
+    expect(listItems(plain)).toEqual(ASK);
+    expect(listItems(metered)).toEqual(ASK);
+    expect(plain.shadowRoot.querySelector("button").textContent.trim()).toBe(
+      "I SUPPORT",
+    );
+    expect(metered.shadowRoot.querySelector("button").textContent.trim()).toBe(
+      "I SUPPORT",
+    );
+  });
 
   it("displays the updated title, hook, financial callout and community image", async () => {
-    const element = await createBanner()
+    const element = await createBanner();
 
     expect(
-      element.shadowRoot.querySelector(".donation-banner-footer__main-title").textContent.trim()
-    ).toBe("Become an Open Food Facts patron")
+      element.shadowRoot
+        .querySelector(".donation-banner-footer__main-title")
+        .textContent.trim(),
+    ).toBe("Become an Open Food Facts patron");
     expect(
-      element.shadowRoot.querySelector(".donation-banner-footer__hook-section p").textContent.trim()
-    ).toBe("We still need €120,000 to finish 2026!")
+      element.shadowRoot
+        .querySelector(".donation-banner-footer__hook-section p")
+        .textContent.trim(),
+    ).toBe("We still need €120,000 to finish 2026!");
     expect(
       element.shadowRoot
         .querySelector(".donation-banner-footer__actions-section__financial p")
-        .textContent.trim()
+        .textContent.trim(),
     ).toBe(
-      "If every visitor this month clicked on Donate and gave just 1€, we'd get over 8 times our yearly budget!"
-    )
-    expect(element.shadowRoot.querySelector("img.group-image")).not.toBeNull()
-  })
+      "If every visitor this month clicked on Donate and gave just 1€, we'd get over 8 times our yearly budget!",
+    );
+    expect(element.shadowRoot.querySelector("img.group-image")).not.toBeNull();
+  });
 
   it("supports custom donate-url attribute", async () => {
-    const element = await createBanner({ "donate-url": "https://example.org/custom-donate" })
+    const element = await createBanner({
+      "donate-url": "https://example.org/custom-donate",
+    });
 
-    const href = donateLink(element)
-    expect(href).toContain("https://example.org/custom-donate")
-    expect(href).toContain("utm_source=off")
-  })
+    const href = donateLink(element);
+    expect(href).toContain("https://example.org/custom-donate");
+    expect(href).toContain("utm_source=off");
+  });
 
   it("supports custom donate-link attribute", async () => {
-    const element = await createBanner({ "donate-link": "https://example.org/from-server-link" })
+    const element = await createBanner({
+      "donate-link": "https://example.org/from-server-link",
+    });
 
-    const href = donateLink(element)
-    expect(href).toContain("https://example.org/from-server-link")
-    expect(href).toContain("utm_source=off")
-  })
+    const href = donateLink(element);
+    expect(href).toContain("https://example.org/from-server-link");
+    expect(href).toContain("utm_source=off");
+  });
 
   it("refuses a donate link that is not an http(s) URL", async () => {
-    const element = await createBanner({ "donate-url": "javascript:alert(document.cookie)//" })
+    const element = await createBanner({
+      "donate-url": "javascript:alert(document.cookie)//",
+    });
 
-    const href = donateLink(element)
-    expect(href.startsWith("javascript:")).toBe(false)
-    expect(href).toContain("https://world.openfoodfacts.org/donate-to-open-food-facts")
-  })
+    const href = donateLink(element);
+    expect(href.startsWith("javascript:")).toBe(false);
+    expect(href).toContain(
+      "https://world.openfoodfacts.org/donate-to-open-food-facts",
+    );
+  });
 
   it("localizes the donation link and utm_term for Japanese (/kifu)", async () => {
-    languageCode.set("ja")
-    const element = await createBanner()
+    languageCode.set("ja");
+    const element = await createBanner();
 
-    const href = donateLink(element)
-    expect(href).toContain("https://world-ja.openfoodfacts.org/kifu")
-    expect(href).toContain("utm_term=ja-text-button")
-  })
+    const href = donateLink(element);
+    expect(href).toContain("https://world-ja.openfoodfacts.org/kifu");
+    expect(href).toContain("utm_term=ja-text-button");
+  });
 
   it("normalizes locale with country code such as fr-FR to French donation link", async () => {
-    languageCode.set("fr-FR")
-    const element = await createBanner()
+    languageCode.set("fr-FR");
+    const element = await createBanner();
 
-    const href = donateLink(element)
-    expect(href).toContain("https://open-food-facts.assoconnect.com")
-    expect(href).toContain("utm_term=fr-text-button")
-  })
+    const href = donateLink(element);
+    expect(href).toContain("https://open-food-facts.assoconnect.com");
+    expect(href).toContain("utm_term=fr-text-button");
+  });
 
   it("normalizes locale with country code such as es-ES to localized Spanish link (/donar-a-open-food-facts)", async () => {
-    languageCode.set("es-ES")
-    const element = await createBanner()
+    languageCode.set("es-ES");
+    const element = await createBanner();
 
-    const href = donateLink(element)
-    expect(href).toContain("https://world-es.openfoodfacts.org/donar-a-open-food-facts")
-    expect(href).toContain("utm_term=es-text-button")
-  })
+    const href = donateLink(element);
+    expect(href).toContain(
+      "https://world-es.openfoodfacts.org/donar-a-open-food-facts",
+    );
+    expect(href).toContain("utm_term=es-text-button");
+  });
 
   it("supports localized Finnish donation link (/lahjoita-open-food-factsille)", async () => {
-    languageCode.set("fi")
-    const element = await createBanner()
+    languageCode.set("fi");
+    const element = await createBanner();
 
-    const href = donateLink(element)
-    expect(href).toContain("https://world-fi.openfoodfacts.org/lahjoita-open-food-factsille")
-    expect(href).toContain("utm_term=fi-text-button")
-  })
+    const href = donateLink(element);
+    expect(href).toContain(
+      "https://world-fi.openfoodfacts.org/lahjoita-open-food-factsille",
+    );
+    expect(href).toContain("utm_term=fi-text-button");
+  });
 
   it("falls back to generic world-<locale> donate url when no localized slug exists", async () => {
-    languageCode.set("ch")
-    const element = await createBanner()
+    languageCode.set("ch");
+    const element = await createBanner();
 
-    const href = donateLink(element)
-    expect(href).toContain("https://world-ch.openfoodfacts.org/donate-to-open-food-facts")
-    expect(href).toContain("utm_term=ch-text-button")
-  })
-})
+    const href = donateLink(element);
+    expect(href).toContain(
+      "https://world-ch.openfoodfacts.org/donate-to-open-food-facts",
+    );
+    expect(href).toContain("utm_term=ch-text-button");
+  });
+});
 
 /** The literal 1.18.0 render, captured before the variants were added. */
 const DEFAULT_MARKUP = (nextYear: string) => `<section class="  ">
@@ -393,28 +430,34 @@ const DEFAULT_MARKUP = (nextYear: string) => `<section class="  ">
           </div>
         </div>
       </div>
-    </section>`
+    </section>`;
 
-const nextYear = () => (new Date().getFullYear() + 1).toString()
+const nextYear = () => (new Date().getFullYear() + 1).toString();
 
 const markup = (element: any) =>
-  element.shadowRoot.querySelector("section").outerHTML.replace(/<!--.*?-->/g, "")
+  element.shadowRoot
+    .querySelector("section")
+    .outerHTML.replace(/<!--.*?-->/g, "");
 
 const text = (element: any) =>
-  (element.shadowRoot.querySelector("section")?.textContent ?? "").replace(/\s+/g, " ").trim()
+  (element.shadowRoot.querySelector("section")?.textContent ?? "")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const bannerEvents = (element: any) => {
-  const detail: any[] = []
-  element.addEventListener("donation-banner-state", (event: any) => detail.push(event.detail))
-  return detail
-}
+  const detail: any[] = [];
+  element.addEventListener("donation-banner-state", (event: any) =>
+    detail.push(event.detail),
+  );
+  return detail;
+};
 
 const settleTask = async (element: any) => {
   for (let attempt = 0; attempt < 20; attempt++) {
-    await element.updateComplete
-    await new Promise((resolve) => setTimeout(resolve, 5))
+    await element.updateComplete;
+    await new Promise((resolve) => setTimeout(resolve, 5));
   }
-}
+};
 
 /** A feed item shaped like `donation_campaign_2026`, with the fixture's figures by default. */
 const feedItem = (overrides: Record<string, unknown> = {}) => ({
@@ -425,163 +468,186 @@ const feedItem = (overrides: Record<string, unknown> = {}) => ({
   count: 760,
   end_date: "2027-01-31 23:59:59",
   ...overrides,
-})
+});
 
 const feed = (item: Record<string, unknown> = {}, id = "camp") => ({
   news: { [id]: feedItem(item) },
   tagline_feed: { default: { news: [{ id }] } },
-})
+});
 
 const mountVariant = async (
   variant: string,
   attributes: Record<string, string> = {},
-  body?: unknown
+  body?: unknown,
 ) => {
   if (body !== undefined) {
     vi.mocked(global.fetch).mockResolvedValue({
       ok: true,
       status: 200,
       json: async () => body,
-    } as Response)
+    } as Response);
   }
-  const element = document.createElement("donation-banner") as any
-  element.setAttribute("variant", variant)
+  const element = document.createElement("donation-banner") as any;
+  element.setAttribute("variant", variant);
   for (const [key, value] of Object.entries(attributes)) {
-    element.setAttribute(key, value)
+    element.setAttribute(key, value);
   }
-  document.body.appendChild(element)
-  await element.updateComplete
+  document.body.appendChild(element);
+  await element.updateComplete;
   if (attributes["news-url"] && attributes["news-id"]) {
-    await settleTask(element)
+    await settleTask(element);
   }
-  return element
-}
+  return element;
+};
 
 describe("donation-banner variants", () => {
   describe("default render pinned to upstream/main", () => {
     it("renders byte-identical markup with no new attributes", async () => {
-      const element = await createBanner()
-      expect(markup(element)).toBe(DEFAULT_MARKUP(nextYear()))
-    })
+      const element = await createBanner();
+      expect(markup(element)).toBe(DEFAULT_MARKUP(nextYear()));
+    });
 
     it("stays pinned with donate-url set", async () => {
-      const element = await createBanner({ "donate-url": "https://example.org/x" })
-      expect(listItems(element)).toEqual(ASK)
-      expect(element.shadowRoot.querySelector("img.group-image")).not.toBeNull()
-      expect(element.shadowRoot.querySelector("button").textContent.trim()).toBe("I SUPPORT")
-    })
+      const element = await createBanner({
+        "donate-url": "https://example.org/x",
+      });
+      expect(listItems(element)).toEqual(ASK);
+      expect(
+        element.shadowRoot.querySelector("img.group-image"),
+      ).not.toBeNull();
+      expect(
+        element.shadowRoot.querySelector("button").textContent.trim(),
+      ).toBe("I SUPPORT");
+    });
 
     it("stays pinned with current-year set explicitly", async () => {
-      const element = await createBanner({ "current-year": "2026" })
-      expect(markup(element)).toBe(DEFAULT_MARKUP("2026"))
-    })
+      const element = await createBanner({ "current-year": "2026" });
+      expect(markup(element)).toBe(DEFAULT_MARKUP("2026"));
+    });
 
     it("falls back to the default render for an unknown variant", async () => {
-      const element = await createBanner({ variant: "foo" })
-      expect(markup(element)).toBe(DEFAULT_MARKUP(nextYear()))
-    })
+      const element = await createBanner({ variant: "foo" });
+      expect(markup(element)).toBe(DEFAULT_MARKUP(nextYear()));
+    });
 
     it("keeps its own meter colour with news-url: no unscoped donation-meter rule in the adopted styles", async () => {
       const element = await createMeteredBanner(
-        campaignFeed({ raised: 44156, goal: 170000, currency: "EUR" })
-      )
-      expect(meterOf(element).getAttribute("url")).toBe(FEED_URL)
+        campaignFeed({ raised: 44156, goal: 170000, currency: "EUR" }),
+      );
+      expect(meterOf(element).getAttribute("url")).toBe(FEED_URL);
 
       // jsdom does not cascade custom properties, so the check is on the CSS
       // text every variant and the default adopt into the same shadow root.
       const cssText = element.constructor.styles
         .map((sheet: any) => sheet.cssText)
         .join("\n")
-        .replace(/\/\*[\s\S]*?\*\//g, "")
+        .replace(/\/\*[\s\S]*?\*\//g, "");
       const selectors = (cssText.match(/[^{}]+(?=\{)/g) as string[])
         .flatMap((list) => list.split(","))
-        .map((selector) => selector.trim())
-      expect(selectors.filter((selector) => selector.endsWith("donation-meter"))).not.toHaveLength(
-        0
-      )
-      expect(selectors).not.toContain("donation-meter")
-    })
-  })
+        .map((selector) => selector.trim());
+      expect(
+        selectors.filter((selector) => selector.endsWith("donation-meter")),
+      ).not.toHaveLength(0);
+      expect(selectors).not.toContain("donation-meter");
+    });
+  });
 
   describe("variant selection", () => {
     it("renders none of the default's photo or list in any variant", async () => {
       for (const variant of ["campaign", "strip", "sheet", "bar"]) {
-        const element = await mountVariant(variant)
-        expect(element.shadowRoot.querySelector("img.group-image")).toBeNull()
-        expect(element.shadowRoot.querySelector("li")).toBeNull()
+        const element = await mountVariant(variant);
+        expect(element.shadowRoot.querySelector("img.group-image")).toBeNull();
+        expect(element.shadowRoot.querySelector("li")).toBeNull();
       }
-    })
-  })
+    });
+  });
 
   describe("campaign, no news-id: built-in copy, no figures", () => {
     it("renders the count-less headline, paragraph, tiers and fine print", async () => {
-      const element = await mountVariant("campaign", { amounts: "3,5,10" })
+      const element = await mountVariant("campaign", { amounts: "3,5,10" });
 
-      expect(text(element)).toContain("Join the people keeping Open Food Facts free.")
-      expect(text(element)).toContain("4.6 million products kept open by volunteers.")
-      expect(text(element)).not.toContain("We need")
-      expect(text(element)).toContain("Most popular")
-      expect(text(element)).toContain("Give €5 a month")
-      expect(text(element)).toContain("Cancel any time.")
-      expect(text(element)).toContain("Receipt by email.")
-      expect(element.shadowRoot.querySelector("donation-meter")).toBeNull()
-      expect(global.fetch).not.toHaveBeenCalled()
-    })
+      expect(text(element)).toContain(
+        "Join the people keeping Open Food Facts free.",
+      );
+      expect(text(element)).toContain(
+        "4.6 million products kept open by volunteers.",
+      );
+      expect(text(element)).not.toContain("We need");
+      expect(text(element)).toContain("Most popular");
+      expect(text(element)).toContain("Give €5 a month");
+      expect(text(element)).toContain("Cancel any time.");
+      expect(text(element)).toContain("Receipt by email.");
+      expect(element.shadowRoot.querySelector("donation-meter")).toBeNull();
+      expect(global.fetch).not.toHaveBeenCalled();
+    });
 
     it("shows Support with no amount/interval when amounts is absent", async () => {
-      const element = await mountVariant("campaign")
-      expect(text(element)).toContain("Support")
-      const href = element.shadowRoot.querySelector("a.give").getAttribute("href")
-      expect(href).not.toContain("amount=")
-      expect(href).not.toContain("interval=")
-    })
+      const element = await mountVariant("campaign");
+      expect(text(element)).toContain("Support");
+      const href = element.shadowRoot
+        .querySelector("a.give")
+        .getAttribute("href");
+      expect(href).not.toContain("amount=");
+      expect(href).not.toContain("interval=");
+    });
 
     it("'I already donated' fires already-donated", async () => {
-      const element = await mountVariant("campaign", { amounts: "3,5,10" })
-      const detail = bannerEvents(element)
+      const element = await mountVariant("campaign", { amounts: "3,5,10" });
+      const detail = bannerEvents(element);
       Array.from(element.shadowRoot.querySelectorAll(".link"))
         .find((btn: any) => btn.textContent.includes("I already donated"))!
         // @ts-expect-error test DOM node
-        .click()
-      expect(detail).toEqual([{ action: "already-donated", variant: "campaign" }])
-    })
-  })
+        .click();
+      expect(detail).toEqual([
+        { action: "already-donated", variant: "campaign" },
+      ]);
+    });
+  });
 
   describe("campaign, with news-id: feed copy and figures, one fetch", () => {
     it("renders the feed's figures and mounts the meter with .funding, no url", async () => {
       const element = await mountVariant(
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
-        feed()
-      )
+        feed(),
+      );
 
-      expect(text(element)).toContain("Join the 760 people keeping Open Food Facts free.")
-      expect(text(element)).toContain("€170,000")
-      const meter = element.shadowRoot.querySelector("donation-meter")
-      const meterText = (meter.shadowRoot.textContent as string).replace(/\s+/g, " ")
-      expect(meterText).toContain("€47,431")
-      expect(meterText).toContain("raised of €170,000")
-      expect(meterText).toContain("760 supporters")
-      expect(meterText).toContain("January 31")
-      expect(meter.funding).toEqual({ raised: 47431, goal: 170000, currency: "EUR" })
-      expect(meter.hasAttribute("url")).toBe(false)
-      expect(global.fetch).toHaveBeenCalledTimes(1)
-    })
+      expect(text(element)).toContain(
+        "Join the 760 people keeping Open Food Facts free.",
+      );
+      expect(text(element)).toContain("€170,000");
+      const meter = element.shadowRoot.querySelector("donation-meter");
+      const meterText = (meter.shadowRoot.textContent as string).replace(
+        /\s+/g,
+        " ",
+      );
+      expect(meterText).toContain("€47,431");
+      expect(meterText).toContain("raised of €170,000");
+      expect(meterText).toContain("760 supporters");
+      expect(meterText).toContain("January 31");
+      expect(meter.funding).toEqual({
+        raised: 47431,
+        goal: 170000,
+        currency: "EUR",
+      });
+      expect(meter.hasAttribute("url")).toBe(false);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
 
     it("does not refetch when swapping between variants with the same news-id", async () => {
       const element = await mountVariant(
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
-        feed()
-      )
-      expect(global.fetch).toHaveBeenCalledTimes(1)
+        feed(),
+      );
+      expect(global.fetch).toHaveBeenCalledTimes(1);
 
-      element.setAttribute("variant", "bar")
-      await settleTask(element)
+      element.setAttribute("variant", "bar");
+      await settleTask(element);
 
-      expect(global.fetch).toHaveBeenCalledTimes(1)
-    })
-  })
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
+  });
 
   describe("feed override", () => {
     it("replaces the six slots on the page locale and fills placeholders", async () => {
@@ -599,60 +665,76 @@ describe("donation-banner variants", () => {
               tier_note: "unlocks {amount} perks",
             },
           },
-        })
-      )
+        }),
+      );
 
-      expect(text(element)).toContain("Feed headline")
-      expect(text(element)).toContain("Feed body €47,431 of €170,000")
-      expect(text(element)).toContain("Feed give €5")
-      expect(text(element)).toContain("Feed fine print")
-      expect(text(element)).toContain("unlocks €5 perks")
-    })
+      expect(text(element)).toContain("Feed headline");
+      expect(text(element)).toContain("Feed body €47,431 of €170,000");
+      expect(text(element)).toContain("Feed give €5");
+      expect(text(element)).toContain("Feed fine print");
+      expect(text(element)).toContain("unlocks €5 perks");
+    });
 
     it("removes a placeholder that names an inherited property, not an own value", async () => {
       const element = await mountVariant(
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
-        feed({ translations: { en: { title: "Feed {constructor} headline", message: "M" } } })
-      )
+        feed({
+          translations: {
+            en: { title: "Feed {constructor} headline", message: "M" },
+          },
+        }),
+      );
 
-      expect(text(element)).toContain("Feed headline")
-      expect(text(element)).not.toContain("function")
-    })
+      expect(text(element)).toContain("Feed headline");
+      expect(text(element)).not.toContain("function");
+    });
 
     it("ignores a feed slot that is not a string and keeps the built-in", async () => {
       const element = await mountVariant(
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
-        feed({ translations: { en: { title: 123, message: ["M"], hook: null } } })
-      )
+        feed({
+          translations: { en: { title: 123, message: ["M"], hook: null } },
+        }),
+      );
 
-      expect(text(element)).toContain("Join the 760 people keeping Open Food Facts free.")
-      expect(text(element)).not.toContain("123")
-      expect(text(element)).toContain("4.6 million products")
-    })
+      expect(text(element)).toContain(
+        "Join the 760 people keeping Open Food Facts free.",
+      );
+      expect(text(element)).not.toContain("123");
+      expect(text(element)).toContain("4.6 million products");
+    });
 
     it("falls back to built-in sentences for keys the feed omits", async () => {
       const element = await mountVariant(
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
-        feed({ translations: { en: { title: "Feed headline", message: "M" } } })
-      )
+        feed({
+          translations: { en: { title: "Feed headline", message: "M" } },
+        }),
+      );
 
-      expect(text(element)).toContain("Feed headline")
-      expect(text(element)).toContain("Give €5 a month")
-    })
+      expect(text(element)).toContain("Feed headline");
+      expect(text(element)).toContain("Give €5 a month");
+    });
 
     it("does not use a default-only translation to override the built-in headline (orchestrator override)", async () => {
       const element = await mountVariant(
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
-        feed({ translations: { default: { title: "Default-only headline", message: "M" } } })
-      )
+        feed({
+          translations: {
+            default: { title: "Default-only headline", message: "M" },
+          },
+        }),
+      );
 
-      expect(text(element)).not.toContain("Default-only headline")
-      expect(text(element)).toContain("Join the 760 people keeping Open Food Facts free.")
-    })
+      expect(text(element)).not.toContain("Default-only headline");
+      expect(text(element)).toContain(
+        "Join the 760 people keeping Open Food Facts free.",
+      );
+    });
 
     it("uses a translations.en title on an en page", async () => {
       const element = await mountVariant(
@@ -663,17 +745,17 @@ describe("donation-banner variants", () => {
             en: { title: "EN headline", message: "M" },
             default: { title: "Default headline", message: "M" },
           },
-        })
-      )
+        }),
+      );
 
-      expect(text(element)).toContain("EN headline")
-      expect(text(element)).not.toContain("Default headline")
-    })
-  })
+      expect(text(element)).toContain("EN headline");
+      expect(text(element)).not.toContain("Default headline");
+    });
+  });
 
   describe("locale fallback", () => {
     it("prefers the full locale key over the short one", async () => {
-      languageCode.set("pt-BR")
+      languageCode.set("pt-BR");
       const element = await mountVariant(
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
@@ -682,88 +764,103 @@ describe("donation-banner variants", () => {
             pt_BR: { title: "PT-BR title", message: "M" },
             pt: { title: "PT title", message: "M" },
           },
-        })
-      )
-      expect(text(element)).toContain("PT-BR title")
-    })
+        }),
+      );
+      expect(text(element)).toContain("PT-BR title");
+    });
 
     it("falls back to the short locale when the full one is missing", async () => {
-      languageCode.set("pt-BR")
+      languageCode.set("pt-BR");
       const element = await mountVariant(
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
-        feed({ translations: { pt: { title: "PT title", message: "M" } } })
-      )
-      expect(text(element)).toContain("PT title")
-    })
+        feed({ translations: { pt: { title: "PT title", message: "M" } } }),
+      );
+      expect(text(element)).toContain("PT title");
+    });
 
     it("falls back to built-in copy when neither pt_BR nor pt is present", async () => {
-      languageCode.set("pt-BR")
+      languageCode.set("pt-BR");
       const element = await mountVariant(
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
-        feed({ translations: { default: { title: "Default title", message: "M" } } })
-      )
-      expect(text(element)).not.toContain("Default title")
-      expect(text(element)).toContain("Join the 760 people keeping Open Food Facts free.")
-    })
-  })
+        feed({
+          translations: { default: { title: "Default title", message: "M" } },
+        }),
+      );
+      expect(text(element)).not.toContain("Default title");
+      expect(text(element)).toContain(
+        "Join the 760 people keeping Open Food Facts free.",
+      );
+    });
+  });
 
   describe("feed errors and unknown/disabled items", () => {
     it("renders built-in copy with no throw or console.error on a rejected fetch", async () => {
-      vi.mocked(global.fetch).mockRejectedValue(new Error("offline"))
+      vi.mocked(global.fetch).mockRejectedValue(new Error("offline"));
       const element = await mountVariant("campaign", {
         "news-url": FEED_URL,
         "news-id": "camp",
         amounts: "3,5,10",
-      })
-      await settleTask(element)
+      });
+      await settleTask(element);
 
-      expect(text(element)).toContain("Join the people keeping Open Food Facts free.")
-      expect(element.shadowRoot.querySelector("donation-meter")).toBeNull()
-      expect(console.error).not.toHaveBeenCalled()
-    })
+      expect(text(element)).toContain(
+        "Join the people keeping Open Food Facts free.",
+      );
+      expect(element.shadowRoot.querySelector("donation-meter")).toBeNull();
+      expect(console.error).not.toHaveBeenCalled();
+    });
 
     it("renders built-in copy on a non-JSON body", async () => {
       vi.mocked(global.fetch).mockResolvedValue({
         ok: true,
         status: 200,
         json: async () => {
-          throw new Error("not json")
+          throw new Error("not json");
         },
-      } as unknown as Response)
+      } as unknown as Response);
       const element = await mountVariant("campaign", {
         "news-url": FEED_URL,
         "news-id": "camp",
         amounts: "3,5,10",
-      })
-      await settleTask(element)
+      });
+      await settleTask(element);
 
-      expect(text(element)).toContain("Join the people keeping Open Food Facts free.")
-      expect(console.error).not.toHaveBeenCalled()
-    })
+      expect(text(element)).toContain(
+        "Join the people keeping Open Food Facts free.",
+      );
+      expect(console.error).not.toHaveBeenCalled();
+    });
 
     it("renders built-in copy on an HTTP 500", async () => {
       const element = await mountVariant(
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
-        undefined
-      )
-      vi.mocked(global.fetch).mockResolvedValue({ ok: false, status: 500 } as Response)
-      element.setAttribute("news-id", "camp2")
-      await settleTask(element)
+        undefined,
+      );
+      vi.mocked(global.fetch).mockResolvedValue({
+        ok: false,
+        status: 500,
+      } as Response);
+      element.setAttribute("news-id", "camp2");
+      await settleTask(element);
 
-      expect(text(element)).toContain("Join the people keeping Open Food Facts free.")
-    })
+      expect(text(element)).toContain(
+        "Join the people keeping Open Food Facts free.",
+      );
+    });
 
     it("renders built-in copy for a news-id the feed does not carry", async () => {
       const element = await mountVariant(
         "campaign",
         { "news-url": FEED_URL, "news-id": "missing", amounts: "3,5,10" },
-        feed()
-      )
-      expect(text(element)).toContain("Join the people keeping Open Food Facts free.")
-    })
+        feed(),
+      );
+      expect(text(element)).toContain(
+        "Join the people keeping Open Food Facts free.",
+      );
+    });
 
     it("renders built-in copy when the item has no translations object", async () => {
       const element = await mountVariant(
@@ -772,163 +869,200 @@ describe("donation-banner variants", () => {
         {
           news: { camp: { raised: 1, goal: 2, currency: "EUR" } },
           tagline_feed: { default: { news: [{ id: "camp" }] } },
-        }
-      )
-      expect(text(element)).toContain("Join the people keeping Open Food Facts free.")
-    })
+        },
+      );
+      expect(text(element)).toContain(
+        "Join the people keeping Open Food Facts free.",
+      );
+    });
 
     it("still renders a disabled or ended item's copy and figures: the page named it", async () => {
       const element = await mountVariant(
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
-        feed({ enabled: false, start_date: "2000-01-01", end_date: "2001-01-01" })
-      )
-      expect(text(element)).toContain("Join the 760 people keeping Open Food Facts free.")
-      const meter = element.shadowRoot.querySelector("donation-meter")
-      expect(meter.shadowRoot.textContent as string).toContain("€47,431")
-    })
-  })
+        feed({
+          enabled: false,
+          start_date: "2000-01-01",
+          end_date: "2001-01-01",
+        }),
+      );
+      expect(text(element)).toContain(
+        "Join the 760 people keeping Open Food Facts free.",
+      );
+      const meter = element.shadowRoot.querySelector("donation-meter");
+      expect(meter.shadowRoot.textContent as string).toContain("€47,431");
+    });
+  });
 
   describe("edge cases: count, end_date, figures", () => {
     it("drops {count} and its surrounding space from a feed string when count is absent", async () => {
       const element = await mountVariant(
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
-        feed({ count: undefined, translations: { en: { title: "X {count} Y", message: "M" } } })
-      )
-      expect(text(element)).toContain("X Y")
-    })
+        feed({
+          count: undefined,
+          translations: { en: { title: "X {count} Y", message: "M" } },
+        }),
+      );
+      expect(text(element)).toContain("X Y");
+    });
 
     it("omits the supporters part of the meter line when count is absent", async () => {
       const element = await mountVariant(
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
-        feed({ count: undefined })
-      )
-      const meter = element.shadowRoot.querySelector("donation-meter")
-      expect((meter.shadowRoot.textContent as string).replace(/\s+/g, " ")).not.toContain(
-        "supporters"
-      )
-    })
+        feed({ count: undefined }),
+      );
+      const meter = element.shadowRoot.querySelector("donation-meter");
+      expect(
+        (meter.shadowRoot.textContent as string).replace(/\s+/g, " "),
+      ).not.toContain("supporters");
+    });
 
     it("omits 'until' for a missing or invalid end_date", async () => {
       const element = await mountVariant(
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
-        feed({ end_date: undefined })
-      )
-      const meter = element.shadowRoot.querySelector("donation-meter")
-      expect(meter.shadowRoot.textContent as string).not.toContain("until")
-    })
+        feed({ end_date: undefined }),
+      );
+      const meter = element.shadowRoot.querySelector("donation-meter");
+      expect(meter.shadowRoot.textContent as string).not.toContain("until");
+    });
 
     it("renders no meter and no bar when the figures do not parse", async () => {
       const element = await mountVariant(
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
-        feed({ currency: "12$" })
-      )
-      expect(element.shadowRoot.querySelector("donation-meter")).toBeNull()
-      expect(text(element)).toContain("Give €5 a month")
-    })
-  })
+        feed({ currency: "12$" }),
+      );
+      expect(element.shadowRoot.querySelector("donation-meter")).toBeNull();
+      expect(text(element)).toContain("Give €5 a month");
+    });
+  });
 
   describe("amounts / selected / tier click", () => {
     it("preselects the lower-middle tier of an even-count ladder", async () => {
-      const element = await mountVariant("campaign", { amounts: "3,5,10,20" })
-      const selected = element.shadowRoot.querySelector(".tier.selected")
-      expect(selected.textContent).toContain("€5")
-    })
+      const element = await mountVariant("campaign", { amounts: "3,5,10,20" });
+      const selected = element.shadowRoot.querySelector(".tier.selected");
+      expect(selected.textContent).toContain("€5");
+    });
 
     it("falls back to the middle when selected is not in amounts", async () => {
-      const element = await mountVariant("campaign", { amounts: "3,5,10", selected: "7" })
-      const selected = element.shadowRoot.querySelector(".tier.selected")
-      expect(selected.textContent).toContain("€5")
-    })
+      const element = await mountVariant("campaign", {
+        amounts: "3,5,10",
+        selected: "7",
+      });
+      const selected = element.shadowRoot.querySelector(".tier.selected");
+      expect(selected.textContent).toContain("€5");
+    });
 
     it("drops non-numeric entries and keeps the valid ones", async () => {
-      const element = await mountVariant("campaign", { amounts: "3,abc,10" })
-      const tiers = Array.from(element.shadowRoot.querySelectorAll(".tier:not(.other)"))
-      expect(tiers).toHaveLength(2)
-    })
+      const element = await mountVariant("campaign", { amounts: "3,abc,10" });
+      const tiers = Array.from(
+        element.shadowRoot.querySelectorAll(".tier:not(.other)"),
+      );
+      expect(tiers).toHaveLength(2);
+    });
 
     it("shows no tiers, no tier note, Support, no amount/interval when amounts is empty or absent", async () => {
-      const empty = await mountVariant("campaign", { amounts: "" })
-      expect(empty.shadowRoot.querySelector(".tier")).toBeNull()
-      expect(text(empty)).toContain("Support")
-      const href = empty.shadowRoot.querySelector("a.give").getAttribute("href")
-      expect(href).not.toContain("amount=")
-      expect(href).not.toContain("interval=")
-    })
+      const empty = await mountVariant("campaign", { amounts: "" });
+      expect(empty.shadowRoot.querySelector(".tier")).toBeNull();
+      expect(text(empty)).toContain("Support");
+      const href = empty.shadowRoot
+        .querySelector("a.give")
+        .getAttribute("href");
+      expect(href).not.toContain("amount=");
+      expect(href).not.toContain("interval=");
+    });
 
     it("moves the selection on tier click without moving the badge or firing an event", async () => {
-      const element = await mountVariant("campaign", { amounts: "3,5,10" })
-      const detail = bannerEvents(element)
+      const element = await mountVariant("campaign", { amounts: "3,5,10" });
+      const detail = bannerEvents(element);
       const tiers = Array.from(
-        element.shadowRoot.querySelectorAll(".tier:not(.other)")
-      ) as HTMLElement[]
-      const tenEuro = tiers.find((tier) => tier.textContent?.includes("€10"))!
-      tenEuro.click()
-      await element.updateComplete
+        element.shadowRoot.querySelectorAll(".tier:not(.other)"),
+      ) as HTMLElement[];
+      const tenEuro = tiers.find((tier) => tier.textContent?.includes("€10"))!;
+      tenEuro.click();
+      await element.updateComplete;
 
-      expect(element.shadowRoot.querySelector(".tier.selected").textContent).toContain("€10")
-      expect(element.shadowRoot.querySelector(".badge").closest(".tier").textContent).toContain(
-        "€5"
-      )
-      expect(text(element)).toContain("Give €10 a month")
-      const href = element.shadowRoot.querySelector("a.give").getAttribute("href")
-      expect(href).toContain("amount=10")
-      expect(href).toContain("interval=1M")
-      expect(detail).toHaveLength(0)
-    })
+      expect(
+        element.shadowRoot.querySelector(".tier.selected").textContent,
+      ).toContain("€10");
+      expect(
+        element.shadowRoot.querySelector(".badge").closest(".tier").textContent,
+      ).toContain("€5");
+      expect(text(element)).toContain("Give €10 a month");
+      const href = element.shadowRoot
+        .querySelector("a.give")
+        .getAttribute("href");
+      expect(href).toContain("amount=10");
+      expect(href).toContain("interval=1M");
+      expect(detail).toHaveLength(0);
+    });
 
     it("navigates Other at once with interval=1T, no amount, and fires click", async () => {
-      const element = await mountVariant("campaign", { amounts: "3,5,10" })
-      const detail = bannerEvents(element)
-      const other = element.shadowRoot.querySelector("a.other")
-      expect(other.getAttribute("href")).toContain("interval=1T")
-      expect(other.getAttribute("href")).not.toContain("amount=")
+      const element = await mountVariant("campaign", { amounts: "3,5,10" });
+      const detail = bannerEvents(element);
+      const other = element.shadowRoot.querySelector("a.other");
+      expect(other.getAttribute("href")).toContain("interval=1T");
+      expect(other.getAttribute("href")).not.toContain("amount=");
 
-      other.click()
+      other.click();
 
-      expect(detail).toEqual([{ action: "click", variant: "campaign", interval: "1T" }])
-    })
-  })
+      expect(detail).toEqual([
+        { action: "click", variant: "campaign", interval: "1T" },
+      ]);
+    });
+  });
 
   describe("utm-content", () => {
     it("overrides the automatic meter tag", async () => {
       const element = await mountVariant(
         "campaign",
-        { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10", "utm-content": "A" },
-        feed()
-      )
-      const href = element.shadowRoot.querySelector("a.give").getAttribute("href")
-      expect(href).toContain("utm_content=A")
-    })
+        {
+          "news-url": FEED_URL,
+          "news-id": "camp",
+          amounts: "3,5,10",
+          "utm-content": "A",
+        },
+        feed(),
+      );
+      const href = element.shadowRoot
+        .querySelector("a.give")
+        .getAttribute("href");
+      expect(href).toContain("utm_content=A");
+    });
 
     it("keeps today's meter rule when utm-content is absent", async () => {
       const element = await mountVariant(
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
-        feed()
-      )
-      const href = element.shadowRoot.querySelector("a.give").getAttribute("href")
-      expect(href).toContain("utm_content=meter")
-    })
-  })
+        feed(),
+      );
+      const href = element.shadowRoot
+        .querySelector("a.give")
+        .getAttribute("href");
+      expect(href).toContain("utm_content=meter");
+    });
+  });
 
   describe("donate-url falling back on an unsafe scheme", () => {
     it("falls back to the default donation page but keeps amount/interval", async () => {
       const element = await mountVariant("campaign", {
         amounts: "3,5,10",
         "donate-url": "javascript:alert(1)",
-      })
-      const href = element.shadowRoot.querySelector("a.give").getAttribute("href")
-      expect(href.startsWith("javascript:")).toBe(false)
-      expect(href).toContain("https://world.openfoodfacts.org/donate-to-open-food-facts")
-      expect(href).toContain("amount=5")
-      expect(href).toContain("interval=1M")
-    })
-  })
+      });
+      const href = element.shadowRoot
+        .querySelector("a.give")
+        .getAttribute("href");
+      expect(href.startsWith("javascript:")).toBe(false);
+      expect(href).toContain(
+        "https://world.openfoodfacts.org/donate-to-open-food-facts",
+      );
+      expect(href).toContain("amount=5");
+      expect(href).toContain("interval=1M");
+    });
+  });
 
   describe("country", () => {
     it("shows the French headline and fine print for country=fr", async () => {
@@ -936,176 +1070,196 @@ describe("donation-banner variants", () => {
         amounts: "5,10",
         selected: "5",
         country: "fr",
-      })
-      expect(text(element)).toContain("To our readers in France")
-      expect(text(element)).toContain("Tax deductible in France")
-      expect(text(element)).toContain("€1.70")
-    })
+      });
+      expect(text(element)).toContain("To our readers in France");
+      expect(text(element)).toContain("Tax deductible in France");
+      expect(text(element)).toContain("€1.70");
+    });
 
     it("is case-insensitive", async () => {
       const element = await mountVariant("campaign", {
         amounts: "5,10",
         selected: "10",
         country: "FR",
-      })
-      expect(text(element)).toContain("To our readers in France")
-      expect(text(element)).toContain("€3.40")
-    })
+      });
+      expect(text(element)).toContain("To our readers in France");
+      expect(text(element)).toContain("€3.40");
+    });
 
     it("drops the French tax line when there are no tiers to price", async () => {
-      const element = await mountVariant("campaign", { country: "fr" })
-      expect(text(element)).toContain("To our readers in France")
-      expect(text(element)).not.toContain("Tax deductible")
-      expect(text(element)).not.toContain("€0")
-      expect(text(element)).toContain("Cancel any time.")
-    })
+      const element = await mountVariant("campaign", { country: "fr" });
+      expect(text(element)).toContain("To our readers in France");
+      expect(text(element)).not.toContain("Tax deductible");
+      expect(text(element)).not.toContain("€0");
+      expect(text(element)).toContain("Cancel any time.");
+    });
 
     it("shows neutral copy for any other country or none", async () => {
-      const none = await mountVariant("campaign", { amounts: "5,10" })
-      expect(text(none)).not.toContain("To our readers in France")
+      const none = await mountVariant("campaign", { amounts: "5,10" });
+      expect(text(none)).not.toContain("To our readers in France");
 
-      const german = await mountVariant("campaign", { amounts: "5,10", country: "de" })
-      expect(text(german)).not.toContain("To our readers in France")
-    })
+      const german = await mountVariant("campaign", {
+        amounts: "5,10",
+        country: "de",
+      });
+      expect(text(german)).not.toContain("To our readers in France");
+    });
 
     it("never reads the countryCode signal", async () => {
-      countryCode.set("fr")
-      const element = await mountVariant("campaign", { amounts: "5,10" })
-      expect(text(element)).not.toContain("To our readers in France")
-    })
-  })
+      countryCode.set("fr");
+      const element = await mountVariant("campaign", { amounts: "5,10" });
+      expect(text(element)).not.toContain("To our readers in France");
+    });
+  });
 
   describe("current-year", () => {
     it("uses year+1 by default in {year} and utm_campaign", async () => {
-      const element = await mountVariant("campaign")
+      const element = await mountVariant("campaign");
       const href =
-        element.shadowRoot.querySelector("a.give")?.getAttribute("href") ?? donateLink(element)
-      expect(href).toContain(`utm_campaign=donate-${nextYear()}-a`)
-    })
+        element.shadowRoot.querySelector("a.give")?.getAttribute("href") ??
+        donateLink(element);
+      expect(href).toContain(`utm_campaign=donate-${nextYear()}-a`);
+    });
 
     it("uses the given current-year for both", async () => {
-      const element = await mountVariant("campaign", { "current-year": "2026" })
-      const href = donateLink(element)
-      expect(href).toContain("utm_campaign=donate-2026-a")
-    })
-  })
+      const element = await mountVariant("campaign", {
+        "current-year": "2026",
+      });
+      const href = donateLink(element);
+      expect(href).toContain("utm_campaign=donate-2026-a");
+    });
+  });
 
   describe("strip", () => {
     it("renders the one-line copy, a Support link and a close button", async () => {
-      const element = await mountVariant("strip")
-      expect(text(element)).toContain("Join the people keeping Open Food Facts free.")
-      expect(text(element)).toContain("€3 a month keeps it that way.")
-      expect(text(element)).toContain("Support")
-      expect(element.shadowRoot.querySelector("cross-icon")).not.toBeNull()
-    })
+      const element = await mountVariant("strip");
+      expect(text(element)).toContain(
+        "Join the people keeping Open Food Facts free.",
+      );
+      expect(text(element)).toContain("€3 a month keeps it that way.");
+      expect(text(element)).toContain("Support");
+      expect(element.shadowRoot.querySelector("cross-icon")).not.toBeNull();
+    });
 
     it("fills {amount} in a feed hook from the tiers, so the strip and bar share the key", async () => {
       const element = await mountVariant(
         "strip",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
-        feed({ translations: { en: { title: "T", hook: "{amount} a month keeps it that way." } } })
-      )
-      expect(text(element)).toContain("€5 a month keeps it that way.")
+        feed({
+          translations: {
+            en: { title: "T", hook: "{amount} a month keeps it that way." },
+          },
+        }),
+      );
+      expect(text(element)).toContain("€5 a month keeps it that way.");
 
       const bar = await mountVariant(
         "bar",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
-        feed({ translations: { en: { title: "T", hook: "Feed hook {amount}" } } })
-      )
-      expect(text(bar)).toContain("Feed hook €5")
-    })
+        feed({
+          translations: { en: { title: "T", hook: "Feed hook {amount}" } },
+        }),
+      );
+      expect(text(bar)).toContain("Feed hook €5");
+    });
 
     it("keeps the neutral line for country=fr (the France opener is the campaign card's)", async () => {
-      const element = await mountVariant("strip", { country: "fr" })
-      expect(text(element)).toContain("Join the people keeping Open Food Facts free.")
-      expect(text(element)).not.toContain("To our readers in France")
-    })
+      const element = await mountVariant("strip", { country: "fr" });
+      expect(text(element)).toContain(
+        "Join the people keeping Open Food Facts free.",
+      );
+      expect(text(element)).not.toContain("To our readers in France");
+    });
 
     it("dismiss emits an event", async () => {
-      const element = await mountVariant("strip")
-      const detail = bannerEvents(element)
-      element.shadowRoot.querySelector(".close").click()
-      expect(detail).toEqual([{ action: "dismiss", variant: "strip" }])
-    })
-  })
+      const element = await mountVariant("strip");
+      const detail = bannerEvents(element);
+      element.shadowRoot.querySelector(".close").click();
+      expect(detail).toEqual([{ action: "dismiss", variant: "strip" }]);
+    });
+  });
 
   describe("sheet", () => {
     const mountSheet = async () => {
-      const element = await mountVariant("sheet", { amounts: "3,5,10" })
-      return element
-    }
+      const element = await mountVariant("sheet", { amounts: "3,5,10" });
+      return element;
+    };
 
     it("renders the dialog markup, grab handle and Not now", async () => {
-      const element = await mountSheet()
-      const dialog = element.shadowRoot.querySelector(".sheet")
-      expect(dialog.getAttribute("role")).toBe("dialog")
-      expect(dialog.getAttribute("aria-modal")).toBe("true")
-      expect(dialog.getAttribute("aria-labelledby")).toBe("donation-banner-title")
-      expect(element.shadowRoot.querySelector(".grab")).not.toBeNull()
-      expect(text(element)).toContain("Not now")
-    })
+      const element = await mountSheet();
+      const dialog = element.shadowRoot.querySelector(".sheet");
+      expect(dialog.getAttribute("role")).toBe("dialog");
+      expect(dialog.getAttribute("aria-modal")).toBe("true");
+      expect(dialog.getAttribute("aria-labelledby")).toBe(
+        "donation-banner-title",
+      );
+      expect(element.shadowRoot.querySelector(".grab")).not.toBeNull();
+      expect(text(element)).toContain("Not now");
+    });
 
     it("Esc, backdrop, x and Not now each emit minimize", async () => {
-      const element = await mountSheet()
-      const detail = bannerEvents(element)
+      const element = await mountSheet();
+      const detail = bannerEvents(element);
 
-      element.shadowRoot.querySelector(".overlay").click()
-      document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }))
-      element.shadowRoot.querySelector(".sheet .close").click()
+      element.shadowRoot.querySelector(".overlay").click();
+      document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+      element.shadowRoot.querySelector(".sheet .close").click();
       Array.from(element.shadowRoot.querySelectorAll(".link"))
         .find((btn: any) => btn.textContent.includes("Not now"))!
         // @ts-expect-error test DOM node
-        .click()
+        .click();
 
-      expect(detail.every((entry) => entry.action === "minimize")).toBe(true)
-      expect(detail).toHaveLength(4)
-    })
+      expect(detail.every((entry) => entry.action === "minimize")).toBe(true);
+      expect(detail).toHaveLength(4);
+    });
 
     it("'I already donated' fires already-donated", async () => {
-      const element = await mountSheet()
-      const detail = bannerEvents(element)
+      const element = await mountSheet();
+      const detail = bannerEvents(element);
       Array.from(element.shadowRoot.querySelectorAll(".link"))
         .find((btn: any) => btn.textContent.includes("I already donated"))!
         // @ts-expect-error test DOM node
-        .click()
-      expect(detail).toEqual([{ action: "already-donated", variant: "sheet" }])
-    })
+        .click();
+      expect(detail).toEqual([{ action: "already-donated", variant: "sheet" }]);
+    });
 
     it("a click inside the sheet emits nothing", async () => {
-      const element = await mountSheet()
-      const detail = bannerEvents(element)
-      element.shadowRoot.querySelector(".sheet h2").click()
-      expect(detail).toHaveLength(0)
-    })
+      const element = await mountSheet();
+      const detail = bannerEvents(element);
+      element.shadowRoot.querySelector(".sheet h2").click();
+      expect(detail).toHaveLength(0);
+    });
 
     it("locks body scroll while open and restores it when removed", async () => {
-      const previous = document.body.style.overflow
-      const element = await mountSheet()
-      expect(document.body.style.overflow).toBe("hidden")
+      const previous = document.body.style.overflow;
+      const element = await mountSheet();
+      expect(document.body.style.overflow).toBe("hidden");
 
-      element.remove()
-      await new Promise((resolve) => setTimeout(resolve, 0))
-      expect(document.body.style.overflow).toBe(previous)
-    })
+      element.remove();
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      expect(document.body.style.overflow).toBe(previous);
+    });
 
     it("two open sheets: the lock holds until the last one is gone, then the page's own value returns", async () => {
-      document.body.style.overflow = "auto"
-      const top = await mountSheet()
-      const footer = await mountSheet()
-      expect(document.body.style.overflow).toBe("hidden")
+      document.body.style.overflow = "auto";
+      const top = await mountSheet();
+      const footer = await mountSheet();
+      expect(document.body.style.overflow).toBe("hidden");
 
-      top.remove()
-      expect(document.body.style.overflow).toBe("hidden")
+      top.remove();
+      expect(document.body.style.overflow).toBe("hidden");
 
-      footer.remove()
-      expect(document.body.style.overflow).toBe("auto")
-    })
+      footer.remove();
+      expect(document.body.style.overflow).toBe("auto");
+    });
 
     it("Shift-Tab with focus on the dialog itself lands on the last focusable", async () => {
-      const element = await mountSheet()
-      const dialog = element.shadowRoot.querySelector(".sheet") as HTMLElement
-      expect(element.shadowRoot.activeElement).toBe(dialog)
-      const focusable = Array.from(dialog.querySelectorAll("button, a[href]")) as HTMLElement[]
+      const element = await mountSheet();
+      const dialog = element.shadowRoot.querySelector(".sheet") as HTMLElement;
+      expect(element.shadowRoot.activeElement).toBe(dialog);
+      const focusable = Array.from(
+        dialog.querySelectorAll("button, a[href]"),
+      ) as HTMLElement[];
 
       const shiftTab = new KeyboardEvent("keydown", {
         key: "Tab",
@@ -1113,32 +1267,36 @@ describe("donation-banner variants", () => {
         bubbles: true,
         composed: true,
         cancelable: true,
-      })
-      dialog.dispatchEvent(shiftTab)
-      expect(shiftTab.defaultPrevented).toBe(true)
-      expect(element.shadowRoot.activeElement).toBe(focusable[focusable.length - 1])
-    })
+      });
+      dialog.dispatchEvent(shiftTab);
+      expect(shiftTab.defaultPrevented).toBe(true);
+      expect(element.shadowRoot.activeElement).toBe(
+        focusable[focusable.length - 1],
+      );
+    });
 
     it("Tab from the last focusable wraps to the first, Shift-Tab reverses", async () => {
-      const element = await mountSheet()
-      const dialog = element.shadowRoot.querySelector(".sheet") as HTMLElement
-      const focusable = Array.from(dialog.querySelectorAll("button, a[href]")) as HTMLElement[]
-      const first = focusable[0]
-      const last = focusable[focusable.length - 1]
+      const element = await mountSheet();
+      const dialog = element.shadowRoot.querySelector(".sheet") as HTMLElement;
+      const focusable = Array.from(
+        dialog.querySelectorAll("button, a[href]"),
+      ) as HTMLElement[];
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
 
-      last.focus()
-      expect(element.shadowRoot.activeElement).toBe(last)
+      last.focus();
+      expect(element.shadowRoot.activeElement).toBe(last);
       last.dispatchEvent(
         new KeyboardEvent("keydown", {
           key: "Tab",
           bubbles: true,
           composed: true,
           cancelable: true,
-        })
-      )
-      expect(element.shadowRoot.activeElement).toBe(first)
+        }),
+      );
+      expect(element.shadowRoot.activeElement).toBe(first);
 
-      first.focus()
+      first.focus();
       first.dispatchEvent(
         new KeyboardEvent("keydown", {
           key: "Tab",
@@ -1146,119 +1304,131 @@ describe("donation-banner variants", () => {
           bubbles: true,
           composed: true,
           cancelable: true,
-        })
-      )
-      expect(element.shadowRoot.activeElement).toBe(last)
-    })
-  })
+        }),
+      );
+      expect(element.shadowRoot.activeElement).toBe(last);
+    });
+  });
 
   describe("bar", () => {
     it("renders the short join line with the count and the hook, no I already donated", async () => {
       const dated = await mountVariant(
         "bar",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
-        feed()
-      )
-      expect(text(dated)).toContain("Join 760 people keeping this free.")
-      expect(text(dated)).toContain("€5 a month keeps it that way.")
-      expect(text(dated)).toContain("Give €5/mo")
-      expect(text(dated)).not.toContain("I already donated")
+        feed(),
+      );
+      expect(text(dated)).toContain("Join 760 people keeping this free.");
+      expect(text(dated)).toContain("€5 a month keeps it that way.");
+      expect(text(dated)).toContain("Give €5/mo");
+      expect(text(dated)).not.toContain("I already donated");
 
-      const noTiers = await mountVariant("bar", { "news-url": FEED_URL, "news-id": "camp" }, feed())
-      expect(text(noTiers)).toContain("€3 a month keeps it that way.")
+      const noTiers = await mountVariant(
+        "bar",
+        { "news-url": FEED_URL, "news-id": "camp" },
+        feed(),
+      );
+      expect(text(noTiers)).toContain("€3 a month keeps it that way.");
 
-      const plain = await mountVariant("bar")
-      expect(text(plain)).toContain("Join the people keeping this free.")
-    })
+      const plain = await mountVariant("bar");
+      expect(text(plain)).toContain("Join the people keeping this free.");
+    });
 
     beforeEach(() => {
-      vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(56)
-    })
+      vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(
+        56,
+      );
+    });
 
     it("pads the body by the bar's height while connected", async () => {
-      await mountVariant("bar")
-      expect(document.body.style.paddingBottom).toBe("56px")
-    })
+      await mountVariant("bar");
+      expect(document.body.style.paddingBottom).toBe("56px");
+    });
 
     it("clears the padding on dismiss and fires the event", async () => {
-      const element = await mountVariant("bar")
-      const detail = bannerEvents(element)
-      element.shadowRoot.querySelector(".close").click()
-      await element.updateComplete
+      const element = await mountVariant("bar");
+      const detail = bannerEvents(element);
+      element.shadowRoot.querySelector(".close").click();
+      await element.updateComplete;
 
-      expect(document.body.style.paddingBottom).toBe("")
-      expect(detail).toEqual([{ action: "dismiss", variant: "bar" }])
-    })
+      expect(document.body.style.paddingBottom).toBe("");
+      expect(detail).toEqual([{ action: "dismiss", variant: "bar" }]);
+    });
 
     it("clears the padding on disconnect", async () => {
-      const element = await mountVariant("bar")
-      element.remove()
-      expect(document.body.style.paddingBottom).toBe("")
-    })
+      const element = await mountVariant("bar");
+      element.remove();
+      expect(document.body.style.paddingBottom).toBe("");
+    });
 
     it("two bars: dismissing one keeps the padding for the other", async () => {
-      const first = await mountVariant("bar")
-      const second = await mountVariant("bar")
-      expect(document.body.style.paddingBottom).toBe("56px")
+      const first = await mountVariant("bar");
+      const second = await mountVariant("bar");
+      expect(document.body.style.paddingBottom).toBe("56px");
 
-      first.shadowRoot.querySelector(".close").click()
-      await first.updateComplete
-      expect(document.body.style.paddingBottom).toBe("56px")
+      first.shadowRoot.querySelector(".close").click();
+      await first.updateComplete;
+      expect(document.body.style.paddingBottom).toBe("56px");
 
-      second.remove()
-      expect(document.body.style.paddingBottom).toBe("")
-    })
+      second.remove();
+      expect(document.body.style.paddingBottom).toBe("");
+    });
 
     it("shows the bar again after a dismiss when the variant changes and comes back", async () => {
-      const element = await mountVariant("bar")
-      element.shadowRoot.querySelector(".close").click()
-      await element.updateComplete
-      expect(element.shadowRoot.querySelector(".bar")).toBeNull()
+      const element = await mountVariant("bar");
+      element.shadowRoot.querySelector(".close").click();
+      await element.updateComplete;
+      expect(element.shadowRoot.querySelector(".bar")).toBeNull();
 
-      element.setAttribute("variant", "strip")
-      await element.updateComplete
-      element.setAttribute("variant", "bar")
-      await element.updateComplete
-      expect(element.shadowRoot.querySelector(".bar")).not.toBeNull()
-      expect(document.body.style.paddingBottom).toBe("56px")
-    })
-  })
+      element.setAttribute("variant", "strip");
+      await element.updateComplete;
+      element.setAttribute("variant", "bar");
+      await element.updateComplete;
+      expect(element.shadowRoot.querySelector(".bar")).not.toBeNull();
+      expect(document.body.style.paddingBottom).toBe("56px");
+    });
+  });
 
   describe("event shape", () => {
     it("carries variant, bubbles and composed on every action", async () => {
-      const element = await mountVariant("strip")
-      let captured: CustomEvent | undefined
+      const element = await mountVariant("strip");
+      let captured: CustomEvent | undefined;
       element.addEventListener("donation-banner-state", (event: Event) => {
-        captured = event as CustomEvent
-      })
-      element.shadowRoot.querySelector(".close").click()
+        captured = event as CustomEvent;
+      });
+      element.shadowRoot.querySelector(".close").click();
 
-      expect(captured?.type).toBe("donation-banner-state")
-      expect(captured?.bubbles).toBe(true)
-      expect(captured?.composed).toBe(true)
-      expect(captured?.detail).toEqual({ action: "dismiss", variant: "strip" })
-    })
-  })
+      expect(captured?.type).toBe("donation-banner-state");
+      expect(captured?.bubbles).toBe(true);
+      expect(captured?.composed).toBe(true);
+      expect(captured?.detail).toEqual({ action: "dismiss", variant: "strip" });
+    });
+  });
 
   describe("dark mode", () => {
     it("flips the dark-mode class on the variant root at runtime", async () => {
-      const element = await mountVariant("campaign")
-      expect(element.shadowRoot.querySelector(".campaign").classList.contains("dark-mode")).toBe(
-        false
-      )
+      const element = await mountVariant("campaign");
+      expect(
+        element.shadowRoot
+          .querySelector(".campaign")
+          .classList.contains("dark-mode"),
+      ).toBe(false);
 
-      onSchemeChange({ matches: true })
-      await element.updateComplete
-      expect(element.shadowRoot.querySelector(".campaign").classList.contains("dark-mode")).toBe(
-        true
-      )
+      onSchemeChange({ matches: true });
+      await element.updateComplete;
+      expect(
+        element.shadowRoot
+          .querySelector(".campaign")
+          .classList.contains("dark-mode"),
+      ).toBe(true);
 
-      onSchemeChange({ matches: false })
-      await element.updateComplete
-      expect(element.shadowRoot.querySelector(".campaign").classList.contains("dark-mode")).toBe(
-        false
-      )
-    })
+      onSchemeChange({ matches: false });
+      await element.updateComplete;
+      expect(
+        element.shadowRoot
+          .querySelector(".campaign")
+          .classList.contains("dark-mode"),
+      ).toBe(false);
+    });
 
     it("puts the class where the dark selectors look for it, in all four variants", async () => {
       // The stylesheet's own dark selectors: `.dark-mode.campaign`, `.dark-mode.strip`,
@@ -1268,19 +1438,25 @@ describe("donation-banner variants", () => {
         strip: ".dark-mode.strip",
         sheet: ".dark-mode .sheet",
         bar: ".dark-mode .bar",
-      }
+      };
       for (const [variant, selector] of Object.entries(expected)) {
-        const element = await mountVariant(variant, { amounts: "3,5,10" })
-        expect(element.shadowRoot.querySelector(selector), `${variant} light`).toBeNull()
+        const element = await mountVariant(variant, { amounts: "3,5,10" });
+        expect(
+          element.shadowRoot.querySelector(selector),
+          `${variant} light`,
+        ).toBeNull();
 
-        onSchemeChange({ matches: true })
-        await element.updateComplete
-        expect(element.shadowRoot.querySelector(selector), `${variant} dark`).not.toBeNull()
+        onSchemeChange({ matches: true });
+        await element.updateComplete;
+        expect(
+          element.shadowRoot.querySelector(selector),
+          `${variant} dark`,
+        ).not.toBeNull();
 
-        onSchemeChange({ matches: false })
-        await element.updateComplete
-        element.remove()
+        onSchemeChange({ matches: false });
+        await element.updateComplete;
+        element.remove();
       }
-    })
-  })
-})
+    });
+  });
+});

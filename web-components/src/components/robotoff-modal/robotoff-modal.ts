@@ -1,16 +1,20 @@
-import { LitElement, html, nothing } from "lit"
-import { customElement, property, state } from "lit/decorators.js"
-import { EventState, EventType, RobotoffContributionType } from "../../constants"
-import type { BasicStateEventDetail } from "../../types"
-import { localized, msg } from "@lit/localize"
-import { IS_HIDDEN } from "../../styles/utils"
-import { classMap } from "lit/directives/class-map.js"
+import { LitElement, html, nothing } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
+import {
+  EventState,
+  EventType,
+  RobotoffContributionType,
+} from "../../constants";
+import type { BasicStateEventDetail } from "../../types";
+import { localized, msg } from "@lit/localize";
+import { IS_HIDDEN } from "../../styles/utils";
+import { classMap } from "lit/directives/class-map.js";
 
-import "../shared/modal"
-import "../robotoff-ingredient-spellcheck/robotoff-ingredient-spellcheck"
-import "../robotoff-nutrient-extraction/robotoff-nutrient-extraction"
-import "../robotoff-ingredient-detection/robotoff-ingredient-detection"
-import "../robotoff-question/robotoff-question"
+import "../shared/modal";
+import "../robotoff-ingredient-spellcheck/robotoff-ingredient-spellcheck";
+import "../robotoff-nutrient-extraction/robotoff-nutrient-extraction";
+import "../robotoff-ingredient-detection/robotoff-ingredient-detection";
+import "../robotoff-question/robotoff-question";
 
 enum MessageType {
   SUCCESS = "success",
@@ -36,37 +40,37 @@ enum MessageType {
 @customElement("robotoff-modal")
 @localized()
 export class RobotoffModal extends LitElement {
-  static override styles = [IS_HIDDEN]
+  static override styles = [IS_HIDDEN];
 
   /**
    * The type of contribution being made.
    */
   @property({ type: String, attribute: "robotoff-contribution-type" })
-  robotoffContributionType?: RobotoffContributionType
+  robotoffContributionType?: RobotoffContributionType;
 
   /**
    * The product code for which the contribution is being made.
    */
   @property({ type: String, attribute: "product-code" })
-  productCode: string = ""
+  productCode: string = "";
 
   /**
    * Indicates whether the modal is in a loading state.
    */
   @state()
-  isLoading = false
+  isLoading = false;
 
   /**
    * Indicates whether the success message should be shown.
    */
   @state()
-  showMessage?: MessageType
+  showMessage?: MessageType;
 
   /**
    * Returns whether the modal is open based on the `robotoffContributionType`.
    */
   get isOpen() {
-    return Boolean(this.robotoffContributionType)
+    return Boolean(this.robotoffContributionType);
   }
 
   /**
@@ -81,8 +85,8 @@ export class RobotoffModal extends LitElement {
         detail: {
           type: type,
         },
-      })
-    )
+      }),
+    );
   }
 
   /**
@@ -90,14 +94,14 @@ export class RobotoffModal extends LitElement {
    * by showing a success message and dispatching a success event.
    */
   onFinished() {
-    const robotoffContributionType = this.robotoffContributionType!
-    this.showMessage = MessageType.SUCCESS
+    const robotoffContributionType = this.robotoffContributionType!;
+    this.showMessage = MessageType.SUCCESS;
     setTimeout(() => {
       if (this.showMessage === MessageType.SUCCESS) {
-        this.showMessage = undefined
+        this.showMessage = undefined;
       }
-      this.sendSuccessEvent(robotoffContributionType)
-    }, 1000)
+      this.sendSuccessEvent(robotoffContributionType);
+    }, 1000);
   }
 
   /**
@@ -105,12 +109,12 @@ export class RobotoffModal extends LitElement {
    * by showing a success message.
    */
   onAnnotated() {
-    this.showMessage = MessageType.ANNOTATION_SUCCESS
+    this.showMessage = MessageType.ANNOTATION_SUCCESS;
     setTimeout(() => {
       if (this.showMessage === MessageType.ANNOTATION_SUCCESS) {
-        this.showMessage = undefined
+        this.showMessage = undefined;
       }
-    }, 1000)
+    }, 1000);
   }
 
   /**
@@ -121,25 +125,25 @@ export class RobotoffModal extends LitElement {
     switch (event.detail.state) {
       // When all insight is annotated, we show a success message
       case EventState.FINISHED:
-        this.onFinished()
-        break
+        this.onFinished();
+        break;
       case EventState.ANNOTATED:
-        this.onAnnotated()
-        break
+        this.onAnnotated();
+        break;
       case EventState.LOADING:
-        this.isLoading = true
-        break
+        this.isLoading = true;
+        break;
       case EventState.HAS_DATA:
-        this.isLoading = false
-        break
+        this.isLoading = false;
+        break;
       case EventState.NO_DATA:
-        this.isLoading = false
+        this.isLoading = false;
         // Send success event if no data to display because we don't want to show the modal again
-        this.sendSuccessEvent(this.robotoffContributionType!)
-        break
+        this.sendSuccessEvent(this.robotoffContributionType!);
+        break;
       case EventState.ERROR:
-        this.isLoading = false
-        break
+        this.isLoading = false;
+        break;
     }
   }
 
@@ -152,51 +156,53 @@ export class RobotoffModal extends LitElement {
         return html`<robotoff-ingredient-spellcheck
           product-code="${this.productCode}"
           @ingredients-state="${this.onStateChange}"
-        ></robotoff-ingredient-spellcheck>`
+        ></robotoff-ingredient-spellcheck>`;
       case RobotoffContributionType.NUTRIENT_EXTRACTION:
         return html`<robotoff-nutrient-extraction
           product-code="${this.productCode}"
           @nutrient-state="${this.onStateChange}"
-        ></robotoff-nutrient-extraction>`
+        ></robotoff-nutrient-extraction>`;
       case RobotoffContributionType.INGREDIENT_DETECTION:
         return html`<robotoff-ingredient-detection
           product-code="${this.productCode}"
           @ingredient-detection-state="${this.onStateChange}"
-        ></robotoff-ingredient-detection>`
+        ></robotoff-ingredient-detection>`;
       case RobotoffContributionType.QUESTIONS:
         return html`<robotoff-question
           product-code="${this.productCode}"
           @question-state="${this.onStateChange}"
-        ></robotoff-question>`
+        ></robotoff-question>`;
     }
-    return nothing
+    return nothing;
   }
 
   /**
    * Closes the modal and dispatches a close event.
    */
   closeModal() {
-    this.dispatchEvent(new CustomEvent(EventType.CLOSE))
+    this.dispatchEvent(new CustomEvent(EventType.CLOSE));
   }
 
   /**
    * Renders the success message.
    */
   renderMessage() {
-    if (!this.showMessage) return nothing
+    if (!this.showMessage) return nothing;
     switch (this.showMessage) {
       case MessageType.SUCCESS:
         return html`<slot name="success-message"
-          ><div class="success-message">${msg("Thanks for your contribution!")}</div></slot
-        >`
+          ><div class="success-message">
+            ${msg("Thanks for your contribution!")}
+          </div></slot
+        >`;
       case MessageType.ANNOTATION_SUCCESS:
         return html`<slot name="annotated-message"
           ><div class="annotated-message">
             ${msg("Saved! Can you help with another one?")}
           </div></slot
-        >`
+        >`;
     }
-    return nothing
+    return nothing;
   }
 
   override render() {
@@ -211,12 +217,12 @@ export class RobotoffModal extends LitElement {
           ${this.renderModalContent()}
         </div>
       </modal-component>
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "robotoff-modal": RobotoffModal
+    "robotoff-modal": RobotoffModal;
   }
 }

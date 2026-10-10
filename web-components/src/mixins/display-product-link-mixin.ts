@@ -1,15 +1,15 @@
-import { html, LitElement, nothing, type TemplateResult } from "lit"
-import type { Constructor } from "."
-import { property } from "lit/decorators.js"
-import "../components/shared/product-link-button"
+import { html, LitElement, nothing, type TemplateResult } from "lit";
+import type { Constructor } from ".";
+import { property } from "lit/decorators.js";
+import "../components/shared/product-link-button";
 
 /**
  * Interface for the DisplayProductLinkMixin.
  */
 export interface DisplayProductLinkMixinInterface {
-  displayProductLink?: boolean
+  displayProductLink?: boolean;
 
-  renderProductLink(productCode: string): TemplateResult | typeof nothing
+  renderProductLink(productCode: string): TemplateResult | typeof nothing;
 }
 
 /**
@@ -18,23 +18,30 @@ export interface DisplayProductLinkMixinInterface {
  * @mixin DisplayProductLinkMixin
  */
 export const DisplayProductLinkMixin = <T extends Constructor<LitElement>>(
-  superClass: T
+  superClass: T,
 ): Constructor<DisplayProductLinkMixinInterface> & T => {
   class DisplayProductLinkMixin extends superClass {
     /**
      * Whether to display the product link.
      * @type {boolean | undefined}
      */
-    @property({ type: Boolean, attribute: "display-product-link", reflect: true })
-    displayProductLink: boolean = false
+    @property({
+      type: Boolean,
+      attribute: "display-product-link",
+      reflect: true,
+    })
+    displayProductLink: boolean = false;
 
     renderProductLink(productCode: string) {
       if (!this.displayProductLink) {
-        return nothing
+        return nothing;
       }
-      return html`<product-link-button product-code="${productCode}"></product-link-button>`
+      return html`<product-link-button
+        product-code="${productCode}"
+      ></product-link-button>`;
     }
   }
 
-  return DisplayProductLinkMixin as Constructor<DisplayProductLinkMixinInterface> & T
-}
+  return DisplayProductLinkMixin as Constructor<DisplayProductLinkMixinInterface> &
+    T;
+};

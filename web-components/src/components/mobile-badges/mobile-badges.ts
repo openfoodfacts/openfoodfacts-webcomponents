@@ -1,18 +1,18 @@
-import { LitElement, html, css, nothing } from "lit"
-import { customElement, state, property } from "lit/decorators.js"
-import { localized, msg } from "@lit/localize"
-import { getImageUrl, languageCode } from "../../signals/app"
-import { classMap } from "lit/directives/class-map.js"
-import { darkModeListener } from "../../utils/dark-mode-listener"
+import { LitElement, html, css, nothing } from "lit";
+import { customElement, state, property } from "lit/decorators.js";
+import { localized, msg } from "@lit/localize";
+import { getImageUrl, languageCode } from "../../signals/app";
+import { classMap } from "lit/directives/class-map.js";
+import { darkModeListener } from "../../utils/dark-mode-listener";
 
 export type Badge = {
-  href: string
-  src: string
-  alt: string
-  id: string
-  hide: boolean
-  errorHandler?: (event: Event) => void
-}
+  href: string;
+  src: string;
+  alt: string;
+  id: string;
+  hide: boolean;
+  errorHandler?: (event: Event) => void;
+};
 
 /**
  * Mobile Badges
@@ -197,62 +197,63 @@ export class MobileBadges extends LitElement {
         flex-wrap: wrap;
       }
     `,
-  ]
+  ];
 
   /**
    * Controls visibility of Google Play Store badge
    */
   @property({ type: Boolean, attribute: "hide-play-store" })
-  hidePlayStore: boolean = false
+  hidePlayStore: boolean = false;
 
   /**
    * Controls visibility of F-Droid badge
    */
   @property({ type: Boolean, attribute: "hide-f-droid" })
-  hideFDroid: boolean = false
+  hideFDroid: boolean = false;
 
   /**
    * Controls visibility of APK download badge
    */
   @property({ type: Boolean, attribute: "hide-apk" })
-  hideApk: boolean = false
+  hideApk: boolean = false;
 
   /**
    * Controls visibility of App Store badge
    */
   @property({ type: Boolean, attribute: "hide-app-store" })
-  hideAppStore: boolean = false
+  hideAppStore: boolean = false;
 
   /**
    * Controls visibility of App Store badge
    */
   @property({ type: Boolean, attribute: "hide-image" })
-  hideImage: boolean = false
+  hideImage: boolean = false;
 
   /**
    * Whether to apply dark mode styling (auto-detected from prefers-color-scheme)
    */
-  isDarkMode = darkModeListener.darkMode
+  isDarkMode = darkModeListener.darkMode;
   private _darkModeCb = (isDark: boolean) => {
-    this.isDarkMode = isDark
-    this.requestUpdate()
-  }
+    this.isDarkMode = isDark;
+    this.requestUpdate();
+  };
 
   override connectedCallback() {
-    super.connectedCallback()
-    darkModeListener.subscribe(this._darkModeCb)
+    super.connectedCallback();
+    darkModeListener.subscribe(this._darkModeCb);
   }
 
   override disconnectedCallback() {
-    darkModeListener.unsubscribe(this._darkModeCb)
-    super.disconnectedCallback()
+    darkModeListener.unsubscribe(this._darkModeCb);
+    super.disconnectedCallback();
   }
 
   /**
    * Link to the F-Droid app page.
    */
   @state()
-  fDroidAppLink = "https://f-droid.org/packages/openfoodfacts.github.scrachx.openfood"
+  fDroidAppLink =
+    "https://f-droid.org/packages/openfoodfacts.github.scrachx.openfood";
 
   /**
    * Generates the URL suffix for Android app links.
@@ -261,7 +262,7 @@ export class MobileBadges extends LitElement {
    * @returns The URL suffix with UTM parameters.
    */
   private getAndroidUrlSuffix(language: string, campaign: string): string {
-    return `?utm_source=off&utm_medium=web&utm_campaign=${campaign}_${language}`
+    return `?utm_source=off&utm_medium=web&utm_campaign=${campaign}_${language}`;
   }
 
   /**
@@ -270,8 +271,8 @@ export class MobileBadges extends LitElement {
    * @returns The Google Play Store link.
    */
   getAndroidAppLink(language: string): string {
-    const baseURI = `https://play.google.com/store/apps/details?id=org.openfoodfacts.scanner&hl=${language}`
-    return `${baseURI}${this.getAndroidUrlSuffix(language, "install_the_app_android_footer")}`
+    const baseURI = `https://play.google.com/store/apps/details?id=org.openfoodfacts.scanner&hl=${language}`;
+    return `${baseURI}${this.getAndroidUrlSuffix(language, "install_the_app_android_footer")}`;
   }
 
   /**
@@ -280,8 +281,9 @@ export class MobileBadges extends LitElement {
    * @returns The APK download link.
    */
   getAndroidApkAppLink(language: string): string {
-    const baseURI = "https://github.com/openfoodfacts/smooth-app/releases/latest"
-    return `${baseURI}${this.getAndroidUrlSuffix(language, "install_the_app_apk_footer")}`
+    const baseURI =
+      "https://github.com/openfoodfacts/smooth-app/releases/latest";
+    return `${baseURI}${this.getAndroidUrlSuffix(language, "install_the_app_apk_footer")}`;
   }
 
   /**
@@ -290,7 +292,7 @@ export class MobileBadges extends LitElement {
    * @returns The path to the badge icon.
    */
   getAndroidAppIconPath(language: string): string {
-    return `https://play.google.com/intl/en_us/badges/static/images/badges/${language}_badge_web_generic.png`
+    return `https://play.google.com/intl/en_us/badges/static/images/badges/${language}_badge_web_generic.png`;
   }
 
   /**
@@ -299,7 +301,7 @@ export class MobileBadges extends LitElement {
    * @returns The path to the badge icon.
    */
   getFDroidAppIconPath(language: string): string {
-    return `https://fdroid.gitlab.io/artwork/badge/get-it-on-${language}.png`
+    return `https://fdroid.gitlab.io/artwork/badge/get-it-on-${language}.png`;
   }
 
   /**
@@ -310,9 +312,9 @@ export class MobileBadges extends LitElement {
    */
   getIosAppIconPath(language: string): string {
     if (language === "en") {
-      return "appstore/black/appstore_UK.svg"
+      return "appstore/black/appstore_UK.svg";
     }
-    return `appstore/black/appstore_${language.toLocaleUpperCase()}.svg`
+    return `appstore/black/appstore_${language.toLocaleUpperCase()}.svg`;
   }
 
   /**
@@ -322,8 +324,8 @@ export class MobileBadges extends LitElement {
    */
   getIosAppLink(language: string): string {
     const baseURI =
-      "https://apps.apple.com/app/open-food-facts/id588797948?utm_source=off&utm_medium=web"
-    return `${baseURI}&utm_campaign=install_the_app_ios_footer_${language}`
+      "https://apps.apple.com/app/open-food-facts/id588797948?utm_source=off&utm_medium=web";
+    return `${baseURI}&utm_campaign=install_the_app_ios_footer_${language}`;
   }
 
   /**
@@ -340,7 +342,7 @@ export class MobileBadges extends LitElement {
     src: string,
     alt: string,
     id: string,
-    errorHandler?: (e: Event) => void
+    errorHandler?: (e: Event) => void,
   ) {
     return html`
       <a class="no-text-decoration" href="${href}">
@@ -354,7 +356,7 @@ export class MobileBadges extends LitElement {
           @error=${errorHandler}
         />
       </a>
-    `
+    `;
   }
 
   /**
@@ -362,7 +364,7 @@ export class MobileBadges extends LitElement {
    * @returns The filtered list of badges.
    **/
   getFilteredBadges(): Badge[] {
-    const language = languageCode.get()
+    const language = languageCode.get();
     const badges: Badge[] = [
       {
         href: this.getAndroidAppLink(language),
@@ -371,8 +373,8 @@ export class MobileBadges extends LitElement {
         id: "playstore_badge",
         hide: this.hidePlayStore,
         errorHandler: (e: Event) => {
-          const target = e.target as HTMLImageElement
-          target.src = this.getAndroidAppIconPath("en")
+          const target = e.target as HTMLImageElement;
+          target.src = this.getAndroidAppIconPath("en");
         },
       },
       {
@@ -382,8 +384,8 @@ export class MobileBadges extends LitElement {
         id: "fdroid_badge",
         hide: this.hideFDroid,
         errorHandler: (e: Event) => {
-          const target = e.target as HTMLImageElement
-          target.src = this.getFDroidAppIconPath("en")
+          const target = e.target as HTMLImageElement;
+          target.src = this.getFDroidAppIconPath("en");
         },
       },
       {
@@ -400,14 +402,14 @@ export class MobileBadges extends LitElement {
         id: "appstore_badge",
         hide: this.hideAppStore,
         errorHandler: (e: Event) => {
-          const target = e.target as HTMLImageElement
-          target.src = getImageUrl(this.getIosAppIconPath("en"))
+          const target = e.target as HTMLImageElement;
+          target.src = getImageUrl(this.getIosAppIconPath("en"));
         },
       },
-    ]
+    ];
 
-    const filteredBadges = badges.filter((badge) => badge.hide == false)
-    return filteredBadges
+    const filteredBadges = badges.filter((badge) => badge.hide == false);
+    return filteredBadges;
   }
 
   /**
@@ -416,7 +418,7 @@ export class MobileBadges extends LitElement {
    **/
   renderImage() {
     if (this.hideImage) {
-      return nothing
+      return nothing;
     }
     return html`
       <div class="logo-container">
@@ -430,11 +432,13 @@ export class MobileBadges extends LitElement {
           <div id="footer_install_the_app">${msg("Install the app!")}</div>
           <!-- TODO find fix to add text between span for translations ex for fr : "Scannez vos <span class="foods">aliments</span> de votre <span class="everyday">quotidien</span>" -->
           ${msg(
-            html`Scan your <span class="everyday">everyday</span> <span class="foods">foods</span>`
+            // keep as-is: reformatting the template would change its translation message id
+            // prettier-ignore
+            html`Scan your <span class="everyday">everyday</span> <span class="foods">foods</span>`,
           )}
         </div>
       </div>
-    `
+    `;
   }
 
   /**
@@ -442,7 +446,7 @@ export class MobileBadges extends LitElement {
    * @returns The badges HTML or nothing if there are no filtered badges.
    **/
   renderBadges() {
-    const filteredBadges = this.getFilteredBadges()
+    const filteredBadges = this.getFilteredBadges();
 
     return html` ${
       filteredBadges.length > 0
@@ -454,21 +458,21 @@ export class MobileBadges extends LitElement {
                   badge.src,
                   badge.alt,
                   badge.id,
-                  badge.errorHandler
-                )
+                  badge.errorHandler,
+                ),
               )}
             </div>
           `
         : ""
-    }`
+    }`;
   }
 
   override render() {
-    const rootClasses = { "dark-mode": this.isDarkMode }
+    const rootClasses = { "dark-mode": this.isDarkMode };
     return html`
       <div class=${classMap(rootClasses)} id="install_the_app_block">
         ${this.renderImage()} ${this.renderBadges()}
       </div>
-    `
+    `;
   }
 }

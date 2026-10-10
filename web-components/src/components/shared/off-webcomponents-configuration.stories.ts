@@ -1,13 +1,13 @@
-import "./off-webcomponents-configuration"
-import type { Meta, StoryObj } from "@storybook/web-components-vite"
+import "./off-webcomponents-configuration";
+import type { Meta, StoryObj } from "@storybook/web-components-vite";
 
 const meta: Meta = {
   title: "Shared/Configuration",
   component: "off-webcomponents-configuration",
-}
-export default meta
+};
+export default meta;
 
-type Story = StoryObj
+type Story = StoryObj;
 
 export const Basic: Story = {
   args: {
@@ -15,4 +15,4 @@ export const Basic: Story = {
     countryCode: "fr",
     assetsImagesPath: "/assets/images",
   },
-}
+};

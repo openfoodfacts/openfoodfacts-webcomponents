@@ -1,11 +1,11 @@
-import { openfoodfactsApiUrl } from "../signals/openfoodfacts"
+import { openfoodfactsApiUrl } from "../signals/openfoodfacts";
 import type {
   BaseProductResponse,
   NutrientsOrderRequest,
   NutrientsParams,
   RequestProductParams,
-} from "../types/openfoodfacts"
-import { addParamsToUrl } from "../utils"
+} from "../types/openfoodfacts";
+import { addParamsToUrl } from "../utils";
 
 enum ApiBaseUrl {
   CGI = "/cgi",
@@ -19,12 +19,12 @@ enum ApiBaseUrl {
  * @returns The url
  */
 const getUrl = (path: string, params?: Record<string, unknown>) => {
-  const url = `${openfoodfactsApiUrl.get()}${path}`
+  const url = `${openfoodfactsApiUrl.get()}${path}`;
   if (!params) {
-    return url
+    return url;
   }
-  return addParamsToUrl(url, params)
-}
+  return addParamsToUrl(url, params);
+};
 
 /**
  * Fetch product data from openfoodfacts
@@ -32,13 +32,16 @@ const getUrl = (path: string, params?: Record<string, unknown>) => {
  * @param params The params to add to the url
  * @returns The product data
  */
-export async function fetchProduct<T>(productCode: string, params: RequestProductParams) {
-  const url = getUrl(`${ApiBaseUrl.API_V2}/product/${productCode}/`, params)
-  const response = await fetch(url)
+export async function fetchProduct<T>(
+  productCode: string,
+  params: RequestProductParams,
+) {
+  const url = getUrl(`${ApiBaseUrl.API_V2}/product/${productCode}/`, params);
+  const response = await fetch(url);
   if (!response.ok) {
-    throw new Error("Failed to fetch product data")
+    throw new Error("Failed to fetch product data");
   }
-  return (await response.json()) as BaseProductResponse<T>
+  return (await response.json()) as BaseProductResponse<T>;
 }
 
 /**
@@ -47,10 +50,10 @@ export async function fetchProduct<T>(productCode: string, params: RequestProduc
  * @returns The nutrients order
  */
 export async function fetchNutrientsOrder(params: NutrientsParams) {
-  const url = getUrl(`${ApiBaseUrl.CGI}/nutrients.pl`, params)
-  const response = await fetch(url)
+  const url = getUrl(`${ApiBaseUrl.CGI}/nutrients.pl`, params);
+  const response = await fetch(url);
   if (!response.ok) {
-    throw new Error("Failed to fetch nutrients order")
+    throw new Error("Failed to fetch nutrients order");
   }
-  return (await response.json()) as NutrientsOrderRequest
+  return (await response.json()) as NutrientsOrderRequest;
 }

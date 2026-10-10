@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/web-components-vite"
-import "./product-card"
+import type { Meta, StoryObj } from "@storybook/web-components-vite";
+import "./product-card";
 
 const meta: Meta = {
   title: "Components/Product Card",
@@ -7,10 +7,10 @@ const meta: Meta = {
   parameters: {
     layout: "centered",
   },
-}
-export default meta
+};
+export default meta;
 
-type Story = StoryObj
+type Story = StoryObj;
 
 export const Basic: Story = {
   args: {
@@ -34,4 +34,4 @@ export const Basic: Story = {
     },
     showMatchTag: true,
   },
-}
+};

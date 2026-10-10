@@ -1,4 +1,4 @@
-import { css } from "lit"
+import { css } from "lit";
 
 export const FOLKSONOMY_INPUT = css`
   input[type="text"] {
@@ -16,6 +16,7 @@ export const FOLKSONOMY_INPUT = css`
   input[type="text"]:focus {
     outline: none;
     border-color: var(--off-folksonomy-input-focus-border, #007bff);
-    box-shadow: 0 0 3px var(--off-folksonomy-input-focus-shadow, rgba(0, 123, 255, 0.5));
+    box-shadow: 0 0 3px
+      var(--off-folksonomy-input-focus-shadow, rgba(0, 123, 255, 0.5));
   }
-`
+`;

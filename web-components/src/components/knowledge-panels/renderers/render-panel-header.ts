@@ -1,6 +1,6 @@
-import { LitElement, html, css, type TemplateResult } from "lit"
-import { customElement, property } from "lit/decorators.js"
-import "../../../utils/knowledge-panels/heading-utils" // Import heading renderer component
+import { LitElement, html, css, type TemplateResult } from "lit";
+import { customElement, property } from "lit/decorators.js";
+import "../../../utils/knowledge-panels/heading-utils"; // Import heading renderer component
 
 /**
  * Panel header renderer component
@@ -24,20 +24,20 @@ export class PanelHeaderRenderer extends LitElement {
       text-align: left;
       word-wrap: break-word;
     }
-  `
+  `;
 
   @property({ type: String })
-  override title = ""
+  override title = "";
 
   @property({ type: String })
-  subtitle = ""
+  subtitle = "";
 
   @property({ type: String })
-  headingLevel = "h3"
+  headingLevel = "h3";
 
   override render(): TemplateResult {
     if (!this.title) {
-      return html``
+      return html``;
     }
 
     return html`
@@ -50,12 +50,12 @@ export class PanelHeaderRenderer extends LitElement {
         </heading-renderer>
         ${this.subtitle ? html`<div class="panel-subtitle">${this.subtitle}</div>` : ""}
       </div>
-    `
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "panel-header-renderer": PanelHeaderRenderer
+    "panel-header-renderer": PanelHeaderRenderer;
   }
 }

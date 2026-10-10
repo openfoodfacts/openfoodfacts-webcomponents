@@ -2,13 +2,13 @@ export const DEFAULT_ROBOTOFF_CONFIGURATION = {
   apiUrl: "https://robotoff.openfoodfacts.org/api/v1",
   dryRun: false,
   imgUrl: "https://images.openfoodfacts.org/images/products",
-}
+};
 
 export const DEFAULT_FOLKSONOMY_CONFIGURATION = {
   apiUrl: "https://api.folksonomy.openfoodfacts.org",
-}
+};
 
-export const PAGE_SIZE = 25
+export const PAGE_SIZE = 25;
 
 export enum EventType {
   CLOSE = "close",
@@ -54,8 +54,8 @@ export enum LoadingState {
   LOADED = "loaded",
 }
 
-export const DEFAULT_LANGUAGE_CODE = "en"
-export const DEFAULT_COUNTRY_CODE = "fr"
+export const DEFAULT_LANGUAGE_CODE = "en";
+export const DEFAULT_COUNTRY_CODE = "fr";
 
 export enum EventState {
   LOADING = "loading", // loading data
@@ -66,10 +66,10 @@ export enum EventState {
   ERROR = "error", // an error occurred during annotation
 }
 
-export const DEFAULT_ASSETS_IMAGES_PATH = "/assets/images"
+export const DEFAULT_ASSETS_IMAGES_PATH = "/assets/images";
 
-export const SELECT_ICON_FILE_NAME = "carret-bottom.svg"
-export const WHITE_SELECT_ICON_FILE_NAME = "white-carret-bottom.svg"
+export const SELECT_ICON_FILE_NAME = "carret-bottom.svg";
+export const WHITE_SELECT_ICON_FILE_NAME = "white-carret-bottom.svg";
 
 export enum RobotoffContributionType {
   QUESTIONS = "questions",
@@ -78,4 +78,4 @@ export enum RobotoffContributionType {
   INGREDIENT_DETECTION = "ingredient_detection",
 }
 
-export const STATIC_HOST = "https://static.openfoodfacts.org"
+export const STATIC_HOST = "https://static.openfoodfacts.org";
