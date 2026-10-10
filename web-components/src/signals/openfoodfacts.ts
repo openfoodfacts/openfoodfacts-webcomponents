@@ -9,7 +9,7 @@ export const DEFAULT_OPENFOODFACTS_API_URL = "https://world.openfoodfacts.org"
 /**
  * Store the loading state of the taxonomies to avoid multiple requests.
  */
-const nutrientsOrderPromises = new SignalMap<Promise<any>>({})
+const nutrientsOrderPromises = new SignalMap<Promise<unknown>>({})
 
 // this enable changing open food facts URL globally
 export const openfoodfactsApiUrl = signal(DEFAULT_OPENFOODFACTS_API_URL)
@@ -29,7 +29,7 @@ const setOrderOfNutrient = (
   index: number,
   nutrient: NutrientOrderRequest
 ): number => {
-  if (obj.hasOwnProperty(nutrient.id)) {
+  if (Object.hasOwn(obj, nutrient.id)) {
     return index
   }
   // set the order of the nutrient (the index

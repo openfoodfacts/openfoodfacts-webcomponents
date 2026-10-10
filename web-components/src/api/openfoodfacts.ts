@@ -18,7 +18,7 @@ enum ApiBaseUrl {
  * @param params The params to add to the url
  * @returns The url
  */
-const getUrl = (path: string, params?: Record<string, any>) => {
+const getUrl = (path: string, params?: Record<string, unknown>) => {
   const url = `${openfoodfactsApiUrl.get()}${path}`
   if (!params) {
     return url

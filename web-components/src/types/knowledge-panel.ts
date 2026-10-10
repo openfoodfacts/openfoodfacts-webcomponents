@@ -18,6 +18,8 @@ export interface PanelImage {
   sizes: {
     [key: string]: ImageSize
   }
+  caption?: string
+  description?: string
 }
 
 // Text element
@@ -56,6 +58,8 @@ export interface TableElement {
 export interface ActionElement {
   actions?: string[]
   html?: string
+  action_text?: string
+  description?: string
 }
 
 // Panel element reference

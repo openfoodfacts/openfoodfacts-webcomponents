@@ -23,7 +23,9 @@ const CONFIGURATION_PROPERTIES: Record<
   string,
   {
     propertyName: keyof OffWebcomponentConfigurationOptions
-    converter?: (value: string) => any
+    converter?: (value: string) => unknown
+    // each entry's fn takes a different value type (string, configuration object...)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fn: (value: any) => void
   }
 > = {

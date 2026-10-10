@@ -6,19 +6,14 @@
  * @param value
  * @returns string - the string representation of the value
  */
-export const paramToString = (value: any): string => {
+export const paramToString = (value: unknown): string => {
   if (isNullOrUndefined(value)) {
     return ""
   }
   if (Array.isArray(value)) {
     return value.map((item) => encodeURIComponent(item)).join(",")
   }
-  if (typeof value === "object") {
-    value = JSON.stringify(value)
-  } else {
-    value = value.toString()
-  }
-  return encodeURIComponent(value)
+  return encodeURIComponent(typeof value === "object" ? JSON.stringify(value) : String(value))
 }
 
 /**
@@ -26,7 +21,7 @@ export const paramToString = (value: any): string => {
  * @param params
  * @returns string - the URLSearchParams string
  */
-export const paramsToUrl = (params: Record<string, any>) => {
+export const paramsToUrl = (params: Record<string, unknown>) => {
   const paramsToStringRecord = Object.entries(params).reduce((acc, [key, value]) => {
     if (acc) {
       acc += "&"
@@ -44,7 +39,7 @@ export const paramsToUrl = (params: Record<string, any>) => {
  * @param params
  * @returns string - the url with the params appended
  */
-export const addParamsToUrl = (url: string, params: Record<string, any>) => {
+export const addParamsToUrl = (url: string, params: Record<string, unknown>) => {
   if (url.includes("?")) {
     return `${url}&${paramsToUrl(params)}`
   }
@@ -59,7 +54,7 @@ export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
  * @param value
  * @returns boolean - true if the value is null or undefined, false otherwise
  */
-export const isNullOrUndefined = (value: any) => value === null || value === undefined
+export const isNullOrUndefined = (value: unknown) => value === null || value === undefined
 
 /**
  * Given a key with dot inside representing nested objects,
@@ -68,20 +63,20 @@ export const isNullOrUndefined = (value: any) => value === null || value === und
  * @example: setValueAndParentsObjectIfNotExists({}, "a.b.c", 3) will create {a: {b: {c: 3}}}
  */
 export const setValueAndParentsObjectIfNotExists = (
-  obj: Record<string, any>,
+  obj: Record<string, unknown>,
   key: string,
-  value: any
+  value: unknown
 ) => {
   const keys = key.split(".")
   const lastKey = keys.pop() as string
-  let lastObject: Record<string, any> = {}
+  let lastObject: Record<string, unknown> = {}
 
   keys.reduce((acc, key) => {
     if (!acc[key]) {
       acc[key] = {}
     }
-    lastObject = acc[key]
-    return acc[key]
+    lastObject = acc[key] as Record<string, unknown>
+    return lastObject
   }, obj)
 
   lastObject[lastKey] = value
@@ -99,7 +94,7 @@ export const randomIdGenerator = () => Math.random().toString(36).substring(2, 1
  * @param callback - the function to debounce
  * @returns () => void - the debounced function
  */
-export const initDebounce = (callback: () => any, debounceTime: number = 500) => {
+export const initDebounce = (callback: () => unknown, debounceTime: number = 500) => {
   let timeout: ReturnType<typeof setTimeout> | undefined
   return () => {
     clearTimeout(timeout)
@@ -142,7 +137,11 @@ export const createDebounce = (debounceTime: number = 500) => {
  * @param filename - the filename for the download (without extension)
  * @param headers - array of header strings
  */
-export const downloadCSV = (rows: Array<Array<any>>, filename: string, headers: Array<string>) => {
+export const downloadCSV = (
+  rows: Array<Array<unknown>>,
+  filename: string,
+  headers: Array<string>
+) => {
   if (rows.length === 0) {
     return
   }

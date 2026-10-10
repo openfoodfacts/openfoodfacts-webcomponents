@@ -1,4 +1,4 @@
-import { directive } from "lit/directive.js"
+import { directive, type ElementPart, type PartInfo } from "lit/directive.js"
 import { AsyncDirective } from "lit/async-directive.js"
 
 /**
@@ -11,11 +11,11 @@ class ClickOutsideDirective extends AsyncDirective {
 
   /**
    * Initializes the ClickOutsideDirective.
-   * @param {any} part - The part information.
+   * @param {PartInfo} part - The part information.
    */
-  constructor(part: any) {
+  constructor(part: PartInfo) {
     super(part)
-    this.element = part.element as HTMLElement
+    this.element = (part as ElementPart).element as HTMLElement
     this.addEventListener()
   }
 
@@ -31,11 +31,11 @@ class ClickOutsideDirective extends AsyncDirective {
 
   /**
    * Updates the directive.
-   * @param {any} part - The part information.
+   * @param {ElementPart} part - The part information.
    * @param {[() => void]} [callback] - The callback function to be called when a click outside the element is detected.
    * @returns {HTMLElement | null} The element to which the directive is applied.
    */
-  override update(part: any, [callback]: [() => void]) {
+  override update(part: ElementPart, [callback]: [() => void]) {
     this.element = part.element as HTMLElement
     return this.render(callback)
   }
