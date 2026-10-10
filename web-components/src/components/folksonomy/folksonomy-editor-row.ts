@@ -426,7 +426,7 @@ export class FolksonomyEditorRow extends LitElement {
       }
 
       autocomplete-input::part(autocomplete-input-item) {
-        color: var(--off-folksonomy-text, #fff) !important;
+        color: var(--off-folksonomy-text, #333) !important;
         background-color: transparent !important;
       }
 
