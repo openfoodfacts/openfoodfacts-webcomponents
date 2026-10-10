@@ -131,7 +131,7 @@ interface Lang {
   confidence: number
 }
 
-interface IngredientDetection {
+export interface IngredientDetection {
   id: string
   text: string
   vegan?: string
@@ -149,6 +149,8 @@ interface IngredientDetection {
   processing?: string
   labels?: string
   bounding_box?: RobotoffBoundingBox
+  start?: number
+  end?: number
 }
 
 export type IngredientDetectionInsight = BaseInsight<{
