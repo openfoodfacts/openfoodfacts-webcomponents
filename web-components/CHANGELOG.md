@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.19.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.18.3...v1.19.0) (2026-10-10)
+
+
+### Features
+
+* new webcomponent to crop an image ([#683](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/683)) ([9e45d81](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/9e45d814b7d9b60524733f650dd4c8ea8952f1fe))
+
+
+### Bug Fixes
+
+* **deps:** bump dompurify from 3.4.15 to 3.4.16 in /web-components ([#669](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/669)) ([1293f23](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/1293f234e85c038cbdc1d80f853c080d9d3c9515))
+* **folksonomy:** show use counts in property suggestions ([#646](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/646)) ([47be7eb](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/47be7eb8395ce24bc2c8783251c009ea0973178a))
+
 ## [1.18.3](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.18.2...v1.18.3) (2026-09-30)
 
 
