@@ -1,5 +1,10 @@
 import { describe, it, expect } from "vitest"
-import { cropImageToBlob, getRotatedSize, normalizeBoundingBox } from "./crop"
+import {
+  cropImageToBlob,
+  denormalizeBoundingBox,
+  getRotatedSize,
+  normalizeBoundingBox,
+} from "./crop"
 
 describe("crop utils", () => {
   describe("getRotatedSize", () => {
@@ -45,6 +50,19 @@ describe("crop utils", () => {
       await expect(
         cropImageToBlob(image, { x: 10, y: 10, width: 50, height: 0.2 })
       ).rejects.toThrow("Crop area is too small")
+    })
+  })
+
+  describe("denormalizeBoundingBox", () => {
+    it("should return values in image pixels", () => {
+      expect(
+        denormalizeBoundingBox({ x_min: 0.25, y_min: 0.25, x_max: 0.75, y_max: 0.75 }, 200, 100)
+      ).toEqual({ x: 50, y: 25, width: 100, height: 50 })
+    })
+
+    it("should be the inverse of normalizeBoundingBox", () => {
+      const box = { x: 12, y: 34, width: 56, height: 78 }
+      expect(denormalizeBoundingBox(normalizeBoundingBox(box, 640, 480), 640, 480)).toEqual(box)
     })
   })
 })
