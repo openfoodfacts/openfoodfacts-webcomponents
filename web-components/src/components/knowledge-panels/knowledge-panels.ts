@@ -6,6 +6,7 @@ import "../../components/shared/loader" // Import the loader component
 import { BASE } from "../../styles/base"
 import { ALERT } from "../../styles/alert"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
+import { KNOWLEDGE_PANELS_THEME } from "../../styles/knowledge-panels-theme"
 
 import type { KnowledgePanel, KnowledgePanelsData } from "../../types/knowledge-panel"
 
@@ -22,10 +23,14 @@ import { extractImages } from "../../utils/knowledge-panels/extract-images"
  * @property {string} url - The URL to fetch the knowledge panels from
  * @property {string} path - The path to the knowledge panels inside the JSON response (e.g., "product.knowledge_panels")
  * @property {string} headingLevel - The heading level to use for panel titles (h2, h3, h4, h5, h6)
+ *
+ * Dark mode is supported through the `--off-kp-*` CSS custom properties,
+ * see `styles/knowledge-panels-theme.ts`.
  */
 @customElement("knowledge-panels")
 export class KnowledgePanelsComponent extends LitElement {
   static override styles = [
+    KNOWLEDGE_PANELS_THEME,
     BASE,
     ALERT,
     ...getButtonClasses([ButtonType.Chocolate, ButtonType.Cappucino]),
@@ -38,6 +43,7 @@ export class KnowledgePanelsComponent extends LitElement {
         box-sizing: border-box;
         overflow-x: hidden; /* Prevent horizontal scrolling */
         padding: 0 0.5rem;
+        color: var(--off-kp-text, currentColor);
       }
 
       /* Apply box-sizing to all elements */
@@ -58,9 +64,9 @@ export class KnowledgePanelsComponent extends LitElement {
         margin-bottom: 1rem;
         border: 1px solid transparent;
         border-radius: 0.25rem;
-        color: #0c5460;
-        background-color: #d1ecf1;
-        border-color: #bee5eb;
+        color: var(--off-kp-info-text, #0c5460);
+        background-color: var(--off-kp-info-bg, #d1ecf1);
+        border-color: var(--off-kp-info-border, #bee5eb);
       }
 
       .loading {

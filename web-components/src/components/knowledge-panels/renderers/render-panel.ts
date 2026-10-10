@@ -24,33 +24,32 @@ export class PanelRenderer extends LitElement {
     .panel {
       margin-bottom: 1.5rem;
       border-radius: 16px;
-      border: 1px solid #f2d3ac;
-      background: #fff;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-      border-bottom: 1px solid #f2d3ac;
-      background: #fffdfa;
+      border: 1px solid var(--off-kp-panel-border, #f2d3ac);
+      box-shadow: 0 2px 8px var(--off-kp-shadow, rgba(0, 0, 0, 0.04));
+      border-bottom: 1px solid var(--off-kp-panel-border, #f2d3ac);
+      background: var(--off-kp-bg, #fffdfa);
       overflow: hidden;
       transition: box-shadow 0.15s;
     }
 
     summary {
-      background: #ffe9c7;
+      background: var(--off-kp-panel-header-bg, #ffe9c7);
       font-weight: bold;
       font-size: 1.12rem;
       cursor: pointer;
       padding: 1rem 1rem;
-      border-bottom: 1px solid #f2d3ac;
+      border-bottom: 1px solid var(--off-kp-panel-border, #f2d3ac);
       outline: none;
       user-select: none;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      color: #674d23;
+      color: var(--off-kp-panel-header-text, #674d23);
       transition: background 0.18s;
     }
 
     summary:hover {
-      background: #ffe0a6;
+      background: var(--off-kp-panel-header-hover-bg, #ffe0a6);
     }
 
     summary::-webkit-details-marker {
@@ -93,6 +92,10 @@ export class PanelRenderer extends LitElement {
       height: 2.5rem;
     }
 
+    .panel-icon-monochrome {
+      filter: var(--off-kp-monochrome-icon-filter, none);
+    }
+
     .arrow {
       transition: transform 0.2s;
       margin-left: 0.5rem;
@@ -103,12 +106,12 @@ export class PanelRenderer extends LitElement {
     }
     .panel-content {
       padding: 1.2rem 1.3rem;
-      background: #fffdfa;
+      background: var(--off-kp-bg, #fffdfa);
     }
     .panel-subtitle {
       margin-bottom: 0.75rem;
       font-style: italic;
-      color: #a88b56;
+      color: var(--off-kp-panel-subtitle-text, #a88b56);
     }
   `
   @property({ type: Object })
@@ -156,6 +159,11 @@ export class PanelRenderer extends LitElement {
         : nothing
 
     const icon = this.panel.title_element?.icon_url
+    // Black monochrome icons (recoloured from the evaluation on the server, or the
+    // generic info icon) need inverting on dark backgrounds; coloured logos must not be
+    const monochromeIcon =
+      this.panel.title_element?.icon_color_from_evaluation ||
+      this.panel.title_element?.type === "info"
 
     if (!this.frame || this.panel.title_element == null) {
       return html`${content}`
@@ -176,7 +184,9 @@ export class PanelRenderer extends LitElement {
                 icon
                   ? html`
                       <img
-                        class="panel-icon panel-icon-${this.panel.title_element?.icon_size}"
+                        class="panel-icon panel-icon-${this.panel.title_element?.icon_size} ${
+                          monochromeIcon ? "panel-icon-monochrome" : ""
+                        }"
                         .src=${icon}
                         .alt=${title}
                       />
