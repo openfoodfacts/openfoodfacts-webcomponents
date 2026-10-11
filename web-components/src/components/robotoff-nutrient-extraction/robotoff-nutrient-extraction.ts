@@ -143,7 +143,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
    * @type {Task}
    */
   private _insightsTask = new Task(this, {
-    task: async ([productCode], {}) => {
+    task: async ([productCode]) => {
       this.emitNutrientEvent(EventState.LOADING)
       const [insights] = await Promise.all([
         fetchNutrientInsights(productCode, {

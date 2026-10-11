@@ -656,12 +656,12 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
    * @returns {TemplateResult} The rendered summary content.
    */
   renderSummary() {
-    let filteredNotAnsweredChanges = this.filteredNotAnsweredChanges
+    const filteredNotAnsweredChanges = this.filteredNotAnsweredChanges
     if (filteredNotAnsweredChanges.length === 0) {
       return nothing
     }
 
-    let notAnsweredChanges = [
+    const notAnsweredChanges = [
       // Get next items from currentAnsweredIndex first
       ...filteredNotAnsweredChanges.filter(
         (change) => change.position >= this.currentAnsweredIndex
@@ -870,7 +870,11 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
     this.updateValues()
     this.isEditMode = false
     this.computeWordDiff()
-    this.filteredNotAnsweredChanges.length ? this.focusFirstButton() : this.focusSaveButton()
+    if (this.filteredNotAnsweredChanges.length) {
+      this.focusFirstButton()
+    } else {
+      this.focusSaveButton()
+    }
   }
 
   /**

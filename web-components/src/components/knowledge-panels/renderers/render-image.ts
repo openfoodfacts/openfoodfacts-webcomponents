@@ -1,5 +1,6 @@
 import { LitElement, html, css, type TemplateResult } from "lit"
 import { customElement, property } from "lit/decorators.js"
+import type { PanelGroupElement } from "../../../types/knowledge-panel"
 
 /**
  * Panel group image renderer component
@@ -37,7 +38,7 @@ export class PanelGroupImageRenderer extends LitElement {
   `
 
   @property({ type: Object })
-  panelGroup: any
+  panelGroup?: PanelGroupElement
 
   override render(): TemplateResult {
     if (!this.panelGroup || !this.panelGroup.image) {

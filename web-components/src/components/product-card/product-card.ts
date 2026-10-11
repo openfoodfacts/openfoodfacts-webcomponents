@@ -1,4 +1,4 @@
-import { LitElement, html, css, nothing } from "lit"
+import { LitElement, html, css, nothing, type PropertyValues } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { classMap } from "lit/directives/class-map.js"
 import { localized, msg, str } from "@lit/localize"
@@ -395,7 +395,7 @@ export class ProductCard extends LitElement {
     super.disconnectedCallback()
   }
 
-  override willUpdate(changedProperties: Map<string, any>) {
+  override willUpdate(changedProperties: PropertyValues) {
     super.willUpdate(changedProperties)
 
     if (changedProperties.has("product")) {
@@ -412,7 +412,7 @@ export class ProductCard extends LitElement {
   /**
    * Updates score image URLs based on the product's nutrition grades, nova group, and greenscore
    */
-  override updated(changedProperties: Map<string, any>) {
+  override updated(changedProperties: PropertyValues) {
     super.updated(changedProperties)
     this.nutriscoreSrc = KP_ATTRIBUTE_IMG(
       `nutriscore-${this.product.nutriscore_grade?.toLowerCase() || "unknown"}.svg`

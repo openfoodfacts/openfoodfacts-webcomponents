@@ -1,6 +1,10 @@
 import { LitElement, html, css, type TemplateResult } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import type { KnowledgePanelElement, KnowledgePanelsData } from "../../../types/knowledge-panel"
+import type {
+  KnowledgePanelElement,
+  KnowledgePanelsData,
+  PanelGroupElement,
+} from "../../../types/knowledge-panel"
 import "../../../utils/knowledge-panels/heading-utils"
 
 /**
@@ -92,7 +96,7 @@ export class PanelGroupElementRenderer extends LitElement {
    * @param panelGroup - The panel group containing panel references
    * @returns Array of rendered panels
    */
-  renderPanelGroupPanels(panelGroup: any): TemplateResult[] {
+  renderPanelGroupPanels(panelGroup: PanelGroupElement): TemplateResult[] {
     return (panelGroup.panel_ids || []).map((panelId: string) => {
       const panel = this.knowledgePanels?.[panelId]
       if (panel) {

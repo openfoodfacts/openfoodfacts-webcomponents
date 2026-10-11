@@ -124,7 +124,7 @@ export class RobotoffIngredientDetection extends DisplayProductLinkMixin(
    * Handles the asynchronous fetching of insights and updates the component state
    */
   private insightsTask = new Task(this, {
-    task: async ([count, page, productCode], {}) => {
+    task: async ([count, page, productCode]) => {
       this.insightIds = []
 
       const response = await fetchIngredientsDetectionInsights(productCode, {
