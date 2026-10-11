@@ -154,7 +154,8 @@ describe("Utility Functions", () => {
   })
 
   describe("initDebounce", () => {
-    it("should debounce function calls", async () => {
+    it("should debounce function calls", () => {
+      vi.useFakeTimers()
       const mockFn = vi.fn()
       const debouncedFn = initDebounce(mockFn, 100)
 
@@ -164,11 +165,12 @@ describe("Utility Functions", () => {
 
       expect(mockFn).not.toHaveBeenCalled()
 
-      await new Promise((resolve) => setTimeout(resolve, 150))
+      vi.advanceTimersByTime(100)
       expect(mockFn).toHaveBeenCalledTimes(1)
     })
 
-    it("should reset timer on subsequent calls", async () => {
+    it("should reset timer on subsequent calls", () => {
+      vi.useFakeTimers()
       const mockFn = vi.fn()
       const debouncedFn = initDebounce(mockFn, 100)
 
@@ -176,16 +178,17 @@ describe("Utility Functions", () => {
 
       setTimeout(() => debouncedFn(), 50) // Reset timer
 
-      await new Promise((resolve) => setTimeout(resolve, 120))
+      vi.advanceTimersByTime(120)
       expect(mockFn).not.toHaveBeenCalled()
 
-      await new Promise((resolve) => setTimeout(resolve, 80))
+      vi.advanceTimersByTime(30)
       expect(mockFn).toHaveBeenCalledTimes(1)
     })
   })
 
   describe("createDebounce", () => {
-    it("should create debounce utility with debounce method", async () => {
+    it("should create debounce utility with debounce method", () => {
+      vi.useFakeTimers()
       const mockFn = vi.fn()
       const debouncer = createDebounce(100)
 
@@ -194,32 +197,40 @@ describe("Utility Functions", () => {
 
       expect(mockFn).not.toHaveBeenCalled()
 
-      await new Promise((resolve) => setTimeout(resolve, 150))
+      vi.advanceTimersByTime(100)
       expect(mockFn).toHaveBeenCalledTimes(1)
     })
 
-    it("should provide clear method to cancel pending execution", async () => {
+    it("should provide clear method to cancel pending execution", () => {
+      vi.useFakeTimers()
       const mockFn = vi.fn()
       const debouncer = createDebounce(100)
 
       debouncer.debounce(mockFn)
       debouncer.clear()
 
-      await new Promise((resolve) => setTimeout(resolve, 150))
+      vi.advanceTimersByTime(100)
       expect(mockFn).not.toHaveBeenCalled()
     })
   })
 
   describe("downloadCSV", () => {
     beforeEach(() => {
-      // Mock DOM methods
-      document.createElement = vi.fn().mockReturnValue({
+      const mockLink = {
         setAttribute: vi.fn(),
         click: vi.fn(),
         style: {},
-      })
-      document.body.appendChild = vi.fn()
-      document.body.removeChild = vi.fn()
+      }
+      vi.spyOn(document, "createElement").mockReturnValue(mockLink as unknown as HTMLAnchorElement)
+      vi.spyOn(document.body, "appendChild").mockImplementation(() => mockLink as unknown as Node)
+      vi.spyOn(document.body, "removeChild").mockImplementation(() => mockLink as unknown as Node)
+      vi.stubGlobal(
+        "URL",
+        Object.assign(class TestURL extends URL {}, {
+          createObjectURL: vi.fn(() => "blob:mock-url"),
+          revokeObjectURL: vi.fn(),
+        })
+      )
     })
 
     it("should handle empty rows gracefully", () => {
@@ -240,7 +251,7 @@ describe("Utility Functions", () => {
         style: {},
       }
 
-      document.createElement = vi.fn().mockReturnValue(mockLink)
+      vi.mocked(document.createElement).mockReturnValue(mockLink as unknown as HTMLAnchorElement)
 
       downloadCSV(rows, "test", headers)
 

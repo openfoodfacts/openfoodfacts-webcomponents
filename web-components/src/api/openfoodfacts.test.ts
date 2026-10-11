@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+import { jsonResponse } from "../test/helpers"
 import { fetchProduct, fetchNutrientsOrder } from "../api/openfoodfacts"
 import { openfoodfactsApiUrl } from "../signals/openfoodfacts"
 
@@ -11,7 +12,8 @@ vi.mock("../signals/openfoodfacts", () => ({
 
 describe("OpenFoodFacts API", () => {
   beforeEach(() => {
-    global.fetch = vi.fn()
+    vi.stubGlobal("fetch", vi.fn<typeof fetch>())
+    vi.mocked(openfoodfactsApiUrl.get).mockReturnValue("https://world.openfoodfacts.org")
   })
 
   describe("fetchProduct", () => {
@@ -24,10 +26,7 @@ describe("OpenFoodFacts API", () => {
         },
       }
 
-      ;(global.fetch as any).mockResolvedValue({
-        ok: true,
-        json: async () => mockProduct,
-      })
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse(mockProduct))
 
       const result = await fetchProduct("1234567890123", {
         fields: "code,product_name",
@@ -40,10 +39,7 @@ describe("OpenFoodFacts API", () => {
     })
 
     it("should throw error on failed response", async () => {
-      ;(global.fetch as any).mockResolvedValue({
-        ok: false,
-        status: 404,
-      })
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse(null, 404))
 
       await expect(fetchProduct("1234567890123", { fields: "code" })).rejects.toThrow(
         "Failed to fetch product data"
@@ -51,7 +47,7 @@ describe("OpenFoodFacts API", () => {
     })
 
     it("should handle network errors", async () => {
-      ;(global.fetch as any).mockRejectedValue(new Error("Network error"))
+      vi.mocked(global.fetch).mockRejectedValue(new Error("Network error"))
 
       await expect(fetchProduct("1234567890123", { fields: "code" })).rejects.toThrow(
         "Network error"
@@ -59,10 +55,7 @@ describe("OpenFoodFacts API", () => {
     })
 
     it("should properly encode parameters", async () => {
-      ;(global.fetch as any).mockResolvedValue({
-        ok: true,
-        json: async () => ({ status: "found" }),
-      })
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse({ status: "found" }))
 
       await fetchProduct("1234567890123", {
         fields: "code,product_name",
@@ -75,10 +68,7 @@ describe("OpenFoodFacts API", () => {
     })
 
     it("should handle special characters in product code", async () => {
-      ;(global.fetch as any).mockResolvedValue({
-        ok: true,
-        json: async () => ({ status: "found" }),
-      })
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse({ status: "found" }))
 
       const productCode = "test/product&code"
       await fetchProduct(productCode, { fields: "code" })
@@ -98,10 +88,7 @@ describe("OpenFoodFacts API", () => {
         ],
       }
 
-      ;(global.fetch as any).mockResolvedValue({
-        ok: true,
-        json: async () => mockResponse,
-      })
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse(mockResponse))
 
       const result = await fetchNutrientsOrder({
         cc: "fr",
@@ -115,10 +102,7 @@ describe("OpenFoodFacts API", () => {
     })
 
     it("should throw error on failed response", async () => {
-      ;(global.fetch as any).mockResolvedValue({
-        ok: false,
-        status: 500,
-      })
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse(null, 500))
 
       await expect(fetchNutrientsOrder({ cc: "fr", lc: "fr" })).rejects.toThrow(
         "Failed to fetch nutrients order"
@@ -126,10 +110,7 @@ describe("OpenFoodFacts API", () => {
     })
 
     it("should handle missing parameters", async () => {
-      ;(global.fetch as any).mockResolvedValue({
-        ok: true,
-        json: async () => ({ nutrients: [] }),
-      })
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse({ nutrients: [] }))
 
       await fetchNutrientsOrder({})
 
@@ -137,12 +118,9 @@ describe("OpenFoodFacts API", () => {
     })
 
     it("should handle JSON parsing errors", async () => {
-      ;(global.fetch as any).mockResolvedValue({
-        ok: true,
-        json: async () => {
-          throw new Error("Invalid JSON")
-        },
-      })
+      const malformedResponse = new Response("not JSON")
+      vi.spyOn(malformedResponse, "json").mockRejectedValue(new Error("Invalid JSON"))
+      vi.mocked(global.fetch).mockResolvedValue(malformedResponse)
 
       await expect(fetchNutrientsOrder({ cc: "fr" })).rejects.toThrow("Invalid JSON")
     })
@@ -151,11 +129,8 @@ describe("OpenFoodFacts API", () => {
   describe("API URL configuration", () => {
     it("should use configured API URL", async () => {
       const mockApiUrl = "https://custom.openfoodfacts.org"
-      ;(openfoodfactsApiUrl.get as any).mockReturnValue(mockApiUrl)
-      ;(global.fetch as any).mockResolvedValue({
-        ok: true,
-        json: async () => ({ status: "found" }),
-      })
+      vi.mocked(openfoodfactsApiUrl.get).mockReturnValue(mockApiUrl)
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse({ status: "found" }))
 
       await fetchProduct("123", { fields: "code" })
 
@@ -164,11 +139,8 @@ describe("OpenFoodFacts API", () => {
 
     it("should handle URL building errors", () => {
       // Test edge case where API URL might be malformed
-      ;(openfoodfactsApiUrl.get as any).mockReturnValue("")
-      ;(global.fetch as any).mockResolvedValue({
-        ok: true,
-        json: async () => ({ status: "found" }),
-      })
+      vi.mocked(openfoodfactsApiUrl.get).mockReturnValue("")
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse({ status: "found" }))
 
       return expect(fetchProduct("123", { fields: "code" })).resolves.not.toThrow()
     })
