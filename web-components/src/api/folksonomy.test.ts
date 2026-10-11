@@ -46,12 +46,14 @@ describe("Folksonomy API", () => {
     })
 
     it("should handle network errors", async () => {
+      vi.spyOn(console, "error").mockImplementation(() => {})
       vi.mocked(global.fetch).mockRejectedValue(new Error("Network error"))
 
       await expect(folksonomyApi.fetchProductProperties("123")).rejects.toThrow("Network error")
     })
 
     it("should handle HTTP error responses", async () => {
+      vi.spyOn(console, "error").mockImplementation(() => {})
       vi.mocked(global.fetch).mockResolvedValue(jsonResponse(null, 404))
 
       await expect(folksonomyApi.fetchProductProperties("123")).rejects.toThrow(
@@ -67,6 +69,7 @@ describe("Folksonomy API", () => {
     })
 
     it("should handle malformed JSON responses", async () => {
+      vi.spyOn(console, "error").mockImplementation(() => {})
       const malformedResponse = new Response("not JSON")
       vi.spyOn(malformedResponse, "json").mockRejectedValue(new Error("Invalid JSON"))
       vi.mocked(global.fetch).mockResolvedValue(malformedResponse)
@@ -94,6 +97,7 @@ describe("Folksonomy API", () => {
     })
 
     it("should handle timeout scenarios", async () => {
+      vi.spyOn(console, "error").mockImplementation(() => {})
       vi.mocked(global.fetch).mockImplementation(
         () =>
           new Promise((_, reject) => {
@@ -105,6 +109,7 @@ describe("Folksonomy API", () => {
     })
 
     it("should handle server unavailable responses", async () => {
+      vi.spyOn(console, "error").mockImplementation(() => {})
       vi.mocked(global.fetch).mockResolvedValue(jsonResponse(null, 503))
 
       await expect(folksonomyApi.fetchProductProperties("123")).rejects.toThrow(
