@@ -15,7 +15,10 @@ export default defineConfig({
         "**/*.d.ts",
       ],
     },
-    setupFiles: ["./src/test/setup.ts"],
+    setupFiles: ["./src/test/lit-warnings.ts", "./src/test/setup.ts"],
+    sequence: {
+      setupFiles: "list",
+    },
   },
   define: {
     global: "globalThis",
