@@ -255,15 +255,18 @@ export class MobileBadges extends LitElement {
   fDroidAppLink = "https://f-droid.org/packages/openfoodfacts.github.scrachx.openfood"
 
   /**
-   * Generates the URL suffix for Android app links.
-   * @param baseURI - The base URL to which the suffix will be appended.
+   * Adds tracking parameters to a URL.
+   * @param baseURI - The base URL.
    * @param language - The language code.
    * @param campaign - The campaign identifier.
-   * @returns The URL suffix with UTM parameters.
+   * @returns The URL with UTM parameters.
    */
-  private getAndroidUrlSuffix(baseURI: string, language: string, campaign: string): string {
-    const separator = baseURI.includes("?") ? "&" : "?"
-    return `${separator}utm_source=off&utm_medium=web&utm_campaign=${campaign}_${language}`
+  private addTrackingParams(baseURI: string, language: string, campaign: string): string {
+    const url = new URL(baseURI)
+    url.searchParams.set("utm_source", "off")
+    url.searchParams.set("utm_medium", "web")
+    url.searchParams.set("utm_campaign", `${campaign}_${language}`)
+    return url.toString()
   }
 
   /**
@@ -273,11 +276,7 @@ export class MobileBadges extends LitElement {
    */
   getAndroidAppLink(language: string): string {
     const baseURI = `https://play.google.com/store/apps/details?id=org.openfoodfacts.scanner&hl=${language}`
-    return `${baseURI}${this.getAndroidUrlSuffix(
-      baseURI,
-      language,
-      "install_the_app_android_footer"
-    )}`
+    return this.addTrackingParams(baseURI, language, "install_the_app_android_footer")
   }
 
   /**
@@ -287,7 +286,7 @@ export class MobileBadges extends LitElement {
    */
   getAndroidApkAppLink(language: string): string {
     const baseURI = "https://github.com/openfoodfacts/smooth-app/releases/latest"
-    return `${baseURI}${this.getAndroidUrlSuffix(baseURI, language, "install_the_app_apk_footer")}`
+    return this.addTrackingParams(baseURI, language, "install_the_app_apk_footer")
   }
 
   /**
