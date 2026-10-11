@@ -1,4 +1,6 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest"
+import { elementUpdated } from "@open-wc/testing/pure"
+import { nextFrame, waitUntil } from "@open-wc/testing-helpers"
 import { languageCode, countryCode } from "../../signals/app"
 import { DEFAULT_LANGUAGE_CODE } from "../../constants"
 
@@ -409,13 +411,6 @@ const bannerEvents = (element: any) => {
   return detail
 }
 
-const settleTask = async (element: any) => {
-  for (let attempt = 0; attempt < 20; attempt++) {
-    await element.updateComplete
-    await new Promise((resolve) => setTimeout(resolve, 5))
-  }
-}
-
 /** A feed item shaped like `donation_campaign_2026`, with the fixture's figures by default. */
 const feedItem = (overrides: Record<string, unknown> = {}) => ({
   translations: { default: { title: "Campaign", message: "Give" } },
@@ -450,10 +445,7 @@ const mountVariant = async (
     element.setAttribute(key, value)
   }
   document.body.appendChild(element)
-  await element.updateComplete
-  if (attributes["news-url"] && attributes["news-id"]) {
-    await settleTask(element)
-  }
+  await elementUpdated(element)
   return element
 }
 
@@ -554,6 +546,10 @@ describe("donation-banner variants", () => {
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
         feed()
       )
+      await waitUntil(
+        () => text(element).includes("Join the 760 people keeping Open Food Facts free."),
+        "Expected feed copy to render"
+      )
 
       expect(text(element)).toContain("Join the 760 people keeping Open Food Facts free.")
       expect(text(element)).toContain("€170,000")
@@ -574,10 +570,14 @@ describe("donation-banner variants", () => {
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
         feed()
       )
+      await waitUntil(
+        () => element.shadowRoot.querySelector("donation-meter"),
+        "Expected feed figures to render"
+      )
       expect(global.fetch).toHaveBeenCalledTimes(1)
 
       element.setAttribute("variant", "bar")
-      await settleTask(element)
+      await elementUpdated(element)
 
       expect(global.fetch).toHaveBeenCalledTimes(1)
     })
@@ -601,6 +601,7 @@ describe("donation-banner variants", () => {
           },
         })
       )
+      await waitUntil(() => text(element).includes("Feed headline"), "Expected feed copy to render")
 
       expect(text(element)).toContain("Feed headline")
       expect(text(element)).toContain("Feed body €47,431 of €170,000")
@@ -615,6 +616,7 @@ describe("donation-banner variants", () => {
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
         feed({ translations: { en: { title: "Feed {constructor} headline", message: "M" } } })
       )
+      await waitUntil(() => text(element).includes("Feed headline"), "Expected feed copy to render")
 
       expect(text(element)).toContain("Feed headline")
       expect(text(element)).not.toContain("function")
@@ -625,6 +627,10 @@ describe("donation-banner variants", () => {
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
         feed({ translations: { en: { title: 123, message: ["M"], hook: null } } })
+      )
+      await waitUntil(
+        () => text(element).includes("Join the 760 people keeping Open Food Facts free."),
+        "Expected feed copy to render"
       )
 
       expect(text(element)).toContain("Join the 760 people keeping Open Food Facts free.")
@@ -638,6 +644,7 @@ describe("donation-banner variants", () => {
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
         feed({ translations: { en: { title: "Feed headline", message: "M" } } })
       )
+      await waitUntil(() => text(element).includes("Feed headline"), "Expected feed copy to render")
 
       expect(text(element)).toContain("Feed headline")
       expect(text(element)).toContain("Give €5 a month")
@@ -648,6 +655,10 @@ describe("donation-banner variants", () => {
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
         feed({ translations: { default: { title: "Default-only headline", message: "M" } } })
+      )
+      await waitUntil(
+        () => text(element).includes("Join the 760 people keeping Open Food Facts free."),
+        "Expected feed copy to render"
       )
 
       expect(text(element)).not.toContain("Default-only headline")
@@ -665,6 +676,7 @@ describe("donation-banner variants", () => {
           },
         })
       )
+      await waitUntil(() => text(element).includes("EN headline"), "Expected feed copy to render")
 
       expect(text(element)).toContain("EN headline")
       expect(text(element)).not.toContain("Default headline")
@@ -684,6 +696,7 @@ describe("donation-banner variants", () => {
           },
         })
       )
+      await waitUntil(() => text(element).includes("PT-BR title"), "Expected feed copy to render")
       expect(text(element)).toContain("PT-BR title")
     })
 
@@ -694,6 +707,7 @@ describe("donation-banner variants", () => {
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
         feed({ translations: { pt: { title: "PT title", message: "M" } } })
       )
+      await waitUntil(() => text(element).includes("PT title"), "Expected feed copy to render")
       expect(text(element)).toContain("PT title")
     })
 
@@ -703,6 +717,10 @@ describe("donation-banner variants", () => {
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
         feed({ translations: { default: { title: "Default title", message: "M" } } })
+      )
+      await waitUntil(
+        () => text(element).includes("Join the 760 people keeping Open Food Facts free."),
+        "Expected feed copy to render"
       )
       expect(text(element)).not.toContain("Default title")
       expect(text(element)).toContain("Join the 760 people keeping Open Food Facts free.")
@@ -718,7 +736,9 @@ describe("donation-banner variants", () => {
         "news-id": "camp",
         amounts: "3,5,10",
       })
-      await settleTask(element)
+      // Fallback copy is present while loading; let the immediate mock response settle.
+      await nextFrame()
+      await elementUpdated(element)
 
       expect(text(element)).toContain("Join the people keeping Open Food Facts free.")
       expect(element.shadowRoot.querySelector("donation-meter")).toBeNull()
@@ -735,7 +755,9 @@ describe("donation-banner variants", () => {
         "news-id": "camp",
         amounts: "3,5,10",
       })
-      await settleTask(element)
+      // Fallback copy is present while loading; let the immediate mock response settle.
+      await nextFrame()
+      await elementUpdated(element)
 
       expect(text(element)).toContain("Join the people keeping Open Food Facts free.")
       expect(console.error).not.toHaveBeenCalled()
@@ -745,12 +767,20 @@ describe("donation-banner variants", () => {
       const element = await mountVariant(
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
-        undefined
+        feed()
       )
+      await waitUntil(
+        () => text(element).includes("Join the 760 people keeping Open Food Facts free."),
+        "Expected the initial feed copy to render"
+      )
+
       vi.mocked(global.fetch).mockResolvedValue({ ok: false, status: 500 } as Response)
       element.setAttribute("news-id", "camp2")
-      await settleTask(element)
+      // Fallback is also shown while loading, so let the immediate HTTP error settle.
+      await nextFrame()
+      await elementUpdated(element)
 
+      expect(global.fetch).toHaveBeenCalledTimes(2)
       expect(text(element)).toContain("Join the people keeping Open Food Facts free.")
     })
 
@@ -760,6 +790,9 @@ describe("donation-banner variants", () => {
         { "news-url": FEED_URL, "news-id": "missing", amounts: "3,5,10" },
         feed()
       )
+      // Fallback copy is present while loading; let the immediate mock response settle.
+      await nextFrame()
+      await elementUpdated(element)
       expect(text(element)).toContain("Join the people keeping Open Food Facts free.")
     })
 
@@ -772,6 +805,9 @@ describe("donation-banner variants", () => {
           tagline_feed: { default: { news: [{ id: "camp" }] } },
         }
       )
+      // Fallback copy is present while loading; let the immediate mock response settle.
+      await nextFrame()
+      await elementUpdated(element)
       expect(text(element)).toContain("Join the people keeping Open Food Facts free.")
     })
 
@@ -780,6 +816,10 @@ describe("donation-banner variants", () => {
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
         feed({ enabled: false, start_date: "2000-01-01", end_date: "2001-01-01" })
+      )
+      await waitUntil(
+        () => text(element).includes("Join the 760 people keeping Open Food Facts free."),
+        "Expected feed copy to render"
       )
       expect(text(element)).toContain("Join the 760 people keeping Open Food Facts free.")
       const meter = element.shadowRoot.querySelector("donation-meter")
@@ -794,6 +834,7 @@ describe("donation-banner variants", () => {
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
         feed({ count: undefined, translations: { en: { title: "X {count} Y", message: "M" } } })
       )
+      await waitUntil(() => text(element).includes("X Y"), "Expected feed copy to render")
       expect(text(element)).toContain("X Y")
     })
 
@@ -802,6 +843,10 @@ describe("donation-banner variants", () => {
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
         feed({ count: undefined })
+      )
+      await waitUntil(
+        () => element.shadowRoot.querySelector("donation-meter"),
+        "Expected feed figures to render"
       )
       const meter = element.shadowRoot.querySelector("donation-meter")
       expect((meter.shadowRoot.textContent as string).replace(/\s+/g, " ")).not.toContain(
@@ -815,6 +860,10 @@ describe("donation-banner variants", () => {
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
         feed({ end_date: undefined })
       )
+      await waitUntil(
+        () => element.shadowRoot.querySelector("donation-meter"),
+        "Expected feed figures to render"
+      )
       const meter = element.shadowRoot.querySelector("donation-meter")
       expect(meter.shadowRoot.textContent as string).not.toContain("until")
     })
@@ -824,6 +873,10 @@ describe("donation-banner variants", () => {
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
         feed({ currency: "12$" })
+      )
+      await waitUntil(
+        () => text(element).includes("Join the 760 people keeping Open Food Facts free."),
+        "Expected the feed copy despite invalid figures"
       )
       expect(element.shadowRoot.querySelector("donation-meter")).toBeNull()
       expect(text(element)).toContain("Give €5 a month")
@@ -899,6 +952,10 @@ describe("donation-banner variants", () => {
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10", "utm-content": "A" },
         feed()
       )
+      await waitUntil(
+        () => element.shadowRoot.querySelector("donation-meter"),
+        "Expected feed figures to render"
+      )
       const href = element.shadowRoot.querySelector("a.give").getAttribute("href")
       expect(href).toContain("utm_content=A")
     })
@@ -908,6 +965,10 @@ describe("donation-banner variants", () => {
         "campaign",
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
         feed()
+      )
+      await waitUntil(
+        () => element.shadowRoot.querySelector("donation-meter"),
+        "Expected feed figures to render"
       )
       const href = element.shadowRoot.querySelector("a.give").getAttribute("href")
       expect(href).toContain("utm_content=meter")
@@ -1003,6 +1064,10 @@ describe("donation-banner variants", () => {
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
         feed({ translations: { en: { title: "T", hook: "{amount} a month keeps it that way." } } })
       )
+      await waitUntil(
+        () => text(element).includes("€5 a month keeps it that way."),
+        "Expected feed copy to render"
+      )
       expect(text(element)).toContain("€5 a month keeps it that way.")
 
       const bar = await mountVariant(
@@ -1010,6 +1075,7 @@ describe("donation-banner variants", () => {
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
         feed({ translations: { en: { title: "T", hook: "Feed hook {amount}" } } })
       )
+      await waitUntil(() => text(bar).includes("Feed hook €5"), "Expected feed copy to render")
       expect(text(bar)).toContain("Feed hook €5")
     })
 
@@ -1157,12 +1223,20 @@ describe("donation-banner variants", () => {
         { "news-url": FEED_URL, "news-id": "camp", amounts: "3,5,10" },
         feed()
       )
+      await waitUntil(
+        () => text(dated).includes("Join 760 people keeping this free."),
+        "Expected feed copy to render"
+      )
       expect(text(dated)).toContain("Join 760 people keeping this free.")
       expect(text(dated)).toContain("€5 a month keeps it that way.")
       expect(text(dated)).toContain("Give €5/mo")
       expect(text(dated)).not.toContain("I already donated")
 
       const noTiers = await mountVariant("bar", { "news-url": FEED_URL, "news-id": "camp" }, feed())
+      await waitUntil(
+        () => text(noTiers).includes("€3 a month keeps it that way."),
+        "Expected feed copy to render"
+      )
       expect(text(noTiers)).toContain("€3 a month keeps it that way.")
 
       const plain = await mountVariant("bar")
