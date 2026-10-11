@@ -399,6 +399,14 @@ export class ProductCard extends LitElement {
     super.willUpdate(changedProperties)
 
     if (changedProperties.has("product")) {
+      this.nutriscoreSrc = KP_ATTRIBUTE_IMG(
+        `nutriscore-${this.product.nutriscore_grade?.toLowerCase() || "unknown"}.svg`
+      )
+      this.novaSrc = KP_ATTRIBUTE_IMG(`nova-group-${this.product.nova_group || "unknown"}.svg`)
+      this.greenscoreSrc = KP_ATTRIBUTE_IMG(
+        `green-score-${this.product.greenscore_grade?.toLowerCase() || "unknown"}.svg`
+      )
+
       const previousProduct = changedProperties.get("product") as Product | undefined
       const imageUrl = this.product.image_front_small_url
 
@@ -407,20 +415,6 @@ export class ProductCard extends LitElement {
         this.imageFailed = false
       }
     }
-  }
-
-  /**
-   * Updates score image URLs based on the product's nutrition grades, nova group, and greenscore
-   */
-  override updated(changedProperties: PropertyValues) {
-    super.updated(changedProperties)
-    this.nutriscoreSrc = KP_ATTRIBUTE_IMG(
-      `nutriscore-${this.product.nutriscore_grade?.toLowerCase() || "unknown"}.svg`
-    )
-    this.novaSrc = KP_ATTRIBUTE_IMG(`nova-group-${this.product.nova_group || "unknown"}.svg`)
-    this.greenscoreSrc = KP_ATTRIBUTE_IMG(
-      `green-score-${this.product.greenscore_grade?.toLowerCase() || "unknown"}.svg`
-    )
   }
 
   /**
