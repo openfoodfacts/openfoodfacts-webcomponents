@@ -100,7 +100,7 @@ const ASK = [
 ]
 
 beforeEach(() => {
-  vi.mocked(global.fetch).mockReset()
+  vi.stubGlobal("fetch", vi.fn<typeof fetch>())
   languageCode.set(DEFAULT_LANGUAGE_CODE)
   countryCode.set("fr")
   document.body.style.overflow = ""
@@ -711,6 +711,7 @@ describe("donation-banner variants", () => {
 
   describe("feed errors and unknown/disabled items", () => {
     it("renders built-in copy with no throw or console.error on a rejected fetch", async () => {
+      vi.spyOn(console, "error").mockImplementation(() => {})
       vi.mocked(global.fetch).mockRejectedValue(new Error("offline"))
       const element = await mountVariant("campaign", {
         "news-url": FEED_URL,
@@ -725,13 +726,10 @@ describe("donation-banner variants", () => {
     })
 
     it("renders built-in copy on a non-JSON body", async () => {
-      vi.mocked(global.fetch).mockResolvedValue({
-        ok: true,
-        status: 200,
-        json: async () => {
-          throw new Error("not json")
-        },
-      } as unknown as Response)
+      vi.spyOn(console, "error").mockImplementation(() => {})
+      const malformedResponse = new Response("not json")
+      vi.spyOn(malformedResponse, "json").mockRejectedValue(new Error("not json"))
+      vi.mocked(global.fetch).mockResolvedValue(malformedResponse)
       const element = await mountVariant("campaign", {
         "news-url": FEED_URL,
         "news-id": "camp",

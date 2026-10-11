@@ -88,6 +88,7 @@ const settleState = async (element: any, states: string[]) => {
 }
 
 beforeEach(() => {
+  vi.stubGlobal("fetch", vi.fn<typeof fetch>())
   document.body.innerHTML = ""
 })
 

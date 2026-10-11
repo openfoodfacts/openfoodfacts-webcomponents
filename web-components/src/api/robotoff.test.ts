@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+import { jsonResponse } from "../test/helpers"
 import robotoff from "../api/robotoff"
 import { AnnotationAnswer } from "../types/robotoff"
 import { robotoffConfiguration } from "../signals/robotoff"
@@ -23,25 +24,26 @@ vi.mock("../signals/app", () => ({
 const defaultRobotoffApiUrl = "https://robotoff.openfoodfacts.org/api/v1"
 
 const setRobotoffConfiguration = (apiUrl = defaultRobotoffApiUrl, dryRun = false) => {
-  ;(robotoffConfiguration.getItem as any).mockImplementation((key: string) => {
+  vi.mocked(robotoffConfiguration.getItem).mockImplementation((key: string) => {
     if (key === "apiUrl") return apiUrl
     if (key === "dryRun") return dryRun
-    return null
+    return null as never
   })
 }
 
-const jsonResponse = (body: unknown) =>
-  new Response(JSON.stringify(body), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  })
-
-const lastRequest = () => (global.fetch as any).mock.calls.at(-1)[0] as Request
-const lastRequestOptions = () => (global.fetch as any).mock.calls.at(-1)[1]
+const lastRequest = () => {
+  const input = vi.mocked(global.fetch).mock.calls.at(-1)?.[0]
+  if (!input) throw new Error("Expected fetch to be called")
+  return input instanceof Request ? input : new Request(input)
+}
+const lastRequestOptions = () => vi.mocked(global.fetch).mock.calls.at(-1)?.[1]
 
 describe("Robotoff API", () => {
   beforeEach(() => {
-    global.fetch = vi.fn().mockResolvedValue(jsonResponse({ status: "saved" }))
+    vi.stubGlobal(
+      "fetch",
+      vi.fn<typeof fetch>().mockResolvedValue(jsonResponse({ status: "saved" }))
+    )
     vi.clearAllMocks()
     setRobotoffConfiguration()
   })
@@ -59,7 +61,7 @@ describe("Robotoff API", () => {
         ],
       }
 
-      ;(global.fetch as any).mockResolvedValue(jsonResponse(mockQuestions))
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse(mockQuestions))
 
       const result = await robotoff.questionsByProductCode("1234567890123")
 
@@ -71,7 +73,7 @@ describe("Robotoff API", () => {
     })
 
     it("should use provided language parameter", async () => {
-      ;(global.fetch as any).mockResolvedValue(jsonResponse({ questions: [] }))
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse({ questions: [] }))
 
       await robotoff.questionsByProductCode("123", { lang: "fr" })
 
@@ -82,7 +84,7 @@ describe("Robotoff API", () => {
     })
 
     it("should handle additional parameters", async () => {
-      ;(global.fetch as any).mockResolvedValue(jsonResponse({ questions: [] }))
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse({ questions: [] }))
 
       await robotoff.questionsByProductCode("123", {
         count: 10,
@@ -95,23 +97,16 @@ describe("Robotoff API", () => {
     })
 
     it("should handle network errors gracefully", async () => {
-      ;(global.fetch as any).mockRejectedValue(new Error("Network failure"))
+      vi.mocked(global.fetch).mockRejectedValue(new Error("Network failure"))
 
       await expect(robotoff.questionsByProductCode("123")).rejects.toThrow("Network failure")
     })
 
     it("should handle malformed JSON responses", async () => {
-      ;(global.fetch as any).mockResolvedValue({
-        ok: true,
-        status: 200,
-        headers: new Headers({ "Content-Type": "application/json" }),
-        text: async () => {
-          throw new Error("Invalid JSON")
-        },
-        json: async () => {
-          throw new Error("Invalid JSON")
-        },
-      })
+      const malformedResponse = new Response("not JSON")
+      vi.spyOn(malformedResponse, "text").mockRejectedValue(new Error("Invalid JSON"))
+      vi.spyOn(malformedResponse, "json").mockRejectedValue(new Error("Invalid JSON"))
+      vi.mocked(global.fetch).mockResolvedValue(malformedResponse)
 
       await expect(robotoff.questionsByProductCode("123")).rejects.toThrow("Invalid JSON")
     })
@@ -129,7 +124,7 @@ describe("Robotoff API", () => {
         ],
       }
 
-      ;(global.fetch as any).mockResolvedValue(jsonResponse(mockInsights))
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse(mockInsights))
 
       const result = await robotoff.insights()
 
@@ -140,7 +135,7 @@ describe("Robotoff API", () => {
 
     it("should preserve a configured API path prefix", async () => {
       setRobotoffConfiguration("https://proxy.example/robotoff/api/v1")
-      ;(global.fetch as any).mockResolvedValue(jsonResponse({ insights: [] }))
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse({ insights: [] }))
 
       await robotoff.insights()
 
@@ -150,7 +145,7 @@ describe("Robotoff API", () => {
     it("should resolve relative configured API paths", async () => {
       const apiPath = "/proxy/robotoff/api/v1"
       setRobotoffConfiguration(apiPath)
-      ;(global.fetch as any).mockResolvedValue(jsonResponse({ insights: [] }))
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse({ insights: [] }))
 
       await robotoff.insights()
 
@@ -160,7 +155,7 @@ describe("Robotoff API", () => {
     })
 
     it("should handle request parameters", async () => {
-      ;(global.fetch as any).mockResolvedValue(jsonResponse({ insights: [] }))
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse({ insights: [] }))
 
       await robotoff.insights({
         barcode: "123",
@@ -174,7 +169,7 @@ describe("Robotoff API", () => {
     })
 
     it("should handle comma-separated parameters correctly", async () => {
-      ;(global.fetch as any).mockResolvedValue(jsonResponse({ insights: [] }))
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse({ insights: [] }))
 
       await robotoff.insights({
         insight_types: "nutrient_extraction,ingredient_spellcheck",
@@ -197,7 +192,7 @@ describe("Robotoff API", () => {
         ],
       }
 
-      ;(global.fetch as any).mockResolvedValue(jsonResponse(mockResponse))
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse(mockResponse))
 
       const result = await robotoff.fetchRobotoffContributionMessageInsights({
         barcode: "123",
@@ -210,7 +205,7 @@ describe("Robotoff API", () => {
     })
 
     it("should override annotated parameter", async () => {
-      ;(global.fetch as any).mockResolvedValue(jsonResponse({ insights: [] }))
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse({ insights: [] }))
 
       await robotoff.fetchRobotoffContributionMessageInsights({
         annotated: true, // Should be overridden to false
@@ -309,13 +304,13 @@ describe("Robotoff API", () => {
 
   describe("error handling", () => {
     it("should propagate fetch errors", async () => {
-      ;(global.fetch as any).mockRejectedValue(new Error("Connection timeout"))
+      vi.mocked(global.fetch).mockRejectedValue(new Error("Connection timeout"))
 
       await expect(robotoff.questionsByProductCode("123")).rejects.toThrow("Connection timeout")
     })
 
     it("should handle malformed API responses", async () => {
-      ;(global.fetch as any).mockResolvedValue(jsonResponse(null))
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse(null))
 
       const result = await robotoff.questionsByProductCode("123")
       expect(result).toBeNull()

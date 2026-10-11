@@ -1,6 +1,7 @@
-import { afterEach, beforeAll, describe, expect, it, vi } from "vitest"
-import { elementUpdated, fixture, fixtureCleanup } from "@open-wc/testing/pure"
+import { beforeAll, describe, expect, it, vi } from "vitest"
+import { elementUpdated, fixture } from "@open-wc/testing/pure"
 import { html } from "lit"
+import type { ProductCard } from "./product-card"
 
 beforeAll(async () => {
   Object.defineProperty(window, "matchMedia", {
@@ -16,7 +17,7 @@ beforeAll(async () => {
 })
 
 const createProductCard = async (brands: string, quantity: string, imageUrl = "") => {
-  const element = await fixture<any>(html`<product-card></product-card>`)
+  const element = await fixture<ProductCard>(html`<product-card></product-card>`)
   element.product = {
     code: "1234567890",
     product_name: "Test product",
@@ -30,30 +31,18 @@ const createProductCard = async (brands: string, quantity: string, imageUrl = ""
   return element
 }
 
-const getBrandQuantityText = (element: any) =>
+const getBrandQuantityText = (element: ProductCard) =>
   element.shadowRoot?.querySelector(".brand-quantity p")?.textContent?.trim()
 
-afterEach(() => {
-  fixtureCleanup()
-})
-
 describe("product-card", () => {
-  it("shows brand and quantity with a dash when both are present", async () => {
-    const element = await createProductCard("Brand A", "100 g")
+  it.each([
+    { brands: "Brand A", quantity: "100 g", expected: "Brand A - 100 g" },
+    { brands: "Brand A", quantity: "", expected: "Brand A" },
+    { brands: "", quantity: "100 g", expected: "100 g" },
+  ])("formats brand and quantity: $expected", async ({ brands, quantity, expected }) => {
+    const element = await createProductCard(brands, quantity)
 
-    expect(getBrandQuantityText(element)).toBe("Brand A - 100 g")
-  })
-
-  it("does not show a dash when quantity is missing", async () => {
-    const element = await createProductCard("Brand A", "")
-
-    expect(getBrandQuantityText(element)).toBe("Brand A")
-  })
-
-  it("does not show a dash when brand is missing", async () => {
-    const element = await createProductCard("", "100 g")
-
-    expect(getBrandQuantityText(element)).toBe("100 g")
+    expect(getBrandQuantityText(element)).toBe(expected)
   })
 
   it("shows a spinner until the product image has loaded", async () => {
