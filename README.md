@@ -138,7 +138,7 @@ Start the development server:
 npm run dev
 ```
 
-Go to http://localhost:8000 to see the demo.
+Go to http://localhost:6006 to see Storybook.
 
 ## Test local changes with npm like Hunger games project
 
@@ -165,7 +165,7 @@ To have it, you need to follow these steps:
    `127.0.0.1 wc.openfoodfacts.net`
 3. Login to http://world.openfoodfacts.net with your Open Food Facts account. (the first basic auth login is off/off)
 4. Go to any product page and upload an image that you want to annotate. The image should not already exist on this product.
-5. Go to http://wc.openfoodfacts.net:8000 to get cookie for api. It will redirect you to the local index.html page.
+5. Go to http://wc.openfoodfacts.net:6006 to get cookie for api.
 6. Use the `barcode` of the product to annotate it.
 
 ### To use it like a library check the [web-components/README.md](web-components/README.md) file
