@@ -348,7 +348,7 @@ export class MobileBadges extends LitElement {
     errorHandler?: (e: Event) => void
   ) {
     return html`
-      <a class="no-text-decoration" href="${href}">
+      <a class="no-text-decoration" href="${href}" target="_blank" rel="noopener noreferrer">
         <img
           id="${id}"
           src="${src}"
