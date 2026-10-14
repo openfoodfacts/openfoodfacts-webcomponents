@@ -4,14 +4,17 @@
 export type DarkModeCallback = (isDark: boolean) => void
 
 class DarkModeListener {
-  private isDark: boolean
+  private isDark = false
   private listeners: Set<DarkModeCallback> = new Set()
-  private mq: MediaQueryList
 
   constructor() {
-    this.mq = window.matchMedia("(prefers-color-scheme: dark)")
-    this.isDark = this.mq.matches
-    this.mq.addEventListener("change", this.handleChange)
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+      return
+    }
+
+    const mq = window.matchMedia("(prefers-color-scheme: dark)")
+    this.isDark = mq.matches
+    mq.addEventListener("change", this.handleChange)
   }
 
   private handleChange = (e: MediaQueryListEvent) => {
