@@ -64,6 +64,7 @@ class ModalComponent extends LitElement {
 
   override willUpdate(changedProperties: PropertyValues) {
     if (
+      typeof document !== "undefined" &&
       changedProperties.has("isOpen") &&
       this.isOpen &&
       document.activeElement instanceof HTMLElement
