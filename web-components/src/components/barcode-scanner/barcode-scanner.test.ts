@@ -46,4 +46,25 @@ describe("BarcodeScanner", () => {
 
     expect(permissionQuery).not.toHaveBeenCalled()
   })
+
+  it("shares an in-flight camera permission request", async () => {
+    const scanner = new BarcodeScanner()
+    let resolvePermission!: (status: PermissionStatus) => void
+    const permissionQuery = vi.fn(
+      () => new Promise<PermissionStatus>((resolve) => (resolvePermission = resolve))
+    )
+    vi.stubGlobal("navigator", { permissions: { query: permissionQuery } })
+    vi.spyOn(console, "warn").mockImplementation(() => {})
+
+    const askPermission = (
+      scanner as unknown as { askPermission: () => Promise<void> }
+    ).askPermission.bind(scanner)
+    const firstRequest = askPermission()
+    const duplicateRequest = askPermission()
+
+    expect(permissionQuery).toHaveBeenCalledTimes(1)
+
+    resolvePermission({ state: "denied" } as PermissionStatus)
+    await Promise.all([firstRequest, duplicateRequest])
+  })
 })

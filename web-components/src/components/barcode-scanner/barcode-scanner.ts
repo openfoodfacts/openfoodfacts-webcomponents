@@ -230,6 +230,8 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
   @state()
   private detectFn?: (imageData: ImageBitmap) => Promise<string | undefined>
 
+  private isRequestingCamera = false
+
   /**
    * A getter that returns whether the video is currently playing.
    * This getter is used to determine the state of the video element and update the component's UI accordingly.
@@ -322,8 +324,8 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
    * This method is called when the user clicks the start scanning button or when the runScanner property is set to true.
    */
   private async askPermission() {
-    // A running scanner already owns a camera stream, so avoid requesting another one.
-    if (this.isVideoPlaying) {
+    // A running scanner or in-flight request already owns the camera startup flow.
+    if (this.isVideoPlaying || this.isRequestingCamera) {
       return
     }
 
@@ -334,22 +336,27 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
       })
       return
     }
+    this.isRequestingCamera = true
     try {
-      const permissionStatus = await navigator.permissions.query({ name: "camera" })
+      try {
+        const permissionStatus = await navigator.permissions.query({ name: "camera" })
 
-      if (["granted", "prompt"].includes(permissionStatus.state)) {
-        await this.startCamera()
-        return
-      } else {
-        console.warn("Camera permission denied. Please enable it in your browser settings.")
+        if (["granted", "prompt"].includes(permissionStatus.state)) {
+          await this.startCamera()
+          return
+        } else {
+          console.warn("Camera permission denied. Please enable it in your browser settings.")
+        }
+      } catch (error) {
+        console.error("Permission query error:", error)
       }
-    } catch (error) {
-      console.error("Permission query error:", error)
+      this.sendBarcodeStateEvent({
+        barcode: this.barcode,
+        state: BarcodeScannerState.NO_PERMISSION,
+      })
+    } finally {
+      this.isRequestingCamera = false
     }
-    this.sendBarcodeStateEvent({
-      barcode: this.barcode,
-      state: BarcodeScannerState.NO_PERMISSION,
-    })
   }
 
   /**
