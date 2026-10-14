@@ -220,7 +220,7 @@ export class NewKeyModal extends LitElement {
 
     const encodedPropertyName = encodeURIComponent(this.propertyName)
     const wikiUrl = `https://wiki.openfoodfacts.org/Folksonomy/Property/${encodedPropertyName}?action=edit&section=new&nosummary=true&preload=Folksonomy/Property/property_template`
-    window.open(wikiUrl, "_blank")
+    window.open(wikiUrl, "_blank", "noopener,noreferrer")
   }
 
   override render() {
@@ -238,7 +238,12 @@ export class NewKeyModal extends LitElement {
               <div class="instruction-description">
                 ${msg("Search for your property concept in the existing properties database:")}
               </div>
-              <a href=${FolksnomyEnginePropertyLink} target="_blank" class="instruction-link">
+              <a
+                href=${FolksnomyEnginePropertyLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="instruction-link"
+              >
                 ${msg("Browse and search existing properties")}
               </a>
             </div>
@@ -252,7 +257,12 @@ export class NewKeyModal extends LitElement {
                 ${msg("I would like to create a property to [describe your use case]...")}
               </div>
               <div class="join-slack-discussion">
-                <a class="instruction-button" href=${OpenFoodFactsSlackLink} target="_blank">
+                <a
+                  class="instruction-button"
+                  href=${OpenFoodFactsSlackLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   ${msg("Join Slack Discussion")}
                 </a>
               </div>
@@ -293,7 +303,12 @@ export class NewKeyModal extends LitElement {
               <div class="instruction-description">
                 ${msg("Learn more about property creation and guidelines:")}
               </div>
-              <a href=${FolksnomyEngineDocumentationLink} target="_blank" class="instruction-link">
+              <a
+                href=${FolksnomyEngineDocumentationLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="instruction-link"
+              >
                 ${msg("Folksonomy Engine Documentation")}
               </a>
             </div>
