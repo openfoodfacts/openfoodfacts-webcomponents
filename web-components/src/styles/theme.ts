@@ -10,7 +10,7 @@ export type ThemeMode = "auto" | "light" | "dark"
  */
 export const SHARED_THEME = css`
   :host {
-    color-scheme: light dark;
+    color-scheme: light;
     --off-theme-surface-default: #fff;
     --off-theme-border-default: #e5e7eb;
     --off-theme-text-default: #1f2937;
@@ -25,6 +25,7 @@ export const SHARED_THEME = css`
   }
 
   :host([theme="dark"]) {
+    color-scheme: dark;
     --off-theme-surface-default: #18181b;
     --off-theme-border-default: #27272a;
     --off-theme-text-default: #fafafa;
@@ -53,5 +54,10 @@ export const SHARED_THEME = css`
       --off-theme-shadow-primary-default: rgba(0, 0, 0, 0.4);
       --off-theme-shadow-secondary-default: rgba(0, 0, 0, 0.3);
     }
+  }
+
+  :host([theme="auto"]),
+  :host(:not([theme])) {
+    color-scheme: light dark;
   }
 `
