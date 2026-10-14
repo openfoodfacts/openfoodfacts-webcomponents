@@ -41,8 +41,8 @@ export class NewsFeed extends LitElement {
         border: 1px solid var(--off-color-border, var(--off-theme-border-default));
         border-radius: 0.5rem;
         box-shadow:
-          0 1px 3px 0 var(--off-color-shadow, var(--off-theme-shadow-default)),
-          0 1px 2px 0 var(--off-color-shadow, var(--off-theme-shadow-default));
+          0 1px 3px 0 var(--off-color-shadow-primary, var(--off-theme-shadow-primary-default)),
+          0 1px 2px 0 var(--off-color-shadow-secondary, var(--off-theme-shadow-secondary-default));
         overflow: hidden;
         background: var(--off-color-surface, var(--off-theme-surface-default));
       }

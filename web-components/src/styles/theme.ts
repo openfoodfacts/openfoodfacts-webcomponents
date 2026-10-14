@@ -20,7 +20,8 @@ export const SHARED_THEME = css`
     --off-theme-error-surface-default: #fee2e2;
     --off-theme-info-default: #3b82f6;
     --off-theme-warning-default: #f59e0b;
-    --off-theme-shadow-default: rgba(0, 0, 0, 0.1);
+    --off-theme-shadow-primary-default: rgba(0, 0, 0, 0.1);
+    --off-theme-shadow-secondary-default: rgba(0, 0, 0, 0.06);
   }
 
   :host([theme="dark"]) {
@@ -33,7 +34,8 @@ export const SHARED_THEME = css`
     --off-theme-error-surface-default: #7f1d1d;
     --off-theme-info-default: #2563eb;
     --off-theme-warning-default: #fbbf24;
-    --off-theme-shadow-default: rgba(0, 0, 0, 0.4);
+    --off-theme-shadow-primary-default: rgba(0, 0, 0, 0.4);
+    --off-theme-shadow-secondary-default: rgba(0, 0, 0, 0.3);
   }
 
   @media (prefers-color-scheme: dark) {
@@ -48,7 +50,8 @@ export const SHARED_THEME = css`
       --off-theme-error-surface-default: #7f1d1d;
       --off-theme-info-default: #2563eb;
       --off-theme-warning-default: #fbbf24;
-      --off-theme-shadow-default: rgba(0, 0, 0, 0.4);
+      --off-theme-shadow-primary-default: rgba(0, 0, 0, 0.4);
+      --off-theme-shadow-secondary-default: rgba(0, 0, 0, 0.3);
     }
   }
 `
