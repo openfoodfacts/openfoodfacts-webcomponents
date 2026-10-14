@@ -34,4 +34,19 @@ describe("modal-component", () => {
 
     expect(close).toHaveBeenCalledOnce()
   })
+
+  it("returns focus to the opener when closed", async () => {
+    const opener = document.createElement("button")
+    document.body.appendChild(opener)
+    opener.focus()
+    const element = await fixture<HTMLElement>(html`<modal-component></modal-component>`)
+
+    ;(element as HTMLElement & { isOpen: boolean }).isOpen = true
+    await elementUpdated(element)
+    ;(element as HTMLElement & { isOpen: boolean }).isOpen = false
+    await elementUpdated(element)
+
+    expect(document.activeElement).toBe(opener)
+    opener.remove()
+  })
 })

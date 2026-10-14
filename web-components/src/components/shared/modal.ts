@@ -1,4 +1,4 @@
-import { LitElement, html, nothing } from "lit"
+import { LitElement, html, nothing, type PropertyValues } from "lit"
 import { customElement, property, query } from "lit/decorators.js"
 import { MODAL } from "../../styles/modal"
 import "./loader"
@@ -30,6 +30,8 @@ class ModalComponent extends LitElement {
   @query(".close-icon")
   private closeButton?: HTMLButtonElement
 
+  private opener?: HTMLElement
+
   /**
    * Indicates whether the modal is open.
    */
@@ -60,9 +62,25 @@ class ModalComponent extends LitElement {
     }
   }
 
-  override updated(changedProperties: Map<string, unknown>) {
-    if (changedProperties.has("isOpen") && this.isOpen) {
+  override willUpdate(changedProperties: PropertyValues) {
+    if (
+      changedProperties.has("isOpen") &&
+      this.isOpen &&
+      document.activeElement instanceof HTMLElement
+    ) {
+      this.opener = document.activeElement
+    }
+  }
+
+  override updated(changedProperties: PropertyValues) {
+    if (!changedProperties.has("isOpen")) {
+      return
+    }
+    if (this.isOpen) {
       this.closeButton?.focus()
+    } else if (this.opener?.isConnected) {
+      this.opener.focus()
+      this.opener = undefined
     }
   }
 
