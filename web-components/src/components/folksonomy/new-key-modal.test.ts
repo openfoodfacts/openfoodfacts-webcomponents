@@ -12,7 +12,9 @@ describe("NewKeyModal", () => {
     document.body.append(modal)
     await modal.updateComplete
 
-    const links = Array.from(modal.shadowRoot!.querySelectorAll('a[target="_blank"]'))
+    const links = Array.from(
+      modal.shadowRoot!.querySelectorAll<HTMLAnchorElement>('a[target="_blank"]')
+    )
     expect(links).toHaveLength(3)
     expect(links.every((link) => link.rel === "noopener noreferrer")).toBe(true)
   })
