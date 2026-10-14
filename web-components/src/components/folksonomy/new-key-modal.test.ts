@@ -19,6 +19,16 @@ describe("NewKeyModal", () => {
     expect(links.every((link) => link.rel === "noopener noreferrer")).toBe(true)
   })
 
+  it("gives the icon-only close control an accessible name", async () => {
+    const modal = document.createElement("new-key-modal") as NewKeyModal
+    document.body.append(modal)
+    await modal.updateComplete
+
+    const closeButton = modal.shadowRoot!.querySelector<HTMLButtonElement>(".close-button")!
+    expect(closeButton.type).toBe("button")
+    expect(closeButton.getAttribute("aria-label")).toBe("Close")
+  })
+
   it("opens the wiki editor without an opener reference", async () => {
     const open = vi.spyOn(window, "open").mockReturnValue(null)
     const modal = document.createElement("new-key-modal") as NewKeyModal

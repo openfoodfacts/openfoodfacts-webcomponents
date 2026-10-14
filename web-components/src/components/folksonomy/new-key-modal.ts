@@ -229,7 +229,14 @@ export class NewKeyModal extends LitElement {
         <div class="modal-content" @click=${(e: Event) => e.stopPropagation()}>
           <div class="modal-header">
             <h2 class="modal-title">${msg("Creating a New Property")}</h2>
-            <button class="close-button" @click=${this.handleClose}>×</button>
+            <button
+              type="button"
+              class="close-button"
+              aria-label=${msg("Close")}
+              @click=${this.handleClose}
+            >
+              ×
+            </button>
           </div>
 
           <div class="instruction-list">
