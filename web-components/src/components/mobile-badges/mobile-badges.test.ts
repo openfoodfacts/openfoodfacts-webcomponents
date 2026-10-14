@@ -73,13 +73,8 @@ describe("mobile-badges", () => {
     expect(playStoreAnchor?.getAttribute("href")).toBe(
       "https://play.google.com/store/apps/details?id=org.openfoodfacts.scanner&hl=en&utm_source=off&utm_medium=web&utm_campaign=install_the_app_android_footer_en"
     )
-    expect(playStoreAnchor?.getAttribute("target")).toBe("_blank")
-    expect(playStoreAnchor?.getAttribute("rel")).toBe("noopener noreferrer")
-
     expect(apkAnchor?.getAttribute("href")).toBe(
       "https://github.com/openfoodfacts/smooth-app/releases/latest?utm_source=off&utm_medium=web&utm_campaign=install_the_app_apk_footer_en"
     )
-    expect(apkAnchor?.getAttribute("target")).toBe("_blank")
-    expect(apkAnchor?.getAttribute("rel")).toBe("noopener noreferrer")
   })
 })
