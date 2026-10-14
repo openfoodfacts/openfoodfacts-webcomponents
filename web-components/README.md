@@ -80,11 +80,7 @@ Be sure to copy all the files in the `dist/localization/locales` folder to your 
 After importing you can use them in your HTML like this example :
 
 ```html
-<robotoff-question
-  product-code="0628233671356"
-  insight-types=""
-  options='{"showMessage": true, "showLoading": true, "showError": true}'
-/>
+<robotoff-question product-code="0628233671356" insight-types="" />
 ```
 
 To use components with good configuration you have to add only one time the `off-webcomponents-configuration` before every components in your HTML.
