@@ -1,3 +1,4 @@
+import { localized, msg } from "@lit/localize"
 import { css, LitElement } from "lit"
 import { html } from "lit-html"
 import { customElement } from "lit/decorators.js"
@@ -9,6 +10,7 @@ import { Breakpoints } from "../../utils/breakpoints"
  * @element info-button
  */
 @customElement("info-button")
+@localized()
 export class InfoButton extends LitElement {
   static override styles = css`
     .info-button {
@@ -37,7 +39,7 @@ export class InfoButton extends LitElement {
 
   override render() {
     return html`
-      <button class="info-button">
+      <button type="button" class="info-button" aria-label=${msg("Information")}>
         <info-icon .custom-styles="${{ fill: "white" }}"></info-icon>
       </button>
     `
