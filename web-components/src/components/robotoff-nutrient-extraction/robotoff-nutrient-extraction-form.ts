@@ -1105,12 +1105,13 @@ export class RobotoffNutrientExtractionForm extends LitElement {
         <button
           type="button"
           class="button chocolate-button"
+          aria-label=${isHidden ? msg("Show nutrient") : msg("Hide nutrient")}
           @click=${() => this.toggleNutrient(column, nutrientKey)}
         >
           ${
             isHidden
-              ? html`<eye-invisible-icon size="18px"></eye-invisible-icon>`
-              : html` <eye-visible-icon size="18px"></eye-visible-icon>`
+              ? html`<eye-invisible-icon size="18px" aria-hidden="true"></eye-invisible-icon>`
+              : html` <eye-visible-icon size="18px" aria-hidden="true"></eye-visible-icon>`
           }
         </button>
       </div>

@@ -34,6 +34,14 @@ describe("RobotoffNutrientExtractionForm", () => {
     await form.updateComplete
 
     expect(form.shadowRoot!.querySelector('input[name="fat_100g"]')).not.toBeNull()
+    const toggleButton = form.shadowRoot!.querySelector<HTMLButtonElement>(
+      ".toggle-nutrient-button-wrapper button"
+    )!
+    expect(toggleButton.getAttribute("aria-label")).toBe("Hide nutrient")
+
+    toggleButton.click()
+    await form.updateComplete
+    expect(toggleButton.getAttribute("aria-label")).toBe("Show nutrient")
 
     form.insight = createInsight("salt_100g")
     await form.updateComplete
