@@ -109,21 +109,22 @@ The default configuration is :
         }'
   assets-images-path="/assets/images"
 ></off-webcomponents-configuration>
-<off-boolean-attribute></off-boolean-attribute>
 ```
 
 #### Boolean attributes
 
-For boolean we follow the convention of lit [here](https://lit.dev/docs/components/properties/#boolean-attributes) Boolean is set to `false` by default and ca be use like this:
+Boolean attributes follow the [Lit convention](https://lit.dev/docs/components/properties/#boolean-attributes):
+they are `false` by default and become `true` when present. For example, `hide-apk`
+controls the APK badge on the real `mobile-badges` component:
 
 - `true` :
 
 ```html
-<off-boolean-attribute hide></off-boolean-attribute>
+<mobile-badges hide-apk></mobile-badges>
 ```
 
 - `false` :
 
 ```html
-<off-boolean-attribute></off-boolean-attribute>
+<mobile-badges></mobile-badges>
 ```
