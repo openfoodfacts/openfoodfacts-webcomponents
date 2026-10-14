@@ -35,4 +35,15 @@ describe("BarcodeScanner", () => {
     expect(startButton?.getAttribute("type")).toBe("button")
     expect(startButton?.getAttribute("aria-label")).toBe("Start barcode scanning")
   })
+
+  it("does not request another camera stream while scanning", async () => {
+    const scanner = new BarcodeScanner()
+    const permissionQuery = vi.fn()
+    vi.stubGlobal("navigator", { permissions: { query: permissionQuery } })
+    ;(scanner as unknown as { stream: MediaStream }).stream = {} as MediaStream
+
+    await (scanner as unknown as { askPermission: () => Promise<void> }).askPermission()
+
+    expect(permissionQuery).not.toHaveBeenCalled()
+  })
 })

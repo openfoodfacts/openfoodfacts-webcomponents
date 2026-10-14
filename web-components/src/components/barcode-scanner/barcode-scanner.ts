@@ -322,6 +322,11 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
    * This method is called when the user clicks the start scanning button or when the runScanner property is set to true.
    */
   private async askPermission() {
+    // A running scanner already owns a camera stream, so avoid requesting another one.
+    if (this.isVideoPlaying) {
+      return
+    }
+
     // If it can't detect, don't ask for permission
     if (!this.canDetect) {
       this.sendBarcodeStateEvent({
