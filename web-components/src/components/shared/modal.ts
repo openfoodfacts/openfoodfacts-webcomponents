@@ -1,5 +1,5 @@
 import { LitElement, html, nothing } from "lit"
-import { customElement, property } from "lit/decorators.js"
+import { customElement, property, query } from "lit/decorators.js"
 import { MODAL } from "../../styles/modal"
 import "./loader"
 import { EventType } from "../../constants"
@@ -27,6 +27,9 @@ import { localized, msg } from "@lit/localize"
 class ModalComponent extends LitElement {
   static override styles = [MODAL]
 
+  @query(".close-icon")
+  private closeButton?: HTMLButtonElement
+
   /**
    * Indicates whether the modal is open.
    */
@@ -50,16 +53,41 @@ class ModalComponent extends LitElement {
     this.dispatchEvent(new CustomEvent(EventType.CLOSE))
   }
 
+  private onKeydown(event: KeyboardEvent) {
+    if (event.key === "Escape") {
+      event.preventDefault()
+      this.closeModal()
+    }
+  }
+
+  override updated(changedProperties: Map<string, unknown>) {
+    if (changedProperties.has("isOpen") && this.isOpen) {
+      this.closeButton?.focus()
+    }
+  }
+
   override render() {
     if (!this.isOpen) {
       return nothing
     }
     return html`
       <div class="overlay" @click="${this.closeModal}" aria-hidden="true"></div>
-      <div class="modal">
+      <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-label=${msg("Contribution dialog")}
+        aria-busy=${this.isLoading}
+        @keydown=${this.onKeydown}
+      >
         <div class="modal-content">
           <div class="modal-header">
-            <button class="close-icon" @click="${this.closeModal}" aria-label=${msg("Close modal")}>
+            <button
+              type="button"
+              class="close-icon"
+              @click="${this.closeModal}"
+              aria-label=${msg("Close modal")}
+            >
               <cross-icon></cross-icon>
             </button>
           </div>
