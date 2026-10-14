@@ -4,8 +4,8 @@ A set of WebComponents for Open Food Facts to help build edition interfaces.
 
 ## Documentation
 
-Link to documentation will be available soon.
-You will see the list of available components and how to use them.
+The [published Storybook documentation](https://openfoodfacts.github.io/openfoodfacts-webcomponents/)
+lists the available components and shows how to use them.
 
 ## Getting Started
 
