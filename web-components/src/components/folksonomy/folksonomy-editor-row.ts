@@ -497,7 +497,7 @@ export class FolksonomyEditorRow extends LitElement {
         <td>
           <a
             class="property-link"
-            href="https://wiki.openfoodfacts.org/Folksonomy/Property/${this.key}"
+            href="https://wiki.openfoodfacts.org/Folksonomy/Property/${encodeURIComponent(this.key)}"
             >${this.key}</a
           >
         </td>
