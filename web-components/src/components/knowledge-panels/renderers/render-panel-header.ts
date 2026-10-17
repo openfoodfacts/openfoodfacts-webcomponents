@@ -12,7 +12,7 @@ export class PanelHeaderRenderer extends LitElement {
   static override styles = css`
     .panel-header {
       width: 100%;
-      border-bottom: 1px solid #eeeeee;
+      border-bottom: 1px solid var(--off-kp-border, #eeeeee);
       padding: 1rem 1.25rem;
       display: block;
     }

@@ -32,29 +32,29 @@ export class TableElementRenderer extends LitElement {
       border-spacing: 0;
       margin-bottom: 0.5rem;
       text-align: left;
-      border: 1px solid #e6e6e6;
+      border: 1px solid var(--off-kp-border, #e6e6e6);
       border-radius: 20px;
       overflow: hidden;
     }
 
     .table_element th,
     .table_element td {
-      border: 1px solid #e6e6e6;
+      border: 1px solid var(--off-kp-border, #e6e6e6);
       padding: 0.75rem;
       text-align: left;
     }
 
     .table_element th {
-      background-color: #f8f9fa;
+      background-color: var(--off-kp-table-header-bg, #f8f9fa);
       font-weight: 600;
     }
 
     .table_element tr:nth-child(even) {
-      background-color: #fcfcfc;
+      background-color: var(--off-kp-table-row-even-bg, #fcfcfc);
     }
 
     .table_element tr:hover {
-      background-color: #f7f7f7;
+      background-color: var(--off-kp-table-row-hover-bg, #f7f7f7);
     }
   `
 

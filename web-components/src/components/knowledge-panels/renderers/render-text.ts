@@ -18,7 +18,7 @@ export class TextElementRenderer extends LitElement {
       text-align: left;
       word-wrap: break-word;
       overflow-wrap: break-word;
-      color: #333;
+      color: var(--off-kp-text, #333);
     }
 
     ul {
