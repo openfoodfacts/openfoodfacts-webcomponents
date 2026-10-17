@@ -212,6 +212,18 @@ describe("Utility Functions", () => {
       vi.advanceTimersByTime(100)
       expect(mockFn).not.toHaveBeenCalled()
     })
+
+    it("should work when window is unavailable during server-side rendering", () => {
+      vi.useFakeTimers()
+      vi.stubGlobal("window", undefined)
+      const mockFn = vi.fn()
+      const debouncer = createDebounce(100)
+
+      debouncer.debounce(mockFn)
+      vi.advanceTimersByTime(100)
+
+      expect(mockFn).toHaveBeenCalledTimes(1)
+    })
   })
 
   describe("downloadCSV", () => {
