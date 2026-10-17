@@ -844,6 +844,15 @@
 <trans-unit id="sbbbd081f048248b3">
   <source><x id="0" equiv-text="${amount}"/> a month keeps it that way.</source>
 </trans-unit>
+<trans-unit id="sb5ce841c8d90ef4f">
+  <source>Remove selected box</source>
+</trans-unit>
+<trans-unit id="sd6c19e8009df5123">
+  <source>Remove all boxes</source>
+</trans-unit>
+<trans-unit id="s43ff715603eee62f">
+  <source>Area to hide</source>
+</trans-unit>
 </body>
 </file>
 </xliff>

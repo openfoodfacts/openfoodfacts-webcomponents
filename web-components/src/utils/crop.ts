@@ -126,3 +126,56 @@ export const cropImageToBlob = (
     )
   })
 }
+
+/**
+ * Converts a normalized bounding box (values between 0 and 1) to image pixels.
+ * @param boundingBox - The normalized bounding box.
+ * @returns The bounding box in the cropperjs image format.
+ */
+export const denormalizeBoundingBox = (
+  boundingBox: NormalizedBoundingBox,
+  imageWidth: number,
+  imageHeight: number
+): CropperImageBoundingBox => {
+  const { x_min, y_min, x_max, y_max } = boundingBox
+  return {
+    x: x_min * imageWidth,
+    y: y_min * imageHeight,
+    width: (x_max - x_min) * imageWidth,
+    height: (y_max - y_min) * imageHeight,
+  }
+}
+
+/**
+ * Hides areas of an image with black boxes.
+ * @param image - The (loaded) source image.
+ * @param boxes - The areas to hide, in natural image pixels.
+ * @param type - The output image type.
+ * @param quality - The output image quality (between 0 and 1), for lossy types.
+ * @returns The redacted image as a Blob.
+ */
+export const redactImageToBlob = (
+  image: HTMLImageElement,
+  boxes: CropperImageBoundingBox[],
+  type = "image/webp",
+  quality?: number
+): Promise<Blob> => {
+  const canvas = document.createElement("canvas")
+  canvas.width = image.naturalWidth
+  canvas.height = image.naturalHeight
+  const ctx = canvas.getContext("2d")
+  if (!ctx) {
+    return Promise.reject(new Error("Canvas 2D context not available"))
+  }
+  ctx.drawImage(image, 0, 0)
+  ctx.fillStyle = "black"
+  boxes.forEach(({ x, y, width, height }) => ctx.fillRect(x, y, width, height))
+
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => (blob ? resolve(blob) : reject(new Error("Failed to export redacted image"))),
+      type,
+      quality
+    )
+  })
+}
