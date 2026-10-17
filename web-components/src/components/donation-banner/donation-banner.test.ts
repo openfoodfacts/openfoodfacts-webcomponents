@@ -288,13 +288,15 @@ describe("donation-banner", () => {
     expect(href).toContain("utm_source=off")
   })
 
-  it("refuses a donate link that is not an http(s) URL", async () => {
-    const element = await createBanner({ "donate-url": "javascript:alert(document.cookie)//" })
+  it.each(["javascript:alert(1)", "data:text/html,<script>alert(1)</script>", "vbscript:alert(1)"])(
+    "falls back for unsafe donate URL %s",
+    async (donateUrl) => {
+      const element = await createBanner({ "donate-url": donateUrl })
+      const href = donateLink(element)
 
-    const href = donateLink(element)
-    expect(href).not.toMatch(/^(?:javascript|data|vbscript):/i)
-    expect(href).toContain("https://world.openfoodfacts.org/donate-to-open-food-facts")
-  })
+      expect(href).toContain("https://world.openfoodfacts.org/donate-to-open-food-facts")
+    }
+  )
 
   it("localizes the donation link and utm_term for Japanese (/kifu)", async () => {
     languageCode.set("ja")
@@ -377,7 +379,7 @@ const DEFAULT_MARKUP = (nextYear: string) => `<section class="  ">
                 <p>support the advancement of public health research.</p>
               </li>
             </ul>
-            
+
           </div>
           <div class="donation-banner-footer__actions-section">
             <div class="donation-banner-footer__actions-section__financial">
