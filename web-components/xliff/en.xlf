@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file target-language="en-GB" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+  <file target-language="en-AU" source-language="en" original="lit-localize-inputs" datatype="plaintext">
     <body>
       <trans-unit id="s49730f3d5751a433">
         <source>Loading...</source>
@@ -262,7 +262,7 @@
       </trans-unit>
       <trans-unit id="seffa8ca49175b5f0">
         <source>Personalized properties</source>
-        <target state="translated">Personalised properties</target>
+        <target state="translated">Personalized properties</target>
       </trans-unit>
       <trans-unit id="s907f7a97c6b29425">
         <source>Be aware the data model might be modified. Use at your own risk.</source>
@@ -286,11 +286,11 @@
       </trans-unit>
       <trans-unit id="s42dd66b2441566fd">
         <source>Center icon</source>
-        <target state="translated">Centre the icon</target>
+        <target state="translated">Center icon</target>
       </trans-unit>
       <trans-unit id="s422bba9636ce2489">
         <source>Center image</source>
-        <target state="translated">Centre the image</target>
+        <target state="translated">Center image</target>
       </trans-unit>
       <trans-unit id="s8038273de2cf8b73">
         <source>Please select a region to crop.</source>
@@ -808,7 +808,7 @@
       </trans-unit>
       <trans-unit id="s091d3d07b5b3076f">
         <source>OK</source>
-        <target state="translated">OK</target>
+        <target state="translated">Ok</target>
       </trans-unit>
       <trans-unit id="s72c9c4e6ab4ca7ae">
         <source>Value replaced successfully!</source>
