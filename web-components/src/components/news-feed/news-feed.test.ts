@@ -76,4 +76,29 @@ describe("news-feed", () => {
     expect(shadowRoot(element).querySelector(".news-item")).not.toBeNull()
     expect(shadowRoot(element).querySelector("donation-meter")).toBeNull()
   })
+
+  it("shows an icon fallback when a feed item ID is not a valid CSS selector", async () => {
+    const element = await renderFeed({
+      news: {
+        "campaign: spring 2026": {
+          translations: {
+            default: {
+              title: "Campaign",
+              message: "Give",
+              image: { url: "https://example.org/icon.png" },
+            },
+          },
+          start_date: inDays(-30),
+          end_date: inDays(150),
+        },
+      },
+      tagline_feed: { default: { news: [{ id: "campaign: spring 2026" }] } },
+    })
+
+    const image = shadowRoot(element).querySelector(".icon") as HTMLImageElement
+    image.dispatchEvent(new Event("error"))
+
+    expect(image.style.display).toBe("none")
+    expect((image.nextElementSibling as HTMLElement).style.display).toBe("flex")
+  })
 })
