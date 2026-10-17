@@ -489,7 +489,7 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
       return html`
         <div class="cta-overlay-wrapper" @click=${this.askPermission}>
           <div class="cta-exit-button">
-            <button class="button white-button small" @click=${this.exit}>
+            <button type="button" class="button white-button small" @click=${this.exit}>
               <close-icon></close-icon><span>${msg("Close")}</span>
             </button>
           </div>
@@ -500,7 +500,7 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
             <div class="cta-overlay-frame left-bottom-border"></div>
             <div class="cta-overlay">
               <div class="cta-overlay-icon">
-                <button class="cta-overlay-button">
+                <button type="button" class="cta-overlay-button" aria-label=${msg("Scan barcode")}>
                   <search-icon></search-icon>
                 </button>
               </div>
@@ -514,7 +514,11 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
         <div class="centered-overlay">
           <div class="cta-overlay">
             <div class="cta-overlay-icon">
-              <button class="cta-overlay-button start-scanning">
+              <button
+                type="button"
+                class="cta-overlay-button start-scanning"
+                aria-label=${msg("Scan barcode")}
+              >
                 <barcode-icon></barcode-icon>
               </button>
             </div>
