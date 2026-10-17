@@ -75,6 +75,25 @@ export const MODAL = css`
     border-color: black;
   }
 
+  @media (prefers-color-scheme: dark) {
+    .modal {
+      background: var(--off-modal-background-dark, #181a1b);
+      color: var(--off-modal-text-dark, #f3f3f3);
+    }
+
+    h2 {
+      color: var(--off-modal-text-dark, #f3f3f3);
+    }
+
+    .close-icon {
+      color: var(--off-modal-text-dark, #f3f3f3);
+    }
+
+    .close-icon:hover {
+      border-color: var(--off-modal-text-dark, #f3f3f3);
+    }
+  }
+
   @keyframes fadeIn {
     from {
       opacity: 0;
