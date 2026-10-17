@@ -7,6 +7,7 @@ import {
   type InsightAnnotationAnswer,
   InsightAnnotationSize,
   AnnotationAnswer,
+  isAnnotationLoading,
 } from "../../types/robotoff"
 import { localized, msg, str } from "@lit/localize"
 import {
@@ -918,7 +919,7 @@ export class RobotoffNutrientExtractionForm extends LitElement {
    * It will render a submit button.
    */
   renderSubmitRow() {
-    const isLoading = Boolean(this.loading)
+    const isLoading = isAnnotationLoading(this.loading)
     const isAcceptLoading =
       isLoading &&
       [AnnotationAnswer.ACCEPT, AnnotationAnswer.ACCEPT_AND_ADD_DATA].includes(this.loading!)

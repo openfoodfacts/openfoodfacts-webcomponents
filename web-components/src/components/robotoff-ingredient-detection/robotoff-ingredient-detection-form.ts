@@ -14,6 +14,7 @@ import {
   type IngredientDetectionInsight,
   type IngredientDetectionAnnotationData,
   AnnotationAnswer,
+  isAnnotationLoading,
 } from "../../types/robotoff"
 import { getRobotoffImageUrl } from "../../signals/robotoff"
 import { localized, msg } from "@lit/localize"
@@ -117,7 +118,7 @@ export class RobotoffIngredientDetectionForm extends LitElement {
    * @returns {boolean} True if loading, false otherwise
    */
   get isLoading() {
-    return Boolean(this.loading) || this.cropMode === ZoomableImage.CropMode.CROP
+    return isAnnotationLoading(this.loading) || this.cropMode === ZoomableImage.CropMode.CROP
   }
 
   /**
@@ -277,7 +278,7 @@ export class RobotoffIngredientDetectionForm extends LitElement {
    */
   renderCropButtons() {
     if (this.cropMode === ZoomableImage.CropMode.CROP) {
-      const isLoading = Boolean(this.loading)
+      const isLoading = isAnnotationLoading(this.loading)
       return html`
             <loading-button
               css-classes="button cappucino-button"
