@@ -39,6 +39,7 @@
     "analyze": "cem analyze --litelement --globs \"src/**/*.ts\"",
     "analyze:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
     "dev": "concurrently \"npm run storybook\" \"npm run analyze:watch\"",
+    "pretest": "npm run translations:build",
     "test": "vitest",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
