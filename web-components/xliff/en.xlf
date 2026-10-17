@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file target-language="en-GB" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+  <file target-language="en-AU" source-language="en" original="lit-localize-inputs" datatype="plaintext">
     <body>
       <trans-unit id="s49730f3d5751a433">
         <source>Loading...</source>
@@ -262,7 +262,7 @@
       </trans-unit>
       <trans-unit id="seffa8ca49175b5f0">
         <source>Personalized properties</source>
-        <target state="translated">Personalised properties</target>
+        <target state="translated">Personalized properties</target>
       </trans-unit>
       <trans-unit id="s907f7a97c6b29425">
         <source>Be aware the data model might be modified. Use at your own risk.</source>
@@ -286,11 +286,11 @@
       </trans-unit>
       <trans-unit id="s42dd66b2441566fd">
         <source>Center icon</source>
-        <target state="translated">Centre the icon</target>
+        <target state="translated">Center icon</target>
       </trans-unit>
       <trans-unit id="s422bba9636ce2489">
         <source>Center image</source>
-        <target state="translated">Centre the image</target>
+        <target state="translated">Center image</target>
       </trans-unit>
       <trans-unit id="s8038273de2cf8b73">
         <source>Please select a region to crop.</source>
@@ -700,11 +700,11 @@
       </trans-unit>
       <trans-unit id="sd1aedfb27dd7ef6c">
         <source>You are about to visit an external website. Continue?</source>
-        <target state="needs-translation">You are about to visit an external website. Continue?</target>
+        <target state="translated">You are about to visit an external website. Continue?</target>
       </trans-unit>
       <trans-unit id="h47db3e6a86aa1671">
         <source>Please <x id="0" equiv-text="&lt;a href=&quot;${this.loginUrl}&quot;&gt;"/>log in<x id="1" equiv-text="&lt;/a&gt;"/> to edit or add properties.</source>
-        <target state="needs-translation">Please <x id="0" equiv-text="&lt;a href=&quot;${this.loginUrl}&quot;&gt;"/>log in<x id="1" equiv-text="&lt;/a&gt;"/> to edit or add properties.</target>
+        <target state="translated">Please <x id="0" equiv-text="&lt;a href=&quot;${this.loginUrl}&quot;&gt;"/>log in<x id="1" equiv-text="&lt;/a&gt;"/> to edit or add properties.</target>
       </trans-unit>
       <trans-unit id="s5f343a43e7ea9f91">
         <source>Error</source>
@@ -712,7 +712,7 @@
       </trans-unit>
       <trans-unit id="sd947a599045e9e0e">
         <source>Failed to check property conflicts. Please try again.</source>
-        <target state="needs-translation">Failed to check property conflicts. Please try again.</target>
+        <target state="translated">Failed to check property conflicts. Please try again.</target>
       </trans-unit>
       <trans-unit id="s92a0d19a28995530" approved="yes">
         <source>Success</source>
@@ -720,23 +720,23 @@
       </trans-unit>
       <trans-unit id="s371091f240c17a7e">
         <source>Property renamed successfully!</source>
-        <target state="needs-translation">Property renamed successfully!</target>
+        <target state="translated">Property renamed successfully!</target>
       </trans-unit>
       <trans-unit id="s4603f58131a777bf">
         <source>Failed to rename property. Please try again.</source>
-        <target state="needs-translation">Failed to rename property. Please try again.</target>
+        <target state="translated">Failed to rename property. Please try again.</target>
       </trans-unit>
       <trans-unit id="s21694d2ab9c0bec5">
         <source>Property deleted successfully!</source>
-        <target state="needs-translation">Property deleted successfully!</target>
+        <target state="translated">Property deleted successfully!</target>
       </trans-unit>
       <trans-unit id="scf78b75273a6b5fe">
         <source>Failed to delete property. Please try again.</source>
-        <target state="needs-translation">Failed to delete property. Please try again.</target>
+        <target state="translated">Failed to delete property. Please try again.</target>
       </trans-unit>
       <trans-unit id="s71ffcb25fc1c5356">
         <source>Rename this property</source>
-        <target state="needs-translation">Rename this property</target>
+        <target state="translated">Rename this property</target>
       </trans-unit>
       <trans-unit id="s60320a18282b2b33">
         <source>Rename</source>
@@ -744,151 +744,151 @@
       </trans-unit>
       <trans-unit id="s6e2a82009cc3dfc7">
         <source>Delete this property</source>
-        <target state="needs-translation">Delete this property</target>
+        <target state="translated">Delete this property</target>
       </trans-unit>
       <trans-unit id="s8bccacf0fc176064">
         <source>Rename Property</source>
-        <target state="needs-translation">Rename Property</target>
+        <target state="translated">Rename Property</target>
       </trans-unit>
       <trans-unit id="s0df37909a355e56f">
         <source>Rename property '<x id="0" equiv-text="${this.renameModalData.property}"/>' to:</source>
-        <target state="needs-translation">Rename property '<x id="0" equiv-text="${this.renameModalData.property}"/>' to:</target>
+        <target state="translated">Rename property '<x id="0" equiv-text="${this.renameModalData.property}"/>' to:</target>
       </trans-unit>
       <trans-unit id="sb550440eeb3f39c5">
         <source>New property name:</source>
-        <target state="needs-translation">New property name:</target>
+        <target state="translated">New property name:</target>
       </trans-unit>
       <trans-unit id="sbb53591e587764b7">
         <source>Enter new property name...</source>
-        <target state="needs-translation">Enter new property name...</target>
+        <target state="translated">Enter new property name...</target>
       </trans-unit>
       <trans-unit id="s8acd49e96b4ee7d4">
         <source>Check Conflicts</source>
-        <target state="needs-translation">Check Conflicts</target>
+        <target state="translated">Check Conflicts</target>
       </trans-unit>
       <trans-unit id="sd1cfdf0ef29cb6a5">
         <source>Property Rename Conflicts</source>
-        <target state="needs-translation">Property Rename Conflicts</target>
+        <target state="translated">Property Rename Conflicts</target>
       </trans-unit>
       <trans-unit id="sf417737adaa5a8c2">
         <source>Renaming '<x id="0" equiv-text="${this.renameModalData.property}"/>' to '<x id="1" equiv-text="${this.renameModalData.newProperty}"/>' will affect:</source>
-        <target state="needs-translation">Renaming '<x id="0" equiv-text="${this.renameModalData.property}"/>' to '<x id="1" equiv-text="${this.renameModalData.newProperty}"/>' will affect:</target>
+        <target state="translated">Renaming '<x id="0" equiv-text="${this.renameModalData.property}"/>' to '<x id="1" equiv-text="${this.renameModalData.newProperty}"/>' will affect:</target>
       </trans-unit>
       <trans-unit id="s14571d0ac58a8b43">
         <source>Products with both properties:</source>
-        <target state="needs-translation">Products with both properties:</target>
+        <target state="translated">Products with both properties:</target>
       </trans-unit>
       <trans-unit id="sb0d459e32656033f">
         <source>Products with old property only:</source>
-        <target state="needs-translation">Products with old property only:</target>
+        <target state="translated">Products with old property only:</target>
       </trans-unit>
       <trans-unit id="sfa3027dde47305fe">
         <source>Products with new property only:</source>
-        <target state="needs-translation">Products with new property only:</target>
+        <target state="translated">Products with new property only:</target>
       </trans-unit>
       <trans-unit id="s9e5b8feb0892646e">
         <source>Do you want to proceed with the rename?</source>
-        <target state="needs-translation">Do you want to proceed with the rename?</target>
+        <target state="translated">Do you want to proceed with the rename?</target>
       </trans-unit>
       <trans-unit id="s97171907a2d1620b">
         <source>Proceed with Rename</source>
-        <target state="needs-translation">Proceed with Rename</target>
+        <target state="translated">Proceed with Rename</target>
       </trans-unit>
       <trans-unit id="s712d70fdcc3dd42b">
         <source>Delete Property</source>
-        <target state="needs-translation">Delete Property</target>
+        <target state="translated">Delete Property</target>
       </trans-unit>
       <trans-unit id="sc11b78f2f3173f75">
         <source>Are you sure you want to delete the property '<x id="0" equiv-text="${this.deleteModalProperty}"/>'?</source>
-        <target state="needs-translation">Are you sure you want to delete the property '<x id="0" equiv-text="${this.deleteModalProperty}"/>'?</target>
+        <target state="translated">Are you sure you want to delete the property '<x id="0" equiv-text="${this.deleteModalProperty}"/>'?</target>
       </trans-unit>
       <trans-unit id="s3b3fe4e829af3e8e">
         <source>This action cannot be undone.</source>
-        <target state="needs-translation">This action cannot be undone.</target>
+        <target state="translated">This action cannot be undone.</target>
       </trans-unit>
       <trans-unit id="s091d3d07b5b3076f">
         <source>OK</source>
-        <target state="translated">OK</target>
+        <target state="translated">Ok</target>
       </trans-unit>
       <trans-unit id="s72c9c4e6ab4ca7ae">
         <source>Value replaced successfully!</source>
-        <target state="needs-translation">Value replaced successfully!</target>
+        <target state="translated">Value replaced successfully!</target>
       </trans-unit>
       <trans-unit id="sdd0eacd725bb2b1d">
         <source>Failed to replace value. Please try again.</source>
-        <target state="needs-translation">Failed to replace value. Please try again.</target>
+        <target state="translated">Failed to replace value. Please try again.</target>
       </trans-unit>
       <trans-unit id="sfe87a7a8bed11acf">
         <source>Value deleted successfully!</source>
-        <target state="needs-translation">Value deleted successfully!</target>
+        <target state="translated">Value deleted successfully!</target>
       </trans-unit>
       <trans-unit id="sccd2745bdd1087f6">
         <source>Failed to delete value. Please try again.</source>
-        <target state="needs-translation">Failed to delete value. Please try again.</target>
+        <target state="translated">Failed to delete value. Please try again.</target>
       </trans-unit>
       <trans-unit id="s88ece9a678e2f106">
         <source>Replace Value</source>
-        <target state="needs-translation">Replace Value</target>
+        <target state="translated">Replace Value</target>
       </trans-unit>
       <trans-unit id="s3355d65e22e222c9">
         <source>Replace all instances of '<x id="0" equiv-text="${this.replaceModalData.value}"/>' with a new value:</source>
-        <target state="needs-translation">Replace all instances of '<x id="0" equiv-text="${this.replaceModalData.value}"/>' with a new value:</target>
+        <target state="translated">Replace all instances of '<x id="0" equiv-text="${this.replaceModalData.value}"/>' with a new value:</target>
       </trans-unit>
       <trans-unit id="s0d426d718d97d14e">
         <source>New value:</source>
-        <target state="needs-translation">New value:</target>
+        <target state="translated">New value:</target>
       </trans-unit>
       <trans-unit id="se80a1ed3dcab7408">
         <source>Enter new value...</source>
-        <target state="needs-translation">Enter new value...</target>
+        <target state="translated">Enter new value...</target>
       </trans-unit>
       <trans-unit id="s2a8434b16dc214a3">
         <source>Replace</source>
-        <target state="needs-translation">Replace</target>
+        <target state="translated">Replace</target>
       </trans-unit>
       <trans-unit id="s8263352c7a634e7f">
         <source>Delete Value</source>
-        <target state="needs-translation">Delete Value</target>
+        <target state="translated">Delete Value</target>
       </trans-unit>
       <trans-unit id="sebe99e3299746177">
         <source>Are you sure you want to delete all instances of the value '<x id="0" equiv-text="${this.deleteModalValue}"/>'?</source>
-        <target state="needs-translation">Are you sure you want to delete all instances of the value '<x id="0" equiv-text="${this.deleteModalValue}"/>'?</target>
+        <target state="translated">Are you sure you want to delete all instances of the value '<x id="0" equiv-text="${this.deleteModalValue}"/>'?</target>
       </trans-unit>
       <trans-unit id="s4b0b53abbd6af54a">
         <source>Replace this value across all products</source>
-        <target state="needs-translation">Replace this value across all products</target>
+        <target state="translated">Replace this value across all products</target>
       </trans-unit>
       <trans-unit id="sb02836b5e3176cfe">
         <source>Delete this value from all products</source>
-        <target state="needs-translation">Delete this value from all products</target>
+        <target state="translated">Delete this value from all products</target>
       </trans-unit>
       <trans-unit id="sbf00647c8838c247">
         <source>Flag an image</source>
-        <target state="needs-translation">Flag an image</target>
+        <target state="translated">Flag an image</target>
       </trans-unit>
       <trans-unit id="s3f1427291c349441">
         <source>Flag a search result</source>
-        <target state="needs-translation">Flag a search result</target>
+        <target state="translated">Flag a search result</target>
       </trans-unit>
       <trans-unit id="s5d027691867d9a4b">
         <source>Flag a product</source>
-        <target state="needs-translation">Flag a product</target>
+        <target state="translated">Flag a product</target>
       </trans-unit>
       <trans-unit id="sba82478b9fa28e99">
         <source>Inappropriate</source>
-        <target state="needs-translation">Inappropriate</target>
+        <target state="translated">Inappropriate</target>
       </trans-unit>
       <trans-unit id="s76cc1c6d9fab3a2d">
         <source>Outdated</source>
-        <target state="needs-translation">Outdated</target>
+        <target state="translated">Outdated</target>
       </trans-unit>
       <trans-unit id="sd0aac0480b0d2e1a">
         <source>Includes Personal Information</source>
-        <target state="needs-translation">Includes Personal Information</target>
+        <target state="translated">Includes Personal Information</target>
       </trans-unit>
       <trans-unit id="sfac15b89e0668996">
         <source>Duplicate</source>
-        <target state="needs-translation">Duplicate</target>
+        <target state="translated">Duplicate</target>
       </trans-unit>
       <trans-unit id="sc9e494c8346b7cb5" approved="yes">
         <source>Other</source>
@@ -896,59 +896,59 @@
       </trans-unit>
       <trans-unit id="s92f7e81236df966a">
         <source>Wrong Barcode</source>
-        <target state="needs-translation">Wrong Barcode</target>
+        <target state="translated">Wrong Barcode</target>
       </trans-unit>
       <trans-unit id="sa4ed3ae23155d4a5">
         <source>Missing Data</source>
-        <target state="needs-translation">Missing Data</target>
+        <target state="translated">Missing Data</target>
       </trans-unit>
       <trans-unit id="s3e878b312b793ad2">
         <source>Wrong Data</source>
-        <target state="needs-translation">Wrong Data</target>
+        <target state="translated">Wrong Data</target>
       </trans-unit>
       <trans-unit id="sbb3f654e375fc42a">
         <source>FLAG IMAGE</source>
-        <target state="needs-translation">FLAG IMAGE</target>
+        <target state="translated">FLAG IMAGE</target>
       </trans-unit>
       <trans-unit id="s4df493c3ade6bff9">
         <source>FLAG SEARCH</source>
-        <target state="needs-translation">FLAG SEARCH</target>
+        <target state="translated">FLAG SEARCH</target>
       </trans-unit>
       <trans-unit id="sa41d7d40e6d1ad7c">
         <source>FLAG PRODUCT</source>
-        <target state="needs-translation">FLAG PRODUCT</target>
+        <target state="translated">FLAG PRODUCT</target>
       </trans-unit>
       <trans-unit id="sfbf30728d115ad08">
         <source>Invalid flag type.</source>
-        <target state="needs-translation">Invalid flag type.</target>
+        <target state="translated">Invalid flag type.</target>
       </trans-unit>
       <trans-unit id="sb1eb1f63600f779e">
         <source>Invalid flavor.</source>
-        <target state="needs-translation">Invalid flavor.</target>
+        <target state="translated">Invalid flavor.</target>
       </trans-unit>
       <trans-unit id="sd2aa918fd2068705">
         <source>User ID is required to submit a flag. Please log in.</source>
-        <target state="needs-translation">User ID is required to submit a flag. Please log in.</target>
+        <target state="translated">User ID is required to submit a flag. Please log in.</target>
       </trans-unit>
       <trans-unit id="sf8746eab0484d95b">
         <source>Image ID is required to flag an image.</source>
-        <target state="needs-translation">Image ID is required to flag an image.</target>
+        <target state="translated">Image ID is required to flag an image.</target>
       </trans-unit>
       <trans-unit id="sca386b8a0876810a">
         <source>Failed to submit flag. Please try again later.</source>
-        <target state="needs-translation">Failed to submit flag. Please try again later.</target>
+        <target state="translated">Failed to submit flag. Please try again later.</target>
       </trans-unit>
       <trans-unit id="s62d9da7ce0def73c">
         <source>An unexpected error occurred.</source>
-        <target state="needs-translation">An unexpected error occurred.</target>
+        <target state="translated">An unexpected error occurred.</target>
       </trans-unit>
       <trans-unit id="s45dce293964ced00">
         <source>Thank you for reporting. Your flag has been submitted successfully.</source>
-        <target state="needs-translation">Thank you for reporting. Your flag has been submitted successfully.</target>
+        <target state="translated">Thank you for reporting. Your flag has been submitted successfully.</target>
       </trans-unit>
       <trans-unit id="s30c7b1afc9fe65d3">
         <source>Image to flag</source>
-        <target state="needs-translation">Image to flag</target>
+        <target state="translated">Image to flag</target>
       </trans-unit>
       <trans-unit id="s39d54c8748d51877">
         <source>Barcode</source>
@@ -956,7 +956,7 @@
       </trans-unit>
       <trans-unit id="s4fb2e52ef0c61ab3">
         <source>Image ID</source>
-        <target state="needs-translation">Image ID</target>
+        <target state="translated">Image ID</target>
       </trans-unit>
       <trans-unit id="saa29a2ac03cd9d19">
         <source>Reason</source>
@@ -968,31 +968,31 @@
       </trans-unit>
       <trans-unit id="scbf8442741ae9d1b">
         <source>Optional details</source>
-        <target state="needs-translation">Optional details</target>
+        <target state="translated">Optional details</target>
       </trans-unit>
       <trans-unit id="se7c56a68f0ecf6e9">
         <source>Submitting...</source>
-        <target state="needs-translation">Submitting...</target>
+        <target state="translated">Submitting...</target>
       </trans-unit>
       <trans-unit id="sf245e27cbd126b9c">
         <source>Unknown Brand/Quantity</source>
-        <target state="needs-translation">Unknown Brand/Quantity</target>
+        <target state="translated">Unknown Brand/Quantity</target>
       </trans-unit>
       <trans-unit id="s6ffdc18b840acf30">
         <source><x id="0" equiv-text="${brands}"/> - <x id="1" equiv-text="${quantity}"/></source>
-        <target state="needs-translation"><x id="0" equiv-text="${brands}"/> - <x id="1" equiv-text="${quantity}"/></target>
+        <target state="translated"><x id="0" equiv-text="${brands}"/> - <x id="1" equiv-text="${quantity}"/></target>
       </trans-unit>
       <trans-unit id="sb18dd702b5f51223">
         <source><x id="0" equiv-text="${missing}"/> short</source>
-        <target state="needs-translation"><x id="0" equiv-text="${missing}"/> short</target>
+        <target state="translated"><x id="0" equiv-text="${missing}"/> short</target>
       </trans-unit>
       <trans-unit id="s4e037fb4937e78d2">
         <source>of <x id="0" equiv-text="${goal}"/></source>
-        <target state="needs-translation">of <x id="0" equiv-text="${goal}"/></target>
+        <target state="translated">of <x id="0" equiv-text="${goal}"/></target>
       </trans-unit>
       <trans-unit id="sfb6c2292955d4453">
         <source>Fundraiser progress</source>
-        <target state="needs-translation">Fundraiser progress</target>
+        <target state="translated">Fundraiser progress</target>
       </trans-unit>
       <trans-unit id="s8966e013dce8891f">
         <source>We still need €120,000 to finish 2026!</source>
@@ -1008,11 +1008,11 @@
       </trans-unit>
       <trans-unit id="s9488434f64291951">
         <source>keeping our database open and available to all,</source>
-        <target state="needs-translation">keeping our database open and available to all,</target>
+        <target state="translated">keeping our database open and available to all,</target>
       </trans-unit>
       <trans-unit id="s1639c60919d39401">
         <source>technical infrastructure (website/mobile app) and a small permanent team</source>
-        <target state="needs-translation">technical infrastructure (website/mobile app) and a small permanent team</target>
+        <target state="translated">technical infrastructure (website/mobile app) and a small permanent team</target>
       </trans-unit>
       <trans-unit id="s3736464cf8d6fa08">
         <source>Support</source>
@@ -1020,99 +1020,99 @@
       </trans-unit>
       <trans-unit id="sfaf54e55dd9b80b7">
         <source>Most popular</source>
-        <target state="needs-translation">Most popular</target>
+        <target state="translated">Most popular</target>
       </trans-unit>
       <trans-unit id="sfdff91b6efc539f8">
         <source>/month</source>
-        <target state="needs-translation">/month</target>
+        <target state="translated">/month</target>
       </trans-unit>
       <trans-unit id="s6d4996ed9ab0a5ff">
         <source>one-time</source>
-        <target state="needs-translation">one-time</target>
+        <target state="translated">one-time</target>
       </trans-unit>
       <trans-unit id="s7f6106f967a3dac1">
         <source>I already donated</source>
-        <target state="needs-translation">I already donated</target>
+        <target state="translated">I already donated</target>
       </trans-unit>
       <trans-unit id="s1debceb76cf716af">
         <source>Open Food Facts is a non-profit. No ads, no industry money, 4.6 million products kept open by volunteers. We need <x id="0" equiv-text="${goal}"/> to run the servers and one engineer in <x id="1" equiv-text="${this.currentYear}"/>. If you looked something up today, €3 a month keeps it free for a year.</source>
-        <target state="needs-translation">Open Food Facts is a non-profit. No ads, no industry money, 4.6 million products kept open by volunteers. We need <x id="0" equiv-text="${goal}"/> to run the servers and one engineer in <x id="1" equiv-text="${this.currentYear}"/>. If you looked something up today, €3 a month keeps it free for a year.</target>
+        <target state="translated">Open Food Facts is a non-profit. No ads, no industry money, 4.6 million products kept open by volunteers. We need <x id="0" equiv-text="${goal}"/> to run the servers and one engineer in <x id="1" equiv-text="${this.currentYear}"/>. If you looked something up today, €3 a month keeps it free for a year.</target>
       </trans-unit>
       <trans-unit id="saacde229bac011db">
         <source>Open Food Facts is a non-profit. No ads, no industry money, 4.6 million products kept open by volunteers. If you looked something up today, €3 a month keeps it free for a year.</source>
-        <target state="needs-translation">Open Food Facts is a non-profit. No ads, no industry money, 4.6 million products kept open by volunteers. If you looked something up today, €3 a month keeps it free for a year.</target>
+        <target state="translated">Open Food Facts is a non-profit. No ads, no industry money, 4.6 million products kept open by volunteers. If you looked something up today, €3 a month keeps it free for a year.</target>
       </trans-unit>
       <trans-unit id="sa94fa9a46d59932d">
         <source>Tax deductible in France: <x id="0" equiv-text="${amount}"/> costs you <x id="1" equiv-text="${net}"/>. Cancel any time.</source>
-        <target state="needs-translation">Tax deductible in France: <x id="0" equiv-text="${amount}"/> costs you <x id="1" equiv-text="${net}"/>. Cancel any time.</target>
+        <target state="translated">Tax deductible in France: <x id="0" equiv-text="${amount}"/> costs you <x id="1" equiv-text="${net}"/>. Cancel any time.</target>
       </trans-unit>
       <trans-unit id="s10b9db9e66aa9a64">
         <source>Cancel any time.</source>
-        <target state="needs-translation">Cancel any time.</target>
+        <target state="translated">Cancel any time.</target>
       </trans-unit>
       <trans-unit id="sea6fd3b4b51e554a">
         <source>Receipt by email.</source>
-        <target state="needs-translation">Receipt by email.</target>
+        <target state="translated">Receipt by email.</target>
       </trans-unit>
       <trans-unit id="s4c5003adba051cb7">
         <source>Give <x id="0" equiv-text="${amount}"/> a month</source>
-        <target state="needs-translation">Give <x id="0" equiv-text="${amount}"/> a month</target>
+        <target state="translated">Give <x id="0" equiv-text="${amount}"/> a month</target>
       </trans-unit>
       <trans-unit id="sfed3132eac9cc388">
         <source>€3 a month keeps it that way.</source>
-        <target state="needs-translation">€3 a month keeps it that way.</target>
+        <target state="translated">€3 a month keeps it that way.</target>
       </trans-unit>
       <trans-unit id="sab56b65357ec6222">
         <source>Cancel any time</source>
-        <target state="needs-translation">Cancel any time</target>
+        <target state="translated">Cancel any time</target>
       </trans-unit>
       <trans-unit id="s275772c501fb3b2e">
         <source>Not now</source>
-        <target state="needs-translation">Not now</target>
+        <target state="translated">Not now</target>
       </trans-unit>
       <trans-unit id="sd95fd198ae0919ff">
         <source>Give <x id="0" equiv-text="${amount}"/>/mo</source>
-        <target state="needs-translation">Give <x id="0" equiv-text="${amount}"/>/mo</target>
+        <target state="translated">Give <x id="0" equiv-text="${amount}"/>/mo</target>
       </trans-unit>
       <trans-unit id="s8fb2185efea4d4e8">
         <source>raised of <x id="0" equiv-text="${goal}"/></source>
-        <target state="needs-translation">raised of <x id="0" equiv-text="${goal}"/></target>
+        <target state="translated">raised of <x id="0" equiv-text="${goal}"/></target>
       </trans-unit>
       <trans-unit id="s8a0df9cb3907a58e">
         <source><x id="0" equiv-text="${fmtCount}"/> supporters</source>
-        <target state="needs-translation"><x id="0" equiv-text="${fmtCount}"/> supporters</target>
+        <target state="translated"><x id="0" equiv-text="${fmtCount}"/> supporters</target>
       </trans-unit>
       <trans-unit id="sd8a0d0cc52fdaf39">
         <source>until <x id="0" equiv-text="${day}"/></source>
-        <target state="needs-translation">until <x id="0" equiv-text="${day}"/></target>
+        <target state="translated">until <x id="0" equiv-text="${day}"/></target>
       </trans-unit>
       <trans-unit id="s1771e84f035dbfca">
         <source>To our readers in France: join the <x id="0" equiv-text="${count}"/> people keeping Open Food Facts free.</source>
-        <target state="needs-translation">To our readers in France: join the <x id="0" equiv-text="${count}"/> people keeping Open Food Facts free.</target>
+        <target state="translated">To our readers in France: join the <x id="0" equiv-text="${count}"/> people keeping Open Food Facts free.</target>
       </trans-unit>
       <trans-unit id="se3c369c9968fb2a4">
         <source>To our readers in France: join the people keeping Open Food Facts free.</source>
-        <target state="needs-translation">To our readers in France: join the people keeping Open Food Facts free.</target>
+        <target state="translated">To our readers in France: join the people keeping Open Food Facts free.</target>
       </trans-unit>
       <trans-unit id="s3a415c0098b6e01b">
         <source>Join the <x id="0" equiv-text="${count}"/> people keeping Open Food Facts free.</source>
-        <target state="needs-translation">Join the <x id="0" equiv-text="${count}"/> people keeping Open Food Facts free.</target>
+        <target state="translated">Join the <x id="0" equiv-text="${count}"/> people keeping Open Food Facts free.</target>
       </trans-unit>
       <trans-unit id="s535e4c52764db5ed">
         <source>Join the people keeping Open Food Facts free.</source>
-        <target state="needs-translation">Join the people keeping Open Food Facts free.</target>
+        <target state="translated">Join the people keeping Open Food Facts free.</target>
       </trans-unit>
       <trans-unit id="s984c3f4ea2027ec3">
         <source>Join <x id="0" equiv-text="${count}"/> people keeping this free.</source>
-        <target state="needs-translation">Join <x id="0" equiv-text="${count}"/> people keeping this free.</target>
+        <target state="translated">Join <x id="0" equiv-text="${count}"/> people keeping this free.</target>
       </trans-unit>
       <trans-unit id="s17e22985ab27800e">
         <source>Join the people keeping this free.</source>
-        <target state="needs-translation">Join the people keeping this free.</target>
+        <target state="translated">Join the people keeping this free.</target>
       </trans-unit>
       <trans-unit id="sbbbd081f048248b3">
         <source><x id="0" equiv-text="${amount}"/> a month keeps it that way.</source>
-        <target state="needs-translation"><x id="0" equiv-text="${amount}"/> a month keeps it that way.</target>
+        <target state="translated"><x id="0" equiv-text="${amount}"/> a month keeps it that way.</target>
       </trans-unit>
     </body>
   </file>
