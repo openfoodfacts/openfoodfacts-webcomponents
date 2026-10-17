@@ -399,12 +399,19 @@ const DEFAULT_MARKUP = (nextYear: string) => `<section class="  ">
 
 const nextYear = () => (new Date().getFullYear() + 1).toString()
 
-const markup = (element: any) =>
-  element.shadowRoot
-    .querySelector("section")
-    .outerHTML.replace(/<!--.*?-->/g, "")
-    // Lit preserves indentation around empty conditional parts as whitespace-only lines.
-    .replace(/\n[ \t]+\n/g, "\n\n")
+const markup = (element: any) => {
+  const section = element.shadowRoot.querySelector("section").cloneNode(true) as HTMLElement
+  const walker = document.createTreeWalker(section, NodeFilter.SHOW_COMMENT)
+  const comments: Comment[] = []
+
+  while (walker.nextNode()) {
+    comments.push(walker.currentNode as Comment)
+  }
+  comments.forEach((comment) => comment.remove())
+
+  // Lit preserves indentation around empty conditional parts as whitespace-only lines.
+  return section.outerHTML.replace(/\n[ \t]+\n/g, "\n\n")
+}
 
 const text = (element: any) =>
   (element.shadowRoot.querySelector("section")?.textContent ?? "").replace(/\s+/g, " ").trim()
