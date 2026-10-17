@@ -168,6 +168,16 @@ describe("Robotoff API", () => {
       expect(lastRequestOptions()).toEqual({ credentials: "include" })
     })
 
+    it("should keep long barcodes and leading zeros unchanged", async () => {
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse({ insights: [] }))
+
+      await robotoff.insights({ barcode: "0012345678901234567890" })
+
+      expect(new URL(lastRequest().url).searchParams.get("barcode")).toBe(
+        "0012345678901234567890"
+      )
+    })
+
     it("should handle comma-separated parameters correctly", async () => {
       vi.mocked(global.fetch).mockResolvedValue(jsonResponse({ insights: [] }))
 
