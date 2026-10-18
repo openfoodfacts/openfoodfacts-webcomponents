@@ -24,8 +24,8 @@ export default defineConfig({
       output: {
         preserveModules: true,
         preserveModulesRoot: resolve(__dirname, "src"),
-        entryFileNames: "esm/[name].js",
-        chunkFileNames: "esm/[name].js",
+        entryFileNames: "modules/[name].js",
+        chunkFileNames: "modules/[name].js",
       },
     },
   },
