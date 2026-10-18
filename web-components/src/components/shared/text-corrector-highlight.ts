@@ -1,4 +1,4 @@
-import { html, css, type PropertyValues } from "lit"
+import { html, css, LitElement, type PropertyValues } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { BASE } from "../../styles/base"
 import { msg, localized } from "@lit/localize"
@@ -14,7 +14,6 @@ import { TEXT_CORRECTOR } from "../../styles/text-corrector"
 import { RELATIVE } from "../../styles/utils"
 import "../shared/loading-button"
 import { TextDiffMixin } from "../../mixins/text-diff-mixin"
-import { LitElement } from "lit"
 import { getValidHeadingLevel } from "../../utils/knowledge-panels/heading-utils"
 import { sanitizeHtml } from "../../utils/html"
 
