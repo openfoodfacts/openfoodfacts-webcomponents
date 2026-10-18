@@ -2,7 +2,6 @@ import { defineConfig } from "vite"
 import { dirname, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
-import { viteStaticCopy } from "vite-plugin-static-copy"
 import dts from "unplugin-dts/vite"
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -25,15 +24,12 @@ export default defineConfig({
       output: {
         preserveModules: true,
         preserveModulesRoot: resolve(__dirname, "src"),
-        entryFileNames: "modules/[name].js",
-        chunkFileNames: "modules/[name].js",
+        entryFileNames: "esm/[name].js",
+        chunkFileNames: "esm/[name].js",
       },
     },
   },
   plugins: [
-    viteStaticCopy({
-      targets: [{ src: "src/assets", dest: "", rename: { stripBase: 1 } }],
-    }),
     dts({
       tsconfigPath: "./tsconfig.json",
       outDirs: "dist/types",

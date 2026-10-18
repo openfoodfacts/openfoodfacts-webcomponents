@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url"
 import { viteStaticCopy } from "vite-plugin-static-copy"
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
+const localeChunkRegex = /src\/localization\/generated\/locales\/(.*)\.ts$/
 
 export default defineConfig({
   build: {
@@ -15,13 +16,30 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, "src/off-webcomponents.ts"),
       fileName: "off-webcomponents.bundled",
-      formats: ["es", "cjs"],
     },
     rolldownOptions: {
-      output: {
-        // Include runtime locale imports in the standalone CDN module.
-        codeSplitting: false,
-      },
+      output: [
+        {
+          format: "es",
+          chunkFileNames: "lang/esm/[name]-[hash].js",
+          manualChunks(id) {
+            const match = id.match(localeChunkRegex)
+            if (match) {
+              return match[1]
+            }
+          },
+        },
+        {
+          format: "cjs",
+          chunkFileNames: "lang/cjs/[name]-[hash].cjs",
+          manualChunks(id) {
+            const match = id.match(localeChunkRegex)
+            if (match) {
+              return match[1]
+            }
+          },
+        },
+      ],
     },
   },
   plugins: [

@@ -13,7 +13,8 @@
   "exports": {
     ".": {
       "types": "./dist/types/off-webcomponents.d.ts",
-      "import": "./dist/modules/off-webcomponents.js"
+      "import": "./dist/esm/off-webcomponents.js",
+      "require": "./dist/cjs/off-webcomponents.cjs"
     }
   },
   "types": "dist/types/off-webcomponents.d.ts",
@@ -21,7 +22,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "npm run translations:build && vite build && vite build --config vite.bundled.config.ts",
+    "build": "npm run translations:build && vite build && vite build --config vite.cjs.config.ts && vite build --config vite.bundled.config.ts",
     "build:watch": "vite build --watch",
     "build:doc": "npm run translations:build && npm run analyze && npm x storybook build",
     "clean": "rimraf dist && rimraf my-element.{d.ts,d.ts.map,js,js.map} test/my-element.{d.ts,d.ts.map,js,js.map} test/my-element_test.{d.ts,d.ts.map,js,js.map}",

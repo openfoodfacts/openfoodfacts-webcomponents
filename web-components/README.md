@@ -17,7 +17,8 @@ ES module imports use the unbundled package modules.
 
 ### With CDN
 
-The CDN build is a standalone ES module with the component code and translations bundled:
+The CDN build is an ES module with the component code bundled. It loads locale chunks on demand from
+`dist/lang/esm/`:
 [https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.bundled.js](https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.bundled.js)
 
 ### Import it in your project
@@ -46,7 +47,9 @@ import "@openfoodfacts/openfoodfacts-webcomponents"
 ></script>
 ```
 
-The CDN bundle includes the translations, so no locale files need to be copied separately.
+The locale chunks are shipped with the package. When self-hosting the build, copy `dist/lang/esm/`
+alongside the bundle and preserve that path (or copy the entire `dist/` directory). You do not need to
+copy locale files individually.
 
 ### Usage
 
