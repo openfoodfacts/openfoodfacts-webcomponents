@@ -13,9 +13,12 @@ You will see the list of available components and how to use them.
 
 `npm install @openfoodfacts/openfoodfacts-webcomponents`
 
+ES module imports use the unbundled package modules.
+
 ### With CDN
 
-Link : [https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.bundled.js](https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.bundled.js)
+The CDN build is a standalone ES module with the component code and translations bundled:
+[https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.bundled.js](https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.bundled.js)
 
 ### Import it in your project
 
@@ -73,7 +76,7 @@ export default defineConfig({
 ></script>
 ```
 
-Be sure to copy all the files in the `dist/localization/locales` folder to your project.
+The CDN bundle includes the translations, so no locale files need to be copied separately.
 
 ### Usage
 
