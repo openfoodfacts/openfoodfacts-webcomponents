@@ -1,4 +1,4 @@
-import { css, type CSSResult } from "lit-element"
+import { css, type CSSResult } from "lit"
 import {
   SAFE_CAPPUCINO,
   SAFE_CHOCOLATE,

@@ -1,5 +1,5 @@
 import { localized, msg } from "@lit/localize"
-import { LitElement, html, css } from "lit-element"
+import { LitElement, html, css } from "lit"
 import { customElement, state } from "lit/decorators.js"
 import { getButtonClasses, ButtonType } from "../../styles/buttons"
 import { MODAL } from "../../styles/modal"
