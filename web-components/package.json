@@ -13,7 +13,7 @@
   "exports": {
     ".": {
       "types": "./dist/types/off-webcomponents.d.ts",
-      "import": "./dist/esm/off-webcomponents.js",
+      "import": "./dist/modules/off-webcomponents.js",
       "require": "./dist/cjs/off-webcomponents.cjs"
     }
   },
