@@ -11,6 +11,7 @@ export default defineConfig({
   build: {
     target: "es2021",
     outDir: "dist",
+    minify: false,
     lib: {
       entry: resolve(__dirname, "src/off-webcomponents.ts"),
       fileName: "off-webcomponents",
