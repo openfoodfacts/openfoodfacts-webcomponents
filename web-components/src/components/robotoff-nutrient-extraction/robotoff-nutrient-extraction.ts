@@ -25,7 +25,7 @@ import { EventState, EventType } from "../../constants"
 import type { BasicStateEventDetail } from "../../types"
 import type { NutrimentsProductType } from "../../types/openfoodfacts"
 import { fetchProduct } from "../../api/openfoodfacts"
-import { ProductFields } from "../../utils/openfoodfacts"
+import { getOriginalImageId, ProductFields } from "../../utils/openfoodfacts"
 import { fetchNutrientsOrderByCountryCode } from "../../signals/openfoodfacts"
 import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin"
 import { ifDefined } from "lit/directives/if-defined.js"
@@ -33,7 +33,7 @@ import { Breakpoints } from "../../utils/breakpoints"
 import { LanguageCodesMixin } from "../../mixins/language-codes-mixin"
 import { CountryCodeMixin } from "../../mixins/country-codes-mixin"
 import { DisplayProductLinkMixin } from "../../mixins/display-product-link-mixin"
-import { localized, msg } from "@lit/localize"
+import { localized, msg, str } from "@lit/localize"
 import { languageCode } from "../../signals/app"
 
 const IMAGE_MAX_WIDTH = 700
@@ -60,6 +60,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
         z-index: 1;
         top: 1rem;
         display: flex;
+        flex-direction: column;
         align-items: center;
         margin-bottom: 1rem;
         background-color: white;
@@ -71,6 +72,11 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
         box-sizing: border-box;
         max-width: ${IMAGE_MAX_WIDTH}px;
         width: 100%;
+      }
+
+      .image-uploaded-at {
+        margin: 0.5rem 0 0;
+        font-size: 0.875rem;
       }
 
       .nutrients {
@@ -182,7 +188,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
   async getProductNutriments(productCode: string) {
     this.nutrimentsData = undefined
     const result = await fetchProduct<NutrimentsProductType>(productCode, {
-      fields: ProductFields.NUTRIMENTS,
+      fields: [ProductFields.NUTRIMENTS, ProductFields.IMAGES].join(","),
       lc: languageCode.get(),
     })
     this.nutrimentsData = result.product
@@ -194,6 +200,16 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
       return nothing
     }
     const imgUrl = getRobotoffImageUrl(insight.source_image)
+    const sourceImageId = getOriginalImageId(insight.source_image)
+    const uploadedAt = sourceImageId
+      ? this.nutrimentsData?.images?.[sourceImageId]?.uploaded_t
+      : undefined
+    const uploadedDate = uploadedAt
+      ? new Intl.DateTimeFormat(languageCode.get(), {
+          dateStyle: "medium",
+          timeZone: "UTC",
+        }).format(new Date(uploadedAt * 1000))
+      : undefined
     return html`
       <div class="image-wrapper">
         <zoomable-image
@@ -205,6 +221,15 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
           }}"
           show-buttons
         ></zoomable-image>
+        ${
+          uploadedAt && uploadedDate
+            ? html`<time
+                class="image-uploaded-at"
+                datetime=${new Date(uploadedAt * 1000).toISOString()}
+                >${msg(str`Photo uploaded on ${uploadedDate}`)}</time
+              >`
+            : nothing
+        }
       </div>
     `
   }
