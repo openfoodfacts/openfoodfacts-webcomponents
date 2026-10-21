@@ -362,6 +362,12 @@ export class FolksonomyEditorRow extends LitElement {
         white-space: nowrap;
       }
 
+      tr:not(.empty-row) td.value-cell {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow: visible;
+      }
+
       .property-link {
         color: var(--off-folksonomy-text, black);
       }
@@ -501,15 +507,16 @@ export class FolksonomyEditorRow extends LitElement {
             >${this.key}</a
           >
         </td>
-        <td>
+        <td class="value-cell">
           ${
             this.editable
-              ? html`<input
-                  type="text"
+              ? html`<textarea
                   class="input"
                   .value=${this.tempValue}
                   @input=${this.handleInputChange}
-                />`
+                  rows="3"
+                  style="width: 100%; resize: vertical; box-sizing: border-box;"
+                ></textarea>`
               : this.isUrl(this.value)
                 ? html`
                     <a
