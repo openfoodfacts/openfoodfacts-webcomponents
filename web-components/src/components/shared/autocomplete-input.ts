@@ -3,7 +3,6 @@ import { customElement, property, state } from "lit/decorators.js"
 import { FOLKSONOMY_INPUT } from "../../styles/folksonomy-input"
 import { classMap } from "lit/directives/class-map.js"
 import type { AutocompleteSuggestion, AutocompleteInputChangeEventDetail } from "../../types"
-import { SAFE_BLUE } from "../../utils/colors"
 import { randomIdGenerator } from "../../utils"
 
 /**
@@ -25,8 +24,9 @@ export class AutocompleteInput extends LitElement {
 
       .autocomplete-list {
         position: absolute;
-        background: #fff;
-        border: 1px solid #ccc;
+        background: var(--off-folksonomy-bg, #fff);
+        color: var(--off-folksonomy-text, #333);
+        border: 1px solid var(--off-folksonomy-border, #ccc);
         border-top: none;
         list-style-type: none;
         padding: 0;
@@ -40,37 +40,34 @@ export class AutocompleteInput extends LitElement {
       .autocomplete-item {
         padding: 10px;
         cursor: pointer;
+        color: var(--off-folksonomy-text, #333);
+        background-color: transparent;
       }
 
       .autocomplete-item:hover {
-        background-color: #f0f0f0;
+        background-color: var(--off-folksonomy-table-header-bg, #f0f0f0);
+        color: var(--off-folksonomy-text, #333);
       }
 
       .autocomplete-item.highlighted {
-        background-color: #e0e0e0;
+        background-color: var(--off-folksonomy-table-header-bg, #e0e0e0);
+        color: var(--off-folksonomy-text, #333);
         font-weight: bold;
       }
 
       .autocomplete-item.not-found {
-        background-color: #f8f9fa;
-        border-top: 1px solid #ddd;
-        color: #007bff;
+        background-color: var(--off-folksonomy-bg, #f8f9fa);
+        border-top: 1px solid var(--off-folksonomy-border, #ddd);
+        color: var(--off-folksonomy-text, #007bff);
         font-style: italic;
         padding: 12px 10px;
       }
-
-      .autocomplete-item.not-found:hover {
-        background-color: #e7f3ff;
-      }
-
       .autocomplete-item.not-found.highlighted {
-        background-color: #d4ebff;
+        background-color: var(--off-folksonomy-table-header-bg, #d4ebff);
         font-weight: normal;
       }
-
-      .autocomplete-input:focus {
-        outline: none;
-        border-color: ${SAFE_BLUE};
+      .autocomplete-item.not-found:hover {
+        background-color: var(--off-folksonomy-table-header-bg, #e7f3ff);
       }
     `,
   ]
