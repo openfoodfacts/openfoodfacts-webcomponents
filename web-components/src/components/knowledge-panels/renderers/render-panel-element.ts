@@ -22,9 +22,9 @@ export class PanelElementRenderer extends LitElement {
       margin-bottom: 1rem;
       border: 1px solid transparent;
       border-radius: 0.25rem;
-      color: #856404;
-      background-color: #fff3cd;
-      border-color: #ffeeba;
+      color: var(--off-kp-warning-text, #856404);
+      background-color: var(--off-kp-warning-bg, #fff3cd);
+      border-color: var(--off-kp-warning-border, #ffeeba);
     }
 
     .sub-panel {
@@ -32,11 +32,11 @@ export class PanelElementRenderer extends LitElement {
       width: 100%;
       margin-bottom: 1.25rem;
       padding: 1rem;
-      border-left: 3px solid #e8e8e8;
-      background-color: #fafafa;
+      border-left: 3px solid var(--off-kp-border, #e8e8e8);
+      background-color: var(--off-kp-sub-panel-bg, #fafafa);
       border-radius: 20px;
       text-align: left;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+      box-shadow: 0 1px 4px var(--off-kp-shadow, rgba(0, 0, 0, 0.02));
       overflow-x: hidden; /* Prevent horizontal overflow */
       word-wrap: break-word; /* Ensure long words don't cause overflow */
       overflow-wrap: break-word; /* Modern version of word-wrap */
