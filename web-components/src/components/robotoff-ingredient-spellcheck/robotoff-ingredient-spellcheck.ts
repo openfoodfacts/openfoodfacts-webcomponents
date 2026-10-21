@@ -262,6 +262,10 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
     const insight = this._insight
     if (!insight) {
       console.error("No insight found at index", this._currentIndex)
+      await this.hideLoading()
+      this.dispatchIngredientSpellcheckStateEvent({
+        state: EventState.ERROR,
+      })
       return
     }
 
