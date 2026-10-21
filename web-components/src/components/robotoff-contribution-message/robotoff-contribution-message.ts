@@ -132,7 +132,7 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
    * It fetches from robotoff : spellcheck insights, nutrient insights, and questions for the product.
    */
   private _fetchDataTask = new Task(this, {
-    task: async ([productCode]) => {
+    task: async ([productCode, isLoggedIn]) => {
       console.log("Fetching data for product code", productCode, this._languageCodes)
       this.showMessages = {
         [RobotoffContributionType.QUESTIONS]: false,
@@ -144,7 +144,7 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
       // Check if it need contributions. If not, don't show the message. If request fails, hide the message but do not crash all requests
       const [questions, insights] = await Promise.allSettled([
         fetchQuestionsByProductCode(productCode),
-        ...(this.isLoggedIn
+        ...(isLoggedIn
           ? [
               robotoff.fetchRobotoffContributionMessageInsights({
                 barcode: productCode,
@@ -174,7 +174,7 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
         ...insightValues,
       }
     },
-    args: () => [this.productCode, ...this._languageCodes],
+    args: () => [this.productCode, this.isLoggedIn, ...this._languageCodes],
   })
 
   /**
