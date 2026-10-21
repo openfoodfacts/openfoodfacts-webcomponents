@@ -1,4 +1,4 @@
-import { LitElement, css, html, nothing } from "lit"
+import { LitElement, css, html, nothing, type PropertyValues } from "lit"
 import { customElement, property, query, state } from "lit/decorators.js"
 import {
   type NutrientsInsight,
@@ -30,12 +30,7 @@ import { backgroundImage } from "../../directives/background-image"
 import { ALERT } from "../../styles/alert"
 import type { NutrimentsProductType } from "../../types/openfoodfacts"
 import { GREEN } from "../../utils/colors"
-import {
-  initDebounce,
-  removeUselessZeros,
-  setValueAndParentsObjectIfNotExists,
-  triggerSubmit,
-} from "../../utils"
+import { removeUselessZeros, setValueAndParentsObjectIfNotExists, triggerSubmit } from "../../utils"
 import { nutrientsOrderByCountryCode, sortKeysByNutrientsOrder } from "../../signals/openfoodfacts"
 import { countryCode, languageCode } from "../../signals/app"
 
@@ -261,11 +256,6 @@ export class RobotoffNutrientExtractionForm extends LitElement {
       serving: {},
     }
 
-  @state()
-  private debounceUpdatedInsight = initDebounce(() => {
-    this.onUpdateInsight()
-  })
-
   /**
    * Autocomplete value
    */
@@ -303,6 +293,10 @@ export class RobotoffNutrientExtractionForm extends LitElement {
    *
    */
   onUpdateInsight = () => {
+    if (!this.insight) {
+      return
+    }
+
     // Update the serving size value to dislay
     this._servingSizeValue = this.insight!.data.nutrients.serving_size?.value || ""
     // Update the insight type by checking the nutrient keys
@@ -329,12 +323,13 @@ export class RobotoffNutrientExtractionForm extends LitElement {
   }
 
   /**
-   * Update the insight type on attribute changed callback
+   * Recalculate the form when Lit updates either data property.
+   * The parent supplies both values as properties, not serialized attributes.
    */
-  override attributeChangedCallback(name: string, oldval: string, newval: string) {
-    super.attributeChangedCallback(name, oldval, newval)
-    if (["insight", "nutriments-data"].includes(name)) {
-      this.debounceUpdatedInsight()
+  override updated(changedProperties: PropertyValues<this>) {
+    super.updated(changedProperties)
+    if (changedProperties.has("insight") || changedProperties.has("nutrimentsData")) {
+      this.onUpdateInsight()
     }
   }
 
@@ -1110,12 +1105,13 @@ export class RobotoffNutrientExtractionForm extends LitElement {
         <button
           type="button"
           class="button chocolate-button"
+          aria-label=${isHidden ? msg("Show nutrient") : msg("Hide nutrient")}
           @click=${() => this.toggleNutrient(column, nutrientKey)}
         >
           ${
             isHidden
-              ? html`<eye-invisible-icon size="18px"></eye-invisible-icon>`
-              : html` <eye-visible-icon size="18px"></eye-visible-icon>`
+              ? html`<eye-invisible-icon size="18px" aria-hidden="true"></eye-invisible-icon>`
+              : html` <eye-visible-icon size="18px" aria-hidden="true"></eye-visible-icon>`
           }
         </button>
       </div>
