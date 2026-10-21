@@ -1,6 +1,7 @@
 import { LitElement, html, css } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { FOLKSONOMY_INPUT } from "../../styles/folksonomy-input"
+import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme"
 import { classMap } from "lit/directives/class-map.js"
 import type { AutocompleteSuggestion, AutocompleteInputChangeEventDetail } from "../../types"
 import { SAFE_BLUE } from "../../utils/colors"
@@ -16,6 +17,7 @@ import { randomIdGenerator } from "../../utils"
 @customElement("autocomplete-input")
 export class AutocompleteInput extends LitElement {
   static override styles = [
+    FOLKSONOMY_THEME,
     FOLKSONOMY_INPUT,
     css`
       .autocomplete-wrapper {
@@ -25,8 +27,8 @@ export class AutocompleteInput extends LitElement {
 
       .autocomplete-list {
         position: absolute;
-        background: #fff;
-        border: 1px solid #ccc;
+        background: var(--off-folksonomy-input-bg, #fff);
+        border: 1px solid var(--off-folksonomy-input-border, #ccc);
         border-top: none;
         list-style-type: none;
         padding: 0;
@@ -40,27 +42,28 @@ export class AutocompleteInput extends LitElement {
       .autocomplete-item {
         padding: 10px;
         cursor: pointer;
+        color: var(--off-folksonomy-text, #333);
       }
 
       .autocomplete-item:hover {
-        background-color: #f0f0f0;
+        background-color: var(--off-folksonomy-row-hover-bg, #f0f0f0);
       }
 
       .autocomplete-item.highlighted {
-        background-color: #e0e0e0;
+        background-color: var(--off-folksonomy-row-hover-bg, #e0e0e0);
         font-weight: bold;
       }
 
       .autocomplete-item.not-found {
-        background-color: #f8f9fa;
-        border-top: 1px solid #ddd;
-        color: #007bff;
+        background-color: var(--off-folksonomy-input-bg, #f8f9fa);
+        border-top: 1px solid var(--off-folksonomy-input-border, #ddd);
+        color: var(--off-folksonomy-link, #007bff);
         font-style: italic;
         padding: 12px 10px;
       }
 
       .autocomplete-item.not-found:hover {
-        background-color: #e7f3ff;
+        background-color: var(--off-folksonomy-row-hover-bg, #e7f3ff);
       }
 
       .autocomplete-item.not-found.highlighted {
