@@ -6,12 +6,11 @@ import {
   isNullOrUndefined,
   setValueAndParentsObjectIfNotExists,
   randomIdGenerator,
-  initDebounce,
-  createDebounce,
   downloadCSV,
   removeUselessZeros,
   normalizeRotation,
 } from "../utils"
+import { debounce } from "./debounce"
 
 describe("Utility Functions", () => {
   describe("paramToString", () => {
@@ -153,11 +152,11 @@ describe("Utility Functions", () => {
     })
   })
 
-  describe("initDebounce", () => {
+  describe("debounce", () => {
     it("should debounce function calls", () => {
       vi.useFakeTimers()
       const mockFn = vi.fn()
-      const debouncedFn = initDebounce(mockFn, 100)
+      const debouncedFn = debounce(mockFn, { wait: 100 })
 
       debouncedFn()
       debouncedFn()
@@ -172,7 +171,7 @@ describe("Utility Functions", () => {
     it("should reset timer on subsequent calls", () => {
       vi.useFakeTimers()
       const mockFn = vi.fn()
-      const debouncedFn = initDebounce(mockFn, 100)
+      const debouncedFn = debounce(mockFn, { wait: 100 })
 
       debouncedFn()
 
@@ -184,30 +183,14 @@ describe("Utility Functions", () => {
       vi.advanceTimersByTime(30)
       expect(mockFn).toHaveBeenCalledTimes(1)
     })
-  })
 
-  describe("createDebounce", () => {
-    it("should create debounce utility with debounce method", () => {
+    it("should cancel pending execution", () => {
       vi.useFakeTimers()
       const mockFn = vi.fn()
-      const debouncer = createDebounce(100)
+      const debouncedFn = debounce(mockFn, { wait: 100 })
 
-      debouncer.debounce(mockFn)
-      debouncer.debounce(mockFn)
-
-      expect(mockFn).not.toHaveBeenCalled()
-
-      vi.advanceTimersByTime(100)
-      expect(mockFn).toHaveBeenCalledTimes(1)
-    })
-
-    it("should provide clear method to cancel pending execution", () => {
-      vi.useFakeTimers()
-      const mockFn = vi.fn()
-      const debouncer = createDebounce(100)
-
-      debouncer.debounce(mockFn)
-      debouncer.clear()
+      debouncedFn()
+      debouncedFn.cancel()
 
       vi.advanceTimersByTime(100)
       expect(mockFn).not.toHaveBeenCalled()
