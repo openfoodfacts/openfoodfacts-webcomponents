@@ -37,7 +37,7 @@ const ticket = {
 
 const flag = {
   id: 501,
-  ticket_id: 100,
+  ticket: 100,
   barcode: "3017620422003",
   type: "product",
   url: ticket.url,
@@ -48,7 +48,7 @@ const flag = {
   comment: "Label appears incorrect",
   created_at: "2026-10-21T10:00:00Z",
   device_id: "test-device",
-} as Flag
+} as unknown as Flag
 
 const createComponent = async (barcode = "3017620422003") => {
   const element = await fixture<NutriPatrolReports>(
@@ -65,7 +65,11 @@ describe("nutripatrol-reports", () => {
       error: undefined,
     })
     mocks.getFlagsByTicketBatch.mockResolvedValue({
-      data: [flag],
+      data: {
+        ticket_id_to_flags: {
+          "100": [flag],
+        },
+      },
       error: undefined,
     })
 
@@ -77,6 +81,21 @@ describe("nutripatrol-reports", () => {
 
     expect(element.shadowRoot?.textContent).toContain("inappropriate")
     expect(element.shadowRoot?.textContent).toContain("open")
+    const links = Array.from(element.shadowRoot?.querySelectorAll("a") ?? [])
+
+    expect(
+      links.some(
+        (link) => link.textContent?.includes("View related item") && link.href === ticket.url
+      )
+    ).toBe(true)
+
+    expect(
+      links.some(
+        (link) =>
+          link.textContent?.includes("View in Nutri-Patrol") &&
+          link.href === "https://nutripatrol.openfoodfacts.org/tickets/100/show"
+      )
+    ).toBe(true)
     expect(mocks.getTickets).toHaveBeenCalledWith({
       barcode: "3017620422003",
       page: 1,

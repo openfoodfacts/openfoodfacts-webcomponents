@@ -31,8 +31,16 @@ const extractFlags = (value: unknown): Flag[] => {
       return
     }
 
-    if (typeof item.id === "number" && typeof item.ticket_id === "number") {
-      found.set(item.id, item as unknown as Flag)
+    const rawTicketId = item.ticket_id ?? item.ticket
+    const ticketId =
+      typeof rawTicketId === "number"
+        ? rawTicketId
+        : typeof rawTicketId === "string" && rawTicketId.trim() !== ""
+          ? Number(rawTicketId)
+          : undefined
+
+    if (typeof item.id === "number" && typeof ticketId === "number" && Number.isInteger(ticketId)) {
+      found.set(item.id, { ...item, ticket_id: ticketId } as unknown as Flag)
       return
     }
 
@@ -55,7 +63,12 @@ export class NutriPatrolReports extends LitElement {
   @property({ type: String })
   barcode = ""
 
-  private client = new NutriPatrol(globalThis.fetch)
+  private client = new NutriPatrol((input, init) =>
+    globalThis.fetch(input, {
+      ...init,
+      credentials: "include",
+    })
+  )
 
   static override styles = css`
     :host {
@@ -264,7 +277,10 @@ export class NutriPatrolReports extends LitElement {
   private renderReport({ flag, ticket }: ReportItem) {
     const date = this.formatDate(flag.created_at ?? ticket.created_at)
     const url = this.getSafeUrl(ticket.url)
-
+    const moderationUrl = new URL(
+      `/tickets/${encodeURIComponent(String(ticket.id))}/show`,
+      "https://nutripatrol.openfoodfacts.org"
+    ).href
     return html`
       <article class="report" key=${flag.id}>
         <div class="report-header">
@@ -276,6 +292,7 @@ export class NutriPatrolReports extends LitElement {
 
         <div class="report-footer">
           <span>${date ?? msg("Date unavailable")}</span>
+
           ${
             url
               ? html`
@@ -285,6 +302,10 @@ export class NutriPatrolReports extends LitElement {
                 `
               : nothing
           }
+
+          <a href=${moderationUrl} target="_blank" rel="noopener noreferrer">
+            ${msg("View in Nutri-Patrol")}
+          </a>
         </div>
       </article>
     `
