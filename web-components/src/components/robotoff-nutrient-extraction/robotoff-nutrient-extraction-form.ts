@@ -1,5 +1,6 @@
 import { LitElement, css, html, nothing } from "lit"
 import { customElement, property, query, state } from "lit/decorators.js"
+import { keyed } from "lit/directives/keyed.js"
 import {
   type NutrientsInsight,
   type NutrientInsightDatum,
@@ -964,13 +965,20 @@ export class RobotoffNutrientExtractionForm extends LitElement {
     return html`<div class="">
       <label class="serving-size-wrapper flex align-center flex-col">
         <span>${msg("Serving size")}</span>
-        <input
-          class="input cappucino"
-          name=${NUTRIENT_SERVING_SIZE_KEY}
-          type="text"
-          .value=${servingSize}
-          @change=${this.onChangeServingSize}
-        />
+        ${
+          // Recreate the input for each insight, otherwise a value typed for the previous product
+          // is kept when both products have the same serving size (e.g. none)
+          keyed(
+            this.insight?.id,
+            html`<input
+              class="input cappucino"
+              name=${NUTRIENT_SERVING_SIZE_KEY}
+              type="text"
+              .value=${servingSize}
+              @change=${this.onChangeServingSize}
+            />`
+          )
+        }
       </label>
       ${this.renderRobotoffSuggestionForServingSize()}
     </div> `
