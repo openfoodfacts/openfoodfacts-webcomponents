@@ -58,6 +58,23 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
       .robotoff-contribution-message li {
         text-align: left;
       }
+      @media (prefers-color-scheme: dark) {
+        .robotoff-contribution-message.alert.info {
+          background-color: var(--robotoff-contribution-message-bg-dark, #1c2b33);
+          border-color: var(--robotoff-contribution-message-border-dark, #2f4b5a);
+          color: var(--robotoff-contribution-message-color-dark, #b8dcf0);
+        }
+        .robotoff-contribution-message .white-button {
+          background-color: #2a2a2a;
+          border-color: #555;
+          color: #f3f3f3;
+        }
+        .robotoff-contribution-message .white-button:hover {
+          background-color: #f3f3f3;
+          border-color: #f3f3f3;
+          color: #181a1b;
+        }
+      }
     `,
   ]
 
