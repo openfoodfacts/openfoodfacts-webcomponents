@@ -362,55 +362,57 @@ export const DONATION_BANNER_VARIANTS = css`
     white-space: nowrap;
   }
 
-  .dark-mode.campaign,
-  .dark-mode.strip,
-  .dark-mode .sheet,
-  .dark-mode .bar {
-    background: #2d2724;
-    color: #f9f7f5;
-    border-color: rgba(255, 255, 255, 0.15);
-  }
+  @media (prefers-color-scheme: dark) {
+    .campaign,
+    .strip,
+    .sheet,
+    .bar {
+      background: #2d2724;
+      color: #f9f7f5;
+      border-color: rgba(255, 255, 255, 0.15);
+    }
 
-  .dark-mode.campaign {
-    border-inline-start-color: #ff8714;
-  }
+    .campaign {
+      border-inline-start-color: #ff8714;
+    }
 
-  .dark-mode.campaign p,
-  .dark-mode .sheet p,
-  .dark-mode.strip .more,
-  .dark-mode .bar .tx,
-  .dark-mode .fine,
-  .dark-mode .links,
-  .dark-mode .close {
-    color: #d4cbc5;
-  }
+    .campaign p,
+    .sheet p,
+    .strip .more,
+    .bar .tx,
+    .fine,
+    .links,
+    .close {
+      color: #d4cbc5;
+    }
 
-  .dark-mode .bar .tx b {
-    color: #f9f7f5;
-  }
+    .bar .tx b {
+      color: #f9f7f5;
+    }
 
-  .dark-mode .tier {
-    background: transparent;
-    border-color: rgba(255, 255, 255, 0.3);
-    color: #f9f7f5;
-  }
+    .tier {
+      background: transparent;
+      border-color: rgba(255, 255, 255, 0.3);
+      color: #f9f7f5;
+    }
 
-  .dark-mode .tier.selected,
-  .dark-mode .give {
-    background: #f9f7f5;
-    border-color: #f9f7f5;
-    color: #201a17;
-  }
+    .tier.selected,
+    .give {
+      background: #f9f7f5;
+      border-color: #f9f7f5;
+      color: #201a17;
+    }
 
-  .dark-mode .tier.selected small {
-    color: #52443d;
-  }
+    .tier.selected small {
+      color: #52443d;
+    }
 
-  .dark-mode .give:hover {
-    background: #fff;
-  }
+    .give:hover {
+      background: #fff;
+    }
 
-  .dark-mode .sheet .grab {
-    background: rgba(255, 255, 255, 0.3);
+    .sheet .grab {
+      background: rgba(255, 255, 255, 0.3);
+    }
   }
 `

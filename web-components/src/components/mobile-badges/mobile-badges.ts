@@ -2,8 +2,6 @@ import { LitElement, html, css, nothing } from "lit"
 import { customElement, state, property } from "lit/decorators.js"
 import { localized, msg } from "@lit/localize"
 import { getImageUrl, languageCode } from "../../signals/app"
-import { classMap } from "lit/directives/class-map.js"
-import { darkModeListener } from "../../utils/dark-mode-listener"
 
 export type Badge = {
   href: string
@@ -31,35 +29,43 @@ export class MobileBadges extends LitElement {
       :host {
         display: block;
       }
-      .dark-mode {
-        background-color: #201a17;
-        color: #f9f7f5;
+      @media (prefers-color-scheme: dark) {
+        #install_the_app_block {
+          background-color: #201a17;
+          color: #f9f7f5;
+        }
       }
       #footer_scan {
         color: #000;
       }
-      .dark-mode #footer_scan {
-        color: #f9f7f5;
+      @media (prefers-color-scheme: dark) {
+        #install_the_app_block #footer_scan {
+          color: #f9f7f5;
+        }
       }
       .everyday {
         background-color: #0064c8;
         border-inline: 5px solid #0064c8;
         color: #fff;
       }
-      .dark-mode .everyday {
-        background-color: #0050a0;
-        border-inline: 5px solid #0050a0;
-        color: #fff;
+      @media (prefers-color-scheme: dark) {
+        #install_the_app_block .everyday {
+          background-color: #0050a0;
+          border-inline: 5px solid #0050a0;
+          color: #fff;
+        }
       }
       .foods {
         background-color: #ff8714;
         border-inline: 5px solid #ff8714;
         color: #fff;
       }
-      .dark-mode .foods {
-        background-color: #cc6c10;
-        border-inline: 5px solid #cc6c10;
-        color: #fff;
+      @media (prefers-color-scheme: dark) {
+        #install_the_app_block .foods {
+          background-color: #cc6c10;
+          border-inline: 5px solid #cc6c10;
+          color: #fff;
+        }
       }
       #install_the_app_block {
         display: flex;
@@ -228,25 +234,6 @@ export class MobileBadges extends LitElement {
    */
   @property({ type: Boolean, attribute: "hide-image" })
   hideImage: boolean = false
-
-  /**
-   * Whether to apply dark mode styling (auto-detected from prefers-color-scheme)
-   */
-  isDarkMode = darkModeListener.darkMode
-  private _darkModeCb = (isDark: boolean) => {
-    this.isDarkMode = isDark
-    this.requestUpdate()
-  }
-
-  override connectedCallback() {
-    super.connectedCallback()
-    darkModeListener.subscribe(this._darkModeCb)
-  }
-
-  override disconnectedCallback() {
-    darkModeListener.unsubscribe(this._darkModeCb)
-    super.disconnectedCallback()
-  }
 
   /**
    * Link to the F-Droid app page.
@@ -469,11 +456,8 @@ export class MobileBadges extends LitElement {
   }
 
   override render() {
-    const rootClasses = { "dark-mode": this.isDarkMode }
     return html`
-      <div class=${classMap(rootClasses)} id="install_the_app_block">
-        ${this.renderImage()} ${this.renderBadges()}
-      </div>
+      <div id="install_the_app_block">${this.renderImage()} ${this.renderBadges()}</div>
     `
   }
 }
