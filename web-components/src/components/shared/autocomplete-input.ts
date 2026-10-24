@@ -72,6 +72,42 @@ export class AutocompleteInput extends LitElement {
         outline: none;
         border-color: ${SAFE_BLUE};
       }
+
+      @media (prefers-color-scheme: dark) {
+        .autocomplete-input {
+          background-color: var(--off-folksonomy-input-bg, #2a2a3a);
+          border-color: var(--off-folksonomy-input-border, #555);
+          color: var(--off-folksonomy-text, #e0e0e0);
+        }
+
+        .autocomplete-list {
+          background: var(--off-folksonomy-input-bg, #2a2a3a);
+          border-color: var(--off-folksonomy-input-border, #555);
+          color: var(--off-folksonomy-text, #e0e0e0);
+        }
+
+        .autocomplete-item:hover {
+          background-color: #3a3a4a;
+        }
+
+        .autocomplete-item.highlighted {
+          background-color: #4a4a5a;
+        }
+
+        .autocomplete-item.not-found {
+          background-color: #252535;
+          border-top-color: #444;
+          color: #5b9bd5;
+        }
+
+        .autocomplete-item.not-found:hover {
+          background-color: #2d3748;
+        }
+
+        .autocomplete-item.not-found.highlighted {
+          background-color: #34445e;
+        }
+      }
     `,
   ]
 

@@ -1,6 +1,6 @@
 import { InsightAnnotationSize } from "../types/robotoff"
 import { isNullOrUndefined } from "."
-import { getTaxonomyUnitById } from "../signals/taxonomies"
+import { getTaxonomyUnitById, getTaxonomyUnitsById } from "../signals/taxonomies"
 
 export enum Unit {
   NULL = "",
@@ -41,8 +41,10 @@ export const FORCED_UNITS_BY_NUTRIENTS_KEYS = {
 
 /**
  * get the possible units for a nutrient key
+ * The units come from the nutrient taxonomy (default unit, country units and "% DV"),
+ * mass units are interchangeable and the current unit is always kept so it can be changed.
  * @param key - the nutrient key
- * @param fallbackUnit - the unit to check if it is forced or not.
+ * @param fallbackUnit - the current unit of the nutrient.
  * For example, if the unit is "kj", it will return ["kj"].
  * @returns
  */
@@ -57,10 +59,9 @@ export const getPossibleUnits = (key: string, fallbackUnit?: string | null) => {
   if (!fallbackUnit) {
     return []
   }
-  if (EDITABLE_UNITS.includes(fallbackUnit as Unit)) {
-    return EDITABLE_UNITS
-  }
-  return [fallbackUnit]
+  const units = [fallbackUnit, ...getTaxonomyUnitsById(key)]
+  const hasEditableUnit = units.some((unit) => EDITABLE_UNITS.includes(unit as Unit))
+  return [...new Set([...(hasEditableUnit ? EDITABLE_UNITS : []), ...units])]
 }
 
 export const NUTRIENT_UNIT_NAME_PREFIX = "unit__"
