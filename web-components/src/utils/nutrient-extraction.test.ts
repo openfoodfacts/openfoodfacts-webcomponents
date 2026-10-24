@@ -13,6 +13,8 @@ describe("getPossibleUnits", () => {
         dv_value: { en: "60" },
       },
       cocoa: { id: "cocoa", name: { en: "Cocoa" }, unit: { en: "%" } },
+      potassium: { id: "potassium", name: { en: "Potassium" }, unit_ca: { en: "% DV" } },
+      ph: { id: "ph", name: { en: "pH" }, unit: { en: "" } },
     })
   })
 
@@ -36,7 +38,12 @@ describe("getPossibleUnits", () => {
     expect(getPossibleUnits("cocoa")).toEqual(["%"])
   })
 
-  it("returns no unit for unknown nutrients", () => {
+  it("uses the taxonomy units when there is no default unit", () => {
+    expect(getPossibleUnits("potassium")).toEqual(["% DV"])
+  })
+
+  it("returns no unit for unknown nutrients or empty units", () => {
     expect(getPossibleUnits("unknown")).toEqual([])
+    expect(getPossibleUnits("ph")).toEqual([])
   })
 })

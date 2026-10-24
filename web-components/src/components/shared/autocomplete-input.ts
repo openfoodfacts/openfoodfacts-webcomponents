@@ -97,7 +97,7 @@ export class AutocompleteInput extends LitElement {
         .autocomplete-item.not-found {
           background-color: #252535;
           border-top-color: #444;
-          color: #5b9bd5;
+          color: #9ecbff;
         }
 
         .autocomplete-item.not-found:hover {

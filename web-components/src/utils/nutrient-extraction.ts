@@ -56,10 +56,12 @@ export const getPossibleUnits = (key: string, fallbackUnit?: string | null) => {
   if (isNullOrUndefined(fallbackUnit)) {
     fallbackUnit = getTaxonomyUnitById(key)
   }
-  if (!fallbackUnit) {
+  const units = [fallbackUnit, ...getTaxonomyUnitsById(key)].filter(
+    (unit): unit is string => !!unit
+  )
+  if (!units.length) {
     return []
   }
-  const units = [fallbackUnit, ...getTaxonomyUnitsById(key)]
   const hasEditableUnit = units.some((unit) => EDITABLE_UNITS.includes(unit as Unit))
   return [...new Set([...(hasEditableUnit ? EDITABLE_UNITS : []), ...units])]
 }
