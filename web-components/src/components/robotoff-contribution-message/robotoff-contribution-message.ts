@@ -37,12 +37,35 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
       :host {
         display: block;
         width: 100%;
+        --robotoff-contribution-message-bg: #d9edf7;
+        --robotoff-contribution-message-border: #bce8f1;
+        --robotoff-contribution-message-color: #31708f;
+        --robotoff-contribution-message-button-bg: white;
+        --robotoff-contribution-message-button-border: white;
+        --robotoff-contribution-message-button-color: black;
+        --robotoff-contribution-message-button-hover-bg: black;
+        --robotoff-contribution-message-button-hover-color: white;
       }
       .robotoff-contribution-message.alert {
         padding: 1rem;
         width: 100%;
         text-align: left;
         box-sizing: border-box;
+      }
+      .robotoff-contribution-message.alert.info {
+        background-color: var(--robotoff-contribution-message-bg);
+        border-color: var(--robotoff-contribution-message-border);
+        color: var(--robotoff-contribution-message-color);
+      }
+      .robotoff-contribution-message .white-button {
+        background-color: var(--robotoff-contribution-message-button-bg);
+        border-color: var(--robotoff-contribution-message-button-border);
+        color: var(--robotoff-contribution-message-button-color);
+      }
+      .robotoff-contribution-message .white-button:hover {
+        background-color: var(--robotoff-contribution-message-button-hover-bg);
+        border-color: var(--robotoff-contribution-message-button-hover-bg);
+        color: var(--robotoff-contribution-message-button-hover-color);
       }
       .robotoff-contribution-message p {
         margin-top: 0;
@@ -59,20 +82,15 @@ export class RobotoffContributionMessage extends LanguageCodesMixin(SignalWatche
         text-align: left;
       }
       @media (prefers-color-scheme: dark) {
-        .robotoff-contribution-message.alert.info {
-          background-color: var(--robotoff-contribution-message-bg-dark, #1c2b33);
-          border-color: var(--robotoff-contribution-message-border-dark, #2f4b5a);
-          color: var(--robotoff-contribution-message-color-dark, #b8dcf0);
-        }
-        .robotoff-contribution-message .white-button {
-          background-color: #2a2a2a;
-          border-color: #555;
-          color: #f3f3f3;
-        }
-        .robotoff-contribution-message .white-button:hover {
-          background-color: #f3f3f3;
-          border-color: #f3f3f3;
-          color: #181a1b;
+        :host {
+          --robotoff-contribution-message-bg: #1c2b33;
+          --robotoff-contribution-message-border: #2f4b5a;
+          --robotoff-contribution-message-color: #b8dcf0;
+          --robotoff-contribution-message-button-bg: #2a2a2a;
+          --robotoff-contribution-message-button-border: #555;
+          --robotoff-contribution-message-button-color: #f3f3f3;
+          --robotoff-contribution-message-button-hover-bg: #f3f3f3;
+          --robotoff-contribution-message-button-hover-color: #181a1b;
         }
       }
     `,
