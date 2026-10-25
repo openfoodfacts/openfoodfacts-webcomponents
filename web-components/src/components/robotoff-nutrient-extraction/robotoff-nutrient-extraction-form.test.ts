@@ -11,11 +11,14 @@ beforeAll(async () => {
 const createInsight = (id: string) =>
   ({
     id,
-    data: { entities: { postprocessed: [] }, nutrients: {} },
+    data: { entities: { postprocessed: [] }, nutrients: { salt_100g: { value: "", unit: "g" } } },
   }) as unknown as NutrientsInsight
 
+const getInput = (element: RobotoffNutrientExtractionForm, name: string) =>
+  element.shadowRoot!.querySelector<HTMLInputElement>(`input[name='${name}']`)!
+
 const getServingSizeInput = (element: RobotoffNutrientExtractionForm) =>
-  element.shadowRoot!.querySelector<HTMLInputElement>("input[name='serving_size']")!
+  getInput(element, "serving_size")
 
 const showInsight = async (element: RobotoffNutrientExtractionForm, id: string) => {
   element.insight = createInsight(id)
@@ -35,6 +38,19 @@ describe("robotoff-nutrient-extraction-form", () => {
     await showInsight(element, "second-product")
 
     expect(getServingSizeInput(element).value).toBe("")
+  })
+
+  it("resets the nutrient values typed for the previous product", async () => {
+    const element = await fixture<RobotoffNutrientExtractionForm>(
+      html`<robotoff-nutrient-extraction-form
+        .insight=${createInsight("first-product")}
+      ></robotoff-nutrient-extraction-form>`
+    )
+    getInput(element, "salt_100g").value = "1.2"
+
+    await showInsight(element, "second-product")
+
+    expect(getInput(element, "salt_100g").value).toBe("")
   })
 
   it("keeps the serving size typed for the current product when re-rendering", async () => {

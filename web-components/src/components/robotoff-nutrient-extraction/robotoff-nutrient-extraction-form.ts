@@ -965,20 +965,13 @@ export class RobotoffNutrientExtractionForm extends LitElement {
     return html`<div class="">
       <label class="serving-size-wrapper flex align-center flex-col">
         <span>${msg("Serving size")}</span>
-        ${
-          // Recreate the input for each insight, otherwise a value typed for the previous product
-          // is kept when both products have the same serving size (e.g. none)
-          keyed(
-            this.insight?.id,
-            html`<input
-              class="input cappucino"
-              name=${NUTRIENT_SERVING_SIZE_KEY}
-              type="text"
-              .value=${servingSize}
-              @change=${this.onChangeServingSize}
-            />`
-          )
-        }
+        <input
+          class="input cappucino"
+          name=${NUTRIENT_SERVING_SIZE_KEY}
+          type="text"
+          .value=${servingSize}
+          @change=${this.onChangeServingSize}
+        />
       </label>
       ${this.renderRobotoffSuggestionForServingSize()}
     </div> `
@@ -1134,16 +1127,21 @@ export class RobotoffNutrientExtractionForm extends LitElement {
    * Render the component.
    */
   override render() {
-    return html`
-      <div class="nutrients-table">
-        <div>${this.renderServingSizeInput()}</div>
-        <div>${this.renderInsightAnnotationSizeSelection()}</div>
+    // Recreate the form for each insight, otherwise values typed for the previous product
+    // are kept in inputs whose bound value did not change (e.g. an empty serving size)
+    return keyed(
+      this.insight?.id,
+      html`
+        <div class="nutrients-table">
+          <div>${this.renderServingSizeInput()}</div>
+          <div>${this.renderInsightAnnotationSizeSelection()}</div>
 
-        <form @submit=${this.onSubmit}>
-          <div class="flex justify-center">${this.renderTable()}</div>
-        </form>
-      </div>
-    `
+          <form @submit=${this.onSubmit}>
+            <div class="flex justify-center">${this.renderTable()}</div>
+          </form>
+        </div>
+      `
+    )
   }
 }
 
