@@ -126,6 +126,9 @@ export class PanelRenderer extends LitElement {
   @property({ type: String })
   headingLevel = "h3"
 
+  @property({ type: String })
+  productCode = ""
+
   /**
    * Checks if a panel is a nutrition panel
    * @returns True if it's a nutrition panel
@@ -150,6 +153,7 @@ export class PanelRenderer extends LitElement {
               html`<element-renderer
                 .element=${element}
                 .knowledgePanels=${this.knowledgePanels}
+                .productCode=${this.productCode}
                 headingLevel=${this.headingLevel}
               ></element-renderer>`
           )

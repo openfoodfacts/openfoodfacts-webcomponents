@@ -22,6 +22,9 @@ import { extractImages } from "../../utils/knowledge-panels/extract-images"
  * @property {string} url - The URL to fetch the knowledge panels from
  * @property {string} path - The path to the knowledge panels inside the JSON response (e.g., "product.knowledge_panels")
  * @property {string} headingLevel - The heading level to use for panel titles (h2, h3, h4, h5, h6)
+ * @property {string} productCode - The barcode of the product, used to link actions to the matching Open Food Facts page
+ * @fires knowledge-panel-action - When an action is clicked, with the action in the event detail.
+ * Calling `preventDefault()` on the event prevents following the action link.
  */
 @customElement("knowledge-panels")
 export class KnowledgePanelsComponent extends LitElement {
@@ -92,6 +95,10 @@ export class KnowledgePanelsComponent extends LitElement {
 
   @property({ type: String })
   path = ""
+
+  /** The barcode of the product the knowledge panels belong to */
+  @property({ type: String, attribute: "product-code" })
+  productCode = ""
 
   @state()
   private knowledgePanels: KnowledgePanelsData | null = null
@@ -203,6 +210,7 @@ export class KnowledgePanelsComponent extends LitElement {
             ? html`<panel-renderer
                 .panel=${panel}
                 .knowledgePanels=${this.knowledgePanels}
+                .productCode=${this.productCode}
                 .nutritionImages=${this.nutritionImages}
                 .frame=${this.topFrame}
                 .headingLevel=${this.headingLevel}
