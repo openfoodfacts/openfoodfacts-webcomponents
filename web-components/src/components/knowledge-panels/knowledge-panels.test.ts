@@ -77,6 +77,18 @@ describe("action-element-renderer", () => {
     )
   })
 
+  it("links both nutrition image actions to the nutrition section of the edit form", async () => {
+    const renderer = await createActionRenderer(
+      createActionElement({ actions: ["add_nutrition_facts_image", "add_nutrition_image"] }),
+      "3017620422003"
+    )
+
+    expect(getActionControls(renderer).map((link) => link.getAttribute("href"))).toEqual([
+      "https://world.openfoodfacts.org/cgi/product.pl?type=edit&code=3017620422003#nutrition",
+      "https://world.openfoodfacts.org/cgi/product.pl?type=edit&code=3017620422003#nutrition",
+    ])
+  })
+
   it("links the Nutri-Patrol report action to the Nutri-Patrol flag form", async () => {
     const renderer = await createActionRenderer(
       createActionElement({ actions: ["report_product_to_nutripatrol"] }),

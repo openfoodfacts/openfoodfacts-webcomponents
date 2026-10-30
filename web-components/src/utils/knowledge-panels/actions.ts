@@ -14,6 +14,7 @@ const EDIT_FORM_ANCHORS: Record<string, string> = {
   add_ingredients_image: "#ingredients",
   add_ingredients_text: "#ingredients",
   add_nutrition_facts_image: "#nutrition",
+  add_nutrition_image: "#nutrition",
   add_nutrition_facts: "#nutrition",
   add_packaging_image: "#packaging",
   add_packaging_text: "#packaging",
