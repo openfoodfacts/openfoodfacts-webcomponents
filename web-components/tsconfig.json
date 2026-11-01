@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
+    "target": "ES2021",
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
     "module": "ESNext",
@@ -22,5 +22,6 @@
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["src/localization/dist"]
 }

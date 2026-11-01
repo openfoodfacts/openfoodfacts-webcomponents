@@ -1,5 +1,5 @@
 import { configureLocalization } from "@lit/localize"
-import { sourceLocale, targetLocales } from "./dist/locale-codes"
+import { sourceLocale, targetLocales } from "./generated/locale-codes"
 import { languageCode } from "../signals/app"
 
 /**
@@ -8,7 +8,7 @@ import { languageCode } from "../signals/app"
 export const { getLocale, setLocale } = configureLocalization({
   sourceLocale,
   targetLocales,
-  loadLocale: (locale: string) => import(`./dist/locales/${locale}.ts`),
+  loadLocale: (locale: string) => import(`./generated/locales/${locale}.ts`),
 })
 
 export const setLanguageCode = (newLanguageCode: string) => {
