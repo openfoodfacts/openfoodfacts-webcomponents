@@ -28,7 +28,7 @@ export async function fetchSpellcheckInsights(
     })
   } catch (error) {
     console.error("Error fetching spellcheck insights:", error)
-    return []
+    throw error
   }
   return result.insights
 }
