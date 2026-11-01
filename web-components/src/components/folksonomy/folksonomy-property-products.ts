@@ -1129,7 +1129,7 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
 
                 <div id="fe_infobox" class="info-box">
                   ${msg("Tip: you can also find the")}
-                  <a href="${this.propertiesUrl}" target="_blank"
+                  <a href="${this.propertiesUrl}" target="_blank" rel="noopener noreferrer"
                     >${msg("list of all properties")}</a
                   >.
                 </div>
