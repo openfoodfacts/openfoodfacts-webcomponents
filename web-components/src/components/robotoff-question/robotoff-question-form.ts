@@ -1,5 +1,5 @@
 import { LitElement, html, css, nothing } from "lit"
-import { customElement, property } from "lit/decorators.js"
+import { customElement, property, state } from "lit/decorators.js"
 import { type Question, AnnotationAnswer } from "../../types/robotoff"
 import { EventType } from "../../constants"
 import { answerQuestion } from "../../signals/questions"
@@ -58,6 +58,10 @@ export class RobotoffQuestionForm extends SignalWatcher(
       .buttons-row {
         margin-top: 1rem;
       }
+      .annotation-error {
+        margin: 1rem 0 0;
+        color: var(--robotoff-question-error-color, #b00020);
+      }
     `,
   ]
 
@@ -68,6 +72,10 @@ export class RobotoffQuestionForm extends SignalWatcher(
   /** True if the image is expanded (and zoomable). */
   @property({ type: Boolean, attribute: "is-image-expanded" })
   isImageExpanded: boolean = false
+
+  /** Whether the most recent answer could not be submitted. */
+  @state()
+  private annotationError = false
 
   get imageSize() {
     return this.isImageExpanded
@@ -91,11 +99,17 @@ export class RobotoffQuestionForm extends SignalWatcher(
   }
 
   private _annotateProduct = async (event: Event, value: AnnotationAnswer) => {
+    this.annotationError = false
     this.showLoading(value)
-    await answerQuestion(this.question?.insight_id as string, value)
-
-    this.hideLoading()
-    this.emitEventClick(event, value)
+    try {
+      await answerQuestion(this.question?.insight_id as string, value)
+      this.emitEventClick(event, value)
+    } catch (error) {
+      console.error("Failed to submit question annotation:", error)
+      this.annotationError = true
+    } finally {
+      await this.hideLoading()
+    }
   }
 
   expandImage() {
@@ -170,6 +184,13 @@ export class RobotoffQuestionForm extends SignalWatcher(
         <p>${this.question.question} <strong> ${this.question.value} </strong></p>
         <div>${this._renderImage()}</div>
         ${this.renderButtons()}
+        ${
+          this.annotationError
+            ? html`<p class="annotation-error" role="alert">
+                ${msg("We could not save your answer. Please try again.")}
+              </p>`
+            : nothing
+        }
       </div>
     `
   }
