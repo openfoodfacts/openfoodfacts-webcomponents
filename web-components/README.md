@@ -87,6 +87,45 @@ After importing you can use them in your HTML like this example :
 />
 ```
 
+### Theming
+
+Components that support the shared theme contract accept a `theme` attribute:
+
+```html
+<news-feed theme="auto"></news-feed>
+<news-feed theme="light"></news-feed>
+<news-feed theme="dark"></news-feed>
+```
+
+- `auto` (the default) follows the system color preference.
+- `light` and `dark` select a mode independently of the system preference.
+
+Shared styles use semantic `--off-color-*` custom properties. Define these on
+an ancestor to style all compatible components, or directly on a component to
+customize only that instance. A value defined directly on the host takes
+precedence over an inherited ancestor value; either takes precedence over the
+component's built-in fallback.
+
+```css
+.open-food-facts-page {
+  --off-color-surface: #ffffff;
+  --off-color-text: #1f2937;
+  --off-color-border: #e5e7eb;
+}
+
+.featured-news {
+  --off-color-surface: #fff7ed;
+}
+```
+
+```html
+<news-feed class="featured-news" theme="light"></news-feed>
+```
+
+Components can retain component-specific color properties where their palette
+needs them. Those properties should fall back to shared semantic tokens, so
+existing host customizations continue to work as the shared contract expands.
+
 To use components with good configuration you have to add only one time the `off-webcomponents-configuration` before every components in your HTML.
 It has this parameters :
 

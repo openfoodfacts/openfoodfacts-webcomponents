@@ -55,6 +55,15 @@ beforeEach(() => {
 })
 
 describe("news-feed", () => {
+  it("reflects an explicit theme mode for host-page styling", async () => {
+    const element = document.createElement("news-feed") as NewsFeed
+    element.theme = "dark"
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    expect(element.getAttribute("theme")).toBe("dark")
+  })
+
   it("shows a meter on a campaign that publishes figures", async () => {
     const element = await renderFeed(feedWith({ raised: 44156, goal: 170000, currency: "EUR" }))
 
