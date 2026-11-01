@@ -333,7 +333,7 @@ describe("donation-banner", () => {
 })
 
 /** The literal 1.18.0 render, captured before the variants were added. */
-const DEFAULT_MARKUP = (nextYear: string) => `<section class="  ">
+const DEFAULT_MARKUP = (nextYear: string) => `<section>
       <div class="donation-banner-footer row">
         <div class="donation-banner-footer__left-aside">
           <div class="donation-banner-footer__hook-section">

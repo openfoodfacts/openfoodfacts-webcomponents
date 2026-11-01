@@ -538,14 +538,6 @@ export class DonationBanner extends LitElement {
         .donation-banner-footer__main-title {
           color: #ff6e78;
         }
-        .donation-banner__main-div-wrapper {
-          color: #f9f7f5;
-        }
-        .donation-banner__hook-section,
-        .donation-banner-footer__hook-section {
-          background-color: #0050a0;
-          color: #fff;
-        }
       }
       .group-image {
         height: auto;
@@ -624,6 +616,16 @@ export class DonationBanner extends LitElement {
         flex-direction: column;
         justify-content: center;
         color: black;
+      }
+      @media (prefers-color-scheme: dark) {
+        .donation-banner__main-div-wrapper {
+          color: #f9f7f5;
+        }
+        .donation-banner__hook-section,
+        .donation-banner-footer__hook-section {
+          background-color: #0050a0;
+          color: #fff;
+        }
       }
       .donation-banner__main-div {
         font-family: "Public Sans", Helvetica, Roboto, Arial, sans-serif;
