@@ -60,14 +60,6 @@ const variantArgs = (variant: string) =>
     current-year="2026"
   ></donation-banner>`
 
-// `subscribe()` overwrites `isDarkMode` as soon as the element connects, so a
-// dark story sets it back after mount rather than as a plain arg.
-const darkPlay = async ({ canvasElement }: { canvasElement: HTMLElement }) => {
-  const el = canvasElement.querySelector("donation-banner") as any
-  el.isDarkMode = true
-  el.requestUpdate()
-}
-
 export const Campaign: Story = {
   loaders: [feedLoader],
   render: () => variantArgs("campaign"),
@@ -76,7 +68,6 @@ export const Campaign: Story = {
 export const CampaignDark: Story = {
   loaders: [feedLoader],
   render: () => variantArgs("campaign"),
-  play: darkPlay,
 }
 
 export const Strip: Story = {
@@ -87,7 +78,6 @@ export const Strip: Story = {
 export const StripDark: Story = {
   loaders: [feedLoader],
   render: () => variantArgs("strip"),
-  play: darkPlay,
 }
 
 export const Sheet: Story = {
@@ -98,7 +88,6 @@ export const Sheet: Story = {
 export const SheetDark: Story = {
   loaders: [feedLoader],
   render: () => variantArgs("sheet"),
-  play: darkPlay,
 }
 
 export const Bar: Story = {
@@ -109,7 +98,6 @@ export const Bar: Story = {
 export const BarDark: Story = {
   loaders: [feedLoader],
   render: () => variantArgs("bar"),
-  play: darkPlay,
 }
 
 /** French headline + fine print, no feed - exercises the built-in copy path. */

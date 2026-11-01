@@ -4,21 +4,7 @@ import { nextFrame, waitUntil } from "@open-wc/testing-helpers"
 import { languageCode, countryCode } from "../../signals/app"
 import { DEFAULT_LANGUAGE_CODE } from "../../constants"
 
-/** Set by the matchMedia mock below; flips `darkModeListener`'s subscribers. */
-let onSchemeChange: (event: { matches: boolean }) => void = () => {}
-
 beforeAll(async () => {
-  Object.defineProperty(window, "matchMedia", {
-    writable: true,
-    value: vi.fn().mockImplementation(() => ({
-      matches: false,
-      addEventListener: (_event: string, cb: (event: { matches: boolean }) => void) => {
-        onSchemeChange = cb
-      },
-      removeEventListener: vi.fn(),
-    })),
-  })
-
   await import("./donation-banner")
 
   // jsdom does not implement navigation; a real anchor click would otherwise log noise.
@@ -347,7 +333,7 @@ describe("donation-banner", () => {
 })
 
 /** The literal 1.18.0 render, captured before the variants were added. */
-const DEFAULT_MARKUP = (nextYear: string) => `<section class="  ">
+const DEFAULT_MARKUP = (nextYear: string) => `<section>
       <div class="donation-banner-footer row">
         <div class="donation-banner-footer__left-aside">
           <div class="donation-banner-footer__hook-section">
@@ -1326,44 +1312,10 @@ describe("donation-banner variants", () => {
   })
 
   describe("dark mode", () => {
-    it("flips the dark-mode class on the variant root at runtime", async () => {
-      const element = await mountVariant("campaign")
-      expect(element.shadowRoot.querySelector(".campaign").classList.contains("dark-mode")).toBe(
-        false
-      )
-
-      onSchemeChange({ matches: true })
-      await element.updateComplete
-      expect(element.shadowRoot.querySelector(".campaign").classList.contains("dark-mode")).toBe(
-        true
-      )
-
-      onSchemeChange({ matches: false })
-      await element.updateComplete
-      expect(element.shadowRoot.querySelector(".campaign").classList.contains("dark-mode")).toBe(
-        false
-      )
-    })
-
-    it("puts the class where the dark selectors look for it, in all four variants", async () => {
-      // The stylesheet's own dark selectors: `.dark-mode.campaign`, `.dark-mode.strip`,
-      // `.dark-mode .sheet`, `.dark-mode .bar`.
-      const expected: Record<string, string> = {
-        campaign: ".dark-mode.campaign",
-        strip: ".dark-mode.strip",
-        sheet: ".dark-mode .sheet",
-        bar: ".dark-mode .bar",
-      }
-      for (const [variant, selector] of Object.entries(expected)) {
+    it("renders every variant without JavaScript theme classes", async () => {
+      for (const variant of ["campaign", "strip", "sheet", "bar"]) {
         const element = await mountVariant(variant, { amounts: "3,5,10" })
-        expect(element.shadowRoot.querySelector(selector), `${variant} light`).toBeNull()
-
-        onSchemeChange({ matches: true })
-        await element.updateComplete
-        expect(element.shadowRoot.querySelector(selector), `${variant} dark`).not.toBeNull()
-
-        onSchemeChange({ matches: false })
-        await element.updateComplete
+        expect(element.shadowRoot.querySelector(".dark-mode"), variant).toBeNull()
         element.remove()
       }
     })
