@@ -729,24 +729,26 @@ export class RobotoffNutrientExtractionForm extends LitElement {
         <div>
           <label class="input-label">
             <div>${label}</div>
-            ${isHidden
-              ? html`
-                  <input type="hidden" name="${inputName}" value="-" />
-                  <input
+            ${
+              isHidden
+                ? html`
+                    <input type="hidden" name="${inputName}" value="-" />
+                    <input
+                      type="text"
+                      value="-"
+                      title="${msg("value")}"
+                      class="input input-nutritional-value cappucino"
+                      disabled
+                    />
+                  `
+                : html`<input
                     type="text"
-                    value="-"
+                    name="${inputName}"
+                    .value="${value}"
                     title="${msg("value")}"
                     class="input input-nutritional-value cappucino"
-                    disabled
-                  />
-                `
-              : html`<input
-                  type="text"
-                  name="${inputName}"
-                  .value="${value}"
-                  title="${msg("value")}"
-                  class="input input-nutritional-value cappucino"
-                />`}
+                  />`
+            }
           </label>
         </div>
 
@@ -755,9 +757,11 @@ export class RobotoffNutrientExtractionForm extends LitElement {
         </div>
         ${this.renderToggleNutrientButton(column, key)}
       </div>
-      ${this.errors[inputName]
-        ? html`<span class="input-error-message" role="alert">${this.errors[inputName]}</span>`
-        : nothing}
+      ${
+        this.errors[inputName]
+          ? html`<span class="input-error-message" role="alert">${this.errors[inputName]}</span>`
+          : nothing
+      }
     `
   }
 
@@ -1108,9 +1112,11 @@ export class RobotoffNutrientExtractionForm extends LitElement {
           class="button chocolate-button"
           @click=${() => this.toggleNutrient(column, nutrientKey)}
         >
-          ${isHidden
-            ? html`<eye-invisible-icon size="18px"></eye-invisible-icon>`
-            : html` <eye-visible-icon size="18px"></eye-visible-icon>`}
+          ${
+            isHidden
+              ? html`<eye-invisible-icon size="18px"></eye-invisible-icon>`
+              : html` <eye-visible-icon size="18px"></eye-visible-icon>`
+          }
         </button>
       </div>
     `

@@ -255,13 +255,18 @@ export class MobileBadges extends LitElement {
   fDroidAppLink = "https://f-droid.org/packages/openfoodfacts.github.scrachx.openfood"
 
   /**
-   * Generates the URL suffix for Android app links.
+   * Adds tracking parameters to a URL.
+   * @param baseURI - The base URL.
    * @param language - The language code.
    * @param campaign - The campaign identifier.
-   * @returns The URL suffix with UTM parameters.
+   * @returns The URL with UTM parameters.
    */
-  private getAndroidUrlSuffix(language: string, campaign: string): string {
-    return `?utm_source=off&utf_medium=web&utm_campaign=${campaign}_${language}`
+  private addTrackingParams(baseURI: string, language: string, campaign: string): string {
+    const url = new URL(baseURI)
+    url.searchParams.set("utm_source", "off")
+    url.searchParams.set("utm_medium", "web")
+    url.searchParams.set("utm_campaign", `${campaign}_${language}`)
+    return url.toString()
   }
 
   /**
@@ -271,7 +276,7 @@ export class MobileBadges extends LitElement {
    */
   getAndroidAppLink(language: string): string {
     const baseURI = `https://play.google.com/store/apps/details?id=org.openfoodfacts.scanner&hl=${language}`
-    return `${baseURI}${this.getAndroidUrlSuffix(language, "install_the_app_android_footer")}`
+    return this.addTrackingParams(baseURI, language, "install_the_app_android_footer")
   }
 
   /**
@@ -281,7 +286,7 @@ export class MobileBadges extends LitElement {
    */
   getAndroidApkAppLink(language: string): string {
     const baseURI = "https://github.com/openfoodfacts/smooth-app/releases/latest"
-    return `${baseURI}${this.getAndroidUrlSuffix(language, "install_the_app_apk_footer")}`
+    return this.addTrackingParams(baseURI, language, "install_the_app_apk_footer")
   }
 
   /**
@@ -322,7 +327,7 @@ export class MobileBadges extends LitElement {
    */
   getIosAppLink(language: string): string {
     const baseURI =
-      "https://apps.apple.com/app/open-food-facts/id588797948?utm_source=off&utf_medium=web"
+      "https://apps.apple.com/app/open-food-facts/id588797948?utm_source=off&utm_medium=web"
     return `${baseURI}&utm_campaign=install_the_app_ios_footer_${language}`
   }
 
@@ -444,15 +449,23 @@ export class MobileBadges extends LitElement {
   renderBadges() {
     const filteredBadges = this.getFilteredBadges()
 
-    return html` ${filteredBadges.length > 0
-      ? html`
-          <div class="badge-container ">
-            ${filteredBadges.map((badge) =>
-              this.generateBadgeLink(badge.href, badge.src, badge.alt, badge.id, badge.errorHandler)
-            )}
-          </div>
-        `
-      : ""}`
+    return html` ${
+      filteredBadges.length > 0
+        ? html`
+            <div class="badge-container ">
+              ${filteredBadges.map((badge) =>
+                this.generateBadgeLink(
+                  badge.href,
+                  badge.src,
+                  badge.alt,
+                  badge.id,
+                  badge.errorHandler
+                )
+              )}
+            </div>
+          `
+        : ""
+    }`
   }
 
   override render() {

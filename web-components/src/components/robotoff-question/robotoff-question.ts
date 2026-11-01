@@ -151,15 +151,17 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
         return html`
           <div class="question-wrapper">
             ${this.renderMessage()}
-            ${isQuestionsFinished(this.productCode).get()
-              ? nothing
-              : html`
-                  <robotoff-question-form
-                    .isImageExpanded=${this.isImageExpanded}
-                    .question=${question}
-                    @submit=${this.onQuestionAnswered}
-                  ></robotoff-question-form>
-                `}
+            ${
+              isQuestionsFinished(this.productCode).get()
+                ? nothing
+                : html`
+                    <robotoff-question-form
+                      .isImageExpanded=${this.isImageExpanded}
+                      .question=${question}
+                      @submit=${this.onQuestionAnswered}
+                    ></robotoff-question-form>
+                  `
+            }
           </div>
         `
       },

@@ -92,7 +92,7 @@ export class RobotoffQuestionForm extends SignalWatcher(
 
   private _annotateProduct = async (event: Event, value: AnnotationAnswer) => {
     this.showLoading(value)
-    await answerQuestion(this.question?.insight_id!, value)
+    await answerQuestion(this.question?.insight_id as string, value)
 
     this.hideLoading()
     this.emitEventClick(event, value)
@@ -115,13 +115,18 @@ export class RobotoffQuestionForm extends SignalWatcher(
           @click="${this.expandImage}"
           ?show-buttons="${this.isImageExpanded}"
         ></zoomable-image>
-        ${this.isImageExpanded
-          ? nothing
-          : html`<div>
-              <button class="expand-button button white-button small" @click="${this.expandImage}">
-                ${msg("Expand image")}
-              </button>
-            </div>`}
+        ${
+          this.isImageExpanded
+            ? nothing
+            : html`<div>
+                <button
+                  class="expand-button button white-button small"
+                  @click="${this.expandImage}"
+                >
+                  ${msg("Expand image")}
+                </button>
+              </div>`
+        }
       </div>
     `
   }

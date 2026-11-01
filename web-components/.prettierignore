@@ -1,0 +1,14 @@
+# Build output
+dist/
+storybook-static/
+coverage/
+src/localization/dist/
+custom-elements.json
+
+# Managed by lit-localize / Crowdin
+xliff/
+
+# Managed by Release Please
+CHANGELOG.md
+
+package-lock.json

@@ -4,6 +4,7 @@
 
 A set of web components for Open Food Facts to help build edition interfaces
 
+
 - Currently, we have Search webcomponents (coded in Lit) in https://github.com/openfoodfacts/openfoodfacts-search
 - Under development are components for nutrition editing, and Robotoff questions
 - Projects/features that could benefit from having webcomponents: nutripatrol (display & input), folksonomy_api (display & input), knowledge panels (display), ingredients (display & input), photo upload, open prices (display & input), photo gallery/editing
@@ -23,6 +24,7 @@ A set of web components for Open Food Facts to help build edition interfaces
 
 #### Display elements
 - [Donation Banner](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#donation-banner)
+- [Donation Meter](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#donation-meter)
 - [Mobile Badges](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#mobile-badges)
 - [Barcode Scanner](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#barcode-scanner)
 - [Autocomplete Input](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#autocomplete-input)
@@ -83,7 +85,7 @@ To publish a new version, you need to be a member of the Open Food Facts organiz
 
 ### Prerequisites
 
-Ensure you have Node.js and npm installed on your machine. We recommend using the version specified in the .nvmrc file. You can use nvm directly to install it with : `nvm install` and `nvm use`. You can find more information [here](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating).
+Use Node.js 24 and npm for development. The `.nvmrc` file specifies the version used by CI. With [nvm](https://github.com/nvm-sh/nvm#installing-and-updating), run `nvm install` and `nvm use` from the repository root.
 
 ### Installation
 
@@ -112,8 +114,8 @@ npm install
 If you use nvm, you can use the .nvmrc file to set the right node version:
 
 ```bash
-nvm use
 nvm install
+nvm use
 ```
 
 To run the project locally:
@@ -136,7 +138,7 @@ Start the development server:
 npm run dev
 ```
 
-Go to http://localhost:8000 to see the demo.
+Go to http://localhost:6006 to see Storybook.
 
 ## Test local changes with npm like Hunger games project
 
@@ -163,7 +165,7 @@ To have it, you need to follow these steps:
    `127.0.0.1 wc.openfoodfacts.net`
 3. Login to http://world.openfoodfacts.net with your Open Food Facts account. (the first basic auth login is off/off)
 4. Go to any product page and upload an image that you want to annotate. The image should not already exist on this product.
-5. Go to http://wc.openfoodfacts.net:8000 to get cookie for api. It will redirect you to the local index.html page.
+5. Go to http://wc.openfoodfacts.net:6006 to get cookie for api.
 6. Use the `barcode` of the product to annotate it.
 
 ### To use it like a library check the [web-components/README.md](web-components/README.md) file
@@ -172,7 +174,7 @@ To have it, you need to follow these steps:
 
 You can find the documentation [here](https://openfoodfacts.github.io/openfoodfacts-webcomponents)
 
-To work on documentation let see [this](web-components/docs/README.md)
+To work on documentation ,you can edit [web-components/README.md](./web-components/README.md)
 
 ## Rules
 

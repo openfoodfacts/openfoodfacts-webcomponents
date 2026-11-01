@@ -1,19 +1,20 @@
+import type {
+  Robotoff,
+  RobotoffAnnotateBody,
+  RobotoffInsightQuery,
+} from "@openfoodfacts/openfoodfacts-nodejs"
+
 export type RobotoffConfigurationOptions = {
   apiUrl: string
   dryRun: boolean
   imgUrl: string
 }
 
-export type QuestionRequestParams = Partial<{
-  insight_types: string
-  brand_filter: string
-  value_tag: string
-  country_filter: string
-  sort_by_popularity: boolean
-  campaign: string
-  predictor: string
-  lang: string
-}>
+type RobotoffClient = InstanceType<typeof Robotoff>
+
+export type QuestionRequestParams = NonNullable<
+  Parameters<RobotoffClient["questionsByProductCode"]>[1]
+>
 
 export type Question = {
   barcode: string
@@ -64,22 +65,9 @@ export enum InsightType {
   ingredient_detection = "ingredient_detection",
 }
 
-export type InsightsRequestParams = Partial<{
-  lc: string[]
-  insight_types: string | string[]
-  barcode: string
-  annotated: boolean
-  annotation: number
-  value_tag: string
-  brands: string
-  countries: string
-  server_type: string
-  predictor: string
-  order_by: string
-  count: number
-  page: number
-  campaigns: string
-}>
+export type InsightsRequestParams = Omit<NonNullable<RobotoffInsightQuery>, "barcode"> & {
+  barcode?: string
+}
 
 export type NutrientInsightDatum = {
   end: number
@@ -193,7 +181,9 @@ export type NutrientAnotationFormData = {
   unit: string | null
 }
 
-export type NutrientsAnnotationData = {
+export type RobotoffAnnotationData = NonNullable<RobotoffAnnotateBody["data"]>
+
+export type NutrientsAnnotationData = RobotoffAnnotationData & {
   serving_size: string | null
   nutrients: Record<string, NutrientAnotationFormData>
   nutrition_data_per: string
@@ -228,7 +218,7 @@ export type IngredientPrediction = {
 }
 export type RobotoffBoundingBox = [number, number, number, number]
 
-export type IngredientDetectionAnnotationData = {
+export type IngredientDetectionAnnotationData = RobotoffAnnotationData & {
   annotation: string
   bounding_box: RobotoffBoundingBox
   rotation: number

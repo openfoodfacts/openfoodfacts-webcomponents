@@ -1,4 +1,4 @@
-import { css, type CSSResult } from "lit-element"
+import { css, type CSSResult } from "lit"
 import {
   SAFE_CAPPUCINO,
   SAFE_CHOCOLATE,
@@ -124,7 +124,7 @@ export const BUTTON_CLASS_BY_TYPE: Record<ButtonType, CSSResult> = {
       background-color: transparent;
       border-color: transparent;
       cursor: pointer;
-      color: black;
+      color: inherit;
     }
 
     .link-button:hover {

@@ -60,7 +60,7 @@ export class NutriPatrolCard extends LitElement {
     .logo {
       height: 30px;
       width: auto;
-      margin-right: 6px;
+      margin-right: 1px;
     }
 
     .barcode {
@@ -209,15 +209,21 @@ export class NutriPatrolCard extends LitElement {
         <div class="footer">
           <span class="type-tag">${issue.type}</span>
 
-          ${issue.type === "image" && issue.image_id != null
-            ? html`<span class="image-tag">Image ${issue.image_id}</span>`
-            : nothing}
-          ${issue.confidence != null
-            ? html`<span class="badge">${(issue.confidence * 100).toFixed(0)}% confidence</span>`
-            : nothing}
-          ${issue.created_at
-            ? html`<small>${new Date(issue.created_at).toLocaleDateString()}</small>`
-            : nothing}
+          ${
+            issue.type === "image" && issue.image_id != null
+              ? html`<span class="image-tag">Image ${issue.image_id}</span>`
+              : nothing
+          }
+          ${
+            issue.confidence != null
+              ? html`<span class="badge">${(issue.confidence * 100).toFixed(0)}% confidence</span>`
+              : nothing
+          }
+          ${
+            issue.created_at
+              ? html`<small>${new Date(issue.created_at).toLocaleDateString()}</small>`
+              : nothing
+          }
         </div>
       </div>
     `
@@ -235,21 +241,25 @@ export class NutriPatrolCard extends LitElement {
           Nutri-Patrol Issues
         </h3>
 
-        ${this.barcode
-          ? html`<p class="barcode">Barcode: <span>${this.barcode}</span></p>`
-          : nothing}
-        ${this.loading
-          ? html`<p class="empty-state">Loading issues…</p>`
-          : this.issues.length === 0
-            ? html`<p class="empty-state">No issues found.</p>`
-            : html`
-                <p class="issue-count">
-                  ${this.issues.length} issue${this.issues.length > 1 ? "s" : ""} found
-                </p>
-                <div class="issues-container">
-                  ${this.issues.map((issue) => this.renderIssue(issue))}
-                </div>
-              `}
+        ${
+          this.barcode
+            ? html`<p class="barcode">Barcode: <span>${this.barcode}</span></p>`
+            : nothing
+        }
+        ${
+          this.loading
+            ? html`<p class="empty-state">Loading issues…</p>`
+            : this.issues.length === 0
+              ? html`<p class="empty-state">No issues found.</p>`
+              : html`
+                  <p class="issue-count">
+                    ${this.issues.length} issue${this.issues.length > 1 ? "s" : ""} found
+                  </p>
+                  <div class="issues-container">
+                    ${this.issues.map((issue) => this.renderIssue(issue))}
+                  </div>
+                `
+        }
       </div>
     `
   }

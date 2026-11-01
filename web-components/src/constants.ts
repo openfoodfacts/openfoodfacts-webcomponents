@@ -9,7 +9,7 @@ export const DEFAULT_FOLKSONOMY_CONFIGURATION = {
 }
 
 export const DEFAULT_NUTRI_PATROL_CONFIGURATION = {
-  imgUrl: "https://nutripatrol.openfoodfacts.org/assets/off-logo-_mdtrtmK.png",
+  imgUrl: "https://world.openfoodfacts.org/images/logos/logo-variants/RVB_ICON_WHITE_BG_OFF.svg",
 }
 export const PAGE_SIZE = 25
 
@@ -18,6 +18,8 @@ export enum EventType {
   SUCCESS = "success",
   SAVE = "save",
   SUBMIT = "submit",
+  CROP = "crop",
+  CROP_ERROR = "crop-error",
   REFUSE = "refuse",
   SKIP = "skip",
   QUESTION_STATE = "question-state",
@@ -25,7 +27,28 @@ export enum EventType {
   BARCODE_SCANNER_STATE = "barcode-scanner-state",
   INGREDIENT_SPELLCHECK_STATE = "ingredient-spellcheck-state",
   INGREDIENT_DETECTION_STATE = "ingredient-detection-state",
+  DONATION_METER_STATE = "donation-meter-state",
+  DONATION_BANNER_STATE = "donation-banner-state",
   INPUT = "INPUT",
+}
+
+export enum DonationBannerVariant {
+  CAMPAIGN = "campaign",
+  STRIP = "strip",
+  SHEET = "sheet",
+  BAR = "bar",
+}
+
+export enum DonationBannerAction {
+  DISMISS = "dismiss",
+  MINIMIZE = "minimize",
+  ALREADY_DONATED = "already-donated",
+  CLICK = "click",
+}
+
+export enum DonationInterval {
+  MONTHLY = "1M",
+  ONE_TIME = "1T",
 }
 
 export enum LoadingState {

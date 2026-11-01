@@ -29,6 +29,15 @@ export type QuestionStateEventDetail = {
 
 export type QuestionStateEvent = CustomEvent<QuestionStateEventDetail>
 
+export type DonationBannerStateEventDetail = {
+  action: "dismiss" | "minimize" | "already-donated" | "click"
+  variant: string | null
+  amount?: number
+  interval?: "1M" | "1T"
+}
+
+export type DonationBannerStateEvent = CustomEvent<DonationBannerStateEventDetail>
+
 export type AutocompleteInputChangeEventDetail = {
   value: string
   filteredSuggestions: AutocompleteSuggestion[]
@@ -42,6 +51,10 @@ export type AutocompleteSuggestionSelectEvent = CustomEvent<AutocompleteSuggesti
 export type AutocompleteSuggestion = {
   label?: string
   value: string
+  /**
+   * Optional number of uses, shown in parentheses after the label.
+   */
+  count?: number
   isNotFound?: boolean
 }
 

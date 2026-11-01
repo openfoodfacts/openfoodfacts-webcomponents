@@ -28,7 +28,7 @@ import { fetchProduct } from "../../api/openfoodfacts"
 import { ProductFields } from "../../utils/openfoodfacts"
 import { fetchNutrientsOrderByCountryCode } from "../../signals/openfoodfacts"
 import { LoadingWithTimeoutMixin } from "../../mixins/loading-with-timeout-mixin"
-import { ifDefined } from "lit-html/directives/if-defined.js"
+import { ifDefined } from "lit/directives/if-defined.js"
 import { Breakpoints } from "../../utils/breakpoints"
 import { LanguageCodesMixin } from "../../mixins/language-codes-mixin"
 import { CountryCodeMixin } from "../../mixins/country-codes-mixin"
@@ -143,11 +143,11 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
    * @type {Task}
    */
   private _insightsTask = new Task(this, {
-    task: async ([productCode], {}) => {
+    task: async ([productCode]) => {
       this.emitNutrientEvent(EventState.LOADING)
       const [insights] = await Promise.all([
         fetchNutrientInsights(productCode, {
-          lc: this._languageCodes,
+          lc: this._languageCodes.join(","),
         }),
         fetchNutrientsTaxonomies(),
         fetchNutrientsOrderByCountryCode(this._countryCode),
@@ -182,7 +182,7 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
   async getProductNutriments(productCode: string) {
     this.nutrimentsData = undefined
     const result = await fetchProduct<NutrimentsProductType>(productCode, {
-      fields: [ProductFields.NUTRIMENTS],
+      fields: ProductFields.NUTRIMENTS,
       lc: languageCode.get(),
     })
     this.nutrimentsData = result.product

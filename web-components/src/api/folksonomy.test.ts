@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+import { jsonResponse } from "../test/helpers"
 
 // Mock the folksonomy configuration
 vi.mock("../signals/folksonomy", () => ({
@@ -13,14 +14,18 @@ vi.mock("../signals/folksonomy", () => ({
 }))
 
 describe("Folksonomy API", () => {
-  let folksonomyApi: any
+  let folksonomyApi: typeof import("../api/folksonomy").default
 
   beforeEach(async () => {
-    global.fetch = vi.fn()
+    vi.stubGlobal("fetch", vi.fn<typeof fetch>())
     vi.clearAllMocks()
 
     // Dynamically import to avoid hoisting issues
     folksonomyApi = (await import("../api/folksonomy")).default
+    const { folksonomyConfiguration } = await import("../signals/folksonomy")
+    vi.mocked(folksonomyConfiguration.getItem).mockImplementation((key) =>
+      key === "apiUrl" ? "https://api.folksonomy.openfoodfacts.org" : (null as unknown as string)
+    )
   })
 
   describe("fetchProductProperties", () => {
@@ -30,10 +35,7 @@ describe("Folksonomy API", () => {
         { k: "packaging", v: "recyclable", version: 1 },
       ]
 
-      ;(global.fetch as any).mockResolvedValue({
-        ok: true,
-        json: async () => mockProperties,
-      })
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse(mockProperties))
 
       const result = await folksonomyApi.fetchProductProperties("1234567890123")
 
@@ -44,16 +46,15 @@ describe("Folksonomy API", () => {
     })
 
     it("should handle network errors", async () => {
-      ;(global.fetch as any).mockRejectedValue(new Error("Network error"))
+      vi.spyOn(console, "error").mockImplementation(() => {})
+      vi.mocked(global.fetch).mockRejectedValue(new Error("Network error"))
 
       await expect(folksonomyApi.fetchProductProperties("123")).rejects.toThrow("Network error")
     })
 
     it("should handle HTTP error responses", async () => {
-      ;(global.fetch as any).mockResolvedValue({
-        ok: false,
-        status: 404,
-      })
+      vi.spyOn(console, "error").mockImplementation(() => {})
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse(null, 404))
 
       await expect(folksonomyApi.fetchProductProperties("123")).rejects.toThrow(
         "HTTP error! status: 404"
@@ -61,22 +62,17 @@ describe("Folksonomy API", () => {
     })
 
     it("should handle empty product code", async () => {
-      ;(global.fetch as any).mockResolvedValue({
-        ok: true,
-        json: async () => [],
-      })
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse([]))
 
       const result = await folksonomyApi.fetchProductProperties("")
       expect(result).toEqual([])
     })
 
     it("should handle malformed JSON responses", async () => {
-      ;(global.fetch as any).mockResolvedValue({
-        ok: true,
-        json: async () => {
-          throw new Error("Invalid JSON")
-        },
-      })
+      vi.spyOn(console, "error").mockImplementation(() => {})
+      const malformedResponse = new Response("not JSON")
+      vi.spyOn(malformedResponse, "json").mockRejectedValue(new Error("Invalid JSON"))
+      vi.mocked(global.fetch).mockResolvedValue(malformedResponse)
 
       await expect(folksonomyApi.fetchProductProperties("123")).rejects.toThrow("Invalid JSON")
     })
@@ -86,7 +82,7 @@ describe("Folksonomy API", () => {
     it("should propagate console.error calls on fetch failures", async () => {
       const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
 
-      ;(global.fetch as any).mockRejectedValue(new Error("Connection failed"))
+      vi.mocked(global.fetch).mockRejectedValue(new Error("Connection failed"))
 
       try {
         await folksonomyApi.fetchProductProperties("123")
@@ -101,7 +97,8 @@ describe("Folksonomy API", () => {
     })
 
     it("should handle timeout scenarios", async () => {
-      ;(global.fetch as any).mockImplementation(
+      vi.spyOn(console, "error").mockImplementation(() => {})
+      vi.mocked(global.fetch).mockImplementation(
         () =>
           new Promise((_, reject) => {
             setTimeout(() => reject(new Error("Timeout")), 1)
@@ -112,10 +109,8 @@ describe("Folksonomy API", () => {
     })
 
     it("should handle server unavailable responses", async () => {
-      ;(global.fetch as any).mockResolvedValue({
-        ok: false,
-        status: 503,
-      })
+      vi.spyOn(console, "error").mockImplementation(() => {})
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse(null, 503))
 
       await expect(folksonomyApi.fetchProductProperties("123")).rejects.toThrow(
         "HTTP error! status: 503"
@@ -126,11 +121,8 @@ describe("Folksonomy API", () => {
   describe("API URL configuration", () => {
     it("should use configured API URL from signal", async () => {
       const { folksonomyConfiguration } = await import("../signals/folksonomy")
-      ;(folksonomyConfiguration.getItem as any).mockReturnValue("https://custom.api.url")
-      ;(global.fetch as any).mockResolvedValue({
-        ok: true,
-        json: async () => [],
-      })
+      vi.mocked(folksonomyConfiguration.getItem).mockReturnValue("https://custom.api.url")
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse([]))
 
       await folksonomyApi.fetchProductProperties("123")
 
@@ -139,11 +131,8 @@ describe("Folksonomy API", () => {
 
     it("should handle missing API URL gracefully", async () => {
       const { folksonomyConfiguration } = await import("../signals/folksonomy")
-      ;(folksonomyConfiguration.getItem as any).mockReturnValue(null)
-      ;(global.fetch as any).mockResolvedValue({
-        ok: true,
-        json: async () => [],
-      })
+      vi.mocked(folksonomyConfiguration.getItem).mockReturnValue(null as unknown as string)
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse([]))
 
       await folksonomyApi.fetchProductProperties("123")
 
@@ -155,10 +144,7 @@ describe("Folksonomy API", () => {
     it("should handle very long product codes", async () => {
       const longProductCode = "1".repeat(1000)
 
-      ;(global.fetch as any).mockResolvedValue({
-        ok: true,
-        json: async () => [],
-      })
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse([]))
 
       await folksonomyApi.fetchProductProperties(longProductCode)
 
@@ -168,10 +154,7 @@ describe("Folksonomy API", () => {
     it("should handle special characters in product codes", async () => {
       const specialCode = "product/with&special%chars"
 
-      ;(global.fetch as any).mockResolvedValue({
-        ok: true,
-        json: async () => [],
-      })
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse([]))
 
       await folksonomyApi.fetchProductProperties(specialCode)
 
@@ -179,20 +162,16 @@ describe("Folksonomy API", () => {
     })
 
     it("should handle null response data", async () => {
-      ;(global.fetch as any).mockResolvedValue({
-        ok: true,
-        json: async () => null,
-      })
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse(null))
 
       const result = await folksonomyApi.fetchProductProperties("123")
       expect(result).toBeNull()
     })
 
     it("should handle undefined response data", async () => {
-      ;(global.fetch as any).mockResolvedValue({
-        ok: true,
-        json: async () => undefined,
-      })
+      const undefinedResponse = new Response(null)
+      vi.spyOn(undefinedResponse, "json").mockResolvedValue(undefined)
+      vi.mocked(global.fetch).mockResolvedValue(undefinedResponse)
 
       const result = await folksonomyApi.fetchProductProperties("123")
       expect(result).toBeUndefined()
@@ -204,10 +183,7 @@ describe("Folksonomy API", () => {
         structure: { deeply: { nested: "value" } },
       }
 
-      ;(global.fetch as any).mockResolvedValue({
-        ok: true,
-        json: async () => weirdResponse,
-      })
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse(weirdResponse))
 
       const result = await folksonomyApi.fetchProductProperties("123")
       expect(result).toEqual(weirdResponse)
@@ -216,10 +192,9 @@ describe("Folksonomy API", () => {
 
   describe("performance and reliability", () => {
     it("should handle concurrent requests", async () => {
-      ;(global.fetch as any).mockResolvedValue({
-        ok: true,
-        json: async () => [{ k: "test", v: "value", version: 1 }],
-      })
+      vi.mocked(global.fetch).mockImplementation(async () =>
+        jsonResponse([{ k: "test", v: "value", version: 1 }])
+      )
 
       const promises = Array(10)
         .fill(0)
@@ -234,11 +209,8 @@ describe("Folksonomy API", () => {
       })
     })
 
-    it("should not leak memory on repeated calls", async () => {
-      ;(global.fetch as any).mockResolvedValue({
-        ok: true,
-        json: async () => [],
-      })
+    it("handles repeated calls", async () => {
+      vi.mocked(global.fetch).mockImplementation(async () => jsonResponse([]))
 
       // Simulate many calls
       for (let i = 0; i < 100; i++) {

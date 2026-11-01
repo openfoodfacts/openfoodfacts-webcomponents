@@ -15,10 +15,10 @@ jobs:
     steps:
 
     - name: Checkout
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
 
     - name: crowdin action
-      uses: crowdin/github-action@v2.15.2
+      uses: crowdin/github-action@9c23991700c0ec5256fd41089b9d9d7d540e424e # v3.3.0
       continue-on-error: true
       with:
         # Upload sources to Crowdin

@@ -1,6 +1,6 @@
 import { LitElement, html, css, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { msg } from "@lit/localize"
+import { msg, localized } from "@lit/localize"
 import { openfoodfactsApiUrl } from "../../signals/openfoodfacts"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import "../icons/external-link"
@@ -9,6 +9,7 @@ import "../icons/external-link"
  * A button component that displays as a link with a link icon.
  * Takes a product-code property and generates the appropriate link.
  */
+@localized()
 @customElement("product-link-button")
 export class ProductLinkButton extends LitElement {
   static override styles = [
@@ -16,6 +17,10 @@ export class ProductLinkButton extends LitElement {
     css`
       :host {
         display: inline-block;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
       }
     `,
   ]

@@ -789,8 +789,10 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
             <button
               class="modal-btn modal-btn-primary"
               @click="${this.handleReplaceValue}"
-              ?disabled="${!this.replaceModalData.newValue.trim() ||
-              this.replaceModalData.newValue.trim() === this.replaceModalData.value}"
+              ?disabled="${
+                !this.replaceModalData.newValue.trim() ||
+                this.replaceModalData.newValue.trim() === this.replaceModalData.value
+              }"
             >
               ${msg("Replace")}
             </button>
@@ -1078,9 +1080,11 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
               </button>
             </div>
             <div class="rows-counter">
-              ${isProductsView
-                ? `${msg("Products")}: ${currentData.length} / ${totalData.length}`
-                : `${msg("Values")}: ${currentData.length} / ${totalData.length}`}
+              ${
+                isProductsView
+                  ? `${msg("Products")}: ${currentData.length} / ${totalData.length}`
+                  : `${msg("Values")}: ${currentData.length} / ${totalData.length}`
+              }
             </div>
           </div>
           <div class="button-group">
@@ -1093,9 +1097,11 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
         <table class="products-table" id="products-table">
           ${isProductsView ? this.renderTableHeader() : this.renderGroupedTableHeader()}
           <tbody>
-            ${isProductsView
-              ? this.filteredProducts.map((product) => this.renderProductRow(product))
-              : this.filteredValues.map((valueItem) => this.renderValueRow(valueItem))}
+            ${
+              isProductsView
+                ? this.filteredProducts.map((product) => this.renderProductRow(product))
+                : this.filteredValues.map((valueItem) => this.renderValueRow(valueItem))
+            }
           </tbody>
         </table>
       </div>
