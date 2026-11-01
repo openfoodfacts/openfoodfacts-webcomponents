@@ -599,11 +599,11 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
   }
 
   private getPropertyUrl(propertyName: string) {
-    return `${this.propertyBasePath}${propertyName}`
+    return `${this.propertyBasePath}${encodeURIComponent(propertyName)}`
   }
 
   private getDocumentationUrl(propertyName: string) {
-    return `https://wiki.openfoodfacts.org/Folksonomy/Property/${propertyName}`
+    return `https://wiki.openfoodfacts.org/Folksonomy/Property/${encodeURIComponent(propertyName)}`
   }
 
   private applyFilters() {

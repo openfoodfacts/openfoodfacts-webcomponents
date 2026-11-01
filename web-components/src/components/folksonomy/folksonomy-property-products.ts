@@ -945,15 +945,15 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
   }
 
   private getProductUrl(productCode: string) {
-    return `/product/${productCode}`
+    return `/product/${encodeURIComponent(productCode)}`
   }
 
   private getPropertyValueUrl(value: string) {
-    return `/property/${this.propertyName}/value/${value}`
+    return `/property/${encodeURIComponent(this.propertyName)}/value/${encodeURIComponent(value)}`
   }
 
   private getDocumentationUrl() {
-    return `https://wiki.openfoodfacts.org/Folksonomy/Property/${this.propertyName}`
+    return `https://wiki.openfoodfacts.org/Folksonomy/Property/${encodeURIComponent(this.propertyName)}`
   }
 
   private renderTableHeader() {
