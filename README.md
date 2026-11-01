@@ -85,7 +85,7 @@ To publish a new version, you need to be a member of the Open Food Facts organiz
 
 ### Prerequisites
 
-Ensure you have Node.js and npm installed on your machine. We recommend using the version specified in the .nvmrc file. You can use nvm directly to install it with : `nvm install` and `nvm use`. You can find more information [here](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating).
+Use Node.js 24 and npm for development. The `.nvmrc` file specifies the version used by CI. With [nvm](https://github.com/nvm-sh/nvm#installing-and-updating), run `nvm install` and `nvm use` from the repository root.
 
 ### Installation
 
@@ -114,8 +114,8 @@ npm install
 If you use nvm, you can use the .nvmrc file to set the right node version:
 
 ```bash
-nvm use
 nvm install
+nvm use
 ```
 
 To run the project locally:
