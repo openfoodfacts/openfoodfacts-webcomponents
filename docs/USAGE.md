@@ -1,43 +1,34 @@
-# openfoodfacts-webcomponents
+# Using the library
 
-A set of WebComponents for Open Food Facts to help build edition interfaces.
-
-## Documentation
-
-Link to documentation will be available soon.
-You will see the list of available components and how to use them.
-
-## Getting Started
-
-### Installation with npm
+## Installation
 
 `npm install @openfoodfacts/openfoodfacts-webcomponents`
 
 ES module imports use the unbundled package modules.
 
-### With CDN
+## With CDN
 
 The CDN build is an ES module with the component code bundled. It loads locale chunks on demand from
 `dist/lang/esm/`:
 [https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.bundled.js](https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.bundled.js)
 
-### Import it in your project
+## Import it in your project
 
 You can use the components via ES6 modules or via script tag. To be sure webcomponents are handled correctly, you have to import the polyfill.
 More details can be found in the [Lit web components polyfill documentation](https://lit.dev/docs/v1/tools/use/).
 
-#### Download polyfill
+### Download polyfill
 
 `npm install @webcomponents/webcomponentsjs`
 
-#### Via ES6 modules
+### Via ES6 modules
 
 ```js
 import "@webcomponents/webcomponentsjs/webcomponents-loader.js"
 import "@openfoodfacts/openfoodfacts-webcomponents"
 ```
 
-#### Via script tag
+### Via script tag
 
 ```html
 <script src="<path-to-webcomponentsjs>/webcomponents-loader.js"></script>
@@ -51,7 +42,7 @@ The locale chunks are shipped with the package. When self-hosting the build, cop
 alongside the bundle and preserve that path (or copy the entire `dist/` directory). You do not need to
 copy locale files individually.
 
-### Usage
+## Component example
 
 After importing you can use them in your HTML like this example :
 
@@ -88,7 +79,7 @@ The default configuration is :
 <off-boolean-attribute></off-boolean-attribute>
 ```
 
-#### Boolean attributes
+### Boolean attributes
 
 For boolean we follow the convention of lit [here](https://lit.dev/docs/components/properties/#boolean-attributes) Boolean is set to `false` by default and ca be use like this:
 

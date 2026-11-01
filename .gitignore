@@ -141,3 +141,6 @@ custom-elements.json
 
 *storybook.log
 storybook-static
+
+# Generated from the root README when packing the npm package
+web-components/README.md

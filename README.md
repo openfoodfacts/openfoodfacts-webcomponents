@@ -2,27 +2,51 @@
 
 [![npm](https://img.shields.io/npm/v/@openfoodfacts/openfoodfacts-webcomponents.svg)](https://www.npmjs.com/package/@openfoodfacts/openfoodfacts-webcomponents)
 
-A set of web components for Open Food Facts to help build edition interfaces
+Building an Open Food Facts interface? These reusable web components help with everything from editing nutrition data and answering Robotoff questions to displaying products. Explore the components below or browse their [documentation](https://openfoodfacts.github.io/openfoodfacts-webcomponents/).
 
+For search components, see [openfoodfacts-search](https://github.com/openfoodfacts/openfoodfacts-search).
 
-- Currently, we have Search webcomponents (coded in Lit) in https://github.com/openfoodfacts/openfoodfacts-search
-- Under development are components for nutrition editing, and Robotoff questions
-- Projects/features that could benefit from having webcomponents: nutripatrol (display & input), folksonomy_api (display & input), knowledge panels (display), ingredients (display & input), photo upload, open prices (display & input), photo gallery/editing
-- API calls could be delegated to [openfoodfacts-nodejs](https://github.com/openfoodfacts/openfoodfacts-nodejs)
-- Candidates for using such webcomponents are: [openfoodfacts-server](https://github.com/openfoodfacts/openfoodfacts-server), [openfoodfacts-explorer](https://github.com/openfoodfacts/openfoodfacts-explorer) , [hunger-games](https://github.com/openfoodfacts/hunger-games) and potentially open-prices
+## 🚀 Using the library
 
-## Currently available webcomponents
+Install the package with npm:
 
-### Available
+```bash
+npm install @openfoodfacts/openfoodfacts-webcomponents @webcomponents/webcomponentsjs
+```
 
-#### 🤖 Robotoff
+Import the library and the web components polyfill in your JavaScript entry point:
+
+```js
+import "@webcomponents/webcomponentsjs/webcomponents-loader.js";
+import "@openfoodfacts/openfoodfacts-webcomponents";
+```
+
+Then use a component in your HTML:
+
+```html
+<robotoff-question
+  product-code="0628233671356"
+  insight-types=""
+  options='{"showMessage": true, "showLoading": true, "showError": true}'
+></robotoff-question>
+```
+
+See the full [usage guide](docs/USAGE.md) for CDN usage, configuration, and more details.
+
+## 🧩 Components
+
+The following components are available in the library:
+
+### 🤖 Robotoff
+
 - [Nutrition editing (with Nutri-Sight integration)](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-nutrient-extraction)
 - [Robotoff Questions](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-question)
 - [Robotoff Ingredients Spellcheck](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-ingredient-spellcheck)
 - [Robotoff Ingredients Detection](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-ingredient-detection)
 - [Robotoff Contribution Message](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-contribution-message)
 
-#### Display elements
+### Interface elements
+
 - [Donation Banner](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#donation-banner)
 - [Donation Meter](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#donation-meter)
 - [Mobile Badges](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#mobile-badges)
@@ -30,11 +54,12 @@ A set of web components for Open Food Facts to help build edition interfaces
 - [Autocomplete Input](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#autocomplete-input)
 - [Product Card](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#product-card)
 
-#### 🔖 Folksonomy Engine
+### 🔖 Folksonomy Engine
+
 - [Folksonomy Editor](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#folksonomy-editor)
 - Folksonomy property listings
 
-### ⚙️ For configuration
+### ⚙️ Configuration
 
 - [Off WebComponents configuration](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#off-webcomponents-configuration)
 
@@ -42,144 +67,25 @@ A set of web components for Open Food Facts to help build edition interfaces
 
 - Knowledge Panels
 
+## 🛠️ Development
+
+Want to build or improve a component? The [development guide](docs/DEVELOPMENT.md) covers setup, testing, and component guidelines.
+
 ## 🎨 Design
 
-- openfoodfacts-webcomponents is a set of web components for Open Food Facts to help build interfaces (view and edits). The idea is to reach feature parity on the essential stuff with the main frontend to eventually replace it, with a great responsive UI (80%+ of our traffic is mobile web).
-- We currently don’t have any real visual mockup of it, nor “artistic direction” so for the time being, we're copying key features from the current frontend, improving them whenever we can.
-- [![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?logo=figma&logoColor=white) Design file for the current website](https://www.figma.com/design/Qg9URUyrjHgYmnDHXRsTTB/Current-Website-design?m=auto&t=RokuCr1uXrGFMhTB-6)
-- [![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?logo=figma&logoColor=white) Design file for Web Components](https://www.figma.com/design/X8nBndPdBfikAcevBiBxKo/Web-Components?node-id=0-1&p=f&t=A7yCwKqyW9klqYq8-0)
+Components should support responsive interfaces for viewing and editing Open Food Facts data. Use these design files as references:
 
-## 📆 Weekly meetings
-
-- We e-meet Wednesdays · 11:00 – 11:25am - Time zone: Europe/Paris
-- [Google Meet](https://meet.google.com/uep-fhvf-gto) Video call link: https://meet.google.com/uep-fhvf-gto
-- Join by phone: https://tel.meet/uep-fhvf-gto?pin=8160344286211
-- Add the Event to your Calendar by [adding the Open Food Facts community calendar to your calendar](https://wiki.openfoodfacts.org/Events)
-- [Weekly Agenda](https://docs.google.com/document/d/1BGHfvrgx5eFIGjK8aTNPK2QwAggRp4oohGuYG9lNX8g/edit?tab=t.0): please add the Agenda items as early as you can. Make sure to check the Agenda items in advance of the meeting, so that we have the most informed discussions possible, leading to argumented decisions.
-- The meeting will handle Agenda items first, and if time permits, collaborative bug triage.
-- We strive to timebox the core of the meeting (decision making) to 30 minutes, with an optional free discussion/live debugging afterwards.
-- We take comprehensive notes in the Weekly Agenda of agenda item discussions and of decisions taken.
-
-## NPM Package
-
-The components are now published automatically on NPM here when we create a release: https://www.npmjs.com/package/@openfoodfacts/openfoodfacts-webcomponents
-
-### Publishing
-
-#### Automatically
-- Creating a release by merging the release please PR
-
-#### Manually
-
-To publish a new version, you need to be a member of the Open Food Facts organization on npm.
-
-- Update the version in `package.json` following [semantic versioning](https://semver.org/).
-
-- Update the `CHANGELOG.md` file with the new version number and the changes made in this version.
-
-- Run the following command to build and publish the package:`npm run publish:package`
-
-- Add a tag to the commit: `git tag X.Y.Z` (replace X.Y.Z with the package version number). Then push the tag to GitHub: `git push --tags`
-
-## Getting Started
-
-### Prerequisites
-
-Use Node.js 24 and npm for development. The `.nvmrc` file specifies the version used by CI. With [nvm](https://github.com/nvm-sh/nvm#installing-and-updating), run `nvm install` and `nvm use` from the repository root.
-
-### Installation
-
-Clone the repository:
-
-```bash
-git clone https://github.com/openfoodfacts/openfoodfacts-webcomponents.git
-```
-
-Navigate to the web-components directory:
-
-```bash
-cd openfoodfacts-webcomponents/web-components
-```
-
-Install dependencies:
-
-```bash
-npm install
-```
-
-## Usage
-
-### Local Development
-
-If you use nvm, you can use the .nvmrc file to set the right node version:
-
-```bash
-nvm install
-nvm use
-```
-
-To run the project locally:
-
-Navigate to the web-components directory (if not already there):
-
-```bash
-cd web-components
-```
-
-Install dependencies (if not already done):
-
-```bash
-npm install
-```
-
-Start the development server:
-
-```bash
-npm run dev
-```
-
-Go to http://localhost:6006 to see Storybook.
-
-## Test local changes with npm like Hunger games project
-
-Build the webcomponents with `npm run build` in the `openfoodfacts-webcomponents/web-components` directory.
-
-In `package.json` of the project you want to test the webcomponents with, add the following line to the dependencies section: `@openfoodfacts/openfoodfacts-webcomponents": "file:../openfoodfacts-webcomponents/web-components`
-
-Then run `npm install` to install the local version of the webcomponents.
-
-#### In addition to above steps, please also follow the below steps to generate translations and for tests.
-
-1. Export your component in `webcomponents/src/off-webcomponents.ts`
-2. Run `npm run translations:build` to build translation.
-3. Add this to `webcomponents/index.html` to display it during test.
-4. Also add the new component in `webcomponents/docs/index.html`.
-
-#### How to test annotating in local
-
-To test annotating nutrients in local you need credential cookie for dev api.
-To have it, you need to follow these steps:
-
-1. Run the project locally as described above.
-2. Edit your hosts file `/etc/hosts` to add the following line:
-   `127.0.0.1 wc.openfoodfacts.net`
-3. Login to http://world.openfoodfacts.net with your Open Food Facts account. (the first basic auth login is off/off)
-4. Go to any product page and upload an image that you want to annotate. The image should not already exist on this product.
-5. Go to http://wc.openfoodfacts.net:6006 to get cookie for api.
-6. Use the `barcode` of the product to annotate it.
-
-### To use it like a library check the [web-components/README.md](web-components/README.md) file
+- [Current website designs](https://www.figma.com/design/Qg9URUyrjHgYmnDHXRsTTB/Current-Website-design?m=auto&t=RokuCr1uXrGFMhTB-6)
+- [Web component designs](https://www.figma.com/design/X8nBndPdBfikAcevBiBxKo/Web-Components?node-id=0-1&p=f&t=A7yCwKqyW9klqYq8-0)
 
 ## 📚 Documentation
 
-You can find the documentation [here](https://openfoodfacts.github.io/openfoodfacts-webcomponents)
+Explore the [component documentation](https://openfoodfacts.github.io/openfoodfacts-webcomponents/).
 
-To work on documentation ,you can edit [web-components/README.md](./web-components/README.md)
+Component examples and documentation are maintained in Storybook stories.
 
-## Rules
+## 📆 Weekly meetings
 
-Each component has to follow this rules :
+Come meet the team on Wednesdays from 11:00 to 11:25 (Europe/Paris)! Join via [Google Meet](https://meet.google.com/uep-fhvf-gto) or [by phone](https://tel.meet/uep-fhvf-gto?pin=8160344286211). You can also add the [Open Food Facts community calendar](https://wiki.openfoodfacts.org/Events) to your calendar.
 
-- its own folder in the `src` folder.
-- attributes are in kebab-case
-- boolean attributes have to be `false` by default to follow this [rule](https://lit.dev/docs/components/properties/#boolean-attributes)
+Please add topics to the [weekly agenda](https://docs.google.com/document/d/1BGHfvrgx5eFIGjK8aTNPK2QwAggRp4oohGuYG9lNX8g/edit?tab=t.0) and review it before the meeting. The team records discussions and decisions there, and may use remaining time for bug triage or debugging.
