@@ -152,13 +152,15 @@ describe("Folksonomy API", () => {
     })
 
     it("should handle special characters in product codes", async () => {
-      const specialCode = "product/with&special%chars"
+      const specialCode = "product/with&special%chars#fragment"
 
       vi.mocked(global.fetch).mockResolvedValue(jsonResponse([]))
 
       await folksonomyApi.fetchProductProperties(specialCode)
 
-      expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining(specialCode))
+      expect(global.fetch).toHaveBeenCalledWith(
+        "https://api.folksonomy.openfoodfacts.org/product/product%2Fwith%26special%25chars%23fragment"
+      )
     })
 
     it("should handle null response data", async () => {
@@ -187,6 +189,47 @@ describe("Folksonomy API", () => {
 
       const result = await folksonomyApi.fetchProductProperties("123")
       expect(result).toEqual(weirdResponse)
+    })
+  })
+
+  describe("request URL encoding", () => {
+    it("encodes a property name used as a query parameter", async () => {
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse([]))
+
+      await folksonomyApi.fetchProductsProperties("producer & partner")
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        "https://api.folksonomy.openfoodfacts.org/products?k=producer+%26+partner",
+        expect.anything()
+      )
+    })
+
+    it("encodes a property key used as a path segment", async () => {
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse([]))
+
+      await folksonomyApi.fetchValues("origin/region#1")
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        "https://api.folksonomy.openfoodfacts.org/values/origin%2Fregion%231",
+        expect.anything()
+      )
+    })
+
+    it("encodes a deleted property key as a path segment", async () => {
+      vi.stubGlobal("localStorage", {
+        getItem: vi.fn((key: string) =>
+          key === "folksonomy-bearer-token" ? "existing-token" : null
+        ),
+        removeItem: vi.fn(),
+      })
+      vi.mocked(global.fetch).mockResolvedValue(jsonResponse({}))
+
+      await folksonomyApi.deleteProductProperty("product/1", "origin/region#1", 2)
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        "https://api.folksonomy.openfoodfacts.org/product/product%2F1/origin%2Fregion%231?version=2",
+        expect.objectContaining({ method: "DELETE" })
+      )
     })
   })
 
