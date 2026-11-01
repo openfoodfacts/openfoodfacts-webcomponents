@@ -26,6 +26,7 @@ export enum EventType {
   INGREDIENT_DETECTION_STATE = "ingredient-detection-state",
   DONATION_METER_STATE = "donation-meter-state",
   DONATION_BANNER_STATE = "donation-banner-state",
+  KNOWLEDGE_PANEL_ACTION = "knowledge-panel-action",
   INPUT = "INPUT",
 }
 

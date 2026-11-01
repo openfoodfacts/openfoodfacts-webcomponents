@@ -53,6 +53,9 @@ export class PanelGroupElementRenderer extends LitElement {
   @property({ type: String })
   headingLevel = "h3"
 
+  @property({ type: String })
+  productCode = ""
+
   override render(): TemplateResult {
     if (!this.element) {
       return html``
@@ -103,6 +106,7 @@ export class PanelGroupElementRenderer extends LitElement {
         return html`<panel-renderer
           .panel=${panel}
           .knowledgePanels=${this.knowledgePanels}
+          .productCode=${this.productCode}
           headingLevel=${this.headingLevel}
         >
         </panel-renderer>`
