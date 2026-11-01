@@ -32,3 +32,4 @@ if (window) {
 } else if (globalThis) {
   ;(globalThis as Global).OFF_WEBCOMPONENTS_VERSION = __OFF_WEBCOMPONENTS_VERSION__
 }
+export { NutriPatrolReports } from "./components/nutripatrol-reports/nutripatrol-reports"
