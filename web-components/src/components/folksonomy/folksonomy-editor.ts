@@ -113,9 +113,25 @@ export class FolksonomyEditor extends LitElement {
       #free_properties_form table th {
         background-color: var(--off-folksonomy-table-header-bg, #dedede);
         font-weight: bold;
-        cursor: pointer;
         user-select: none;
         white-space: nowrap;
+      }
+      .sort-button {
+        display: inline-flex;
+        align-items: center;
+        width: 100%;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        font: inherit;
+        font-weight: inherit;
+        text-align: left;
+        cursor: pointer;
+      }
+      .sort-button:focus-visible {
+        outline: 2px solid var(--off-folksonomy-accent, #007bff);
+        outline-offset: 2px;
       }
       .sort-header {
         display: inline-flex;
@@ -258,6 +274,8 @@ export class FolksonomyEditor extends LitElement {
         <svg
           class="sort-arrow ${isActive && this.sortDirection === "asc" ? "active" : ""}"
           viewBox="0 0 10 6"
+          aria-hidden="true"
+          focusable="false"
         >
           <polygon points="5,0 10,6 0,6" />
         </svg>
@@ -265,11 +283,21 @@ export class FolksonomyEditor extends LitElement {
           class="sort-arrow ${isActive && this.sortDirection === "desc" ? "active" : ""}"
           viewBox="0 0 10 6"
           style="transform:rotate(180deg)"
+          aria-hidden="true"
+          focusable="false"
         >
           <polygon points="5,0 10,6 0,6" />
         </svg>
       </span>
     `
+  }
+
+  private getAriaSort(column: "key" | "value") {
+    if (this.sortColumn !== column) {
+      return "none"
+    }
+
+    return this.sortDirection === "asc" ? "ascending" : "descending"
   }
 
   private renderForm() {
@@ -278,16 +306,20 @@ export class FolksonomyEditor extends LitElement {
         <table>
           <tr>
             <th
-              @click=${() => this.handleSort("key")}
+              aria-sort=${this.getAriaSort("key")}
               class=${`sortable ${this.sortColumn === "key" ? `sort-${this.sortDirection}` : ""}`}
             >
-              <span class="sort-header"> ${msg("Property")} ${this.renderSortIcon("key")} </span>
+              <button type="button" class="sort-button" @click=${() => this.handleSort("key")}>
+                <span class="sort-header"> ${msg("Property")} ${this.renderSortIcon("key")} </span>
+              </button>
             </th>
             <th
-              @click=${() => this.handleSort("value")}
+              aria-sort=${this.getAriaSort("value")}
               class=${`sortable ${this.sortColumn === "value" ? `sort-${this.sortDirection}` : ""}`}
             >
-              <span class="sort-header"> ${msg("Value")} ${this.renderSortIcon("value")} </span>
+              <button type="button" class="sort-button" @click=${() => this.handleSort("value")}>
+                <span class="sort-header"> ${msg("Value")} ${this.renderSortIcon("value")} </span>
+              </button>
             </th>
             ${this.pageType == "edit" && !this.viewOnly ? html`<th>${msg("Actions")}</th>` : null}
           </tr>
