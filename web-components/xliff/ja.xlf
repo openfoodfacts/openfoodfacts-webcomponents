@@ -720,23 +720,23 @@
       </trans-unit>
       <trans-unit id="s371091f240c17a7e">
         <source>Property renamed successfully!</source>
-        <target state="needs-translation">Property renamed successfully!</target>
+        <target state="translated">プロパティ名は正常に変更されました！</target>
       </trans-unit>
       <trans-unit id="s4603f58131a777bf">
         <source>Failed to rename property. Please try again.</source>
-        <target state="needs-translation">Failed to rename property. Please try again.</target>
+        <target state="translated">プロパティ名の変更に失敗しました。もう一度お試しください。</target>
       </trans-unit>
       <trans-unit id="s21694d2ab9c0bec5">
         <source>Property deleted successfully!</source>
-        <target state="needs-translation">Property deleted successfully!</target>
+        <target state="translated">プロパティは正常に削除されました！</target>
       </trans-unit>
       <trans-unit id="scf78b75273a6b5fe">
         <source>Failed to delete property. Please try again.</source>
-        <target state="needs-translation">Failed to delete property. Please try again.</target>
+        <target state="translated">プロパティの削除に失敗しました。もう一度お試しください。</target>
       </trans-unit>
       <trans-unit id="s71ffcb25fc1c5356">
         <source>Rename this property</source>
-        <target state="needs-translation">Rename this property</target>
+        <target state="translated">プロパティ名を変更</target>
       </trans-unit>
       <trans-unit id="s60320a18282b2b33">
         <source>Rename</source>
@@ -744,47 +744,47 @@
       </trans-unit>
       <trans-unit id="s6e2a82009cc3dfc7">
         <source>Delete this property</source>
-        <target state="needs-translation">Delete this property</target>
+        <target state="translated">プロパティを削除</target>
       </trans-unit>
       <trans-unit id="s8bccacf0fc176064">
         <source>Rename Property</source>
-        <target state="needs-translation">Rename Property</target>
+        <target state="translated">プロパティ名を変更</target>
       </trans-unit>
       <trans-unit id="s0df37909a355e56f">
         <source>Rename property '<x id="0" equiv-text="${this.renameModalData.property}"/>' to:</source>
-        <target state="needs-translation">Rename property '<x id="0" equiv-text="${this.renameModalData.property}"/>' to:</target>
+        <target state="translated">プロパティ「<x id="0" equiv-text="${this.renameModalData.property}"/>」の名前を次のように変更：</target>
       </trans-unit>
       <trans-unit id="sb550440eeb3f39c5">
         <source>New property name:</source>
-        <target state="needs-translation">New property name:</target>
+        <target state="translated">新しいプロパティ名：</target>
       </trans-unit>
       <trans-unit id="sbb53591e587764b7">
         <source>Enter new property name...</source>
-        <target state="needs-translation">Enter new property name...</target>
+        <target state="translated">新しいプロパティ名を入力…</target>
       </trans-unit>
       <trans-unit id="s8acd49e96b4ee7d4">
         <source>Check Conflicts</source>
-        <target state="needs-translation">Check Conflicts</target>
+        <target state="translated">競合を確認</target>
       </trans-unit>
       <trans-unit id="sd1cfdf0ef29cb6a5">
         <source>Property Rename Conflicts</source>
-        <target state="needs-translation">Property Rename Conflicts</target>
+        <target state="translated">プロパティ名の変更の競合</target>
       </trans-unit>
       <trans-unit id="sf417737adaa5a8c2">
         <source>Renaming '<x id="0" equiv-text="${this.renameModalData.property}"/>' to '<x id="1" equiv-text="${this.renameModalData.newProperty}"/>' will affect:</source>
-        <target state="needs-translation">Renaming '<x id="0" equiv-text="${this.renameModalData.property}"/>' to '<x id="1" equiv-text="${this.renameModalData.newProperty}"/>' will affect:</target>
+        <target state="translated">「<x id="0" equiv-text="${this.renameModalData.property}"/>」の名前を「<x id="1" equiv-text="${this.renameModalData.newProperty}"/>」に変更すると、以下のものに影響します。</target>
       </trans-unit>
       <trans-unit id="s14571d0ac58a8b43">
         <source>Products with both properties:</source>
-        <target state="needs-translation">Products with both properties:</target>
+        <target state="translated">両方のプロパティを持つ製品:</target>
       </trans-unit>
       <trans-unit id="sb0d459e32656033f">
         <source>Products with old property only:</source>
-        <target state="needs-translation">Products with old property only:</target>
+        <target state="translated">古いプロパティのみを持つ製品:</target>
       </trans-unit>
       <trans-unit id="sfa3027dde47305fe">
         <source>Products with new property only:</source>
-        <target state="needs-translation">Products with new property only:</target>
+        <target state="translated">新しいプロパティのみを持つ製品:</target>
       </trans-unit>
       <trans-unit id="s9e5b8feb0892646e">
         <source>Do you want to proceed with the rename?</source>
