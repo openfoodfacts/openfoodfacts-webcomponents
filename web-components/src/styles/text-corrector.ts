@@ -8,6 +8,12 @@ export const TEXT_CORRECTOR = css`
     box-shadow: 0 0.5rem 2px -2px rgba(0, 0, 0, 0.1);
   }
 
+  @media (prefers-color-scheme: dark) {
+    .text-section {
+      border-bottom-color: #333;
+    }
+  }
+
   h2 {
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
