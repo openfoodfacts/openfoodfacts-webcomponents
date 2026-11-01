@@ -33,7 +33,13 @@ const getApiUrl = (path: string) => {
  * @returns {string | null}
  */
 function getStoredToken(): string | null {
-  return localStorage.getItem(FOLKSONOMY_BEARER_TOKEN_KEY)
+  try {
+    return typeof localStorage === "undefined"
+      ? null
+      : localStorage.getItem(FOLKSONOMY_BEARER_TOKEN_KEY)
+  } catch {
+    return null
+  }
 }
 
 /**
@@ -41,16 +47,28 @@ function getStoredToken(): string | null {
  * @param token
  */
 function saveTokenToStorage(token: string) {
-  localStorage.setItem(FOLKSONOMY_BEARER_TOKEN_KEY, token)
-  localStorage.setItem(FOLKSONOMY_BEARER_DATE_KEY, new Date().getTime().toString())
+  try {
+    if (typeof localStorage === "undefined") return
+
+    localStorage.setItem(FOLKSONOMY_BEARER_TOKEN_KEY, token)
+    localStorage.setItem(FOLKSONOMY_BEARER_DATE_KEY, new Date().getTime().toString())
+  } catch {
+    // Storage is an optional cache; authentication still works without it.
+  }
 }
 
 /**
  * Clear token from localStorage
  */
 function clearStoredToken() {
-  localStorage.removeItem(FOLKSONOMY_BEARER_TOKEN_KEY)
-  localStorage.removeItem(FOLKSONOMY_BEARER_DATE_KEY)
+  try {
+    if (typeof localStorage === "undefined") return
+
+    localStorage.removeItem(FOLKSONOMY_BEARER_TOKEN_KEY)
+    localStorage.removeItem(FOLKSONOMY_BEARER_DATE_KEY)
+  } catch {
+    // Nothing needs to be cleared when storage is unavailable.
+  }
 }
 
 /**
