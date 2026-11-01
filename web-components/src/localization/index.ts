@@ -13,9 +13,12 @@ export const { getLocale, setLocale } = configureLocalization({
 
 export const setLanguageCode = (newLanguageCode: string) => {
   if (!(targetLocales as readonly string[]).includes(newLanguageCode)) {
-    throw new Error(`Invalid language code: ${newLanguageCode}`)
+    // Open Food Facts can support a language before a UI translation bundle is available.
+    // Keep that code for component data, but render the interface in the source locale.
+    languageCode.set(newLanguageCode)
+    return setLocale(sourceLocale)
   }
   // Set the language code (en, fr, ..)
-  setLocale(newLanguageCode)
   languageCode.set(newLanguageCode)
+  return setLocale(newLanguageCode)
 }
