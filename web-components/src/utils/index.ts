@@ -117,7 +117,7 @@ export const createDebounce = (debounceTime: number = 500) => {
       if (timeout) {
         clearTimeout(timeout)
       }
-      timeout = window.setTimeout(() => {
+      timeout = setTimeout(() => {
         callback()
         timeout = null
       }, debounceTime)
