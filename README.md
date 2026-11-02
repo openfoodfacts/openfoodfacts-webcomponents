@@ -2,41 +2,41 @@
 
 [![npm](https://img.shields.io/npm/v/@openfoodfacts/openfoodfacts-webcomponents.svg)](https://www.npmjs.com/package/@openfoodfacts/openfoodfacts-webcomponents)
 
-A set of web components for Open Food Facts to help build edition interfaces
+A set of web components for Open Food Facts to help build edition interfaces.
 
 
 - Currently, we have Search webcomponents (coded in Lit) in https://github.com/openfoodfacts/openfoodfacts-search
-- Under development are components for nutrition editing, and Robotoff questions
-- Projects/features that could benefit from having webcomponents: nutripatrol (display & input), folksonomy_api (display & input), knowledge panels (display), ingredients (display & input), photo upload, open prices (display & input), photo gallery/editing
-- API calls could be delegated to [openfoodfacts-nodejs](https://github.com/openfoodfacts/openfoodfacts-nodejs)
-- Candidates for using such webcomponents are: [openfoodfacts-server](https://github.com/openfoodfacts/openfoodfacts-server), [openfoodfacts-explorer](https://github.com/openfoodfacts/openfoodfacts-explorer) , [hunger-games](https://github.com/openfoodfacts/hunger-games) and potentially open-prices
+- Components for nutrition editing, Robotoff questions, nutripatrol (display & input), folksonomy_api (display & input), knowledge panels (display)
+- Projects/features that could benefit from having webcomponents: ingredients (display & input), photo upload, open prices (display & input), photo gallery/editing
+- API calls should be delegated as much as possible to the [openfoodfacts-js](https://github.com/openfoodfacts/openfoodfacts-js) SDK.
+- Candidates for using such webcomponents are: [openfoodfacts-server](https://github.com/openfoodfacts/openfoodfacts-server), [openfoodfacts-explorer](https://github.com/openfoodfacts/openfoodfacts-explorer) , [hunger-games](https://github.com/openfoodfacts/hunger-games) and potentially [open-prices-frontend](https://github.com/openfoodfacts/open-prices-frontend)
 
 ## Currently available webcomponents
 
 ### Available
 
 #### 🤖 Robotoff
-- [Nutrition editing (with Nutri-Sight integration)](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-nutrient-extraction)
-- [Robotoff Questions](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-question)
-- [Robotoff Ingredients Spellcheck](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-ingredient-spellcheck)
-- [Robotoff Ingredients Detection](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-ingredient-detection)
-- [Robotoff Contribution Message](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#robotoff-contribution-message)
+- [Nutrition editing (with Nutri-Sight integration)](https://openfoodfacts.github.io/openfoodfacts-webcomponents/?path=/story/components-robotoff-nutrient-extraction--basic)
+- [Robotoff Questions](https://openfoodfacts.github.io/openfoodfacts-webcomponents/?path=/story/components-robotoff-question--basic)
+- [Robotoff Ingredients Spellcheck](https://openfoodfacts.github.io/openfoodfacts-webcomponents/?path=/story/components-robotoff-ingredient-spellcheck--basic)
+- [Robotoff Ingredients Detection](https://openfoodfacts.github.io/openfoodfacts-webcomponents/?path=/story/components-robotoff-ingredient-detection--basic)
+- [Robotoff Contribution Message](https://openfoodfacts.github.io/openfoodfacts-webcomponents/?path=/story/components-robotoff-contribution-message--basic)
 
 #### Display elements
-- [Donation Banner](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#donation-banner)
-- [Donation Meter](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#donation-meter)
-- [Mobile Badges](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#mobile-badges)
-- [Barcode Scanner](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#barcode-scanner)
-- [Autocomplete Input](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#autocomplete-input)
-- [Product Card](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#product-card)
+- [Donation Banner](https://openfoodfacts.github.io/openfoodfacts-webcomponents/?path=/story/components-donation-banner--basic)
+- [Donation Meter](https://openfoodfacts.github.io/openfoodfacts-webcomponents/?path=/story/components-donation-meter--from-the-news-feed)
+- [Mobile Badges](https://openfoodfacts.github.io/openfoodfacts-webcomponents/?path=/story/components-mobile-badges--basic)
+- [Barcode Scanner](https://openfoodfacts.github.io/openfoodfacts-webcomponents/?path=/story/components-barcode-scanner--basic)
+- [Autocomplete Input](https://openfoodfacts.github.io/openfoodfacts-webcomponents/?path=/story/shared-autocomplete-input--basic)
+- [Product Card](https://openfoodfacts.github.io/openfoodfacts-webcomponents/?path=/story/components-product-card--basic)
 
 #### 🔖 Folksonomy Engine
-- [Folksonomy Editor](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#folksonomy-editor)
+- [Folksonomy Editor](https://openfoodfacts.github.io/openfoodfacts-webcomponents/?path=/story/components-folksonomy-editor--basic)
 - Folksonomy property listings
 
 ### ⚙️ For configuration
 
-- [Off WebComponents configuration](https://openfoodfacts.github.io/openfoodfacts-webcomponents/#off-webcomponents-configuration)
+- [Off WebComponents configuration](https://openfoodfacts.github.io/openfoodfacts-webcomponents/?path=/story/shared-configuration--basic)
 
 ### 🚧 Work in progress
 
