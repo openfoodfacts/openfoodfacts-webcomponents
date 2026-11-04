@@ -30,12 +30,8 @@ import { backgroundImage } from "../../directives/background-image"
 import { ALERT } from "../../styles/alert"
 import type { NutrimentsProductType } from "../../types/openfoodfacts"
 import { GREEN } from "../../utils/colors"
-import {
-  initDebounce,
-  removeUselessZeros,
-  setValueAndParentsObjectIfNotExists,
-  triggerSubmit,
-} from "../../utils"
+import { debounceForLit } from "../../utils/debounce"
+import { removeUselessZeros, setValueAndParentsObjectIfNotExists, triggerSubmit } from "../../utils"
 import { nutrientsOrderByCountryCode, sortKeysByNutrientsOrder } from "../../signals/openfoodfacts"
 import { countryCode, languageCode } from "../../signals/app"
 
@@ -261,10 +257,7 @@ export class RobotoffNutrientExtractionForm extends LitElement {
       serving: {},
     }
 
-  @state()
-  private debounceUpdatedInsight = initDebounce(() => {
-    this.onUpdateInsight()
-  })
+  private debounceUpdatedInsight = debounceForLit(this, () => this.onUpdateInsight())
 
   /**
    * Autocomplete value
