@@ -577,6 +577,7 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
     }
     return html`
       <button
+        type="button"
         class="suggestion-button button light-green-button small"
         @click="${() => this.updateResult(true, [item])}"
         tabindex="1"
@@ -610,6 +611,7 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
         break
     }
     return html`<button
+      type="button"
       class="suggestion-button button light-red-button small"
       @click="${() => this.updateResult(false, [item])}"
       tabindex="2"
@@ -910,6 +912,7 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
       return html`
         <div class="submit-buttons buttons-row can-wrap">
           <button
+            type="button"
             class="button cappucino-button with-icon"
             @click=${this.cancelEditMode}
             ?disabled=${isLoading}
@@ -947,6 +950,7 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
         <p class="text">${this.renderSpellCheckDiff()}</p>
         <div style="display: flex; justify-content: flex-end;">
           <button
+            type="button"
             class="button cappucino-button with-icon"
             @click=${this.enterEditMode}
             ?disabled=${isLoading}
