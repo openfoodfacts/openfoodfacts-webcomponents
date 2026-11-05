@@ -13,9 +13,13 @@ You will see the list of available components and how to use them.
 
 `npm install @openfoodfacts/openfoodfacts-webcomponents`
 
+ES module imports use the unbundled package modules.
+
 ### With CDN
 
-Link : [https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.bundled.js](https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.bundled.js)
+The CDN build is an ES module with the component code bundled. It loads locale chunks on demand from
+`dist/lang/esm/`:
+[https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.bundled.js](https://cdn.jsdelivr.net/npm/@openfoodfacts/openfoodfacts-webcomponents/dist/off-webcomponents.bundled.js)
 
 ### Import it in your project
 
@@ -33,36 +37,6 @@ import "@webcomponents/webcomponentsjs/webcomponents-loader.js"
 import "@openfoodfacts/openfoodfacts-webcomponents"
 ```
 
-Then you have to copy the localization files to your project.
-If you use vite you can use the plugin [vite-plugin-static-copy](https://github.com/sapphi-red/vite-plugin-static-copy) to copy the localization files to your project.
-
-```bash
-npm install vite-plugin-static-copy
-```
-
-```javascript
-import copy from "rollup-plugin-copy"
-import path from "path"
-export default defineConfig({
-  // ...
-  plugins: [
-    // ...
-    viteStaticCopy({
-      targets: [
-        {
-          src: path.resolve(
-            __dirname,
-            "node_modules/@openfoodfacts/openfoodfacts-webcomponents/dist/localization/locales/*.js"
-          ),
-          dest: "assets/localization/locales",
-        },
-      ],
-    }),
-  ],
-  // ...
-})
-```
-
 #### Via script tag
 
 ```html
@@ -73,7 +47,9 @@ export default defineConfig({
 ></script>
 ```
 
-Be sure to copy all the files in the `dist/localization/locales` folder to your project.
+The locale chunks are shipped with the package. When self-hosting the build, copy `dist/lang/esm/`
+alongside the bundle and preserve that path (or copy the entire `dist/` directory). You do not need to
+copy locale files individually.
 
 ### Usage
 

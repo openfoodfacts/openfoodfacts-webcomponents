@@ -131,6 +131,7 @@ dist
 .idea
 build/
 dist/
+web-components/src/localization/generated/
 .env
 .vscode
 docs/dist/
