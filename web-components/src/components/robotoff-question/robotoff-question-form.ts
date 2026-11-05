@@ -1,6 +1,6 @@
 import { LitElement, html, css, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { type Question, AnnotationAnswer } from "../../types/robotoff"
+import { type Question, AnnotationAnswer, isAnnotationLoading } from "../../types/robotoff"
 import { EventType } from "../../constants"
 import { answerQuestion } from "../../signals/questions"
 import { SignalWatcher } from "@lit-labs/signals"
@@ -132,7 +132,7 @@ export class RobotoffQuestionForm extends SignalWatcher(
   }
 
   private renderButtons() {
-    const isLoading = Boolean(this.loading)
+    const isLoading = isAnnotationLoading(this.loading)
     return html`
       <div class="buttons-row">
         <loading-button
