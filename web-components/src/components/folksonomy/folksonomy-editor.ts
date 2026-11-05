@@ -5,6 +5,11 @@ import "./folksonomy-editor-row"
 import folksonomyApi from "../../api/folksonomy"
 import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme"
 
+const DEFAULT_LOGIN_URL = "/cgi/login.pl"
+const DEFAULT_PROPERTIES_URL = "/properties"
+const DEFAULT_PROPERTIES_DOCUMENTATION_URL = "https://wiki.openfoodfacts.org/Folksonomy/Property"
+const DEFAULT_FOLKSONOMY_ENGINE_URL = "https://wiki.openfoodfacts.org/Folksonomy_Engine"
+
 /**
  * Folksonomy Editor
  * @element folksonomy-editor
@@ -39,28 +44,28 @@ export class FolksonomyEditor extends LitElement {
    * @type {string}
    */
   @property({ type: String, attribute: "properties-base-url" })
-  propertiesBaseUrl = "/properties"
+  propertiesBaseUrl = DEFAULT_PROPERTIES_URL
 
   /**
    * The URL for the login page
    * @type {string}
    */
   @property({ type: String, attribute: "login-url" })
-  loginUrl = "/cgi/login.pl"
+  loginUrl = DEFAULT_LOGIN_URL
 
   /**
    * The URL for properties documentation (e.g., "https://wiki.openfoodfacts.org/Folksonomy/Property")
    * @type {string}
    */
   @property({ type: String, attribute: "properties-documentation-url" })
-  propertiesDocumentationUrl = "https://wiki.openfoodfacts.org/Folksonomy/Property"
+  propertiesDocumentationUrl = DEFAULT_PROPERTIES_DOCUMENTATION_URL
 
   /**
    * The URL for the Folksonomy Engine project (e.g., "https://wiki.openfoodfacts.org/Folksonomy_Engine")
    * @type {string}
    */
   @property({ type: String, attribute: "folksonomy-engine-url" })
-  folksonomyEngineUrl = "https://wiki.openfoodfacts.org/Folksonomy_Engine"
+  folksonomyEngineUrl = DEFAULT_FOLKSONOMY_ENGINE_URL
 
   static override styles = [
     FOLKSONOMY_THEME,
@@ -273,6 +278,7 @@ export class FolksonomyEditor extends LitElement {
   }
 
   private renderForm() {
+    const loginUrl = this.getSafeUrl(this.loginUrl, DEFAULT_LOGIN_URL)
     return html`
       <form id="free_properties_form">
         <table>
@@ -316,7 +322,7 @@ export class FolksonomyEditor extends LitElement {
         ${
           this.viewOnly
             ? html`<p class="login-message">
-                ${msg(html`Please <a href="${this.loginUrl}">log in</a> to edit or add properties.`)}
+                ${msg(html`Please <a href=${loginUrl}>log in</a> to edit or add properties.`)}
               </p>`
             : null
         }
@@ -325,6 +331,15 @@ export class FolksonomyEditor extends LitElement {
   }
 
   override render() {
+    const propertiesBaseUrl = this.getSafeUrl(this.propertiesBaseUrl, DEFAULT_PROPERTIES_URL)
+    const propertiesDocumentationUrl = this.getSafeUrl(
+      this.propertiesDocumentationUrl,
+      DEFAULT_PROPERTIES_DOCUMENTATION_URL
+    )
+    const folksonomyEngineUrl = this.getSafeUrl(
+      this.folksonomyEngineUrl,
+      DEFAULT_FOLKSONOMY_ENGINE_URL
+    )
     return html`
       <section>
         <div class="feus">
@@ -345,11 +360,11 @@ export class FolksonomyEditor extends LitElement {
                   html`These properties are created and filed by users for any kind of usages. Feel
                     free to add your own. The properties and values you create
                     <strong>must be factual</strong>. You can dive into
-                    <a href="${this.propertiesBaseUrl}"
+                    <a href=${propertiesBaseUrl}
                       >the list of properties already used by the community</a
                     >
                     or explore the
-                    <a href="${this.propertiesDocumentationUrl}"
+                    <a href=${propertiesDocumentationUrl}
                       >properties' documentation and its search engine</a
                     >.`
                 )}
@@ -358,8 +373,8 @@ export class FolksonomyEditor extends LitElement {
               <p>
                 ${msg(
                   html`This is brought by the
-                    <a href="${this.folksonomyEngineUrl}">Folksonomy Engine project</a>. Don't
-                    hesitate to participate or give feedback`
+                    <a href=${folksonomyEngineUrl}>Folksonomy Engine project</a>. Don't hesitate to
+                    participate or give feedback`
                 )}
               </p>
               ${this.renderForm()}
@@ -368,6 +383,20 @@ export class FolksonomyEditor extends LitElement {
         </div>
       </section>
     `
+  }
+
+  private getSafeUrl(url: string, fallback: string): string {
+    const base =
+      typeof window === "undefined" ? "https://world.openfoodfacts.org" : window.location.href
+    try {
+      const parsedUrl = new URL(url, base)
+      if (parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:") {
+        return parsedUrl.toString()
+      }
+    } catch {
+      // Use the documented default when a configuration value is malformed.
+    }
+    return new URL(fallback, base).toString()
   }
 }
 
