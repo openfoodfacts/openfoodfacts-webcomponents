@@ -475,6 +475,7 @@ export class FolksonomyEditorRow extends LitElement {
           <td>
             <div class="button-container">
               <button
+                type="button"
                 class="button chocolate-button"
                 @click=${this.addCustomKeyAndValue}
                 id="create-button"
@@ -532,18 +533,30 @@ export class FolksonomyEditorRow extends LitElement {
                   ${
                     this.editable
                       ? html`
-                          <button class="button chocolate-button" @click=${this.handleSave}>
+                          <button
+                            type="button"
+                            class="button chocolate-button"
+                            @click=${this.handleSave}
+                          >
                             ${msg("Save")}
                           </button>
-                          <button class="button chocolate-button" @click=${this.handleCancel}>
+                          <button
+                            type="button"
+                            class="button chocolate-button"
+                            @click=${this.handleCancel}
+                          >
                             ${msg("Cancel")}
                           </button>
                         `
-                      : html`<button class="button chocolate-button" @click=${this.handleEdit}>
+                      : html`<button
+                          type="button"
+                          class="button chocolate-button"
+                          @click=${this.handleEdit}
+                        >
                           ${msg("Edit")}
                         </button>`
                   }
-                  <button class="button chocolate-button" @click=${this.handleDelete}>
+                  <button type="button" class="button chocolate-button" @click=${this.handleDelete}>
                     ${msg("Delete")}
                   </button>
                 </div>
