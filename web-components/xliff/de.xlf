@@ -1113,6 +1113,69 @@ sich zu beteiligen oder Feedback zu geben</target>
         <source><x id="0" equiv-text="${amount}"/> a month keeps it that way.</source>
         <target state="needs-translation"><x id="0" equiv-text="${amount}"/> a month keeps it that way.</target>
       </trans-unit>
+<trans-unit id="seb31d198279dc024">
+  <source>Complete or correct product information</source>
+</trans-unit>
+<trans-unit id="sebfc334fee8d3271">
+  <source>Add a category</source>
+</trans-unit>
+<trans-unit id="s59647d5169cdf1cf">
+  <source>Add the ingredients</source>
+</trans-unit>
+<trans-unit id="s30fcfdf0b25a7391">
+  <source>Take a photo of the ingredients</source>
+</trans-unit>
+<trans-unit id="s8d691c1f1e288f23">
+  <source>Add nutrition facts</source>
+</trans-unit>
+<trans-unit id="s0230741cf1702926">
+  <source>Take a photo of the nutrition facts</source>
+</trans-unit>
+<trans-unit id="s9d7f93e75ff51791">
+  <source>Take a photo of the recycling information</source>
+</trans-unit>
+<trans-unit id="s002cbc49321517ec">
+  <source>Extract and check the recycling information</source>
+</trans-unit>
+<trans-unit id="s2b0f1eb015fbe029">
+  <source>Add packaging components</source>
+</trans-unit>
+<trans-unit id="s087655f14174ba35">
+  <source>Add the origins of ingredients for this product</source>
+</trans-unit>
+<trans-unit id="scfd876e5977bb90a">
+  <source>Add quantity of the product</source>
+</trans-unit>
+<trans-unit id="s56fc4f1048b33251">
+  <source>Add the store where you found this product</source>
+</trans-unit>
+<trans-unit id="see368f478ae36035">
+  <source>Take a photo of traceability codes</source>
+</trans-unit>
+<trans-unit id="s1ce0e64864c33077">
+  <source>Add any label present on this product</source>
+</trans-unit>
+<trans-unit id="s4667ec9a31c200bc">
+  <source>Add the country where you found this product</source>
+</trans-unit>
+<trans-unit id="sd810354ab2139844">
+  <source>Add basic details</source>
+</trans-unit>
+<trans-unit id="s0e5da5303f4ddbb8">
+  <source>Add portion size</source>
+</trans-unit>
+<trans-unit id="sba17a928f4b3d13f">
+  <source>Refresh the photo of the ingredients</source>
+</trans-unit>
+<trans-unit id="s19142b9d3ba093fc">
+  <source>Refresh the photo of the nutrition facts</source>
+</trans-unit>
+<trans-unit id="s23108f8a6c21357f">
+  <source>Report this product to our moderators</source>
+</trans-unit>
+<trans-unit id="saffce1edcb631945">
+  <source>Report this image to our moderators</source>
+</trans-unit>
     </body>
   </file>
 </xliff>
