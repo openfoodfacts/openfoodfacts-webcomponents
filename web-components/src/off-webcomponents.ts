@@ -18,6 +18,7 @@ export { AutocompleteInput } from "./components/shared/autocomplete-input"
 export { RobotoffIngredientDetection as RobotoffCrops } from "./components/robotoff-ingredient-detection/robotoff-ingredient-detection"
 export { ProductCard } from "./components/product-card/product-card"
 export { NewsFeed } from "./components/news-feed/news-feed"
+export { NutriPatrolCard } from "./components/nutri-patrol-card/nutripatrol-card"
 export { NutriPatrolFlagForm } from "./components/nutripatrol-flag-form/nutripatrol-flag-form"
 export { ImageCrop } from "./components/image-crop/image-crop"
 // Will be added in the future when design is ready
