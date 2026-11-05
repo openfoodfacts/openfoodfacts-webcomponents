@@ -139,7 +139,7 @@ async function makeAuthenticatedRequest(url: string, options: RequestInit = {}):
 
 async function fetchProductProperties(product: string): Promise<FetchProductPropertiesResponse> {
   try {
-    const response = await fetch(getApiUrl(`/product/${product}`))
+    const response = await fetch(getApiUrl(`/product/${encodeURIComponent(product)}`))
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
@@ -183,7 +183,9 @@ async function deleteProductProperty(
 ): Promise<DeleteProductPropertyResponse> {
   try {
     const response = await makeAuthenticatedRequest(
-      getApiUrl(`/product/${product}/${k}?version=${version}`),
+      getApiUrl(
+        `/product/${encodeURIComponent(product)}/${encodeURIComponent(k)}?version=${version}`
+      ),
       {
         method: "DELETE",
         headers: {
@@ -252,7 +254,7 @@ async function fetchProductsProperties(
   propertyName: string
 ): Promise<{ k: string; v: string; product: string }[]> {
   try {
-    const url = `/products?k=${propertyName}`
+    const url = `/products?${new URLSearchParams({ k: propertyName })}`
 
     const response = await fetch(getApiUrl(url), {
       method: "GET",
@@ -275,7 +277,7 @@ async function fetchProductsProperties(
 
 async function fetchValues(key: string): Promise<{ v: string; product_count: number }[]> {
   try {
-    const response = await fetch(getApiUrl(`/values/${key}`), {
+    const response = await fetch(getApiUrl(`/values/${encodeURIComponent(key)}`), {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
