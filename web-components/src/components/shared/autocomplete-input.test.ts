@@ -30,4 +30,13 @@ describe("autocomplete-input", () => {
 
     expect(items).toEqual(["is_original (12)", "is-original (0)", "origine"])
   })
+
+  it("includes the shared dark theme for suggestion surfaces", async () => {
+    const { AutocompleteInput } = await import("./autocomplete-input")
+    const styles = AutocompleteInput.styles.map((style) => style.cssText).join("\n")
+
+    expect(styles).toContain("--off-folksonomy-input-bg: #2a2a3a")
+    expect(styles).toContain("background: var(--off-folksonomy-input-bg, #fff)")
+    expect(styles).toContain("color: var(--off-folksonomy-text, #333)")
+  })
 })
