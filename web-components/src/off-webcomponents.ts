@@ -20,6 +20,7 @@ export { ProductCard } from "./components/product-card/product-card"
 export { NewsFeed } from "./components/news-feed/news-feed"
 export { NutriPatrolFlagForm } from "./components/nutripatrol-flag-form/nutripatrol-flag-form"
 export { ImageCrop } from "./components/image-crop/image-crop"
+export { ImageRedact } from "./components/image-redact/image-redact"
 // Will be added in the future when design is ready
 // export { KnowledgePanelsComponent } from "./components/knowledge-panels/knowledge-panels"
 

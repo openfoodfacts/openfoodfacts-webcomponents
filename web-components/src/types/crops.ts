@@ -25,3 +25,15 @@ export type ImageCropResult = {
   // the rotation applied to the cropped image, in degrees
   rotation: number
 }
+
+/**
+ * Result of the image-redact component.
+ */
+export type ImageRedactResult = {
+  // the image with the boxes painted in black
+  blob: Blob
+  // the hidden areas, in natural image pixels
+  boxes: CropperImageBoundingBox[]
+  // the hidden areas, relative to the image size
+  normalizedBoxes: NormalizedBoundingBox[]
+}
