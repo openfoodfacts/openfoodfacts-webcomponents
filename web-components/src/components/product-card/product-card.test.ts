@@ -70,4 +70,32 @@ describe("product-card", () => {
     expect(element.shadowRoot?.querySelector(".product-image")).toBeNull()
     expect(element.shadowRoot?.querySelector(".placeholder-image")).not.toBeNull()
   })
+
+  it("gives the product image and health scores descriptive alternative text", async () => {
+    const element = await fixture<ProductCard>(html`<product-card></product-card>`)
+    element.product = {
+      code: "1234567890",
+      product_name: "Tasty soup",
+      brands: "Brand A",
+      quantity: "400 g",
+      image_front_small_url: "https://example.com/product.jpg",
+      product_type: "food",
+      nutriscore_grade: "a",
+      nova_group: 2,
+      greenscore_grade: "b",
+    }
+    await elementUpdated(element)
+
+    expect(element.shadowRoot?.querySelector(".product-image")?.getAttribute("alt")).toBe(
+      "Front image of Tasty soup"
+    )
+    const scoreImages: HTMLImageElement[] = element.shadowRoot
+      ? Array.from(element.shadowRoot.querySelectorAll<HTMLImageElement>(".score-image"))
+      : []
+    expect(scoreImages.map((image) => image.getAttribute("alt"))).toEqual([
+      "Nutri-Score: A",
+      "NOVA group: 2",
+      "Green-Score: B",
+    ])
+  })
 })
