@@ -230,6 +230,8 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
   @state()
   private detectFn?: (imageData: ImageBitmap) => Promise<string | undefined>
 
+  private isRequestingCamera = false
+
   /**
    * A getter that returns whether the video is currently playing.
    * This getter is used to determine the state of the video element and update the component's UI accordingly.
@@ -288,7 +290,7 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
       if (!("BarcodeDetector" in globalThis)) {
         throw new Error("BarcodeDetector API is not supported in this browser.")
       }
-      this.codeReader = new BarcodeDetector({ formats: ["ean_13", "ean_8"] })
+      this.codeReader = new BarcodeDetector({ formats: ["ean_13", "ean_8", "qr_code"] })
       this.detectFn = this.detectWithBarcodeDetector
       this.sendBarcodeStateEvent({ state: BarcodeScannerState.DETECTOR_AVAILABLE })
     } catch (error) {
@@ -322,6 +324,11 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
    * This method is called when the user clicks the start scanning button or when the runScanner property is set to true.
    */
   private async askPermission() {
+    // A running scanner or in-flight request already owns the camera startup flow.
+    if (this.isVideoPlaying || this.isRequestingCamera) {
+      return
+    }
+
     // If it can't detect, don't ask for permission
     if (!this.canDetect) {
       this.sendBarcodeStateEvent({
@@ -329,22 +336,27 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
       })
       return
     }
+    this.isRequestingCamera = true
     try {
-      const permissionStatus = await navigator.permissions.query({ name: "camera" })
+      try {
+        const permissionStatus = await navigator.permissions.query({ name: "camera" })
 
-      if (["granted", "prompt"].includes(permissionStatus.state)) {
-        await this.startCamera()
-        return
-      } else {
-        console.warn("Camera permission denied. Please enable it in your browser settings.")
+        if (["granted", "prompt"].includes(permissionStatus.state)) {
+          await this.startCamera()
+          return
+        } else {
+          console.warn("Camera permission denied. Please enable it in your browser settings.")
+        }
+      } catch (error) {
+        console.error("Permission query error:", error)
       }
-    } catch (error) {
-      console.error("Permission query error:", error)
+      this.sendBarcodeStateEvent({
+        barcode: this.barcode,
+        state: BarcodeScannerState.NO_PERMISSION,
+      })
+    } finally {
+      this.isRequestingCamera = false
     }
-    this.sendBarcodeStateEvent({
-      barcode: this.barcode,
-      state: BarcodeScannerState.NO_PERMISSION,
-    })
   }
 
   /**
@@ -489,8 +501,8 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
       return html`
         <div class="cta-overlay-wrapper" @click=${this.askPermission}>
           <div class="cta-exit-button">
-            <button class="button white-button small" @click=${this.exit}>
-              <close-icon></close-icon><span>${msg("Close")}</span>
+            <button type="button" class="button white-button small" @click=${this.exit}>
+              <close-icon aria-hidden="true"></close-icon><span>${msg("Close")}</span>
             </button>
           </div>
           <div class="centered-overlay">
@@ -500,9 +512,9 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
             <div class="cta-overlay-frame left-bottom-border"></div>
             <div class="cta-overlay">
               <div class="cta-overlay-icon">
-                <button class="cta-overlay-button">
+                <span class="cta-overlay-button" aria-hidden="true">
                   <search-icon></search-icon>
-                </button>
+                </span>
               </div>
             </div>
           </div>
@@ -514,8 +526,12 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
         <div class="centered-overlay">
           <div class="cta-overlay">
             <div class="cta-overlay-icon">
-              <button class="cta-overlay-button start-scanning">
-                <barcode-icon></barcode-icon>
+              <button
+                type="button"
+                class="cta-overlay-button start-scanning"
+                aria-label=${msg("Start barcode scanning")}
+              >
+                <barcode-icon aria-hidden="true"></barcode-icon>
               </button>
             </div>
             <div class="cta-overlay-text">
