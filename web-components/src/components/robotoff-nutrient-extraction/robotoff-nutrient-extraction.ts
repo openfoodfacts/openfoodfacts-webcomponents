@@ -222,13 +222,26 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
   }
 
   /**
+   * Completes an annotation without leaving the contribution flow busy if the API rejects it.
+   */
+  private async submitAnnotation(annotation: () => Promise<unknown>) {
+    try {
+      await annotation()
+      await this.afterInsightAnnotation()
+    } catch (error) {
+      console.error("Failed to submit nutrient annotation:", error)
+      await this.hideLoading()
+      this.emitNutrientEvent(EventState.ERROR)
+    }
+  }
+
+  /**
    * Annotate the nutrients insights
    * @returns {Promise<void>}
    */
   async onSubmit(event: CustomEvent<InsightAnnotationAnswer>) {
     this.showLoading(AnnotationAnswer.ACCEPT_AND_ADD_DATA)
-    await annotateNutrientsWithData(event.detail)
-    await this.afterInsightAnnotation()
+    await this.submitAnnotation(() => annotateNutrientsWithData(event.detail))
   }
 
   /**
@@ -236,8 +249,9 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
    */
   async onRefuse() {
     this.showLoading(AnnotationAnswer.REFUSE)
-    await annotateNutrientWithoutData(this.currentInsightId, AnnotationAnswer.REFUSE)
-    await this.afterInsightAnnotation()
+    await this.submitAnnotation(() =>
+      annotateNutrientWithoutData(this.currentInsightId, AnnotationAnswer.REFUSE)
+    )
   }
 
   /**
@@ -245,8 +259,9 @@ export class RobotoffNutrientExtraction extends DisplayProductLinkMixin(
    */
   async onSkip() {
     this.showLoading(AnnotationAnswer.SKIP)
-    await annotateNutrientWithoutData(this.currentInsightId, AnnotationAnswer.SKIP)
-    await this.afterInsightAnnotation()
+    await this.submitAnnotation(() =>
+      annotateNutrientWithoutData(this.currentInsightId, AnnotationAnswer.SKIP)
+    )
   }
   renderHeader(insight: NutrientsInsight) {
     return html`
