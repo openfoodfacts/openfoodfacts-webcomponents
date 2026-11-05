@@ -91,10 +91,17 @@ export class FolksonomyEditorRow extends LitElement {
   @property({ type: Boolean }) empty = false
 
   /**
+   * Keys already present on the product, used to prevent duplicate additions.
+   */
+  @property({ attribute: false }) existingKeys: string[] = []
+
+  /**
    * Indicates whether the row is editable.
    * @private
    */
   @state() editable = false
+
+  @state() private submitError = ""
 
   /**
    * Indicates whether the new key modal is open.
@@ -145,6 +152,7 @@ export class FolksonomyEditorRow extends LitElement {
     const value = (e.target as HTMLInputElement).value
     this.keyInput = value
     this.key = value
+    this.submitError = ""
 
     if (e.detail.matching) {
       this.fetchValuesForKey(value)
@@ -160,6 +168,7 @@ export class FolksonomyEditorRow extends LitElement {
     const value = e.detail.value
     this.valueInput = value
     this.value = value
+    this.submitError = ""
 
     // In case of input value match exactly with only one suggestion, fetch values for the key
     if (e.detail.matching) {
@@ -280,6 +289,11 @@ export class FolksonomyEditorRow extends LitElement {
    */
   private async addCustomKeyAndValue() {
     if (this.keyInput && this.valueInput) {
+      if (this.existingKeys.includes(this.keyInput)) {
+        this.submitError = msg("This property already exists. Use Edit to modify its value.")
+        return
+      }
+
       try {
         const newProperty = await folksonomyApi.addProductProperty(
           this.productCode,
@@ -297,6 +311,10 @@ export class FolksonomyEditorRow extends LitElement {
         this.keyInput = ""
         this.valueInput = ""
       } catch (error) {
+        this.submitError =
+          error instanceof Error && error.message.includes("status: 422")
+            ? msg("This property already exists. Use Edit to modify its value.")
+            : msg("Unable to add this property. Please try again.")
         console.error("Failed to add custom key and value", error)
       }
     }
@@ -364,6 +382,12 @@ export class FolksonomyEditorRow extends LitElement {
 
       .property-link {
         color: var(--off-folksonomy-text, black);
+      }
+
+      .submit-error {
+        color: var(--off-folksonomy-error, #b91c1c);
+        display: block;
+        margin-top: 0.5rem;
       }
 
       #create-button {
@@ -481,6 +505,11 @@ export class FolksonomyEditorRow extends LitElement {
               >
                 ${msg("Submit")}
               </button>
+              ${
+                this.submitError
+                  ? html`<span class="submit-error" role="alert">${this.submitError}</span>`
+                  : null
+              }
             </div>
           </td>
         </tr>

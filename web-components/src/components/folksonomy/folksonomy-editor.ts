@@ -308,6 +308,7 @@ export class FolksonomyEditor extends LitElement {
                   product-code=${this.productCode}
                   page-type=${this.pageType}
                   row-number=${this.properties.length + 1}
+                  .existingKeys=${this.properties.map((property) => property.key)}
                   empty
                 ></folksonomy-editor-row>`
               : null
