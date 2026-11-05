@@ -50,20 +50,7 @@ export const UnfixableIssue: Story = {
     el.widgetType = args.widgetType ?? "auto"
     el.viewOnly = !!args.viewOnly
 
-    return html`
-      <div style="max-width: 450px; padding: 1.5rem;">
-        <folksonomy-property-editor
-          .property=${args.property}
-          .productCode=${args.productCode}
-          .title=${args.title}
-          .callToAction=${args.callToAction}
-          .acceptedValues=${args.acceptedValues}
-          .image=${args.image}
-          .widgetType=${args.widgetType}
-          ?view-only=${args.viewOnly}
-        ></folksonomy-property-editor>
-      </div>
-    `
+    return html` <div style="max-width: 450px; padding: 1.5rem;">${el}</div> `
   },
 }
 

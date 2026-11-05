@@ -10,6 +10,7 @@ beforeAll(async () => {
 beforeEach(() => {
   document.body.innerHTML = ""
   vi.restoreAllMocks()
+  vi.spyOn(folksonomyApi, "fetchProductProperties").mockResolvedValue([])
 })
 
 describe("folksonomy-property-editor", () => {
@@ -41,16 +42,22 @@ describe("folksonomy-property-editor", () => {
     await element.updateComplete
 
     const shadow = element.shadowRoot!
+    const pillsGroup = shadow.querySelector(".pills-container")
+    expect(pillsGroup?.getAttribute("role")).toBe("group")
+    expect(pillsGroup?.getAttribute("aria-label")).toBe("unfixable")
+
     const pills = shadow.querySelectorAll(".pill-btn")
     expect(pills.length).toBe(2)
     expect(pills[0].textContent?.trim()).toBe("yes")
     expect(pills[1].textContent?.trim()).toBe("no")
+    expect(pills[0].getAttribute("aria-pressed")).toBe("false")
 
     // Click "yes"
     ;(pills[0] as HTMLButtonElement).click()
     await element.updateComplete
 
     expect(pills[0].classList.contains("active")).toBe(true)
+    expect(pills[0].getAttribute("aria-pressed")).toBe("true")
   })
 
   it("renders text input when no accepted-values are passed", async () => {
@@ -106,6 +113,68 @@ describe("folksonomy-property-editor", () => {
           property: "unfixable",
           value: "yes",
           version: 1,
+          productCode: "3017620422003",
+        },
+      })
+    )
+  })
+
+  it("calls updateProductProperty when existing property is present", async () => {
+    vi.spyOn(folksonomyApi, "fetchProductProperties").mockResolvedValueOnce([
+      {
+        k: "unfixable",
+        v: "yes",
+        version: 1,
+        owner: "test",
+        product: "3017620422003",
+        editor: "test",
+        last_edit: new Date().toISOString(),
+        comment: "",
+      },
+    ])
+    vi.spyOn(folksonomyApi, "updateProductProperty").mockResolvedValueOnce({
+      key: "unfixable",
+      value: "no",
+      version: 2,
+    })
+
+    const element = document.createElement("folksonomy-property-editor") as FolksonomyPropertyEditor
+    element.property = "unfixable"
+    element.productCode = "3017620422003"
+    element.acceptedValues = ["yes", "no"]
+    document.body.appendChild(element)
+
+    const shadow = element.shadowRoot!
+    await waitUntil(
+      () => shadow.querySelector(".existing-badge")?.textContent?.includes("yes"),
+      "loaded existing property"
+    )
+    await element.updateComplete
+
+    const pills = shadow.querySelectorAll(".pill-btn")
+    ;(pills[1] as HTMLButtonElement).click()
+    await element.updateComplete
+
+    const savedListener = vi.fn()
+    element.addEventListener("property-saved", savedListener)
+
+    const ctaBtn = shadow.querySelector(".cta-btn") as HTMLButtonElement
+    ctaBtn.click()
+
+    await waitUntil(() => savedListener.mock.calls.length > 0, "property-saved event")
+
+    expect(folksonomyApi.updateProductProperty).toHaveBeenCalledWith(
+      "3017620422003",
+      "unfixable",
+      "no",
+      1
+    )
+    expect(savedListener).toHaveBeenCalledWith(
+      expect.objectContaining({
+        detail: {
+          property: "unfixable",
+          value: "no",
+          version: 2,
           productCode: "3017620422003",
         },
       })

@@ -37,12 +37,15 @@ export class FolksonomyPropertyEditor extends LitElement {
   @property({ type: String, attribute: "product-code", reflect: true })
   productCode = ""
 
+  private productAlias = ""
+
   /**
    * Alias attribute for product-code.
    */
   @property({ type: String, attribute: "product" })
   set product(val: string) {
-    if (val && !this.productCode) {
+    if (val && (!this.productCode || this.productCode === this.productAlias)) {
+      this.productAlias = val
       this.productCode = val
     }
   }
@@ -342,8 +345,8 @@ export class FolksonomyPropertyEditor extends LitElement {
   ]
 
   override willUpdate(changedProps: Map<string, unknown>) {
-    if (changedProps.has("value") && this.value) {
-      this.currentValue = this.value
+    if (changedProps.has("value")) {
+      this.currentValue = this.value || ""
     }
 
     if (
@@ -351,6 +354,9 @@ export class FolksonomyPropertyEditor extends LitElement {
       this.property &&
       this.productCode
     ) {
+      if (!changedProps.has("value")) {
+        this.currentValue = this.value || ""
+      }
       this.loadExistingProperty()
     }
   }
@@ -361,10 +367,17 @@ export class FolksonomyPropertyEditor extends LitElement {
   async loadExistingProperty() {
     if (!this.property || !this.productCode) return
 
+    const requestedProperty = this.property
+    const requestedProductCode = this.productCode
+    const isCurrentRequest = () =>
+      this.property === requestedProperty && this.productCode === requestedProductCode
+
     this.loading = true
     try {
-      const properties = await folksonomyApi.fetchProductProperties(this.productCode)
-      const match = properties.find((p) => p.k === this.property)
+      const properties = await folksonomyApi.fetchProductProperties(requestedProductCode)
+      if (!isCurrentRequest()) return
+
+      const match = properties.find((p) => p.k === requestedProperty)
       if (match) {
         this.existingValue = match.v
         this.version = match.version
@@ -378,7 +391,9 @@ export class FolksonomyPropertyEditor extends LitElement {
     } catch {
       // Ignore initial fetch errors if product not found or offline
     } finally {
-      this.loading = false
+      if (isCurrentRequest()) {
+        this.loading = false
+      }
     }
   }
 
@@ -413,6 +428,8 @@ export class FolksonomyPropertyEditor extends LitElement {
    * Save or update the property in Folksonomy Engine
    */
   async handleSave() {
+    if (this.saving || this.loading) return
+
     if (!this.property) {
       this.statusMessage = msg("Missing property key.")
       this.statusType = "error"
@@ -495,15 +512,18 @@ export class FolksonomyPropertyEditor extends LitElement {
 
     if (
       this.isBooleanType() ||
-      (this.acceptedValues.length > 0 && this.acceptedValues.length <= 4)
+      (this.widgetType === "auto" &&
+        this.acceptedValues.length > 0 &&
+        this.acceptedValues.length <= 4)
     ) {
       return html`
-        <div class="pills-container">
+        <div class="pills-container" role="group" aria-label=${this.title || this.property}>
           ${this.acceptedValues.map(
             (val) => html`
               <button
                 type="button"
                 class="pill-btn ${this.currentValue === val ? "active" : ""}"
+                aria-pressed=${this.currentValue === val ? "true" : "false"}
                 @click=${() => this.handlePillClick(val)}
               >
                 ${val}
@@ -514,9 +534,17 @@ export class FolksonomyPropertyEditor extends LitElement {
       `
     }
 
-    if (this.widgetType === "select" || this.acceptedValues.length > 4) {
+    if (
+      this.widgetType === "select" ||
+      (this.widgetType === "auto" && this.acceptedValues.length > 4)
+    ) {
       return html`
-        <select class="custom-select" .value=${this.currentValue} @change=${this.handleInputChange}>
+        <select
+          class="custom-select"
+          aria-label=${this.title || this.property}
+          .value=${this.currentValue}
+          @change=${this.handleInputChange}
+        >
           <option value="" disabled ?selected=${!this.currentValue}>
             ${msg("Select an option...")}
           </option>
@@ -531,7 +559,12 @@ export class FolksonomyPropertyEditor extends LitElement {
 
     if (this.widgetType === "date") {
       return html`
-        <input type="date" .value=${this.currentValue} @input=${this.handleInputChange} />
+        <input
+          type="date"
+          aria-label=${this.title || this.property}
+          .value=${this.currentValue}
+          @input=${this.handleInputChange}
+        />
       `
     }
 
@@ -601,7 +634,7 @@ export class FolksonomyPropertyEditor extends LitElement {
                   <button
                     type="button"
                     class="cta-btn"
-                    ?disabled=${this.saving || !this.currentValue}
+                    ?disabled=${this.saving || this.loading || !this.currentValue}
                     @click=${this.handleSave}
                   >
                     ${this.saving ? html`<span class="spinner"></span>` : nothing} ${buttonLabel}
@@ -610,20 +643,22 @@ export class FolksonomyPropertyEditor extends LitElement {
               `
             : nothing
         }
-        ${
-          this.statusMessage
-            ? html`
-                <div class="status-alert ${this.statusType}">
-                  ${this.statusMessage}
-                  ${
-                    this.statusType === "error" && this.statusMessage.includes("sign in")
-                      ? html`<a href=${this.loginUrl} target="_blank">${msg("Login here")}</a>`
-                      : nothing
-                  }
-                </div>
-              `
-            : nothing
-        }
+        <div role="status" aria-live="polite">
+          ${
+            this.statusMessage
+              ? html`
+                  <div class="status-alert ${this.statusType}">
+                    ${this.statusMessage}
+                    ${
+                      this.statusType === "error" && this.statusMessage.includes("sign in")
+                        ? html`<a href=${this.loginUrl} target="_blank">${msg("Login here")}</a>`
+                        : nothing
+                    }
+                  </div>
+                `
+              : nothing
+          }
+        </div>
       </div>
     `
   }
