@@ -29,6 +29,10 @@ import { ifDefined } from "lit/directives/if-defined.js"
 import { LanguageCodesMixin } from "../../mixins/language-codes-mixin"
 import { DisplayProductLinkMixin } from "../../mixins/display-product-link-mixin"
 
+export const getSpellcheckLanguageFilter = (languageCodes?: string[]) => {
+  return languageCodes?.length ? { lc: languageCodes.join(",") } : {}
+}
+
 /**
  * RobotoffIngredients component
  * It allows the user to correct the ingredients list of a product
@@ -198,9 +202,10 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
       this.dispatchIngredientSpellcheckStateEvent({
         state: EventState.LOADING,
       })
-      const insights = await fetchSpellcheckInsights(productCode ? productCode : undefined, {
-        lc: this._languageCodes.join(","),
-      })
+      const insights = await fetchSpellcheckInsights(
+        productCode ? productCode : undefined,
+        getSpellcheckLanguageFilter(this.languageCodes)
+      )
       this._insightIds = insights
         // Currently we filter by lang here but we should do it in the API when is available
         .map((insight) => insight.id)
@@ -338,6 +343,13 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
             <div>
               ${this.renderProductLink(insight.barcode)} ${this.renderImage()}
               <div>
+                ${
+                  !this._languageCodes.includes(insight.data.lang)
+                    ? html`<p role="status">
+                        ${msg("This ingredient list is in a different language from your interface.")}
+                      </p>`
+                    : nothing
+                }
                 <text-corrector
                   loading=${ifDefined(this.loading) as AnnotationAnswer}
                   correction=${correction}
