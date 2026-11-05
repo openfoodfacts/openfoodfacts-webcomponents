@@ -15,11 +15,11 @@ export class ActionElementRenderer extends LitElement {
       width: 100%;
       margin: 1rem 0;
       padding: 1rem;
-      background-color: #f8f9fa;
+      background-color: var(--off-kp-action-bg, #f8f9fa);
       border-radius: 22px;
-      border: 1px solid #e8e8e8;
+      border: 1px solid var(--off-kp-border, #e8e8e8);
       text-align: left;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+      box-shadow: 0 2px 6px var(--off-kp-shadow, rgba(0, 0, 0, 0.03));
     }
 
     .action small {

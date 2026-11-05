@@ -15,7 +15,7 @@ export class TitledTextElementRenderer extends LitElement {
       display: block;
       padding-bottom: 0.85rem;
       margin-bottom: 0.85rem;
-      border-bottom: 1px solid #f5f5f5;
+      border-bottom: 1px solid var(--off-kp-border, #f5f5f5);
       text-align: left;
     }
 
@@ -36,7 +36,7 @@ export class TitledTextElementRenderer extends LitElement {
     .element-value {
       width: 100%;
       display: block;
-      color: #444;
+      color: var(--off-kp-text-secondary, #444);
       text-align: left;
       word-wrap: break-word;
       line-height: 1.6;
