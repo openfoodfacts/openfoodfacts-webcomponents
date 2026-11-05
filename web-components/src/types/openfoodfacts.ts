@@ -23,9 +23,14 @@ export type ImageIngredientsProductType = {
 }
 export type NutrimentsData = Record<string, number | string>
 
+export type ProductImage = {
+  uploaded_t?: number
+}
+
 export type NutrimentsProductType = {
   nutriments: NutrimentsData
   serving_size: string
+  images?: Record<string, ProductImage>
 }
 
 export type NutrientsParams = Partial<{
