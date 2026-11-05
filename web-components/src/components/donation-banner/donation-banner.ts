@@ -758,11 +758,33 @@ export class DonationBanner extends LitElement {
           width: 100% !important;
           flex-basis: auto !important;
         }
+        .donation-banner__actions-section,
+        .donation-banner-footer__actions-section {
+          flex-direction: column;
+          justify-content: center;
+        }
+        .donation-banner__actions-section__financial,
+        .donation-banner-footer__actions-section__financial {
+          flex: 1 1 auto;
+          text-align: center;
+        }
+        .donation-banner__actions-section__donate-button,
+        .donation-banner-footer__actions-section__donate-button {
+          align-self: stretch;
+          display: flex;
+          justify-content: center;
+        }
+        .donation-banner__actions-section__donate-button a,
+        .donation-banner-footer__actions-section__donate-button a {
+          display: block;
+          width: min(100%, 280px);
+        }
         .donation-banner__actions-section__donate-button a button,
         .donation-banner-footer__actions-section__donate-button a button {
           font-size: 18px;
-          padding: 8px 12px;
+          padding: 12px 24px;
           white-space: nowrap;
+          width: 100%;
         }
         .group-image {
           width: 100%;
