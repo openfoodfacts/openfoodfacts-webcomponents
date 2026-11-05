@@ -17,6 +17,7 @@ import { SignalWatcher } from "@lit-labs/signals"
 import "../shared/loader"
 import "./robotoff-question-form"
 import { BASE } from "../../styles/base"
+import { SHARED_THEME, type ThemeMode } from "../../styles/theme"
 
 /**
  * Robotoff question component
@@ -28,6 +29,7 @@ import { BASE } from "../../styles/base"
 export class RobotoffQuestion extends SignalWatcher(LitElement) {
   static override styles = [
     BASE,
+    SHARED_THEME,
     css`
       :host {
         display: block;
@@ -41,19 +43,31 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
       }
       .message {
         font-style: italic;
-        color: var(--robotoff-question-message-color, #444);
+        color: var(--robotoff-question-message-color, var(--off-color-text-muted, #444));
+      }
+      :host([theme="dark"]) {
+        background: var(--robotoff-question-bg-dark, var(--off-color-surface, #181a1b));
+        color: var(--robotoff-question-color-dark, var(--off-color-text, #f3f3f3));
+      }
+      :host([theme="dark"]) .message {
+        color: var(--robotoff-question-message-color-dark, var(--off-color-text-muted, #b3b3b3));
       }
       @media (prefers-color-scheme: dark) {
-        :host {
-          background: var(--robotoff-question-bg-dark, #181a1b);
-          color: var(--robotoff-question-color-dark, #f3f3f3);
+        :host([theme="auto"]),
+        :host(:not([theme])) {
+          background: var(--robotoff-question-bg-dark, var(--off-color-surface, #181a1b));
+          color: var(--robotoff-question-color-dark, var(--off-color-text, #f3f3f3));
         }
-        .message {
-          color: var(--robotoff-question-message-color-dark, #b3b3b3);
+        :host([theme="auto"]) .message,
+        :host(:not([theme])) .message {
+          color: var(--robotoff-question-message-color-dark, var(--off-color-text-muted, #b3b3b3));
         }
       }
     `,
   ]
+
+  @property({ reflect: true })
+  theme: ThemeMode = "auto"
 
   @property({ type: Boolean, attribute: "show-message" })
   showMessage = true
