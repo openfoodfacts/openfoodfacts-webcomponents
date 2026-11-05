@@ -221,12 +221,14 @@ export class NewsFeed extends LitElement {
   // --- Helper Methods ---
 
   private getLang(lang: string | undefined) {
-    return lang || navigator.language?.split("-")[0] || "en"
+    return (
+      lang || (typeof navigator !== "undefined" ? navigator.language?.split("-")[0] : "en") || "en"
+    )
   }
 
   private getFullLang(lang: string | undefined) {
     // Get the full language code if available (e.g., 'fr-FR')
-    return lang || navigator.language || "en"
+    return lang || (typeof navigator !== "undefined" ? navigator.language : "en") || "en"
   }
 
   /**

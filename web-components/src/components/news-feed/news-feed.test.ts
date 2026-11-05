@@ -1,4 +1,4 @@
-import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest"
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest"
 import { waitUntil } from "@open-wc/testing-helpers"
 import dayjs from "dayjs/esm"
 import type { NewsFeed } from "./news-feed"
@@ -54,7 +54,23 @@ beforeEach(() => {
   document.body.innerHTML = ""
 })
 
+afterEach(() => {
+  vi.unstubAllGlobals()
+})
+
 describe("news-feed", () => {
+  it("uses English language fallbacks during server rendering", () => {
+    vi.stubGlobal("navigator", undefined)
+    const element = document.createElement("news-feed") as NewsFeed
+    const helpers = element as unknown as {
+      getLang: (lang: string | undefined) => string
+      getFullLang: (lang: string | undefined) => string
+    }
+
+    expect(helpers.getLang(undefined)).toBe("en")
+    expect(helpers.getFullLang(undefined)).toBe("en")
+  })
+
   it("shows a meter on a campaign that publishes figures", async () => {
     const element = await renderFeed(feedWith({ raised: 44156, goal: 170000, currency: "EUR" }))
 
