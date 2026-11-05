@@ -238,6 +238,9 @@ export class NutriPatrolFlagForm extends LitElement {
   @property({ type: String })
   url = ""
 
+  @property({ type: String })
+  token?: string
+
   @property({ type: Boolean, reflect: true })
   open = false
 
@@ -259,7 +262,23 @@ export class NutriPatrolFlagForm extends LitElement {
   @query("dialog")
   private dialog!: HTMLDialogElement
 
-  private client = new NutriPatrol(globalThis.fetch)
+    private _client?: NutriPatrol
+  private get client(): NutriPatrol {
+    if (!this._client) {
+      const fetchWithAuth = (input: RequestInfo | URL, init?: RequestInit) => {
+        init = init || {}
+        if (this.token) {
+          init.headers = {
+            ...init.headers,
+            Authorization: `Bearer ${this.token}`,
+          }
+        }
+        return globalThis.fetch(input, init)
+      }
+      this._client = new NutriPatrol(fetchWithAuth)
+    }
+    return this._client
+  }
   private autoCloseTimer?: ReturnType<typeof setTimeout>
 
   private get modalTitle(): string {
@@ -307,6 +326,9 @@ export class NutriPatrolFlagForm extends LitElement {
   }
 
   override updated(changedProperties: Map<string, unknown>) {
+    if (changedProperties.has("token")) {
+      this._client = undefined // Force recreation of client with new token
+    }
     if (changedProperties.has("open")) {
       if (this.open) {
         if (this.dialog && !this.dialog.open) {
