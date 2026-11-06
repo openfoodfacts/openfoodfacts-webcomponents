@@ -136,6 +136,9 @@ export class FolksonomyPropertyEditor extends LitElement {
   private loading = false
 
   @state()
+  private lookupFailed = false
+
+  @state()
   private saving = false
 
   @state()
@@ -216,6 +219,28 @@ export class FolksonomyPropertyEditor extends LitElement {
         padding: 0.2rem 0.5rem;
         border-radius: 4px;
         margin-bottom: 0.75rem;
+      }
+
+      .existing-badge.lookup-error {
+        background-color: var(--off-folksonomy-error-bg, #ffebee);
+        color: var(--off-folksonomy-danger, #c62828);
+        border: 1px solid var(--off-folksonomy-error-border, #ef9a9a);
+        gap: 0.5rem;
+      }
+
+      .retry-btn {
+        background: transparent;
+        border: 1px solid currentColor;
+        color: inherit;
+        border-radius: 3px;
+        padding: 0.1rem 0.4rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .retry-btn:hover {
+        background-color: rgba(198, 40, 40, 0.08);
       }
 
       .input-group {
@@ -357,6 +382,7 @@ export class FolksonomyPropertyEditor extends LitElement {
       if (!changedProps.has("value")) {
         this.currentValue = this.value || ""
       }
+      this.lookupFailed = false
       this.loadExistingProperty()
     }
   }
@@ -373,6 +399,7 @@ export class FolksonomyPropertyEditor extends LitElement {
       this.property === requestedProperty && this.productCode === requestedProductCode
 
     this.loading = true
+    this.lookupFailed = false
     try {
       const properties = await folksonomyApi.fetchProductProperties(requestedProductCode)
       if (!isCurrentRequest()) return
@@ -388,8 +415,17 @@ export class FolksonomyPropertyEditor extends LitElement {
         this.existingValue = ""
         this.version = 1
       }
-    } catch {
-      // Ignore initial fetch errors if product not found or offline
+      this.lookupFailed = false
+    } catch (err: unknown) {
+      if (!isCurrentRequest()) return
+      const is404 = err instanceof Error && err.message?.includes("404")
+      if (is404) {
+        this.existingValue = ""
+        this.version = 1
+        this.lookupFailed = false
+      } else {
+        this.lookupFailed = true
+      }
     } finally {
       if (isCurrentRequest()) {
         this.loading = false
@@ -429,6 +465,12 @@ export class FolksonomyPropertyEditor extends LitElement {
    */
   async handleSave() {
     if (this.saving || this.loading) return
+
+    if (this.lookupFailed) {
+      this.statusMessage = msg("Could not verify existing property. Please retry.")
+      this.statusType = "error"
+      return
+    }
 
     if (!this.property) {
       this.statusMessage = msg("Missing property key.")
@@ -615,14 +657,27 @@ export class FolksonomyPropertyEditor extends LitElement {
                   <span>${msg("Checking existing property...")}</span>
                 </div>
               `
-            : this.existingValue
+            : this.lookupFailed
               ? html`
-                  <div class="existing-badge">
-                    <span>✓</span>
-                    <span>${msg("Current:")} <strong>${this.existingValue}</strong></span>
+                  <div class="existing-badge lookup-error">
+                    <span>${msg("Could not check existing property.")}</span>
+                    <button
+                      type="button"
+                      class="retry-btn"
+                      @click=${() => this.loadExistingProperty()}
+                    >
+                      ${msg("Retry")}
+                    </button>
                   </div>
                 `
-              : nothing
+              : this.existingValue
+                ? html`
+                    <div class="existing-badge">
+                      <span>✓</span>
+                      <span>${msg("Current:")} <strong>${this.existingValue}</strong></span>
+                    </div>
+                  `
+                : nothing
         }
 
         <div class="input-group">${this.renderWidget()}</div>
@@ -634,7 +689,7 @@ export class FolksonomyPropertyEditor extends LitElement {
                   <button
                     type="button"
                     class="cta-btn"
-                    ?disabled=${this.saving || this.loading || !this.currentValue}
+                    ?disabled=${this.saving || this.loading || this.lookupFailed || !this.currentValue}
                     @click=${this.handleSave}
                   >
                     ${this.saving ? html`<span class="spinner"></span>` : nothing} ${buttonLabel}

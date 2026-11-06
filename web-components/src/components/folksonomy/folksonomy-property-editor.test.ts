@@ -180,4 +180,43 @@ describe("folksonomy-property-editor", () => {
       })
     )
   })
+
+  it("displays lookup error and retry button when lookup fails, and recovers on retry", async () => {
+    vi.spyOn(folksonomyApi, "fetchProductProperties")
+      .mockRejectedValueOnce(new Error("Network Error"))
+      .mockResolvedValueOnce([
+        {
+          k: "unfixable",
+          v: "yes",
+          version: 1,
+          owner: "test",
+          product: "3017620422003",
+          editor: "test",
+          last_edit: new Date().toISOString(),
+          comment: "",
+        },
+      ])
+
+    const element = document.createElement("folksonomy-property-editor") as FolksonomyPropertyEditor
+    element.property = "unfixable"
+    element.productCode = "3017620422003"
+    element.acceptedValues = ["yes", "no"]
+    document.body.appendChild(element)
+
+    const shadow = element.shadowRoot!
+    await waitUntil(() => shadow.querySelector(".lookup-error") !== null, "lookup-error visible")
+
+    const ctaBtn = shadow.querySelector(".cta-btn") as HTMLButtonElement
+    expect(ctaBtn.disabled).toBe(true)
+
+    const retryBtn = shadow.querySelector(".retry-btn") as HTMLButtonElement
+    expect(retryBtn).not.toBeNull()
+    retryBtn.click()
+
+    await waitUntil(
+      () => shadow.querySelector(".existing-badge")?.textContent?.includes("yes"),
+      "recovered after retry"
+    )
+    expect(shadow.querySelector(".lookup-error")).toBeNull()
+  })
 })
