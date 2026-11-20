@@ -62,13 +62,17 @@ function createRobotoff(fetch: typeof window.fetch) {
   })
 }
 
-const toRobotoffInsightQuery = (
-  requestParams: InsightsRequestParams
-): NonNullable<SDKRobotoffInsightQuery> => {
+type RobotoffInsightQuery = Omit<NonNullable<SDKRobotoffInsightQuery>, "barcode"> & {
+  barcode?: string
+}
+
+const toRobotoffInsightQuery = (requestParams: InsightsRequestParams): RobotoffInsightQuery => {
   const { barcode, ...query } = requestParams
   return {
     ...query,
-    ...(barcode === undefined ? {} : { barcode: Number(barcode) }),
+    // Keep the barcode as a string: converting it to a number loses leading
+    // zeros and precision for long barcodes.
+    ...(barcode === undefined ? {} : { barcode: String(barcode) }),
   }
 }
 
@@ -173,9 +177,9 @@ const robotoff = {
   async insights<
     T extends NutrientsInsight | IngredientSpellcheckInsight | IngredientDetectionInsight,
   >(requestParams: InsightsRequestParams = {}): Promise<InsightsResponse<T>> {
-    const result = (await createRobotoff(fetch).insights(
-      toRobotoffInsightQuery(requestParams)
-    )) as unknown as {
+    // The SDK types barcode as a number, but it must be sent as a string.
+    const query = toRobotoffInsightQuery(requestParams) as unknown as SDKRobotoffInsightQuery
+    const result = (await createRobotoff(fetch).insights(query)) as unknown as {
       data?: InsightsResponse<T>
       error?: unknown
     }
