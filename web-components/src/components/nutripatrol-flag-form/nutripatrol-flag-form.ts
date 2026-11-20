@@ -3,6 +3,7 @@ import { customElement, property, state, query } from "lit/decorators.js"
 import { localized, msg } from "@lit/localize"
 import { NutriPatrol } from "@openfoodfacts/openfoodfacts-nodejs"
 import { BASE } from "../../styles/base"
+import { SHARED_THEME, type ThemeMode } from "../../styles/theme"
 
 const VALID_TYPES = ["product", "image", "search"] as const
 const VALID_FLAVORS = ["off", "obf", "opff", "opf", "off-pro"] as const
@@ -37,19 +38,98 @@ interface FlagCreatePayload {
 export class NutriPatrolFlagForm extends LitElement {
   static override styles = [
     BASE,
+    SHARED_THEME,
     css`
       :host {
         display: block;
         font-family: "Plus Jakarta Sans Variable", system-ui, sans-serif;
+        --off-nutripatrol-dialog-background-default: #fdfaf5;
+        --off-nutripatrol-dialog-text-default: #333;
+        --off-nutripatrol-dialog-shadow-default: 0 4px 12px rgba(0, 0, 0, 0.15);
+        --off-nutripatrol-header-border-default: #e0e0e0;
+        --off-nutripatrol-title-default: #000;
+        --off-nutripatrol-close-default: #666;
+        --off-nutripatrol-label-default: #555;
+        --off-nutripatrol-input-background-default: #fafafa;
+        --off-nutripatrol-input-border-default: #ccc;
+        --off-nutripatrol-input-text-default: #333;
+        --off-nutripatrol-disabled-background-default: #f0f0f0;
+        --off-nutripatrol-disabled-text-default: #888;
+        --off-nutripatrol-submit-default: #32863b;
+        --off-nutripatrol-submit-hover-default: #2b7433;
+        --off-nutripatrol-submit-disabled-default: #92bfa4;
+        --off-nutripatrol-error-background-default: #ffebee;
+        --off-nutripatrol-error-border-default: #ef9a9a;
+        --off-nutripatrol-error-text-default: #c62828;
+        --off-nutripatrol-success-background-default: #e8f5e9;
+        --off-nutripatrol-success-border-default: #a5d6a7;
+        --off-nutripatrol-success-text-default: #2e7d32;
+      }
+
+      :host([theme="dark"]) {
+        --off-nutripatrol-dialog-background-default: #1e1e1e;
+        --off-nutripatrol-dialog-text-default: #eee;
+        --off-nutripatrol-dialog-shadow-default: 0 4px 12px rgba(255, 255, 255, 0.15);
+        --off-nutripatrol-header-border-default: #444;
+        --off-nutripatrol-title-default: #fff;
+        --off-nutripatrol-close-default: #aaa;
+        --off-nutripatrol-label-default: #ccc;
+        --off-nutripatrol-input-background-default: #2b2b2b;
+        --off-nutripatrol-input-border-default: #555;
+        --off-nutripatrol-input-text-default: #eee;
+        --off-nutripatrol-disabled-background-default: #333;
+        --off-nutripatrol-disabled-text-default: #999;
+        --off-nutripatrol-submit-default: #4a9c4f;
+        --off-nutripatrol-submit-hover-default: #3b7e3d;
+        --off-nutripatrol-submit-disabled-default: #555;
+        --off-nutripatrol-error-background-default: #5f2120;
+        --off-nutripatrol-error-border-default: #873c3c;
+        --off-nutripatrol-error-text-default: #ffbaba;
+        --off-nutripatrol-success-background-default: #1b4332;
+        --off-nutripatrol-success-border-default: #2e7d32;
+        --off-nutripatrol-success-text-default: #a7f3d0;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :host([theme="auto"]),
+        :host(:not([theme])) {
+          --off-nutripatrol-dialog-background-default: #1e1e1e;
+          --off-nutripatrol-dialog-text-default: #eee;
+          --off-nutripatrol-dialog-shadow-default: 0 4px 12px rgba(255, 255, 255, 0.15);
+          --off-nutripatrol-header-border-default: #444;
+          --off-nutripatrol-title-default: #fff;
+          --off-nutripatrol-close-default: #aaa;
+          --off-nutripatrol-label-default: #ccc;
+          --off-nutripatrol-input-background-default: #2b2b2b;
+          --off-nutripatrol-input-border-default: #555;
+          --off-nutripatrol-input-text-default: #eee;
+          --off-nutripatrol-disabled-background-default: #333;
+          --off-nutripatrol-disabled-text-default: #999;
+          --off-nutripatrol-submit-default: #4a9c4f;
+          --off-nutripatrol-submit-hover-default: #3b7e3d;
+          --off-nutripatrol-submit-disabled-default: #555;
+          --off-nutripatrol-error-background-default: #5f2120;
+          --off-nutripatrol-error-border-default: #873c3c;
+          --off-nutripatrol-error-text-default: #ffbaba;
+          --off-nutripatrol-success-background-default: #1b4332;
+          --off-nutripatrol-success-border-default: #2e7d32;
+          --off-nutripatrol-success-text-default: #a7f3d0;
+        }
       }
 
       dialog {
         padding: 0;
         border: none;
         border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        background: #fdfaf5;
-        color: #333;
+        box-shadow: var(--nutripatrol-dialog-shadow, var(--off-nutripatrol-dialog-shadow-default));
+        background: var(
+          --nutripatrol-dialog-background,
+          var(--off-color-surface, var(--off-nutripatrol-dialog-background-default))
+        );
+        color: var(
+          --nutripatrol-dialog-text,
+          var(--off-color-text, var(--off-nutripatrol-dialog-text-default))
+        );
         max-width: 500px;
         width: 100%;
       }
@@ -60,7 +140,8 @@ export class NutriPatrolFlagForm extends LitElement {
 
       .modal-header {
         padding: 1rem;
-        border-bottom: 1px solid #e0e0e0;
+        border-bottom: 1px solid
+          var(--nutripatrol-header-border, var(--off-nutripatrol-header-border-default));
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -72,7 +153,7 @@ export class NutriPatrolFlagForm extends LitElement {
         text-align: center;
         width: 100%;
         font-weight: 500;
-        color: #000;
+        color: var(--nutripatrol-title, var(--off-nutripatrol-title-default));
       }
 
       .close-btn {
@@ -80,7 +161,7 @@ export class NutriPatrolFlagForm extends LitElement {
         border: none;
         font-size: 1.5rem;
         cursor: pointer;
-        color: #666;
+        color: var(--nutripatrol-close, var(--off-nutripatrol-close-default));
         padding: 0 0.5rem;
         position: absolute;
         right: 1rem;
@@ -101,7 +182,7 @@ export class NutriPatrolFlagForm extends LitElement {
 
       label {
         font-size: 0.85rem;
-        color: #555;
+        color: var(--nutripatrol-label, var(--off-nutripatrol-label-default));
       }
 
       input,
@@ -109,17 +190,25 @@ export class NutriPatrolFlagForm extends LitElement {
       textarea {
         font-family: inherit;
         padding: 0.5rem;
-        border: 1px solid #ccc;
+        border: 1px solid
+          var(--nutripatrol-input-border, var(--off-nutripatrol-input-border-default));
         border-radius: 4px;
         font-size: 1rem;
         width: 100%;
         box-sizing: border-box;
-        background: #fafafa;
+        background: var(
+          --nutripatrol-input-background,
+          var(--off-nutripatrol-input-background-default)
+        );
+        color: var(--nutripatrol-input-text, var(--off-nutripatrol-input-text-default));
       }
 
       input:disabled {
-        background: #f0f0f0;
-        color: #888;
+        background: var(
+          --nutripatrol-disabled-background,
+          var(--off-nutripatrol-disabled-background-default)
+        );
+        color: var(--nutripatrol-disabled-text, var(--off-nutripatrol-disabled-text-default));
       }
 
       textarea {
@@ -128,7 +217,7 @@ export class NutriPatrolFlagForm extends LitElement {
       }
 
       .submit-btn {
-        background-color: #32863b;
+        background-color: var(--nutripatrol-submit, var(--off-nutripatrol-submit-default));
         color: white;
         border: none;
         padding: 0.75rem 1rem;
@@ -142,11 +231,17 @@ export class NutriPatrolFlagForm extends LitElement {
       }
 
       .submit-btn:hover {
-        background-color: #2b7433;
+        background-color: var(
+          --nutripatrol-submit-hover,
+          var(--off-nutripatrol-submit-hover-default)
+        );
       }
 
       .submit-btn:disabled {
-        background-color: #92bfa4;
+        background-color: var(
+          --nutripatrol-submit-disabled,
+          var(--off-nutripatrol-submit-disabled-default)
+        );
         cursor: not-allowed;
       }
 
@@ -158,67 +253,32 @@ export class NutriPatrolFlagForm extends LitElement {
       }
 
       .message.error {
-        background-color: #ffebee;
-        color: #c62828;
-        border: 1px solid #ef9a9a;
+        background-color: var(
+          --nutripatrol-error-background,
+          var(--off-color-error-surface, var(--off-nutripatrol-error-background-default))
+        );
+        color: var(
+          --nutripatrol-error-text,
+          var(--off-color-error, var(--off-nutripatrol-error-text-default))
+        );
+        border: 1px solid
+          var(--nutripatrol-error-border, var(--off-nutripatrol-error-border-default));
       }
 
       .message.success {
-        background-color: #e8f5e9;
-        color: #2e7d32;
-        border: 1px solid #a5d6a7;
-      }
-      @media (prefers-color-scheme: dark) {
-        dialog {
-          background: #1e1e1e;
-          color: #eee;
-          box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
-        }
-        .modal-header {
-          border-color: #444;
-        }
-        .modal-title {
-          color: #fff;
-        }
-        .close-btn {
-          color: #aaa;
-        }
-        label {
-          color: #ccc;
-        }
-        input,
-        select,
-        textarea {
-          background: #2b2b2b;
-          border: 1px solid #555;
-          color: #eee;
-        }
-        input:disabled {
-          background: #333;
-          color: #999;
-        }
-        .submit-btn {
-          background-color: #4a9c4f;
-        }
-        .submit-btn:hover {
-          background-color: #3b7e3d;
-        }
-        .submit-btn:disabled {
-          background-color: #555;
-        }
-        .message.error {
-          background-color: #5f2120;
-          border-color: #873c3c;
-          color: #ffbaba;
-        }
-        .message.success {
-          background-color: #1b4332;
-          border-color: #2e7d32;
-          color: #a7f3d0;
-        }
+        background-color: var(
+          --nutripatrol-success-background,
+          var(--off-nutripatrol-success-background-default)
+        );
+        color: var(--nutripatrol-success-text, var(--off-nutripatrol-success-text-default));
+        border: 1px solid
+          var(--nutripatrol-success-border, var(--off-nutripatrol-success-border-default));
       }
     `,
   ]
+
+  @property({ reflect: true })
+  theme: ThemeMode = "auto"
 
   @property({ type: String })
   barcode = ""
