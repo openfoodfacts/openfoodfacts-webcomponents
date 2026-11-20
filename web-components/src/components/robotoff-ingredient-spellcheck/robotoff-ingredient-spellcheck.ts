@@ -198,9 +198,15 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
       this.dispatchIngredientSpellcheckStateEvent({
         state: EventState.LOADING,
       })
-      const insights = await fetchSpellcheckInsights(productCode ? productCode : undefined, {
-        lc: this._languageCodes.join(","),
-      })
+      let insights
+      try {
+        insights = await fetchSpellcheckInsights(productCode ? productCode : undefined, {
+          lc: this._languageCodes.join(","),
+        })
+      } catch (error) {
+        this.dispatchIngredientSpellcheckStateEvent({ state: EventState.ERROR })
+        throw error
+      }
       this._insightIds = insights
         // Currently we filter by lang here but we should do it in the API when is available
         .map((insight) => insight.id)
@@ -350,6 +356,7 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
           </div>
         `
       },
+      error: () => html`<slot name="error">${msg("Unable to load ingredient corrections.")}</slot>`,
     })
   }
 }
