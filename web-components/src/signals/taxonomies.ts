@@ -5,6 +5,11 @@ import taxonomies from "../api/taxonomies"
 import { Computed } from "@lit-labs/signals"
 
 /**
+ * Unit used to express a nutrient as a percentage of its daily value.
+ */
+export const DAILY_VALUE_UNIT = "% DV"
+
+/**
  * Store the loading state of the taxonomies to avoid multiple requests.
  */
 const isLoading = new SignalMap<LoadingState>({
@@ -63,6 +68,28 @@ export const getTaxonomyUnitById = (id: string): string | undefined => {
     return
   }
   return taxonomy?.unit?.en
+}
+
+/**
+ * Get all the units allowed by the taxonomy of a nutrient:
+ * its default unit, its country specific units (e.g. unit_ca) and "% DV" if it has a daily value.
+ * If the id is not available, it returns an empty array.
+ */
+export const getTaxonomyUnitsById = (id: string): string[] => {
+  const taxonomy = nutrientTaxonomyById.getItem(id)
+  if (!taxonomy) {
+    return []
+  }
+  const units = [taxonomy.unit?.en]
+  Object.entries(taxonomy).forEach(([key, value]) => {
+    if (key.startsWith("unit_")) {
+      units.push((value as NutrientTaxonomy[`unit_${string}`])?.en)
+    }
+  })
+  if (taxonomy.dv_value || taxonomy.dv_2016_value) {
+    units.push(DAILY_VALUE_UNIT)
+  }
+  return [...new Set(units.filter((unit): unit is string => !!unit))]
 }
 
 /**
