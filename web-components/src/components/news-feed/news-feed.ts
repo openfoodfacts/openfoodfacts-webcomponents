@@ -427,8 +427,23 @@ export class NewsFeed extends LitElement {
 
   // --- Lit Render Methods ---
 
+  /**
+   * Returns a navigable news URL, rejecting protocols that could execute code
+   * when a feed is rendered as an anchor.
+   */
+  private getSafeNewsUrl(url: string | undefined): string | undefined {
+    if (!url?.trim()) return undefined
+
+    try {
+      const parsedUrl = new URL(url, window.location.href)
+      return ["http:", "https:"].includes(parsedUrl.protocol) ? parsedUrl.href : undefined
+    } catch {
+      return undefined
+    }
+  }
+
   _renderNewsItem(item: ProcessedNewsItem & { parsedMessage: string }) {
-    const hasUrl = item.url && item.url.trim() !== ""
+    const safeUrl = this.getSafeNewsUrl(item.url)
     const placeholderId = `placeholder-${item.id || Math.random().toString(36).substring(7)}`
 
     // Create placeholder icon content
@@ -470,7 +485,7 @@ export class NewsFeed extends LitElement {
       </div>
     `
 
-    if (!hasUrl) {
+    if (!safeUrl) {
       return html`
         <div class="news-item-wrapper" data-news-id=${item.id}>
           <div class="news-item ${item.message_type}">${iconTemplate} ${contentTemplate}</div>
@@ -480,7 +495,7 @@ export class NewsFeed extends LitElement {
 
     return html`
       <a
-        href=${item.url ?? ""}
+        href=${safeUrl}
         target="_blank"
         rel="noopener noreferrer"
         class="news-item-wrapper"

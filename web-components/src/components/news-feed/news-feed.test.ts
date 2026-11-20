@@ -76,4 +76,31 @@ describe("news-feed", () => {
     expect(shadowRoot(element).querySelector(".news-item")).not.toBeNull()
     expect(shadowRoot(element).querySelector("donation-meter")).toBeNull()
   })
+
+  it("does not create a link for a feed URL using a non-web protocol", async () => {
+    const element = await renderFeed(
+      feedWith({
+        translations: {
+          default: { title: "Campaign", message: "Give", url: "javascript:alert(1)" },
+        },
+      })
+    )
+
+    expect(shadowRoot(element).querySelector(".news-item-wrapper")?.tagName).toBe("DIV")
+    expect(shadowRoot(element).querySelector("a.news-item-wrapper")).toBeNull()
+  })
+
+  it("keeps HTTPS news links navigable", async () => {
+    const element = await renderFeed(
+      feedWith({
+        translations: {
+          default: { title: "Campaign", message: "Give", url: "https://example.org/news" },
+        },
+      })
+    )
+
+    expect(shadowRoot(element).querySelector("a.news-item-wrapper")?.getAttribute("href")).toBe(
+      "https://example.org/news"
+    )
+  })
 })
