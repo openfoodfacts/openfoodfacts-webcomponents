@@ -18,7 +18,8 @@ export class ProductLinkButton extends LitElement {
       :host {
         display: inline-block;
       }
-      a {
+      a.button.with-icon {
+        display: inline-flex;
         color: inherit;
         text-decoration: none;
       }
@@ -42,11 +43,14 @@ export class ProductLinkButton extends LitElement {
     }
 
     return html`
-      <a href="${this.productUrl}" target="_blank" rel="noopener noreferrer">
-        <button class="link-button button with-icon small">
-          <external-link-icon></external-link-icon>
-          <span>${msg("View Product")}</span>
-        </button>
+      <a
+        class="link-button button with-icon small"
+        href="${this.productUrl}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <external-link-icon aria-hidden="true"></external-link-icon>
+        <span>${msg("View Product")}</span>
       </a>
     `
   }
