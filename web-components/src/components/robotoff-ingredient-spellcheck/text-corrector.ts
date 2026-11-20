@@ -3,7 +3,7 @@ import { customElement, property, query, state } from "lit/decorators.js"
 import { BASE } from "../../styles/base"
 import { msg, localized } from "@lit/localize"
 import { EventType } from "../../constants"
-import { AnnotationAnswer } from "../../types/robotoff"
+import { AnnotationAnswer, isAnnotationLoading } from "../../types/robotoff"
 import "../icons/check"
 import "../icons/cross"
 import "../icons/skip"
@@ -884,7 +884,7 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
   renderButtons() {
     const confirmTitle = this.isConfirmDisabled ? this.updateTextMsg : ""
 
-    const isLoading = Boolean(this.loading)
+    const isLoading = isAnnotationLoading(this.loading)
     const isSuccessLoading = [
       AnnotationAnswer.ACCEPT,
       AnnotationAnswer.ACCEPT_AND_ADD_DATA,
@@ -941,7 +941,7 @@ export class TextCorrector extends TextDiffMixin(LitElement) {
   }
 
   renderSpellCheck() {
-    const isLoading = Boolean(this.loading)
+    const isLoading = isAnnotationLoading(this.loading)
     return html`
       <div class="text-section">
         <p class="text">${this.renderSpellCheckDiff()}</p>
