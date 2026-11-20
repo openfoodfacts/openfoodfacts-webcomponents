@@ -23,6 +23,16 @@ export const MODAL = css`
     animation: fadeIn 0.3s ease-in-out;
   }
 
+  @media (prefers-color-scheme: dark) {
+    .modal {
+      background: var(--modal-bg-dark, #1e1e1e);
+      color: var(--modal-color-dark, #eee);
+    }
+    .close-icon:hover {
+      border-color: #fff;
+    }
+  }
+
   .overlay {
     position: fixed;
     top: 0;
