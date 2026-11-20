@@ -33,6 +33,7 @@ interface Product {
   brands: string
   quantity: string
   image_front_small_url: string
+  image_front_url?: string
   product_type: string
   nutriscore_grade?: string
   nova_group?: number
@@ -365,7 +366,7 @@ export class ProductCard extends LitElement {
   greenscoreSrc = ""
 
   @state()
-  private imageLoading = false
+  private isImageLoading = false
 
   @state()
   private imageFailed = false
@@ -375,6 +376,14 @@ export class ProductCard extends LitElement {
    */
   @property({ type: String })
   placeholderImage = getImageUrl("Placeholder.svg")
+
+  /** Uses native image loading. Defaults to `lazy`; use `eager` to load immediately. */
+  @property({ type: String, attribute: "image-loading" })
+  imageLoading: "lazy" | "eager" = "lazy"
+
+  /** Defaults to `auto`, letting the browser choose how to decode the image. */
+  @property({ type: String, attribute: "image-decoding" })
+  imageDecoding: "async" | "sync" | "auto" = "auto"
 
   /**
    * Whether to apply dark mode styling (auto-detected from prefers-color-scheme)
@@ -408,10 +417,15 @@ export class ProductCard extends LitElement {
       )
 
       const previousProduct = changedProperties.get("product") as Product | undefined
-      const imageUrl = this.product.image_front_small_url
+      const imageUrl = this.product.image_front_small_url || this.product.image_front_url
+      const previousImageUrl =
+        previousProduct?.image_front_small_url || previousProduct?.image_front_url
 
-      if (imageUrl !== previousProduct?.image_front_small_url) {
-        this.imageLoading = Boolean(imageUrl)
+      if (
+        imageUrl !== previousImageUrl ||
+        (this.imageFailed && this.product.image_front_url !== previousProduct?.image_front_url)
+      ) {
+        this.isImageLoading = Boolean(imageUrl)
         this.imageFailed = false
       }
     }
@@ -470,17 +484,24 @@ export class ProductCard extends LitElement {
   }
 
   private handleImageLoad = () => {
-    this.imageLoading = false
+    this.isImageLoading = false
   }
 
   private handleImageError = () => {
-    this.imageLoading = false
+    this.isImageLoading = false
     this.imageFailed = true
   }
 
   override render() {
     const isNavigatingToProduct = this.navigating.to?.params?.barcode === this.product.code
-    const hasProductImage = Boolean(this.product.image_front_small_url)
+    const imageUrl = this.product.image_front_small_url || this.product.image_front_url
+    const imageSrcSet =
+      this.product.image_front_small_url &&
+      this.product.image_front_url &&
+      this.product.image_front_small_url !== this.product.image_front_url
+        ? `${this.product.image_front_small_url} 1x, ${this.product.image_front_url} 2x`
+        : nothing
+    const hasProductImage = Boolean(imageUrl)
     const shouldShowProductImage = hasProductImage && !this.imageFailed
     const matchTagInfo = this.getMatchTagInfo()
 
@@ -511,7 +532,7 @@ export class ProductCard extends LitElement {
             : nothing
         }
         <div class="card-content">
-          <div class="image-container" aria-busy=${this.imageLoading}>
+          <div class="image-container" aria-busy=${this.isImageLoading}>
             ${
               isNavigatingToProduct
                 ? html`
@@ -523,15 +544,18 @@ export class ProductCard extends LitElement {
                   ? html`
                       <div class="image-wrapper">
                         ${
-                          this.imageLoading
+                          this.isImageLoading
                             ? html`<span class="loading-ring" aria-hidden="true"></span>`
                             : nothing
                         }
                         <img
-                          src=${this.product.image_front_small_url}
+                          src=${imageUrl}
+                          srcset=${imageSrcSet}
+                          loading=${this.imageLoading}
+                          decoding=${this.imageDecoding}
                           class=${classMap({
                             "product-image": true,
-                            "image-loading": this.imageLoading,
+                            "image-loading": this.isImageLoading,
                           })}
                           alt="Product front"
                           @load=${this.handleImageLoad}

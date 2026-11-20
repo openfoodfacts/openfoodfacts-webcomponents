@@ -59,6 +59,48 @@ describe("product-card", () => {
     expect(image.classList.contains("image-loading")).toBe(false)
   })
 
+  it("offers the larger front image for high-density displays", async () => {
+    const element = await createProductCard("Brand A", "100 g", "https://example.com/small.jpg")
+    element.product = { ...element.product, image_front_url: "https://example.com/large.jpg" }
+    await elementUpdated(element)
+
+    const image = element.shadowRoot?.querySelector(".product-image") as HTMLImageElement
+    expect(image.getAttribute("src")).toBe("https://example.com/small.jpg")
+    expect(image.getAttribute("srcset")).toBe(
+      "https://example.com/small.jpg 1x, https://example.com/large.jpg 2x"
+    )
+  })
+
+  it("defaults to lazy loading and auto decoding and allows overrides", async () => {
+    const element = await createProductCard("Brand A", "100 g", "https://example.com/product.jpg")
+    const image = element.shadowRoot?.querySelector(".product-image") as HTMLImageElement
+
+    expect(image.getAttribute("loading")).toBe("lazy")
+    expect(image.getAttribute("decoding")).toBe("auto")
+
+    element.setAttribute("image-loading", "eager")
+    element.setAttribute("image-decoding", "sync")
+    await elementUpdated(element)
+
+    expect(image.getAttribute("loading")).toBe("eager")
+    expect(image.getAttribute("decoding")).toBe("sync")
+
+    element.setAttribute("image-loading", "lazy")
+    await elementUpdated(element)
+
+    expect(image.getAttribute("loading")).toBe("lazy")
+  })
+
+  it("uses the larger front image when no small image is provided", async () => {
+    const element = await createProductCard("Brand A", "100 g")
+    element.product = { ...element.product, image_front_url: "https://example.com/large.jpg" }
+    await elementUpdated(element)
+
+    const image = element.shadowRoot?.querySelector(".product-image") as HTMLImageElement
+    expect(image.getAttribute("src")).toBe("https://example.com/large.jpg")
+    expect(image.hasAttribute("srcset")).toBe(false)
+  })
+
   it("shows the placeholder when the product image fails to load", async () => {
     const element = await createProductCard("Brand A", "100 g", "https://example.com/product.jpg")
 
