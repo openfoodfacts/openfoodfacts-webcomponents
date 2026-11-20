@@ -135,7 +135,7 @@ export class RobotoffQuestion extends SignalWatcher(LitElement) {
     if (!this.hasAnswered) {
       return getMessageWrapper(msg("Open Food Facts needs your help with this product."))
     }
-    return html`<div>${msg("Thanks for your help! Can you assist with another question?")}</div>`
+    return getMessageWrapper(msg("Thanks for your help! Can you assist with another question?"))
   }
 
   override render() {
