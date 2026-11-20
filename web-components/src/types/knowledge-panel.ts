@@ -62,6 +62,13 @@ export interface ActionElement {
   description?: string
 }
 
+// Detail of the event dispatched when a knowledge panel action is clicked
+export interface KnowledgePanelActionEventDetail {
+  action: string
+  productCode?: string
+  url?: string
+}
+
 // Panel element reference
 export interface PanelElementRef {
   panel_id: string

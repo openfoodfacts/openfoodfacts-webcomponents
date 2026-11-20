@@ -26,6 +26,9 @@ export class ElementRenderer extends LitElement {
   @property({ type: String })
   headingLevel = "h3"
 
+  @property({ type: String })
+  productCode = ""
+
   override render(): TemplateResult {
     if (!this.element || !this.element.element_type) {
       console.error("Invalid element:", this.element)
@@ -51,6 +54,7 @@ export class ElementRenderer extends LitElement {
         return html`<panel-element-renderer
           .element=${this.element}
           .knowledgePanels=${this.knowledgePanels}
+          .productCode=${this.productCode}
           headingLevel=${this.headingLevel}
         >
         </panel-element-renderer>`
@@ -59,12 +63,17 @@ export class ElementRenderer extends LitElement {
         return html`<panel-group-element-renderer
           .element=${this.element}
           .knowledgePanels=${this.knowledgePanels}
+          .productCode=${this.productCode}
           headingLevel=${this.headingLevel}
         >
         </panel-group-element-renderer>`
 
       case "action":
-        return html`<action-element-renderer .element=${this.element}> </action-element-renderer>`
+        return html`<action-element-renderer
+          .element=${this.element}
+          .productCode=${this.productCode}
+        >
+        </action-element-renderer>`
 
       default:
         console.log(`Unsupported element type: ${this.element.element_type}`, this.element)
