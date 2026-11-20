@@ -15,6 +15,7 @@ import "../robotoff-question/robotoff-question"
 enum MessageType {
   SUCCESS = "success",
   ANNOTATION_SUCCESS = "annotation-success",
+  ERROR = "error",
 }
 
 /**
@@ -139,6 +140,7 @@ export class RobotoffModal extends LitElement {
         break
       case EventState.ERROR:
         this.isLoading = false
+        this.showMessage = MessageType.ERROR
         break
     }
   }
@@ -195,6 +197,10 @@ export class RobotoffModal extends LitElement {
             ${msg("Saved! Can you help with another one?")}
           </div></slot
         >`
+      case MessageType.ERROR:
+        return html`<div class="error-message" role="alert">
+          ${msg("We could not save your answer. Please try again.")}
+        </div>`
     }
     return nothing
   }
@@ -207,7 +213,9 @@ export class RobotoffModal extends LitElement {
         @close="${this.closeModal}"
       >
         ${this.renderMessage()}
-        <div class=${classMap({ "is-hidden": Boolean(this.showMessage) })}>
+        <div
+          class=${classMap({ "is-hidden": Boolean(this.showMessage) && this.showMessage !== MessageType.ERROR })}
+        >
           ${this.renderModalContent()}
         </div>
       </modal-component>

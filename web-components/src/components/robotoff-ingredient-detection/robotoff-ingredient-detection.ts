@@ -200,16 +200,24 @@ export class RobotoffIngredientDetection extends DisplayProductLinkMixin(
     const { insightId, value, data } = event.detail
 
     this.showLoading(value)
-    await robotoff.annotateIngredientDetection(insightId, value, data)
-    await this.hideLoading()
-    this.dispatchIngredientDetectionStateEvent({
-      state: EventState.ANNOTATED,
-    })
-    const newIndex = this.index + 1
-    this.setIndex(newIndex)
-    if (newIndex >= this.insights.length) {
+    try {
+      await robotoff.annotateIngredientDetection(insightId, value, data)
+      await this.hideLoading()
       this.dispatchIngredientDetectionStateEvent({
-        state: EventState.FINISHED,
+        state: EventState.ANNOTATED,
+      })
+      const newIndex = this.index + 1
+      this.setIndex(newIndex)
+      if (newIndex >= this.insights.length) {
+        this.dispatchIngredientDetectionStateEvent({
+          state: EventState.FINISHED,
+        })
+      }
+    } catch (error) {
+      console.error("Failed to submit ingredient detection annotation:", error)
+      await this.hideLoading()
+      this.dispatchIngredientDetectionStateEvent({
+        state: EventState.ERROR,
       })
     }
   }
