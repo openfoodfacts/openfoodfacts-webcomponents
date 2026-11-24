@@ -86,8 +86,6 @@ export const FOLKSONOMY_THEME = css`
   @media (prefers-color-scheme: dark) {
     :host([theme="auto"]),
     :host(:not([theme])) {git status
-git diff --stat
-npm run lint
       ${FOLKSONOMY_DARK_VARS}
     }
   }
