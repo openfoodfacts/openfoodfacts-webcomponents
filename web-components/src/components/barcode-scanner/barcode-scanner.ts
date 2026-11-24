@@ -394,6 +394,9 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
       }
     } catch (err) {
       console.error("Error accessing camera: ", err)
+      // Release a stream acquired before the failure (e.g. when play() rejects),
+      // so the camera turns off and a later start request is not ignored.
+      this.stopVideo()
     }
   }
 
@@ -409,7 +412,9 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
     if (this.stream) {
       this.stream.getTracks().forEach((track) => track.stop())
       // clean video
-      this.video.srcObject = null
+      if (this.video) {
+        this.video.srcObject = null
+      }
       this.stream = null
     }
   }
@@ -443,6 +448,11 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
     // The loop belongs to this stream: once it is stopped (Close, detection,
     // disconnect) or replaced, the loop ends instead of polling forever.
     const stream = this.stream
+    // The stream may already be gone, e.g. when a STARTED listener removed the
+    // element: a loop bound to `null` would never see a change and never end.
+    if (!stream) {
+      return
+    }
     // Process video frames for barcode detection
     const processFrame = async () => {
       if (this.stream !== stream) {

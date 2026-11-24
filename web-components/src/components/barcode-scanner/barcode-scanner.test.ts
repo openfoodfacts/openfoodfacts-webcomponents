@@ -153,6 +153,38 @@ describe("barcode-scanner", () => {
     expect(states.map((detail) => detail.state)).not.toContain(BarcodeScannerState.DETECTED)
   })
 
+  it("releases the camera and allows a retry when the video fails to play", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {})
+    vi.mocked(HTMLMediaElement.prototype.play).mockRejectedValueOnce(new Error("NotAllowedError"))
+    const { element, states } = await createScanner()
+
+    overlay(element).click()
+    await vi.waitFor(() => expect(tracks).toHaveLength(1))
+    await vi.waitFor(() => expect(tracks[0].stop).toHaveBeenCalled())
+    await element.updateComplete
+
+    await startScanning(element, states)
+    expect(getUserMedia).toHaveBeenCalledTimes(2)
+  })
+
+  it("does not start a detection loop when a STARTED listener removes the element", async () => {
+    const { element, states } = await createScanner()
+    element.addEventListener(EventType.BARCODE_SCANNER_STATE, (event) => {
+      if ((event as CustomEvent<StateDetail>).detail.state === BarcodeScannerState.STARTED) {
+        element.remove()
+      }
+    })
+
+    overlay(element).click()
+    await vi.waitFor(() =>
+      expect(states.map((detail) => detail.state)).toContain(BarcodeScannerState.STARTED)
+    )
+    await runFrames()
+
+    expect(frames).toHaveLength(0)
+    expect(detect).not.toHaveBeenCalled()
+  })
+
   it("reports a detected barcode once, even after the overlay was tapped", async () => {
     const { element, states } = await createScanner()
     await startScanning(element, states)
