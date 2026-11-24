@@ -1,6 +1,7 @@
 import { localized, msg } from "@lit/localize"
 import { LitElement, html, css } from "lit-element"
-import { customElement, state } from "lit/decorators.js"
+import { customElement, property, state } from "lit/decorators.js"
+import { SHARED_THEME, type ThemeMode } from "../../styles/theme"
 import { getButtonClasses, ButtonType } from "../../styles/buttons"
 import { MODAL } from "../../styles/modal"
 import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme"
@@ -15,8 +16,10 @@ import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme"
 @customElement("delete-modal")
 export class DeleteModal extends LitElement {
   @state() open = true
+  @property({ reflect: true }) theme: ThemeMode = "auto"
 
   static override styles = [
+    SHARED_THEME,
     FOLKSONOMY_THEME,
     MODAL,
     ...getButtonClasses([ButtonType.Danger, ButtonType.Chocolate]),
@@ -37,7 +40,10 @@ export class DeleteModal extends LitElement {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background: var(--off-folksonomy-modal-bg, white);
+        background: var(
+          --off-folksonomy-modal-bg,
+          var(--off-color-surface, var(--off-theme-surface-default))
+        );
         border-radius: 12px;
         padding: 24px;
         min-width: 400px;
@@ -72,7 +78,10 @@ export class DeleteModal extends LitElement {
       .modal-title {
         font-size: 20px;
         font-weight: 600;
-        color: var(--off-folksonomy-modal-title, #1f2937);
+        color: var(
+          --off-folksonomy-modal-title,
+          var(--off-color-text, var(--off-theme-text-default))
+        );
         margin: 0 0 24px 0;
         text-align: center;
         margin-bottom: 12px;
@@ -84,7 +93,10 @@ export class DeleteModal extends LitElement {
 
       .modal-message {
         font-size: 16px;
-        color: var(--off-folksonomy-modal-message, #6b7280);
+        color: var(
+          --off-folksonomy-modal-message,
+          var(--off-color-text-muted, var(--off-theme-text-muted-default))
+        );
         line-height: 1.5;
         margin: 0;
       }
