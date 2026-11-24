@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.19.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.18.3...v1.19.0) (2026-11-01)
+
+
+### Features
+
+* new webcomponent to crop an image ([#683](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/683)) ([9e45d81](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/9e45d814b7d9b60524733f650dd4c8ea8952f1fe))
+
+
+### Bug Fixes
+
+* **deps:** bump cropperjs from 2.2.0 to 2.3.0 in /web-components ([e6a5484](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/e6a54849ddc2edb6433a4fbbb869a5574eb62a65))
+* **deps:** bump dompurify from 3.4.15 to 3.4.16 in /web-components ([#669](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/669)) ([1293f23](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/1293f234e85c038cbdc1d80f853c080d9d3c9515))
+* **deps:** bump dompurify from 3.4.16 to 3.4.17 in /web-components ([d743277](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/d743277e70b16f169a5af7c345106646d5a97323))
+* **deps:** bump shell-quote and concurrently in /web-components ([222ae6e](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/222ae6e8c59f2521d6fb4fe3e3fd4cd302ae8f00))
+* **folksonomy:** show use counts in property suggestions ([#646](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/646)) ([47be7eb](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/47be7eb8395ce24bc2c8783251c009ea0973178a))
+* **product-card:** compute score images before rendering ([e0fa4fd](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/e0fa4fd699dffa5d43f67a7bc919fbc7e4b2ee22))
+* Use correct query separator in Play Store badge link ([#711](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/711)) ([658743c](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/658743c9b5ec9afc32fce469ae3b16099ccd0b31))
+
 ## [1.18.3](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.18.2...v1.18.3) (2026-09-30)
 
 

@@ -3,7 +3,8 @@ import { customElement, property, state } from "lit/decorators.js"
 import { localized, msg, str } from "@lit/localize"
 import { SignalWatcher } from "@lit-labs/signals"
 import folksonomyApi from "../../api/folksonomy"
-import { createDebounce, downloadCSV } from "../../utils"
+import { debounceForLit } from "../../utils/debounce"
+import { downloadCSV } from "../../utils"
 import "../shared/dual-range-slider"
 import type { PropertyClashCheck } from "../../types/folksonomy"
 import { userInfo } from "../../signals/folksonomy"
@@ -533,18 +534,12 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
     type: "success" as "success" | "error",
   }
 
-  private filterDebounce = createDebounce(1100)
+  private filterDebounce = debounceForLit(this, () => this.applyFilters(), { wait: 1100 })
 
   override async connectedCallback() {
     super.connectedCallback()
     await this.fetchProperties()
     await folksonomyApi.fetchUserInfo()
-  }
-
-  override disconnectedCallback() {
-    super.disconnectedCallback()
-    // Clean up filter debounce
-    this.filterDebounce.clear()
   }
 
   private async fetchProperties() {
@@ -625,9 +620,7 @@ export class FolksonomyProperties extends SignalWatcher(LitElement) {
     }
 
     // Debounce filtering with 1100ms delay (as specified in original config)
-    this.filterDebounce.debounce(() => {
-      this.applyFilters()
-    })
+    this.filterDebounce()
   }
 
   private handleRangeChange(event: CustomEvent) {

@@ -1,8 +1,9 @@
 import { LitElement, html, css } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
-import { downloadCSV } from "../../utils"
 import { localized, msg, str } from "@lit/localize"
 import { SignalWatcher } from "@lit-labs/signals"
+import { debounceForLit } from "../../utils/debounce"
+import { downloadCSV } from "../../utils"
 import folksonomyApi from "../../api/folksonomy"
 import { userInfo } from "../../signals/folksonomy"
 import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme"
@@ -611,7 +612,7 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
     type: "success" as "success" | "error",
   }
 
-  private filterTimeout: number | null = null
+  private filterDebounce = debounceForLit(this, () => this.applyFilters(), { wait: 300 })
 
   override async connectedCallback() {
     super.connectedCallback()
@@ -619,15 +620,6 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
       await this.fetchProductsPropertiesMain()
     }
     await folksonomyApi.fetchUserInfo()
-  }
-
-  override disconnectedCallback() {
-    super.disconnectedCallback()
-    // Clean up filter timeout
-    if (this.filterTimeout) {
-      clearTimeout(this.filterTimeout)
-      this.filterTimeout = null
-    }
   }
 
   private async fetchProductsPropertiesMain() {
@@ -903,13 +895,7 @@ export class FolksonomyPropertyProducts extends SignalWatcher(LitElement) {
     }
 
     // Debounce filtering with 300ms delay for live filtering
-    if (this.filterTimeout) {
-      clearTimeout(this.filterTimeout)
-    }
-
-    this.filterTimeout = window.setTimeout(() => {
-      this.applyFilters()
-    }, 300)
+    this.filterDebounce()
   }
 
   private resetFilters() {

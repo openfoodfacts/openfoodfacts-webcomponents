@@ -9,7 +9,7 @@ Always reference these instructions first and fallback to search or bash command
 ### Bootstrap and Setup
 - Navigate to the web-components directory: `cd web-components`
 - Install dependencies: `npm install` - takes 30 seconds. NEVER CANCEL.
-- The repository uses Node.js (current version v20+ works fine, ignore the invalid .nvmrc at repo root)
+- Use Node.js 24 as specified in the repository root .nvmrc.
 
 ### Build Process
 - **CRITICAL**: Set timeout to 30+ minutes for all build commands. NEVER CANCEL builds.
@@ -128,7 +128,7 @@ Always reference these instructions first and fallback to search or bash command
 - **check-build.yml**: Runs `npm install` and `npm run build` in web-components directory
 - **ts-lint.yml**: Runs `npm run lint` in web-components directory  
 - **package.yml**: Publishes to npm on releases
-- All workflows use Node.js from .nvmrc and cache npm dependencies
+- CI, documentation, and translation workflows use Node.js from .nvmrc; package workflows use Node.js 24.x.
 
 ### Publishing Process
 - Package is published as `@openfoodfacts/openfoodfacts-webcomponents` on npm

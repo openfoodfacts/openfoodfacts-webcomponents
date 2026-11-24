@@ -1,11 +1,10 @@
 import { localized, msg } from "@lit/localize"
-import { LitElement, html, css } from "lit-element"
+import { LitElement, html, css } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
-import { SHARED_THEME, type ThemeMode } from "../../styles/theme"
 import { getButtonClasses, ButtonType } from "../../styles/buttons"
 import { MODAL } from "../../styles/modal"
 import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme"
-
+import { SHARED_THEME, type ThemeMode } from "../../styles/theme"
 /**
  * @customElement("delete-modal")
  * @lit

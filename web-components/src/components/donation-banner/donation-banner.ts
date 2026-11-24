@@ -48,20 +48,14 @@ const openOnPage = { sheets: 0, bars: 0, bodyOverflow: "" }
 @customElement("donation-banner")
 @localized()
 export class DonationBanner extends LitElement {
-  /**
-   * The links to the donation page
-   * @type {Object}
-   */
+  /** The links to the donation page */
   @property({ type: Object })
-  links = {
+  links: Record<string, string> = {
     fr: "https://open-food-facts.assoconnect.com/collect/description/476750-c-faire-un-don-a-open-food-facts",
     default: "https://world.openfoodfacts.org/donate-to-open-food-facts",
   }
 
-  /**
-   * News feed carrying the campaign figures.
-   * @type {String}
-   */
+  /** News feed carrying the campaign figures. */
   @property({ type: String, attribute: "news-url" })
   newsUrl?: string
 
@@ -99,26 +93,18 @@ export class DonationBanner extends LitElement {
   @state()
   private meterHasFigures = false
 
-  /**
-   * Custom link/url to the donation page.
-   * @type {String}
-   */
+  /** Custom link/url to the donation page. */
   @property({ type: String, attribute: "donate-url" })
   donateUrl?: string
 
   @property({ type: String, attribute: "donate-link" })
   donateLinkProp?: string
 
-  /**
-   * The fundraiser year (next year)
-   * @type {String}
-   */
+  /** The fundraiser year (next year) */
   @property({ type: String, reflect: true, attribute: "current-year" })
   currentYear: string = this.getDefaultYear()
 
-  /**
-   * Whether to apply dark mode styling (auto-detected from prefers-color-scheme)
-   */
+  /** Whether to apply dark mode styling (auto-detected from prefers-color-scheme) */
   isDarkMode = darkModeListener.darkMode
   private _darkModeCb = (isDark: boolean) => {
     this.isDarkMode = isDark
@@ -128,6 +114,7 @@ export class DonationBanner extends LitElement {
   /** Whether this element currently holds one of the page's sheet locks. */
   private locked = false
   private previouslyFocused: HTMLElement | null = null
+
   /** Whether this element currently counts as one of the page's padding bars. */
   private padded = false
 
