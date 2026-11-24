@@ -1114,6 +1114,30 @@
         <source><x id="0" equiv-text="${amount}"/> a month keeps it that way.</source>
         <target state="needs-translation"><x id="0" equiv-text="${amount}"/> a month keeps it that way.</target>
       </trans-unit>
+<trans-unit id="s2068cd808cfb9ee5">
+  <source>Last packaging-change event</source>
+</trans-unit>
+<trans-unit id="sb60ffe256cfa322e">
+  <source>No edit yet.</source>
+</trans-unit>
+<trans-unit id="scf96c4bf8006fd23">
+  <source>No packaging parts.</source>
+</trans-unit>
+<trans-unit id="se8d1dc9b3c5efd07">
+  <source>Packaging part <x id="0" equiv-text="${index + 1}"/></source>
+</trans-unit>
+<trans-unit id="s2c6c47f92443800e">
+  <source>Number of units</source>
+</trans-unit>
+<trans-unit id="s2de969afacdaa7a6">
+  <source>Shape</source>
+</trans-unit>
+<trans-unit id="s5c60254028976b28">
+  <source>Not specified</source>
+</trans-unit>
+<trans-unit id="sb19c9290038389c0">
+  <source>Material</source>
+</trans-unit>
     </body>
   </file>
 </xliff>
