@@ -102,6 +102,14 @@ export class FolksonomyEditorRow extends LitElement {
    */
   @state() showNewKeyModal = false
 
+  /**
+   * Indicates whether the delete confirmation modal is open.
+   * The modal is rendered inside the row, so it leaves the DOM when closed
+   * and inherits the `--off-folksonomy-*` theme variables set on the host.
+   * @private
+   */
+  @state() private showDeleteModal = false
+
   override connectedCallback() {
     super.connectedCallback()
     if (this.pageType === "edit") {
@@ -253,25 +261,36 @@ export class FolksonomyEditorRow extends LitElement {
    * Deletes the property and dispatches a delete-row event.
    * @private
    */
-  private async handleDelete() {
-    const deleteModal = document.createElement("delete-modal")
-    deleteModal.addEventListener("confirm-delete", async () => {
-      try {
-        await folksonomyApi.deleteProductProperty(this.productCode, this.key, this.version)
-        this.dispatchEvent(
-          new CustomEvent("delete-row", {
-            detail: { key: this.key },
-            bubbles: true,
-            composed: true,
-          })
-        )
-      } catch (error) {
-        console.error("Failed to delete property", error)
-      } finally {
-        deleteModal.remove()
-      }
-    })
-    document.body.appendChild(deleteModal)
+  private handleDelete() {
+    this.showDeleteModal = true
+  }
+
+  /**
+   * Closes the delete confirmation modal without deleting.
+   * @private
+   */
+  private handleCancelDelete() {
+    this.showDeleteModal = false
+  }
+
+  /**
+   * Deletes the property once the user confirmed, and dispatches a delete-row event.
+   * @private
+   */
+  private async handleConfirmDelete() {
+    this.showDeleteModal = false
+    try {
+      await folksonomyApi.deleteProductProperty(this.productCode, this.key, this.version)
+      this.dispatchEvent(
+        new CustomEvent("delete-row", {
+          detail: { key: this.key },
+          bubbles: true,
+          composed: true,
+        })
+      )
+    } catch (error) {
+      console.error("Failed to delete property", error)
+    }
   }
 
   /**
@@ -554,6 +573,14 @@ export class FolksonomyEditorRow extends LitElement {
       ${
         this.showNewKeyModal
           ? html`<new-key-modal @close-modal=${this.handleCloseNewKeyModal}></new-key-modal>`
+          : null
+      }
+      ${
+        this.showDeleteModal
+          ? html`<delete-modal
+              @confirm-delete=${this.handleConfirmDelete}
+              @cancel-delete=${this.handleCancelDelete}
+            ></delete-modal>`
           : null
       }
     `
