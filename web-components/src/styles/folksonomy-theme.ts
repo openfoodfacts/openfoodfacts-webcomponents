@@ -85,7 +85,7 @@ export const FOLKSONOMY_THEME = css`
 
   @media (prefers-color-scheme: dark) {
     :host([theme="auto"]),
-    :host(:not([theme])) {git status
+    :host(:not([theme])) {
       ${FOLKSONOMY_DARK_VARS}
     }
   }
