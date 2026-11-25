@@ -1,10 +1,12 @@
 import { LitElement, html, css } from "lit"
 import { customElement } from "lit/decorators.js"
+import { classMap } from "lit/directives/class-map.js"
 import { localized, msg } from "@lit/localize"
 
 import { BASE } from "../../styles/base"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { STATIC_HOST } from "../../constants"
+import { darkModeListener } from "../../utils/dark-mode-listener"
 
 import "../mobile-badges/mobile-badges"
 
@@ -17,6 +19,29 @@ const OFF_WEBSITE = "https://world.openfoodfacts.org"
 @customElement("off-footer")
 @localized()
 export class Footer extends LitElement {
+  /**
+   * Whether to apply dark mode styling
+   * (auto-detected from prefers-color-scheme).
+   */
+  isDarkMode = darkModeListener.darkMode
+
+  private _darkModeCb = (isDark: boolean) => {
+    this.isDarkMode = isDark
+    this.requestUpdate()
+  }
+
+  override connectedCallback() {
+    super.connectedCallback()
+    this.isDarkMode = darkModeListener.darkMode
+    darkModeListener.subscribe(this._darkModeCb)
+    this.requestUpdate()
+  }
+
+  override disconnectedCallback() {
+    darkModeListener.unsubscribe(this._darkModeCb)
+    super.disconnectedCallback()
+  }
+
   static override styles = [
     BASE,
     ...getButtonClasses([ButtonType.White]),
@@ -27,13 +52,16 @@ export class Footer extends LitElement {
 
       footer {
         width: 100%;
+        font-family: "Public Sans", Helvetica, Roboto, Arial, sans-serif;
+        font-size: 14px;
         line-height: 1.5;
       }
 
       .container {
+        width: 100%;
         max-width: 1280px;
         margin: 0 auto;
-        padding: 0 1rem;
+        padding: 0 24px;
         box-sizing: border-box;
       }
 
@@ -41,15 +69,20 @@ export class Footer extends LitElement {
 
       .app-section {
         background-color: #fff;
-        padding: 1rem 0;
+        padding: 16px 24px;
+      }
+
+      .app-section mobile-badges {
+        max-width: 1280px;
+        margin: 0 auto;
       }
 
       /* Community and project section */
 
       .community-section {
-        background-color: #ebdfd8;
-        color: #201a17;
-        padding: 2rem 0 4rem;
+        background-color: #ede0db;
+        color: #000;
+        padding: 32px 0 64px;
       }
 
       .community-grid {
@@ -59,13 +92,16 @@ export class Footer extends LitElement {
       }
 
       h3 {
-        font-size: 1.2rem;
+        font-size: 18px;
         font-weight: 600;
-        margin: 0 0 0.5rem;
+        line-height: 1.4;
+        margin: 2.8px 0 7px;
       }
 
       p {
-        margin: 0 0 0.6rem;
+        font-size: 14px;
+        line-height: 1.6;
+        margin: 0 0 7px;
       }
 
       a {
@@ -98,62 +134,121 @@ export class Footer extends LitElement {
       .project-links {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.75rem;
+        gap: 12px;
         list-style: none;
         padding: 0;
-        margin: 1rem 0 0;
+        margin: 16px 0 0;
       }
 
       .project-links .button {
         display: inline-block;
-        border-radius: 0.5rem;
-        padding: 0.35rem 0.6rem;
-        font-size: 0.875rem;
+        border-radius: 8px;
+        padding: 7px 10.5px;
+        font-size: 13px;
+        font-weight: 400;
+        line-height: normal;
         text-decoration: none;
+        margin: 0;
       }
 
       /* Bottom footer section */
 
       .bottom-section {
         background-color: #201a17;
+        background-image:
+          url("https://static.openfoodfacts.org/images/illustrations/footer-planet.svg"),
+          url("https://static.openfoodfacts.org/images/illustrations/footer-orange.svg");
+        background-position:
+          left top,
+          right bottom;
+        background-repeat: no-repeat, no-repeat;
+        background-size: auto, auto;
         color: #fff;
         text-align: center;
-        padding: 1.5rem 0 2rem;
+        padding: 24px 0 32px;
       }
 
       .footer-logo {
         height: 48px;
+        width: auto;
         max-width: 100%;
         object-fit: contain;
         margin: 8px;
       }
 
       .footer-description {
-        margin: 0.5rem 0 1.5rem;
+        margin: 0 0 20px;
+        font-size: 14px;
+        line-height: 1.6;
       }
 
       .legal-links {
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
-        gap: 0.75rem;
+        gap: 12px;
         list-style: none;
         padding: 0;
         margin: 0;
-        font-size: 0.75rem;
+        font-size: 10.5px;
+        line-height: 1.6;
       }
 
-      @media (max-width: 767px) {
+      /* Dark mode */
+
+      .dark-mode .app-section {
+        background-color: #201a17;
+        color: #f9f7f5;
+      }
+
+      .dark-mode .community-section {
+        background-color: #302824;
+        color: #f9f7f5;
+      }
+
+      .dark-mode .project-links .button {
+        background-color: #493d37;
+        color: #f9f7f5;
+      }
+
+      .dark-mode .project-links .button:hover {
+        background-color: #5c4d45;
+      }
+
+      .dark-mode .social-icon {
+        filter: brightness(0) invert(1);
+      }
+
+      @media (max-width: 1023px) {
+        .container {
+          padding: 0 16px;
+        }
+
         .community-grid {
           grid-template-columns: 1fr;
+          gap: 24px;
         }
 
         .community-section {
-          padding: 1.5rem 0;
+          padding: 24px 0;
         }
 
         .bottom-section {
-          padding: 1.5rem 0;
+          padding: 24px 0;
+        }
+
+        .project-links {
+          gap: 8px;
+        }
+
+        .legal-links {
+          gap: 10px;
+        }
+      }
+
+      @media (max-width: 767px) {
+        .bottom-section {
+          background-image: none;
         }
       }
     `,
@@ -370,8 +465,12 @@ export class Footer extends LitElement {
   }
 
   override render() {
+    const rootClasses = {
+      "dark-mode": this.isDarkMode,
+    }
+
     return html`
-      <footer>
+      <footer class=${classMap(rootClasses)}>
         ${this.renderAppSection()} ${this.renderCommunitySection()} ${this.renderBottomSection()}
       </footer>
     `

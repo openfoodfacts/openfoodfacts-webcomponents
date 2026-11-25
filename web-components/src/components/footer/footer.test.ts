@@ -1,14 +1,17 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest"
 import type { Footer } from "./footer"
 
+const colorScheme = Object.assign(new EventTarget(), { matches: false })
+
+const changeColorScheme = (matches: boolean) => {
+  colorScheme.matches = matches
+  colorScheme.dispatchEvent(Object.assign(new Event("change"), { matches }))
+}
+
 beforeAll(async () => {
   Object.defineProperty(window, "matchMedia", {
     writable: true,
-    value: vi.fn().mockImplementation(() => ({
-      matches: false,
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-    })),
+    value: vi.fn().mockReturnValue(colorScheme),
   })
 
   await import("./footer")
@@ -16,6 +19,7 @@ beforeAll(async () => {
 
 beforeEach(() => {
   document.body.innerHTML = ""
+  changeColorScheme(false)
 })
 
 const createFooter = async () => {
@@ -26,6 +30,24 @@ const createFooter = async () => {
 }
 
 describe("off-footer", () => {
+  it("tracks the color scheme while connected and resynchronizes on reconnect", async () => {
+    const element = await createFooter()
+    const footer = element.shadowRoot?.querySelector("footer")
+    expect(footer?.classList.contains("dark-mode")).toBe(false)
+
+    changeColorScheme(true)
+    await element.updateComplete
+    expect(footer?.classList.contains("dark-mode")).toBe(true)
+
+    element.remove()
+    changeColorScheme(false)
+    expect(element.isDarkMode).toBe(true)
+
+    document.body.appendChild(element)
+    await element.updateComplete
+    expect(footer?.classList.contains("dark-mode")).toBe(false)
+  })
+
   it("renders a semantic footer element", async () => {
     const element = await createFooter()
 
