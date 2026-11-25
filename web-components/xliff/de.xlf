@@ -943,7 +943,7 @@ sich zu beteiligen oder Feedback zu geben</target>
       </trans-unit>
       <trans-unit id="s45dce293964ced00">
         <source>Thank you for reporting. Your flag has been submitted successfully.</source>
-        <target state="needs-translation">Thank you for reporting. Your flag has been submitted successfully.</target>
+        <target state="translated">Vielen Dank für Ihre Meldung. Ihre Meldung wurde erfolgreich übermittelt.</target>
       </trans-unit>
       <trans-unit id="s30c7b1afc9fe65d3">
         <source>Image to flag</source>
