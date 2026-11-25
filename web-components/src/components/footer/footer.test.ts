@@ -35,6 +35,17 @@ describe("off-footer", () => {
     const styles = Footer.styles.map((style) => style.cssText).join("\n")
 
     expect(styles).toContain("prefers-color-scheme: dark")
+    for (const token of [
+      "--off-footer-bg",
+      "--off-footer-text-color",
+      "--off-footer-link-color",
+      "--off-footer-link-hover-color",
+      "--off-footer-border-color",
+      "--off-footer-accent-color",
+      "--off-footer-bottom-bg",
+    ]) {
+      expect(styles).toContain(`${token}:`)
+    }
     for (const color of ["#201a17", "#f9f7f5", "#302824", "#493d37", "#5c4d45"]) {
       expect(styles).toContain(color)
     }
@@ -55,6 +66,14 @@ describe("off-footer", () => {
     expect(root?.querySelector("#contribute_and_discover_links_block")).not.toBeNull()
 
     expect(root?.querySelector("#footer_block")).not.toBeNull()
+  })
+
+  it("exposes parts for its main regions", async () => {
+    const element = await createFooter()
+
+    for (const part of ["container", "brand", "links", "social", "legal", "bottom"]) {
+      expect(element.shadowRoot?.querySelector(`[part~="${part}"]`)).not.toBeNull()
+    }
   })
 
   it("reuses the existing mobile-badges component", async () => {

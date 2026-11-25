@@ -4,6 +4,7 @@ import { localized, msg } from "@lit/localize"
 
 import { BASE } from "../../styles/base"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
+import { SAFE_CAPPUCINO } from "../../utils/colors"
 import {
   DEFAULT_FOOTER_BASE_URL,
   DEFAULT_FOOTER_BRAND,
@@ -29,6 +30,44 @@ import "../mobile-badges/mobile-badges"
  * @slot social - Replaces the default social links.
  * @slot legal - Replaces the default legal links.
  * @slot bottom - Replaces all content in the bottom footer section.
+ * @cssprop --off-footer-bg - App section background color.
+ * @cssprop --off-footer-text-color - App section text color.
+ * @cssprop --off-footer-link-color - Footer link color; defaults to its inherited text color.
+ * @cssprop --off-footer-link-hover-color - Footer link hover color.
+ * @cssprop --off-footer-border-color - Project link border color.
+ * @cssprop --off-footer-project-link-hover-border-color - Project link hover border color.
+ * @cssprop --off-footer-accent-color - Community section accent/background color.
+ * @cssprop --off-footer-community-bg - Community section background color.
+ * @cssprop --off-footer-community-text-color - Community section text color.
+ * @cssprop --off-footer-project-link-bg - Project link background color.
+ * @cssprop --off-footer-project-link-text-color - Project link text color.
+ * @cssprop --off-footer-project-link-hover-bg - Project link hover background color.
+ * @cssprop --off-footer-project-link-hover-text-color - Project link hover text color.
+ * @cssprop --off-footer-bottom-bg - Bottom section background color.
+ * @cssprop --off-footer-bottom-text-color - Bottom section text color.
+ * @cssprop --off-footer-app-padding - App section padding.
+ * @cssprop --off-footer-container-padding - Desktop container inline padding.
+ * @cssprop --off-footer-container-padding-mobile - Narrow container inline padding.
+ * @cssprop --off-footer-community-padding - Desktop community section padding.
+ * @cssprop --off-footer-community-padding-mobile - Narrow community section padding.
+ * @cssprop --off-footer-community-gap - Desktop community grid gap.
+ * @cssprop --off-footer-community-gap-mobile - Narrow community grid gap.
+ * @cssprop --off-footer-bottom-padding - Desktop bottom section padding.
+ * @cssprop --off-footer-bottom-padding-mobile - Narrow bottom section padding.
+ * @cssprop --off-footer-project-link-gap - Desktop project link gap.
+ * @cssprop --off-footer-project-link-gap-mobile - Narrow project link gap.
+ * @cssprop --off-footer-legal-link-gap - Desktop legal link gap.
+ * @cssprop --off-footer-legal-link-gap-mobile - Narrow legal link gap.
+ * @cssprop --off-footer-social-link-gap - Social link gap.
+ * @cssprop --off-footer-project-link-radius - Project link corner radius.
+ * @cssprop --off-footer-brand-logo-margin - Footer logo margin.
+ * @cssprop --off-footer-brand-description-margin-bottom - Brand description bottom margin.
+ * @csspart container - Content containers in the link and bottom sections.
+ * @csspart brand - Brand logo and description region.
+ * @csspart links - Link group region.
+ * @csspart social - Social links region.
+ * @csspart legal - Legal links region.
+ * @csspart bottom - Bottom footer region.
  */
 @customElement("off-footer")
 @localized()
@@ -113,6 +152,38 @@ export class Footer extends LitElement {
     css`
       :host {
         display: block;
+        --off-footer-bg: #fff;
+        --off-footer-text-color: #000;
+        --off-footer-link-color: currentColor;
+        --off-footer-link-hover-color: currentColor;
+        --off-footer-border-color: #fff;
+        --off-footer-project-link-hover-border-color: #000;
+        --off-footer-accent-color: ${SAFE_CAPPUCINO};
+        --off-footer-community-bg: var(--off-footer-accent-color, ${SAFE_CAPPUCINO});
+        --off-footer-community-text-color: var(--off-footer-text-color, #000);
+        --off-footer-project-link-bg: #fff;
+        --off-footer-project-link-text-color: #000;
+        --off-footer-project-link-hover-bg: #000;
+        --off-footer-project-link-hover-text-color: #fff;
+        --off-footer-bottom-bg: #201a17;
+        --off-footer-bottom-text-color: #fff;
+        --off-footer-app-padding: 16px 24px;
+        --off-footer-container-padding: 24px;
+        --off-footer-container-padding-mobile: 16px;
+        --off-footer-community-padding: 32px 0 64px;
+        --off-footer-community-padding-mobile: 24px 0;
+        --off-footer-community-gap: 2rem;
+        --off-footer-community-gap-mobile: 24px;
+        --off-footer-bottom-padding: 24px 0 32px;
+        --off-footer-bottom-padding-mobile: 24px 0;
+        --off-footer-project-link-gap: 12px;
+        --off-footer-project-link-gap-mobile: 8px;
+        --off-footer-legal-link-gap: 12px;
+        --off-footer-legal-link-gap-mobile: 10px;
+        --off-footer-social-link-gap: 0.4rem;
+        --off-footer-project-link-radius: 8px;
+        --off-footer-brand-logo-margin: 8px;
+        --off-footer-brand-description-margin-bottom: 20px;
       }
 
       footer {
@@ -126,15 +197,16 @@ export class Footer extends LitElement {
         width: 100%;
         max-width: 1280px;
         margin: 0 auto;
-        padding: 0 24px;
+        padding: 0 var(--off-footer-container-padding, 24px);
         box-sizing: border-box;
       }
 
       /* App promotion section */
 
       .app-section {
-        background-color: #fff;
-        padding: 16px 24px;
+        background-color: var(--off-footer-bg, #fff);
+        color: var(--off-footer-text-color, #000);
+        padding: var(--off-footer-app-padding, 16px 24px);
       }
 
       .app-section mobile-badges {
@@ -145,15 +217,15 @@ export class Footer extends LitElement {
       /* Community and project section */
 
       .community-section {
-        background-color: #ede0db;
-        color: #000;
-        padding: 32px 0 64px;
+        background-color: var(--off-footer-community-bg, ${SAFE_CAPPUCINO});
+        color: var(--off-footer-community-text-color, #000);
+        padding: var(--off-footer-community-padding, 32px 0 64px);
       }
 
       .community-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 2rem;
+        gap: var(--off-footer-community-gap, 2rem);
       }
 
       h3 {
@@ -170,7 +242,11 @@ export class Footer extends LitElement {
       }
 
       a {
-        color: inherit;
+        color: var(--off-footer-link-color, inherit);
+      }
+
+      a:hover {
+        color: var(--off-footer-link-hover-color, inherit);
       }
 
       a:focus-visible {
@@ -182,7 +258,7 @@ export class Footer extends LitElement {
         display: flex;
         align-items: center;
         flex-wrap: wrap;
-        gap: 0.4rem;
+        gap: var(--off-footer-social-link-gap, 0.4rem);
       }
 
       .social-links a {
@@ -199,7 +275,7 @@ export class Footer extends LitElement {
       .project-links {
         display: flex;
         flex-wrap: wrap;
-        gap: 12px;
+        gap: var(--off-footer-project-link-gap, 12px);
         list-style: none;
         padding: 0;
         margin: 16px 0 0;
@@ -207,19 +283,28 @@ export class Footer extends LitElement {
 
       .project-links .button {
         display: inline-block;
-        border-radius: 8px;
+        border-radius: var(--off-footer-project-link-radius, 8px);
         padding: 7px 10.5px;
         font-size: 13px;
         font-weight: 400;
         line-height: normal;
         text-decoration: none;
         margin: 0;
+        background-color: var(--off-footer-project-link-bg, #fff);
+        border-color: var(--off-footer-border-color, #fff);
+        color: var(--off-footer-project-link-text-color, #000);
+      }
+
+      .project-links .button:hover {
+        background-color: var(--off-footer-project-link-hover-bg, #000);
+        border-color: var(--off-footer-project-link-hover-border-color, #000);
+        color: var(--off-footer-project-link-hover-text-color, #fff);
       }
 
       /* Bottom footer section */
 
       .bottom-section {
-        background-color: #201a17;
+        background-color: var(--off-footer-bottom-bg, #201a17);
         background-image:
           url("https://static.openfoodfacts.org/images/illustrations/footer-planet.svg"),
           url("https://static.openfoodfacts.org/images/illustrations/footer-orange.svg");
@@ -228,9 +313,9 @@ export class Footer extends LitElement {
           right bottom;
         background-repeat: no-repeat, no-repeat;
         background-size: auto, auto;
-        color: #fff;
+        color: var(--off-footer-bottom-text-color, #fff);
         text-align: center;
-        padding: 24px 0 32px;
+        padding: var(--off-footer-bottom-padding, 24px 0 32px);
       }
 
       .footer-logo {
@@ -238,11 +323,11 @@ export class Footer extends LitElement {
         width: auto;
         max-width: 100%;
         object-fit: contain;
-        margin: 8px;
+        margin: var(--off-footer-brand-logo-margin, 8px);
       }
 
       .footer-description {
-        margin: 0 0 20px;
+        margin: 0 0 var(--off-footer-brand-description-margin-bottom, 20px);
         font-size: 14px;
         line-height: 1.6;
       }
@@ -251,7 +336,7 @@ export class Footer extends LitElement {
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
-        gap: 12px;
+        gap: var(--off-footer-legal-link-gap, 12px);
         list-style: none;
         padding: 0;
         margin: 0;
@@ -260,23 +345,18 @@ export class Footer extends LitElement {
       }
 
       @media (prefers-color-scheme: dark) {
-        .app-section {
-          background-color: #201a17;
-          color: #f9f7f5;
-        }
-
-        .community-section {
-          background-color: #302824;
-          color: #f9f7f5;
-        }
-
-        .project-links .button {
-          background-color: #493d37;
-          color: #f9f7f5;
-        }
-
-        .project-links .button:hover {
-          background-color: #5c4d45;
+        :host {
+          --off-footer-bg: #201a17;
+          --off-footer-text-color: #f9f7f5;
+          --off-footer-accent-color: #302824;
+          --off-footer-community-bg: var(--off-footer-accent-color, #302824);
+          --off-footer-community-text-color: #f9f7f5;
+          --off-footer-border-color: #493d37;
+          --off-footer-project-link-hover-border-color: #000;
+          --off-footer-project-link-bg: #493d37;
+          --off-footer-project-link-text-color: #f9f7f5;
+          --off-footer-project-link-hover-bg: #5c4d45;
+          --off-footer-project-link-hover-text-color: #f9f7f5;
         }
 
         .social-icon {
@@ -286,28 +366,28 @@ export class Footer extends LitElement {
 
       @media (max-width: 1023px) {
         .container {
-          padding: 0 16px;
+          padding: 0 var(--off-footer-container-padding-mobile, 16px);
         }
 
         .community-grid {
           grid-template-columns: 1fr;
-          gap: 24px;
+          gap: var(--off-footer-community-gap-mobile, 24px);
         }
 
         .community-section {
-          padding: 24px 0;
+          padding: var(--off-footer-community-padding-mobile, 24px 0);
         }
 
         .bottom-section {
-          padding: 24px 0;
+          padding: var(--off-footer-bottom-padding-mobile, 24px 0);
         }
 
         .project-links {
-          gap: 8px;
+          gap: var(--off-footer-project-link-gap-mobile, 8px);
         }
 
         .legal-links {
-          gap: 10px;
+          gap: var(--off-footer-legal-link-gap-mobile, 10px);
         }
       }
 
@@ -439,8 +519,8 @@ export class Footer extends LitElement {
 
     const useDefaultTranslations = this.socialLinks === DEFAULT_FOOTER_SOCIAL_LINKS
     return html`
-      <slot name="social">
-        <p class="social-links">
+      <slot name="social" part="social">
+        <p class="social-links" part="social">
           ${msg("Follow us:")}
           ${this.socialLinks.map((link) => {
             const href = sanitizeHref(link.href, this.getSafeBaseUrl())
@@ -524,7 +604,7 @@ export class Footer extends LitElement {
       }
 
       return html`
-        <section aria-labelledby=${headingId}>
+        <section aria-labelledby=${headingId} part="links">
           <h3 id=${headingId}>${heading}</h3>
           ${content}
         </section>
@@ -532,7 +612,7 @@ export class Footer extends LitElement {
     }
 
     return html`
-      <section aria-labelledby=${headingId}>
+      <section aria-labelledby=${headingId} part="links">
         <h3 id=${headingId}>${heading}</h3>
         <ul class="project-links">
           ${group.links.map((link) => {
@@ -569,8 +649,8 @@ export class Footer extends LitElement {
 
     return html`
       <div class="community-section" id="contribute_and_discover_links_block">
-        <div class="container community-grid">
-          <slot name="links">
+        <div class="container community-grid" part="container">
+          <slot name="links" part="links">
             ${this.linkGroups.map((group, index) =>
               this.renderGroup(group, index, useDefaultTranslations)
             )}
@@ -590,7 +670,7 @@ export class Footer extends LitElement {
     const logo = sanitizeHref(this.brand.logo, this.getSafeBaseUrl())
 
     return html`
-      <slot name="brand">
+      <slot name="brand" part="brand">
         ${this.renderAnchor(
           { label: brandName, href: this.getSafeBaseUrl() },
           logo
@@ -607,8 +687,8 @@ export class Footer extends LitElement {
     const links = this.legalLinks.filter((link) => this.showDonation || link.type !== "donation")
 
     return html`
-      <slot name="legal">
-        <ul class="legal-links">
+      <slot name="legal" part="legal">
+        <ul class="legal-links" part="legal">
           ${links.map(
             (link) =>
               html`<li>
@@ -622,8 +702,8 @@ export class Footer extends LitElement {
 
   private renderBottomSection() {
     return html`
-      <div class="bottom-section" id="footer_block">
-        <div class="container">
+      <div class="bottom-section" id="footer_block" part="bottom">
+        <div class="container" part="container">
           <slot name="bottom"> ${this.renderBrand()} ${this.renderLegalLinks()} </slot>
         </div>
       </div>
