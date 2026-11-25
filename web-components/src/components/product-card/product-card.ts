@@ -4,7 +4,6 @@ import { classMap } from "lit/directives/class-map.js"
 import { localized, msg, str } from "@lit/localize"
 import { KP_ATTRIBUTE_IMG } from "../../utils/openfoodfacts"
 import { getImageUrl } from "../../signals/app"
-import { darkModeListener } from "../../utils/dark-mode-listener"
 
 interface NavigationState {
   to: {
@@ -75,9 +74,11 @@ export class ProductCard extends LitElement {
       height: 100%;
     }
 
-    .dark-mode {
-      background-color: #2d2724;
-      color: #f9f7f5;
+    @media (prefers-color-scheme: dark) {
+      .card-container {
+        background-color: #2d2724;
+        color: #f9f7f5;
+      }
     }
 
     .image-container {
@@ -186,8 +187,10 @@ export class ProductCard extends LitElement {
       overflow: hidden;
     }
 
-    .dark-mode .placeholder-image {
-      filter: invert(1);
+    @media (prefers-color-scheme: dark) {
+      .placeholder-image {
+        filter: invert(1);
+      }
     }
 
     .content-container {
@@ -376,25 +379,6 @@ export class ProductCard extends LitElement {
   @property({ type: String })
   placeholderImage = getImageUrl("Placeholder.svg")
 
-  /**
-   * Whether to apply dark mode styling (auto-detected from prefers-color-scheme)
-   */
-  isDarkMode = darkModeListener.darkMode
-  private _darkModeCb = (isDark: boolean) => {
-    this.isDarkMode = isDark
-    this.requestUpdate()
-  }
-
-  override connectedCallback() {
-    super.connectedCallback()
-    darkModeListener.subscribe(this._darkModeCb)
-  }
-
-  override disconnectedCallback() {
-    darkModeListener.unsubscribe(this._darkModeCb)
-    super.disconnectedCallback()
-  }
-
   override willUpdate(changedProperties: PropertyValues) {
     super.willUpdate(changedProperties)
 
@@ -498,13 +482,8 @@ export class ProductCard extends LitElement {
       brandQuantityStr = quantity
     }
 
-    const cardClasses = {
-      "card-container": true,
-      "dark-mode": this.isDarkMode,
-    }
-
     return html`
-      <div class=${classMap(cardClasses)}>
+      <div class="card-container">
         ${
           this.showMatchTag
             ? html`<div class="match-tag ${matchTagInfo.cssClass}">${matchTagInfo.text}</div>`
