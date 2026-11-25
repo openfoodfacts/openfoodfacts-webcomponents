@@ -2,77 +2,156 @@ GitHub:
 - changed-files:
   - any-glob-to-any-file: '.github/**/*'
 
+👩‍💻 DevOps:
+- changed-files:
+  - any-glob-to-any-file: '.github/workflows/**/*'
+  - any-glob-to-any-file: 'Makefile'
+  - any-glob-to-any-file: 'web-components/scripts/**/*'
+  - any-glob-to-any-file: 'web-components/vite.config.ts'
+  - any-glob-to-any-file: 'web-components/vitest.config.ts'
+  - any-glob-to-any-file: 'web-components/eslint.config.js'
+  - any-glob-to-any-file: 'web-components/tsconfig.json'
+
+dependencies:
+- changed-files:
+  - any-glob-to-any-file: 'package.json'
+  - any-glob-to-any-file: 'web-components/package.json'
+  - any-glob-to-any-file: 'web-components/package-lock.json'
+
+📚 Documentation:
+- changed-files:
+  - any-glob-to-any-file: '**/*.md'
+
+Translations:
+- changed-files:
+  - any-glob-to-any-file: 'web-components/xliff/**/*'
+  - any-glob-to-any-file: 'web-components/lit-localize.json'
+  - any-glob-to-any-file: 'web-components/src/localization/**/*'
+  - any-glob-to-any-file: 'crowdin.yml'
+
 🏷️ Folksonomy Engine:
 - changed-files:
   - any-glob-to-any-file: 'web-components/src/api/folksonomy.ts'
-  - any-glob-to-any-file: 'web-components/src/components/folksnomy/folksonomy-property-products.ts'
-  - any-glob-to-any-file: 'web-components/src/components/folksnomy/**/*'
+  - any-glob-to-any-file: 'web-components/src/api/folksonomy.test.ts'
+  - any-glob-to-any-file: 'web-components/src/components/folksonomy/**/*'
+  - any-glob-to-any-file: 'web-components/src/signals/folksonomy.ts'
+  - any-glob-to-any-file: 'web-components/src/styles/folksonomy-input.ts'
+  - any-glob-to-any-file: 'web-components/src/styles/folksonomy-theme.ts'
+  - any-glob-to-any-file: 'web-components/src/types/folksonomy.ts'
 
 🤳🥫 Barcode scanner:
 - changed-files:
-    - any-glob-to-any-file: 'web-components/src/components/barcode-scanner/**/*'
+  - any-glob-to-any-file: 'web-components/src/components/barcode-scanner/**/*'
 
 Buttons:
 - changed-files:
-    - any-glob-to-any-file: 'web-components/src/components/buttons/**/*'
+  - any-glob-to-any-file: 'web-components/src/components/buttons/**/*'
 
 🎁 donations:
 - changed-files:
-    - any-glob-to-any-file: 'web-components/src/components/donation-banner/**/*'
+  - any-glob-to-any-file: 'web-components/src/components/donation-banner/**/*'
+  - any-glob-to-any-file: 'web-components/src/components/donation-meter/**/*'
+  - any-glob-to-any-file: 'web-components/src/styles/donation-banner-variants.ts'
+  - any-glob-to-any-file: 'web-components/src/utils/funding.ts'
+  - any-glob-to-any-file: 'web-components/src/utils/funding.test.ts'
 
 App download QRcode:
 - changed-files:
-    - any-glob-to-any-file: 'web-components/src/components/download-app-qr-code/**/*'
-    
+  - any-glob-to-any-file: 'web-components/src/components/download-app-qr-code/**/*'
+
 Icons:
 - changed-files:
-    - any-glob-to-any-file: 'web-components/src/components/icons/**/*'
+  - any-glob-to-any-file: 'web-components/src/components/icons/**/*'
+
+Images:
+- changed-files:
+  - any-glob-to-any-file: 'web-components/src/components/image-crop/**/*'
+  - any-glob-to-any-file: 'web-components/src/components/shared/zoomable-image.ts'
+  - any-glob-to-any-file: 'web-components/src/types/crops.ts'
+  - any-glob-to-any-file: 'web-components/src/utils/crop.ts'
+  - any-glob-to-any-file: 'web-components/src/utils/crop.test.ts'
+  - any-glob-to-any-file: 'web-components/src/assets/images/**/*'
+
+cropping validation:
+- changed-files:
+  - any-glob-to-any-file: 'web-components/src/components/image-crop/**/*'
+  - any-glob-to-any-file: 'web-components/src/types/crops.ts'
+  - any-glob-to-any-file: 'web-components/src/utils/crop.ts'
+  - any-glob-to-any-file: 'web-components/src/utils/crop.test.ts'
 
 📖 Knowledge Panels:
 - changed-files:
-    - any-glob-to-any-file: 'web-components/src/components/knowledge-panels/**/*'
-    - any-glob-to-any-file: '‎web-components/src/api/knowledgepanel.ts'
-    - any-glob-to-any-file: '‎web-components/src/components/knowledge-panels/renderers/render-panel.ts'
-    - any-glob-to-any-file: '‎web-components/src/components/knowledge-panels/renderers/render-table.ts'
-    - any-glob-to-any-file: '‎web-components/src/components/knowledge-panels/renderers/render-text.ts'
-    - any-glob-to-any-file: '‎web-components/src/components/knowledge-panels/knowledge-panels.stories.ts'
-    - any-glob-to-any-file: '‎web-components/src/components/knowledge-panels/knowledge-panels.ts'
-    - any-glob-to-any-file: '‎web-components/src/types/knowledge-panel.ts'
+  - any-glob-to-any-file: 'web-components/src/components/knowledge-panels/**/*'
+  - any-glob-to-any-file: 'web-components/src/api/knowledgepanel.ts'
+  - any-glob-to-any-file: 'web-components/src/types/knowledge-panel.ts'
+  - any-glob-to-any-file: 'web-components/src/utils/knowledge-panels/**/*'
 
-Mobile badges:
+mobile badges:
 - changed-files:
-    - any-glob-to-any-file: 'web-components/src/components/mobile-badges/**/*'
+  - any-glob-to-any-file: 'web-components/src/components/mobile-badges/**/*'
 
-🤖 Robotoff:
+News feed:
 - changed-files:
-    - any-glob-to-any-file: 'web-components/src/components/robotoff-contribution-message/**/*'
-    - any-glob-to-any-file: 'web-components/src/components/robotoff-ingredient-detection/**/*'
-    - any-glob-to-any-file: 'web-components/src/components/robotoff-ingredient-detection/**/*'
-    - any-glob-to-any-file: 'web-components/src/components/robotoff-ingredient-spellcheck/**/*'
-    - any-glob-to-any-file: 'web-components/src/components/robotoff-modal/**/*'
-    - any-glob-to-any-file: 'web-components/src/components/robotoff-nutrient-extraction/**/*'
-    - any-glob-to-any-file: 'web-components/src/components/robotoff-question/**/*'
+  - any-glob-to-any-file: 'web-components/src/components/news-feed/**/*'
+  - any-glob-to-any-file: 'web-components/src/types/news-feed.ts'
 
-🛣️ Road to scores:
+🛡️ Nutri-Patrol:
 - changed-files:
-    - any-glob-to-any-file: 'web-components/src/components/robotoff-contribution-message/**/*'
-
-Ingredients detection:
-- changed-files:
-    - any-glob-to-any-file: 'web-components/src/components/robotoff-ingredient-detection/**/*'
-
-Ingredients spellcheck:
-- changed-files:
-    - any-glob-to-any-file: 'web-components/src/components/robotoff-ingredient-spellcheck/**/*'
-
-Nutrient extraction:
-- changed-files:
-    - any-glob-to-any-file: 'web-components/src/components/robotoff-nutrient-extraction/**/*'
-
-Shared:
-- changed-files:
-    - any-glob-to-any-file: 'web-components/src/components/shared/**/*'
+  - any-glob-to-any-file: 'web-components/src/components/nutripatrol-flag-form/**/*'
 
 Product card:
 - changed-files:
-    - any-glob-to-any-file: 'web-components/src/components/product-card/**/*'
+  - any-glob-to-any-file: 'web-components/src/components/product-card/**/*'
+
+🤖 Robotoff:
+- changed-files:
+  - any-glob-to-any-file: 'web-components/src/api/robotoff.ts'
+  - any-glob-to-any-file: 'web-components/src/api/robotoff.test.ts'
+  - any-glob-to-any-file: 'web-components/src/components/robotoff-contribution-message/**/*'
+  - any-glob-to-any-file: 'web-components/src/components/robotoff-ingredient-detection/**/*'
+  - any-glob-to-any-file: 'web-components/src/components/robotoff-ingredient-spellcheck/**/*'
+  - any-glob-to-any-file: 'web-components/src/components/robotoff-modal/**/*'
+  - any-glob-to-any-file: 'web-components/src/components/robotoff-nutrient-extraction/**/*'
+  - any-glob-to-any-file: 'web-components/src/components/robotoff-question/**/*'
+  - any-glob-to-any-file: 'web-components/src/signals/robotoff.ts'
+  - any-glob-to-any-file: 'web-components/src/signals/questions.ts'
+  - any-glob-to-any-file: 'web-components/src/signals/ingredient-detection.ts'
+  - any-glob-to-any-file: 'web-components/src/signals/ingredient-spellcheck.ts'
+  - any-glob-to-any-file: 'web-components/src/signals/nutrient-extraction.ts'
+  - any-glob-to-any-file: 'web-components/src/types/robotoff.ts'
+
+🛣️ Road to scores:
+- changed-files:
+  - any-glob-to-any-file: 'web-components/src/components/robotoff-contribution-message/**/*'
+
+Ingredients detection:
+- changed-files:
+  - any-glob-to-any-file: 'web-components/src/components/robotoff-ingredient-detection/**/*'
+  - any-glob-to-any-file: 'web-components/src/signals/ingredient-detection.ts'
+
+Ingredients spellcheck:
+- changed-files:
+  - any-glob-to-any-file: 'web-components/src/components/robotoff-ingredient-spellcheck/**/*'
+  - any-glob-to-any-file: 'web-components/src/signals/ingredient-spellcheck.ts'
+  - any-glob-to-any-file: 'web-components/src/types/ingredient-spellcheck.ts'
+
+Nutrient extraction:
+- changed-files:
+  - any-glob-to-any-file: 'web-components/src/components/robotoff-nutrient-extraction/**/*'
+  - any-glob-to-any-file: 'web-components/src/signals/nutrient-extraction.ts'
+  - any-glob-to-any-file: 'web-components/src/utils/nutrient-extraction.ts'
+
+Shared:
+- changed-files:
+  - any-glob-to-any-file: 'web-components/src/components/shared/**/*'
+
+configuration:
+- changed-files:
+  - any-glob-to-any-file: 'web-components/src/components/shared/off-webcomponents-configuration*'
+  - any-glob-to-any-file: 'web-components/src/constants.ts'
+  - any-glob-to-any-file: 'web-components/src/signals/app.ts'
+  - any-glob-to-any-file: 'web-components/src/signals/app.test.ts'
+
+♿️ a11y:
+- changed-files:
+  - any-glob-to-any-file: 'web-components/src/styles/accessibility.ts'
