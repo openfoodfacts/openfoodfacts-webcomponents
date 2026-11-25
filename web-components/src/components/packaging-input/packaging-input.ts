@@ -1,6 +1,7 @@
 import { LitElement, html, css } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { localized, msg, str } from "@lit/localize"
+import { repeat } from "lit/directives/repeat.js"
 import type { PackagingComponent } from "@openfoodfacts/openfoodfacts-nodejs"
 import { BASE } from "../../styles/base"
 import { INPUT } from "../../styles/form"
@@ -27,6 +28,9 @@ export type PackagingChangeEvent = CustomEvent<PackagingChangeEventDetail>
 @customElement("packaging-input")
 @localized()
 export class PackagingInput extends LitElement {
+  private nextPartKey = 0
+  private partKeys: number[] = []
+  private lastInternalPackagings: readonly PackagingComponent[] | null | undefined
   static override styles = [
     BASE,
     INPUT,
@@ -105,6 +109,54 @@ export class PackagingInput extends LitElement {
   @property({ attribute: false })
   packagings: readonly PackagingComponent[] | null | undefined = []
 
+  override willUpdate(changed: Map<string, unknown>) {
+    if (changed.has("packagings")) {
+      const newParts = this.packagings ?? []
+      if (this.packagings !== this.lastInternalPackagings) {
+        this.partKeys = newParts.map(() => this.nextPartKey++)
+      }
+    }
+  }
+
+  private emit(next: PackagingComponent[], keys: number[]) {
+    this.partKeys = keys
+    this.packagings = next
+    this.lastInternalPackagings = next
+    this.dispatchEvent(
+      new CustomEvent<PackagingChangeEventDetail>("packaging-change", {
+        detail: { packagings: structuredClone(next) },
+        bubbles: true,
+        composed: true,
+      })
+    )
+  }
+
+  private async focusUnits(index: number) {
+    await this.updateComplete
+    if (index < 0) {
+      this.shadowRoot?.querySelector<HTMLButtonElement>("[data-add-focus]")?.focus()
+      return
+    }
+    this.shadowRoot?.querySelector<HTMLInputElement>(`[data-part-index="${index}"]`)?.focus()
+  }
+
+  private async addPart() {
+    const next = structuredClone(this.packagings ?? []) as PackagingComponent[]
+    const keys = [...this.partKeys, this.nextPartKey++]
+    next.push({})
+    this.emit(next, keys)
+    await this.focusUnits(next.length - 1)
+  }
+
+  private async removePart(index: number) {
+    const next = structuredClone(this.packagings ?? []) as PackagingComponent[]
+    const keys = [...this.partKeys]
+    next.splice(index, 1)
+    keys.splice(index, 1)
+    this.emit(next, keys)
+    await this.focusUnits(next.length === 0 ? -1 : Math.min(index, next.length - 1))
+  }
+
   private changeUnits(index: number, input: HTMLInputElement) {
     // Let the browser explain invalid input. Keep the last accepted data unchanged.
     if (!input.reportValidity()) return
@@ -120,28 +172,24 @@ export class PackagingInput extends LitElement {
     } else {
       next[index].number_of_units = units
     }
-    this.packagings = next
-    this.dispatchEvent(
-      new CustomEvent<PackagingChangeEventDetail>("packaging-change", {
-        detail: { packagings: structuredClone(next) },
-        bubbles: true,
-        composed: true,
-      })
-    )
+    this.emit(next, [...this.partKeys])
   }
 
   override render() {
     const parts = this.packagings ?? []
     return html`
       ${parts.length === 0 ? html`<p>${msg("No packaging parts.")}</p>` : null}
-      ${parts.map(
+      ${repeat(
+        parts,
+        (_part, index) => this.partKeys[index],
         (part, index) => html`
-          <fieldset>
+          <fieldset data-part-key=${this.partKeys[index]}>
             <legend>${msg(str`Packaging part ${index + 1}`)}</legend>
             <label>
               ${msg("Number of units")}
               <input
                 class="input-number"
+                data-part-index=${index}
                 type="number"
                 min="1"
                 step="any"
@@ -156,9 +204,19 @@ export class PackagingInput extends LitElement {
               <dt>${msg("Material")}</dt>
               <dd>${part.material?.lc_name || part.material?.id || msg("Not specified")}</dd>
             </dl>
+            <button
+              type="button"
+              aria-label=${msg(str`Remove packaging part ${index + 1}`)}
+              @click=${() => this.removePart(index)}
+            >
+              ${msg("Remove")}
+            </button>
           </fieldset>
         `
       )}
+      <button type="button" data-add-focus @click=${this.addPart}>
+        ${msg("Add packaging part")}
+      </button>
     `
   }
 }
