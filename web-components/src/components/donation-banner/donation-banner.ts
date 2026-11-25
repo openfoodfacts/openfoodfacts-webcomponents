@@ -17,7 +17,6 @@ import type { FeedCopyKey, NewsData, NewsItem } from "../../types/news-feed"
 import { findNewsItem, parseCount, parseFunding } from "../../utils/funding"
 import { classMap } from "lit/directives/class-map.js"
 import { ifDefined } from "lit/directives/if-defined.js"
-import { darkModeListener } from "../../utils/dark-mode-listener"
 import { getLocalizedDonateUrl } from "./donation-links"
 import { DONATION_BANNER_VARIANTS } from "../../styles/donation-banner-variants"
 import "../donation-meter/donation-meter"
@@ -104,13 +103,6 @@ export class DonationBanner extends LitElement {
   @property({ type: String, reflect: true, attribute: "current-year" })
   currentYear: string = this.getDefaultYear()
 
-  /** Whether to apply dark mode styling (auto-detected from prefers-color-scheme) */
-  isDarkMode = darkModeListener.darkMode
-  private _darkModeCb = (isDark: boolean) => {
-    this.isDarkMode = isDark
-    this.requestUpdate()
-  }
-
   /** Whether this element currently holds one of the page's sheet locks. */
   private locked = false
   private previouslyFocused: HTMLElement | null = null
@@ -120,12 +112,10 @@ export class DonationBanner extends LitElement {
 
   override connectedCallback() {
     super.connectedCallback()
-    darkModeListener.subscribe(this._darkModeCb)
     document.addEventListener("keydown", this.onSheetKeyDown)
   }
 
   override disconnectedCallback() {
-    darkModeListener.unsubscribe(this._darkModeCb)
     document.removeEventListener("keydown", this.onSheetKeyDown)
     this.clearPageEffects()
     super.disconnectedCallback()
@@ -536,24 +526,18 @@ export class DonationBanner extends LitElement {
         box-sizing: border-box;
         border-radius: 20px;
       }
-      .dark-mode .donation-banner,
-      .dark-mode .donation-banner-footer {
-        background-color: #2d2724;
-        color: #f9f7f5;
-        border-color: #ff6e78;
-        border-radius: 20px;
-      }
-      .dark-mode .donation-banner__main-title,
-      .dark-mode .donation-banner-footer__main-title {
-        color: #ff6e78;
-      }
-      .dark-mode .donation-banner__main-div-wrapper {
-        color: #f9f7f5;
-      }
-      .dark-mode .donation-banner__hook-section,
-      .dark-mode .donation-banner-footer__hook-section {
-        background-color: #0050a0;
-        color: #fff;
+      @media (prefers-color-scheme: dark) {
+        .donation-banner,
+        .donation-banner-footer {
+          background-color: #2d2724;
+          color: #f9f7f5;
+          border-color: #ff6e78;
+          border-radius: 20px;
+        }
+        .donation-banner__main-title,
+        .donation-banner-footer__main-title {
+          color: #ff6e78;
+        }
       }
       .group-image {
         height: auto;
@@ -632,6 +616,16 @@ export class DonationBanner extends LitElement {
         flex-direction: column;
         justify-content: center;
         color: black;
+      }
+      @media (prefers-color-scheme: dark) {
+        .donation-banner__main-div-wrapper {
+          color: #f9f7f5;
+        }
+        .donation-banner__hook-section,
+        .donation-banner-footer__hook-section {
+          background-color: #0050a0;
+          color: #fff;
+        }
       }
       .donation-banner__main-div {
         font-family: "Public Sans", Helvetica, Roboto, Arial, sans-serif;
@@ -948,7 +942,7 @@ export class DonationBanner extends LitElement {
   }
 
   private renderCampaign() {
-    return html`<section class=${classMap({ "dark-mode": this.isDarkMode, campaign: true })}>
+    return html`<section class="campaign">
       <div class="text">
         <h2 id="donation-banner-title">${this.h2Headline()}</h2>
         <p>${this.campaignParagraph()}</p>
@@ -966,7 +960,7 @@ export class DonationBanner extends LitElement {
   }
 
   private renderStrip() {
-    return html`<section class=${classMap({ "dark-mode": this.isDarkMode, strip: true })}>
+    return html`<section class="strip">
       <span>
         <b>${this.joinHeadline()}</b>
         <span class="more">${this.hook()}</span>
@@ -981,7 +975,7 @@ export class DonationBanner extends LitElement {
   }
 
   private renderSheet() {
-    return html`<section class=${classMap({ "dark-mode": this.isDarkMode, "sheet-root": true })}>
+    return html`<section class="sheet-root">
       <div class="overlay" @click=${this.onMinimize}></div>
       <div
         class="sheet"
@@ -1006,11 +1000,9 @@ export class DonationBanner extends LitElement {
 
   private renderBarVariant() {
     if (this.barDismissed) {
-      return html`<section
-        class=${classMap({ "dark-mode": this.isDarkMode, "bar-root": true })}
-      ></section>`
+      return html`<section class="bar-root"></section>`
     }
-    return html`<section class=${classMap({ "dark-mode": this.isDarkMode, "bar-root": true })}>
+    return html`<section class="bar-root">
       <div class="bar">
         <div class="tx">
           <b>${this.barHeadline()}</b>
@@ -1023,8 +1015,7 @@ export class DonationBanner extends LitElement {
   }
 
   private renderDefault() {
-    const rootClasses = { "dark-mode": this.isDarkMode }
-    return html`<section class=${classMap(rootClasses)}>
+    return html`<section>
       <div class="donation-banner-footer row">
         <div class="donation-banner-footer__left-aside">
           <div class="donation-banner-footer__hook-section">
