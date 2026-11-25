@@ -4,6 +4,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
   pull-requests: write
@@ -19,7 +23,4 @@ jobs:
           # see: https://docs.github.com/en/actions/security-guides/automatic-token-authentication#using-the-github_token-in-a-workflow
           # So this is a personal access token
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
-          release-type: node
           target-branch: main
-          # our package.json is the one in webcomponents directory
-          path: "web-components"
