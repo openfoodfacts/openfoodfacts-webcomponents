@@ -1,12 +1,10 @@
 import { LitElement, html, css } from "lit"
 import { customElement } from "lit/decorators.js"
-import { classMap } from "lit/directives/class-map.js"
 import { localized, msg } from "@lit/localize"
 
 import { BASE } from "../../styles/base"
 import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import { STATIC_HOST } from "../../constants"
-import { darkModeListener } from "../../utils/dark-mode-listener"
 
 import "../mobile-badges/mobile-badges"
 
@@ -19,29 +17,6 @@ const OFF_WEBSITE = "https://world.openfoodfacts.org"
 @customElement("off-footer")
 @localized()
 export class Footer extends LitElement {
-  /**
-   * Whether to apply dark mode styling
-   * (auto-detected from prefers-color-scheme).
-   */
-  isDarkMode = darkModeListener.darkMode
-
-  private _darkModeCb = (isDark: boolean) => {
-    this.isDarkMode = isDark
-    this.requestUpdate()
-  }
-
-  override connectedCallback() {
-    super.connectedCallback()
-    this.isDarkMode = darkModeListener.darkMode
-    darkModeListener.subscribe(this._darkModeCb)
-    this.requestUpdate()
-  }
-
-  override disconnectedCallback() {
-    darkModeListener.unsubscribe(this._darkModeCb)
-    super.disconnectedCallback()
-  }
-
   static override styles = [
     BASE,
     ...getButtonClasses([ButtonType.White]),
@@ -194,29 +169,29 @@ export class Footer extends LitElement {
         line-height: 1.6;
       }
 
-      /* Dark mode */
+      @media (prefers-color-scheme: dark) {
+        .app-section {
+          background-color: #201a17;
+          color: #f9f7f5;
+        }
 
-      .dark-mode .app-section {
-        background-color: #201a17;
-        color: #f9f7f5;
-      }
+        .community-section {
+          background-color: #302824;
+          color: #f9f7f5;
+        }
 
-      .dark-mode .community-section {
-        background-color: #302824;
-        color: #f9f7f5;
-      }
+        .project-links .button {
+          background-color: #493d37;
+          color: #f9f7f5;
+        }
 
-      .dark-mode .project-links .button {
-        background-color: #493d37;
-        color: #f9f7f5;
-      }
+        .project-links .button:hover {
+          background-color: #5c4d45;
+        }
 
-      .dark-mode .project-links .button:hover {
-        background-color: #5c4d45;
-      }
-
-      .dark-mode .social-icon {
-        filter: brightness(0) invert(1);
+        .social-icon {
+          filter: brightness(0) invert(1);
+        }
       }
 
       @media (max-width: 1023px) {
@@ -465,12 +440,8 @@ export class Footer extends LitElement {
   }
 
   override render() {
-    const rootClasses = {
-      "dark-mode": this.isDarkMode,
-    }
-
     return html`
-      <footer class=${classMap(rootClasses)}>
+      <footer>
         ${this.renderAppSection()} ${this.renderCommunitySection()} ${this.renderBottomSection()}
       </footer>
     `

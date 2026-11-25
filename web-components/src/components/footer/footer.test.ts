@@ -1,25 +1,8 @@
-import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest"
-import type { Footer } from "./footer"
-
-const colorScheme = Object.assign(new EventTarget(), { matches: false })
-
-const changeColorScheme = (matches: boolean) => {
-  colorScheme.matches = matches
-  colorScheme.dispatchEvent(Object.assign(new Event("change"), { matches }))
-}
-
-beforeAll(async () => {
-  Object.defineProperty(window, "matchMedia", {
-    writable: true,
-    value: vi.fn().mockReturnValue(colorScheme),
-  })
-
-  await import("./footer")
-})
+import { beforeEach, describe, expect, it } from "vitest"
+import { Footer } from "./footer"
 
 beforeEach(() => {
   document.body.innerHTML = ""
-  changeColorScheme(false)
 })
 
 const createFooter = async () => {
@@ -30,22 +13,13 @@ const createFooter = async () => {
 }
 
 describe("off-footer", () => {
-  it("tracks the color scheme while connected and resynchronizes on reconnect", async () => {
-    const element = await createFooter()
-    const footer = element.shadowRoot?.querySelector("footer")
-    expect(footer?.classList.contains("dark-mode")).toBe(false)
+  it("defines dark-mode styles", () => {
+    const styles = Footer.styles.map((style) => style.cssText).join("\n")
 
-    changeColorScheme(true)
-    await element.updateComplete
-    expect(footer?.classList.contains("dark-mode")).toBe(true)
-
-    element.remove()
-    changeColorScheme(false)
-    expect(element.isDarkMode).toBe(true)
-
-    document.body.appendChild(element)
-    await element.updateComplete
-    expect(footer?.classList.contains("dark-mode")).toBe(false)
+    expect(styles).toContain("prefers-color-scheme: dark")
+    for (const color of ["#201a17", "#f9f7f5", "#302824", "#493d37", "#5c4d45"]) {
+      expect(styles).toContain(color)
+    }
   })
 
   it("renders a semantic footer element", async () => {
