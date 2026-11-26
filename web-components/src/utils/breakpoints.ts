@@ -17,8 +17,15 @@ export const mobileAndTabletRegex =
  * @returns {boolean} True if the device is a mobile or tablet, false otherwise.
  */
 export const mobileAndTabletCheck = () => {
+  if (typeof navigator === "undefined") {
+    return false
+  }
+
   const value =
-    navigator.userAgent || navigator.vendor || (window as Window & { opera?: string }).opera || ""
+    navigator.userAgent ||
+    navigator.vendor ||
+    (typeof window !== "undefined" ? (window as Window & { opera?: string }).opera : "") ||
+    ""
 
   return mobileAndTabletRegex.test(value) || mobileAndTabletRegex.test(value.substr(0, 4))
 }
