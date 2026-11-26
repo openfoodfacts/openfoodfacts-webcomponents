@@ -5,7 +5,7 @@ import { fileURLToPath } from "url"
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const localesDir = path.resolve(__dirname, "../src/localization/dist/locales")
+const localesDir = path.resolve(__dirname, "../src/localization/generated/locales")
 
 if (!fs.existsSync(localesDir)) {
   console.log(`Locales directory ${localesDir} does not exist. Skipping fix.`)
