@@ -40,6 +40,15 @@ export enum AnnotationAnswer {
   REFUSE = 0,
   SKIP = -1,
 }
+
+/**
+ * Whether an annotation request is in flight.
+ *
+ * `REFUSE` is represented by zero, so a truthiness check would incorrectly
+ * report it as idle and leave competing controls available.
+ */
+export const isAnnotationLoading = (annotation?: AnnotationAnswer): boolean =>
+  annotation !== undefined
 export enum InsightAnnotationSize {
   CENTGRAMS = "100g",
   SERVING = "serving",
