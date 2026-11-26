@@ -1,13 +1,28 @@
 import { LitElement, html, css, type TemplateResult } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import type { KnowledgePanelElement } from "../../../types/knowledge-panel"
+import { localized } from "@lit/localize"
+import type {
+  KnowledgePanelActionEventDetail,
+  KnowledgePanelElement,
+} from "../../../types/knowledge-panel"
+import { EventType } from "../../../constants"
 import { sanitizeHtml } from "../../../utils/html"
+import {
+  getKnowledgePanelActionLabel,
+  getKnowledgePanelActionUrl,
+} from "../../../utils/knowledge-panels/actions"
 
 /**
  * Action element renderer component
  *
+ * Renders a button for each action of the element.
+ * When the product code is known, actions supported by Open Food Facts link to the matching page.
+ *
  * @element action-element-renderer
+ * @fires knowledge-panel-action - When an action is clicked, with the action in the event detail.
+ * Calling `preventDefault()` on the event prevents following the action link.
  */
+@localized()
 @customElement("action-element-renderer")
 export class ActionElementRenderer extends LitElement {
   static override styles = css`
@@ -20,6 +35,12 @@ export class ActionElementRenderer extends LitElement {
       border: 1px solid #e8e8e8;
       text-align: left;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
 
     .action small {
@@ -42,6 +63,9 @@ export class ActionElementRenderer extends LitElement {
       font-size: 1rem;
       line-height: 1.5;
       border-radius: 0.25rem;
+      border-width: 1px;
+      border-style: solid;
+      text-decoration: none;
       transition:
         color 0.15s ease-in-out,
         background-color 0.15s ease-in-out,
@@ -65,6 +89,60 @@ export class ActionElementRenderer extends LitElement {
   @property({ type: Object })
   element?: KnowledgePanelElement
 
+  /**
+   * The barcode of the product the knowledge panels belong to, used to build the action links
+   */
+  @property({ type: String })
+  productCode = ""
+
+  /**
+   * Dispatch the action event and only follow the action link if the event was not cancelled
+   * @param event - The click event
+   * @param action - The clicked action
+   * @param url - The URL of the action, if any
+   */
+  private onActionClick(event: Event, action: string, url?: string) {
+    const actionEvent = new CustomEvent<KnowledgePanelActionEventDetail>(
+      EventType.KNOWLEDGE_PANEL_ACTION,
+      {
+        detail: { action, productCode: this.productCode || undefined, url },
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+      }
+    )
+    if (!this.dispatchEvent(actionEvent)) {
+      event.preventDefault()
+    }
+  }
+
+  /**
+   * Renders an action as a link when its URL is known, otherwise as a button
+   * @param action - The action identifier (e.g. "add_categories")
+   * @param fallbackLabel - The label to use if the action is unknown
+   * @returns Template result for the action
+   */
+  renderAction(action: string, fallbackLabel?: string): TemplateResult {
+    const label = getKnowledgePanelActionLabel(action) ?? fallbackLabel ?? action
+    const url = getKnowledgePanelActionUrl(action, this.productCode)
+
+    if (url) {
+      return html`<a
+        class="button chocolate-button"
+        href=${url}
+        @click=${(event: Event) => this.onActionClick(event, action, url)}
+        >${label}</a
+      >`
+    }
+    return html`<button
+      type="button"
+      class="button chocolate-button"
+      @click=${(event: Event) => this.onActionClick(event, action)}
+    >
+      ${label}
+    </button>`
+  }
+
   override render(): TemplateResult {
     if (!this.element) {
       return html``
@@ -75,16 +153,17 @@ export class ActionElementRenderer extends LitElement {
       return html``
     }
 
-    const actionText = actionElement.action_text || "Default Action"
+    const actions = actionElement.actions || []
     const actionDescription = actionElement.description || ""
     const sanitizedHTML = sanitizeHtml(actionElement.html || "")
 
     return html`
       <div class="action">
         <div>${sanitizedHTML}</div>
-        <button class="button chocolate-button" disabled>${actionText}</button>
+        <div class="actions">
+          ${actions.map((action) => this.renderAction(action, actionElement.action_text))}
+        </div>
         ${actionDescription ? html`<small>${actionDescription}</small>` : ""}
-        <small>(Actions are displayed but not functional in this version)</small>
       </div>
     `
   }
