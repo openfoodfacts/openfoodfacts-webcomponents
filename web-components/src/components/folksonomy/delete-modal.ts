@@ -10,6 +10,8 @@ import { FOLKSONOMY_THEME } from "../../styles/folksonomy-theme"
  * @lit
  * @element delete-modal
  * @description A modal dialog for confirming deletion of an item.
+ * @fires confirm-delete - Fired when the user confirms the deletion.
+ * @fires cancel-delete - Fired when the user cancels (Cancel button, overlay click or Escape).
  */
 @localized()
 @customElement("delete-modal")
@@ -155,6 +157,12 @@ export class DeleteModal extends LitElement {
 
   private handleCancel(event: Event) {
     event.preventDefault()
+    this.dispatchEvent(
+      new CustomEvent("cancel-delete", {
+        bubbles: true,
+        composed: true,
+      })
+    )
     this.open = false
   }
 
