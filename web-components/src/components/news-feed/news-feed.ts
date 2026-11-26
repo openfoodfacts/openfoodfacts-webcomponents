@@ -429,7 +429,6 @@ export class NewsFeed extends LitElement {
 
   _renderNewsItem(item: ProcessedNewsItem & { parsedMessage: string }) {
     const hasUrl = item.url && item.url.trim() !== ""
-    const placeholderId = `placeholder-${item.id || Math.random().toString(36).substring(7)}`
 
     // Create placeholder icon content
     const placeholderContent = item.id ? item.id.substring(0, 3) : "NWS"
@@ -444,16 +443,15 @@ export class NewsFeed extends LitElement {
             @error=${(e: Event) => {
               const target = e.target as HTMLImageElement
               target.style.display = "none"
-
-              const element = this.shadowRoot!.querySelector(`#${placeholderId}`)! as HTMLElement
-              element.style.display = "flex"
+              const placeholder = target.nextElementSibling as HTMLElement | null
+              if (placeholder) {
+                placeholder.style.display = "flex"
+              }
             }}
           />
-          <div id=${placeholderId} class="placeholder-icon" style="display: none;">
-            ${placeholderContent}
-          </div>
+          <div class="placeholder-icon" style="display: none;">${placeholderContent}</div>
         `
-      : html`<div id=${placeholderId} class="placeholder-icon">${placeholderContent}</div>`
+      : html`<div class="placeholder-icon">${placeholderContent}</div>`
 
     // Content template - always the same
     const contentTemplate = html`
