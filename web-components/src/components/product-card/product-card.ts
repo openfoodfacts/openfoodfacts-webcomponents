@@ -470,6 +470,17 @@ export class ProductCard extends LitElement {
 
     const brands = this.product.brands?.trim()
     const quantity = this.product.quantity?.trim()
+    const productName = this.product.product_name?.trim()
+    const productImageAlt = productName
+      ? msg(str`Front image of ${productName}`)
+      : msg("Product front")
+    const nutriScoreAlt = msg(
+      str`Nutri-Score: ${this.product.nutriscore_grade?.toUpperCase() || msg("unknown")}`
+    )
+    const novaAlt = msg(str`NOVA group: ${this.product.nova_group || msg("unknown")}`)
+    const greenScoreAlt = msg(
+      str`Green-Score: ${this.product.greenscore_grade?.toUpperCase() || msg("unknown")}`
+    )
 
     let brandQuantityStr = msg("Unknown Brand/Quantity")
     if (brands && quantity) {
@@ -512,7 +523,7 @@ export class ProductCard extends LitElement {
                             "product-image": true,
                             "image-loading": this.imageLoading,
                           })}
-                          alt="Product front"
+                          alt=${productImageAlt}
                           @load=${this.handleImageLoad}
                           @error=${this.handleImageError}
                         />
@@ -523,7 +534,7 @@ export class ProductCard extends LitElement {
                         <img
                           src=${this.placeholderImage}
                           class="placeholder-image"
-                          alt="Product front"
+                          alt=${productImageAlt}
                         />
                       </div>
                     `
@@ -546,13 +557,13 @@ export class ProductCard extends LitElement {
                 ? html`
                     <div class="scores-container">
                       <div class="score-item">
-                        <img src=${this.nutriscoreSrc} alt="nutriscore" class="score-image" />
+                        <img src=${this.nutriscoreSrc} alt=${nutriScoreAlt} class="score-image" />
                       </div>
                       <div class="score-item">
-                        <img src=${this.novaSrc} alt="nova" class="score-image" />
+                        <img src=${this.novaSrc} alt=${novaAlt} class="score-image" />
                       </div>
                       <div class="score-item">
-                        <img src=${this.greenscoreSrc} alt="greenscore" class="score-image" />
+                        <img src=${this.greenscoreSrc} alt=${greenScoreAlt} class="score-image" />
                       </div>
                     </div>
                   `
