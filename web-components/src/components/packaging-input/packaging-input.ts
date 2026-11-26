@@ -3,6 +3,8 @@ import { customElement, property } from "lit/decorators.js"
 import { localized, msg, str } from "@lit/localize"
 import { repeat } from "lit/directives/repeat.js"
 import type { PackagingComponent } from "@openfoodfacts/openfoodfacts-nodejs"
+import { AutocompleteInput } from "../shared/autocomplete-input"
+import type { AutocompleteSuggestionSelectEvent } from "../../types"
 import { BASE } from "../../styles/base"
 import { INPUT } from "../../styles/form"
 import {
@@ -58,6 +60,12 @@ export class PackagingInput extends LitElement {
       label {
         display: grid;
         gap: 0.5rem;
+        font-weight: 600;
+      }
+      .taxonomy-field {
+        display: grid;
+        gap: 0.5rem;
+        margin-top: 1rem;
         font-weight: 600;
       }
       input {
@@ -174,6 +182,39 @@ export class PackagingInput extends LitElement {
     }
     this.emit(next, [...this.partKeys])
   }
+  private changeTaxonomyField(
+    index: number,
+    field: "shape" | "material",
+    input: AutocompleteInput
+  ) {
+    const parts = this.packagings ?? []
+    const currentPart = parts[index]
+    if (!currentPart) return
+
+    const currentTag = currentPart[field]
+    const currentText = currentTag?.lc_name || currentTag?.id || ""
+    const newText = input.value.trim()
+
+    // Show the same trimmed value that will be stored.
+    input.value = newText
+
+    if (newText === currentText) return
+
+    const next = structuredClone(parts) as PackagingComponent[]
+
+    if (newText === "") {
+      delete next[index][field]
+    } else {
+      const updatedTag: NonNullable<PackagingComponent["shape"]> = {
+        ...next[index][field],
+        lc_name: newText,
+      }
+      delete updatedTag.id
+      next[index][field] = updatedTag
+    }
+
+    this.emit(next, [...this.partKeys])
+  }
 
   override render() {
     const parts = this.packagings ?? []
@@ -198,12 +239,69 @@ export class PackagingInput extends LitElement {
                   this.changeUnits(index, event.currentTarget as HTMLInputElement)}
               />
             </label>
-            <dl>
-              <dt>${msg("Shape")}</dt>
-              <dd>${part.shape?.lc_name || part.shape?.id || msg("Not specified")}</dd>
-              <dt>${msg("Material")}</dt>
-              <dd>${part.material?.lc_name || part.material?.id || msg("Not specified")}</dd>
-            </dl>
+            <div class="taxonomy-field">
+              <span>${msg("Shape")}</span>
+              <autocomplete-input
+                data-taxonomy-field="shape"
+                .inputLabel=${msg("Shape")}
+                .value=${part.shape?.lc_name || part.shape?.id || ""}
+                .openOnSuggestionsUpdate=${true}
+                .preventTabNavigation=${false}
+                @suggestion-select=${(event: AutocompleteSuggestionSelectEvent) =>
+                  this.changeTaxonomyField(
+                    index,
+                    "shape",
+                    event.currentTarget as AutocompleteInput
+                  )}
+                @focusout=${(event: FocusEvent) =>
+                  this.changeTaxonomyField(
+                    index,
+                    "shape",
+                    event.currentTarget as AutocompleteInput
+                  )}
+                @keydown=${(event: KeyboardEvent) => {
+                  if (event.key === "Enter" && !event.isComposing) {
+                    this.changeTaxonomyField(
+                      index,
+                      "shape",
+                      event.currentTarget as AutocompleteInput
+                    )
+                  }
+                }}
+              ></autocomplete-input>
+            </div>
+
+            <div class="taxonomy-field">
+              <span>${msg("Material")}</span>
+              <autocomplete-input
+                data-taxonomy-field="material"
+                .inputLabel=${msg("Material")}
+                .value=${part.material?.lc_name || part.material?.id || ""}
+                .openOnSuggestionsUpdate=${true}
+                .preventTabNavigation=${false}
+                @suggestion-select=${(event: AutocompleteSuggestionSelectEvent) =>
+                  this.changeTaxonomyField(
+                    index,
+                    "material",
+                    event.currentTarget as AutocompleteInput
+                  )}
+                @focusout=${(event: FocusEvent) =>
+                  this.changeTaxonomyField(
+                    index,
+                    "material",
+                    event.currentTarget as AutocompleteInput
+                  )}
+                @keydown=${(event: KeyboardEvent) => {
+                  if (event.key === "Enter" && !event.isComposing) {
+                    this.changeTaxonomyField(
+                      index,
+                      "material",
+                      event.currentTarget as AutocompleteInput
+                    )
+                  }
+                }}
+              ></autocomplete-input>
+            </div>
             <button
               type="button"
               aria-label=${msg(str`Remove packaging part ${index + 1}`)}
