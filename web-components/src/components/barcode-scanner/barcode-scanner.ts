@@ -231,6 +231,17 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
   private detectFn?: (imageData: ImageBitmap) => Promise<string | undefined>
 
   /**
+   * Whether a camera start is in progress (permission query or getUserMedia pending).
+   * Used to ignore repeated start requests, which would otherwise open a second stream.
+   */
+  private isStartingCamera = false
+
+  /**
+   * The id of the pending animation frame of the barcode detection loop.
+   */
+  private frameRequestId?: number
+
+  /**
    * A getter that returns whether the video is currently playing.
    * This getter is used to determine the state of the video element and update the component's UI accordingly.
    */
@@ -329,6 +340,12 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
       })
       return
     }
+    // The camera is already running or starting: opening another stream would
+    // leave the current one running and start a second detection loop.
+    if (this.isVideoPlaying || this.isStartingCamera) {
+      return
+    }
+    this.isStartingCamera = true
     try {
       const permissionStatus = await navigator.permissions.query({ name: "camera" })
 
@@ -340,6 +357,8 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
       }
     } catch (error) {
       console.error("Permission query error:", error)
+    } finally {
+      this.isStartingCamera = false
     }
     this.sendBarcodeStateEvent({
       barcode: this.barcode,
@@ -375,6 +394,9 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
       }
     } catch (err) {
       console.error("Error accessing camera: ", err)
+      // Release a stream acquired before the failure (e.g. when play() rejects),
+      // so the camera turns off and a later start request is not ignored.
+      this.stopVideo()
     }
   }
 
@@ -383,10 +405,16 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
    * This method is called when the barcode scanner is stopped or when the component is disconnected.
    */
   private stopVideo() {
+    if (this.frameRequestId !== undefined) {
+      cancelAnimationFrame(this.frameRequestId)
+      this.frameRequestId = undefined
+    }
     if (this.stream) {
       this.stream.getTracks().forEach((track) => track.stop())
       // clean video
-      this.video.srcObject = null
+      if (this.video) {
+        this.video.srcObject = null
+      }
       this.stream = null
     }
   }
@@ -417,11 +445,22 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
    */
   private setupFrameCapture() {
     const video = this.video
+    // The loop belongs to this stream: once it is stopped (Close, detection,
+    // disconnect) or replaced, the loop ends instead of polling forever.
+    const stream = this.stream
+    // The stream may already be gone, e.g. when a STARTED listener removed the
+    // element: a loop bound to `null` would never see a change and never end.
+    if (!stream) {
+      return
+    }
     // Process video frames for barcode detection
     const processFrame = async () => {
+      if (this.stream !== stream) {
+        return
+      }
       // Check if the video is paused or ended
       if (video.paused || video.ended) {
-        requestAnimationFrame(processFrame)
+        this.frameRequestId = requestAnimationFrame(processFrame)
         return
       }
 
@@ -437,6 +476,10 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
         try {
           // Detect barcodes in the image bitmap
           const result = await this.detectFn!(imageBitmap)
+          // The stream may have been stopped while the frame was being analysed.
+          if (this.stream !== stream) {
+            return
+          }
           if (result) {
             this.barcode = result
             this.sendBarcodeStateEvent({
@@ -454,10 +497,10 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
       }
 
       // Continue processing frames if no barcode is detected
-      requestAnimationFrame(processFrame)
+      this.frameRequestId = requestAnimationFrame(processFrame)
     }
 
-    requestAnimationFrame(processFrame)
+    this.frameRequestId = requestAnimationFrame(processFrame)
   }
 
   /**
@@ -487,7 +530,7 @@ export class BarcodeScanner extends ConsoleLogMixin(LitElement) {
     }
     if (this.isVideoPlaying) {
       return html`
-        <div class="cta-overlay-wrapper" @click=${this.askPermission}>
+        <div class="cta-overlay-wrapper">
           <div class="cta-exit-button">
             <button class="button white-button small" @click=${this.exit}>
               <close-icon></close-icon><span>${msg("Close")}</span>
