@@ -172,18 +172,31 @@ export class RobotoffIngredientSpellcheck extends DisplayProductLinkMixin(
    */
   async updateIngredientsImageUrl(insight?: IngredientSpellcheckInsight) {
     if (!insight) {
-      this.productData.imageUrl = undefined
-      this.productData.name = undefined
+      this.productData = {}
       return
     }
-    const result = await fetchProduct<ImageIngredientsProductType>(insight.barcode, {
-      lc: insight.data.lang,
-      fields: [ProductFields.IMAGE_INGREDIENTS_URL, ProductFields.PRODUCT_NAME].join(","),
-    })
 
-    this.productData = {
-      imageUrl: result.product.image_ingredients_url,
-      name: result.product.product_name,
+    try {
+      const result = await fetchProduct<ImageIngredientsProductType>(insight.barcode, {
+        lc: insight.data.lang,
+        fields: [ProductFields.IMAGE_INGREDIENTS_URL, ProductFields.PRODUCT_NAME].join(","),
+      })
+
+      // An earlier request can resolve after the user advances to a different insight.
+      // Only apply data when this insight is still the one being displayed.
+      if (this._insight?.id === insight.id) {
+        this.productData = {
+          imageUrl: result.product.image_ingredients_url,
+          name: result.product.product_name,
+        }
+      }
+    } catch (error) {
+      // The image is supplementary to the correction task. Keep the text correction usable
+      // when product metadata is temporarily unavailable, without leaving an unhandled rejection.
+      if (this._insight?.id === insight.id) {
+        this.productData = {}
+      }
+      console.error("Error fetching ingredients image:", error)
     }
   }
 
