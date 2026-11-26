@@ -357,6 +357,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
   renderCenterButton() {
     return html`
       <button
+        type="button"
         class="link-button"
         @click=${this.fitImageToContainer}
         title=${msg("Center image")}
@@ -374,6 +375,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
   renderRotateButtons() {
     return html`
       <button
+        type="button"
         class="link-button"
         @click=${() => this.rotateImage(-90)}
         title=${msg("Rotate image to the left")}
@@ -382,6 +384,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
         <rotate-left-icon aria-hidden="true"></rotate-left-icon>
       </button>
       <button
+        type="button"
         class="link-button"
         @click=${() => this.rotateImage(90)}
         title=${msg("Rotate image to the right")}
@@ -587,6 +590,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
         ${this.renderMessage()}
         <div class="button-container">
           <button
+            type="button"
             class="button white-button small"
             @click=${this.resetCrop}
             aria-label=${msg("Reset selection")}
@@ -594,6 +598,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
             ${msg("Reset selection")}
           </button>
           <button
+            type="button"
             class="button chocolate-button small"
             @click=${this.showCrop}
             aria-label=${msg("Show crop")}
@@ -623,6 +628,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
         </div>
         <div class="crop-result-buttons flex justify-center gap-0_5">
           <button
+            type="button"
             class="button chocolate-button"
             @click=${this.submitCrop}
             aria-label=${msg("Validate crop")}
@@ -630,6 +636,7 @@ export class ZoomableImage extends MessageDisplayMixinElement {
             ${msg("Validate crop")}
           </button>
           <button
+            type="button"
             class="button white-button"
             @click=${this.resetCrop}
             aria-label=${msg("Reset crop")}
