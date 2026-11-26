@@ -4,8 +4,8 @@ A set of WebComponents for Open Food Facts to help build edition interfaces.
 
 ## Documentation
 
-Link to documentation will be available soon.
-You will see the list of available components and how to use them.
+The [published Storybook documentation](https://openfoodfacts.github.io/openfoodfacts-webcomponents/)
+lists the available components and shows how to use them.
 
 ## Getting Started
 
@@ -80,11 +80,7 @@ Be sure to copy all the files in the `dist/localization/locales` folder to your 
 After importing you can use them in your HTML like this example :
 
 ```html
-<robotoff-question
-  product-code="0628233671356"
-  insight-types=""
-  options='{"showMessage": true, "showLoading": true, "showError": true}'
-/>
+<robotoff-question product-code="0628233671356" insight-types="" />
 ```
 
 To use components with good configuration you have to add only one time the `off-webcomponents-configuration` before every components in your HTML.
@@ -109,21 +105,22 @@ The default configuration is :
         }'
   assets-images-path="/assets/images"
 ></off-webcomponents-configuration>
-<off-boolean-attribute></off-boolean-attribute>
 ```
 
 #### Boolean attributes
 
-For boolean we follow the convention of lit [here](https://lit.dev/docs/components/properties/#boolean-attributes) Boolean is set to `false` by default and ca be use like this:
+Boolean attributes follow the [Lit convention](https://lit.dev/docs/components/properties/#boolean-attributes):
+they are `false` by default and become `true` when present. For example, `hide-apk`
+controls the APK badge on the real `mobile-badges` component:
 
 - `true` :
 
 ```html
-<off-boolean-attribute hide></off-boolean-attribute>
+<mobile-badges hide-apk></mobile-badges>
 ```
 
 - `false` :
 
 ```html
-<off-boolean-attribute></off-boolean-attribute>
+<mobile-badges></mobile-badges>
 ```
