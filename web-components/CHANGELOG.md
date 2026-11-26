@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.19.1](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.19.0...v1.19.1) (2026-11-26)
+
+
+### Bug Fixes
+
+* **deps:** bump the runtime-dependencies group in /web-components with 4 updates ([#818](https://github.com/openfoodfacts/openfoodfacts-webcomponents/issues/818)) ([1d47422](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/1d47422b89abec58d31a7ef90990769588da1608))
+* **i18n:** complete Italian translations ([2193a85](https://github.com/openfoodfacts/openfoodfacts-webcomponents/commit/2193a8506c7fbbc206b01d4952fbab1990f31fdb))
+
 ## [1.19.0](https://github.com/openfoodfacts/openfoodfacts-webcomponents/compare/v1.18.3...v1.19.0) (2026-11-01)
 
 
