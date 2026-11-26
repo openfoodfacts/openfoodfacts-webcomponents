@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { jsonResponse } from "../test/helpers"
 
 // Mock the folksonomy configuration
@@ -26,6 +26,31 @@ describe("Folksonomy API", () => {
     vi.mocked(folksonomyConfiguration.getItem).mockImplementation((key) =>
       key === "apiUrl" ? "https://api.folksonomy.openfoodfacts.org" : (null as unknown as string)
     )
+  })
+
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  describe("authentication storage", () => {
+    it("continues authenticated edits when storage is unavailable", async () => {
+      vi.stubGlobal("localStorage", undefined)
+      vi.mocked(global.fetch)
+        .mockResolvedValueOnce(jsonResponse({ access_token: "temporary-token" }))
+        .mockResolvedValueOnce(jsonResponse({}))
+
+      await expect(
+        folksonomyApi.replaceValue({ property: "labels", old_value: "old", new_value: "new" })
+      ).resolves.toEqual({ success: true })
+
+      expect(global.fetch).toHaveBeenNthCalledWith(
+        2,
+        "https://api.folksonomy.openfoodfacts.org/admin/value/replace",
+        expect.objectContaining({
+          headers: expect.objectContaining({ Authorization: "Bearer temporary-token" }),
+        })
+      )
+    })
   })
 
   describe("fetchProductProperties", () => {
