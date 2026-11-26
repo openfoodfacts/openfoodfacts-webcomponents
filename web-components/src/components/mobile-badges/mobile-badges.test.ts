@@ -77,4 +77,15 @@ describe("mobile-badges", () => {
       "https://github.com/openfoodfacts/smooth-app/releases/latest?utm_source=off&utm_medium=web&utm_campaign=install_the_app_apk_footer_en"
     )
   })
+
+  it("opens every store badge in a separate, isolated tab", async () => {
+    const element = await createMobileBadges()
+    const links = Array.from(element.shadowRoot!.querySelectorAll("a"))
+
+    expect(links).toHaveLength(4)
+    links.forEach((link) => {
+      expect(link.target).toBe("_blank")
+      expect(link.rel).toBe("noopener noreferrer")
+    })
+  })
 })
