@@ -17,6 +17,7 @@ import { folksonomyConfiguration, userInfo, userInfoLoading } from "../signals/f
 // Constants for localStorage
 const FOLKSONOMY_BEARER_TOKEN_KEY = "folksonomy-bearer-token"
 const FOLKSONOMY_BEARER_DATE_KEY = "folksonomy-token-date"
+const TOKEN_MAX_AGE_MS = 3600000 // 1 hour in milliseconds
 
 /**
  * Get the API URL for a given path with the current configuration
@@ -30,10 +31,25 @@ const getApiUrl = (path: string) => {
 
 /**
  * Get stored token from localStorage
+ * Returns null if token doesn't exist or has expired
  * @returns {string | null}
  */
 function getStoredToken(): string | null {
-  return localStorage.getItem(FOLKSONOMY_BEARER_TOKEN_KEY)
+  const token = localStorage.getItem(FOLKSONOMY_BEARER_TOKEN_KEY)
+  const tokenDate = localStorage.getItem(FOLKSONOMY_BEARER_DATE_KEY)
+  
+  if (!token || !tokenDate) {
+    return null
+  }
+  
+  // Check if token has expired
+  const age = Date.now() - parseInt(tokenDate)
+  if (age > TOKEN_MAX_AGE_MS) {
+    clearStoredToken() // Clean up expired token
+    return null
+  }
+  
+  return token
 }
 
 /**
