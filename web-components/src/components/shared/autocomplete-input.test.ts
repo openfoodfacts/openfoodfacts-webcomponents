@@ -178,4 +178,27 @@ describe("autocomplete-input", () => {
 
     expect(element.shadowRoot!.querySelector(".autocomplete-list")).not.toBeNull()
   })
+  it("filters suggestions locally by default and can disable filtering", async () => {
+    const element = await fixture<AutocompleteInput>(
+      html`<autocomplete-input></autocomplete-input>`
+    )
+    element.value = "pet"
+    element.suggestions = [{ value: "Plastic" }]
+    await elementUpdated(element)
+
+    const input = element.shadowRoot!.querySelector<HTMLInputElement>("input")!
+    input.dispatchEvent(new Event("focus"))
+    await elementUpdated(element)
+
+    // By default, "Plastic" does not contain the literal text "pet".
+    expect(element.shadowRoot!.querySelector('[role="option"]')).toBeNull()
+
+    // Disabling the filter displays the result.
+    element.filterLocally = false
+    await elementUpdated(element)
+
+    expect(element.shadowRoot!.querySelector('[role="option"]')?.textContent?.trim()).toBe(
+      "Plastic"
+    )
+  })
 })

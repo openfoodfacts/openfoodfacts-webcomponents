@@ -112,4 +112,103 @@ describe("PackagingSuggestionsController", () => {
 
     expect(controller.state).toEqual({ status: "idle" })
   })
+  it("ignores an older response while waiting to start the next search", async () => {
+    const controller = await makeController()
+    vi.useFakeTimers()
+
+    let resolveOld!: (suggestions: string[]) => void
+    const oldRequest = new Promise<string[]>((resolve) => {
+      resolveOld = resolve
+    })
+
+    vi.mocked(fetchPackagingSuggestions)
+      .mockReturnValueOnce(oldRequest)
+      .mockResolvedValueOnce(["Plastic"])
+
+    // Start the search for "pl".
+    controller.search({ ...options, text: "pl" })
+    await vi.advanceTimersByTimeAsync(250)
+
+    // The user types "pla". The new search is still waiting for 250 ms.
+    controller.search({ ...options, text: "pla" })
+    expect(controller.state).toEqual({ status: "waiting" })
+
+    // The old response arrives during the wait.
+    resolveOld(["Old result"])
+    await Promise.resolve()
+    await Promise.resolve()
+
+    // It must not replace the state of the new search.
+    expect(controller.state).toEqual({ status: "waiting" })
+
+    // The wait ends and the response for "pla" arrives.
+    await vi.advanceTimersByTimeAsync(250)
+
+    expect(controller.state).toEqual({
+      status: "success",
+      suggestions: ["Plastic"],
+    })
+  })
+  it("ignores a response when the search is no longer current", async () => {
+    const controller = await makeController()
+    vi.useFakeTimers()
+
+    let resolveRequest!: (suggestions: string[]) => void
+    const request = new Promise<string[]>((resolve) => {
+      resolveRequest = resolve
+    })
+
+    vi.mocked(fetchPackagingSuggestions).mockReset()
+    vi.mocked(fetchPackagingSuggestions).mockReturnValueOnce(request)
+
+    let isCurrent = true
+
+    controller.search(options, 0, () => isCurrent)
+    await vi.advanceTimersByTimeAsync(0)
+
+    expect(fetchPackagingSuggestions).toHaveBeenCalledTimes(1)
+    expect(controller.state).toEqual({ status: "loading" })
+
+    // Simulate a configuration change before the response arrives.
+    isCurrent = false
+    resolveRequest(["Old suggestion"])
+
+    await vi.advanceTimersByTimeAsync(0)
+
+    // The old response must not become a valid result.
+    expect(controller.state).not.toEqual({
+      status: "success",
+      suggestions: ["Old suggestion"],
+    })
+    expect(controller.state).toEqual({ status: "loading" })
+  })
+  it("ignores an error when the search is no longer current", async () => {
+    const controller = await makeController()
+    vi.useFakeTimers()
+
+    let rejectRequest!: (error: Error) => void
+    const request = new Promise<string[]>((_resolve, reject) => {
+      rejectRequest = reject
+    })
+
+    vi.mocked(fetchPackagingSuggestions).mockReset()
+    vi.mocked(fetchPackagingSuggestions).mockReturnValueOnce(request)
+
+    let isCurrent = true
+
+    controller.search(options, 0, () => isCurrent)
+    await vi.advanceTimersByTimeAsync(0)
+
+    expect(fetchPackagingSuggestions).toHaveBeenCalledTimes(1)
+    expect(controller.state).toEqual({ status: "loading" })
+
+    // The configuration changes and the previous request fails.
+    isCurrent = false
+    rejectRequest(new Error("Old network error"))
+
+    await vi.advanceTimersByTimeAsync(0)
+
+    // An error from the previous search must not be displayed.
+    expect(controller.state).toEqual({ status: "loading" })
+  })
 })

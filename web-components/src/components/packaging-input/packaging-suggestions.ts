@@ -17,15 +17,19 @@ export class PackagingSuggestionsController implements ReactiveController {
 
   private readonly task = new Task(this.host, {
     autoRun: false,
-    task: async ([options, version]: readonly [PackagingSuggestionsOptions, number]) => {
+    task: async ([options, version, isCurrent]: readonly [
+      PackagingSuggestionsOptions,
+      number,
+      () => boolean,
+    ]) => {
       try {
         const suggestions = await fetchPackagingSuggestions(options)
 
-        if (version === this.version) {
+        if (version === this.version && isCurrent()) {
           this.setState({ status: "success", suggestions })
         }
       } catch (error: unknown) {
-        if (version === this.version) {
+        if (version === this.version && isCurrent()) {
           this.setState({ status: "error", error })
         }
       }
@@ -36,7 +40,7 @@ export class PackagingSuggestionsController implements ReactiveController {
     host.addController(this)
   }
 
-  search(options: PackagingSuggestionsOptions, delay = 250) {
+  search(options: PackagingSuggestionsOptions, delay = 250, isCurrent: () => boolean = () => true) {
     this.invalidate()
 
     const version = this.version
@@ -45,7 +49,7 @@ export class PackagingSuggestionsController implements ReactiveController {
     this.timer = setTimeout(() => {
       this.timer = undefined
       this.setState({ status: "loading" })
-      void this.task.run([options, version])
+      void this.task.run([options, version, isCurrent])
     }, delay)
   }
 

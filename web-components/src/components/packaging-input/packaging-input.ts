@@ -1,10 +1,14 @@
 import { LitElement, html, css } from "lit"
+import { SignalWatcher } from "@lit-labs/signals"
 import { customElement, property } from "lit/decorators.js"
 import { localized, msg, str } from "@lit/localize"
 import { repeat } from "lit/directives/repeat.js"
 import type { PackagingComponent } from "@openfoodfacts/openfoodfacts-nodejs"
 import { AutocompleteInput } from "../shared/autocomplete-input"
-import type { AutocompleteSuggestionSelectEvent } from "../../types"
+import type { AutocompleteInputChangeEvent, AutocompleteSuggestionSelectEvent } from "../../types"
+import { countryCode, languageCode } from "../../signals/app"
+import { openfoodfactsApiUrl } from "../../signals/openfoodfacts"
+import { PackagingSuggestionsController } from "./packaging-suggestions"
 import { BASE } from "../../styles/base"
 import { INPUT } from "../../styles/form"
 import {
@@ -29,10 +33,20 @@ export type PackagingChangeEvent = CustomEvent<PackagingChangeEventDetail>
  */
 @customElement("packaging-input")
 @localized()
-export class PackagingInput extends LitElement {
+export class PackagingInput extends SignalWatcher(LitElement) {
   private nextPartKey = 0
   private partKeys: number[] = []
   private lastInternalPackagings: readonly PackagingComponent[] | null | undefined
+  private readonly suggestionsController = new PackagingSuggestionsController(this)
+
+  private activeSearch: {
+    partKey: number
+    field: "shape" | "material"
+    text: string
+    language: string
+    country: string
+    apiUrl: string
+  } | null = null
   static override styles = [
     BASE,
     INPUT,
@@ -120,8 +134,31 @@ export class PackagingInput extends LitElement {
   override willUpdate(changed: Map<string, unknown>) {
     if (changed.has("packagings")) {
       const newParts = this.packagings ?? []
+
       if (this.packagings !== this.lastInternalPackagings) {
+        if (this.activeSearch) {
+          this.cancelTaxonomySearch()
+        }
+
         this.partKeys = newParts.map(() => this.nextPartKey++)
+      }
+    }
+
+    const language = languageCode.get()
+    const country = countryCode.get()
+    const apiUrl = openfoodfactsApiUrl.get()
+    const active = this.activeSearch
+
+    if (
+      active &&
+      (active.language !== language || active.country !== country || active.apiUrl !== apiUrl)
+    ) {
+      const index = this.partKeys.indexOf(active.partKey)
+
+      if (index === -1) {
+        this.cancelTaxonomySearch()
+      } else {
+        this.searchTaxonomy(index, active.field, active.text, 0)
       }
     }
   }
@@ -157,6 +194,10 @@ export class PackagingInput extends LitElement {
   }
 
   private async removePart(index: number) {
+    if (this.activeSearch?.partKey === this.partKeys[index]) {
+      this.cancelTaxonomySearch()
+    }
+
     const next = structuredClone(this.packagings ?? []) as PackagingComponent[]
     const keys = [...this.partKeys]
     next.splice(index, 1)
@@ -215,7 +256,106 @@ export class PackagingInput extends LitElement {
 
     this.emit(next, [...this.partKeys])
   }
+  private searchTaxonomy(index: number, field: "shape" | "material", text: string, delay: number) {
+    const partKey = this.partKeys[index]
+    if (partKey === undefined) return
 
+    const language = languageCode.get()
+    const country = countryCode.get()
+    const apiUrl = openfoodfactsApiUrl.get()
+
+    const search = {
+      partKey,
+      field,
+      text,
+      language,
+      country,
+      apiUrl,
+    }
+
+    this.activeSearch = search
+
+    this.suggestionsController.search(
+      {
+        taxonomy: field === "shape" ? "packaging_shapes" : "packaging_materials",
+        text,
+        language,
+        country,
+        apiUrl,
+      },
+      delay,
+      () =>
+        this.activeSearch === search &&
+        languageCode.get() === language &&
+        countryCode.get() === country &&
+        openfoodfactsApiUrl.get() === apiUrl
+    )
+  }
+
+  private cancelTaxonomySearch() {
+    this.activeSearch = null
+    this.suggestionsController.cancel()
+  }
+
+  private suggestionsFor(index: number, field: "shape" | "material") {
+    const active = this.activeSearch
+    const state = this.suggestionsController.state
+
+    if (
+      !active ||
+      active.partKey !== this.partKeys[index] ||
+      active.field !== field ||
+      state.status !== "success"
+    ) {
+      return []
+    }
+
+    return state.suggestions.map((suggestion) => ({ value: suggestion }))
+  }
+  private searchMessage(index: number, field: "shape" | "material") {
+    const active = this.activeSearch
+    const state = this.suggestionsController.state
+
+    if (!active || active.partKey !== this.partKeys[index] || active.field !== field) {
+      return ""
+    }
+
+    if (state.status === "waiting" || state.status === "loading") {
+      return msg("Searching for suggestions...")
+    }
+
+    if (state.status === "success" && state.suggestions.length === 0) {
+      return msg("No suggestions found.")
+    }
+
+    if (state.status === "error") {
+      return msg("Could not load suggestions.")
+    }
+
+    return ""
+  }
+  private onTaxonomyFocusOut(index: number, field: "shape" | "material", event: FocusEvent) {
+    const autocomplete = event.currentTarget as AutocompleteInput
+
+    this.changeTaxonomyField(index, field, autocomplete)
+
+    const retryButton = autocomplete.parentElement?.querySelector<HTMLButtonElement>(
+      `[data-retry="${field}"]`
+    )
+
+    if (event.relatedTarget !== retryButton || !retryButton) {
+      this.cancelTaxonomySearch()
+    }
+  }
+
+  private retryTaxonomySearch(event: Event) {
+    const button = event.currentTarget as HTMLButtonElement
+    const autocomplete =
+      button.parentElement?.querySelector<AutocompleteInput>("autocomplete-input")
+    const input = autocomplete?.shadowRoot?.querySelector<HTMLInputElement>("input")
+
+    input?.focus()
+  }
   override render() {
     const parts = this.packagings ?? []
     return html`
@@ -246,19 +386,26 @@ export class PackagingInput extends LitElement {
                 .inputLabel=${msg("Shape")}
                 .value=${part.shape?.lc_name || part.shape?.id || ""}
                 .openOnSuggestionsUpdate=${true}
+                .filterLocally=${false}
+                .clearSuggestionsOnInput=${true}
                 .preventTabNavigation=${false}
+                .suggestions=${this.suggestionsFor(index, "shape")}
+                @focusin=${(event: FocusEvent) =>
+                  this.searchTaxonomy(
+                    index,
+                    "shape",
+                    (event.currentTarget as AutocompleteInput).value,
+                    0
+                  )}
+                @input-change=${(event: AutocompleteInputChangeEvent) =>
+                  this.searchTaxonomy(index, "shape", event.detail.value, 250)}
                 @suggestion-select=${(event: AutocompleteSuggestionSelectEvent) =>
                   this.changeTaxonomyField(
                     index,
                     "shape",
                     event.currentTarget as AutocompleteInput
                   )}
-                @focusout=${(event: FocusEvent) =>
-                  this.changeTaxonomyField(
-                    index,
-                    "shape",
-                    event.currentTarget as AutocompleteInput
-                  )}
+                @focusout=${(event: FocusEvent) => this.onTaxonomyFocusOut(index, "shape", event)}
                 @keydown=${(event: KeyboardEvent) => {
                   if (event.key === "Enter" && !event.isComposing) {
                     this.changeTaxonomyField(
@@ -269,6 +416,33 @@ export class PackagingInput extends LitElement {
                   }
                 }}
               ></autocomplete-input>
+              <span data-search-status="shape" role="status" aria-live="polite"
+                >${this.searchMessage(index, "shape")}</span
+              >
+              ${
+                this.activeSearch?.partKey === this.partKeys[index] &&
+                this.activeSearch.field === "shape" &&
+                this.suggestionsController.state.status === "error"
+                  ? html`
+                      <button
+                        type="button"
+                        data-retry="shape"
+                        @click=${this.retryTaxonomySearch}
+                        @focusout=${(event: FocusEvent) => {
+                          const autocomplete = (
+                            event.currentTarget as HTMLButtonElement
+                          ).parentElement?.querySelector("autocomplete-input")
+
+                          if (event.relatedTarget !== autocomplete) {
+                            this.cancelTaxonomySearch()
+                          }
+                        }}
+                      >
+                        ${msg("Retry shape suggestions")}
+                      </button>
+                    `
+                  : null
+              }
             </div>
 
             <div class="taxonomy-field">
@@ -278,7 +452,19 @@ export class PackagingInput extends LitElement {
                 .inputLabel=${msg("Material")}
                 .value=${part.material?.lc_name || part.material?.id || ""}
                 .openOnSuggestionsUpdate=${true}
+                .filterLocally=${false}
+                .clearSuggestionsOnInput=${true}
                 .preventTabNavigation=${false}
+                .suggestions=${this.suggestionsFor(index, "material")}
+                @focusin=${(event: FocusEvent) =>
+                  this.searchTaxonomy(
+                    index,
+                    "material",
+                    (event.currentTarget as AutocompleteInput).value,
+                    0
+                  )}
+                @input-change=${(event: AutocompleteInputChangeEvent) =>
+                  this.searchTaxonomy(index, "material", event.detail.value, 250)}
                 @suggestion-select=${(event: AutocompleteSuggestionSelectEvent) =>
                   this.changeTaxonomyField(
                     index,
@@ -286,11 +472,7 @@ export class PackagingInput extends LitElement {
                     event.currentTarget as AutocompleteInput
                   )}
                 @focusout=${(event: FocusEvent) =>
-                  this.changeTaxonomyField(
-                    index,
-                    "material",
-                    event.currentTarget as AutocompleteInput
-                  )}
+                  this.onTaxonomyFocusOut(index, "material", event)}
                 @keydown=${(event: KeyboardEvent) => {
                   if (event.key === "Enter" && !event.isComposing) {
                     this.changeTaxonomyField(
@@ -301,6 +483,33 @@ export class PackagingInput extends LitElement {
                   }
                 }}
               ></autocomplete-input>
+              <span data-search-status="material" role="status" aria-live="polite"
+                >${this.searchMessage(index, "material")}</span
+              >
+              ${
+                this.activeSearch?.partKey === this.partKeys[index] &&
+                this.activeSearch.field === "material" &&
+                this.suggestionsController.state.status === "error"
+                  ? html`
+                      <button
+                        type="button"
+                        data-retry="material"
+                        @click=${this.retryTaxonomySearch}
+                        @focusout=${(event: FocusEvent) => {
+                          const autocomplete = (
+                            event.currentTarget as HTMLButtonElement
+                          ).parentElement?.querySelector("autocomplete-input")
+
+                          if (event.relatedTarget !== autocomplete) {
+                            this.cancelTaxonomySearch()
+                          }
+                        }}
+                      >
+                        ${msg("Retry material suggestions")}
+                      </button>
+                    `
+                  : null
+              }
             </div>
             <button
               type="button"

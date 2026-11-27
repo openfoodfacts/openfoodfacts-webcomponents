@@ -102,6 +102,10 @@ export class AutocompleteInput extends LitElement {
    * Each suggestion can be a string or an object with label and value properties.
    */
   @property({ type: Array }) suggestions: AutocompleteSuggestion[] = []
+  @property({ type: Boolean, attribute: "filter-locally" })
+  filterLocally = true
+  @property({ type: Boolean, attribute: "clear-suggestions-on-input" })
+  clearSuggestionsOnInput = false
   /**
    * Open the list when suggestions arrive while the user is editing.
    */
@@ -206,7 +210,7 @@ export class AutocompleteInput extends LitElement {
    * @returns Filtered suggestions that match the input value.
    */
   private filterSuggestions(inputValue: string): AutocompleteSuggestion[] {
-    if (!inputValue) return this.suggestions
+    if (!this.filterLocally || !inputValue) return this.suggestions
 
     return this.suggestions.filter((suggestion) => {
       const suggestionText = this.getSuggestionTextToFilter(suggestion)
@@ -226,6 +230,11 @@ export class AutocompleteInput extends LitElement {
   private onInput(e: Event) {
     this.asyncSuggestionsActive = true
     const inputValue = (e.target as HTMLInputElement).value
+
+    if (this.clearSuggestionsOnInput) {
+      this.suggestions = []
+    }
+
     this.value = inputValue
     this.highlightedIndex = -1
     const filteredSuggestions = this.filteredSuggestions
@@ -289,6 +298,8 @@ export class AutocompleteInput extends LitElement {
    * @param e - The keyboard event.
    */
   private onKeyDown(e: KeyboardEvent) {
+    if (e.isComposing) return
+
     if (e.key === "Escape" && this.openOnSuggestionsUpdate) {
       this.asyncSuggestionsActive = false
       if (this.showSuggestions) e.preventDefault()
@@ -397,7 +408,10 @@ export class AutocompleteInput extends LitElement {
                       })}"
                       role="option"
                       id=${this.getSuggestionItemId(index)}
-                      @mousedown=${() => this.selectSuggestion(this.suggestionsWithNotFound[index])}
+                      @mousedown=${() => {
+                        const suggestion = this.suggestionsWithNotFound[index]
+                        if (suggestion) this.selectSuggestion(suggestion)
+                      }}
                       @mouseenter=${() => (this.highlightedIndex = index)}
                       aria-selected=${index === this.highlightedIndex}
                     >

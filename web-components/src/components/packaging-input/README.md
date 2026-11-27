@@ -1,8 +1,6 @@
 # Packaging Input (draft)
 
-`packaging-input` receives packaging parts and lets the user add, remove and edit
-their unit counts. Shape and material are currently displayed only. The component
-never saves a product.
+`packaging-input` receives packaging parts and lets the user add and remove parts and edit their unit counts, shapes and materials. Shape and material fields offer taxonomy suggestions. The component never saves a product.
 
 ```ts
 import {
@@ -39,11 +37,17 @@ document.body.append(editor)
   The browser reports invalid entries and the last accepted data is retained.
   Existing data is displayed without silently normalizing it. Domain review is
   still needed before treating this rule as final.
-- Shape/material display `lc_name`, falling back to `id`. They are preserved
-  unchanged. No taxonomy identifiers are derived from display names.
+- Shape and material display `lc_name`, falling back to `id`. Unchanged values
+  retain their existing identifiers and labels.
+- Selecting a suggestion or confirming different text updates `lc_name` and
+  removes the previous `id`, while preserving other properties of that field.
+  No taxonomy identifier is invented from the displayed text. Clearing the
+  field removes `shape` or `material` from that part.
+- Shape and material suggestions are requested using the configured language,
+  country and API server. The editor displays loading, empty and error states;
+  after an error, the user can retry. Free text can also be confirmed.
 - After adding a part, focus moves to its units field. After removal, focus moves
   to the units field of the next available part, or to Add packaging part when the
   list becomes empty.
 
-The Storybook examples show the last emitted payload, including fields that the
-basic editor does not edit. No network access is required by this draft.
+The Storybook examples show the last emitted payload, including fields that the basic editor does not edit. Taxonomy suggestions require access to the configured API server.
