@@ -1,15 +1,14 @@
 import type { NutrientTaxonomy } from "../types/taxonomies"
 import { SignalMap } from "../utils/signals"
-import { LoadingState } from "../constants"
 import taxonomies from "../api/taxonomies"
 import { Computed } from "@lit-labs/signals"
 
 /**
- * Store the loading state of the taxonomies to avoid multiple requests.
+ * In-flight or completed request for the nutrients taxonomies.
+ * Shared between callers so that only one request is made at a time,
+ * and cleared on failure so that a later call can retry.
  */
-const isLoading = new SignalMap<LoadingState>({
-  nutrients: LoadingState.NOT_LOADED,
-})
+let nutrientsTaxonomiesPromise: Promise<void> | undefined
 
 /**
  * Store the taxonomies by id.
@@ -67,18 +66,23 @@ export const getTaxonomyUnitById = (id: string): string | undefined => {
 
 /**
  * Fetch the nutrients taxonomies and store them in the signal.
-k
+ * Concurrent calls share the same request and resolve once the taxonomies are stored.
+ * If the request fails, the error is rethrown and the next call retries.
  */
-export const fetchNutrientsTaxonomies = async () => {
-  if (isLoading.getItem("nutrients") != LoadingState.NOT_LOADED) {
-    return
+export const fetchNutrientsTaxonomies = (): Promise<void> => {
+  if (!nutrientsTaxonomiesPromise) {
+    nutrientsTaxonomiesPromise = taxonomies
+      .nutrientsTaxonomies()
+      .then((response) => {
+        Object.entries(response).forEach(([key, value]) => {
+          const id = key.replace("zz:", "")
+          nutrientTaxonomyById.setItem(id, { ...value, id })
+        })
+      })
+      .catch((error) => {
+        nutrientsTaxonomiesPromise = undefined
+        throw error
+      })
   }
-  isLoading.setItem("nutrients", LoadingState.LOADING)
-  const response = await taxonomies.nutrientsTaxonomies()
-
-  Object.entries(response).forEach(([key, value]) => {
-    const id = key.replace("zz:", "")
-    nutrientTaxonomyById.setItem(id, { ...value, id })
-  })
-  isLoading.setItem("nutrients", LoadingState.LOADED)
+  return nutrientsTaxonomiesPromise
 }
