@@ -324,10 +324,12 @@ export class AutocompleteInput extends LitElement {
       case "ArrowDown":
         e.preventDefault()
         this.highlightedIndex = Math.min(this.highlightedIndex + 1, suggestionsToShow.length - 1)
+        void this.updateComplete.then(() => this.scrollHighlightedSuggestion())
         break
       case "ArrowUp":
         e.preventDefault()
         this.highlightedIndex = Math.max(this.highlightedIndex - 1, -1)
+        void this.updateComplete.then(() => this.scrollHighlightedSuggestion())
         break
       case "Enter":
         e.preventDefault()
@@ -350,6 +352,22 @@ export class AutocompleteInput extends LitElement {
           this.selectSuggestion(suggestionsToShow[this.highlightedIndex])
         }
         break
+    }
+  }
+
+  private scrollHighlightedSuggestion() {
+    const list = this.shadowRoot?.querySelector<HTMLElement>(".autocomplete-list")
+    const item = this.shadowRoot?.getElementById(this.getSuggestionItemId(this.highlightedIndex))
+    if (!list || !item) return
+
+    const listBounds = list.getBoundingClientRect()
+    const itemBounds = item.getBoundingClientRect()
+    const top = listBounds.top + list.clientTop
+    const bottom = top + list.clientHeight
+    if (itemBounds.top < top) {
+      list.scrollTop += itemBounds.top - top
+    } else if (itemBounds.bottom > bottom) {
+      list.scrollTop += itemBounds.bottom - bottom
     }
   }
 

@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it } from "vitest"
+import { beforeAll, describe, expect, it, vi } from "vitest"
 import { elementUpdated, fixture } from "@open-wc/testing/pure"
 import { html } from "lit"
 import type { AutocompleteSuggestion } from "../../types"
@@ -21,6 +21,42 @@ const openSuggestions = async (suggestions: AutocompleteSuggestion[]) => {
 }
 
 describe("autocomplete-input", () => {
+  it("scrolls overflowing keyboard options into view without moving input focus", async () => {
+    const element = await fixture<AutocompleteInput>(
+      html`<autocomplete-input></autocomplete-input>`
+    )
+    element.suggestions = [{ value: "Bottle" }, { value: "Box" }]
+    await elementUpdated(element)
+    const input = element.shadowRoot!.querySelector("input")!
+    input.focus()
+    await elementUpdated(element)
+    const list = element.shadowRoot!.querySelector<HTMLElement>(".autocomplete-list")!
+    const items = element.shadowRoot!.querySelectorAll<HTMLElement>(".autocomplete-item")
+    Object.defineProperty(list, "clientHeight", { value: 100 })
+    vi.spyOn(list, "getBoundingClientRect").mockReturnValue({ top: 100 } as DOMRect)
+    vi.spyOn(items[0], "getBoundingClientRect").mockReturnValue({
+      top: 100,
+      bottom: 140,
+    } as DOMRect)
+    vi.spyOn(items[1], "getBoundingClientRect").mockReturnValue({
+      top: 190,
+      bottom: 230,
+    } as DOMRect)
+    const press = async (key: string) => {
+      input.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }))
+      await elementUpdated(element)
+    }
+    await press("ArrowDown")
+    expect(list.scrollTop).toBe(0)
+    await press("ArrowDown")
+    expect(list.scrollTop).toBe(30)
+    vi.mocked(items[0].getBoundingClientRect).mockReturnValue({ top: 70, bottom: 110 } as DOMRect)
+    await press("ArrowUp")
+    expect(list.scrollTop).toBe(0)
+    expect(element.shadowRoot!.activeElement).toBe(input)
+    expect(input.getAttribute("aria-activedescendant")).toBe(items[0].id)
+  })
+
   it("shows the count in parentheses when a suggestion has one", async () => {
     const items = await openSuggestions([
       { value: "is_original", count: 12 },
