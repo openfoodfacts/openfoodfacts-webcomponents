@@ -175,12 +175,27 @@ describe("packaging input taxonomy search", () => {
     )
     expect(retryButton).not.toBeNull()
 
+    // Leaving the page for DevTools must preserve the error and retry action.
+    input.blur()
+    await elementUpdated(editor)
+    expect(editor.shadowRoot!.querySelector(`[data-retry="${field}"]`)).toBe(retryButton)
+
+    // Returning from DevTools can restore input focus before the pointer click.
+    input.focus()
+    await elementUpdated(editor)
+    expect(editor.shadowRoot!.querySelector(`[data-retry="${field}"]`)).toBe(retryButton)
+
     // Simulate navigating to the button with the keyboard.
     retryButton!.focus()
     await elementUpdated(editor)
     expect(editor.shadowRoot!.querySelector(`[data-retry="${field}"]`)).not.toBeNull()
 
+    retryButton!.blur()
+    await elementUpdated(editor)
+    expect(editor.shadowRoot!.querySelector(`[data-retry="${field}"]`)).toBe(retryButton)
+
     // Clicking returns focus to the field and starts another search.
+    retryButton!.focus()
     retryButton!.click()
     await vi.advanceTimersByTimeAsync(0)
     await elementUpdated(editor)
@@ -194,6 +209,10 @@ describe("packaging input taxonomy search", () => {
       apiUrl: openfoodfactsApiUrl.get(),
     })
     expect(autocomplete.suggestions).toEqual([{ value: result }])
+    expect(autocomplete.shadowRoot!.activeElement).toBe(input)
+    expect(autocomplete.shadowRoot!.querySelector('[role="option"]')?.textContent?.trim()).toBe(
+      result
+    )
     expect(autocomplete.value).toBe(text)
     expect(editor.packagings).toEqual([{ [field]: { lc_name: text } }])
   })

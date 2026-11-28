@@ -371,18 +371,39 @@ export class PackagingInput extends SignalWatcher(LitElement) {
       `[data-retry="${field}"]`
     )
 
-    if (event.relatedTarget !== retryButton || !retryButton) {
+    if (
+      (event.relatedTarget !== retryButton || !retryButton) &&
+      this.suggestionsController.state.status !== "error"
+    ) {
       this.cancelTaxonomySearch()
     }
   }
 
+  private onTaxonomyFocusIn(index: number, field: "shape" | "material", event: FocusEvent) {
+    // Restoring window focus must not remove Retry before its click arrives.
+    if (
+      this.activeSearch?.partKey === this.partKeys[index] &&
+      this.activeSearch.field === field &&
+      this.suggestionsController.state.status === "error"
+    ) {
+      return
+    }
+    this.searchTaxonomy(index, field, (event.currentTarget as AutocompleteInput).value, 0)
+  }
+
   private retryTaxonomySearch(event: Event) {
+    const search = this.activeSearch
+    if (!search) return
+    const index = this.partKeys.indexOf(search.partKey)
+    if (index < 0) return
     const button = event.currentTarget as HTMLButtonElement
     const autocomplete =
       button.parentElement?.querySelector<AutocompleteInput>("autocomplete-input")
     const input = autocomplete?.shadowRoot?.querySelector<HTMLInputElement>("input")
 
-    input?.focus()
+    if (!input || !autocomplete) return
+    input.focus()
+    this.searchTaxonomy(index, search.field, autocomplete.value, 0)
   }
   override disconnectedCallback() {
     this.composingInput = null
@@ -433,13 +454,7 @@ export class PackagingInput extends SignalWatcher(LitElement) {
                 .clearSuggestionsOnInput=${true}
                 .preventTabNavigation=${false}
                 .suggestions=${this.suggestionsFor(index, "shape")}
-                @focusin=${(event: FocusEvent) =>
-                  this.searchTaxonomy(
-                    index,
-                    "shape",
-                    (event.currentTarget as AutocompleteInput).value,
-                    0
-                  )}
+                @focusin=${(event: FocusEvent) => this.onTaxonomyFocusIn(index, "shape", event)}
                 @input-change=${(event: AutocompleteInputChangeEvent) =>
                   this.searchTaxonomy(index, "shape", event.detail.value, 250)}
                 @suggestion-select=${(event: AutocompleteSuggestionSelectEvent) =>
@@ -477,7 +492,10 @@ export class PackagingInput extends SignalWatcher(LitElement) {
                             event.currentTarget as HTMLButtonElement
                           ).parentElement?.querySelector("autocomplete-input")
 
-                          if (event.relatedTarget !== autocomplete) {
+                          if (
+                            event.relatedTarget !== autocomplete &&
+                            this.suggestionsController.state.status !== "error"
+                          ) {
                             this.cancelTaxonomySearch()
                           }
                         }}
@@ -511,13 +529,7 @@ export class PackagingInput extends SignalWatcher(LitElement) {
                 .clearSuggestionsOnInput=${true}
                 .preventTabNavigation=${false}
                 .suggestions=${this.suggestionsFor(index, "material")}
-                @focusin=${(event: FocusEvent) =>
-                  this.searchTaxonomy(
-                    index,
-                    "material",
-                    (event.currentTarget as AutocompleteInput).value,
-                    0
-                  )}
+                @focusin=${(event: FocusEvent) => this.onTaxonomyFocusIn(index, "material", event)}
                 @input-change=${(event: AutocompleteInputChangeEvent) =>
                   this.searchTaxonomy(index, "material", event.detail.value, 250)}
                 @suggestion-select=${(event: AutocompleteSuggestionSelectEvent) =>
@@ -556,7 +568,10 @@ export class PackagingInput extends SignalWatcher(LitElement) {
                             event.currentTarget as HTMLButtonElement
                           ).parentElement?.querySelector("autocomplete-input")
 
-                          if (event.relatedTarget !== autocomplete) {
+                          if (
+                            event.relatedTarget !== autocomplete &&
+                            this.suggestionsController.state.status !== "error"
+                          ) {
                             this.cancelTaxonomySearch()
                           }
                         }}
