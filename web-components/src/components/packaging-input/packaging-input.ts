@@ -11,6 +11,7 @@ import { openfoodfactsApiUrl } from "../../signals/openfoodfacts"
 import { PackagingSuggestionsController } from "./packaging-suggestions"
 import { BASE } from "../../styles/base"
 import { INPUT } from "../../styles/form"
+import { ButtonType, getButtonClasses } from "../../styles/buttons"
 import {
   SAFE_BLUE,
   SAFE_CAPPUCINO,
@@ -51,6 +52,7 @@ export class PackagingInput extends SignalWatcher(LitElement) {
   static override styles = [
     BASE,
     INPUT,
+    ...getButtonClasses([ButtonType.Chocolate, ButtonType.ChocolateOutline]),
     css`
       :host {
         display: block;
@@ -101,9 +103,25 @@ export class PackagingInput extends SignalWatcher(LitElement) {
       .input-number::-webkit-inner-spin-button {
         -webkit-appearance: auto;
       }
-      input:focus-visible {
+      input:focus-visible,
+      .button:focus-visible {
         outline: 2px solid ${SAFE_BLUE};
         outline-offset: 2px;
+      }
+      .button {
+        box-sizing: border-box;
+        min-height: 2.75rem;
+        max-width: 100%;
+        border-radius: 0.5rem;
+        font: inherit;
+        font-weight: 600;
+        overflow-wrap: anywhere;
+      }
+      .remove-part {
+        margin-top: 1rem;
+      }
+      .taxonomy-field .button {
+        justify-self: start;
       }
       dl {
         display: grid;
@@ -452,6 +470,7 @@ export class PackagingInput extends SignalWatcher(LitElement) {
                       <button
                         type="button"
                         data-retry="shape"
+                        class="button chocolate-button-outline"
                         @click=${this.retryTaxonomySearch}
                         @focusout=${(event: FocusEvent) => {
                           const autocomplete = (
@@ -530,6 +549,7 @@ export class PackagingInput extends SignalWatcher(LitElement) {
                       <button
                         type="button"
                         data-retry="material"
+                        class="button chocolate-button-outline"
                         @click=${this.retryTaxonomySearch}
                         @focusout=${(event: FocusEvent) => {
                           const autocomplete = (
@@ -550,6 +570,7 @@ export class PackagingInput extends SignalWatcher(LitElement) {
             <button
               type="button"
               aria-label=${msg(str`Remove packaging part ${index + 1}`)}
+              class="button chocolate-button-outline remove-part"
               @click=${() => this.removePart(index)}
             >
               ${msg("Remove")}
@@ -557,7 +578,7 @@ export class PackagingInput extends SignalWatcher(LitElement) {
           </fieldset>
         `
       )}
-      <button type="button" data-add-focus @click=${this.addPart}>
+      <button type="button" class="button chocolate-button" data-add-focus @click=${this.addPart}>
         ${msg("Add packaging part")}
       </button>
     `
