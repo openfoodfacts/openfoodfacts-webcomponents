@@ -996,15 +996,15 @@
       </trans-unit>
       <trans-unit id="s8966e013dce8891f">
         <source>We still need €120,000 to finish 2026!</source>
-        <target state="needs-translation">We still need €120,000 to finish 2026!</target>
+        <target state="translated">2026 పూర్తి చేయడానికి మాకు ఇంకా €120,000 అవసరం!</target>
       </trans-unit>
       <trans-unit id="s4b2638408d2e3aa8">
         <source>Become an Open Food Facts patron</source>
-        <target state="needs-translation">Become an Open Food Facts patron</target>
+        <target state="translated">Open Food Facts పోషకుడిగా మారండి</target>
       </trans-unit>
       <trans-unit id="s12b36eaac15a1c74">
         <source>If every visitor this month clicked on Donate and gave just 1€, we'd get over 8 times our yearly budget!</source>
-        <target state="needs-translation">If every visitor this month clicked on Donate and gave just 1€, we'd get over 8 times our yearly budget!</target>
+        <target state="translated">ఈ నెలలో ప్రతి సందర్శకుడు విరాళం పై క్లిక్ చేసి కేవలం 1€ ఇస్తే, మా వార్షిక బడ్జెట్ కంటే 8 రెట్లు ఎక్కువ లభిస్తుంది!</target>
       </trans-unit>
       <trans-unit id="s9488434f64291951">
         <source>keeping our database open and available to all,</source>
