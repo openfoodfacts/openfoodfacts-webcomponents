@@ -12,6 +12,49 @@ vi.mock("../../api/taxonomies", () => ({
 }))
 
 describe("packaging input taxonomy search", () => {
+  it.each(["shape", "material"])("waits for composition to end in %s", async (field) => {
+    const editor = await fixture<PackagingInput>(html`<packaging-input></packaging-input>`)
+    editor.packagings = [{}]
+    await elementUpdated(editor)
+    const autocomplete = editor.shadowRoot!.querySelector<AutocompleteInput>(
+      `[data-taxonomy-field="${field}"]`
+    )!
+    await elementUpdated(autocomplete)
+    const input = autocomplete.shadowRoot!.querySelector("input")!
+    const change = vi.fn()
+    editor.addEventListener("packaging-change", change)
+    vi.mocked(fetchPackagingSuggestions).mockReset().mockResolvedValue([])
+    vi.useFakeTimers()
+    try {
+      input.value = "b"
+      input.dispatchEvent(new InputEvent("input", { bubbles: true, composed: true }))
+      input.dispatchEvent(
+        new CompositionEvent("compositionstart", { bubbles: true, composed: true })
+      )
+      input.value = "bo"
+      input.dispatchEvent(
+        new InputEvent("input", { bubbles: true, composed: true, isComposing: true })
+      )
+      await vi.advanceTimersByTimeAsync(500)
+      expect(fetchPackagingSuggestions).not.toHaveBeenCalled()
+      input.value = "bottle"
+      input.dispatchEvent(
+        new InputEvent("input", { bubbles: true, composed: true, isComposing: true })
+      )
+      input.dispatchEvent(new CompositionEvent("compositionend", { bubbles: true, composed: true }))
+      input.dispatchEvent(new InputEvent("input", { bubbles: true, composed: true }))
+      await vi.advanceTimersByTimeAsync(249)
+      expect(fetchPackagingSuggestions).not.toHaveBeenCalled()
+      await vi.advanceTimersByTimeAsync(1)
+      expect(fetchPackagingSuggestions).toHaveBeenCalledTimes(1)
+      expect(fetchPackagingSuggestions).toHaveBeenCalledWith(
+        expect.objectContaining({ text: "bottle" })
+      )
+      expect(change).not.toHaveBeenCalled()
+    } finally {
+      vi.useRealTimers()
+    }
+  })
   it("requests shape suggestions when the shape field receives focus", async () => {
     const editor = await fixture<PackagingInput>(html`<packaging-input></packaging-input>`)
     editor.packagings = [{ shape: { lc_name: "Bottle" } }]

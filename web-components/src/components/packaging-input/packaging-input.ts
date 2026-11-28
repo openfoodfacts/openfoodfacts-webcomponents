@@ -38,6 +38,7 @@ export class PackagingInput extends SignalWatcher(LitElement) {
   private partKeys: number[] = []
   private lastInternalPackagings: readonly PackagingComponent[] | null | undefined
   private readonly suggestionsController = new PackagingSuggestionsController(this)
+  private composingInput: AutocompleteInput | null = null
 
   private activeSearch: {
     partKey: number
@@ -136,6 +137,7 @@ export class PackagingInput extends SignalWatcher(LitElement) {
       const newParts = this.packagings ?? []
 
       if (this.packagings !== this.lastInternalPackagings) {
+        this.composingInput = null
         if (this.activeSearch) {
           this.cancelTaxonomySearch()
         }
@@ -194,6 +196,12 @@ export class PackagingInput extends SignalWatcher(LitElement) {
   }
 
   private async removePart(index: number) {
+    if (
+      this.composingInput?.closest("fieldset")?.getAttribute("data-part-key") ===
+      String(this.partKeys[index])
+    ) {
+      this.composingInput = null
+    }
     if (this.activeSearch?.partKey === this.partKeys[index]) {
       this.cancelTaxonomySearch()
     }
@@ -257,6 +265,7 @@ export class PackagingInput extends SignalWatcher(LitElement) {
     this.emit(next, [...this.partKeys])
   }
   private searchTaxonomy(index: number, field: "shape" | "material", text: string, delay: number) {
+    if (this.composingInput) return
     const partKey = this.partKeys[index]
     if (partKey === undefined) return
 
@@ -336,6 +345,7 @@ export class PackagingInput extends SignalWatcher(LitElement) {
   }
   private onTaxonomyFocusOut(index: number, field: "shape" | "material", event: FocusEvent) {
     const autocomplete = event.currentTarget as AutocompleteInput
+    if (this.composingInput === autocomplete) this.composingInput = null
 
     this.changeTaxonomyField(index, field, autocomplete)
 
@@ -355,6 +365,10 @@ export class PackagingInput extends SignalWatcher(LitElement) {
     const input = autocomplete?.shadowRoot?.querySelector<HTMLInputElement>("input")
 
     input?.focus()
+  }
+  override disconnectedCallback() {
+    this.composingInput = null
+    super.disconnectedCallback()
   }
   override render() {
     const parts = this.packagings ?? []
@@ -383,6 +397,17 @@ export class PackagingInput extends SignalWatcher(LitElement) {
               <span>${msg("Shape")}</span>
               <autocomplete-input
                 data-taxonomy-field="shape"
+                @compositionstart=${(event: CompositionEvent) => {
+                  this.composingInput = event.currentTarget as AutocompleteInput
+                  this.cancelTaxonomySearch()
+                }}
+                @compositionend=${(event: CompositionEvent) => {
+                  if (this.composingInput !== event.currentTarget) return
+                  this.composingInput = null
+                  const input = event.currentTarget as AutocompleteInput
+                  input.value = input.shadowRoot!.querySelector<HTMLInputElement>("input")!.value
+                  this.searchTaxonomy(index, "shape", input.value, 250)
+                }}
                 .inputLabel=${msg("Shape")}
                 .value=${part.shape?.lc_name || part.shape?.id || ""}
                 .openOnSuggestionsUpdate=${true}
@@ -449,6 +474,17 @@ export class PackagingInput extends SignalWatcher(LitElement) {
               <span>${msg("Material")}</span>
               <autocomplete-input
                 data-taxonomy-field="material"
+                @compositionstart=${(event: CompositionEvent) => {
+                  this.composingInput = event.currentTarget as AutocompleteInput
+                  this.cancelTaxonomySearch()
+                }}
+                @compositionend=${(event: CompositionEvent) => {
+                  if (this.composingInput !== event.currentTarget) return
+                  this.composingInput = null
+                  const input = event.currentTarget as AutocompleteInput
+                  input.value = input.shadowRoot!.querySelector<HTMLInputElement>("input")!.value
+                  this.searchTaxonomy(index, "material", input.value, 250)
+                }}
                 .inputLabel=${msg("Material")}
                 .value=${part.material?.lc_name || part.material?.id || ""}
                 .openOnSuggestionsUpdate=${true}
