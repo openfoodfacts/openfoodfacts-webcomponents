@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it } from "vitest"
+import { beforeAll, describe, expect, it, vi } from "vitest"
 import { elementUpdated, fixture } from "@open-wc/testing/pure"
 import { html } from "lit"
 import type { AutocompleteSuggestion } from "../../types"
@@ -21,6 +21,71 @@ const openSuggestions = async (suggestions: AutocompleteSuggestion[]) => {
 }
 
 describe("autocomplete-input", () => {
+  it("exposes a named combobox and only references visible suggestions", async () => {
+    const element = await fixture<AutocompleteInput>(
+      html`<autocomplete-input></autocomplete-input>`
+    )
+    element.inputLabel = "Shape"
+    element.suggestions = [{ value: "Bottle" }]
+    await elementUpdated(element)
+    const input = element.shadowRoot!.querySelector("input")!
+    expect(input.getAttribute("role")).toBe("combobox")
+    expect(input.getAttribute("aria-expanded")).toBe("false")
+    expect(input.hasAttribute("aria-controls")).toBe(false)
+    input.focus()
+    await elementUpdated(element)
+    const list = element.shadowRoot!.querySelector('[role="listbox"]')!
+    expect(list.getAttribute("aria-label")).toBe("Shape")
+    expect(input.getAttribute("aria-controls")).toBe(list.id)
+    expect(input.getAttribute("aria-expanded")).toBe("true")
+    input.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true }))
+    await elementUpdated(element)
+    const activeId = input.getAttribute("aria-activedescendant")!
+    expect(element.shadowRoot!.getElementById(activeId)?.getAttribute("aria-selected")).toBe("true")
+    input.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }))
+    await elementUpdated(element)
+    expect(input.getAttribute("aria-expanded")).toBe("false")
+    expect(input.hasAttribute("aria-controls")).toBe(false)
+    expect(input.hasAttribute("aria-activedescendant")).toBe(false)
+    expect(element.shadowRoot!.querySelector('[role="listbox"]')).toBeNull()
+  })
+
+  it("scrolls overflowing keyboard options into view without moving input focus", async () => {
+    const element = await fixture<AutocompleteInput>(
+      html`<autocomplete-input></autocomplete-input>`
+    )
+    element.suggestions = [{ value: "Bottle" }, { value: "Box" }]
+    await elementUpdated(element)
+    const input = element.shadowRoot!.querySelector("input")!
+    input.focus()
+    await elementUpdated(element)
+    const list = element.shadowRoot!.querySelector<HTMLElement>(".autocomplete-list")!
+    const items = element.shadowRoot!.querySelectorAll<HTMLElement>(".autocomplete-item")
+    Object.defineProperty(list, "clientHeight", { value: 100 })
+    vi.spyOn(list, "getBoundingClientRect").mockReturnValue({ top: 100 } as DOMRect)
+    vi.spyOn(items[0], "getBoundingClientRect").mockReturnValue({
+      top: 100,
+      bottom: 140,
+    } as DOMRect)
+    vi.spyOn(items[1], "getBoundingClientRect").mockReturnValue({
+      top: 190,
+      bottom: 230,
+    } as DOMRect)
+    const press = async (key: string) => {
+      input.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }))
+      await elementUpdated(element)
+    }
+    await press("ArrowDown")
+    expect(list.scrollTop).toBe(0)
+    await press("ArrowDown")
+    expect(list.scrollTop).toBe(30)
+    vi.mocked(items[0].getBoundingClientRect).mockReturnValue({ top: 70, bottom: 110 } as DOMRect)
+    await press("ArrowUp")
+    expect(list.scrollTop).toBe(0)
+    expect(element.shadowRoot!.activeElement).toBe(input)
+    expect(input.getAttribute("aria-activedescendant")).toBe(items[0].id)
+  })
+
   it("shows the count in parentheses when a suggestion has one", async () => {
     const items = await openSuggestions([
       { value: "is_original", count: 12 },
@@ -29,5 +94,176 @@ describe("autocomplete-input", () => {
     ])
 
     expect(items).toEqual(["is_original (12)", "is-original (0)", "origine"])
+  })
+  it("uses the provided accessible name for the internal input", async () => {
+    const element = await fixture<AutocompleteInput>(
+      html`<autocomplete-input></autocomplete-input>`
+    )
+
+    element.inputLabel = "Shape"
+    await elementUpdated(element)
+
+    const input = element.shadowRoot!.querySelector("input")
+    expect(input?.getAttribute("aria-label")).toBe("Shape")
+
+    element.inputLabel = "Material"
+    await elementUpdated(element)
+    expect(input?.getAttribute("aria-label")).toBe("Material")
+  })
+
+  it("does not add an empty accessible name by default", async () => {
+    const element = await fixture<AutocompleteInput>(
+      html`<autocomplete-input></autocomplete-input>`
+    )
+
+    const input = element.shadowRoot!.querySelector("input")
+    expect(input?.hasAttribute("aria-label")).toBe(false)
+  })
+  it("opens the list when suggestions arrive after focus if enabled", async () => {
+    const element = await fixture<AutocompleteInput>(
+      html`<autocomplete-input></autocomplete-input>`
+    )
+    element.openOnSuggestionsUpdate = true
+    await elementUpdated(element)
+
+    const input = element.shadowRoot!.querySelector("input")!
+    input.dispatchEvent(new Event("focus"))
+    await elementUpdated(element)
+
+    expect(element.shadowRoot!.querySelector(".autocomplete-list")).toBeNull()
+
+    element.suggestions = [{ value: "Bottle" }]
+    await elementUpdated(element)
+
+    expect(element.shadowRoot!.querySelector(".autocomplete-item")?.textContent?.trim()).toBe(
+      "Bottle"
+    )
+  })
+
+  it("does not reopen after Escape while waiting for suggestions", async () => {
+    const element = await fixture<AutocompleteInput>(
+      html`<autocomplete-input></autocomplete-input>`
+    )
+    element.openOnSuggestionsUpdate = true
+    await elementUpdated(element)
+
+    const input = element.shadowRoot!.querySelector("input")!
+    input.dispatchEvent(new Event("focus"))
+    input.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }))
+
+    element.suggestions = [{ value: "Bottle" }]
+    await elementUpdated(element)
+
+    expect(element.shadowRoot!.querySelector(".autocomplete-list")).toBeNull()
+  })
+
+  it("does not open when suggestions arrive after blur", async () => {
+    const element = await fixture<AutocompleteInput>(
+      html`<autocomplete-input></autocomplete-input>`
+    )
+    element.openOnSuggestionsUpdate = true
+    await elementUpdated(element)
+
+    const input = element.shadowRoot!.querySelector("input")!
+    input.dispatchEvent(new Event("focus"))
+    input.dispatchEvent(new Event("blur"))
+
+    element.suggestions = [{ value: "Bottle" }]
+    await elementUpdated(element)
+
+    expect(element.shadowRoot!.querySelector(".autocomplete-list")).toBeNull()
+  })
+
+  it("keeps the previous behavior when opening on updates is not enabled", async () => {
+    const element = await fixture<AutocompleteInput>(
+      html`<autocomplete-input></autocomplete-input>`
+    )
+
+    const input = element.shadowRoot!.querySelector("input")!
+    input.dispatchEvent(new Event("focus"))
+
+    element.suggestions = [{ value: "Bottle" }]
+    await elementUpdated(element)
+
+    expect(element.shadowRoot!.querySelector(".autocomplete-list")).toBeNull()
+  })
+  it("selects the highlighted suggestion without blocking Tab when configured", async () => {
+    const element = await fixture<AutocompleteInput>(
+      html`<autocomplete-input></autocomplete-input>`
+    )
+    element.preventTabNavigation = false
+    element.suggestions = [{ value: "Bottle" }]
+    await elementUpdated(element)
+
+    const input = element.shadowRoot!.querySelector("input")!
+    input.dispatchEvent(new Event("focus"))
+    await elementUpdated(element)
+
+    input.dispatchEvent(
+      new KeyboardEvent("keydown", {
+        key: "ArrowDown",
+        bubbles: true,
+        cancelable: true,
+      })
+    )
+    await elementUpdated(element)
+
+    let selectedValue = ""
+    element.addEventListener("suggestion-select", (event: Event) => {
+      selectedValue = (event as CustomEvent<AutocompleteSuggestion>).detail.value
+    })
+
+    const tab = new KeyboardEvent("keydown", {
+      key: "Tab",
+      bubbles: true,
+      cancelable: true,
+    })
+    input.dispatchEvent(tab)
+
+    expect(selectedValue).toBe("Bottle")
+    expect(tab.defaultPrevented).toBe(false)
+  })
+  it("keeps suggestions open when refocused before the blur delay ends", async () => {
+    const element = await fixture<AutocompleteInput>(
+      html`<autocomplete-input></autocomplete-input>`
+    )
+    element.openOnSuggestionsUpdate = true
+    element.suggestions = [{ value: "Bottle" }]
+    await elementUpdated(element)
+
+    const input = element.shadowRoot!.querySelector("input")!
+    input.dispatchEvent(new Event("focus"))
+    await elementUpdated(element)
+
+    input.dispatchEvent(new Event("blur"))
+    input.dispatchEvent(new Event("focus"))
+
+    await new Promise((resolve) => setTimeout(resolve, 200))
+    await elementUpdated(element)
+
+    expect(element.shadowRoot!.querySelector(".autocomplete-list")).not.toBeNull()
+  })
+  it("filters suggestions locally by default and can disable filtering", async () => {
+    const element = await fixture<AutocompleteInput>(
+      html`<autocomplete-input></autocomplete-input>`
+    )
+    element.value = "pet"
+    element.suggestions = [{ value: "Plastic" }]
+    await elementUpdated(element)
+
+    const input = element.shadowRoot!.querySelector<HTMLInputElement>("input")!
+    input.dispatchEvent(new Event("focus"))
+    await elementUpdated(element)
+
+    // By default, "Plastic" does not contain the literal text "pet".
+    expect(element.shadowRoot!.querySelector('[role="option"]')).toBeNull()
+
+    // Disabling the filter displays the result.
+    element.filterLocally = false
+    await elementUpdated(element)
+
+    expect(element.shadowRoot!.querySelector('[role="option"]')?.textContent?.trim()).toBe(
+      "Plastic"
+    )
   })
 })

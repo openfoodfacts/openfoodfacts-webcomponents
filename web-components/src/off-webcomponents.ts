@@ -15,6 +15,11 @@ export { FolksonomyEditor } from "./components/folksonomy/folksonomy-editor"
 export { FolksonomyProperties } from "./components/folksonomy/folksonomy-properties"
 export { FolksonomyPropertyProducts } from "./components/folksonomy/folksonomy-property-products"
 export { AutocompleteInput } from "./components/shared/autocomplete-input"
+export { PackagingInput } from "./components/packaging-input/packaging-input"
+export type {
+  PackagingChangeEvent,
+  PackagingChangeEventDetail,
+} from "./components/packaging-input/packaging-input"
 export { RobotoffIngredientDetection as RobotoffCrops } from "./components/robotoff-ingredient-detection/robotoff-ingredient-detection"
 export { ProductCard } from "./components/product-card/product-card"
 export { NewsFeed } from "./components/news-feed/news-feed"

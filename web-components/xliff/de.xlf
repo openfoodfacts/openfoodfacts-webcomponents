@@ -1113,6 +1113,51 @@ sich zu beteiligen oder Feedback zu geben</target>
         <source><x id="0" equiv-text="${amount}"/> a month keeps it that way.</source>
         <target state="needs-translation"><x id="0" equiv-text="${amount}"/> a month keeps it that way.</target>
       </trans-unit>
+<trans-unit id="s2068cd808cfb9ee5">
+  <source>Last packaging-change event</source>
+</trans-unit>
+<trans-unit id="sb60ffe256cfa322e">
+  <source>No edit yet.</source>
+</trans-unit>
+<trans-unit id="scf96c4bf8006fd23">
+  <source>No packaging parts.</source>
+</trans-unit>
+<trans-unit id="se8d1dc9b3c5efd07">
+  <source>Packaging part <x id="0" equiv-text="${index + 1}"/></source>
+</trans-unit>
+<trans-unit id="s2c6c47f92443800e">
+  <source>Number of units</source>
+</trans-unit>
+<trans-unit id="s2de969afacdaa7a6">
+  <source>Shape</source>
+</trans-unit>
+<trans-unit id="sb19c9290038389c0">
+  <source>Material</source>
+</trans-unit>
+<trans-unit id="s4c509885ba8970b9">
+  <source>Searching for suggestions...</source>
+</trans-unit>
+<trans-unit id="s27d275c056860f67">
+  <source>No suggestions found.</source>
+</trans-unit>
+<trans-unit id="s3ca99ce3f1ca605a">
+  <source>Could not load suggestions.</source>
+</trans-unit>
+<trans-unit id="s493b7d91ffaa32f1">
+  <source>Retry shape suggestions</source>
+</trans-unit>
+<trans-unit id="s6115a51abcde22bb">
+  <source>Retry material suggestions</source>
+</trans-unit>
+<trans-unit id="sb9e0fc1b28955565">
+  <source>Remove packaging part <x id="0" equiv-text="${index + 1}"/></source>
+</trans-unit>
+<trans-unit id="sea4f08110bb8f15d">
+  <source>Remove</source>
+</trans-unit>
+<trans-unit id="s78d76b0a0023c6f4">
+  <source>Add packaging part</source>
+</trans-unit>
     </body>
   </file>
 </xliff>

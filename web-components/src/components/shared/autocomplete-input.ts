@@ -2,6 +2,7 @@ import { LitElement, html, css } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import { FOLKSONOMY_INPUT } from "../../styles/folksonomy-input"
 import { classMap } from "lit/directives/class-map.js"
+import { ifDefined } from "lit/directives/if-defined.js"
 import type { AutocompleteSuggestion, AutocompleteInputChangeEventDetail } from "../../types"
 import { SAFE_BLUE } from "../../utils/colors"
 import { randomIdGenerator } from "../../utils"
@@ -83,6 +84,10 @@ export class AutocompleteInput extends LitElement {
   /**
    * Current value of the input field.
    */
+  /**
+   * Accessible name for the internal input field.
+   */
+  @property({ type: String, attribute: "input-label" }) inputLabel = ""
   @property({ type: String })
   get value() {
     return this._inputValue ?? ""
@@ -97,7 +102,22 @@ export class AutocompleteInput extends LitElement {
    * Each suggestion can be a string or an object with label and value properties.
    */
   @property({ type: Array }) suggestions: AutocompleteSuggestion[] = []
-
+  @property({ type: Boolean, attribute: "filter-locally" })
+  filterLocally = true
+  @property({ type: Boolean, attribute: "clear-suggestions-on-input" })
+  clearSuggestionsOnInput = false
+  /**
+   * Open the list when suggestions arrive while the user is editing.
+   */
+  @property({ type: Boolean, attribute: "open-on-suggestions-update" })
+  openOnSuggestionsUpdate = false
+  /**
+   * Whether selecting a highlighted suggestion prevents Tab navigation.
+   */
+  @property({ type: Boolean, attribute: "prevent-tab-navigation" })
+  preventTabNavigation = true
+  private asyncSuggestionsActive = false
+  private blurTimer: ReturnType<typeof setTimeout> | undefined
   /**
    * Whether to show a "not found" option when no suggestions match.
    */
@@ -167,7 +187,19 @@ export class AutocompleteInput extends LitElement {
     }
     return filtered
   }
-
+  override willUpdate(changed: Map<string, unknown>) {
+    if (this.openOnSuggestionsUpdate && changed.has("suggestions") && this.asyncSuggestionsActive) {
+      this.highlightedIndex = -1
+      this.showSuggestions = this.suggestionsWithNotFound.length > 0
+    }
+  }
+  override disconnectedCallback() {
+    if (this.blurTimer !== undefined) {
+      clearTimeout(this.blurTimer)
+      this.blurTimer = undefined
+    }
+    super.disconnectedCallback()
+  }
   override connectedCallback() {
     super.connectedCallback()
     this._id = randomIdGenerator()
@@ -178,7 +210,7 @@ export class AutocompleteInput extends LitElement {
    * @returns Filtered suggestions that match the input value.
    */
   private filterSuggestions(inputValue: string): AutocompleteSuggestion[] {
-    if (!inputValue) return this.suggestions
+    if (!this.filterLocally || !inputValue) return this.suggestions
 
     return this.suggestions.filter((suggestion) => {
       const suggestionText = this.getSuggestionTextToFilter(suggestion)
@@ -196,7 +228,13 @@ export class AutocompleteInput extends LitElement {
    * @param e - The input event.
    */
   private onInput(e: Event) {
+    this.asyncSuggestionsActive = true
     const inputValue = (e.target as HTMLInputElement).value
+
+    if (this.clearSuggestionsOnInput) {
+      this.suggestions = []
+    }
+
     this.value = inputValue
     this.highlightedIndex = -1
     const filteredSuggestions = this.filteredSuggestions
@@ -226,6 +264,7 @@ export class AutocompleteInput extends LitElement {
    * @param suggestion - The selected suggestion.
    */
   private selectSuggestion(suggestion: AutocompleteSuggestion) {
+    this.asyncSuggestionsActive = false
     // Don't change the input value for the "not found" special case
     if (suggestion.value !== "__NOT_FOUND__") {
       this._inputValue = suggestion.value
@@ -259,6 +298,15 @@ export class AutocompleteInput extends LitElement {
    * @param e - The keyboard event.
    */
   private onKeyDown(e: KeyboardEvent) {
+    if (e.isComposing) return
+
+    if (e.key === "Escape" && this.openOnSuggestionsUpdate) {
+      this.asyncSuggestionsActive = false
+      if (this.showSuggestions) e.preventDefault()
+      this.showSuggestions = false
+      return
+    }
+
     const suggestionsToShow = this.suggestionsWithNotFound
     if (suggestionsToShow.length === 0) return
 
@@ -276,10 +324,12 @@ export class AutocompleteInput extends LitElement {
       case "ArrowDown":
         e.preventDefault()
         this.highlightedIndex = Math.min(this.highlightedIndex + 1, suggestionsToShow.length - 1)
+        void this.updateComplete.then(() => this.scrollHighlightedSuggestion())
         break
       case "ArrowUp":
         e.preventDefault()
         this.highlightedIndex = Math.max(this.highlightedIndex - 1, -1)
+        void this.updateComplete.then(() => this.scrollHighlightedSuggestion())
         break
       case "Enter":
         e.preventDefault()
@@ -298,14 +348,35 @@ export class AutocompleteInput extends LitElement {
         break
       case "Tab":
         if (this.highlightedIndex >= 0) {
-          e.preventDefault()
+          if (this.preventTabNavigation) e.preventDefault()
           this.selectSuggestion(suggestionsToShow[this.highlightedIndex])
         }
         break
     }
   }
 
+  private scrollHighlightedSuggestion() {
+    const list = this.shadowRoot?.querySelector<HTMLElement>(".autocomplete-list")
+    const item = this.shadowRoot?.getElementById(this.getSuggestionItemId(this.highlightedIndex))
+    if (!list || !item) return
+
+    const listBounds = list.getBoundingClientRect()
+    const itemBounds = item.getBoundingClientRect()
+    const top = listBounds.top + list.clientTop
+    const bottom = top + list.clientHeight
+    if (itemBounds.top < top) {
+      list.scrollTop += itemBounds.top - top
+    } else if (itemBounds.bottom > bottom) {
+      list.scrollTop += itemBounds.bottom - bottom
+    }
+  }
+
   onFocus() {
+    if (this.openOnSuggestionsUpdate && this.blurTimer !== undefined) {
+      clearTimeout(this.blurTimer)
+      this.blurTimer = undefined
+    }
+    this.asyncSuggestionsActive = true
     this.showSuggestions = this.suggestions.length > 0
     this.highlightedIndex = -1
   }
@@ -316,19 +387,29 @@ export class AutocompleteInput extends LitElement {
         <input
           id=${this._id}
           type="text"
+          role="combobox"
           class="autocomplete-input"
           .value=${this.value}
           placeholder=${this.placeholder}
+          aria-label=${ifDefined(this.inputLabel || undefined)}
           @input=${this.onInput}
           @keydown=${this.onKeyDown}
           @focus=${() => this.onFocus()}
-          @blur=${() => setTimeout(() => (this.showSuggestions = false), 150)}
+          @blur=${() => {
+            this.asyncSuggestionsActive = false
+            this.blurTimer = setTimeout(() => {
+              this.showSuggestions = false
+              this.blurTimer = undefined
+            }, 150)
+          }}
           aria-autocomplete="list"
-          aria-controls=${this.suggestionId}
+          aria-controls=${ifDefined(this.showSuggestions ? this.suggestionId : undefined)}
           aria-expanded=${this.showSuggestions}
-          aria-activedescendant=${
-            this.highlightedIndex >= 0 ? this.getSuggestionItemId(this.highlightedIndex) : ""
-          }
+          aria-activedescendant=${ifDefined(
+            this.showSuggestions && this.highlightedIndex >= 0
+              ? this.getSuggestionItemId(this.highlightedIndex)
+              : undefined
+          )}
           part="autocomplete-input"
         />
         ${
@@ -337,6 +418,7 @@ export class AutocompleteInput extends LitElement {
                 class="autocomplete-list"
                 id=${this.suggestionId}
                 role="listbox"
+                aria-label=${ifDefined(this.inputLabel || this.placeholder || undefined)}
                 part="autocomplete-input-list"
               >
                 ${this.suggestionsWithNotFound.map(
@@ -348,7 +430,10 @@ export class AutocompleteInput extends LitElement {
                       })}"
                       role="option"
                       id=${this.getSuggestionItemId(index)}
-                      @mousedown=${() => this.selectSuggestion(this.suggestionsWithNotFound[index])}
+                      @mousedown=${() => {
+                        const suggestion = this.suggestionsWithNotFound[index]
+                        if (suggestion) this.selectSuggestion(suggestion)
+                      }}
                       @mouseenter=${() => (this.highlightedIndex = index)}
                       aria-selected=${index === this.highlightedIndex}
                     >
