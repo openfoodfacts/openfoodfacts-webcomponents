@@ -18,6 +18,36 @@ const edit = async (editor: PackagingInput, value: string, index = 0) => {
 }
 
 describe("packaging-input", () => {
+  it("labels each part and its controls, including inputs inside shadow roots", async () => {
+    const editor = await makeEditor()
+    editor.packagings = [{}, {}]
+    await elementUpdated(editor)
+    const parts = editor.shadowRoot!.querySelectorAll("fieldset")
+    for (const [index, part] of Array.from(parts).entries()) {
+      expect(part.querySelector("legend")?.textContent?.trim()).toBe(`Packaging part ${index + 1}`)
+      const units = part.querySelector("input")!
+      expect(units.labels?.[0].textContent?.trim()).toBe("Number of units")
+      for (const [field, label] of [
+        ["shape", "Shape"],
+        ["material", "Material"],
+      ]) {
+        const autocomplete = part.querySelector<AutocompleteInput>(
+          `[data-taxonomy-field="${field}"]`
+        )!
+        await elementUpdated(autocomplete)
+        expect(autocomplete.shadowRoot!.querySelector("input")?.getAttribute("aria-label")).toBe(
+          label
+        )
+      }
+      expect(part.querySelector("button")?.getAttribute("aria-label")).toBe(
+        `Remove packaging part ${index + 1}`
+      )
+    }
+    expect(editor.shadowRoot!.querySelector("[data-add-focus]")?.textContent?.trim()).toBe(
+      "Add packaging part"
+    )
+  })
+
   it.each([[], null, undefined])("accepts empty input %j without emitting", async (value) => {
     const editor = await makeEditor()
     const listener = vi.fn()

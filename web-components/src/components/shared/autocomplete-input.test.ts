@@ -21,6 +21,35 @@ const openSuggestions = async (suggestions: AutocompleteSuggestion[]) => {
 }
 
 describe("autocomplete-input", () => {
+  it("exposes a named combobox and only references visible suggestions", async () => {
+    const element = await fixture<AutocompleteInput>(
+      html`<autocomplete-input></autocomplete-input>`
+    )
+    element.inputLabel = "Shape"
+    element.suggestions = [{ value: "Bottle" }]
+    await elementUpdated(element)
+    const input = element.shadowRoot!.querySelector("input")!
+    expect(input.getAttribute("role")).toBe("combobox")
+    expect(input.getAttribute("aria-expanded")).toBe("false")
+    expect(input.hasAttribute("aria-controls")).toBe(false)
+    input.focus()
+    await elementUpdated(element)
+    const list = element.shadowRoot!.querySelector('[role="listbox"]')!
+    expect(list.getAttribute("aria-label")).toBe("Shape")
+    expect(input.getAttribute("aria-controls")).toBe(list.id)
+    expect(input.getAttribute("aria-expanded")).toBe("true")
+    input.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true }))
+    await elementUpdated(element)
+    const activeId = input.getAttribute("aria-activedescendant")!
+    expect(element.shadowRoot!.getElementById(activeId)?.getAttribute("aria-selected")).toBe("true")
+    input.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }))
+    await elementUpdated(element)
+    expect(input.getAttribute("aria-expanded")).toBe("false")
+    expect(input.hasAttribute("aria-controls")).toBe(false)
+    expect(input.hasAttribute("aria-activedescendant")).toBe(false)
+    expect(element.shadowRoot!.querySelector('[role="listbox"]')).toBeNull()
+  })
+
   it("scrolls overflowing keyboard options into view without moving input focus", async () => {
     const element = await fixture<AutocompleteInput>(
       html`<autocomplete-input></autocomplete-input>`

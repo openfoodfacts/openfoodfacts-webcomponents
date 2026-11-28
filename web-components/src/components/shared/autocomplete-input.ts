@@ -387,6 +387,7 @@ export class AutocompleteInput extends LitElement {
         <input
           id=${this._id}
           type="text"
+          role="combobox"
           class="autocomplete-input"
           .value=${this.value}
           placeholder=${this.placeholder}
@@ -402,11 +403,13 @@ export class AutocompleteInput extends LitElement {
             }, 150)
           }}
           aria-autocomplete="list"
-          aria-controls=${this.suggestionId}
+          aria-controls=${ifDefined(this.showSuggestions ? this.suggestionId : undefined)}
           aria-expanded=${this.showSuggestions}
-          aria-activedescendant=${
-            this.highlightedIndex >= 0 ? this.getSuggestionItemId(this.highlightedIndex) : ""
-          }
+          aria-activedescendant=${ifDefined(
+            this.showSuggestions && this.highlightedIndex >= 0
+              ? this.getSuggestionItemId(this.highlightedIndex)
+              : undefined
+          )}
           part="autocomplete-input"
         />
         ${
@@ -415,6 +418,7 @@ export class AutocompleteInput extends LitElement {
                 class="autocomplete-list"
                 id=${this.suggestionId}
                 role="listbox"
+                aria-label=${ifDefined(this.inputLabel || this.placeholder || undefined)}
                 part="autocomplete-input-list"
               >
                 ${this.suggestionsWithNotFound.map(
